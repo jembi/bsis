@@ -36,4 +36,139 @@
       <where>componentTypeCode = 0011</where><!-- Whole Blood Single Pack - CPDA -->
     </update>
   </changeSet>
+  
+  <changeSet id="20160719-1453" author="lauravignoli">
+  
+    <!-- Set defaults for storageInfo -->
+    <update tableName="ComponentType">
+      <column name="storageInfo" value="Store at 2-6C" type="text"></column>
+      <where>componentTypeCode = 1001</where><!-- Whole Blood - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="storageInfo" value="Store at 2-6C" type="text"></column>
+      <where>componentTypeCode = 1005</where><!-- Whole Blood Poor Platelets - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="storageInfo" value="Store at 2-6C" type="text"></column>
+      <where>componentTypeCode = 2001</where><!-- Packed Red Cells - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="storageInfo" value="Store at 2-6C" type="text"></column>
+      <where>componentTypeCode = 2011</where><!-- Packed Red Cells - SAGM -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="storageInfo" value="Store below -30C" type="text"></column>
+      <where>componentTypeCode = 3001</where><!-- Fresh Frozen Plasma - Whole Blood -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="storageInfo" value="Store below -30C" type="text"></column>
+      <where>componentTypeCode = 3002</where><!-- Frozen Plasma - Whole Blood -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="storageInfo" value="Store at 20-24C" type="text"></column>
+      <where>componentTypeCode = 4001</where><!-- Platelets Concentrate - Whole Blood -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="storageInfo" value="Store at 20-24C" type="text"></column>
+      <where>componentTypeCode = 4011</where><!-- Platelets Concentrate - Whole Blood - 24H -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="storageInfo" value="Store at 2-6C" type="text"></column>
+      <where>componentTypeCode = 2101</where><!-- Packed Red Cells - Paediatric - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="storageInfo" value="Store below -30C" type="text"></column>
+      <where>componentTypeCode = 3011</where><!-- Fresh Frozen Plasma - Apheresis -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="storageInfo" value="Store at 20-24C" type="text"></column>
+      <where>componentTypeCode = 4021</where><!-- Platelets Concentrate - Apheresis -->
+    </update>
+    
+    <!-- Set defaults for transportInfo -->
+    <update tableName="ComponentType">
+      <column name="transportInfo" value="Transport at 2-10C" type="text"></column>
+      <where>componentTypeCode = 1001</where><!-- Whole Blood - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="transportInfo" value="Transport at 2-10C" type="text"></column>
+      <where>componentTypeCode = 1005</where><!-- Whole Blood Poor Platelets - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="transportInfo" value="Transport at 2-10C" type="text"></column>
+      <where>componentTypeCode = 2001</where><!-- Packed Red Cells - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="transportInfo" value="Transport at 2-10C" type="text"></column>
+      <where>componentTypeCode = 2011</where><!-- Packed Red Cells - SAGM -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="transportInfo" value="Transport below -25C" type="text"></column>
+      <where>componentTypeCode = 3001</where><!-- Fresh Frozen Plasma - Whole Blood -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="transportInfo" value="Transport below -25C" type="text"></column>
+      <where>componentTypeCode = 3002</where><!-- Frozen Plasma - Whole Blood -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="transportInfo" value="Transport at 20-24C" type="text"></column>
+      <where>componentTypeCode = 4001</where><!-- Platelets Concentrate - Whole Blood -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="transportInfo" value="Transport at 20-24C" type="text"></column>
+      <where>componentTypeCode = 4011</where><!-- Platelets Concentrate - Whole Blood - 24H -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="transportInfo" value="Transport at 2-10C" type="text"></column>
+      <where>componentTypeCode = 2101</where><!-- Packed Red Cells - Paediatric - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="transportInfo" value="Transport below -25C" type="text"></column>
+      <where>componentTypeCode = 3011</where><!-- Fresh Frozen Plasma - Apheresis -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="transportInfo" value="Transport at 20-24C" type="text"></column>
+      <where>componentTypeCode = 4021</where><!-- Platelets Concentrate - Apheresis -->
+    </update>
+    
+    <!-- Set defaults for preparationInfo -->
+    <update tableName="ComponentType">
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB" type="text"></column>
+      <where>componentTypeCode = 1001</where><!-- Whole Blood - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB" type="text"></column>
+      <where>componentTypeCode = 1005</where><!-- Whole Blood Poor Platelets - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB" type="text"></column>
+      <where>componentTypeCode = 2001</where><!-- Packed Red Cells - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB" type="text"></column>
+      <where>componentTypeCode = 2011</where><!-- Packed Red Cells - SAGM -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB" type="text"></column>
+      <where>componentTypeCode = 3001</where><!-- Fresh Frozen Plasma - Whole Blood -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB" type="text"></column>
+      <where>componentTypeCode = 3002</where><!-- Frozen Plasma - Whole Blood -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB" type="text"></column>
+      <where>componentTypeCode = 4001</where><!-- Platelets Concentrate - Whole Blood -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB" type="text"></column>
+      <where>componentTypeCode = 4011</where><!-- Platelets Concentrate - Whole Blood - 24H -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB" type="text"></column>
+      <where>componentTypeCode = 2101</where><!-- Packed Red Cells - Paediatric - CPDA -->
+    </update>    
+    
+  </changeSet>
+
 </databaseChangeLog>
