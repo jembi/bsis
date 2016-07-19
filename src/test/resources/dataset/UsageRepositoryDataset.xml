@@ -57,15 +57,15 @@
                    createdDate="2015-08-11 09:05:56.0" lastUpdated="2015-08-11 09:07:10.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1"
                    backEntry="false"/>
-    <ComponentType id="1" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
                    componentTypeCode="0011"/>
-    <ComponentType id="14" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="14" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - Paediatric - CPDA"
                    componentTypeCode="2101"/>
-    <ComponentType id="6" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="6" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood - CPDA" componentTypeCode="1001"
                    pediComponentType_id="14"/>

@@ -81,4 +81,16 @@ public class ComponentTypeBackingForm {
     componentType.setPreparationInfo(preparationInfo);
   }
 
+  public void setTransportInfo(String transportInfo) {
+    componentType.setTransportInfo(transportInfo);
+  }
+
+  public void setStorageInfo(String storageInfo) {
+    componentType.setStorageInfo(storageInfo);
+  }
+
+  public void setCanBeIssued(boolean canBeIssued) {
+    componentType.setCanBeIssued(canBeIssued);
+  }
+
 }

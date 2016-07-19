@@ -37,6 +37,18 @@ public class ComponentTypeFullViewModel extends ComponentTypeViewModel {
     return componentType.getPreparationInfo();
   }
 
+  public String getTransportInfo() {
+    return componentType.getTransportInfo();
+  }
+
+  public String getStorageInfo() {
+    return componentType.getStorageInfo();
+  }
+
+  public boolean getCanBeIssued() {
+    return componentType.getCanBeIssued();
+  }
+
   public List<ComponentTypeCombinationViewModel> getProducedComponentTypeCombinations() {
     return getComponentTypeCombinationViewModels(componentType.getProducedComponentTypeCombinations());
   }
