@@ -52,6 +52,13 @@ public class LocationRepository {
         .setParameter("isDeleted", false)
         .getResultList();
   }
+  
+  public List<Location> getTestingSites() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_TESTING_SITES, Location.class)
+        .setParameter("isTestingSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
 
   public List<Location> getAllLocations() {
     TypedQuery<Location> query =
@@ -105,40 +112,48 @@ public class LocationRepository {
     return false;
   }
   
-  public List<Location> findLocations(String name, boolean includeSimilarResults, LocationType locationType) {
+  public List<Location> findLocations(String name, boolean includeSimilarResults, LocationType locationType, boolean includeDeletedLocations) {
     // build up Query string
-    String queryString = "SELECT l FROM Location l WHERE l.isDeleted = :isDeleted ";
+    StringBuilder queryBuilder = new StringBuilder();
+    if (!includeDeletedLocations) {
+      addWhereCondition(queryBuilder, "l.isDeleted = :isDeleted ");
+    }
     if (!StringUtils.isBlank(name)) {
       if (includeSimilarResults) {
-        queryString = queryString + "AND l.name LIKE :name ";
+        addWhereCondition(queryBuilder, "l.name LIKE :name ");
       } else {
-        queryString = queryString + "AND l.name = :name ";
+        addWhereCondition(queryBuilder, "l.name = :name ");
       }
     }
     if (locationType != null) {
       switch(locationType) {
         case VENUE:
-          queryString = queryString + "AND l.isVenue = :isVenue ";
+          addWhereCondition(queryBuilder, "l.isVenue = :isVenue ");
           break;
         case PROCESSING_SITE:
-          queryString = queryString + "AND l.isProcessingSite = :isProcessingSite ";
+          addWhereCondition(queryBuilder, "l.isProcessingSite = :isProcessingSite ");
           break;
         case DISTRIBUTION_SITE:
-          queryString = queryString + "AND l.isDistributionSite = :isDistributionSite ";
+          addWhereCondition(queryBuilder, "l.isDistributionSite = :isDistributionSite ");
           break;
         case TESTING_SITE:
-          queryString = queryString + "AND l.isTestingSite = :isTestingSite ";
+          addWhereCondition(queryBuilder, "l.isTestingSite = :isTestingSite ");
           break;
         case USAGE_SITE:
-          queryString = queryString + "AND l.isUsageSite = :isUsageSite ";
+          addWhereCondition(queryBuilder, "l.isUsageSite = :isUsageSite ");
           break;
       }
     }
-    queryString = queryString + "ORDER BY l.name ASC";
 
     // create Query and set parameters
-    TypedQuery<Location> query = em.createQuery(queryString, Location.class);
-    query.setParameter("isDeleted", false);
+    queryBuilder.insert(0,"SELECT l FROM Location l ");
+    queryBuilder.append("ORDER BY l.name ASC");
+    
+    TypedQuery<Location> query = em.createQuery(queryBuilder.toString(), Location.class);
+    
+    if (!includeDeletedLocations) {
+      query.setParameter("isDeleted", false);
+    }
     
     if (!StringUtils.isBlank(name)) {
       if (includeSimilarResults) {
@@ -170,5 +185,14 @@ public class LocationRepository {
 
     // execute Query
     return query.getResultList();
+  }
+  
+  private void addWhereCondition(StringBuilder whereClause, String condition) {
+    if (StringUtils.isBlank(whereClause)) {
+      whereClause.append("WHERE ");
+    } else {
+      whereClause.append("AND ");
+    }
+    whereClause.append(condition);
   }
 }

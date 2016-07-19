@@ -1,9 +1,5 @@
 package org.jembi.bsis.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -30,46 +26,41 @@ public class TestBatchCRUDService {
   @Autowired
   private DonationBatchRepository donationBatchRepository;
 
-  public TestBatch updateTestBatch(Long testBatchId, TestBatchStatus newStatus, Date newCreatedDate, List<Long> newDonationBatchIds) {
+  public TestBatch updateTestBatch(TestBatch updatedTestBatch) {
 
-    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+    TestBatch existingTestBatch = testBatchRepository.findTestBatchById(updatedTestBatch.getId());
 
-    if (newStatus != null) {
-      testBatch = changeTestBatchStatus(testBatch, newStatus);
+    if (updatedTestBatch.getStatus() != null) {
+      existingTestBatch = changeTestBatchStatus(existingTestBatch, updatedTestBatch.getStatus());
     }
 
-    if (newStatus != TestBatchStatus.CLOSED && !testBatchConstraintChecker.canEditTestBatch(testBatch)) {
+    if (existingTestBatch.getStatus() != TestBatchStatus.CLOSED && !testBatchConstraintChecker.canEditTestBatch(existingTestBatch)) {
       throw new IllegalStateException("Test batch cannot be updated");
     }
 
-    if (newCreatedDate != null) {
-      testBatch.setCreatedDate(newCreatedDate);
+    if (updatedTestBatch.getCreatedDate() != null) {
+      existingTestBatch.setCreatedDate(updatedTestBatch.getCreatedDate());
     }
 
-    if (newDonationBatchIds != null) {
-      List<DonationBatch> newDonationBatches = new ArrayList<DonationBatch>();
+    if (updatedTestBatch.getDonationBatches() != null) {
       // unlink old donation batches
-      List<Long> existingDonationBatchIds = new ArrayList<Long>();
-      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-        existingDonationBatchIds.add(donationBatch.getId());
-        if (!newDonationBatchIds.contains(donationBatch.getId())) {
+      for (DonationBatch donationBatch : existingTestBatch.getDonationBatches()) {
+        if (!updatedTestBatch.getDonationBatches().contains(donationBatch)) {
           donationBatch.setTestBatch(null);
           donationBatchRepository.updateDonationBatch(donationBatch);
         }
       }
       // link new donation batches
-      for (Long batchId : newDonationBatchIds) {
-        DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(batchId);
-        newDonationBatches.add(donationBatch);
-        if (!existingDonationBatchIds.contains(batchId)) {
-          donationBatch.setTestBatch(testBatch);
-          donationBatchRepository.updateDonationBatch(donationBatch);
-        }
+      for (DonationBatch donationBatch : updatedTestBatch.getDonationBatches()) {
+        donationBatch.setTestBatch(existingTestBatch);
+        donationBatchRepository.updateDonationBatch(donationBatch);
       }
-      testBatch.setDonationBatches(newDonationBatches);
+      existingTestBatch.setDonationBatches(updatedTestBatch.getDonationBatches());
     }
+    
+    existingTestBatch.setLocation(updatedTestBatch.getLocation());
 
-    return testBatchRepository.update(testBatch);
+    return testBatchRepository.update(existingTestBatch);
   }
 
   public void deleteTestBatch(Long testBatchId) {
