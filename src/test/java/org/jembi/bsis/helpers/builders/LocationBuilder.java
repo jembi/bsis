@@ -104,5 +104,4 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
   public static LocationBuilder aTestingSite() {
     return new LocationBuilder().thatIsTestingSite();
   }
-
 }

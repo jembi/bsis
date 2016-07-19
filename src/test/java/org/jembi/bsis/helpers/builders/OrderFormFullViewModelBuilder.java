@@ -9,7 +9,7 @@ import java.util.Map;
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormItemViewModel;
 
@@ -17,8 +17,8 @@ public class OrderFormFullViewModelBuilder extends AbstractBuilder<OrderFormFull
 
   private Long id;
   private Date orderDate;
-  private LocationViewModel dispatchedFrom;
-  private LocationViewModel dispatchedTo;
+  private LocationFullViewModel dispatchedFrom;
+  private LocationFullViewModel dispatchedTo;
   private OrderStatus status = OrderStatus.CREATED;
   private OrderType type = OrderType.ISSUE;
   private List<OrderFormItemViewModel> items = new ArrayList<>();
@@ -35,12 +35,12 @@ public class OrderFormFullViewModelBuilder extends AbstractBuilder<OrderFormFull
     return this;
   }
 
-  public OrderFormFullViewModelBuilder withDispatchedFrom(LocationViewModel dispatchedFrom) {
+  public OrderFormFullViewModelBuilder withDispatchedFrom(LocationFullViewModel dispatchedFrom) {
     this.dispatchedFrom = dispatchedFrom;
     return this;
   }
 
-  public OrderFormFullViewModelBuilder withDispatchedTo(LocationViewModel dispatchedTo) {
+  public OrderFormFullViewModelBuilder withDispatchedTo(LocationFullViewModel dispatchedTo) {
     this.dispatchedTo = dispatchedTo;
     return this;
   }

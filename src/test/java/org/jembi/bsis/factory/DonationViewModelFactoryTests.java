@@ -33,7 +33,7 @@ import org.jembi.bsis.service.DonorConstraintChecker;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,7 +59,7 @@ public class DonationViewModelFactoryTests {
   @Mock
   private DonorConstraintChecker donorConstraintChecker;
   @Mock
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   @Mock
   private PackTypeFactory packTypeFactory;
 
@@ -151,7 +151,7 @@ public class DonationViewModelFactoryTests {
         .withBloodPressureDiastolic(bloodPressureDiastolic)
         .withBleedStartTime(bleedStartTime)
         .withBleedEndTime(bleedEndTime)
-        .withVenue(new LocationViewModel(venue))
+        .withVenue(new LocationFullViewModel(venue))
         .thatIsReleased()
         .build();
 
@@ -159,7 +159,7 @@ public class DonationViewModelFactoryTests {
     when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanUpdatePermission);
     when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(irrelevantCanDonatePermission);
     when(adverseEventViewModelFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
-    when(locationViewModelFactory.createLocationViewModel(venue)).thenReturn(new LocationViewModel(venue));
+    when(locationFactory.createFullViewModel(venue)).thenReturn(new LocationFullViewModel(venue));
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
 
     DonationViewModel returnedDonationViewModel = donationViewModelFactory.createDonationViewModelWithPermissions(

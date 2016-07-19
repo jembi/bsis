@@ -35,7 +35,7 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.OrderFormConstraintChecker;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormItemViewModel;
 import org.jembi.bsis.viewmodel.OrderFormViewModel;
@@ -62,7 +62,7 @@ public class OrderFormFactoryTests {
   private ComponentFactory componentFactory;
   
   @Mock
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   @Mock
   private ComponentRepository componentRepository;
@@ -145,8 +145,8 @@ public class OrderFormFactoryTests {
     Date orderDate = new Date();
 
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
-        .withDispatchedFrom(new LocationViewModel(dispatchedFrom))
-        .withDispatchedTo(new LocationViewModel(dispatchedTo))
+        .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
+        .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withOrderDate(orderDate)
         .withPermission("canDispatch", true).withPermission("canEdit", true).withPermission("canDelete", true)
         .withId(1L).build();
@@ -157,8 +157,8 @@ public class OrderFormFactoryTests {
         .withOrderDate(orderDate).withId(1L).build();
 
     // Setup mock
-    when(locationViewModelFactory.createLocationViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
-    when(locationViewModelFactory.createLocationViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
+    when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
+    when(locationFactory.createFullViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
     when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);
     when(orderFormConstraintChecker.canEdit(entity)).thenReturn(true);
     when(orderFormConstraintChecker.canDelete(entity)).thenReturn(true);
@@ -177,8 +177,8 @@ public class OrderFormFactoryTests {
     OrderFormItemViewModel expectedItem1 = anOrderFormItemViewModel().withBloodGroup("A+").build();
     OrderFormItemViewModel expectedItem2 = anOrderFormItemViewModel().withBloodGroup("B+").build();
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
-        .withDispatchedFrom(new LocationViewModel(dispatchedFrom))
-        .withDispatchedTo(new LocationViewModel(dispatchedTo))
+        .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
+        .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withPermission("canDispatch", true).withPermission("canEdit", true).withPermission("canDelete", true)
         .withOrderDate(orderDate).withId(1L)
         .withItem(expectedItem1).withItem(expectedItem2).build();
@@ -192,8 +192,8 @@ public class OrderFormFactoryTests {
         .withId(1L).withOrderFormItem(item1).withOrderFormItem(item2).build();
 
     // Setup mock
-    when(locationViewModelFactory.createLocationViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
-    when(locationViewModelFactory.createLocationViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
+    when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
+    when(locationFactory.createFullViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
     when(orderFormItemFactory.createViewModels(Arrays.asList(item1, item2))).thenReturn(Arrays.asList(expectedItem1, expectedItem2));
     when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);
     when(orderFormConstraintChecker.canEdit(entity)).thenReturn(true);
@@ -243,10 +243,10 @@ public class OrderFormFactoryTests {
 
     Component component = aComponent().withId(1L).withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(dispatchedFrom).build();
     ComponentViewModel componentViewModel = ComponentViewModelBuilder.aComponentViewModel().withId(1L)
-        .withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(new LocationViewModel(dispatchedFrom)).build();
+        .withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(new LocationFullViewModel(dispatchedFrom)).build();
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
-        .withDispatchedFrom(new LocationViewModel(dispatchedFrom))
-        .withDispatchedTo(new LocationViewModel(dispatchedTo))
+        .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
+        .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withPermission("canDispatch", true).withPermission("canEdit", true).withPermission("canDelete", true)
         .withOrderDate(orderDate).withId(1L)
         .withComponent(componentViewModel).build();
@@ -259,8 +259,8 @@ public class OrderFormFactoryTests {
     
     // Setup mock
     when(componentFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
-    when(locationViewModelFactory.createLocationViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
-    when(locationViewModelFactory.createLocationViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
+    when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
+    when(locationFactory.createFullViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
     when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);
     when(orderFormConstraintChecker.canEdit(entity)).thenReturn(true);
     when(orderFormConstraintChecker.canDelete(entity)).thenReturn(true);
@@ -277,8 +277,8 @@ public class OrderFormFactoryTests {
     Date orderDate = new Date();
 
     OrderFormViewModel expectedViewModel = anOrderFormViewModel()
-        .withDispatchedFrom(new LocationViewModel(dispatchedFrom))
-        .withDispatchedTo(new LocationViewModel(dispatchedTo))
+        .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
+        .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withOrderDate(orderDate).withId(1L).build();
 
     OrderForm entity = anOrderForm()
@@ -287,8 +287,8 @@ public class OrderFormFactoryTests {
         .withOrderDate(orderDate).withId(1L).build();
 
     // Setup mock
-    when(locationViewModelFactory.createLocationViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
-    when(locationViewModelFactory.createLocationViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
+    when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
+    when(locationFactory.createFullViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
 
     OrderFormViewModel convertedViewModel = orderFormFactory.createViewModel(entity);
 
@@ -303,13 +303,13 @@ public class OrderFormFactoryTests {
     Date orderDate2 = new Date();
 
     OrderFormViewModel expectedViewModel1 = anOrderFormViewModel()
-        .withDispatchedFrom(new LocationViewModel(dispatchedFrom))
-        .withDispatchedTo(new LocationViewModel(dispatchedTo))
+        .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
+        .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withOrderDate(orderDate1).withId(1L).build();
     
     OrderFormViewModel expectedViewModel2 = anOrderFormViewModel()
-        .withDispatchedFrom(new LocationViewModel(dispatchedFrom))
-        .withDispatchedTo(new LocationViewModel(dispatchedTo))
+        .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
+        .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withOrderDate(orderDate2).withId(2L).build();
 
     OrderForm entity1 = anOrderForm()
@@ -323,8 +323,8 @@ public class OrderFormFactoryTests {
         .withOrderDate(orderDate2).withId(2L).build();
     
     // Setup mock
-    when(locationViewModelFactory.createLocationViewModel(dispatchedFrom)).thenReturn(expectedViewModel1.getDispatchedFrom());
-    when(locationViewModelFactory.createLocationViewModel(dispatchedTo)).thenReturn(expectedViewModel1.getDispatchedTo());
+    when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel1.getDispatchedFrom());
+    when(locationFactory.createFullViewModel(dispatchedTo)).thenReturn(expectedViewModel1.getDispatchedTo());
 
     List<OrderFormViewModel> convertedViewModels = orderFormFactory.createViewModels(Arrays.asList(entity1, entity2));
 

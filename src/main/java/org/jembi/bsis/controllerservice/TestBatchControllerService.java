@@ -6,7 +6,7 @@ import java.util.List;
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.factory.DonationBatchViewModelFactory;
 import org.jembi.bsis.factory.DonationSummaryViewModelFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -39,7 +39,7 @@ public class TestBatchControllerService {
   @Autowired
   private LocationRepository locationRepository;
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   
   @Autowired
   private TestBatchRepository testBatchRepository;
@@ -64,7 +64,7 @@ public class TestBatchControllerService {
 
   public List<LocationViewModel> getTestingSites() {
     List<Location> locations = locationRepository.getTestingSites();
-    return locationViewModelFactory.createLocationViewModels(locations);
+    return locationFactory.createViewModels(locations);
   }
 
   public List<DonationBatchViewModel> getUnnasignedDonationBatches() {

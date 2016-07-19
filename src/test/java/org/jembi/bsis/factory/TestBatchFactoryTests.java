@@ -66,7 +66,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   @Mock
   private TestBatchConstraintChecker testBatchConstraintChecker;
   @Mock
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   @Mock
   private DonationBatchRepository donationBatchRepository;
   @Mock

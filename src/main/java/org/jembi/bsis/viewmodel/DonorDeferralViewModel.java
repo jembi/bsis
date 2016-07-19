@@ -15,7 +15,7 @@ public class DonorDeferralViewModel {
   private DeferralReasonViewModel deferralReason;
   private String createdBy;
   private String donorNumber;
-  private LocationViewModel venue;
+  private LocationFullViewModel venue;
   private Date deferralDate;
   private DonorViewModel deferredDonor;
   private String deferralReasonText;
@@ -69,11 +69,11 @@ public class DonorDeferralViewModel {
     this.donorNumber = donorNumber;
   }
 
-  public LocationViewModel getVenue() {
+  public LocationFullViewModel getVenue() {
     return venue;
   }
 
-  public void setVenue(LocationViewModel venue) {
+  public void setVenue(LocationFullViewModel venue) {
     this.venue = venue;
   }
 

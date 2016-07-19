@@ -2,7 +2,7 @@ package org.jembi.bsis.controllerservice;
 
 import java.util.List;
 
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.viewmodel.LocationViewModel;
@@ -17,11 +17,11 @@ public class PostDonationCounsellingControllerService {
   @Autowired
   private LocationRepository locationRepository;
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   
   public List<LocationViewModel> getVenues() {
     List<Location> venues = locationRepository.getVenues();
-    return locationViewModelFactory.createLocationViewModels(venues);
+    return locationFactory.createViewModels(venues);
   }
 
 }

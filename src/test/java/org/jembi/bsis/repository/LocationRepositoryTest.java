@@ -78,7 +78,7 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testUpdateLocation() throws Exception {
     Location one = locationRepository.findLocationByName("Maseru");
     one.setIsMobileSite(true);
-    locationRepository.updateLocation(1l, one);
+    locationRepository.updateLocation(one);
     Location savedOne = locationRepository.findLocationByName("Maseru");
     Assert.assertTrue("The location is saved", savedOne.getIsMobileSite());
   }

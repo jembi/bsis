@@ -35,7 +35,7 @@ public class TestBatchFactory {
   private TestBatchConstraintChecker testBatchConstraintChecker;
 
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   
   @Autowired
   private DonationBatchRepository donationBatchRepository;
@@ -116,7 +116,7 @@ public class TestBatchFactory {
     testBatchViewModel.setCreatedDate(testBatch.getCreatedDate());
     testBatchViewModel.setLastUpdated(testBatch.getLastUpdated());
     testBatchViewModel.setNotes(testBatch.getNotes());
-    testBatchViewModel.setLocation(locationViewModelFactory.createLocationViewModel(testBatch.getLocation()));
+    testBatchViewModel.setLocation(locationFactory.createViewModel(testBatch.getLocation()));
 
     // Calculate number of samples (only consider donations with test samples)
     int numSamples = 0;
