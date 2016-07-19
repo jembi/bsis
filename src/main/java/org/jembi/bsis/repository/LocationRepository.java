@@ -52,6 +52,13 @@ public class LocationRepository {
         .setParameter("isDeleted", false)
         .getResultList();
   }
+  
+  public List<Location> getTestingSites() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_TESTING_SITES, Location.class)
+        .setParameter("isTestingSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
 
   public List<Location> getAllLocations() {
     TypedQuery<Location> query =

@@ -1,0 +1,53 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20160711-1648" author="lauravignoli">
+		<sql dbms="mysql">
+			ALTER TABLE TestBatch CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+		</sql>
+		<modifyDataType tableName="Location" columnName="isVenue" newDataType="tinyint(1)"/>
+		<insert tableName = "Location">
+			<column name="name" value="Default Testing Location"/>
+			<column name="isDeleted" value="0"/>
+			<column name="isVenue" value="0"/>
+			<column name="isMobileSite" value="0"/>
+			<column name="isUsageSite" value="0"/>
+			<column name="notes" value="NULL"/>
+			<column name="isTestingSite" value="1"/>
+		</insert>
+		<addColumn tableName="TestBatch">
+			<column name="location_id" type="BIGINT(20)" defaultValue="NULL" />
+		</addColumn>
+		<addColumn tableName="TestBatch_AUD">
+			<column name="location_id" type="BIGINT(20)" defaultValue="NULL" />
+		</addColumn>
+		<sql>
+			UPDATE TestBatch tb
+			SET tb.location_id = (SELECT l.id FROM Location l where l.name='Default Testing Location');
+		</sql>
+		<addNotNullConstraint tableName="TestBatch"
+			columnName="location_id" columnDataType="BIGINT(20)" />
+		<addForeignKeyConstraint constraintName="FK_TESTBATCH_LOCATION_ID"
+			referencedTableName="Location" baseColumnNames="location_id"
+			baseTableName="TestBatch" referencedColumnNames="id" />
+	</changeSet>
+
+  <changeSet id="20160713-1558" author="bausmeier">
+    <insert tableName="FormField">
+      <column name="form" value="TestBatch"></column>
+      <column name="field" value="location"></column>
+      <column name="defaultDisplayName" value="Location"></column>
+      <column name="defaultValue" value=""></column>
+      <column name="maxLength" value="0"></column>
+      <column name="hidden" value="0"></column>
+      <column name="isHidable" value="0"></column>
+      <column name="isRequired" value="1"></column>
+      <column name="canBeOptional" value="0"></column>
+      <column name="autoGenerate" value="0"></column>
+      <column name="isAutoGeneratable" value="0"></column>
+      <column name="useCurrentTime" value="0"></column>
+      <column name="isTimeField" value="0"></column>			
+    </insert>
+  </changeSet>
+</databaseChangeLog>

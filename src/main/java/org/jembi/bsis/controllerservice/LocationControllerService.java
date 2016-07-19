@@ -23,11 +23,6 @@ public class LocationControllerService {
   @Autowired
   private LocationFactory locationFactory;
   
-  public List<LocationFullViewModel> getAllLocations() {
-    List<Location> allLocations = locationRepository.getAllLocations();
-    return locationFactory.createFullViewModels(allLocations);
-  }
-  
   public LocationFullViewModel addLocation(LocationBackingForm form) {
     Location location = form.getLocation();
     locationRepository.saveLocation(location);

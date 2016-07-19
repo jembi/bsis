@@ -5,10 +5,10 @@ import java.util.*;
 import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
+import org.jembi.bsis.controllerservice.PostDonationCounsellingControllerService;
 import org.jembi.bsis.factory.PostDonationCounsellingViewModelFactory;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
-import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.service.PostDonationCounsellingCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
@@ -29,10 +29,10 @@ public class PostDonationCounsellingController {
   private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
 
   @Autowired
-  private PostDonationCounsellingRepository postDonationCounsellingRepository;
-
-  @Autowired
   private PostDonationCounsellingViewModelFactory postDonationCounsellingViewModelFactory;
+  
+  @Autowired
+  private PostDonationCounsellingControllerService postDonationCounsellingControllerService;
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
@@ -68,6 +68,14 @@ public class PostDonationCounsellingController {
     }
     map.put("counsellingStatuses", counsellingStatuses);
 
+    return map;
+  }
+
+  @RequestMapping(value = "/searchForm", method = RequestMethod.GET)
+  @PreAuthorize("hasAnyRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING + "')")
+  public Map<String, Object> getPostDonationCounsellingSearchForm() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("venues", postDonationCounsellingControllerService.getVenues());
     return map;
   }
 

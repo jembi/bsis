@@ -7,9 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
+import org.jembi.bsis.repository.DonationBatchRepository;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.TestBatchConstraintChecker;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
@@ -23,15 +26,36 @@ import org.springframework.stereotype.Service;
  * A factory for creating TestBatchViewModel and TestBatchFullViewModel objects.
  */
 @Service
-public class TestBatchViewModelFactory {
+public class TestBatchFactory {
 
-  /** The donation batch view model factory. */
   @Autowired
   private DonationBatchViewModelFactory donationBatchViewModelFactory;
 
-  /** The test batch constraint checker. */
   @Autowired
   private TestBatchConstraintChecker testBatchConstraintChecker;
+
+  @Autowired
+  private LocationFactory locationFactory;
+  
+  @Autowired
+  private DonationBatchRepository donationBatchRepository;
+  
+  @Autowired
+  private LocationRepository locationRepository;
+  
+  public TestBatch createEntity(TestBatchBackingForm backingForm) {
+    TestBatch testBatch = new TestBatch();
+    testBatch.setId(backingForm.getId());
+    testBatch.setStatus(backingForm.getStatus());
+    testBatch.setCreatedDate(backingForm.getCreatedDate());
+    List<DonationBatch> donationBatches = new ArrayList<>();
+    for (long donationBatchId : backingForm.getDonationBatchIds()) {
+      donationBatches.add(donationBatchRepository.findDonationBatchById(donationBatchId));
+    }
+    testBatch.setDonationBatches(donationBatches);
+    testBatch.setLocation(locationRepository.getLocation(backingForm.getLocation().getId()));
+    return testBatch;
+  }
 
   /**
    * Creates a list of basic view models for the given list of test batches.
@@ -92,6 +116,7 @@ public class TestBatchViewModelFactory {
     testBatchViewModel.setCreatedDate(testBatch.getCreatedDate());
     testBatchViewModel.setLastUpdated(testBatch.getLastUpdated());
     testBatchViewModel.setNotes(testBatch.getNotes());
+    testBatchViewModel.setLocation(locationFactory.createViewModel(testBatch.getLocation()));
 
     // Calculate number of samples (only consider donations with test samples)
     int numSamples = 0;

@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.TestResultsBackingForms;
 import org.jembi.bsis.backingform.validator.TestResultsBackingFormsValidator;
 import org.jembi.bsis.factory.DonationViewModelFactory;
-import org.jembi.bsis.factory.TestBatchViewModelFactory;
+import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
@@ -61,7 +61,7 @@ public class TestResultController {
   private BloodTestsService bloodTestsService;
 
   @Autowired
-  private TestBatchViewModelFactory testBatchViewModelFactory;
+  private TestBatchFactory testBatchViewModelFactory;
 
   @Autowired
   private TestResultsBackingFormsValidator testResultsBackingFormsValidator;

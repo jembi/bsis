@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
@@ -41,15 +39,6 @@ public class LocationsController {
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(locationBackingFormValidator);
-  }
-
-  @RequestMapping(method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
-  public Map<String, Object> getAllLocations(
-      HttpServletRequest request, HttpServletResponse response) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("allLocations", locationControllerService.getAllLocations());
-    return map;
   }
 
   @RequestMapping(method = RequestMethod.POST)
