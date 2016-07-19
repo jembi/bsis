@@ -1,0 +1,39 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20160719-1323" author="lauravignoli">
+    <addColumn tableName="ComponentType">
+      <column name="storageInfo" type="text" defaultValue="NULL"/>
+      <column name="transportInfo" type="text" defaultValue="NULL"/>
+      <column name="canBeIssued" type="tinyint(1)" defaultValue="1" />
+    </addColumn>
+    <addColumn tableName="ComponentType_AUD">
+      <column name="storageInfo" type="text" />
+      <column name="transportInfo" type="text" />
+      <column name="canBeIssued" type="tinyint(1)" />
+    </addColumn>
+    
+    <!-- Set canBeIssued to false for component types that can't be issued -->
+    <update tableName="ComponentType">
+      <column name="canBeIssued" value="0" type="tinyint(1)"></column>
+      <where>componentTypeCode = 0021</where><!-- Apheresis -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="canBeIssued" value="0" type="tinyint(1)"></column>
+      <where>componentTypeCode = 0014</where><!-- Whole Blood Quad Pack - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="canBeIssued" value="0" type="tinyint(1)"></column>
+      <where>componentTypeCode = 0013</where><!-- Whole Blood Triple Pack - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="canBeIssued" value="0" type="tinyint(1)"></column>
+      <where>componentTypeCode = 0012</where><!-- Whole Blood Double Pack - CPDA -->
+    </update>
+    <update tableName="ComponentType">
+      <column name="canBeIssued" value="0" type="tinyint(1)"></column>
+      <where>componentTypeCode = 0011</where><!-- Whole Blood Single Pack - CPDA -->
+    </update>
+  </changeSet>
+</databaseChangeLog>

@@ -32,5 +32,6 @@
   <include file="./src/main/resources/liquibase/updates/1161-add-is-testing-site.xml" />
   <include file="./src/main/resources/liquibase/updates/273-remove-legacy-general-config.xml" />
   <include file="./src/main/resources/liquibase/updates/1162-add-location-to-test-batch.xml" />
+  <include file="./src/main/resources/liquibase/updates/79-add-fields-to-component-types.xml" />
 
 </databaseChangeLog>
