@@ -125,7 +125,7 @@ public class ComponentStatusCalculator {
       newComponentStatus = ComponentStatus.EXPIRED;
     }
 
-    if (ttiStatus.equals(TTIStatus.TTI_UNSAFE)) {
+    if (donation.isIneligibleDonor() || ttiStatus.equals(TTIStatus.TTI_UNSAFE)) {
       newComponentStatus = ComponentStatus.UNSAFE;
     }
 

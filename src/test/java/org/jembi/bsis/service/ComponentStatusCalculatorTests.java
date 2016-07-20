@@ -29,6 +29,7 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -492,6 +493,34 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // verify
     assertThat("status is changed", statusChanged, is(true));
     assertThat("status is EXPIRED", component.getStatus(), is(ComponentStatus.EXPIRED));
+  }
+  
+  @Test
+  public void testUpdateComponentStatusQuarantined_shouldChangeStatusToUnsafe() throws Exception {
+    // set up data
+    Long donationId = 113L;
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .thatIsReleased()
+        .withIneligibleDonor(true)
+        .build();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withExpiresOn(new DateTime().plusDays(10).toDate())
+        .withDonation(donation)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(true));
+    assertThat("status is UNSAFE", component.getStatus(), is(ComponentStatus.UNSAFE));
   }
   
   @Test

@@ -52,6 +52,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private String extraBloodTypeInformation;
   private Date createdDate = new Date();
   private boolean released;
+  private boolean ineligibleDonor;
 
   public DonationBuilder withId(Long id) {
     this.id = id;
@@ -197,6 +198,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     this.released = false;
     return this;
   }
+  
+  public DonationBuilder withIneligibleDonor(boolean ineligibleDonor) {
+    this.ineligibleDonor = ineligibleDonor;
+    return this;
+  }
 
   @Override
   public Donation build() {
@@ -229,6 +235,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     donation.setExtraBloodTypeInformation(extraBloodTypeInformation);
     donation.setCreatedDate(createdDate);
     donation.setReleased(released);
+    donation.setIneligibleDonor(ineligibleDonor);
     return donation;
   }
 
