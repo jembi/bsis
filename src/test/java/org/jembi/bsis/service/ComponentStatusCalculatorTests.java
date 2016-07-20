@@ -29,6 +29,7 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -39,8 +40,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   private ComponentStatusCalculator componentStatusCalculator;
   @Mock
   private DonationRepository donationRepository;
-  @Mock
-  private DonationConstraintChecker donationConstraintChecker;
 
   @Test
   public void testShouldComponentsBeDiscardedWithBloodTestNotFlaggedForDiscard_shouldReturnFalse() {
@@ -364,7 +363,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     
     // set up mocks
     when(donationRepository.findDonationById(donationId)).thenReturn(donation);
-    when(donationConstraintChecker.donationHasDiscrepancies(donation)).thenReturn(false);
     
     // SUT
     boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
@@ -397,7 +395,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     
     // set up mocks
     when(donationRepository.findDonationById(donationId)).thenReturn(donation);
-    when(donationConstraintChecker.donationHasDiscrepancies(donation)).thenReturn(false);
     
     // SUT
     boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
@@ -430,7 +427,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     
     // set up mocks
     when(donationRepository.findDonationById(donationId)).thenReturn(donation);
-    when(donationConstraintChecker.donationHasDiscrepancies(donation)).thenReturn(true);
     
     // SUT
     boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
@@ -444,13 +440,11 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testUpdateComponentStatusQuarantinedBloodGroupingCompleteTTISafe_shouldChangeStatusToAvailable() throws Exception {
     // set up data
     Long donationId = Long.valueOf(1234);
-    TestBatch testBatch = aReleasedTestBatch().withId(1L).build();
-    DonationBatch donationBatch = aDonationBatch().withId(1L).withTestBatch(testBatch).build();
     Donation donation = aDonation()
         .withId(donationId)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withTTIStatus(TTIStatus.TTI_SAFE)
-        .withDonationBatch(donationBatch)
+        .thatIsReleased()
         .build();
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
@@ -463,7 +457,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     
     // set up mocks
     when(donationRepository.findDonationById(donationId)).thenReturn(donation);
-    when(donationConstraintChecker.donationHasDiscrepancies(donation)).thenReturn(false);
     
     // SUT
     boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
@@ -503,6 +496,34 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   }
   
   @Test
+  public void testUpdateComponentStatusQuarantined_shouldChangeStatusToUnsafe() throws Exception {
+    // set up data
+    Long donationId = 113L;
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .thatIsReleased()
+        .withIneligibleDonor(true)
+        .build();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withExpiresOn(new DateTime().plusDays(10).toDate())
+        .withDonation(donation)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(true));
+    assertThat("status is UNSAFE", component.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
   public void testUpdateComponentStatusUnsafe_shouldNotChangeStatusToExpired() throws Exception {
     // set up data
     Long donationId = Long.valueOf(1234);
@@ -535,13 +556,11 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testUpdateComponentStatusQuarantinedBloodGroupingCompleteTTIUnSafe_shouldChangeStatusToUnsafe() throws Exception {
     // set up data
     Long donationId = Long.valueOf(1234);
-    TestBatch testBatch = aReleasedTestBatch().withId(1L).build();
-    DonationBatch donationBatch = aDonationBatch().withId(1L).withTestBatch(testBatch).build();
     Donation donation = aDonation()
         .withId(donationId)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withTTIStatus(TTIStatus.TTI_UNSAFE)
-        .withDonationBatch(donationBatch)
+        .thatIsReleased()
         .build();
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
@@ -554,7 +573,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     
     // set up mocks
     when(donationRepository.findDonationById(donationId)).thenReturn(donation);
-    when(donationConstraintChecker.donationHasDiscrepancies(donation)).thenReturn(false);
     
     // SUT
     boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
@@ -587,7 +605,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     
     // set up mocks
     when(donationRepository.findDonationById(donationId)).thenReturn(donation);
-    when(donationConstraintChecker.donationHasDiscrepancies(donation)).thenReturn(false);
     
     // SUT
     boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);

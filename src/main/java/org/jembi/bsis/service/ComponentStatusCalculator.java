@@ -11,8 +11,6 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.packtype.PackType;
-import org.jembi.bsis.model.testbatch.TestBatch;
-import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +21,6 @@ public class ComponentStatusCalculator {
   
   @Autowired
   private DonationRepository donationRepository;
-
-  @Autowired
-  private DonationConstraintChecker donationConstraintChecker;
 
   public boolean shouldComponentsBeDiscarded(List<BloodTestResult> bloodTestResults) {
 
@@ -110,12 +105,8 @@ public class ComponentStatusCalculator {
     Donation donation = donationRepository.findDonationById(donationId);
     BloodTypingStatus bloodTypingStatus = donation.getBloodTypingStatus();
 
-    TestBatch testBatch = donation.getDonationBatch().getTestBatch();
-    boolean donationReleased = testBatch != null &&
-        testBatch.getStatus() != TestBatchStatus.OPEN &&
-        !donationConstraintChecker.donationHasDiscrepancies(donation);
     // If the donation has not been released yet, then don't use its TTI status
-    TTIStatus ttiStatus = donationReleased ? donation.getTTIStatus() : TTIStatus.NOT_DONE;
+    TTIStatus ttiStatus = donation.isReleased() ? donation.getTTIStatus() : TTIStatus.NOT_DONE;
 
     // Start with the old status if there is one.
     ComponentStatus newComponentStatus = oldComponentStatus == null ? ComponentStatus.QUARANTINED : oldComponentStatus;
@@ -134,7 +125,7 @@ public class ComponentStatusCalculator {
       newComponentStatus = ComponentStatus.EXPIRED;
     }
 
-    if (ttiStatus.equals(TTIStatus.TTI_UNSAFE)) {
+    if (donation.isIneligibleDonor() || ttiStatus.equals(TTIStatus.TTI_UNSAFE)) {
       newComponentStatus = ComponentStatus.UNSAFE;
     }
 
