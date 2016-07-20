@@ -57,7 +57,7 @@
                    createdDate="2015-08-12 03:36:07.0" lastUpdated="2015-08-12 03:37:00.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1"
                    backEntry="false"/>
-    <ComponentType id="1" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
                    componentTypeCode="0011"/>

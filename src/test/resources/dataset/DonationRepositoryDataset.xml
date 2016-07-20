@@ -64,15 +64,15 @@
 
     <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
 
-    <ComponentType id="1" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
                    componentTypeCode="0011"/>
-    <ComponentType id="2" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="2" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Double Pack - CPDA"
                    componentTypeCode="0012"/>
-    <ComponentType id="3" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="3" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Triple Pack - CPDA"
                    componentTypeCode="0013"/>

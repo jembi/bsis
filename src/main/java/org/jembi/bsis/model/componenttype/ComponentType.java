@@ -87,6 +87,12 @@ public class ComponentType extends BaseEntity {
 
   private String preparationInfo;
 
+  private String transportInfo;
+
+  private String storageInfo;
+
+  private boolean canBeIssued = true;
+
   public Boolean getIsDeleted() {
     return isDeleted;
   }
@@ -224,6 +230,30 @@ public class ComponentType extends BaseEntity {
     this.preparationInfo = preparationInfo;
   }
 
+  public String getTransportInfo() {
+    return transportInfo;
+  }
+
+  public void setTransportInfo(String transportInfo) {
+    this.transportInfo = transportInfo;
+  }
+
+  public String getStorageInfo() {
+    return storageInfo;
+  }
+
+  public void setStorageInfo(String storageInfo) {
+    this.storageInfo = storageInfo;
+  }
+
+  public boolean getCanBeIssued() {
+    return canBeIssued;
+  }
+
+  public void setCanBeIssued(boolean canBeIssued) {
+    this.canBeIssued = canBeIssued;
+  }
+
   public void copy(ComponentType componentType) {
     this.componentTypeName = componentType.getComponentTypeName();
     this.componentTypeCode = componentType.getComponentTypeCode();
@@ -238,6 +268,9 @@ public class ComponentType extends BaseEntity {
     this.lowTransportTemperature = componentType.getLowTransportTemperature();
     this.highTransportTemperature = componentType.getHighTransportTemperature();
     this.preparationInfo = componentType.getPreparationInfo();
+    this.transportInfo = componentType.getTransportInfo();
+    this.storageInfo = componentType.getStorageInfo();
+    this.canBeIssued = componentType.getCanBeIssued();
   }
 
 

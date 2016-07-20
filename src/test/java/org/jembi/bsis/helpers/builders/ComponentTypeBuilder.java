@@ -20,6 +20,9 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   private Integer lowStorageTemperature;
   private Integer highStorageTemperature;
   private String preparationInfo;
+  private String transportInfo;
+  private String storageInfo;
+  private boolean canBeIssued = true;
   private List<ComponentTypeCombination> producedComponentTypeCombinations = new ArrayList<>();
 
   public ComponentTypeBuilder withId(Long id) {
@@ -82,6 +85,21 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     return this;
   }
 
+  public ComponentTypeBuilder withTransportInfo(String transportInfo) {
+    this.transportInfo = transportInfo;
+    return this;
+  }
+
+  public ComponentTypeBuilder withStorageInfo(String storageInfo) {
+    this.storageInfo = storageInfo;
+    return this;
+  }
+
+  public ComponentTypeBuilder withCanBeIssued(boolean canBeIssued) {
+    this.canBeIssued = canBeIssued;
+    return this;
+  }
+
   public ComponentTypeBuilder withProducedComponentTypeCombination(ComponentTypeCombination producedComponentTypeCombination) {
     this.producedComponentTypeCombinations.add(producedComponentTypeCombination);
     return this;
@@ -102,6 +120,9 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     componentType.setHighStorageTemperature(highStorageTemperature);
     componentType.setPreparationInfo(preparationInfo);
     componentType.setProducedComponentTypeCombinations(producedComponentTypeCombinations);
+    componentType.setTransportInfo(transportInfo);
+    componentType.setStorageInfo(storageInfo);
+    componentType.setCanBeIssued(canBeIssued);
     return componentType;
   }
 

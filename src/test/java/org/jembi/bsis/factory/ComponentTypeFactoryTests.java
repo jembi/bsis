@@ -3,7 +3,6 @@ package org.jembi.bsis.factory;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
@@ -23,7 +22,7 @@ public class ComponentTypeFactoryTests {
   private ComponentTypeFactory componentTypeFactory;
 
   @Test
-  public void testSingleFullComponentType_shouldReturnExpectedEntity() {
+  public void testSingleFullComponentType_shouldReturnExpectedViewModel() {
     ComponentTypeCombination producedComponentTypeCombination = new ComponentTypeCombination();
     ComponentType entity = ComponentTypeBuilder.aComponentType()
         .withId(1L)
@@ -33,8 +32,11 @@ public class ComponentTypeFactoryTests {
         .withExpiresAfter(90)
         .withHighStorageTemperature(10)
         .withLowStorageTemperature(0)
-        .withPreparationInfo("prepare")
+        .withPreparationInfo("preparationInfo")
         .withProducedComponentTypeCombination(producedComponentTypeCombination)
+        .withTransportInfo("transportInfo")
+        .withStorageInfo("storageInfo")
+        .withCanBeIssued(false)
         .build();
 
     ComponentTypeFullViewModel viewModel = componentTypeFactory.createFullViewModel(entity);
@@ -48,13 +50,16 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", ComponentTypeTimeUnits.DAYS, viewModel.getExpiresAfterUnits());
     Assert.assertEquals("View Model correct", Integer.valueOf(10), viewModel.getHighStorageTemperature());
     Assert.assertEquals("View Model correct", Integer.valueOf(0), viewModel.getLowStorageTemperature());
-    Assert.assertEquals("View Model correct", "prepare", viewModel.getPreparationInfo());
+    Assert.assertEquals("View Model correct", "preparationInfo", viewModel.getPreparationInfo());
     Assert.assertNotNull("View Model correct", viewModel.getProducedComponentTypeCombinations());
     Assert.assertEquals("View Model correct", 1, viewModel.getProducedComponentTypeCombinations().size());
+    Assert.assertEquals("View Model correct", "transportInfo", viewModel.getTransportInfo());
+    Assert.assertEquals("View Model correct", "storageInfo", viewModel.getStorageInfo());
+    Assert.assertEquals("View Model correct", false, viewModel.getCanBeIssued());
   }
   
   @Test
-  public void testSingleComponentType_shouldReturnExpectedEntity() {
+  public void testSingleComponentType_shouldReturnExpectedViewModel() {
     ComponentType entity = ComponentTypeBuilder.aComponentType()
         .withId(1L)
         .withComponentTypeName("name")
