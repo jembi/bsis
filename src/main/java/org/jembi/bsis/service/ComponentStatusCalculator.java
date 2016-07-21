@@ -97,24 +97,27 @@ public class ComponentStatusCalculator {
     ComponentStatus oldComponentStatus = component.getStatus();
 
     // nothing to do if the component has any of these statuses
-    if (component.getStatus() != null && statusNotToBeChanged.contains(component.getStatus()))
+    if (oldComponentStatus != null && statusNotToBeChanged.contains(oldComponentStatus)) {
       return false;
+    }
 
     Long donationId = component.getDonation().getId();
     Donation donation = donationRepository.findDonationById(donationId);
     BloodTypingStatus bloodTypingStatus = donation.getBloodTypingStatus();
-
-    // If the donation has not been released yet, then don't use its TTI status
-    TTIStatus ttiStatus = donation.isReleased() ? donation.getTTIStatus() : TTIStatus.NOT_DONE;
+    TTIStatus ttiStatus = donation.getTTIStatus();
 
     // Start with the old status if there is one.
     ComponentStatus newComponentStatus = oldComponentStatus == null ? ComponentStatus.QUARANTINED : oldComponentStatus;
 
+    // Conditions for AVAILABLE status:
+    // 1. Donation is released
+    // 2. Blood typing is complete
+    // 3. Blood group is confirmed
+    // 4. TTI status is safe
     if (donation.isReleased() &&
         bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
         BloodTypingMatchStatus.isBloodGroupConfirmed(donation.getBloodTypingMatchStatus()) &&
-        ttiStatus.equals(TTIStatus.TTI_SAFE) &&
-        oldComponentStatus != ComponentStatus.UNSAFE) {
+        ttiStatus.equals(TTIStatus.TTI_SAFE)) {
       newComponentStatus = ComponentStatus.AVAILABLE;
     }
 

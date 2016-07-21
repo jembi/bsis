@@ -255,6 +255,33 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   }
   
   @Test
+  public void testUpdateComponentStatusWithNoInitialStatus_shouldChangeStatusToQuarantined() throws Exception {
+    // set up data
+    long donationId = 1234L;
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
+        .withTTIStatus(TTIStatus.NOT_DONE)
+        .build();
+    Component component = aComponent().withId(1L)
+        .withStatus(null)
+        .withExpiresOn(new DateTime().plusDays(3).toDate())
+        .withDonation(donation)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(true));
+    assertThat("status is QUARANTINED", component.getStatus(), is(ComponentStatus.QUARANTINED));
+  }
+  
+  @Test
   public void testUpdateComponentStatusQuarantined_shouldNotChangeStatus() throws Exception {
     // set up data
     Long donationId = Long.valueOf(1234);
