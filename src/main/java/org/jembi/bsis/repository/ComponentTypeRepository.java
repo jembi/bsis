@@ -60,10 +60,12 @@ public class ComponentTypeRepository {
     return em.merge(existingComponentType);
   }
   
+  /**
+   * N.B. Includes deleted component types.
+   */
   public ComponentType findComponentTypeByCode(String componentTypeCode) throws NoResultException {
     return em.createNamedQuery(ComponentTypeQueryConstants.NAME_FIND_COMPONENT_TYPE_BY_CODE, ComponentType.class)
         .setParameter("componentTypeCode", componentTypeCode)
-        .setParameter("deleted", false)
         .getSingleResult();
   }
 }

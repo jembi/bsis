@@ -4,8 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 
-import javax.persistence.NoResultException;
-
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Test;
@@ -17,7 +15,7 @@ public class ComponentTypeRepositoryTests extends ContextDependentTestSuite {
   private ComponentTypeRepository componentTypeRepository;
   
   @Test
-  public void testFindComponentByCode_shouldReturnCorrectComponent() {
+  public void testFindComponentTypeByCodeWithMultipleComponentTypes_shouldReturnCorrectComponentType() {
     String componentTypeCode = "0011";
     
     // Expected
@@ -33,8 +31,8 @@ public class ComponentTypeRepositoryTests extends ContextDependentTestSuite {
     assertThat(returnedComponentType, is(expectedComponentType));
   }
   
-  @Test(expected = NoResultException.class)
-  public void testFindComponentByCodeWithDeletedComponent_shouldThrowNoResultException() {
+  @Test
+  public void testFindComponentTypeByCodeWithDeletedComponentType_shouldReturnComponentType() {
     String componentTypeCode = "0011";
     
      aComponentType().withComponentTypeCode(componentTypeCode).thatIsDeleted().buildAndPersist(entityManager);

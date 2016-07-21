@@ -15,7 +15,6 @@ public class ComponentTypeQueryConstants {
   public static final String QUERY_FIND_COMPONENT_TYPE_BY_CODE =
       "SELECT ct "
       + "FROM ComponentType ct "
-      + "WHERE ct.componentTypeCode = :componentTypeCode "
-      + "AND ct.isDeleted = :deleted ";
+      + "WHERE ct.componentTypeCode = :componentTypeCode ";
 
 }
