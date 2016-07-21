@@ -9,7 +9,7 @@ import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
-import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.jembi.bsis.viewmodel.ComponentTypeSearchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class ComponentTypeControllerService {
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
   
-  public List<ComponentTypeViewModel> getComponentTypes(boolean includeDeleted) {
+  public List<ComponentTypeSearchViewModel> getComponentTypes(boolean includeDeleted) {
     List<ComponentType> componentTypes;
 
     if (includeDeleted) {
@@ -32,7 +32,7 @@ public class ComponentTypeControllerService {
       componentTypes = componentTypeRepository.getAllComponentTypes();
     }
 
-    return componentTypeFactory.createViewModels(componentTypes);
+    return componentTypeFactory.createSearchViewModels(componentTypes);
   }
   
   public ComponentTypeFullViewModel getComponentType(long id) {

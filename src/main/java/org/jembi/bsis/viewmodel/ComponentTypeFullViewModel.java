@@ -5,9 +5,8 @@ import java.util.List;
 
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
-import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 
-public class ComponentTypeFullViewModel extends ComponentTypeViewModel {
+public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
 
   public ComponentTypeFullViewModel(ComponentType componentType) {
     super(componentType);
@@ -15,14 +14,6 @@ public class ComponentTypeFullViewModel extends ComponentTypeViewModel {
 
   public boolean isHasBloodGroup() {
     return componentType.getHasBloodGroup();
-  }
-
-  public Integer getExpiresAfter() {
-    return componentType.getExpiresAfter();
-  }
-
-  public ComponentTypeTimeUnits getExpiresAfterUnits() {
-    return componentType.getExpiresAfterUnits();
   }
 
   public Integer getLowStorageTemperature() {
@@ -43,10 +34,6 @@ public class ComponentTypeFullViewModel extends ComponentTypeViewModel {
 
   public String getStorageInfo() {
     return componentType.getStorageInfo();
-  }
-
-  public boolean getCanBeIssued() {
-    return componentType.getCanBeIssued();
   }
 
   public List<ComponentTypeCombinationViewModel> getProducedComponentTypeCombinations() {

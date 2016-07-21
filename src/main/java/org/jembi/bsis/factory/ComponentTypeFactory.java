@@ -6,6 +6,7 @@ import java.util.List;
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
+import org.jembi.bsis.viewmodel.ComponentTypeSearchViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,11 @@ public class ComponentTypeFactory {
     viewModel.setComponentTypeName(entity.getComponentTypeName());
     viewModel.setComponentTypeNameShort(entity.getComponentTypeNameShort());
     viewModel.setDescription(entity.getDescription());*/
+    return viewModel;
+  }
+  
+  public ComponentTypeSearchViewModel createSearchViewModel(ComponentType entity) {
+    ComponentTypeSearchViewModel viewModel = new ComponentTypeSearchViewModel(entity);
     return viewModel;
   }
   
@@ -46,6 +52,16 @@ public class ComponentTypeFactory {
     }
     viewModel.setProducedComponentTypeCombinations(producedComponentTypeCombinationViewModels);*/
     return viewModel;
+  }
+  
+  public List<ComponentTypeSearchViewModel> createSearchViewModels(List<ComponentType> entities) {
+    List<ComponentTypeSearchViewModel> viewModels = new ArrayList<>();
+    if (entities != null) {
+      for (ComponentType entity : entities) {
+        viewModels.add(createSearchViewModel(entity));
+      }
+    }
+    return viewModels;
   }
   
   public List<ComponentTypeViewModel> createViewModels(List<ComponentType> entities) {
