@@ -12,7 +12,7 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
     super(componentType);
   }
 
-  public boolean isHasBloodGroup() {
+  public Boolean isHasBloodGroup() {
     return componentType.getHasBloodGroup();
   }
 
@@ -40,13 +40,14 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
     return getComponentTypeCombinationViewModels(componentType.getProducedComponentTypeCombinations());
   }
 
-  private List<ComponentTypeCombinationViewModel> getComponentTypeCombinationViewModels(
-      List<ComponentTypeCombination> componentTypeCombinations) {
+  private List<ComponentTypeCombinationViewModel> getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations) {
 
-    List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels =
-        new ArrayList<ComponentTypeCombinationViewModel>();
-    for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations)
-      componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
+    List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels = new ArrayList<ComponentTypeCombinationViewModel>();
+    if (componentTypeCombinations != null) {
+      for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations) {
+        componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
+      }
+    }
 
     return componentTypeCombinationViewModels;
   }
