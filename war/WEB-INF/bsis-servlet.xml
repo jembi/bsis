@@ -87,6 +87,7 @@
         <prop key="hibernate.dialect">org.jembi.bsis.dialect.BSISDialect</prop>
         <prop key="hibernate.show_sql">false</prop>
         <prop key="hibernate.hbm2ddl.auto">none</prop>
+        <prop key="javax.persistence.validation.mode">CALLBACK</prop>
       </props>
     </property>
   </bean>
