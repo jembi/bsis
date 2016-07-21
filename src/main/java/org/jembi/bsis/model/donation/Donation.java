@@ -28,11 +28,6 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Range;
-import org.jembi.bsis.constraintvalidator.DonationBatchExists;
-import org.jembi.bsis.constraintvalidator.DonationTypeExists;
-import org.jembi.bsis.constraintvalidator.DonorExists;
-import org.jembi.bsis.constraintvalidator.LocationExists;
-import org.jembi.bsis.constraintvalidator.PackTypeExists;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -84,7 +79,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @Index(name = "donation_donationIdentificationNumber_index")
   private String donationIdentificationNumber;
 
-  @DonorExists
   @ManyToOne
   private Donor donor;
 
@@ -110,11 +104,9 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @Index(name = "donation_donationDate_index")
   private Date donationDate;
 
-  @DonationTypeExists
   @ManyToOne
   private DonationType donationType;
 
-  @PackTypeExists
   @ManyToOne
   private PackType packType;
 
@@ -153,7 +145,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @ManyToOne(optional = true)
   private User donationCreatedBy;
 
-  @DonationBatchExists
   @ManyToOne(optional = true)
   private DonationBatch donationBatch;
 
@@ -184,7 +175,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   private Date bleedEndTime;
 
   @OneToOne
-  @LocationExists
   @NotNull
   private Location venue;
 

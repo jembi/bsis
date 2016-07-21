@@ -28,7 +28,6 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
-import org.jembi.bsis.constraintvalidator.LocationExists;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.address.Address;
 import org.jembi.bsis.model.address.AddressType;
@@ -153,7 +152,6 @@ public class Donor extends BaseModificationTrackerEntity {
   /**
    * Which venue the donor is registered to
    */
-  @LocationExists
   @ManyToOne
   private Location venue;
 

@@ -21,7 +21,6 @@ import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.constraintvalidator.LocationExists;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -43,7 +42,6 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   private static final long serialVersionUID = 1L;
   
   @OneToOne(optional = false)
-  @LocationExists
   @NotNull
   private Location location;
 
