@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
- * ComponentStatusConsistencyConstraintValidatorTests validates all compatible combinations
+ * ComponentStatusConsistencyConstraintValidatorTests validates all compatible combinations (there's
+ * integration tests for the non compatible ones in ComponentStatusConsistencyRoundTripTests)
  * 
  * IN_STOCK_COMPATIBLE_STATUSES = AVAILABLE, EXPIRED, UNSAFE 
  * NOT_IN_STOCK_COMPATIBLE_STATUSES = AVAILABLE, EXPIRED, UNSAFE, DISCARDED, PROCESSED, QUARANTINED 
