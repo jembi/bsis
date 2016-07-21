@@ -12,6 +12,7 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.DonationRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -124,8 +125,12 @@ public class ComponentStatusCalculator {
     if (component.getExpiresOn().before(new Date())) {
       newComponentStatus = ComponentStatus.EXPIRED;
     }
+    
+    // If this component belongs to a donation with an unconfirmed blood typing match status
+    boolean unconfirmedBloodGroup = donation.isReleased()
+        && !BloodTypingMatchStatus.isBloodGroupConfirmed(donation.getBloodTypingMatchStatus());
 
-    if (donation.isIneligibleDonor() || ttiStatus.equals(TTIStatus.TTI_UNSAFE)) {
+    if (donation.isIneligibleDonor() || ttiStatus.equals(TTIStatus.TTI_UNSAFE) || unconfirmedBloodGroup) {
       newComponentStatus = ComponentStatus.UNSAFE;
     }
 
