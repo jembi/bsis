@@ -100,8 +100,6 @@ public class ComponentStatusCalculator {
     if (component.getStatus() != null && statusNotToBeChanged.contains(component.getStatus()))
       return false;
 
-    if (component.getDonation() == null)
-      return false;
     Long donationId = component.getDonation().getId();
     Donation donation = donationRepository.findDonationById(donationId);
     BloodTypingStatus bloodTypingStatus = donation.getBloodTypingStatus();
@@ -112,7 +110,9 @@ public class ComponentStatusCalculator {
     // Start with the old status if there is one.
     ComponentStatus newComponentStatus = oldComponentStatus == null ? ComponentStatus.QUARANTINED : oldComponentStatus;
 
-    if (bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
+    if (donation.isReleased() &&
+        bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
+        BloodTypingMatchStatus.isBloodGroupConfirmed(donation.getBloodTypingMatchStatus()) &&
         ttiStatus.equals(TTIStatus.TTI_SAFE) &&
         oldComponentStatus != ComponentStatus.UNSAFE) {
       newComponentStatus = ComponentStatus.AVAILABLE;
