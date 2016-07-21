@@ -6,12 +6,15 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
+import org.jembi.bsis.backingform.validator.ComponentTypeBackingFormValidator;
 import org.jembi.bsis.controllerservice.ComponentTypeControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +28,13 @@ public class ComponentTypeController {
 
   @Autowired
   private ComponentTypeControllerService componentTypeControllerService;
+  @Autowired
+  private ComponentTypeBackingFormValidator componentTypeBackingFormValidator;
+
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(componentTypeBackingFormValidator);
+  }
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_TYPES + "')")

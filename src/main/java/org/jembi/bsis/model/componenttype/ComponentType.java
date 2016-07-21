@@ -27,7 +27,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @NamedQueries({
   @NamedQuery(name = ComponentTypeQueryConstants.NAME_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS,
-      query = ComponentTypeQueryConstants.QUERY_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS)
+      query = ComponentTypeQueryConstants.QUERY_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS),
+  @NamedQuery(name = ComponentTypeQueryConstants.NAME_FIND_COMPONENT_TYPE_BY_CODE,
+      query = ComponentTypeQueryConstants.QUERY_FIND_COMPONENT_TYPE_BY_CODE)
 })
 @Entity
 @Audited
@@ -36,17 +38,18 @@ public class ComponentType extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length = 50)
+  @Column(length = 50, nullable = false)
   private String componentTypeName;
 
-  @Column(length = 30)
+  @Column(length = 30, nullable = false)
   private String componentTypeCode;
 
+  @Column(nullable = false)
   private Integer expiresAfter;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 30)
-  private ComponentTypeTimeUnits expiresAfterUnits;
+  @Column(length = 30, nullable = false)
+  private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
 
   @NotAudited
   @ManyToMany(mappedBy = "componentTypes", fetch = FetchType.EAGER)
@@ -75,7 +78,7 @@ public class ComponentType extends BaseEntity {
   @Lob
   private String description;
 
-  private Boolean isDeleted;
+  private boolean isDeleted = false;
 
   private Integer lowStorageTemperature;
 

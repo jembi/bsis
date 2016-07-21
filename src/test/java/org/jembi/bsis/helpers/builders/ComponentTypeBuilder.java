@@ -10,11 +10,11 @@ import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
 
   private Long id;
-  private String componentTypeName;
+  private String componentTypeName = "Default Component Type Name";
   private Boolean isDeleted = false;
   private int expiresAfter;
   private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
-  private String componentTypeCode;
+  private String componentTypeCode = "0000"; // Default code
   private String description;
   private boolean hasBloodGroup = false;
   private Integer lowStorageTemperature;
