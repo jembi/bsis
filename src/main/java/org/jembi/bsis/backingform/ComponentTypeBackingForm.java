@@ -109,4 +109,7 @@ public class ComponentTypeBackingForm {
     componentType.setCanBeIssued(canBeIssued);
   }
 
+  public void setIsDeleted(boolean isDeleted) {
+    componentType.setIsDeleted(isDeleted);
+  }
 }
