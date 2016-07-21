@@ -21,7 +21,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
@@ -174,8 +173,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @Temporal(TemporalType.TIMESTAMP)
   private Date bleedEndTime;
 
-  @OneToOne
-  @NotNull
+  @ManyToOne(optional = false)
   private Location venue;
 
   @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)

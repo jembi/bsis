@@ -27,7 +27,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private Long id;
   private Donor donor = aDonor().build();
   private Date donationDate;
-  private Location venue;
+  private Location venue = LocationBuilder.aVenue().build();
   private String donationIdentificationNumber;
   private TTIStatus ttiStatus;
   private Boolean deleted;

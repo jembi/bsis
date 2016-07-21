@@ -15,7 +15,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
@@ -42,7 +41,6 @@ public class ComponentBatch extends BaseModificationTrackerEntity {
   private static final long serialVersionUID = 1L;
   
   @OneToOne(optional = false)
-  @NotNull
   private Location location;
 
   @SuppressWarnings("unchecked")

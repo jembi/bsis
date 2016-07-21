@@ -20,8 +20,6 @@ import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.repository.DonationBatchRepository;
-import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -114,6 +112,7 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     List<DonationBatch> unassigned = donationBatchRepository.findUnassignedDonationBatches();
     Assert.assertNotNull("Should not return a null list", unassigned);
     Assert.assertEquals("There are no unassigned donation batches", 0, unassigned.size());
+    Location venue = locationRepository.getLocation(1l);
 
     // create an unassigned batch
     DonationBatch donationBatch = new DonationBatch();
@@ -122,6 +121,7 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     donationBatch.setLastUpdated(new Date());
     donationBatch.setIsDeleted(false);
     donationBatch.setIsClosed(true);
+    donationBatch.setVenue(venue);
     donationBatchRepository.addDonationBatch(donationBatch);
 
     unassigned = donationBatchRepository.findUnassignedDonationBatches();

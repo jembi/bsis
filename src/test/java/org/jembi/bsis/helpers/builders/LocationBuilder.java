@@ -6,7 +6,7 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
 
   private Long id;
   private boolean venue;
-  private String name;
+  private String name = "location";
   private boolean usageSite;
   private boolean processingSite;
   private boolean mobileSite;
