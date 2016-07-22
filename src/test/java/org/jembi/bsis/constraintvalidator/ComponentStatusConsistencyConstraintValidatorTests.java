@@ -4,10 +4,10 @@ import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
-import org.jembi.bsis.suites.ContextDependentTestSuite;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
 
 
 /**
@@ -19,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * REMOVED_COMPATIBLE_STATUSES = ISSUED, DISCARDED
  * 
  */
-public class ComponentStatusConsistencyConstraintValidatorTests extends ContextDependentTestSuite {
+public class ComponentStatusConsistencyConstraintValidatorTests extends UnitTestSuite {
   
-  @Autowired
+  @InjectMocks
   private ComponentStatusConsistencyConstraintValidator constraintValidator;
 
   @Test

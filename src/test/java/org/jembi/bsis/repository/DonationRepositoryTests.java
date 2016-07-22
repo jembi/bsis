@@ -40,12 +40,6 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
   private DonationRepository donationRepository;
 
   @Test
-  public void test() {
-    Donation donation = aDonation().build();
-    System.out.println(donation.getId());
-  }
-
-  @Test
   public void testFindCollectedDonationsReportIndicators_shouldReturnAggregatedIndicators() {
     Date irrelevantStartDate = new DateTime().minusDays(7).toDate();
     Date irrelevantEndDate = new DateTime().minusDays(2).toDate();
