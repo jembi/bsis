@@ -10,10 +10,10 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = ComponentStatusConsistencyConstraintValidator.class)
+@Constraint(validatedBy = ComponentStatusIsConsistentConstraintValidator.class)
 @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ComponentStatusConsistency {
+public @interface ComponentStatusIsConsistent {
 
   String message() default "Component status and inventory status are not consistent for this Component";
 

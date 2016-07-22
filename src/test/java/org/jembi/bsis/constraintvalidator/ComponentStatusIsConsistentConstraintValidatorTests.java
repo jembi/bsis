@@ -11,18 +11,19 @@ import org.mockito.InjectMocks;
 
 
 /**
- * ComponentStatusConsistencyConstraintValidatorTests validates all compatible combinations (there's
- * integration tests for the non compatible ones in ComponentStatusConsistencyRoundTripTests)
+ * ComponentStatusIsConsistentConstraintValidatorTests validates all compatible combinations
+ * (there's integration tests for the non compatible ones in
+ * ComponentStatusIsConsistentRoundTripTests)
  * 
  * IN_STOCK_COMPATIBLE_STATUSES = AVAILABLE, EXPIRED, UNSAFE 
  * NOT_IN_STOCK_COMPATIBLE_STATUSES = AVAILABLE, EXPIRED, UNSAFE, DISCARDED, PROCESSED, QUARANTINED 
  * REMOVED_COMPATIBLE_STATUSES = ISSUED, DISCARDED
  * 
  */
-public class ComponentStatusConsistencyConstraintValidatorTests extends UnitTestSuite {
+public class ComponentStatusIsConsistentConstraintValidatorTests extends UnitTestSuite {
   
   @InjectMocks
-  private ComponentStatusConsistencyConstraintValidator constraintValidator;
+  private ComponentStatusIsConsistentConstraintValidator constraintValidator;
 
   @Test
   public void testConsistencyInStockAvailable_shouldBeCompatible() {

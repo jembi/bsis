@@ -10,15 +10,15 @@ import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Test;
 
 /**
- * ComponentStatusConsistencyRoundTripTests validates all non compatible combinations (there's unit
- * tests for the compatible ones in ComponentStatusConsistencyConstraintValidatorTests)
+ * ComponentStatusIsConsistentRoundTripTests validates all non compatible combinations (there's unit
+ * tests for the compatible ones in ComponentStatusIsConsistentConstraintValidatorTests)
  * 
  * IN_STOCK_NON_COMPATIBLE_STATUSES = DISCARDED, PROCESSED, QUARANTINED, ISSUED
  * NOT_IN_STOCK_NON_COMPATIBLE_STATUSES = ISSUED 
  * REMOVED_NON_COMPATIBLE_STATUSES = AVAILABLE, EXPIRED, UNSAFE, PROCESSED, QUARANTINED
  * 
  */
-public class ComponentStatusConsistencyRoundTripTests extends ContextDependentTestSuite {
+public class ComponentStatusIsConsistentRoundTripTests extends ContextDependentTestSuite {
   
   @Test(expected = ConstraintViolationException.class)
   public void testPersistComponentInStockDiscarded_shouldThrow() {

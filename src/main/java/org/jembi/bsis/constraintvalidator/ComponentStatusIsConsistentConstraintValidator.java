@@ -12,9 +12,9 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 
 @org.springframework.stereotype.Component
-public class ComponentStatusConsistencyConstraintValidator implements ConstraintValidator<ComponentStatusConsistency, Component> {
+public class ComponentStatusIsConsistentConstraintValidator implements ConstraintValidator<ComponentStatusIsConsistent, Component> {
 
-  private static final Logger LOGGER = Logger.getLogger(ComponentStatusConsistencyConstraintValidator.class);
+  private static final Logger LOGGER = Logger.getLogger(ComponentStatusIsConsistentConstraintValidator.class);
 
   private static final List<ComponentStatus> IN_STOCK_COMPATIBLE_STATUSES = Arrays.asList(
       ComponentStatus.AVAILABLE,
@@ -34,7 +34,7 @@ public class ComponentStatusConsistencyConstraintValidator implements Constraint
       ComponentStatus.DISCARDED);
 
   @Override
-  public void initialize(ComponentStatusConsistency constraint) {
+  public void initialize(ComponentStatusIsConsistent constraint) {
   }
 
   @Override

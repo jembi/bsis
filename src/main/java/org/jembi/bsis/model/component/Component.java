@@ -25,7 +25,7 @@ import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.constraintvalidator.ComponentStatusConsistency;
+import org.jembi.bsis.constraintvalidator.ComponentStatusIsConsistent;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
@@ -64,7 +64,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 })
 @Entity
 @Audited
-@ComponentStatusConsistency
+@ComponentStatusIsConsistent
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Component extends BaseModificationTrackerEntity {
 
