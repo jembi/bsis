@@ -29,6 +29,12 @@ public class ComponentTypeRepository {
     return query.getResultList();
   }
 
+  public List<ComponentType> getAllComponentTypesThatCanBeIssued() {
+    return em.createNamedQuery(ComponentTypeQueryConstants.NAME_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED, ComponentType.class)
+        .setParameter("deleted", false)
+        .getResultList();
+  }
+
   public List<ComponentType> getAllComponentTypesIncludeDeleted() {
     TypedQuery<ComponentType> query;
     query = em.createQuery("SELECT ct from ComponentType ct", ComponentType.class);
