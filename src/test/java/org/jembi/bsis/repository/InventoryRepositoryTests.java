@@ -22,7 +22,6 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.util.BloodGroup;
-import org.jembi.bsis.repository.InventoryRepository;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -129,7 +128,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     .withComponentType(type1).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     // components that don't match due to Inventory Statuses
-    aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.EXPIRED)
+    aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.ISSUED)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.EXPIRED)
@@ -166,9 +165,6 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     
     // components that don't match due to Component Status (note that USED and ISSUED belong to a Inventory Status.REMOVED)
     aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.PROCESSED)
-    .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
-    
-    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.SPLIT)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.UNSAFE)
@@ -213,7 +209,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(type3).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.EXPIRED)
+    aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.ISSUED)
     .withComponentType(type3).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.IN_STOCK);
@@ -313,9 +309,6 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.PROCESSED)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
-    aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.SPLIT)
-    .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
-    
     aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withStatus(ComponentStatus.UNSAFE)
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
@@ -345,7 +338,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     Location location = LocationBuilder.aProcessingSite().withName("PSite").buildAndPersist(entityManager);
 
     // components that match
-    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.QUARANTINED)
+    aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(type1).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
 
     aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withStatus(ComponentStatus.AVAILABLE)

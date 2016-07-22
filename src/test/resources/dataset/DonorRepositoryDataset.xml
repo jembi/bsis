@@ -20,7 +20,7 @@
     <address id="1" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
-             homeAddressState="" homeAddressZipcode="" workAddressline1="" workAddressline2=""
+             homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
              workAddressCity="" workAddressProvince="" workAddressDistrict="" workAddressCountry=""
              workAddressState="" workAddressZipcode="" postalAddressline1="" postalAddressline2=""
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
@@ -28,7 +28,7 @@
     <address id="2" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
-             homeAddressState="" homeAddressZipcode="" workAddressline1="" workAddressline2=""
+             homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
              workAddressCity="" workAddressProvince="" workAddressDistrict="" workAddressCountry=""
              workAddressState="" workAddressZipcode="" postalAddressline1="" postalAddressline2=""
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
@@ -36,7 +36,7 @@
     <address id="3" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
-             homeAddressState="" homeAddressZipcode="" workAddressline1="" workAddressline2=""
+             homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
              workAddressCity="" workAddressProvince="" workAddressDistrict="" workAddressCountry=""
              workAddressState="" workAddressZipcode="" postalAddressline1="" postalAddressline2=""
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
@@ -44,7 +44,7 @@
     <address id="4" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
-             homeAddressState="" homeAddressZipcode="" workAddressline1="" workAddressline2=""
+             homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
              workAddressCity="" workAddressProvince="" workAddressDistrict="" workAddressCountry=""
              workAddressState="" workAddressZipcode="" postalAddressline1="" postalAddressline2=""
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
@@ -52,7 +52,7 @@
     <address id="5" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
-             homeAddressState="" homeAddressZipcode="" workAddressline1="" workAddressline2=""
+             homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
              workAddressCity="" workAddressProvince="" workAddressDistrict="" workAddressCountry=""
              workAddressState="" workAddressZipcode="" postalAddressline1="" postalAddressline2=""
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
@@ -60,7 +60,7 @@
     <address id="6" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"
              homeAddressProvince="" homeAddressDistrict="" homeAddressCountry=""
-             homeAddressState="" homeAddressZipcode="" workAddressline1="" workAddressline2=""
+             homeAddressState="" homeAddressZipcode="1122" workAddressline1="" workAddressline2=""
              workAddressCity="" workAddressProvince="" workAddressDistrict="" workAddressCountry=""
              workAddressState="" workAddressZipcode="" postalAddressline1="" postalAddressline2=""
              postalAddressCity="" postalAddressProvince="" postalAddressDistrict=""
@@ -118,11 +118,11 @@
            idNumber="123" notes="notes" addressId="6" contactId="1"
            venue_id="3" createdBy_id="1" lastUpdatedBy_id="1"/>
 
-    <packtype id="1" packType="Single" canPool="" testSampleProduced="true"
+    <packtype id="1" packType="Single" canPool="" testSampleProduced="true" countAsDonation="true"
               canSplit="" isDeleted="0"></packtype>
-    <packtype id="2" packType="Triple" canPool="" testSampleProduced="true"
+    <packtype id="2" packType="Triple" canPool="" testSampleProduced="true" countAsDonation="true"
               canSplit="" isDeleted="0"></packtype>
-    <packtype id="3" packType="Pedi" canPool="" testSampleProduced="true"
+    <packtype id="3" packType="Pedi" canPool="" testSampleProduced="true" countAsDonation="true"
               canSplit="" isDeleted="0"></packtype>
 
     <donationtype id="1" donationType="Voluntary" isDeleted="0"></donationtype>

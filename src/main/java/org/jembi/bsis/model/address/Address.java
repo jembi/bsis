@@ -1,7 +1,6 @@
 package org.jembi.bsis.model.address;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.Pattern;
 
 import org.jembi.bsis.model.BaseEntity;
 
@@ -20,7 +19,6 @@ public class Address extends BaseEntity {
   private String homeAddressDistrict;
   private String homeAddressCountry;
   private String homeAddressState;
-  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
   private String homeAddressZipcode;
 
   private String workAddressLine1;
@@ -30,7 +28,6 @@ public class Address extends BaseEntity {
   private String workAddressDistrict;
   private String workAddressCountry;
   private String workAddressState;
-  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
   private String workAddressZipcode;
 
   private String postalAddressLine1;
@@ -40,7 +37,6 @@ public class Address extends BaseEntity {
   private String postalAddressDistrict;
   private String postalAddressCountry;
   private String postalAddressState;
-  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
   private String postalAddressZipcode;
 
   public String getHomeAddressLine1() {

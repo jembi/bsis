@@ -28,7 +28,6 @@ import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.util.Gender;
-import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Ignore;
@@ -185,7 +184,7 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
         .withComponentBatch(null)
         .buildAndPersist(entityManager);
     Donor existingDonor = aDonor().buildAndPersist(entityManager);
-    
+    Location venue = aVenue().buildAndPersist(entityManager);
     Donation donation = aDonation()
         .withPackType(packTypeThatCountsAsDonation)
         .withDonationBatch(donationBatchWithoutComponentBatch)
@@ -193,6 +192,7 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
         .withDonationDate(new Date())
         .withBleedStartTime(new Date())
         .withBleedEndTime(new Date())
+        .withVenue(venue)
         .build();
     
     // Call the method being tested
@@ -214,7 +214,7 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
         .withComponentBatch(aComponentBatch().withLocation(componentBatchProcessingSite).build())
         .buildAndPersist(entityManager);
     Donor existingDonor = aDonor().buildAndPersist(entityManager);
-    
+    Location venue = aVenue().buildAndPersist(entityManager);
     Donation donation = aDonation()
         .withPackType(packTypeThatCountsAsDonation)
         .withDonationBatch(donationBatchWithComponentBatch)
@@ -222,6 +222,7 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
         .withDonationDate(new Date())
         .withBleedStartTime(new Date())
         .withBleedEndTime(new Date())
+        .withVenue(venue)
         .build();
     
     // Call the method being tested
