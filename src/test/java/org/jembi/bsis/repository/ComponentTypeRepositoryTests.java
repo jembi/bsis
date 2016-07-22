@@ -30,14 +30,19 @@ public class ComponentTypeRepositoryTests extends ContextDependentTestSuite {
     
     assertThat(returnedComponentType, is(expectedComponentType));
   }
-  
+
   @Test
   public void testFindComponentTypeByCodeWithDeletedComponentType_shouldReturnComponentType() {
     String componentTypeCode = "0011";
+
+    ComponentType expectedComponentType = aComponentType()
+        .withComponentTypeCode(componentTypeCode)
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+
+    ComponentType returnedComponentType = componentTypeRepository.findComponentTypeByCode(componentTypeCode);
     
-     aComponentType().withComponentTypeCode(componentTypeCode).thatIsDeleted().buildAndPersist(entityManager);
-    
-    componentTypeRepository.findComponentTypeByCode(componentTypeCode);
+    assertThat(returnedComponentType, is(expectedComponentType));
   }
 
 }
