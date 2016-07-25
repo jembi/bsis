@@ -68,9 +68,9 @@ public class GlobalControllerExceptionHandler {
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "There are validation issues, please provide valid inputs");
-    errorMap.put("userMessage", "Please provide valid inputs");
-    errorMap.put("moreInfo", e.getMessage());
+    errorMap.put("developerMessage", e.getMessage());
+    errorMap.put("userMessage", "");
+    errorMap.put("moreInfo", e.getStackTrace()[0]);
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     for (FieldError error : e.getErrors().getFieldErrors()) {
       errorMap.put(error.getField(), error.getDefaultMessage());
