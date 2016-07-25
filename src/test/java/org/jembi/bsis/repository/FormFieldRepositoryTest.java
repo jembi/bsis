@@ -34,13 +34,6 @@ public class FormFieldRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testGetAll() throws Exception {
-    List<FormField> all = formFieldRepository.allFormFields();
-    Assert.assertNotNull("There are FormFields", all);
-    Assert.assertEquals("There are 170 FormFields", 170, all.size());
-  }
-
-  @Test
   public void testFindFormFieldById() throws Exception {
     FormField one = formFieldRepository.findFormFieldById(1l);
     Assert.assertNotNull("There is a FormField with id 1", one);
