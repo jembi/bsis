@@ -39,8 +39,11 @@ public class GlobalControllerExceptionHandler {
   public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException errors) {
     
-    LOGGER.error(errors.getMessage());
-    LOGGER.trace(errors);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(errors.getMessage(), errors);
+    } else {
+      LOGGER.error(errors.getMessage());
+    }
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
@@ -119,8 +122,11 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException error) {
     
-    LOGGER.error(error.getMessage());
-    LOGGER.trace(error);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(error.getMessage(), error);
+    } else {
+      LOGGER.error(error.getMessage());
+    }
     
     Map<String, Object> errorMap = new HashMap<>();
     errorMap.put("hasErrors", "true");
@@ -135,8 +141,11 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(IllegalStateException.class)
   public ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalStateException error) {
     
-    LOGGER.error(error.getMessage());
-    LOGGER.trace(error);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(error.getMessage(), error);
+    } else {
+      LOGGER.error(error.getMessage());
+    }
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
@@ -179,8 +188,11 @@ public class GlobalControllerExceptionHandler {
     String errorMessage = error.getMethod() + " supports only " + error.getSupportedHttpMethods()
         + ", change the request type to " + error.getSupportedHttpMethods();
 
-    LOGGER.error(errorMessage);
-    LOGGER.trace(error);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(errorMessage, error);
+    } else {
+      LOGGER.error(errorMessage);
+    }
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
@@ -202,8 +214,11 @@ public class GlobalControllerExceptionHandler {
     
     String errorMessage = "the requested content type [" + error.getContentType() + "] is not supported";
 
-    LOGGER.error(errorMessage);
-    LOGGER.trace(error);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(errorMessage, error);
+    } else {
+      LOGGER.error(errorMessage);
+    }
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
@@ -225,8 +240,11 @@ public class GlobalControllerExceptionHandler {
     String errorMessage = "the request parameter ["
         + error.getParameterName() + "] of type [" + error.getParameterType() + "] is missing";
     
-    LOGGER.error(errorMessage);
-    LOGGER.trace(error);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(errorMessage, error);
+    } else {
+      LOGGER.error(errorMessage);
+    }
         
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
@@ -248,8 +266,11 @@ public class GlobalControllerExceptionHandler {
     String errorMessage = error.getPropertyName() + "with value " + error.getValue()
         + "is not compatable to" + error.getRequiredType();
     
-    LOGGER.error(errorMessage);
-    LOGGER.trace(error);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(errorMessage, error);
+    } else {
+      LOGGER.error(errorMessage);
+    }
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
@@ -289,8 +310,11 @@ public class GlobalControllerExceptionHandler {
 
     String errorMessage = "Value '" + error.getValue() + "' is not compatable with " + error.getRequiredType();
     
-    LOGGER.error(errorMessage);
-    LOGGER.trace(error);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(errorMessage, error);
+    } else {
+      LOGGER.error(errorMessage);
+    }
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
@@ -312,8 +336,11 @@ public class GlobalControllerExceptionHandler {
     String errorMessage = error.getValue() + "cannot be converted to " + error.getTargetType() +
         "change '" + error.getValue() + "' To match target type" + error.getTargetType();
     
-    LOGGER.error(errorMessage);
-    LOGGER.trace(error);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(errorMessage, error);
+    } else {
+      LOGGER.error(errorMessage);
+    }
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
@@ -335,7 +362,7 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(NullPointerException.class)
   public ResponseEntity<Map<String, Object>> handleNullPointerException(NullPointerException error) {
 
-    LOGGER.error(error);
+    LOGGER.error(error.getMessage(), error);
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
@@ -352,9 +379,14 @@ public class GlobalControllerExceptionHandler {
    */
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<Map<String, Object>> handleHttpMessageNotReadableException(HttpMessageNotReadableException error) {
+
+    String errorMessage = "Error parsing  Json request to corresponding object. Error: " + error.getMessage();
     
-    LOGGER.error("Error parsing  Json request to corresponding object. Error: " + error.getMessage());
-    LOGGER.trace(error);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(errorMessage, error);
+    } else {
+      LOGGER.error(errorMessage);
+    }
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
@@ -374,9 +406,12 @@ public class GlobalControllerExceptionHandler {
   public ResponseEntity<Map<String, Object>> handleHttpMessageNotWritableException(HttpMessageNotWritableException error) {
     
     String errorMessage = "Error parsing Object to JSON response";
-    
-    LOGGER.error(errorMessage + ". Error: " + error.getMessage());
-    LOGGER.trace(error);
+
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug(error.getMessage(), error);
+    } else {
+      LOGGER.error(errorMessage + ". Error: " + error.getMessage());
+    }
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
