@@ -92,10 +92,7 @@ public class GeneralConfigUpdater {
   public void initializeGeneralConfigs() {
     //Set the application root log level at startup
     GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName("log.level");
-    if (generalConfig == null || StringUtils.isBlank(generalConfig.getValue())) {
-      // perhaps the log.level configuration has not yet been loaded into the repository
-      LoggerUtil.setLogLevel("info");
-    } else {
+    if (generalConfig != null && StringUtils.isNotBlank(generalConfig.getValue())) {
       LoggerUtil.setLogLevel(generalConfig.getValue());
     }
   }
