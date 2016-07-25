@@ -71,11 +71,11 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("developerMessage", "There are validation issues, please provide valid inputs");
     errorMap.put("userMessage", "Please provide valid inputs");
     errorMap.put("moreInfo", e.getMessage());
-    errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
+    errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
     for (FieldError error : e.getErrors().getFieldErrors()) {
       errorMap.put(error.getField(), error.getDefaultMessage());
     }
-    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   /**
@@ -297,7 +297,7 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("developerMessage", error.getMessage());
     errorMap.put("userMessage", "");
     errorMap.put("moreInfo", error.getStackTrace()[0]);
-    errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
+    errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
 
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
@@ -380,7 +380,7 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<Map<String, Object>> handleHttpMessageNotReadableException(HttpMessageNotReadableException error) {
 
-    String errorMessage = "Error parsing  Json request to corresponding object. Error: " + error.getMessage();
+    String errorMessage = "Error parsing Json request to corresponding object. Error: " + error.getMessage();
     
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug(errorMessage, error);
