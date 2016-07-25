@@ -274,6 +274,7 @@ public class ComponentType extends BaseEntity {
     this.transportInfo = componentType.getTransportInfo();
     this.storageInfo = componentType.getStorageInfo();
     this.canBeIssued = componentType.getCanBeIssued();
+    this.isDeleted = componentType.getIsDeleted();
   }
 
 
