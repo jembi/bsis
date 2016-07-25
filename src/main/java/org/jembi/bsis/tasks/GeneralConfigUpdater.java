@@ -80,7 +80,7 @@ public class GeneralConfigUpdater {
           LOGGER.trace("There are no configs to update");
         }
       } else {
-        LOGGER.warn("Could not find the config file in the path");
+        LOGGER.trace("Could not find the config file in the path");
       }
 
     } catch (IOException error) {
@@ -92,9 +92,9 @@ public class GeneralConfigUpdater {
 
   @Scheduled(fixedDelay = Integer.MAX_VALUE)
   public void initializeGeneralConfigs() {
-    LOGGER.info("Set the application root log level at startup");
     GeneralConfig generalConfig = generalConfigRepository.getGeneralConfigByName("log.level");
     if (generalConfig != null && StringUtils.isNotBlank(generalConfig.getValue())) {
+      LOGGER.info("Set the application root log level to: " + generalConfig.getValue());
       LoggerUtil.setLogLevel(generalConfig.getValue());
     }
   }

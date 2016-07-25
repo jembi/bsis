@@ -24,12 +24,9 @@ public class CustomIntegrator implements Integrator {
   @Override
   public void integrate(Configuration configuration, SessionFactoryImplementor implementor,
                         SessionFactoryServiceRegistry registry) {
-    logger.info("Registering event listeners");
-    // you can add duplication strategory for duplicate registrations
+    logger.info("Registering listeners for PERSIST and MERGE events");
 
     final EventListenerRegistry eventRegistry = registry.getService(EventListenerRegistry.class);
-    // prepend to register before or append to register after
-    // this example will register a persist event listener
 
     eventRegistry.prependListeners(EventType.PERSIST, EntitySaveListener.class);
     eventRegistry.appendListeners(EventType.MERGE, EntitySaveListener.class);
