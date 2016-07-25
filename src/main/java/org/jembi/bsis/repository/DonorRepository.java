@@ -17,6 +17,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.jembi.bsis.dto.DuplicateDonorDTO;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.model.address.AddressType;
@@ -39,6 +40,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class DonorRepository {
+  
+  private static final Logger LOGGER = Logger.getLogger(DonorRepository.class);
 
   @PersistenceContext
   private EntityManager em;
@@ -190,7 +193,7 @@ public class DonorRepository {
     } catch (NoResultException ex) {
       return null;
     } catch (NonUniqueResultException ex) {
-      ex.printStackTrace();
+      LOGGER.error("Duplicate Donor with  donorNumber '" + donorNumber + "'", ex);
     }
     return donor;
   }

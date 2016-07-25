@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.jembi.bsis.model.donor.Donor;
 import org.joda.time.DateTime;
 import org.joda.time.Years;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DonorUtils {
+  
+  private static final Logger LOGGER = Logger.getLogger(DonorUtils.class);
 
   public static Integer computeDonorAge(Donor donor) {
     Date birthDate = donor.getBirthDate();
@@ -73,7 +76,7 @@ public class DonorUtils {
       md5.update(hashComponents.getBytes());
       md5Checksum = String.format("%032x", new BigInteger(1, md5.digest()));
     } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
+      LOGGER.error("Could not compute Donor hash for '" + donor.getId() +"'", e);
     }
 
     return md5Checksum;
