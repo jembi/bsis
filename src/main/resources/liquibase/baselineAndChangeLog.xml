@@ -34,5 +34,6 @@
   <include file="./src/main/resources/liquibase/updates/1158-manage-locations.xml" />
   <include file="./src/main/resources/liquibase/updates/1162-add-location-to-test-batch.xml" />
   <include file="./src/main/resources/liquibase/updates/79-add-fields-to-component-types.xml" />
+  <include file="./src/main/resources/liquibase/updates/1332-manage-existing-component-types.xml" />
 
 </databaseChangeLog>

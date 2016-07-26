@@ -9,6 +9,13 @@ public class ComponentTypeQueryConstants {
           "FROM ComponentType ct " +
           "WHERE ct.id = :id " +
           "AND ct.isDeleted = :deleted ";
+  
+  public static final String NAME_FIND_COMPONENT_TYPE_BY_CODE =
+      "ComponentType.findComponentTypeByCode";
+  public static final String QUERY_FIND_COMPONENT_TYPE_BY_CODE =
+      "SELECT ct "
+      + "FROM ComponentType ct "
+      + "WHERE ct.componentTypeCode = :componentTypeCode ";
 
   public static final String NAME_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED =
       "ComponentType.getComponentTypesThatCanBeIssued";

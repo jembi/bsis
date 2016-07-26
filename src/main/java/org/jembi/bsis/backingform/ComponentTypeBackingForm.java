@@ -24,17 +24,33 @@ public class ComponentTypeBackingForm {
   public void setComponentType(ComponentType componentType) {
     this.componentType = componentType;
   }
+  
+  public Long getId() {
+    return componentType.getId();
+  }
 
   public void setId(Long id) {
     componentType.setId(id);
   }
 
+  public String getComponentTypeName() {
+    return componentType.getComponentTypeName();
+  }
+  
   public void setComponentTypeName(String componentTypeName) {
     componentType.setComponentTypeName(componentTypeName);
   }
 
+  public String getComponentTypeCode() {
+    return componentType.getComponentTypeCode();
+  }
+
   public void setComponentTypeCode(String componentTypeCode) {
     componentType.setComponentTypeCode(componentTypeCode);
+  }
+  
+  public Integer getExpiresAfter() {
+    return componentType.getExpiresAfter();
   }
 
   public void setExpiresAfter(Integer expiresAfter) {
@@ -93,4 +109,7 @@ public class ComponentTypeBackingForm {
     componentType.setCanBeIssued(canBeIssued);
   }
 
+  public void setIsDeleted(boolean isDeleted) {
+    componentType.setIsDeleted(isDeleted);
+  }
 }

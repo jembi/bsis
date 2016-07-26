@@ -5,6 +5,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.matchers.LocationMatcher.hasSameStateAsLocation;
 
@@ -165,11 +166,11 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     entityManager.flush();
 
     // set up test data (Donation)
-    ComponentType componentType = new ComponentType();
-    componentType.setComponentTypeCode("0011");
-    componentType.setExpiresAfter(35);
-    componentType.setExpiresAfterUnits(ComponentTypeTimeUnits.DAYS);
-    entityManager.persist(componentType);
+    ComponentType componentType = aComponentType()
+        .withComponentTypeCode("0011")
+        .withExpiresAfter(35)
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .buildAndPersist(entityManager);
     PackTypeBuilder.aPackType().withPackType("Single").withCountAsDonation(true).withTestSampleProduced(true)
         .withPeriodBetweenDonations(90).withComponentType(componentType)
         .thatIsNotDeleted().buildAndPersist(entityManager);
