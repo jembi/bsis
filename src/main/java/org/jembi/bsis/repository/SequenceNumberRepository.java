@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.log4j.Logger;
 import org.jembi.bsis.model.sequencenumber.SequenceNumberStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class SequenceNumberRepository {
+  
+  private static final Logger LOGGER = Logger.getLogger(SequenceNumberRepository.class);
 
   @PersistenceContext
   private EntityManager em;
@@ -40,7 +43,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      //ex.printStackTrace();
+      LOGGER.debug("Creating SequenceNumberStore entry for Donation donationIdentificationNumber");
       valuePresentInTable = false;
       prefix = "C";
       seqNumStore = new SequenceNumberStore();
@@ -81,7 +84,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      //ex.printStackTrace();
+      LOGGER.debug("Creating SequenceNumberStore entry for Request requestNumber");
       valuePresentInTable = false;
       seqNumStore = new SequenceNumberStore();
       seqNumStore.setTargetTable("Request");
@@ -122,7 +125,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       //prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      //ex.printStackTrace();
+      LOGGER.debug("Creating SequenceNumberStore entry for Donor donorNumber");
       valuePresentInTable = false;
       seqNumStore = new SequenceNumberStore();
       seqNumStore.setTargetTable("Donor");
@@ -166,7 +169,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
 
     } catch (NoResultException ex) {
-      //ex.printStackTrace();
+      LOGGER.debug("Creating SequenceNumberStore entry for Donor donorNumber");
 
       seqNumStore = new SequenceNumberStore();
       seqNumStore.setTargetTable("Donor");
@@ -206,7 +209,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      //ex.printStackTrace();
+      LOGGER.debug("Creating SequenceNumberStore entry for Donation donationIdentificationNumber");
       valuePresentInTable = false;
       prefix = "C";
       seqNumStore = new SequenceNumberStore();
@@ -252,7 +255,7 @@ public class SequenceNumberRepository {
       lastNumber = seqNumStore.getLastNumber();
       prefix = seqNumStore.getPrefix();
     } catch (NoResultException ex) {
-      //ex.printStackTrace();
+      LOGGER.debug("Creating SequenceNumberStore entry for " + targetTable + " " + columnName + " and prefix " + numberPrefix);
       valuePresentInTable = false;
       prefix = numberPrefix;
       seqNumStore = new SequenceNumberStore();
