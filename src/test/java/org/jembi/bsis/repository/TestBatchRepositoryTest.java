@@ -115,12 +115,12 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
     testBatch.setDonationBatches(donationBatches);
     Location location = locationRepository.getLocation(2l);
     testBatch.setLocation(location);
-    TestBatch savedTestBatch = testBatchRepository.saveTestBatch(testBatch, "1234567");
+    TestBatch savedTestBatch = testBatchRepository.saveTestBatch(testBatch, "123456");
     Assert.assertNotNull("Saved TestBatch has an id", savedTestBatch.getId());
     TestBatch retrievedTestBatch = testBatchRepository.findTestBatchById(savedTestBatch.getId());
     Assert.assertNotNull("Saved TestBatch is found", retrievedTestBatch);
     Assert.assertEquals("TestBatch status is correct", TestBatchStatus.OPEN, retrievedTestBatch.getStatus());
-    Assert.assertEquals("TestBatch batchNumber is correct", "1234567", retrievedTestBatch.getBatchNumber());
+    Assert.assertEquals("TestBatch batchNumber is correct", "123456", retrievedTestBatch.getBatchNumber());
     DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(3l);
     Assert.assertNotNull("DonationBatch was linked to TestBatch", updatedDonationBatch.getTestBatch());
   }

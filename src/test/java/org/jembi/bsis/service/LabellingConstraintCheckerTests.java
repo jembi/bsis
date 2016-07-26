@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.mockito.Mockito.when;
@@ -141,7 +142,8 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withBloodAbo("A")
         .withBloodRh("+")
         .build();
-    Component component = aComponent().withId(1L).withDonation(donation).withStatus(ComponentStatus.AVAILABLE).build();
+    Component component = aComponent().withId(1L).withDonation(donation).withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(aComponentType().withCanBeIssued(true).build()).build();
     
     // Mocks
     when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
@@ -165,7 +167,8 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withBloodAbo("A")
         .withBloodRh("+")
         .build();
-    Component component = aComponent().withId(1L).withDonation(donation).withStatus(ComponentStatus.QUARANTINED).build();
+    Component component = aComponent().withId(1L).withDonation(donation).withStatus(ComponentStatus.QUARANTINED)
+        .withComponentType(aComponentType().withCanBeIssued(true).build()).build();
     
     // Mocks
     when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
@@ -299,6 +302,30 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     assertThat(canPrintDiscardLabel, is(false));
   }
 
+  @Test
+  public void testCanPrintPackLabelWithComponentThatCanBeIssued_shouldReturnTrue() {
+    // Set up
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(aComponentType().withCanBeIssued(true).build()).build();
+
+    // Exercise SUT
+    boolean canPrintPackLabel = labellingConstraintChecker.canPrintPackLabel(component);
+
+    // Verify
+    assertThat(canPrintPackLabel, is(true));
+  }
   
+  @Test
+  public void testCanPrintPackLabelWithComponentThatCantBeIssued_shouldReturnFalse() {
+    // Set up
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(aComponentType().withCanBeIssued(false).build()).build();
+
+    // Exercise SUT
+    boolean canPrintPackLabel = labellingConstraintChecker.canPrintPackLabel(component);
+
+    // Verify
+    assertThat(canPrintPackLabel, is(false));
+  }
 
 }

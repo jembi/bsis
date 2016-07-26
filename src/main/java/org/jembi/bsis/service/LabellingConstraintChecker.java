@@ -19,6 +19,9 @@ public class LabellingConstraintChecker {
   private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
   
   public boolean canPrintPackLabel(Component component) {
+    if (!component.getComponentType().getCanBeIssued()) {
+      return false;
+    }
     return component.getStatus() == ComponentStatus.AVAILABLE;
   }
   

@@ -10,12 +10,12 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = DonationBatchExistsConstraintValidator.class)
-@Target({ElementType.FIELD})
+@Constraint(validatedBy = ComponentStatusIsConsistentConstraintValidator.class)
+@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DonationBatchExists {
+public @interface ComponentStatusIsConsistent {
 
-  String message() default "Donation batch does not exist";
+  String message() default "Component status and inventory status are not consistent for this Component";
 
   Class<?>[] groups() default {};
 

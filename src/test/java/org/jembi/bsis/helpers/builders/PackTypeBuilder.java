@@ -11,7 +11,7 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
 
   private Long id;
   private String type;
-  private Boolean countAsDonation;
+  private Boolean countAsDonation = Boolean.TRUE;;
   private int periodBetweenDonations;
   private Boolean isDeleted;
   private ComponentType componentType = aComponentType().build();

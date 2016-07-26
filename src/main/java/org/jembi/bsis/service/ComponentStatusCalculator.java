@@ -11,9 +11,8 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.packtype.PackType;
-import org.jembi.bsis.model.testbatch.TestBatch;
-import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +22,6 @@ public class ComponentStatusCalculator {
   
   @Autowired
   private DonationRepository donationRepository;
-
-  @Autowired
-  private DonationConstraintChecker donationConstraintChecker;
 
   public boolean shouldComponentsBeDiscarded(List<BloodTestResult> bloodTestResults) {
 
@@ -101,28 +97,27 @@ public class ComponentStatusCalculator {
     ComponentStatus oldComponentStatus = component.getStatus();
 
     // nothing to do if the component has any of these statuses
-    if (component.getStatus() != null && statusNotToBeChanged.contains(component.getStatus()))
+    if (oldComponentStatus != null && statusNotToBeChanged.contains(oldComponentStatus)) {
       return false;
+    }
 
-    if (component.getDonation() == null)
-      return false;
     Long donationId = component.getDonation().getId();
     Donation donation = donationRepository.findDonationById(donationId);
     BloodTypingStatus bloodTypingStatus = donation.getBloodTypingStatus();
-
-    TestBatch testBatch = donation.getDonationBatch().getTestBatch();
-    boolean donationReleased = testBatch != null &&
-        testBatch.getStatus() != TestBatchStatus.OPEN &&
-        !donationConstraintChecker.donationHasDiscrepancies(donation);
-    // If the donation has not been released yet, then don't use its TTI status
-    TTIStatus ttiStatus = donationReleased ? donation.getTTIStatus() : TTIStatus.NOT_DONE;
+    TTIStatus ttiStatus = donation.getTTIStatus();
 
     // Start with the old status if there is one.
     ComponentStatus newComponentStatus = oldComponentStatus == null ? ComponentStatus.QUARANTINED : oldComponentStatus;
 
-    if (bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
-        ttiStatus.equals(TTIStatus.TTI_SAFE) &&
-        oldComponentStatus != ComponentStatus.UNSAFE) {
+    // Conditions for AVAILABLE status:
+    // 1. Donation is released
+    // 2. Blood typing is complete
+    // 3. Blood group is confirmed
+    // 4. TTI status is safe
+    if (donation.isReleased() &&
+        bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
+        BloodTypingMatchStatus.isBloodGroupConfirmed(donation.getBloodTypingMatchStatus()) &&
+        ttiStatus.equals(TTIStatus.TTI_SAFE)) {
       newComponentStatus = ComponentStatus.AVAILABLE;
     }
 
@@ -133,8 +128,12 @@ public class ComponentStatusCalculator {
     if (component.getExpiresOn().before(new Date())) {
       newComponentStatus = ComponentStatus.EXPIRED;
     }
+    
+    // If this component belongs to a donation with an unconfirmed blood typing match status
+    boolean unconfirmedBloodGroup = donation.isReleased()
+        && !BloodTypingMatchStatus.isBloodGroupConfirmed(donation.getBloodTypingMatchStatus());
 
-    if (ttiStatus.equals(TTIStatus.TTI_UNSAFE)) {
+    if (donation.isIneligibleDonor() || ttiStatus.equals(TTIStatus.TTI_UNSAFE) || unconfirmedBloodGroup) {
       newComponentStatus = ComponentStatus.UNSAFE;
     }
 

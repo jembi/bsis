@@ -34,7 +34,7 @@ public class DonationPersister extends AbstractEntityPersister<Donation> {
     if (donation.getPackType() != null) {
       aPackTypePersister().deepPersist(donation.getPackType(), entityManager);
     }
-    
+
     if (donation.getDonationBatch() != null) {
       aDonationBatchPersister().deepPersist(donation.getDonationBatch(), entityManager);
     }

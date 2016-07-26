@@ -18,7 +18,6 @@ import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.constraintvalidator.LocationExists;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donation.Donation;
@@ -55,7 +54,6 @@ public class DonationBatch extends BaseModificationTrackerEntity {
   private List<Donation> donations = Collections.EMPTY_LIST;
 
   @OneToOne
-  @LocationExists
   @NotNull
   private Location venue;
 

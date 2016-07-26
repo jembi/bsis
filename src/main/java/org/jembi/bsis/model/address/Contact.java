@@ -1,7 +1,6 @@
 package org.jembi.bsis.model.address;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Email;
 import org.jembi.bsis.model.BaseEntity;
@@ -14,13 +13,10 @@ public class Contact extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
   private String mobileNumber;
 
-  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
   private String homeNumber;
 
-  @Pattern(regexp = "[0-9]+", message = "Given Input Must be a number")
   private String workNumber;
 
   @Email
