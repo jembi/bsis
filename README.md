@@ -55,8 +55,7 @@ Development Environment
       http://stackoverflow.com/questions/6083501/maven-dependencies-not-visible-in-web-inf-lib
       Note that the Maven Dependencies are removed from Deployment Assembly and need to readded when Maven update project is run.
 2. You will also need to setup a MySQL database:
-    *  Create the MYSQL database: `CREATE DATABASE bsis123 CHARACTER SET utf8 COLLATE utf8_general_ci;`.
-    *  Run the Maven build `mvn clean install` which will call the liquibase scripts to initialise your database.
+    *  Run the Maven build `mvn clean install` which will call the liquibase scripts to create and initialise your database.
     * `BSIS/src/database.properties` contains your database connection information.
 
 Important Coding Conventions
