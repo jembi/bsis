@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -101,7 +103,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testFindComponentsByDonationIdentificationNumber_shouldCallRepositoryAndFactory() throws Exception {
+  public void testFindManagementComponentsByDonationIdentificationNumber_shouldCallRepositoryAndFactory() throws Exception {
     // setup data
     String donationIdentificationNumber = "1234567";
     List<Component> components = Arrays.asList(
@@ -118,7 +120,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     Mockito.when(componentFactory.createManagementViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
-    componentControllerService.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    componentControllerService.findManagementComponentsByDonationIdentificationNumber(donationIdentificationNumber);
     
     // verify
     Mockito.verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
@@ -126,9 +128,35 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testFindAnyComponent_shouldCallRepositoryAndFactory() throws Exception {
+  public void testFindComponentsByDonationIdentificationNumber_shouldCallRepositoryAndFactory() throws Exception {
     // setup data
     String donationIdentificationNumber = "1234567";
+    List<Component> components = Arrays.asList(
+        aComponent().withId(1L).build(),
+        aComponent().withId(2L).build()
+    );
+    List<ComponentViewModel> componentViewModels = Arrays.asList(
+        aComponentViewModel().withId(1L).build(),
+        aComponentViewModel().withId(2L).build()
+    );
+    
+    // setup mocks
+    when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
+    when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
+    
+    // SUT
+    List<ComponentViewModel> returnedViewModels = componentControllerService.findComponentsByDonationIdentificationNumber(
+        donationIdentificationNumber);
+    
+    // verify
+    verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    verify(componentFactory).createComponentViewModels(components);
+    assertThat(returnedViewModels, is(componentViewModels));
+  }
+  
+  @Test
+  public void testFindAnyComponent_shouldCallRepositoryAndFactory() throws Exception {
+    // setup data
     List<Long> componentTypeIds = Arrays.asList(1L, 2L);
     List<ComponentStatus> statusStringToComponentStatus = Arrays.asList(ComponentStatus.AVAILABLE);
     Date dateFrom = new Date();
@@ -143,17 +171,16 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     );
     
     // setup mocks
-    Mockito.when(componentRepository.findAnyComponent(donationIdentificationNumber, componentTypeIds, 
-        statusStringToComponentStatus, dateFrom, dateTo)).thenReturn(components);
+    Mockito.when(componentRepository.findAnyComponent(componentTypeIds, statusStringToComponentStatus, dateFrom,
+        dateTo)).thenReturn(components);
     Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
-    componentControllerService.findAnyComponent(donationIdentificationNumber, componentTypeIds, 
-        statusStringToComponentStatus, dateFrom, dateTo);
+    componentControllerService.findAnyComponent(componentTypeIds, statusStringToComponentStatus, dateFrom, dateTo);
     
     // verify
-    Mockito.verify(componentRepository).findAnyComponent(donationIdentificationNumber, componentTypeIds, 
-        statusStringToComponentStatus, dateFrom, dateTo);
+    Mockito.verify(componentRepository).findAnyComponent(componentTypeIds, statusStringToComponentStatus, dateFrom,
+        dateTo);
     Mockito.verify(componentFactory).createComponentViewModels(components);
   }
   

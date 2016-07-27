@@ -63,15 +63,20 @@ public class ComponentControllerService {
     return componentFactory.createComponentViewModel(component);
   }
   
-  public List<ComponentManagementViewModel> findComponentsByDonationIdentificationNumber(String donationNumber) {
+  public List<ComponentManagementViewModel> findManagementComponentsByDonationIdentificationNumber(String donationNumber) {
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(donationNumber);
     List<ComponentManagementViewModel> componentViewModels = componentFactory.createManagementViewModels(results);
     return componentViewModels;
   }
+  
+  public List<ComponentViewModel> findComponentsByDonationIdentificationNumber(String donationNumber) {
+    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(donationNumber);
+    return componentFactory.createComponentViewModels(results);
+  }
 
-  public List<ComponentViewModel> findAnyComponent(String donationIdentificationNumber, List<Long> componentTypeIds,
+  public List<ComponentViewModel> findAnyComponent(List<Long> componentTypeIds,
       List<ComponentStatus> statusStringToComponentStatus, Date dateFrom, Date dateTo) {
-    List<Component> results = componentRepository.findAnyComponent(donationIdentificationNumber, componentTypeIds,
+    List<Component> results = componentRepository.findAnyComponent(componentTypeIds,
         statusStringToComponentStatus, dateFrom, dateTo);
     List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
     return components;

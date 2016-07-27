@@ -9,7 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Repository
 @Transactional
 public class ComponentRepository extends AbstractRepository<Component> {
@@ -26,7 +24,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
   @PersistenceContext
   private EntityManager em;
 
-  public List<Component> findAnyComponent(String donationIdentificationNumber, List<Long> componentTypes, List<ComponentStatus> status,
+  public List<Component> findAnyComponent(List<Long> componentTypes, List<ComponentStatus> status,
       Date donationDateFrom, Date donationDateTo) {
     TypedQuery<Component> query;
     String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
@@ -34,9 +32,6 @@ public class ComponentRepository extends AbstractRepository<Component> {
 
     if (status != null && !status.isEmpty()) {
       queryStr += "AND c.status IN :status ";
-    }
-    if (!StringUtils.isBlank(donationIdentificationNumber)) {
-      queryStr += "AND c.donation.donationIdentificationNumber = :donationIdentificationNumber ";
     }
     if (componentTypes != null && !componentTypes.isEmpty()) {
       queryStr += "AND c.componentType.id IN (:componentTypeIds) ";
@@ -55,9 +50,6 @@ public class ComponentRepository extends AbstractRepository<Component> {
 
     if (status != null && !status.isEmpty()) {
       query.setParameter("status", status);
-    }
-    if (!StringUtils.isBlank(donationIdentificationNumber)) {
-      query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     }
     if (componentTypes != null && !componentTypes.isEmpty()) {
       query.setParameter("componentTypeIds", componentTypes);
