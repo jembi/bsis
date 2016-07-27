@@ -10,10 +10,9 @@ import java.util.List;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.DonationBatchRepository;
-import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,6 +28,9 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Autowired
   DonationBatchRepository donationBatchRepository;
+
+  @Autowired
+  LocationRepository locationRepository;
 
   @Override
   protected IDataSet getDataSet() throws Exception {
@@ -111,12 +113,14 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
     List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
     donationBatches.add(donationBatchRepository.findDonationBatchById(3l));
     testBatch.setDonationBatches(donationBatches);
-    TestBatch savedTestBatch = testBatchRepository.saveTestBatch(testBatch, "1234567");
+    Location location = locationRepository.getLocation(2l);
+    testBatch.setLocation(location);
+    TestBatch savedTestBatch = testBatchRepository.saveTestBatch(testBatch, "123456");
     Assert.assertNotNull("Saved TestBatch has an id", savedTestBatch.getId());
     TestBatch retrievedTestBatch = testBatchRepository.findTestBatchById(savedTestBatch.getId());
     Assert.assertNotNull("Saved TestBatch is found", retrievedTestBatch);
     Assert.assertEquals("TestBatch status is correct", TestBatchStatus.OPEN, retrievedTestBatch.getStatus());
-    Assert.assertEquals("TestBatch batchNumber is correct", "1234567", retrievedTestBatch.getBatchNumber());
+    Assert.assertEquals("TestBatch batchNumber is correct", "123456", retrievedTestBatch.getBatchNumber());
     DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(3l);
     Assert.assertNotNull("DonationBatch was linked to TestBatch", updatedDonationBatch.getTestBatch());
   }

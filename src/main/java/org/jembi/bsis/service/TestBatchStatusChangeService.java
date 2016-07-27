@@ -70,7 +70,7 @@ public class TestBatchStatusChangeService {
     }
 
     Donor donor = donation.getDonor();
-    if (donation.getBloodTypingMatchStatus() != BloodTypingMatchStatus.NO_TYPE_DETERMINED) {
+    if (BloodTypingMatchStatus.isBloodGroupConfirmed(donation.getBloodTypingMatchStatus())) {
       // Update the donor's Abo/Rh values to match the donation
       donor.setBloodAbo(donation.getBloodAbo());
       donor.setBloodRh(donation.getBloodRh());
@@ -98,6 +98,11 @@ public class TestBatchStatusChangeService {
       }
     } else if (componentStatusCalculator.shouldComponentsBeDiscarded(donation.getBloodTestResults())) {
       LOGGER.info("Handling donation with components flagged for discard: " + donation);
+      componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
+
+    } else if (donation.getTTIStatus() == TTIStatus.INDETERMINATE 
+        || donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.INDETERMINATE) {
+      LOGGER.info("Handling donation with INDETERMINATE ttiStatus or bloodTypingMatchStatus: " + donation);
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
 
     } else if (donation.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_TYPE_DETERMINED)) {

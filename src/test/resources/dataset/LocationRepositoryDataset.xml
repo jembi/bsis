@@ -1,24 +1,26 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-    <Location isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
-    <Location isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="true"
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Leribe" notes=""/>
-    <Location isDistributionSite="0" isProcessingSite="0" id="3" isDeleted="false" isVenue="true"
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="3" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Mohale&apos;s Hoek"
               notes=""/>
-    <Location isDistributionSite="0" isProcessingSite="0" id="4" isDeleted="false" isVenue="false"
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="4" isDeleted="false" isVenue="false"
               isMobileSite="false" isUsageSite="true" name="Maseru Hospital"
               notes=""/>
-    <Location isDistributionSite="0" isProcessingSite="0" id="5" isDeleted="false" isVenue="false"
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="5" isDeleted="false" isVenue="false"
               isMobileSite="false" isUsageSite="true" name="Leribe Hospital"
               notes=""/>
-    <Location isDistributionSite="0" isProcessingSite="0" id="6" isDeleted="true" isVenue="false"
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="6" isDeleted="true" isVenue="false"
               isMobileSite="false" isUsageSite="true" name="Leribe Clinic" notes=""/>
-    <Location isDistributionSite="0" isProcessingSite="0" id="7" isDeleted="true" isVenue="true"
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="7" isDeleted="true" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Hlotse" notes=""/>
-    <Location isDistributionSite="0" isProcessingSite="1" id="8" isDeleted="false" isVenue="true"
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="1" id="8" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Processing" notes=""/>
-    <Location isDistributionSite="1" isProcessingSite="0" id="9" isDeleted="false" isVenue="false"
+    <Location isTestingSite="0" isDistributionSite="1" isProcessingSite="0" id="9" isDeleted="false" isVenue="false"
               isMobileSite="false" isUsageSite="false" name="Distribution" notes=""/>
+    <Location isTestingSite="1" isDistributionSite="0" isProcessingSite="0" id="10" isDeleted="false" isVenue="false"
+              isMobileSite="false" isUsageSite="false" name="Testing" notes=""/>
 </dataset>

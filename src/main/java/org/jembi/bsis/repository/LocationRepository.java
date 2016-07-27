@@ -8,6 +8,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.location.LocationType;
 import org.springframework.stereotype.Repository;
@@ -23,22 +24,6 @@ public class LocationRepository {
     em.persist(location);
     em.flush();
   }
-
-  public List<Location> getLocationsByType(LocationType locationType) {
-    
-    switch (locationType) {
-      case VENUE:
-        return getVenues();
-      case PROCESSING_SITE:
-        return getProcessingSites();
-      case USAGE_SITE:
-        return getUsageSites();
-      case DISTRIBUTION_SITE:
-        return getDistributionSites();
-      default:
-        throw new IllegalArgumentException("Can't get locations for type: " + locationType);
-    }
-  }
   
   public List<Location> getVenues() {
     return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_VENUES, Location.class)
@@ -47,7 +32,7 @@ public class LocationRepository {
         .getResultList();
   }
   
-  private List<Location> getProcessingSites() {
+  public List<Location> getProcessingSites() {
     return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_PROCESSING_SITES, Location.class)
         .setParameter("isProcessingSite", true)
         .setParameter("isDeleted", false)
@@ -67,6 +52,13 @@ public class LocationRepository {
         .setParameter("isDeleted", false)
         .getResultList();
   }
+  
+  public List<Location> getTestingSites() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_TESTING_SITES, Location.class)
+        .setParameter("isTestingSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
 
   public List<Location> getAllLocations() {
     TypedQuery<Location> query =
@@ -82,8 +74,8 @@ public class LocationRepository {
     return query.getSingleResult();
   }
 
-  public Location updateLocation(Long locationId, Location location) {
-    Location existingLocation = em.find(Location.class, locationId);
+  public Location updateLocation(Location location) {
+    Location existingLocation = em.find(Location.class, location.getId());
     existingLocation.copy(location);
     em.merge(existingLocation);
     em.flush();
@@ -118,5 +110,89 @@ public class LocationRepository {
       return true;
     }
     return false;
+  }
+  
+  public List<Location> findLocations(String name, boolean includeSimilarResults, LocationType locationType, boolean includeDeletedLocations) {
+    // build up Query string
+    StringBuilder queryBuilder = new StringBuilder();
+    if (!includeDeletedLocations) {
+      addWhereCondition(queryBuilder, "l.isDeleted = :isDeleted ");
+    }
+    if (!StringUtils.isBlank(name)) {
+      if (includeSimilarResults) {
+        addWhereCondition(queryBuilder, "l.name LIKE :name ");
+      } else {
+        addWhereCondition(queryBuilder, "l.name = :name ");
+      }
+    }
+    if (locationType != null) {
+      switch(locationType) {
+        case VENUE:
+          addWhereCondition(queryBuilder, "l.isVenue = :isVenue ");
+          break;
+        case PROCESSING_SITE:
+          addWhereCondition(queryBuilder, "l.isProcessingSite = :isProcessingSite ");
+          break;
+        case DISTRIBUTION_SITE:
+          addWhereCondition(queryBuilder, "l.isDistributionSite = :isDistributionSite ");
+          break;
+        case TESTING_SITE:
+          addWhereCondition(queryBuilder, "l.isTestingSite = :isTestingSite ");
+          break;
+        case USAGE_SITE:
+          addWhereCondition(queryBuilder, "l.isUsageSite = :isUsageSite ");
+          break;
+      }
+    }
+
+    // create Query and set parameters
+    queryBuilder.insert(0,"SELECT l FROM Location l ");
+    queryBuilder.append("ORDER BY l.name ASC");
+    
+    TypedQuery<Location> query = em.createQuery(queryBuilder.toString(), Location.class);
+    
+    if (!includeDeletedLocations) {
+      query.setParameter("isDeleted", false);
+    }
+    
+    if (!StringUtils.isBlank(name)) {
+      if (includeSimilarResults) {
+        query.setParameter("name", "%"+name+"%");
+      } else {
+        query.setParameter("name", name);
+      }
+    }
+    
+    if (locationType != null) {
+      switch(locationType) {
+        case VENUE:
+          query.setParameter("isVenue", true);
+          break;
+        case PROCESSING_SITE:
+          query.setParameter("isProcessingSite", true);
+          break;
+        case DISTRIBUTION_SITE:
+          query.setParameter("isDistributionSite", true);
+          break;
+        case TESTING_SITE:
+          query.setParameter("isTestingSite", true);
+          break;
+        case USAGE_SITE:
+          query.setParameter("isUsageSite", true);
+          break;
+      }
+    }
+
+    // execute Query
+    return query.getResultList();
+  }
+  
+  private void addWhereCondition(StringBuilder whereClause, String condition) {
+    if (StringUtils.isBlank(whereClause)) {
+      whereClause.append("WHERE ");
+    } else {
+      whereClause.append("AND ");
+    }
+    whereClause.append(condition);
   }
 }

@@ -27,7 +27,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @NamedQueries({
   @NamedQuery(name = ComponentTypeQueryConstants.NAME_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS,
-      query = ComponentTypeQueryConstants.QUERY_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS)
+      query = ComponentTypeQueryConstants.QUERY_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS),
+  @NamedQuery(name = ComponentTypeQueryConstants.NAME_FIND_COMPONENT_TYPE_BY_CODE,
+      query = ComponentTypeQueryConstants.QUERY_FIND_COMPONENT_TYPE_BY_CODE),
+  @NamedQuery(name = ComponentTypeQueryConstants.NAME_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED,
+      query = ComponentTypeQueryConstants.QUERY_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED)
 })
 @Entity
 @Audited
@@ -36,17 +40,18 @@ public class ComponentType extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length = 50)
+  @Column(length = 50, nullable = false)
   private String componentTypeName;
 
-  @Column(length = 30)
+  @Column(length = 30, nullable = false)
   private String componentTypeCode;
 
+  @Column(nullable = false)
   private Integer expiresAfter;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 30)
-  private ComponentTypeTimeUnits expiresAfterUnits;
+  @Column(length = 30, nullable = false)
+  private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
 
   @NotAudited
   @ManyToMany(mappedBy = "componentTypes", fetch = FetchType.EAGER)
@@ -75,7 +80,7 @@ public class ComponentType extends BaseEntity {
   @Lob
   private String description;
 
-  private Boolean isDeleted;
+  private boolean isDeleted = false;
 
   private Integer lowStorageTemperature;
 
@@ -86,6 +91,12 @@ public class ComponentType extends BaseEntity {
   private Integer highTransportTemperature;
 
   private String preparationInfo;
+
+  private String transportInfo;
+
+  private String storageInfo;
+
+  private boolean canBeIssued = true;
 
   public Boolean getIsDeleted() {
     return isDeleted;
@@ -224,6 +235,30 @@ public class ComponentType extends BaseEntity {
     this.preparationInfo = preparationInfo;
   }
 
+  public String getTransportInfo() {
+    return transportInfo;
+  }
+
+  public void setTransportInfo(String transportInfo) {
+    this.transportInfo = transportInfo;
+  }
+
+  public String getStorageInfo() {
+    return storageInfo;
+  }
+
+  public void setStorageInfo(String storageInfo) {
+    this.storageInfo = storageInfo;
+  }
+
+  public boolean getCanBeIssued() {
+    return canBeIssued;
+  }
+
+  public void setCanBeIssued(boolean canBeIssued) {
+    this.canBeIssued = canBeIssued;
+  }
+
   public void copy(ComponentType componentType) {
     this.componentTypeName = componentType.getComponentTypeName();
     this.componentTypeCode = componentType.getComponentTypeCode();
@@ -238,6 +273,10 @@ public class ComponentType extends BaseEntity {
     this.lowTransportTemperature = componentType.getLowTransportTemperature();
     this.highTransportTemperature = componentType.getHighTransportTemperature();
     this.preparationInfo = componentType.getPreparationInfo();
+    this.transportInfo = componentType.getTransportInfo();
+    this.storageInfo = componentType.getStorageInfo();
+    this.canBeIssued = componentType.getCanBeIssued();
+    this.isDeleted = componentType.getIsDeleted();
   }
 
 

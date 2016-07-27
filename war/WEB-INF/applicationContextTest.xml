@@ -67,7 +67,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
       <props>
         <prop key="hibernate.dialect">org.jembi.bsis.dialect.BSISTestDialect</prop>
         <prop key="hibernate.show_sql">false</prop>
-        <prop key="javax.persistence.validation.mode">none</prop>
+        <prop key="javax.persistence.validation.mode">CALLBACK</prop>
       </props>
     </property>
   </bean>

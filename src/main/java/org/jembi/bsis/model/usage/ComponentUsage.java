@@ -10,7 +10,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.constraintvalidator.ComponentExists;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.component.Component;
 
@@ -23,7 +22,6 @@ public class ComponentUsage extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @ComponentExists
   @OneToOne
   private Component component;
 

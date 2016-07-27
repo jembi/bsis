@@ -10,6 +10,7 @@ public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResul
   private String result;
   private BloodTest bloodTest;
   private Donation donation;
+  private boolean reEntryRequired;
 
   public BloodTestResultBuilder withId(Long id) {
     this.id = id;
@@ -31,6 +32,11 @@ public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResul
     return this;
   }
 
+  public BloodTestResultBuilder withReEntryRequired(boolean reEntryRequired) {
+    this.reEntryRequired = reEntryRequired;
+    return this;
+  }
+
   @Override
   public BloodTestResult build() {
     BloodTestResult bloodTestResult = new BloodTestResult();
@@ -38,6 +44,7 @@ public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResul
     bloodTestResult.setResult(result);
     bloodTestResult.setBloodTest(bloodTest);
     bloodTestResult.setDonation(donation);
+    bloodTestResult.setReEntryRequired(reEntryRequired);
     return bloodTestResult;
   }
 

@@ -13,22 +13,15 @@ import org.hibernate.event.spi.PreInsertEventListener;
 import org.jembi.bsis.model.modificationtracker.ModificationTracker;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.security.BsisUserDetails;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-
 public class EntitySaveListener implements PersistEventListener, MergeEventListener, PreInsertEventListener {
 
   private static final long serialVersionUID = 1L;
 
-  static final Logger logger = LoggerFactory
-      .getLogger(EntitySaveListener.class);
-
   public EntitySaveListener() {
-    logger.info("EntitySaveListener created");
   }
 
   public void onPersist(PersistEvent event) throws HibernateException {

@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.factory.MobileClinicDonorViewModelFactory;
-import org.jembi.bsis.model.location.LocationType;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -59,7 +58,7 @@ public class MobileClinicController {
   Map<String, Object> mobileClinicLookUpFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
+    map.put("venues", locationRepository.getVenues());
     return map;
   }
 

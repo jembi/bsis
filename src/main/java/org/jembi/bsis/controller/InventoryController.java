@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.factory.InventoryFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
@@ -39,7 +39,7 @@ public class InventoryController {
   private LocationRepository locationRepository;
   
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
@@ -53,7 +53,7 @@ public class InventoryController {
     List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
     List<Location> distributionSites = locationRepository.getDistributionSites();
     Map<String, Object> map = new HashMap<>();
-    map.put("distributionSites", locationViewModelFactory.createLocationViewModels(distributionSites));
+    map.put("distributionSites", locationFactory.createFullViewModels(distributionSites));
     map.put("componentTypes", componentTypeFactory.createViewModels(componentTypes));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }

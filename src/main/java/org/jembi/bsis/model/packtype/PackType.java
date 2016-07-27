@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseEntity;
@@ -31,20 +30,17 @@ public class PackType extends BaseEntity {
   @ManyToOne
   private ComponentType componentType;
 
-  @NotNull
+  @Column(nullable = false)
   private Boolean countAsDonation;
 
-  @NotNull
   @Column(nullable = false)
   private Boolean testSampleProduced = Boolean.TRUE;
 
-  @AssertTrue(message = "Component type should be not null when countAsDonation is set to true")
+  @AssertTrue(message = "Component type should not be null if countAsDonation is true")
   private boolean isValid() {
-    if (this.countAsDonation == true)
-      if (componentType != null)
-        return true;
-      else
-        return false;
+    if (countAsDonation == true && componentType == null) {
+      return false;
+    }
     return true;
   }
 

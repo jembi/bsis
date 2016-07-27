@@ -13,9 +13,8 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.DonationBatchBackingForm;
 import org.jembi.bsis.backingform.validator.DonationBatchBackingFormValidator;
 import org.jembi.bsis.factory.DonationBatchViewModelFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
-import org.jembi.bsis.model.location.LocationType;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.DonationBatchCRUDService;
@@ -61,7 +60,7 @@ public class DonationBatchController {
   DonationBatchBackingFormValidator donationBatchBackingFormValidator;
   
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   public DonationBatchController() {
   }
@@ -101,7 +100,7 @@ public class DonationBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addDonationBatchForm", form);
-    map.put("venues", locationViewModelFactory.createLocationViewModels(locationRepository.getLocationsByType(LocationType.VENUE)));
+    map.put("venues", locationFactory.createFullViewModels(locationRepository.getVenues()));
     // to ensure custom field names are displayed in the form
     Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donationbatch");
     map.put("donationBatchFields", formFields);

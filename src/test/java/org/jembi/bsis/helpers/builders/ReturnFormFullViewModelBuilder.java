@@ -8,15 +8,15 @@ import java.util.Map;
 
 import org.jembi.bsis.model.returnform.ReturnStatus;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.ReturnFormFullViewModel;
 
 public class ReturnFormFullViewModelBuilder extends AbstractBuilder<ReturnFormFullViewModel> {
 
   private Long id;
   private Date returnDate;
-  private LocationViewModel returnedFrom;
-  private LocationViewModel returnedTo;
+  private LocationFullViewModel returnedFrom;
+  private LocationFullViewModel returnedTo;
   private ReturnStatus status = ReturnStatus.CREATED;
   private List<ComponentViewModel> components = new ArrayList<>();
   private Map<String, Boolean> permissions = new HashMap<>();
@@ -31,12 +31,12 @@ public class ReturnFormFullViewModelBuilder extends AbstractBuilder<ReturnFormFu
     return this;
   }
 
-  public ReturnFormFullViewModelBuilder withReturnedFrom(LocationViewModel returnedFrom) {
+  public ReturnFormFullViewModelBuilder withReturnedFrom(LocationFullViewModel returnedFrom) {
     this.returnedFrom = returnedFrom;
     return this;
   }
 
-  public ReturnFormFullViewModelBuilder withReturnedTo(LocationViewModel returnedTo) {
+  public ReturnFormFullViewModelBuilder withReturnedTo(LocationFullViewModel returnedTo) {
     this.returnedTo = returnedTo;
     return this;
   }

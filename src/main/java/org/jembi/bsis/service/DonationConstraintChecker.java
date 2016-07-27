@@ -9,7 +9,6 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
@@ -31,10 +30,6 @@ public class DonationConstraintChecker {
     private ComponentRepository componentRepository;
     @Autowired
     private BloodTestsService bloodTestsService;
-    @Autowired
-    private DonorRepository donorRepository;
-    @Autowired
-    private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
     
     public boolean canDeleteDonation(long donationId) throws NoResultException {
 
@@ -102,10 +97,8 @@ public class DonationConstraintChecker {
             return true;
         }
         
-        if (!(donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.MATCH
-            || donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NO_TYPE_DETERMINED
-            || donation.getBloodTypingMatchStatus() == BloodTypingMatchStatus.RESOLVED) ||
-                donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE) {
+        if (!BloodTypingMatchStatus.isEndState(donation.getBloodTypingMatchStatus()) 
+            || donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE) {
             return true;
         }
         
@@ -119,16 +112,6 @@ public class DonationConstraintChecker {
         boolean donationReleased = testBatch != null &&
                 testBatch.getStatus() != TestBatchStatus.OPEN &&
                 !donationHasDiscrepancies(donation, bloodTestingRuleResult);
-        return donationReleased;
-    }
-    
-    /**
-     * @return true if the Donation has no discrepancies and is in a TestBatch that is either closed or released 
-     */
-    public boolean donationIsReleased(TestBatch testBatch, Donation donation) {
-        boolean donationReleased = testBatch != null &&
-                testBatch.getStatus() != TestBatchStatus.OPEN &&
-                !donationHasDiscrepancies(donation);
         return donationReleased;
     }
     

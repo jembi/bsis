@@ -30,7 +30,7 @@ import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +45,7 @@ public class ComponentFactoryTests {
   private ComponentFactory componentFactory;
   
   @Mock
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   @Mock
   private ComponentTypeFactory componentTypeFactory;
@@ -77,13 +77,13 @@ public class ComponentFactoryTests {
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withComponentType(new ComponentTypeViewModel(componentType))
-        .withLocation(new LocationViewModel(location))
+        .withLocation(new LocationFullViewModel(location))
         .withBloodAbo(donation.getBloodAbo())
         .withBloodRh(donation.getBloodRh())
         .build();
 
     // setup mocks
-    when(locationViewModelFactory.createLocationViewModel(location)).thenReturn(new LocationViewModel(location));
+    when(locationFactory.createFullViewModel(location)).thenReturn(new LocationFullViewModel(location));
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
 
     // run test

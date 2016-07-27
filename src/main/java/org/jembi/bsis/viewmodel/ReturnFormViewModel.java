@@ -11,9 +11,9 @@ public class ReturnFormViewModel extends BaseViewModel {
 
   private Date returnDate;
 
-  private LocationViewModel returnedFrom;
+  private LocationFullViewModel returnedFrom;
 
-  private LocationViewModel returnedTo;
+  private LocationFullViewModel returnedTo;
 
   private ReturnStatus status;
 
@@ -26,19 +26,19 @@ public class ReturnFormViewModel extends BaseViewModel {
     this.returnDate = orderDate;
   }
 
-  public LocationViewModel getReturnedFrom() {
+  public LocationFullViewModel getReturnedFrom() {
     return returnedFrom;
   }
 
-  public void setReturnedFrom(LocationViewModel returnedFrom) {
+  public void setReturnedFrom(LocationFullViewModel returnedFrom) {
     this.returnedFrom = returnedFrom;
   }
 
-  public LocationViewModel getReturnedTo() {
+  public LocationFullViewModel getReturnedTo() {
     return returnedTo;
   }
 
-  public void setReturnedTo(LocationViewModel returnedTo) {
+  public void setReturnedTo(LocationFullViewModel returnedTo) {
     this.returnedTo = returnedTo;
   }
 

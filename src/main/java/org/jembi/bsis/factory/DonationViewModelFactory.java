@@ -24,7 +24,7 @@ public class DonationViewModelFactory {
   @Autowired
   private DonorConstraintChecker donorConstraintChecker;
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   @Autowired
   private PackTypeFactory packTypeFactory;
 
@@ -87,7 +87,7 @@ public class DonationViewModelFactory {
     donationViewModel.setBloodPressureDiastolic(donation.getBloodPressureDiastolic());
     donationViewModel.setBleedStartTime(donation.getBleedStartTime());
     donationViewModel.setBleedEndTime(donation.getBleedEndTime());
-    donationViewModel.setVenue(locationViewModelFactory.createLocationViewModel(donation.getVenue()));
+    donationViewModel.setVenue(locationFactory.createFullViewModel(donation.getVenue()));
     donationViewModel.setReleased(donation.isReleased());
 
     if (donation.getAdverseEvent() != null) {

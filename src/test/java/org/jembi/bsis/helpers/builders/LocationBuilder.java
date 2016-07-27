@@ -6,11 +6,12 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
 
   private Long id;
   private boolean venue;
-  private String name;
+  private String name = "location";
   private boolean usageSite;
   private boolean processingSite;
   private boolean mobileSite;
   private boolean distributionSite;
+  private boolean testingSite;
   private boolean deleted;
   private String notes;
 
@@ -24,7 +25,7 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
     return this;
   }
 
-  private LocationBuilder thatIsProcessingSite() {
+  public LocationBuilder thatIsProcessingSite() {
     processingSite = true;
     return this;
   }
@@ -41,6 +42,11 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
 
   public LocationBuilder thatIsDistributionSite() {
     distributionSite = true;
+    return this;
+  }
+  
+  public LocationBuilder thatIsTestingSite() {
+    testingSite = true;
     return this;
   }
 
@@ -71,6 +77,7 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
     location.setIsMobileSite(mobileSite);
     location.setIsDistributionSite(distributionSite);
     location.setIsDeleted(deleted);
+    location.setIsTestingSite(testingSite);
     return location;
   }
 
@@ -94,4 +101,7 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
     return new LocationBuilder().thatIsUsageSite();
   }
 
+  public static LocationBuilder aTestingSite() {
+    return new LocationBuilder().thatIsTestingSite();
+  }
 }

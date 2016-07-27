@@ -12,7 +12,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.constraintvalidator.ComponentExists;
 import org.jembi.bsis.model.BaseEntity;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -24,7 +23,6 @@ public class ComponentStatusChange extends BaseEntity implements Comparable<Comp
 
   private static final long serialVersionUID = 1L;
 
-  @ComponentExists
   @ManyToOne
   private Component component;
 

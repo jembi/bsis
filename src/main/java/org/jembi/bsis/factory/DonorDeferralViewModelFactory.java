@@ -14,7 +14,7 @@ import org.jembi.bsis.service.DeferralConstraintChecker;
 import org.jembi.bsis.viewmodel.DeferralReasonViewModel;
 import org.jembi.bsis.viewmodel.DonorDeferralViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +64,7 @@ public class DonorDeferralViewModelFactory {
     viewModel.setDeferredUntil(donorDeferral.getDeferredUntil());
     viewModel.setDonorNumber(donorDeferral.getDeferredDonor().getDonorNumber());
     viewModel.setDeferredDonor(new DonorViewModel(donorDeferral.getDeferredDonor()));
-    viewModel.setVenue(new LocationViewModel(donorDeferral.getVenue()));
+    viewModel.setVenue(new LocationFullViewModel(donorDeferral.getVenue()));
     viewModel.setId(donorDeferral.getId());
     viewModel.setDeferralReasonText(donorDeferral.getDeferralReasonText());
 

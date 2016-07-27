@@ -34,6 +34,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.BloodTestResultNamedQueryConstants;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
+import org.jembi.bsis.service.BloodTestingRuleEngine;
 import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;

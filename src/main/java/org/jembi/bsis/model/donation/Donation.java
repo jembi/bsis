@@ -21,18 +21,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Range;
-import org.jembi.bsis.constraintvalidator.DonationBatchExists;
-import org.jembi.bsis.constraintvalidator.DonationTypeExists;
-import org.jembi.bsis.constraintvalidator.DonorExists;
-import org.jembi.bsis.constraintvalidator.LocationExists;
-import org.jembi.bsis.constraintvalidator.PackTypeExists;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -84,7 +78,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @Index(name = "donation_donationIdentificationNumber_index")
   private String donationIdentificationNumber;
 
-  @DonorExists
   @ManyToOne
   private Donor donor;
 
@@ -110,11 +103,9 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @Index(name = "donation_donationDate_index")
   private Date donationDate;
 
-  @DonationTypeExists
   @ManyToOne
   private DonationType donationType;
 
-  @PackTypeExists
   @ManyToOne
   private PackType packType;
 
@@ -153,7 +144,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @ManyToOne(optional = true)
   private User donationCreatedBy;
 
-  @DonationBatchExists
   @ManyToOne(optional = true)
   private DonationBatch donationBatch;
 
@@ -183,9 +173,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @Temporal(TemporalType.TIMESTAMP)
   private Date bleedEndTime;
 
-  @OneToOne
-  @LocationExists
-  @NotNull
+  @ManyToOne(optional = false)
   private Location venue;
 
   @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)

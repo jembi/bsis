@@ -8,10 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.location.LocationType;
 import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.LocationRepository;
@@ -50,7 +49,7 @@ public class ReportsController {
   private TipsRepository tipsRepository;
   
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   
   @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
@@ -66,7 +65,7 @@ public class ReportsController {
     List<Location> distributionSites = locationRepository.getDistributionSites();
 
     Map<String, Object> map = new HashMap<>();
-    map.put("distributionSites", locationViewModelFactory.createLocationViewModels(distributionSites));
+    map.put("distributionSites", locationFactory.createFullViewModels(distributionSites));
     return map;
   }
 
@@ -75,7 +74,7 @@ public class ReportsController {
   public Map<String, Object> donationsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("report.donations.donationsreport", tipsRepository.getTipsContent("report.donations.donationsreport"));
-    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
+    map.put("venues", locationRepository.getVenues());
     return map;
   }
 
@@ -84,7 +83,7 @@ public class ReportsController {
   public Map<String, Object> requestsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("report.requests.requestsreport", tipsRepository.getTipsContent("report.requests.requestsreport"));
-    map.put("sites", locationRepository.getLocationsByType(LocationType.USAGE_SITE));
+    map.put("sites", locationRepository.getUsageSites());
     return map;
   }
 
@@ -152,7 +151,7 @@ public class ReportsController {
   public Map<String, Object> testResultsReportFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("ttiTests", bloodTestingRepository.getTTITests());
-    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
+    map.put("venues", locationRepository.getVenues());
     map.put("report.donations.testresultsreport", tipsRepository.getTipsContent("report.donations.testresultsreport"));
     return map;
   }

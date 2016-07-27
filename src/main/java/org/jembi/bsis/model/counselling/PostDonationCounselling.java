@@ -13,7 +13,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.constraintvalidator.DonationExists;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.PostDonationCounsellingNamedQueryConstants;
@@ -36,7 +35,6 @@ public class PostDonationCounselling extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @DonationExists
   @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
   private Donation donation;
 

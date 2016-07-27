@@ -3,11 +3,14 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aTestingSiteBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.builders.TestBatchFullViewModelBuilder.aTestBatchFullViewModel;
 import static org.jembi.bsis.helpers.builders.TestBatchViewModelBuilder.aTestBatchViewModel;
 import static org.jembi.bsis.helpers.matchers.DonationTestOutcomesReportViewModelMatcher.hasSameStateAsDonationTestOutcomesReportViewModel;
 import static org.jembi.bsis.helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
+import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 import static org.jembi.bsis.helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
 import static org.mockito.Mockito.when;
 
@@ -17,8 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.jembi.bsis.factory.DonationBatchViewModelFactory;
-import org.jembi.bsis.factory.TestBatchViewModelFactory;
+import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.helpers.builders.DonationTestOutcomesReportViewModelBuilder;
 import org.jembi.bsis.helpers.builders.DonorBuilder;
 import org.jembi.bsis.helpers.builders.PackTypeBuilder;
@@ -26,9 +28,12 @@ import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
+import org.jembi.bsis.repository.DonationBatchRepository;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.service.TestBatchConstraintChecker;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
@@ -43,7 +48,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class TestBatchViewModelFactoryTests extends UnitTestSuite {
+public class TestBatchFactoryTests extends UnitTestSuite {
 
   private static final Long IRRELEVANT_ID = 4L;
   private static final Long ANOTHER_IRRELEVANT_ID = 5L;
@@ -55,11 +60,17 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
   private static final CanReleaseResult CANT_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(false);
 
   @InjectMocks
-  private TestBatchViewModelFactory testBatchViewModelFactory;
+  private TestBatchFactory testBatchFactory;
   @Mock
   private DonationBatchViewModelFactory donationBatchViewModelFactory;
   @Mock
   private TestBatchConstraintChecker testBatchConstraintChecker;
+  @Mock
+  private LocationFactory locationFactory;
+  @Mock
+  private DonationBatchRepository donationBatchRepository;
+  @Mock
+  private LocationRepository locationRepository;
 
   private DonationBatch createDonationBatch() {
     PackType packType = PackTypeBuilder.aPackType().withTestSampleProduced(true).build();
@@ -107,7 +118,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     when(donationBatchViewModelFactory.createDonationBatchViewModelWithTestSamples(donationBatch))
         .thenReturn(donationBatchViewModel);
 
-    List<TestBatchViewModel> returnedViewModels = testBatchViewModelFactory.createTestBatchBasicViewModels(testBatches);
+    List<TestBatchViewModel> returnedViewModels = testBatchFactory.createTestBatchBasicViewModels(testBatches);
 
     assertThat(returnedViewModels.get(0), hasSameStateAsTestBatchViewModel(expectedViewModel));
   }
@@ -177,7 +188,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .thenReturn(donationBatchViewModel);
 
     List<TestBatchFullViewModel> returnedViewModels =
-        testBatchViewModelFactory.createTestBatchFullViewModels(testBatches, false);
+        testBatchFactory.createTestBatchFullViewModels(testBatches, false);
 
     assertThat(returnedViewModels.get(0), hasSameStateAsTestBatchFullViewModel(expectedViewModel1));
     assertThat(returnedViewModels.get(1), hasSameStateAsTestBatchFullViewModel(expectedViewModel2));
@@ -229,7 +240,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
 
-    TestBatchFullViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
 
     assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
@@ -274,7 +285,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
 
-    TestBatchFullViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
 
     assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
@@ -319,7 +330,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
 
-    TestBatchFullViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
 
     assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
@@ -364,7 +375,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
 
-    TestBatchFullViewModel returnedViewModel = testBatchViewModelFactory.createTestBatchFullViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
 
     assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
@@ -400,7 +411,7 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
     TestBatch testBatch = aTestBatch().withDonationBatch(donationBatch).build();
     
     List<DonationTestOutcomesReportViewModel> report =
-        testBatchViewModelFactory.createDonationTestOutcomesReportViewModels(testBatch);
+        testBatchFactory.createDonationTestOutcomesReportViewModels(testBatch);
 
     assertThat("Donation 1 has no previous abo/rh", report.get(0).getPreviousDonationAboRhOutcome().isEmpty());
     assertThat("Donation 2 has correct previous abo/rh", report.get(1).getPreviousDonationAboRhOutcome().equals("A1B1"));
@@ -442,10 +453,39 @@ public class TestBatchViewModelFactoryTests extends UnitTestSuite {
         .build();
     
     List<DonationTestOutcomesReportViewModel> returnedViewModels =
-        testBatchViewModelFactory.createDonationTestOutcomesReportViewModels(testBatch);
+        testBatchFactory.createDonationTestOutcomesReportViewModels(testBatch);
 
     assertThat(returnedViewModels.get(0), hasSameStateAsDonationTestOutcomesReportViewModel(expectedViewModel));
   }
 
+  @Test
+  public void testCreateEntity_shouldSetCorrectFields() {
+    TestBatchBackingForm backingForm = new TestBatchBackingForm();
+    backingForm.setId(IRRELEVANT_ID);
+    backingForm.setStatus(TestBatchStatus.OPEN.toString());
+    backingForm.setCreatedDate(IRRELEVANT_CREATED_DATE);
+    backingForm.setDonationBatchIds(Arrays.asList(1L, 2L));
+    backingForm.setLocation(aTestingSiteBackingForm().withId(7L).build());
+    
+    DonationBatch firstDonationBatch = aDonationBatch().withId(1L).build();
+    DonationBatch secondDonationBatch = aDonationBatch().withId(2L).build();
+    Location location = aTestingSite().withId(7L).build();
+    
+    TestBatch expectedTestBatch = aTestBatch()
+        .withId(IRRELEVANT_ID)
+        .withStatus(TestBatchStatus.OPEN)
+        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withDonationBatches(Arrays.asList(firstDonationBatch, secondDonationBatch))
+        .withLocation(location)
+        .build();
+    
+    when(donationBatchRepository.findDonationBatchById(1L)).thenReturn(firstDonationBatch);
+    when(donationBatchRepository.findDonationBatchById(2L)).thenReturn(secondDonationBatch);
+    when(locationRepository.getLocation(7L)).thenReturn(location);
+    
+    TestBatch returnedTestBatch = testBatchFactory.createEntity(backingForm);
+    
+    assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
+  }
   
 }

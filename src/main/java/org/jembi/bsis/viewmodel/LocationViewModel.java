@@ -1,49 +1,24 @@
 package org.jembi.bsis.viewmodel;
 
-import org.jembi.bsis.model.location.Location;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class LocationViewModel extends BaseViewModel {
 
-  @JsonIgnore
-  private Location location;
-
-  public LocationViewModel(Location location) {
-    this.location = location;
-  }
-
-  @Override
-  public Long getId() {
-    return location.getId();
-  }
+  private String name;
+  private boolean isDeleted;
 
   public String getName() {
-    return location.getName();
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public boolean getIsDeleted() {
-    return location.getIsDeleted();
+    return isDeleted;
   }
 
-  public boolean getIsUsageSite() {
-    return location.getIsUsageSite();
-  }
-
-  public boolean getIsMobileSite() {
-    return location.getIsMobileSite();
-  }
-
-  public boolean getIsVenue() {
-    return location.getIsVenue();
+  public void setIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
   
-  public boolean getIsProcessingSite() {
-    return location.getIsProcessingSite();
-  }
-  
-  public boolean getIsDistributionSite() {
-    return location.getIsDistributionSite();
-  }
-
 }

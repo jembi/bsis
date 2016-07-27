@@ -205,6 +205,23 @@ public class DonationConstraintCheckerTests {
 
     assertThat(result, is(false));
   }
+  
+  @Test
+  public void testDonationHasDiscrepanciesInDeterminateBloodTypingStatus_shouldReturnFalse() {
+    Donation donation = aDonation()
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withPackType(aPackType().build())
+        .build();
+
+    when(bloodTestsService.executeTests(donation))
+        .thenReturn(aBloodTestingRuleResult().build());
+
+    boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
+
+    assertThat(result, is(false));
+  }
 
   @Test
   public void testDonationHasDiscrepanciesWithMatchBloodTypingMatchStatus_shouldReturnFalse() {
@@ -295,27 +312,6 @@ public class DonationConstraintCheckerTests {
   }
 
   @Test
-  public void testDonationIsReleasedTestBatchReleasedNoPendingTests2_shouldReturnTrue() {
-    Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withPackType(aPackType().build())
-        .build();
-
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.RELEASED)
-        .build();
-
-    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
-    when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
-
-    boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation);
-
-    assertThat(result, is(true));
-  }
-
-  @Test
   public void testDonationIsOpenTestBatchReleasedNoPendingTests_shouldReturnFalse() {
     Donation donation = aDonation()
         .withTTIStatus(TTIStatus.TTI_SAFE)
@@ -336,27 +332,6 @@ public class DonationConstraintCheckerTests {
   }
 
   @Test
-  public void testDonationIsOpenTestBatchReleasedNoPendingTests2_shouldReturnFalse() {
-    Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withPackType(aPackType().build())
-        .build();
-
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.OPEN)
-        .build();
-
-    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
-    when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
-
-    boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation);
-
-    assertThat(result, is(false));
-  }
-
-  @Test
   public void testDonationIsNullTestBatch_shouldReturnFalse() {
     Donation donation = aDonation()
         .withTTIStatus(TTIStatus.TTI_SAFE)
@@ -368,23 +343,6 @@ public class DonationConstraintCheckerTests {
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     boolean result = donationConstraintChecker.donationIsReleased(null, donation, bloodTestingRuleResult);
-
-    assertThat(result, is(false));
-  }
-
-  @Test
-  public void testDonationIsNullTestBatch2_shouldReturnFalse() {
-    Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withPackType(aPackType().build())
-        .build();
-
-    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
-    when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
-
-    boolean result = donationConstraintChecker.donationIsReleased(null, donation);
 
     assertThat(result, is(false));
   }
@@ -410,27 +368,6 @@ public class DonationConstraintCheckerTests {
   }
 
   @Test
-  public void testDonationIsReleasedTestBatchReleasedPendingTests2_shouldReturnFalse() {
-    Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withPackType(aPackType().build())
-        .build();
-
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.RELEASED)
-        .build();
-
-    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
-    when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
-
-    boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation);
-
-    assertThat(result, is(false));
-  }
-
-  @Test
   public void testDonationIsOpenTestBatchReleasedPendingTests_shouldReturnFalse() {
     Donation donation = aDonation()
         .withTTIStatus(TTIStatus.TTI_SAFE)
@@ -446,27 +383,6 @@ public class DonationConstraintCheckerTests {
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
 
     boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation, bloodTestingRuleResult);
-
-    assertThat(result, is(false));
-  }
-
-  @Test
-  public void testDonationIsOpenTestBatchReleasedPendingTests2_shouldReturnFalse() {
-    Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withPackType(aPackType().build())
-        .build();
-
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.OPEN)
-        .build();
-
-    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
-    when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
-
-    boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation);
 
     assertThat(result, is(false));
   }

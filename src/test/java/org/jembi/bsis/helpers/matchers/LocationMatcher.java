@@ -22,6 +22,9 @@ public class LocationMatcher extends TypeSafeMatcher<Location> {
         .appendText("\nisUsageSite: ").appendValue(expected.getIsUsageSite())
         .appendText("\nisMobileSite: ").appendValue(expected.getIsMobileSite())
         .appendText("\nisVenue: ").appendValue(expected.getIsVenue())
+        .appendText("\nisDistributionSite: ").appendValue(expected.getIsDistributionSite())
+        .appendText("\nisProcessingSite: ").appendValue(expected.getIsProcessingSite())
+        .appendText("\nisTestingSite: ").appendValue(expected.getIsTestingSite())
         .appendText("\nisDeleted: ").appendValue(expected.getIsDeleted())
         .appendText("\nNotes: ").appendValue(expected.getNotes());
   }
@@ -33,6 +36,9 @@ public class LocationMatcher extends TypeSafeMatcher<Location> {
         && Objects.equals(actual.getIsUsageSite(), expected.getIsUsageSite())
         && Objects.equals(actual.getIsMobileSite(), expected.getIsMobileSite())
         && Objects.equals(actual.getIsVenue(), expected.getIsVenue())
+        && Objects.equals(actual.getIsDistributionSite(), expected.getIsDistributionSite())
+        && Objects.equals(actual.getIsProcessingSite(), expected.getIsProcessingSite())
+        && Objects.equals(actual.getIsTestingSite(), expected.getIsTestingSite())
         && Objects.equals(actual.getIsDeleted(), expected.getIsDeleted())
         && Objects.equals(actual.getNotes(), expected.getNotes());
   }

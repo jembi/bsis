@@ -13,11 +13,10 @@ import org.jembi.bsis.backingform.ComponentBatchBackingForm;
 import org.jembi.bsis.backingform.validator.ComponentBatchBackingFormValidator;
 import org.jembi.bsis.factory.ComponentBatchViewModelFactory;
 import org.jembi.bsis.factory.DonationBatchViewModelFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.location.LocationType;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.ComponentBatchCRUDService;
@@ -65,7 +64,7 @@ public class ComponentBatchController {
   private DonationBatchViewModelFactory donationBatchViewModelFactory;
   
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   public ComponentBatchController() {
   }
@@ -81,13 +80,13 @@ public class ComponentBatchController {
     Map<String, Object> map = new HashMap<String, Object>();
     
     List<DonationBatch> donationBatches = donationBatchRepository.findUnassignedDonationBatchesForComponentBatch();
-    List<Location> locations = locationRepository.getLocationsByType(LocationType.PROCESSING_SITE);
+    List<Location> locations = locationRepository.getProcessingSites();
     
     map.put("addComponentBatchForm", new ComponentBatchBackingForm());
     map.put("donationBatches", donationBatchViewModelFactory.createDonationBatchBasicViewModels(donationBatches));
     map.put("componentBatchFields", formFieldAccessorService.getFormFieldsForForm("ComponentBatch"));
     map.put("bloodTransportBoxFields", formFieldAccessorService.getFormFieldsForForm("BloodTransportBox"));
-    map.put("processingSites", locationViewModelFactory.createLocationViewModels(locations));
+    map.put("processingSites", locationFactory.createFullViewModels(locations));
 
     return map;
   }

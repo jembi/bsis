@@ -120,6 +120,7 @@ public class DataImportService {
 
   private boolean validationOnly;
   private String action;
+  private Location testingSite = null;
 
 
   public void importData(Workbook workbook, boolean validationOnly) {
@@ -184,6 +185,18 @@ public class DataImportService {
             
           case "isVenue":
             locationBackingForm.setIsVenue(cell.getBooleanCellValue());
+            break;
+            
+          case "isProcessingSite":
+            locationBackingForm.setIsProcessingSite(cell.getBooleanCellValue());
+            break;
+            
+          case "isDistributionSite":
+            locationBackingForm.setIsDistributionSite(cell.getBooleanCellValue());
+            break;
+            
+          case "isTestingSite":
+            locationBackingForm.setIsTestingSite(cell.getBooleanCellValue());
             break;
             
           case "isDeleted":
@@ -805,7 +818,7 @@ public class DataImportService {
     entityManager.clear();
   }
 
-  public void importDeferralData(Sheet sheet) {
+  private void importDeferralData(Sheet sheet) {
     Map<String, DeferralReason> deferralReasonCache = buildDeferralReasonCache();
     Map<String, Location> locationCache = buildLocationCache();
 
@@ -908,7 +921,7 @@ public class DataImportService {
     entityManager.clear();
   }
 
-  public void importOutcomeData(Sheet sheet) {
+  private void importOutcomeData(Sheet sheet) {
     Map<String, BloodTest> bloodTestCache = buildBloodTestCache();
     
     // Keep a reference to the row containing the headers
@@ -1040,6 +1053,9 @@ public class DataImportService {
 
     if (testBatch == null) {
       testBatch = new TestBatch();
+      // Assign default testing site
+      setTestingSite();
+      testBatch.setLocation(testingSite);
       testBatch.setBatchNumber(sequenceNumberRepository.getNextTestBatchNumber());
       testBatch.setStatus(TestBatchStatus.CLOSED);
       testBatch.setCreatedDate(donationDate);
@@ -1065,6 +1081,17 @@ public class DataImportService {
     }
 
     return donationBatch;
+  }
+
+  private void setTestingSite() {
+    if (testingSite == null) {
+      List<Location> testingSites = locationRepository.getTestingSites();
+      if (testingSites.size() > 0) {
+        testingSite = testingSites.get(0);
+      } else {
+        throw new IllegalArgumentException("Can't create test batch, there's no testing sites.");
+      }
+    }
   }
 
   private Map<String, BloodTest> buildBloodTestCache() {

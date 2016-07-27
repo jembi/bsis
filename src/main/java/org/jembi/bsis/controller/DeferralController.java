@@ -11,7 +11,6 @@ import org.jembi.bsis.backingform.validator.DeferralBackingFormValidator;
 import org.jembi.bsis.controllerservice.DeferralControllerService;
 import org.jembi.bsis.factory.DonorDeferralViewModelFactory;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
-import org.jembi.bsis.model.location.LocationType;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.DonorDeferralCRUDService;
@@ -63,7 +62,7 @@ public class DeferralController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("deferralReasons", donorRepository.getDeferralReasons());
-    map.put("venues", locationRepository.getLocationsByType(LocationType.VENUE));
+    map.put("venues", locationRepository.getVenues());
     return map;
   }
 
