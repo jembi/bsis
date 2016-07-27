@@ -28,7 +28,7 @@ import org.springframework.validation.MapBindingResult;
 
 public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   
-  private static final Date DEFERRED_UNTIL = new Date();
+  private static final Date DEFERRED_UNTIL = new Date(new Date().getTime()+ (1000 *60 * 60 * 24));
   private static final Long DEFERRED_DONOR_ID = 88L;
   private static final long DEFERRAL_REASON_ID = 115L;
   
@@ -90,7 +90,6 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
     when(locationRepository.verifyLocationExists(1L)).thenReturn(false);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
     when(deferralReasonRepository.verifyDeferralReasonExists(DEFERRAL_REASON_ID)).thenReturn(true);
-
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
     deferralBackingFormValidator.validate(deferralBackingForm, errors);
@@ -120,6 +119,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertNotNull("Error on venue", errors.getFieldError("venue"));
+   
   }
 
   @Test
@@ -175,19 +175,19 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   @Test
   public void testInvalidDeferredUntilNotSpecified() throws Exception {
     LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
-
+    Date deferredUntil =  new Date(new Date().getTime()- (1000 *60 * 60 * 24));
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withDeferralReason(aDeferralReasonBackingForm().withId(DEFERRAL_REASON_ID).build())
         .withVenue(venue)
-        .withDeferredDonor(aDonorBackingForm().withId(DEFERRED_DONOR_ID).build())
+        .withDeferredDonor(aDonorBackingForm().withId(DEFERRED_DONOR_ID).build())      
+        .withDeferredUntil(deferredUntil)
         .withDeferralDate(new Date())
         .build();
-    
+ 
     mockFormFields();
     when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
     when(deferralReasonRepository.verifyDeferralReasonExists(DEFERRAL_REASON_ID)).thenReturn(true);
-
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
     deferralBackingFormValidator.validate(deferralBackingForm, errors);
@@ -195,8 +195,33 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertNotNull("Error on deferredUntil", errors.getFieldError("deferredUntil"));
+    Assert.assertTrue("Error on deferredUntil date", deferralBackingForm.getDeferredUntil().before(deferralBackingForm.getDeferralDate()));
   }
-
+  
+  @Test
+  public void testInvalidDeferredUntilWithNullDeferralDate_ShouldReturnError() throws Exception {
+    LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
+    Date deferralDate =  null;
+    DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
+        .withDeferralReason(aDeferralReasonBackingForm().withId(DEFERRAL_REASON_ID).build())
+        .withVenue(venue)
+        .withDeferredDonor(aDonorBackingForm().withId(DEFERRED_DONOR_ID).build())      
+        .withDeferredUntil(DEFERRED_UNTIL)
+        .withDeferralDate(deferralDate)
+        .build();
+ 
+    mockFormFields();
+    when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
+    when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
+    when(deferralReasonRepository.verifyDeferralReasonExists(DEFERRAL_REASON_ID)).thenReturn(true);
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "deferral");
+    deferralBackingFormValidator.validate(deferralBackingForm, errors);
+    
+    // check asserts
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
+  }
+  
   @Test
   public void testInvalidDeferredDonorNotSpecified() throws Exception {
     LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
@@ -220,7 +245,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertNotNull("Error on deferredDonor", errors.getFieldError("deferredDonor"));
   }
-
+  
   @Test
   public void testInvalidDeferredDonorDoesNotExist() throws Exception {
     LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
