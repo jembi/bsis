@@ -5,9 +5,9 @@ import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aCompo
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasSameStateAsComponentFullViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentManagementViewModelMatcher.hasSameStateAsComponentManagementViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
-import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameStateAsComponentViewModel;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.backingform.ComponentBackingForm;
+import org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
-import org.jembi.bsis.helpers.builders.ComponentViewModelBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -26,10 +26,10 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
+import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
-import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.junit.Assert;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public class ComponentFactoryTests {
   private ComponentRepository componentRepository;
 
   @Test
-  public void createComponentViewModel_oneComponent() throws Exception {
+  public void createComponentFullViewModel_oneComponent() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build();
     Location location = aLocation().build();
@@ -72,7 +72,7 @@ public class ComponentFactoryTests {
             .withComponentType(componentType)
         .withLocation(location)
         .withDonation(donation).build();
-    ComponentViewModel expectedViewModel = ComponentViewModelBuilder.aComponentViewModel()
+    ComponentFullViewModel expectedViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
@@ -87,15 +87,15 @@ public class ComponentFactoryTests {
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
 
     // run test
-    ComponentViewModel convertedViewModel = componentFactory.createComponentViewModel(component);
+    ComponentFullViewModel convertedViewModel = componentFactory.createComponentFullViewModel(component);
     
     // do asserts
     Assert.assertNotNull("View model created", convertedViewModel);
-    assertThat("Correct view model", convertedViewModel, hasSameStateAsComponentViewModel(expectedViewModel));
+    assertThat("Correct view model", convertedViewModel, hasSameStateAsComponentFullViewModel(expectedViewModel));
   }
   
   @Test
-  public void createComponentViewModels_componentList() throws Exception {
+  public void createComponentFullViewModels_componentList() throws Exception {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
     Donation donation = DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build();
@@ -103,7 +103,7 @@ public class ComponentFactoryTests {
     components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
     
     // run test
-    List<ComponentViewModel> viewModels = componentFactory.createComponentViewModels(components);
+    List<ComponentFullViewModel> viewModels = componentFactory.createComponentFullViewModels(components);
     
     // do asserts
     Assert.assertNotNull("View models created", viewModels);
@@ -111,14 +111,14 @@ public class ComponentFactoryTests {
   }
   
   @Test
-  public void createComponentViewModels_nullCollection() throws Exception {
+  public void createComponentFullViewModels_nullCollection() throws Exception {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
     components.add(aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).build());
     components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).build());
     
     // run test
-    List<ComponentViewModel> viewModels = componentFactory.createComponentViewModels(null);
+    List<ComponentFullViewModel> viewModels = componentFactory.createComponentFullViewModels(null);
     
     // do asserts
     Assert.assertNotNull("View models created", viewModels);

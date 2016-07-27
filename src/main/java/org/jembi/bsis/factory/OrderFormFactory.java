@@ -75,7 +75,7 @@ public class OrderFormFactory {
     OrderFormFullViewModel viewModel = new OrderFormFullViewModel();
     populateBasicViewModel(entity, viewModel);
     viewModel.setItems(orderFormItemFactory.createViewModels(entity.getItems()));
-    viewModel.setComponents(componentFactory.createComponentViewModels(entity.getComponents()));
+    viewModel.setComponents(componentFactory.createComponentFullViewModels(entity.getComponents()));
 
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDispatch", orderFormConstraintChecker.canDispatch(entity));

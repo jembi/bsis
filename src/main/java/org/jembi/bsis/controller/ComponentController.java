@@ -18,7 +18,7 @@ import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidato
 import org.jembi.bsis.controllerservice.ComponentControllerService;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.ComponentViewModel;
+import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -114,7 +114,7 @@ public class ComponentController {
       @RequestParam(value = "donationDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateFrom,
       @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo) {
 
-    List<ComponentViewModel> components;
+    List<ComponentFullViewModel> components;
     
     if (StringUtils.isBlank(donationIdentificationNumber)) {
       components = componentControllerService.findAnyComponent(componentTypeIds, statuses, donationDateFrom, donationDateTo);

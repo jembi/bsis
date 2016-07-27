@@ -5,13 +5,13 @@ import java.util.Objects;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.jembi.bsis.viewmodel.ComponentViewModel;
+import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 
-public class ComponentViewModelMatcher extends TypeSafeMatcher<ComponentViewModel> {
+public class ComponentFullViewModelMatcher extends TypeSafeMatcher<ComponentFullViewModel> {
 
-  private ComponentViewModel expected;
+  private ComponentFullViewModel expected;
 
-  public ComponentViewModelMatcher(ComponentViewModel expected) {
+  public ComponentFullViewModelMatcher(ComponentFullViewModel expected) {
     this.expected = expected;
   }
 
@@ -32,7 +32,7 @@ public class ComponentViewModelMatcher extends TypeSafeMatcher<ComponentViewMode
   }
 
   @Override
-  public boolean matchesSafely(ComponentViewModel actual) {
+  public boolean matchesSafely(ComponentFullViewModel actual) {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     return Objects.equals(actual.getId(), expected.getId()) &&
         Objects.equals(actual.getComponentCode(), expected.getComponentCode()) &&
@@ -46,8 +46,8 @@ public class ComponentViewModelMatcher extends TypeSafeMatcher<ComponentViewMode
         Objects.equals(actual.getBloodAbo(), expected.getBloodAbo());
   }
 
-  public static ComponentViewModelMatcher hasSameStateAsComponentViewModel(ComponentViewModel expected) {
-    return new ComponentViewModelMatcher(expected);
+  public static ComponentFullViewModelMatcher hasSameStateAsComponentFullViewModel(ComponentFullViewModel expected) {
+    return new ComponentFullViewModelMatcher(expected);
   }
 
 }

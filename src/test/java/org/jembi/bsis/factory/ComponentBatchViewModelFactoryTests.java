@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.helpers.builders.ComponentViewModelBuilder;
+import org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componentbatch.BloodTransportBox;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
@@ -25,7 +25,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.viewmodel.BloodTransportBoxViewModel;
 import org.jembi.bsis.viewmodel.ComponentBatchFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentBatchViewModel;
-import org.jembi.bsis.viewmodel.ComponentViewModel;
+import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.junit.Assert;
@@ -82,8 +82,8 @@ public class ComponentBatchViewModelFactoryTests {
         .build();
     
     // set up mocks
-    ComponentViewModel componentViewModel = ComponentViewModelBuilder.aComponentViewModel().build();
-    when(componentFactory.createComponentViewModels(componentBatch.getComponents())).thenReturn(Arrays.asList(componentViewModel));
+    ComponentFullViewModel componentFullViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel().build();
+    when(componentFactory.createComponentFullViewModels(componentBatch.getComponents())).thenReturn(Arrays.asList(componentFullViewModel));
     
     DonationBatchViewModel donationBatchViewModel = new DonationBatchViewModel();
     when(donationBatchViewModelFactory.createDonationBatchBasicViewModel(donationBatch)).thenReturn(donationBatchViewModel);

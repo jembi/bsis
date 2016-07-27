@@ -13,7 +13,7 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
-import org.jembi.bsis.viewmodel.ComponentViewModel;
+import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,19 +98,19 @@ public class ComponentFactory {
     return viewModel;
   }
 
-  public List<ComponentViewModel> createComponentViewModels(Collection<Component> components) {
-    List<ComponentViewModel> viewModels = new ArrayList<>();
+  public List<ComponentFullViewModel> createComponentFullViewModels(Collection<Component> components) {
+    List<ComponentFullViewModel> viewModels = new ArrayList<>();
     if (components != null) {
       Iterator<Component> it = components.iterator();
       while (it.hasNext()) {
-        viewModels.add(createComponentViewModel(it.next()));
+        viewModels.add(createComponentFullViewModel(it.next()));
       }
     }
     return viewModels;
   }
   
-  public ComponentViewModel createComponentViewModel(Component component) {
-    ComponentViewModel viewModel = new ComponentViewModel();
+  public ComponentFullViewModel createComponentFullViewModel(Component component) {
+    ComponentFullViewModel viewModel = new ComponentFullViewModel();
     viewModel.setBloodAbo(component.getDonation().getBloodAbo());
     viewModel.setBloodRh(component.getDonation().getBloodRh());
     viewModel.setComponentCode(component.getComponentCode());

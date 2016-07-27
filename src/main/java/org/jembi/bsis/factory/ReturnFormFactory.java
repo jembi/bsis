@@ -58,7 +58,7 @@ public class ReturnFormFactory {
   public ReturnFormFullViewModel createFullViewModel(ReturnForm entity) {
     ReturnFormFullViewModel viewModel = new ReturnFormFullViewModel();
     populateBasicViewModel(entity, viewModel);
-    viewModel.setComponents(componentFactory.createComponentViewModels(entity.getComponents()));
+    viewModel.setComponents(componentFactory.createComponentFullViewModels(entity.getComponents()));
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();

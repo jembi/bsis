@@ -3,10 +3,10 @@ package org.jembi.bsis.helpers.builders;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
-import org.jembi.bsis.viewmodel.ComponentViewModel;
+import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 
-public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewModel> {
+public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFullViewModel> {
 
   private Long id;
   private LocationFullViewModel location;
@@ -16,44 +16,44 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
   private String bloodAbo;
   private ComponentTypeViewModel componentType;
 
-  public ComponentViewModelBuilder withId(Long id) {
+  public ComponentFullViewModelBuilder withId(Long id) {
     this.id = id;
     return this;
   }
 
-  public ComponentViewModelBuilder withLocation(LocationFullViewModel location) {
+  public ComponentFullViewModelBuilder withLocation(LocationFullViewModel location) {
     this.location = location;
     return this;
   }
 
-  public ComponentViewModelBuilder withInventoryStatus(InventoryStatus inventoryStatus) {
+  public ComponentFullViewModelBuilder withInventoryStatus(InventoryStatus inventoryStatus) {
     this.inventoryStatus = inventoryStatus;
     return this;
   }
 
-  public ComponentViewModelBuilder withStatus(ComponentStatus status) {
+  public ComponentFullViewModelBuilder withStatus(ComponentStatus status) {
     this.status = status;
     return this;
   }
 
-  public ComponentViewModelBuilder withBloodAbo(String bloodAbo) {
+  public ComponentFullViewModelBuilder withBloodAbo(String bloodAbo) {
     this.bloodAbo = bloodAbo;
     return this;
   }
 
-  public ComponentViewModelBuilder withBloodRh(String bloodRh) {
+  public ComponentFullViewModelBuilder withBloodRh(String bloodRh) {
     this.bloodRh = bloodRh;
     return this;
   }
 
-  public ComponentViewModelBuilder withComponentType(ComponentTypeViewModel componentType) {
+  public ComponentFullViewModelBuilder withComponentType(ComponentTypeViewModel componentType) {
     this.componentType = componentType;
     return this;
   }
 
   @Override
-  public ComponentViewModel build() {
-    ComponentViewModel viewModel = new ComponentViewModel();
+  public ComponentFullViewModel build() {
+    ComponentFullViewModel viewModel = new ComponentFullViewModel();
     viewModel.setId(id);
     viewModel.setInventoryStatus(inventoryStatus);
     viewModel.setStatus(status);
@@ -64,8 +64,8 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
     return viewModel;
   }
   
-  public static ComponentViewModelBuilder aComponentViewModel() {
-    return new ComponentViewModelBuilder();
+  public static ComponentFullViewModelBuilder aComponentFullViewModel() {
+    return new ComponentFullViewModelBuilder();
   }
 
 }

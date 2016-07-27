@@ -8,7 +8,7 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ComponentViewModel extends BaseViewModel {
+public class ComponentFullViewModel extends BaseViewModel {
 
   private ComponentTypeViewModel componentType;
   private LocationFullViewModel location;
