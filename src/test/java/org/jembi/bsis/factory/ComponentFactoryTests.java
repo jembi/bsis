@@ -4,10 +4,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasSameStateAsComponentFullViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentManagementViewModelMatcher.hasSameStateAsComponentManagementViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
+import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameStateAsComponentViewModel;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.junit.Assert;
 import org.junit.Test;
@@ -184,5 +187,52 @@ public class ComponentFactoryTests {
     
     // checks
     assertThat("Created correctly", entity, hasSameStateAsComponent(expectedEntity));
+  }
+
+  @Test
+  public void createComponentViewModel_oneComponent() throws Exception {
+    // set up data
+    Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber("1234567").build();
+    ComponentType componentType = ComponentTypeBuilder.aComponentType().build();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(componentType)
+        .withComponentCode("componentCode")
+        .withCreatedOn(new Date())
+        .withDonation(donation)
+        .build();
+    ComponentViewModel expectedViewModel = aComponentViewModel().withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(new ComponentTypeViewModel(componentType))
+        .withComponentCode("componentCode")
+        .withCreatedOn(new Date())
+        .withDonationIdentificationNumber("1234567")
+        .withExpiryStatus("")
+        .build();
+
+    // setup mocks
+    when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
+
+    // run test
+    ComponentViewModel convertedViewModel = componentFactory.createComponentViewModel(component);
+
+    // do asserts
+    Assert.assertNotNull("View model created", convertedViewModel);
+    assertThat("Correct view model", convertedViewModel, hasSameStateAsComponentViewModel(expectedViewModel));
+  }
+
+  @Test
+  public void createComponentViewModels_componentList() throws Exception {
+    // set up data
+    ArrayList<Component> components = new ArrayList<>();
+    components.add(aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).build());
+    components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).build());
+
+    // run test
+    List<ComponentViewModel> viewModels = componentFactory.createComponentViewModels(components);
+
+    // do asserts
+    Assert.assertNotNull("View models created", viewModels);
+    Assert.assertEquals("Correct number of view models created", 2, viewModels.size());
   }
 }

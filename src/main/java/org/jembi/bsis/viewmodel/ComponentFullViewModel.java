@@ -2,38 +2,23 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
 
-import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ComponentFullViewModel extends BaseViewModel {
+public class ComponentFullViewModel extends ComponentViewModel {
 
-  private ComponentTypeViewModel componentType;
   private LocationFullViewModel location;
-  private Date createdOn;
   private Date expiresOn;
-  private String donationIdentificationNumber;
   private String notes;
   private PackTypeFullViewModel packType;
-  private ComponentStatus status;
-  private String expiryStatus;
   private Date createdDate;
   private Date issuedOn;
   private Date discardedOn;
   private String bloodAbo;
   private String bloodRh;
-  private String componentCode;
   private InventoryStatus inventoryStatus;
-
-  public ComponentTypeViewModel getComponentType() {
-    return componentType;
-  }
-
-  public void setComponentType(ComponentTypeViewModel componentType) {
-    this.componentType = componentType;
-  }
 
   public LocationFullViewModel getLocation() {
     return location;
@@ -44,28 +29,12 @@ public class ComponentFullViewModel extends BaseViewModel {
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getCreatedOn() {
-    return createdOn;
-  }
-
-  public void setCreatedOn(Date createdOn) {
-    this.createdOn = createdOn;
-  }
-
-  @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getExpiresOn() {
     return expiresOn;
   }
 
   public void setExpiresOn(Date expiresOn) {
     this.expiresOn = expiresOn;
-  }
-  public String getDonationIdentificationNumber() {
-    return donationIdentificationNumber;
-  }
-
-  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
-    this.donationIdentificationNumber = donationIdentificationNumber;
   }
 
   public String getNotes() {
@@ -82,21 +51,6 @@ public class ComponentFullViewModel extends BaseViewModel {
 
   public void setPackType(PackTypeFullViewModel packType) {
     this.packType = packType;
-  }
-
-  public ComponentStatus getStatus() {
-    return status;
-  }
-
-  public void setStatus(ComponentStatus status) {
-    this.status = status;
-  }
-  public String getExpiryStatus() {
-    return expiryStatus;
-  }
-
-  public void setExpiryStatus(String expiryStatus) {
-    this.expiryStatus = expiryStatus;
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
@@ -140,13 +94,6 @@ public class ComponentFullViewModel extends BaseViewModel {
   public void setBloodRh(String bloodRh) {
     this.bloodRh = bloodRh;
   }
-  public String getComponentCode() {
-    return componentCode;
-  }
-
-  public void setComponentCode(String componentCode) {
-    this.componentCode = componentCode;
-  }
 
   public InventoryStatus getInventoryStatus() {
     return inventoryStatus;
@@ -155,7 +102,5 @@ public class ComponentFullViewModel extends BaseViewModel {
   public void setInventoryStatus(InventoryStatus inventoryStatus) {
     this.inventoryStatus = inventoryStatus;
   }
-
-  
 
 }

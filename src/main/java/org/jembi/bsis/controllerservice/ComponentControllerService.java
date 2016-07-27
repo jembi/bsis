@@ -23,6 +23,7 @@ import org.jembi.bsis.service.ComponentCRUDService;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.DiscardReasonViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,16 +70,16 @@ public class ComponentControllerService {
     return componentViewModels;
   }
   
-  public List<ComponentFullViewModel> findComponentsByDonationIdentificationNumber(String donationNumber) {
+  public List<ComponentViewModel> findComponentsByDonationIdentificationNumber(String donationNumber) {
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(donationNumber);
-    return componentFactory.createComponentFullViewModels(results);
+    return componentFactory.createComponentViewModels(results);
   }
 
-  public List<ComponentFullViewModel> findAnyComponent(List<Long> componentTypeIds,
+  public List<ComponentViewModel> findAnyComponent(List<Long> componentTypeIds,
       List<ComponentStatus> statusStringToComponentStatus, Date dateFrom, Date dateTo) {
     List<Component> results = componentRepository.findAnyComponent(componentTypeIds,
         statusStringToComponentStatus, dateFrom, dateTo);
-    List<ComponentFullViewModel> components = componentFactory.createComponentFullViewModels(results);
+    List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
     return components;
   }
   

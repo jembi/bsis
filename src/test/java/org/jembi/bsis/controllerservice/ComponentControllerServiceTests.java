@@ -4,8 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
-import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -37,6 +37,7 @@ import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -135,22 +136,22 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
         aComponent().withId(1L).build(),
         aComponent().withId(2L).build()
     );
-    List<ComponentFullViewModel> componentViewModels = Arrays.asList(
-        aComponentFullViewModel().withId(1L).build(),
-        aComponentFullViewModel().withId(2L).build()
+    List<ComponentViewModel> componentViewModels = Arrays.asList(
+        aComponentViewModel().withId(1L).build(), 
+        aComponentViewModel().withId(2L).build()
     );
     
     // setup mocks
     when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
-    when(componentFactory.createComponentFullViewModels(components)).thenReturn(componentViewModels);
+    when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
-    List<ComponentFullViewModel> returnedViewModels = componentControllerService.findComponentsByDonationIdentificationNumber(
+    List<ComponentViewModel> returnedViewModels = componentControllerService.findComponentsByDonationIdentificationNumber(
         donationIdentificationNumber);
     
     // verify
     verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
-    verify(componentFactory).createComponentFullViewModels(components);
+    verify(componentFactory).createComponentViewModels(components);
     assertThat(returnedViewModels, is(componentViewModels));
   }
   
@@ -165,15 +166,15 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
         ComponentBuilder.aComponent().withId(1L).build(),
         ComponentBuilder.aComponent().withId(2L).build()
     );
-    List<ComponentFullViewModel> componentFullViewModels = Arrays.asList(
-        ComponentFullViewModelBuilder.aComponentFullViewModel().build(),
-        ComponentFullViewModelBuilder.aComponentFullViewModel().build()
+    List<ComponentViewModel> componentViewModels = Arrays.asList(
+        aComponentViewModel().build(),
+        aComponentViewModel().build()
     );
     
     // setup mocks
     Mockito.when(componentRepository.findAnyComponent(componentTypeIds, statusStringToComponentStatus, dateFrom,
         dateTo)).thenReturn(components);
-    Mockito.when(componentFactory.createComponentFullViewModels(components)).thenReturn(componentFullViewModels);
+    Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
     componentControllerService.findAnyComponent(componentTypeIds, statusStringToComponentStatus, dateFrom, dateTo);
@@ -181,7 +182,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // verify
     Mockito.verify(componentRepository).findAnyComponent(componentTypeIds, statusStringToComponentStatus, dateFrom,
         dateTo);
-    Mockito.verify(componentFactory).createComponentFullViewModels(components);
+    Mockito.verify(componentFactory).createComponentViewModels(components);
   }
   
   @Test

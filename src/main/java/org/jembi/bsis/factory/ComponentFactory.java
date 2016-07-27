@@ -12,8 +12,9 @@ import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
-import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
+import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
+import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,24 +110,46 @@ public class ComponentFactory {
     return viewModels;
   }
   
+  public List<ComponentViewModel> createComponentViewModels(Collection<Component> components) {
+    List<ComponentViewModel> viewModels = new ArrayList<>();
+    if (components != null) {
+      Iterator<Component> it = components.iterator();
+      while (it.hasNext()) {
+        viewModels.add(createComponentViewModel(it.next()));
+      }
+    }
+    return viewModels;
+  }
+
+  public ComponentViewModel createComponentViewModel(Component component) {
+    ComponentViewModel viewModel = new ComponentViewModel();
+    return populateViewModel(viewModel, component);
+  }
+
   public ComponentFullViewModel createComponentFullViewModel(Component component) {
     ComponentFullViewModel viewModel = new ComponentFullViewModel();
+    populateViewModel(viewModel, component);
+
     viewModel.setBloodAbo(component.getDonation().getBloodAbo());
     viewModel.setBloodRh(component.getDonation().getBloodRh());
-    viewModel.setComponentCode(component.getComponentCode());
-    viewModel.setComponentType(componentTypeFactory.createViewModel(component.getComponentType()));
     viewModel.setCreatedDate(component.getCreatedDate());
-    viewModel.setCreatedOn(component.getCreatedOn());
     viewModel.setDiscardedOn(component.getDiscardedOn());
-    viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
     viewModel.setExpiresOn(component.getExpiresOn());
-    viewModel.setExpiryStatus(getExpiryStatus(component));
-    viewModel.setId(component.getId());
     viewModel.setInventoryStatus(component.getInventoryStatus());
     viewModel.setIssuedOn(component.getIssuedOn());
     viewModel.setLocation(locationFactory.createFullViewModel(component.getLocation()));
     viewModel.setNotes(component.getNotes());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
+    return viewModel;
+  }
+
+  private ComponentViewModel populateViewModel(ComponentViewModel viewModel, Component component) {
+    viewModel.setComponentCode(component.getComponentCode());
+    viewModel.setComponentType(componentTypeFactory.createViewModel(component.getComponentType()));
+    viewModel.setCreatedOn(component.getCreatedOn());
+    viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
+    viewModel.setExpiryStatus(getExpiryStatus(component));
+    viewModel.setId(component.getId());
     viewModel.setStatus(component.getStatus());
     return viewModel;
   }
