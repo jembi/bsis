@@ -53,6 +53,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
         query = InventoryNamedQueryConstants.QUERY_FIND_STOCK_LEVELS),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN,
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN_AND_STATUS,
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN_AND_STATUS),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN,
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENT_BY_CODE_AND_DIN),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN_IN_STOCK,

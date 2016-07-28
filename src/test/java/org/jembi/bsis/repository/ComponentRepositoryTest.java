@@ -90,8 +90,7 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testFindAnyComponentQuarantinedType1() throws Exception {
-    List<ComponentStatus> status = new ArrayList<ComponentStatus>();
-    status.add(ComponentStatus.QUARANTINED);
+    ComponentStatus status = ComponentStatus.QUARANTINED;
     List<Long> componentTypeIds = new ArrayList<Long>();
     componentTypeIds.add(1l);
     List<Component> all = componentRepository.findAnyComponent(componentTypeIds, status, null, null);

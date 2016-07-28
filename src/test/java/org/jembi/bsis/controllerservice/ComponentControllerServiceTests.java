@@ -156,10 +156,37 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   }
   
   @Test
+  public void testFindComponentsByDonationIdentificationNumberAndStatus_shouldCallRepositoryAndFactory() throws Exception {
+    // setup data
+    String donationIdentificationNumber = "1234567";
+    ComponentStatus status = ComponentStatus.DISCARDED;
+    List<Component> components = Arrays.asList(
+        aComponent().withId(1L).withStatus(status).build(),
+        aComponent().withId(2L).withStatus(status).build()
+    );
+    List<ComponentViewModel> componentViewModels = Arrays.asList(
+        aComponentViewModel().withId(1L).withStatus(status).build(),
+        aComponentViewModel().withId(2L).withStatus(status).build()
+    );
+    
+    // setup mocks
+    when(componentRepository.findComponentsByDonationIdentificationNumberAndStatus(donationIdentificationNumber, status))
+        .thenReturn(components);
+    when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
+    
+    // SUT
+    List<ComponentViewModel> returnedViewModels = componentControllerService.findComponentsByDonationIdentificationNumberAndStatus(
+        donationIdentificationNumber, status);
+    
+    // verify
+    assertThat(returnedViewModels, is(componentViewModels));
+  }
+  
+  @Test
   public void testFindAnyComponent_shouldCallRepositoryAndFactory() throws Exception {
     // setup data
     List<Long> componentTypeIds = Arrays.asList(1L, 2L);
-    List<ComponentStatus> statusStringToComponentStatus = Arrays.asList(ComponentStatus.AVAILABLE);
+    ComponentStatus status = ComponentStatus.AVAILABLE;
     Date dateFrom = new Date();
     Date dateTo = new Date();
     List<Component> components = Arrays.asList(
@@ -172,15 +199,14 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     );
     
     // setup mocks
-    Mockito.when(componentRepository.findAnyComponent(componentTypeIds, statusStringToComponentStatus, dateFrom,
-        dateTo)).thenReturn(components);
+    Mockito.when(componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo)).thenReturn(components);
     Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
-    componentControllerService.findAnyComponent(componentTypeIds, statusStringToComponentStatus, dateFrom, dateTo);
+    componentControllerService.findAnyComponent(componentTypeIds, status, dateFrom, dateTo);
     
     // verify
-    Mockito.verify(componentRepository).findAnyComponent(componentTypeIds, statusStringToComponentStatus, dateFrom,
+    Mockito.verify(componentRepository).findAnyComponent(componentTypeIds, status, dateFrom,
         dateTo);
     Mockito.verify(componentFactory).createComponentViewModels(components);
   }

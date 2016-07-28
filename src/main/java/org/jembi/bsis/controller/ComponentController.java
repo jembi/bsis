@@ -110,14 +110,17 @@ public class ComponentController {
       @RequestParam(value = "componentNumber", required = false, defaultValue = "") String componentNumber,
       @RequestParam(value = "donationIdentificationNumber", required = false, defaultValue = "") String donationIdentificationNumber,
       @RequestParam(value = "componentTypes", required = false, defaultValue = "") List<Long> componentTypeIds,
-      @RequestParam(value = "status", required = false) List<ComponentStatus> statuses,
+      @RequestParam(value = "status", required = false) ComponentStatus status,
       @RequestParam(value = "donationDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateFrom,
       @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo) {
 
     List<ComponentViewModel> components;
     
     if (StringUtils.isBlank(donationIdentificationNumber)) {
-      components = componentControllerService.findAnyComponent(componentTypeIds, statuses, donationDateFrom, donationDateTo);
+      components = componentControllerService.findAnyComponent(componentTypeIds, status, donationDateFrom, donationDateTo);
+    } else if (status != null) {
+      components = componentControllerService.findComponentsByDonationIdentificationNumberAndStatus(
+          donationIdentificationNumber, status);
     } else {
       components = componentControllerService.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
     }
