@@ -3,6 +3,9 @@ package org.jembi.bsis.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aDiscardReason;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aReturnReason;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
@@ -23,14 +26,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jembi.bsis.factory.ComponentFactory;
-import org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.matchers.ComponentMatcher;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeType;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
@@ -110,7 +111,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Assert.assertNotNull("Status change has been set", component.getStatusChanges());
     Assert.assertEquals("Status change has been set", 1, component.getStatusChanges().size());
     ComponentStatusChange statusChange = component.getStatusChanges().iterator().next();
-    Assert.assertEquals("Status change is correct", ComponentStatusChangeType.DISCARDED, statusChange.getStatusChangeType());
     Assert.assertEquals("Status change is correct", ComponentStatus.DISCARDED, statusChange.getNewStatus());
     Assert.assertEquals("Status change is correct", discardReasonId, statusChange.getStatusChangeReason().getId());
     Assert.assertEquals("Status change is correct", reasonText, statusChange.getStatusChangeReasonText());
@@ -777,7 +777,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withId(componentId)
         .withStatus(ComponentStatus.DISCARDED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(new Date()).build())
+        .withComponentStatusChange(aComponentStatusChange()
+            .withStatusChangedOn(new Date())
+            .withStatusChangeReason(aDiscardReason().build())
+            .build())
         .build();
     
     when(componentRepository.findComponentById(componentId)).thenReturn(component);
@@ -798,21 +801,33 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_MONTH, -10);
     Date discardDate1 = cal.getTime();
-    cal.add(Calendar.DAY_OF_MONTH, 5);
-    Date returnDate = cal.getTime();
     cal.add(Calendar.DAY_OF_MONTH, 2);
     Date discardDate2 = cal.getTime();
     cal.add(Calendar.DAY_OF_MONTH, 2);
     Date discardDate3 = cal.getTime();
+    cal.add(Calendar.DAY_OF_MONTH, 5);
+    Date returnDate = cal.getTime();
     long componentId = 76L;
     Component component = aComponent()
         .withId(componentId)
         .withStatus(ComponentStatus.DISCARDED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate1).build())
-        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate3).build())
-        .withComponentStatusChange(ComponentStatusChangeBuilder.aReturnedStatusChange().withStatusChangedOn(returnDate).build())
-        .withComponentStatusChange(ComponentStatusChangeBuilder.aDiscardedStatusChange().withStatusChangedOn(discardDate2).build())
+        .withComponentStatusChange(aComponentStatusChange()
+            .withStatusChangedOn(discardDate1)
+            .withStatusChangeReason(aDiscardReason().build())
+            .build())
+        .withComponentStatusChange(aComponentStatusChange()
+            .withStatusChangedOn(discardDate3)
+            .withStatusChangeReason(aDiscardReason().build())
+            .build())
+        .withComponentStatusChange(aComponentStatusChange()
+            .withStatusChangedOn(returnDate)
+            .withStatusChangeReason(aReturnReason().build())
+            .build())
+        .withComponentStatusChange(aComponentStatusChange()
+            .withStatusChangedOn(discardDate2)
+            .withStatusChangeReason(aDiscardReason().build())
+            .build())
         .build();
     
     when(componentRepository.findComponentById(componentId)).thenReturn(component);
@@ -826,10 +841,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Iterator<ComponentStatusChange> it = returnedComponent.getStatusChanges().iterator();
     assertThat(it.next().getIsDeleted(), is(false));
     assertThat(it.next().getIsDeleted(), is(false));
-    assertThat(it.next().getIsDeleted(), is(false));
     ComponentStatusChange discarded3 = it.next();
     assertThat(discarded3.getStatusChangedOn(), is(discardDate3));
     assertThat(discarded3.getIsDeleted(), is(true));
+    assertThat(it.next().getIsDeleted(), is(false));
   }
   
   @Test(expected = IllegalStateException.class)

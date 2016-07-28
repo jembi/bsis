@@ -31,10 +31,6 @@ public class ComponentStatusChange extends BaseEntity implements Comparable<Comp
 
   @Enumerated(EnumType.STRING)
   @Column(length = 30)
-  private ComponentStatusChangeType statusChangeType;
-
-  @Enumerated(EnumType.STRING)
-  @Column(length = 30)
   private ComponentStatus newStatus;
 
   @ManyToOne
@@ -113,14 +109,6 @@ public class ComponentStatusChange extends BaseEntity implements Comparable<Comp
 
   public void setStatusChangeReason(ComponentStatusChangeReason discardReason) {
     this.statusChangeReason = discardReason;
-  }
-
-  public ComponentStatusChangeType getStatusChangeType() {
-    return statusChangeType;
-  }
-
-  public void setStatusChangeType(ComponentStatusChangeType statusChangeType) {
-    this.statusChangeType = statusChangeType;
   }
 
   public boolean getIsDeleted() {

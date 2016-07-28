@@ -12,7 +12,7 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeType;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
@@ -186,7 +186,6 @@ public class ComponentCRUDService {
     
     // create a component status change for the component
     ComponentStatusChange statusChange = new ComponentStatusChange();
-    statusChange.setStatusChangeType(ComponentStatusChangeType.DISCARDED);
     statusChange.setNewStatus(ComponentStatus.DISCARDED);
     statusChange.setStatusChangedOn(new Date());
     ComponentStatusChangeReason discardReason = new ComponentStatusChangeReason();
@@ -228,7 +227,7 @@ public class ComponentCRUDService {
     ComponentStatusChange lastDiscardComponentStatusChange = null;
     if (existingComponent.getStatusChanges() != null) {
       for (ComponentStatusChange statusChange : existingComponent.getStatusChanges()) {
-        if (statusChange.getStatusChangeType() == ComponentStatusChangeType.DISCARDED) {
+        if (statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.DISCARDED) {
           if (lastDiscardComponentStatusChange == null || 
               statusChange.getStatusChangedOn().after(lastDiscardComponentStatusChange.getStatusChangedOn())) {
             lastDiscardComponentStatusChange = statusChange;

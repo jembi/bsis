@@ -9,7 +9,6 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeType;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
@@ -41,7 +40,6 @@ public class ComponentReturnService {
     // Create a component status change for the component
     Date now = dateGeneratorService.generateDate();
     ComponentStatusChange statusChange = new ComponentStatusChange();
-    statusChange.setStatusChangeType(ComponentStatusChangeType.RETURNED);
     statusChange.setNewStatus(component.getStatus());
     statusChange.setStatusChangedOn(now);
     ComponentStatusChangeReason statusChangeReason = componentStatusChangeReasonRepository

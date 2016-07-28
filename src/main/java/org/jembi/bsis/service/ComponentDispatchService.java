@@ -9,7 +9,6 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeType;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
@@ -42,7 +41,6 @@ public class ComponentDispatchService {
 
     // Create a component status change for the component
     ComponentStatusChange statusChange = new ComponentStatusChange();
-    statusChange.setStatusChangeType(ComponentStatusChangeType.ISSUED);
     statusChange.setNewStatus(ComponentStatus.ISSUED);
     statusChange.setStatusChangedOn(issuedDate);
     ComponentStatusChangeReason statusChangeReason = componentStatusChangeReasonRepository

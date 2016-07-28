@@ -46,4 +46,9 @@ public class ComponentStatusChangeReasonBuilder extends AbstractEntityBuilder<Co
         .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED);
   }
 
+  public static ComponentStatusChangeReasonBuilder aReturnReason() {
+    return new ComponentStatusChangeReasonBuilder()
+        .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.RETURNED);
+  }
+
 }
