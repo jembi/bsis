@@ -1,5 +1,7 @@
 package org.jembi.bsis.model.reporting;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +40,17 @@ public class Report {
 
   public void setDataValues(List<DataValue> dataValues) {
     this.dataValues = dataValues;
+  }
+
+  public void sortDataValuesByVenue() {
+    if (dataValues != null) {
+      Collections.sort(dataValues, new Comparator<DataValue>() {
+        @Override
+        public int compare(DataValue o1, DataValue o2) {
+          return o1.getVenue().getName().compareTo(o2.getVenue().getName());
+        }
+      });
+    }
   }
 
   @Override

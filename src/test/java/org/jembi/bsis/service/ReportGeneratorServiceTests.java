@@ -3,13 +3,12 @@ package org.jembi.bsis.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
-import static org.jembi.bsis.helpers.builders.BloodTestResultDTOBuilder.aBloodTestResultDTO;
 import static org.jembi.bsis.helpers.builders.CohortBuilder.aCohort;
 import static org.jembi.bsis.helpers.builders.CollectedDonationDTOBuilder.aCollectedDonationDTO;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DataValueBuilder.aDataValue;
 import static org.jembi.bsis.helpers.builders.DonationTypeBuilder.aDonationType;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.ReportBuilder.aReport;
 import static org.jembi.bsis.helpers.builders.StockLevelDTOBuilder.aStockLevelDTO;
 import static org.mockito.Mockito.when;
@@ -19,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.constant.CohortConstants;
-import org.jembi.bsis.dto.BloodTestResultDTO;
 import org.jembi.bsis.dto.CollectedDonationDTO;
 import org.jembi.bsis.dto.StockLevelDTO;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
@@ -32,7 +30,6 @@ import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.InventoryRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
-import org.jembi.bsis.service.ReportGeneratorService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -128,56 +125,38 @@ public class ReportGeneratorServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testGenerateTTIPrevalenceReport() {
-
-    Date irrelevantStartDate = new Date();
-    Date irrelevantEndDate = new Date();
-
-    List<BloodTestResultDTO> dtos = Arrays.asList(
-        aBloodTestResultDTO()
-            .withBloodTest(aBloodTest().withTestName("HCV").build())
-            .withResult("POS")
-            .withGender(Gender.female)
-            .withCount(2)
-            .build()
+  public void testReportSortDataValuesByVenue_shouldSortCorrectly() {
+    Location venue1 = aVenue().withName("venue1").build();
+    Location venue2 = aVenue().withName("venue2").build();
+    Location venue3 = aVenue().withName("venue3").build();
+    
+    List<DataValue> dataValues = Arrays.asList(
+        aDataValue().withVenue(venue1).build(),
+        aDataValue().withVenue(venue2).build(),
+        aDataValue().withVenue(venue3).build(),
+        aDataValue().withVenue(venue3).build(),
+        aDataValue().withVenue(venue2).build(),
+        aDataValue().withVenue(venue1).build()
     );
-
+    
     List<DataValue> expectedDataValues = Arrays.asList(
-        aDataValue()
-            .withStartDate(irrelevantStartDate)
-            .withEndDate(irrelevantEndDate)
-            .withValue(2L)
-            .withCohort(aCohort()
-                .withCategory(CohortConstants.BLOOD_TEST_CATEGORY)
-                .withComparator(Comparator.EQUALS)
-                .withOption("HCV")
-                .build())
-            .withCohort(aCohort()
-                .withCategory(CohortConstants.BLOOD_TEST_RESULT_CATEGORY)
-                .withComparator(Comparator.EQUALS)
-                .withOption("POS")
-                .build())
-            .withCohort(aCohort()
-                .withCategory(CohortConstants.GENDER_CATEGORY)
-                .withComparator(Comparator.EQUALS)
-                .withOption(Gender.female)
-                .build())
-            .build()
+        aDataValue().withVenue(venue1).build(),
+        aDataValue().withVenue(venue1).build(),
+        aDataValue().withVenue(venue2).build(),
+        aDataValue().withVenue(venue2).build(),
+        aDataValue().withVenue(venue3).build(),
+        aDataValue().withVenue(venue3).build()
     );
-
-    Report expectedReport = aReport()
-        .withStartDate(irrelevantStartDate)
-        .withEndDate(irrelevantEndDate)
-        .withDataValues(expectedDataValues)
-        .build();
-
-    when(bloodTestingRepository.findTTIPrevalenceReportIndicators(irrelevantStartDate, irrelevantEndDate))
-        .thenReturn(dtos);
-
-    Report returnedReport = reportGeneratorService.generateTTIPrevalenceReport(irrelevantStartDate,
-        irrelevantEndDate);
-
-    assertThat(returnedReport, is(equalTo(expectedReport)));
+    
+    Report sortedReport = new Report();
+    sortedReport.setDataValues(dataValues);
+    sortedReport.sortDataValuesByVenue();
+    
+    Report expectedReport = new Report();
+    expectedReport.setDataValues(expectedDataValues);
+    
+    assertThat(sortedReport, is(equalTo(expectedReport)));
+    
   }
 
 }
