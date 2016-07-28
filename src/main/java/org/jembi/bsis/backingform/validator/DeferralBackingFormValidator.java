@@ -1,5 +1,6 @@
 package org.jembi.bsis.backingform.validator;
 
+
 import org.jembi.bsis.backingform.DeferralBackingForm;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DonorRepository;
@@ -7,6 +8,7 @@ import org.jembi.bsis.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import java.util.Date;
 
 @Component
 public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingForm> {
@@ -17,7 +19,7 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
   private DonorRepository donorRepository;
   @Autowired
   private DeferralReasonRepository deferralReasonRepository;
-
+  private boolean isDeferralDateUntilInvalid;
   @Override
   public void validateForm(DeferralBackingForm form, Errors errors) {
 
@@ -34,6 +36,17 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
     if (form.getDeferralReason() != null && !deferralReasonRepository.verifyDeferralReasonExists(form.getDeferralReason().getId())) {
       errors.rejectValue("deferralReason", "deferral.deferralReason.required", "Deferral reason does not exist");
     }
+    
+    if (form.getDeferralDate() != null) {
+      isDeferralDateUntilInvalid = form.getDeferredUntil().before(form.getDeferralDate());
+    } else {
+      isDeferralDateUntilInvalid = form.getDeferredUntil().before(new Date());
+    }
+
+    if (isDeferralDateUntilInvalid) {
+      errors.rejectValue("deferredUntil", "deferral.deferredUntil.required","Deferral end date can't be ealier than deferral date");
+    }
+   
   }
 
   @Override
