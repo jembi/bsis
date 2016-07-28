@@ -24,10 +24,11 @@ public class BloodTestResultNamedQueryConstants {
       "BloodTestResult.findTTIPrevalenceReportTotalUnitsTested";
   
   public static final String QUERY_FIND_TOTAL_UNITS_TESTED_FOR_DATE_RANGE = 
-      "SELECT NEW org.jembi.bsis.dto.BloodTestTotalDTO(do.gender, d.venue, COUNT(b)) " +
+      "SELECT NEW org.jembi.bsis.dto.BloodTestTotalDTO(do.gender, d.venue, COUNT(DISTINCT d)) " +
           "FROM BloodTestResult b, Donation d, Donor do " +
           "WHERE b.donation = d AND d.donor = do AND d.donationDate BETWEEN :startDate AND :endDate " +
           "AND d.isDeleted = :deleted " +
+          "AND d.released = :released " +
           "AND b.bloodTest.bloodTestType = :bloodTestType " +
           "GROUP BY d.venue, do.gender " +
           "ORDER BY d.venue, do.gender";
@@ -36,10 +37,11 @@ public class BloodTestResultNamedQueryConstants {
       "BloodTestResult.findTTIPrevalenceReportTotalUnsafeUnitsTested";
   
   public static final String QUERY_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE =  
-      "SELECT NEW org.jembi.bsis.dto.BloodTestTotalDTO(do.gender, d.venue, COUNT(d)) " +
+      "SELECT NEW org.jembi.bsis.dto.BloodTestTotalDTO(do.gender, d.venue, COUNT(DISTINCT d)) " +
           "FROM BloodTestResult b, Donation d, Donor do " +
           "WHERE b.donation = d AND d.donor = do AND d.donationDate BETWEEN :startDate AND :endDate " +
           "AND d.isDeleted = :deleted " +
+          "AND d.released = :released " +
           "AND b.bloodTest.bloodTestType = :bloodTestType " +
           "AND d.ttiStatus = :ttiStatus " +
           "GROUP BY d.venue, do.gender " +
