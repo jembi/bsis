@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -69,9 +68,8 @@ public class ComponentFactory {
   public List<ComponentManagementViewModel> createManagementViewModels(Collection<Component> components) {
     List<ComponentManagementViewModel> viewModels = new ArrayList<>();
     if (components != null) {
-      Iterator<Component> it = components.iterator();
-      while (it.hasNext()) {
-        viewModels.add(createManagementViewModel(it.next()));
+      for (Component component : components) {
+        viewModels.add(createManagementViewModel(component));
       }
     }
     return viewModels;
@@ -102,9 +100,8 @@ public class ComponentFactory {
   public List<ComponentFullViewModel> createComponentFullViewModels(Collection<Component> components) {
     List<ComponentFullViewModel> viewModels = new ArrayList<>();
     if (components != null) {
-      Iterator<Component> it = components.iterator();
-      while (it.hasNext()) {
-        viewModels.add(createComponentFullViewModel(it.next()));
+      for (Component component : components) {
+        viewModels.add(createComponentFullViewModel(component));
       }
     }
     return viewModels;
@@ -113,9 +110,8 @@ public class ComponentFactory {
   public List<ComponentViewModel> createComponentViewModels(Collection<Component> components) {
     List<ComponentViewModel> viewModels = new ArrayList<>();
     if (components != null) {
-      Iterator<Component> it = components.iterator();
-      while (it.hasNext()) {
-        viewModels.add(createComponentViewModel(it.next()));
+      for (Component component : components) {
+        viewModels.add(createComponentViewModel(component));
       }
     }
     return viewModels;
