@@ -41,13 +41,16 @@ public class BloodTestingRepositoryTests extends ContextDependentTestSuite{
     Location expectedVenue = aVenue().build();
     Gender expectedGender = Gender.male;
     Donation expectedDonationStartDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
+        .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
     Donation expectedDonationEndDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantEndDate)
-        .withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
-    Donation expectedDonationCurrentDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(new Date())
-        .withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
+        .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
+    
+    Donation outOfRangeDateDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(new Date())
+        .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
     Donation deletedDonation = aDonation().withVenue(expectedVenue).thatIsDeleted().withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
+        .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
+    Donation notReleasedDonation = aDonation().withVenue(expectedVenue).thatIsDeleted().withDonationDate(irrelevantStartDate)
+        .thatIsNotReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
     BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI).buildAndPersist(entityManager);
     BloodTest unexpectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING).buildAndPersist(entityManager);
     
@@ -65,7 +68,7 @@ public class BloodTestingRepositoryTests extends ContextDependentTestSuite{
     
     // Excluded by date
     aBloodTestResult()
-        .withDonation(expectedDonationCurrentDate)
+        .withDonation(outOfRangeDateDonation)
         .withBloodTest(expectedBloodTest)
         .buildAndPersist(entityManager);
     
@@ -80,7 +83,12 @@ public class BloodTestingRepositoryTests extends ContextDependentTestSuite{
         .withDonation(expectedDonationStartDate)
         .withBloodTest(unexpectedBloodTest)
         .buildAndPersist(entityManager);
-     
+    
+    // Excluded by not being released
+    aBloodTestResult()
+        .withDonation(notReleasedDonation)
+        .withBloodTest(expectedBloodTest)
+        .buildAndPersist(entityManager);
     
     List<BloodTestResultDTO> expectedDtos = Arrays.asList(
         aBloodTestResultDTO()

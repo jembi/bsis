@@ -16,6 +16,7 @@ public class BloodTestResultNamedQueryConstants {
           "FROM BloodTestResult b, Donation d, Donor do " +
           "WHERE b.donation = d AND d.donor = do AND d.donationDate BETWEEN :startDate AND :endDate " +
           "AND d.isDeleted = :deleted " +
+          "AND d.released = :released " +
           "AND b.bloodTest.bloodTestType = :bloodTestType " +
           "GROUP BY d.venue, do.gender, b.bloodTest, b.result " +
           "ORDER BY d.venue, do.gender, b.bloodTest, b.result";

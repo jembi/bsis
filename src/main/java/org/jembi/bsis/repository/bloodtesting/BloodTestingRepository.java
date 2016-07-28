@@ -289,6 +289,7 @@ public class BloodTestingRepository {
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("deleted", false)
+        .setParameter("released", true)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
         .getResultList();
   }
