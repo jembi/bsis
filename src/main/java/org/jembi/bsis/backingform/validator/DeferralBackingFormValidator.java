@@ -8,7 +8,6 @@ import org.jembi.bsis.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import java.util.Date;
 
 @Component
 public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingForm> {
@@ -37,16 +36,9 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
       errors.rejectValue("deferralReason", "deferral.deferralReason.required", "Deferral reason does not exist");
     }
     
-    if (form.getDeferralDate() != null) {
-      isDeferralDateUntilInvalid = form.getDeferredUntil().before(form.getDeferralDate());
-    } else {
-      isDeferralDateUntilInvalid = form.getDeferredUntil().before(new Date());
+    if (form.getDeferralDate() != null && form.getDeferredUntil() != null  && form.getDeferredUntil().before(form.getDeferralDate())) {
+      errors.rejectValue("deferredUntil", "deferral.deferredUntil.invalid","Deferral end date can't be ealier than deferral date");
     }
-
-    if (isDeferralDateUntilInvalid) {
-      errors.rejectValue("deferredUntil", "deferral.deferredUntil.required","Deferral end date can't be ealier than deferral date");
-    }
-   
   }
 
   @Override
