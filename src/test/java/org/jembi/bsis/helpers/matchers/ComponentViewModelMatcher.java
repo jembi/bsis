@@ -22,12 +22,9 @@ public class ComponentViewModelMatcher extends TypeSafeMatcher<ComponentViewMode
         .appendText("\nComponentCode: ").appendValue(expected.getComponentCode())
         .appendText("\nComponentType: ").appendValue(expected.getComponentType())
         .appendText("\nStatus: ").appendValue(expected.getStatus())
-        .appendText("\nInventoryStatus: ").appendValue(expected.getInventoryStatus())
-        .appendText("\nLocation: ").appendValue(expected.getLocation())
-        .appendText("\nCreatedOn: ").appendValue(expected.getCreatedOn())
-        .appendText("\nExpiresOn: ").appendValue(expected.getExpiresOn())
-        .appendText("\nBlood ABO: ").appendValue(expected.getBloodAbo())
-        .appendText("\nBlood Rh: ").appendValue(expected.getBloodRh())
+        .appendText("\ncreatedOn: ").appendValue(expected.getCreatedOn())
+        .appendText("\ndonationIdentificationNumber: ").appendValue(expected.getDonationIdentificationNumber())
+        .appendText("\nexpiryStatus: ").appendValue(expected.getExpiryStatus())
         ;
   }
 
@@ -38,12 +35,9 @@ public class ComponentViewModelMatcher extends TypeSafeMatcher<ComponentViewMode
         Objects.equals(actual.getComponentCode(), expected.getComponentCode()) &&
         Objects.equals(actual.getComponentType(), expected.getComponentType()) &&
         Objects.equals(actual.getStatus(), expected.getStatus()) &&
-        Objects.equals(actual.getInventoryStatus(), expected.getInventoryStatus()) &&
-        Objects.equals(actual.getLocation(), expected.getLocation()) &&
         (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn()) || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
-        (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn()) || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
-        Objects.equals(actual.getBloodAbo(), expected.getBloodAbo()) &&
-        Objects.equals(actual.getBloodAbo(), expected.getBloodAbo());
+        Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
+        Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus());
   }
 
   public static ComponentViewModelMatcher hasSameStateAsComponentViewModel(ComponentViewModel expected) {

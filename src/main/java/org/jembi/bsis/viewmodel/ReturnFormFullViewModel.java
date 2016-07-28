@@ -7,14 +7,14 @@ import java.util.Map;
 
 public class ReturnFormFullViewModel extends ReturnFormViewModel {
 
-  private List<ComponentViewModel> components = new ArrayList<>();
+  private List<ComponentFullViewModel> components = new ArrayList<>();
   private Map<String, Boolean> permissions = new HashMap<>();
 
-  public List<ComponentViewModel> getComponents() {
+  public List<ComponentFullViewModel> getComponents() {
     return components;
   }
 
-  public void setComponents(List<ComponentViewModel> components) {
+  public void setComponents(List<ComponentFullViewModel> components) {
     this.components = components;
   }
 

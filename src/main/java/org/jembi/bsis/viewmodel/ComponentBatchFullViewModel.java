@@ -5,7 +5,7 @@ import java.util.List;
 public class ComponentBatchFullViewModel extends ComponentBatchViewModel {
 
   private List<BloodTransportBoxViewModel> bloodTransportBoxes;
-  private List<ComponentViewModel> components;
+  private List<ComponentFullViewModel> components;
   
   public ComponentBatchFullViewModel() {
     super();
@@ -19,11 +19,11 @@ public class ComponentBatchFullViewModel extends ComponentBatchViewModel {
     this.bloodTransportBoxes = bloodTransportBoxes;
   }
 
-  public List<ComponentViewModel> getComponents() {
+  public List<ComponentFullViewModel> getComponents() {
     return components;
   }
 
-  public void setComponents(List<ComponentViewModel> components) {
+  public void setComponents(List<ComponentFullViewModel> components) {
     this.components = components;
   }  
 }

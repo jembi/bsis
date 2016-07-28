@@ -11,7 +11,7 @@ import org.hamcrest.Matchers;
 import org.jembi.bsis.backingform.ReturnFormBackingForm;
 import org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
-import org.jembi.bsis.helpers.builders.ComponentViewModelBuilder;
+import org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder;
 import org.jembi.bsis.helpers.builders.LocationBackingFormBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.ReturnFormBackingFormBuilder;
@@ -27,7 +27,7 @@ import org.jembi.bsis.model.returnform.ReturnForm;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.ReturnFormConstraintChecker;
-import org.jembi.bsis.viewmodel.ComponentViewModel;
+import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.ReturnFormFullViewModel;
 import org.jembi.bsis.viewmodel.ReturnFormViewModel;
@@ -124,13 +124,13 @@ public class ReturnFormFactoryTests {
     Location returnedTo = LocationBuilder.aDistributionSite().withId(2L).build();
     Date returnDate = new Date();
     Component component = ComponentBuilder.aComponent().withId(1L).build();
-    ComponentViewModel componentViewModel = ComponentViewModelBuilder.aComponentViewModel().withId(1L).build();
+    ComponentFullViewModel componentFullViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel().withId(1L).build();
 
     ReturnFormFullViewModel expectedViewModel = ReturnFormFullViewModelBuilder.aReturnFormFullViewModel()
         .withReturnedFrom(new LocationFullViewModel(returnedFrom))
         .withReturnedTo(new LocationFullViewModel(returnedTo))
         .withReturnDate(returnDate)
-        .withComponent(componentViewModel)
+        .withComponent(componentFullViewModel)
         .withPermission("canEdit", true)
         .withPermission("canReturn", true)
         .withPermission("canDiscard", true)
@@ -145,7 +145,7 @@ public class ReturnFormFactoryTests {
         .build();
 
     // Setup mocks
-    when(componentFactory.createComponentViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
+    when(componentFactory.createComponentFullViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
     when(locationFactory.createFullViewModel(returnedFrom)).thenReturn(new LocationFullViewModel(returnedFrom));
     when(locationFactory.createFullViewModel(returnedTo)).thenReturn(new LocationFullViewModel(returnedTo));
     when(returnFormConstraintChecker.canEdit(entity)).thenReturn(true);

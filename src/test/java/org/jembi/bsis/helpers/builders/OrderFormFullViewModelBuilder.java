@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
-import org.jembi.bsis.viewmodel.ComponentViewModel;
+import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormItemViewModel;
@@ -22,7 +22,7 @@ public class OrderFormFullViewModelBuilder extends AbstractBuilder<OrderFormFull
   private OrderStatus status = OrderStatus.CREATED;
   private OrderType type = OrderType.ISSUE;
   private List<OrderFormItemViewModel> items = new ArrayList<>();
-  private List<ComponentViewModel> components = new ArrayList<>();
+  private List<ComponentFullViewModel> components = new ArrayList<>();
   private Map<String, Boolean> permissions = new HashMap<>();
 
   public OrderFormFullViewModelBuilder withId(Long id) {
@@ -60,7 +60,7 @@ public class OrderFormFullViewModelBuilder extends AbstractBuilder<OrderFormFull
     return this;
   }
 
-  public OrderFormFullViewModelBuilder withComponent(ComponentViewModel component) {
+  public OrderFormFullViewModelBuilder withComponent(ComponentFullViewModel component) {
     this.components.add(component);
     return this;
   }

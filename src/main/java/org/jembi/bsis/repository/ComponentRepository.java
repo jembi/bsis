@@ -9,7 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Repository
 @Transactional
 public class ComponentRepository extends AbstractRepository<Component> {
@@ -26,17 +24,14 @@ public class ComponentRepository extends AbstractRepository<Component> {
   @PersistenceContext
   private EntityManager em;
 
-  public List<Component> findAnyComponent(String donationIdentificationNumber, List<Long> componentTypes, List<ComponentStatus> status,
+  public List<Component> findAnyComponent(List<Long> componentTypes, ComponentStatus status,
       Date donationDateFrom, Date donationDateTo) {
     TypedQuery<Component> query;
     String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
         "c.isDeleted= :isDeleted ";
 
-    if (status != null && !status.isEmpty()) {
-      queryStr += "AND c.status IN :status ";
-    }
-    if (!StringUtils.isBlank(donationIdentificationNumber)) {
-      queryStr += "AND c.donation.donationIdentificationNumber = :donationIdentificationNumber ";
+    if (status != null) {
+      queryStr += "AND c.status = :status ";
     }
     if (componentTypes != null && !componentTypes.isEmpty()) {
       queryStr += "AND c.componentType.id IN (:componentTypeIds) ";
@@ -53,11 +48,8 @@ public class ComponentRepository extends AbstractRepository<Component> {
     query = em.createQuery(queryStr, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
 
-    if (status != null && !status.isEmpty()) {
+    if (status != null) {
       query.setParameter("status", status);
-    }
-    if (!StringUtils.isBlank(donationIdentificationNumber)) {
-      query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     }
     if (componentTypes != null && !componentTypes.isEmpty()) {
       query.setParameter("componentTypeIds", componentTypes);
@@ -76,6 +68,15 @@ public class ComponentRepository extends AbstractRepository<Component> {
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN, Component.class)
         .setParameter("isDeleted", Boolean.FALSE)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .getResultList();
+  }
+
+  public List<Component> findComponentsByDonationIdentificationNumberAndStatus(String donationIdentificationNumber,
+      ComponentStatus status) {
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN_AND_STATUS, Component.class)
+        .setParameter("isDeleted", Boolean.FALSE)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .setParameter("status", status)
         .getResultList();
   }
 

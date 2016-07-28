@@ -172,5 +172,50 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
     Assert.assertTrue("contains child2", children.contains(child2));
 
   }
+  
+  @Test
+  public void testFindComponentsByDonationIdentificationNumberAndStatus_shouldReturnCorrectComponents() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Donation donation = aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+    // Excluded by isDeleted
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(donation)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by status
+    aComponent()
+        .withStatus(ComponentStatus.EXPIRED)
+        .withDonation(donation)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by donation
+    aComponent()
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(aDonation().build())
+        .buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumberAndStatus(
+        donationIdentificationNumber, ComponentStatus.DISCARDED);
+    
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
 
 }

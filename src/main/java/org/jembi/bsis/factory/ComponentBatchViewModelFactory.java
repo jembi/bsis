@@ -60,7 +60,7 @@ public class ComponentBatchViewModelFactory {
   private void populateFullViewModel(ComponentBatch componentBatch, ComponentBatchFullViewModel viewModel) {
 
     populateViewModel(componentBatch, viewModel);
-    viewModel.setComponents(componentFactory.createComponentViewModels(componentBatch.getComponents()));
+    viewModel.setComponents(componentFactory.createComponentFullViewModels(componentBatch.getComponents()));
     viewModel.setBloodTransportBoxes(
         bloodTransportBoxViewModelFactory.createBloodTransportBoxViewModels(componentBatch.getBloodTransportBoxes()));
   }
