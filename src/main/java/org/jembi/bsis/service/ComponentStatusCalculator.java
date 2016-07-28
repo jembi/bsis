@@ -133,7 +133,7 @@ public class ComponentStatusCalculator {
     boolean unconfirmedBloodGroup = donation.isReleased()
         && !BloodTypingMatchStatus.isBloodGroupConfirmed(donation.getBloodTypingMatchStatus());
 
-    if (donation.isIneligibleDonor() || ttiStatus.equals(TTIStatus.TTI_UNSAFE) || unconfirmedBloodGroup) {
+    if (donation.isIneligibleDonor() || TTIStatus.isUnsafeStatus(ttiStatus) || unconfirmedBloodGroup) {
       newComponentStatus = ComponentStatus.UNSAFE;
     }
 

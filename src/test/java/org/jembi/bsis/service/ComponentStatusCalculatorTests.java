@@ -678,6 +678,34 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   }
   
   @Test
+  public void testUpdateComponentWithIndeterminateTTI_shouldChangeStatusToUnsafe() throws Exception {
+    // set up data
+    long donationId = 1234;
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withTTIStatus(TTIStatus.INDETERMINATE)
+        .thatIsReleased()
+        .build();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withExpiresOn(new DateTime().plusDays(90).toDate())
+        .withDonation(donation)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(true));
+    assertThat("status is UNSAFE", component.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
   public void testUpdateComponentStatusQuarantinedBloodGroupingCompleteOldStatusTTIUnSafe_shouldNotChangeStatus() throws Exception {
     // set up data
     Long donationId = Long.valueOf(1234);
