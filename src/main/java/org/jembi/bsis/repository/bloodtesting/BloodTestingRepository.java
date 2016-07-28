@@ -23,6 +23,7 @@ import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jembi.bsis.dto.BloodTestResultDTO;
+import org.jembi.bsis.dto.BloodTestTotalDTO;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestContext;
@@ -289,6 +290,29 @@ public class BloodTestingRepository {
         .setParameter("endDate", endDate)
         .setParameter("deleted", false)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
+        .getResultList();
+  }
+  
+  public List<BloodTestTotalDTO> findTTIPrevalenceReportTotalUnitsTested(Date startDate, Date endDate) {
+    return em.createNamedQuery(
+        BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_UNITS_TESTED_FOR_DATE_RANGE,
+        BloodTestTotalDTO.class)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("deleted", false)
+        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
+        .getResultList();
+  }
+  
+  public List<BloodTestTotalDTO> findTTIPrevalenceReportTotalUnsafeUnitsTested(Date startDate, Date endDate) {
+    return em.createNamedQuery(
+        BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE,
+        BloodTestTotalDTO.class)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("deleted", false)
+        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
+        .setParameter("ttiStatus", TTIStatus.TTI_UNSAFE)
         .getResultList();
   }
 

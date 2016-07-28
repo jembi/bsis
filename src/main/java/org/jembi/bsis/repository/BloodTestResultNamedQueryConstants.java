@@ -19,4 +19,29 @@ public class BloodTestResultNamedQueryConstants {
           "AND b.bloodTest.bloodTestType = :bloodTestType " +
           "GROUP BY d.venue, do.gender, b.bloodTest, b.result " +
           "ORDER BY d.venue, do.gender, b.bloodTest, b.result";
+  
+  public static final String NAME_FIND_TOTAL_UNITS_TESTED_FOR_DATE_RANGE = 
+      "BloodTestResult.findTTIPrevalenceReportTotalUnitsTested";
+  
+  public static final String QUERY_FIND_TOTAL_UNITS_TESTED_FOR_DATE_RANGE = 
+      "SELECT NEW org.jembi.bsis.dto.BloodTestTotalDTO(do.gender, d.venue, COUNT(b)) " +
+          "FROM BloodTestResult b, Donation d, Donor do " +
+          "WHERE b.donation = d AND d.donor = do AND d.donationDate BETWEEN :startDate AND :endDate " +
+          "AND d.isDeleted = :deleted " +
+          "AND b.bloodTest.bloodTestType = :bloodTestType " +
+          "GROUP BY d.venue, do.gender " +
+          "ORDER BY d.venue, do.gender";
+  
+  public static final String NAME_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE =
+      "BloodTestResult.findTTIPrevalenceReportTotalUnsafeUnitsTested";
+  
+  public static final String QUERY_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE =  
+      "SELECT NEW org.jembi.bsis.dto.BloodTestTotalDTO(do.gender, d.venue, COUNT(d)) " +
+          "FROM BloodTestResult b, Donation d, Donor do " +
+          "WHERE b.donation = d AND d.donor = do AND d.donationDate BETWEEN :startDate AND :endDate " +
+          "AND d.isDeleted = :deleted " +
+          "AND b.bloodTest.bloodTestType = :bloodTestType " +
+          "AND d.ttiStatus = :ttiStatus " +
+          "GROUP BY d.venue, do.gender " +
+          "ORDER BY d.venue, do.gender";
 }
