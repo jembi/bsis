@@ -10,11 +10,17 @@ import org.jembi.bsis.model.reporting.DataValue;
 
 public class DataValueBuilder extends AbstractBuilder<DataValue> {
 
+  private String id;
   private Date startDate;
   private Date endDate;
   private Object value;
   private Location venue;
   private List<Cohort> cohorts;
+
+  public DataValueBuilder withId(String id) {
+    this.id = id;
+    return this;
+  }
 
   public DataValueBuilder withStartDate(Date startDate) {
     this.startDate = startDate;
@@ -47,6 +53,7 @@ public class DataValueBuilder extends AbstractBuilder<DataValue> {
   @Override
   public DataValue build() {
     DataValue dataValue = new DataValue();
+    dataValue.setId(id);
     dataValue.setStartDate(startDate);
     dataValue.setEndDate(endDate);
     dataValue.setValue(value);

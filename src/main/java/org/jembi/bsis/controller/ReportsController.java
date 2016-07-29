@@ -17,6 +17,7 @@ import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TipsRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.service.ReportGeneratorService;
+import org.jembi.bsis.service.TtiPrevalenceReportGeneratorService;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,9 @@ public class ReportsController {
   @Autowired
   private LocationFactory locationFactory;
   
+  @Autowired
+  private TtiPrevalenceReportGeneratorService ttiPrevalenceReportGeneratorService;
+
   @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
   public Report findStockLevels(@RequestParam(value = "location", required = false) Long locationId,
@@ -218,7 +222,7 @@ public class ReportsController {
   public Report getTTIPrevalenceReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-    return reportGeneratorService.generateTTIPrevalenceReport(startDate, endDate);
+    return ttiPrevalenceReportGeneratorService.generateTTIPrevalenceReport(startDate, endDate);
   }
 
 }
