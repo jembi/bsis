@@ -1,5 +1,6 @@
 package org.jembi.bsis.backingform.validator;
 
+
 import org.jembi.bsis.backingform.DeferralBackingForm;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DonorRepository;
@@ -17,7 +18,6 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
   private DonorRepository donorRepository;
   @Autowired
   private DeferralReasonRepository deferralReasonRepository;
-
   @Override
   public void validateForm(DeferralBackingForm form, Errors errors) {
 
@@ -33,6 +33,10 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
     
     if (form.getDeferralReason() != null && !deferralReasonRepository.verifyDeferralReasonExists(form.getDeferralReason().getId())) {
       errors.rejectValue("deferralReason", "deferral.deferralReason.required", "Deferral reason does not exist");
+    }
+    
+    if (form.getDeferralDate() != null && form.getDeferredUntil() != null  && form.getDeferredUntil().before(form.getDeferralDate())) {
+      errors.rejectValue("deferredUntil", "deferral.deferredUntil.invalid","Deferral end date can't be ealier than deferral date");
     }
   }
 
