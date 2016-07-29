@@ -30,6 +30,10 @@ public class ComponentStatusChangeReason extends BaseEntity {
   @Column(length = 30)
   private ComponentStatusChangeReasonCategory category;
 
+  @Enumerated(EnumType.STRING)
+  @Column(length = 30, nullable = true)
+  private ComponentStatusChangeReasonType type;
+
   private Boolean isDeleted;
 
   public ComponentStatusChangeReason() {

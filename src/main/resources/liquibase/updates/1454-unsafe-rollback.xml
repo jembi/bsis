@@ -7,5 +7,14 @@
     <dropColumn tableName="ComponentStatusChange" columnName="statusChangeType" />
     <dropColumn tableName="ComponentStatusChange_AUD" columnName="statusChangeType" />
   </changeSet>
+  
+  <changeSet id="20160729-1125" author="bausmeier">
+    <addColumn tableName="ComponentStatusChangeReason">
+      <column name="type" type="VARCHAR(30)"></column>
+    </addColumn>
+    <addColumn tableName="ComponentStatusChangeReason_AUD">
+      <column name="type" type="VARCHAR(30)"></column>
+    </addColumn>
+  </changeSet>
 
 </databaseChangeLog>
