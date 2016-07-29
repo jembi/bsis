@@ -311,7 +311,6 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     Component component = aComponent().withId(componentId).withWeight(componentWeight).build();
     
     // setup mocks
-    Mockito.when(componentFactory.createEntity(backingForm)).thenReturn(component);
     Mockito.when(componentCRUDService.recordComponentWeight(componentId, componentWeight)).thenReturn(component);
     Mockito.when(componentFactory.createManagementViewModel(component))
     .thenReturn(ComponentManagementViewModelBuilder.aComponentManagementViewModel().build());
@@ -320,7 +319,6 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     componentControllerService.recordComponentWeight(backingForm);
     
     // verify
-    Mockito.verify(componentFactory).createEntity(backingForm);
     Mockito.verify(componentCRUDService).recordComponentWeight(componentId, componentWeight);
     Mockito.verify(componentFactory).createManagementViewModel(component);
   }
