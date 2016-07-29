@@ -98,9 +98,9 @@ public class ComponentControllerService {
     return componentViewModels;
   }
   
-  public ComponentManagementViewModel updateComponent(ComponentBackingForm componentBackingForm) {
+  public ComponentManagementViewModel recordComponentWeight(ComponentBackingForm componentBackingForm) {
     Component component = componentFactory.createEntity(componentBackingForm);
-    component = componentCRUDService.updateComponent(component);
+    component = componentCRUDService.recordComponentWeight(component.getId(), component.getWeight());
     return componentFactory.createManagementViewModel(component);
   }
   

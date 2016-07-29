@@ -303,24 +303,25 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testUpdateComponent_shouldCallServiceRepositoryAndFactory() throws Exception {
+  public void testRecordComponentWeight_shouldCallServiceRepositoryAndFactory() throws Exception {
     // setup data
     Long componentId = Long.valueOf(1);
-    ComponentBackingForm backingForm = aComponentBackingForm().withId(componentId).withWeight(123).build();
-    Component component = aComponent().withId(componentId).withWeight(123).build();
+    int componentWeight = 123;
+    ComponentBackingForm backingForm = aComponentBackingForm().withId(componentId).withWeight(componentWeight).build();
+    Component component = aComponent().withId(componentId).withWeight(componentWeight).build();
     
     // setup mocks
     Mockito.when(componentFactory.createEntity(backingForm)).thenReturn(component);
-    Mockito.when(componentCRUDService.updateComponent(component)).thenReturn(component);
+    Mockito.when(componentCRUDService.recordComponentWeight(componentId, componentWeight)).thenReturn(component);
     Mockito.when(componentFactory.createManagementViewModel(component))
     .thenReturn(ComponentManagementViewModelBuilder.aComponentManagementViewModel().build());
     
     // SUT
-    componentControllerService.updateComponent(backingForm);
+    componentControllerService.recordComponentWeight(backingForm);
     
     // verify
     Mockito.verify(componentFactory).createEntity(backingForm);
-    Mockito.verify(componentCRUDService).updateComponent(component);
+    Mockito.verify(componentCRUDService).recordComponentWeight(componentId, componentWeight);
     Mockito.verify(componentFactory).createManagementViewModel(component);
   }
   

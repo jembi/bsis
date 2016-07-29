@@ -538,6 +538,26 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentRepository).findComponentsByDINAndType(din, id);
   }
   
+  @Test
+  public void testUpdateComponentWeight_shouldReturnExistingComponent() {
+    // set up data
+    long componentId = 1L;
+    int componentWeight = 420;
+    Component oldComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withWeight(componentWeight)
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
+    
+    // SUT
+    Component returnedComponent = componentCRUDService.recordComponentWeight(componentId, componentWeight);
+    
+    assertThat(returnedComponent, hasSameStateAsComponent(oldComponent));
+  }
+  
   @Test(expected = java.lang.IllegalStateException.class)
   public void testUpdateComponentWeight_shouldThrowException() throws Exception {
     // set up data
@@ -546,18 +566,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withId(componentId)
         .withStatus(ComponentStatus.PROCESSED)
         .build();
-    Component component = aComponent()
-        .withId(componentId)
-        .withWeight(320)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
-        .build();
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(false);
+    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(false);
     
     // SUT
-    componentCRUDService.updateComponent(component);
+    componentCRUDService.recordComponentWeight(componentId, 320);
   }
 
   @Test
@@ -566,11 +581,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Long componentId = Long.valueOf(1);
     Component oldComponent = aComponent()
         .withId(componentId)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
-        .build();
-    Component component = aComponent()
-        .withId(componentId)
-        .withWeight(320)
         .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
         .build();
     
@@ -582,7 +592,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
     
     // SUT
-    Component updatedComponent = componentCRUDService.updateComponent(component);
+    Component updatedComponent = componentCRUDService.recordComponentWeight(componentId, 320);
     
     // check
     assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
@@ -596,12 +606,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withId(componentId)
         .withStatus(ComponentStatus.QUARANTINED)
         .build();
-    Component component = aComponent()
-        .withId(componentId)
-        .withStatus(ComponentStatus.QUARANTINED)
-        .withWeight(420)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
-        .build();
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
@@ -611,7 +615,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
     
     // SUT
-    Component updatedComponent = componentCRUDService.updateComponent(component);
+    Component updatedComponent = componentCRUDService.recordComponentWeight(componentId, 420);
     
     // check
     assertThat("Component was not flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
@@ -625,12 +629,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withId(componentId)
         .withStatus(ComponentStatus.UNSAFE)
         .withWeight(111)
-        .build();
-    Component componentToUpdate = aComponent()
-        .withId(componentId)
-        .withStatus(ComponentStatus.UNSAFE)
-        .withWeight(420)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
         .build();
     Component reEvaluatedcomponent = aComponent()
         .withId(componentId)
@@ -647,31 +645,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.update(reEvaluatedcomponent)).thenReturn(reEvaluatedcomponent);
     
     // SUT
-    Component updatedComponent = componentCRUDService.updateComponent(componentToUpdate);
+    Component updatedComponent = componentCRUDService.recordComponentWeight(componentId, 420);
     
     // check
     assertThat("Component status was re-evaluated", updatedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
-  }
-  
-  @Test
-  public void testUpdateComponent_shouldJustSave() throws Exception {
-    // set up data
-    Long componentId = Long.valueOf(1);
-    Component component = aComponent()
-        .withId(componentId)
-        .build();
-    
-    // mocks
-    when(componentRepository.findComponentById(componentId)).thenReturn(component);
-    when(componentStatusCalculator.shouldComponentBeDiscarded(component)).thenReturn(false);
-    when(componentStatusCalculator.updateComponentStatus(component)).thenReturn(false);
-    when(componentRepository.update(component)).thenReturn(component);
-    
-    // SUT
-    componentCRUDService.updateComponent(component);
-    
-    // check
-    verify(componentRepository).update(component);
   }
   
   @Test
@@ -912,8 +889,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
 
     // Verify
     verify(componentRepository).update(argThat(hasSameStateAsComponent(component2)));
-
-
   }
   
 }

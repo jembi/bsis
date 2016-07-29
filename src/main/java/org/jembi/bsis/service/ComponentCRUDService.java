@@ -168,7 +168,7 @@ public class ComponentCRUDService {
       }
     }
     
-    return update(parentComponent);
+    return updateComponent(parentComponent);
   }
 
   public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
@@ -201,9 +201,7 @@ public class ComponentCRUDService {
       existingComponent.setInventoryStatus(InventoryStatus.REMOVED);
     }
     
-    update(existingComponent);
-    
-    return existingComponent;
+    return updateComponent(existingComponent);
   }
   
   public Component undiscardComponent(long componentId) {
@@ -239,51 +237,35 @@ public class ComponentCRUDService {
       lastDiscardComponentStatusChange.setIsDeleted(true);
     }
     
-    return update(existingComponent);
+    return updateComponent(existingComponent);
   }
   
-  public Component updateComponent(Component component) {
-    Component existingComponent = componentRepository.findComponentById(component.getId());
+  public Component recordComponentWeight(long componentId, int componentWeight) {
+    Component existingComponent = componentRepository.findComponentById(componentId);
 
     // check if the weight is being updated
-    if (existingComponent.getWeight() != component.getWeight()) {
-      // check if it is possible to update the weight
-      if (!componentConstraintChecker.canRecordWeight(existingComponent)) {
-        throw new IllegalStateException("The weight of Component " + component.getId() 
-            + " cannot be updated from " + existingComponent.getWeight() + " to " + component.getWeight());
-      }
-      // it's OK to update the weight
-      existingComponent.setWeight(component.getWeight());
+    if (existingComponent.getWeight() != null && existingComponent.getWeight() == componentWeight) {
+      return existingComponent;
     }
+
+    // check if it is possible to update the weight
+    if (!componentConstraintChecker.canRecordWeight(existingComponent)) {
+      throw new IllegalStateException("The weight of Component " + componentId 
+          + " cannot be updated from " + existingComponent.getWeight() + " to " + componentWeight);
+    }
+    // it's OK to update the weight
+    existingComponent.setWeight(componentWeight);
 
     // check if the component should be discarded or re-evaluated
     if (componentStatusCalculator.shouldComponentBeDiscarded(existingComponent)) {
-      LOGGER.info("Flagging component for discard " + component);
+      LOGGER.info("Flagging component for discard " + componentId);
       existingComponent.setStatus(ComponentStatus.UNSAFE);
     } else if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
       // re-evaluate the status as it might have been set to UNSAFE because of a previous unsafe weight
       existingComponent.setStatus(ComponentStatus.QUARANTINED);
-    } else {
-      existingComponent.setStatus(component.getStatus());
     }
 
-    // update other fields
-    existingComponent.setComponentCode(component.getComponentCode());
-    existingComponent.setComponentType(component.getComponentType());
-    existingComponent.setInventoryStatus(component.getInventoryStatus());
-    existingComponent.setParentComponent(component.getParentComponent());
-    existingComponent.setStatusChanges(component.getStatusChanges());
-    existingComponent.setDonation(component.getDonation());
-    existingComponent.setLocation(component.getLocation());
-    existingComponent.setComponentBatch(component.getComponentBatch());
-    existingComponent.setCreatedOn(component.getCreatedOn());
-    existingComponent.setExpiresOn(component.getExpiresOn());
-    existingComponent.setDiscardedOn(component.getDiscardedOn());
-    existingComponent.setIssuedOn(component.getIssuedOn());
-    existingComponent.setNotes(component.getNotes());
-    existingComponent.setIsDeleted(component.getIsDeleted());
-
-    return update(existingComponent);
+    return updateComponent(existingComponent);
   }
   
   public Component findComponentById(Long id) {
@@ -306,7 +288,7 @@ public class ComponentCRUDService {
       componentRepository.update(child);
     }
     parentComponent.setStatus(ComponentStatus.QUARANTINED);
-    return update(parentComponent);
+    return updateComponent(parentComponent);
   }
   
   private Component add(Component component) {
@@ -315,7 +297,7 @@ public class ComponentCRUDService {
     return component;
   }
   
-  private Component update(Component component) {
+  public Component updateComponent(Component component) {
     componentStatusCalculator.updateComponentStatus(component);
     return componentRepository.update(component);
   }
