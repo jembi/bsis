@@ -68,5 +68,14 @@ public class ComponentStatusChangeReason extends BaseEntity {
     this.setCategory(componentStatusChangeReason.getCategory());
     this.setStatusChangeReason(componentStatusChangeReason.getStatusChangeReason());
     this.setIsDeleted(componentStatusChangeReason.getIsDeleted());
+    this.setType(componentStatusChangeReason.getType());
+  }
+
+  public ComponentStatusChangeReasonType getType() {
+    return type;
+  }
+
+  public void setType(ComponentStatusChangeReasonType type) {
+    this.type = type;
   }
 }
