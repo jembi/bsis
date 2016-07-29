@@ -126,7 +126,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   @Test
   public void testInvalidDeferralReasonNotSpecified() throws Exception {
     LocationBackingForm venue = aLocationBackingForm().withId(1L).build();
- 
+    
     DeferralBackingForm deferralBackingForm = aDeferralBackingForm()
         .withVenue(venue)
         .withDeferredUntil(DEFERRED_UNTIL)
