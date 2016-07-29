@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.jembi.bsis.backingform.DeferralBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
+import org.jembi.bsis.backingform.validator.DeferralBackingFormValidator;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
@@ -209,7 +210,7 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferralDate(new Date())
         .build();
     
-    // test commit template 2
+    // test commit template
 
     mockFormFields();
     when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
