@@ -210,8 +210,6 @@ public class DeferralBackingFormValidatorTest extends UnitTestSuite {
         .withDeferralDate(new Date())
         .build();
     
-    // test commit template
-
     mockFormFields();
     when(locationRepository.verifyLocationExists(1L)).thenReturn(true);
     when(donorRepository.verifyDonorExists(DEFERRED_DONOR_ID)).thenReturn(true);
