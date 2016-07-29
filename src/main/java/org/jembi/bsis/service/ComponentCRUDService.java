@@ -13,6 +13,7 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonType;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
@@ -45,6 +46,9 @@ public class ComponentCRUDService {
   
   @Autowired
   private ComponentConstraintChecker componentConstraintChecker;
+
+  @Autowired
+  private DateGeneratorService dateGeneratorService;
 
   /**
    * Change the status of components belonging to the donor from AVAILABLE to UNSAFE.
@@ -291,6 +295,25 @@ public class ComponentCRUDService {
     return updateComponent(parentComponent);
   }
   
+  public Component markComponentsAsUnsafe(Component component, ComponentStatusChangeReasonType reasonType) {
+
+    // create a component unsafe status change for the component
+    ComponentStatusChange statusChange = new ComponentStatusChange();
+    statusChange.setNewStatus(ComponentStatus.UNSAFE);
+    statusChange.setStatusChangedOn(dateGeneratorService.generateDate());
+    statusChange.setChangedBy(SecurityUtils.getCurrentUser());
+    ComponentStatusChangeReason unsafeReason = new ComponentStatusChangeReason();
+    unsafeReason.setCategory(ComponentStatusChangeReasonCategory.UNSAFE);
+    unsafeReason.setType(reasonType);
+    statusChange.setStatusChangeReason(unsafeReason);
+    statusChange.setComponent(component);
+
+    component.addStatusChange(statusChange);
+    component.setStatus(ComponentStatus.UNSAFE);
+    return updateComponent(component);
+
+  }
+
   private Component add(Component component) {
     componentStatusCalculator.updateComponentStatus(component);
     componentRepository.save(component);

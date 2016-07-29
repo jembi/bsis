@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aComponentStatusChangeReason;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aDiscardReason;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aReturnReason;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
@@ -32,6 +33,9 @@ import org.jembi.bsis.helpers.matchers.ComponentMatcher;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonType;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
@@ -68,6 +72,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   private ComponentStatusCalculator componentStatusCalculator;
   @Mock
   private ComponentConstraintChecker componentConstraintChecker;
+  @Mock
+  private DateGeneratorService dateGeneratorService;
 
   @Test
   public void testMarkComponentsBelongingToDonorAsUnsafe_shouldDelegateToRepositoryWithCorrectParameters() {
@@ -891,4 +897,30 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentRepository).update(argThat(hasSameStateAsComponent(component2)));
   }
   
+
+  @Test
+  public void testMarkComponentsAsUnsafe_shouldCreateStatusChangeReason() {
+    Date date = new Date();
+    Donation donation = aDonation().build();
+    Location location = aLocation().build();
+    Component component = aComponent().withDonation(donation).withLocation(location).build();
+    ComponentStatusChangeReason statusChangeReason = aComponentStatusChangeReason()
+        .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.UNSAFE)
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.INVALID_WEIGHT)
+        .build();
+    ComponentStatusChange statusChange =
+        aComponentStatusChange().withStatusChangeReason(statusChangeReason).withStatusChangedOn(date).build();
+    Component updatedComponent = aComponent().withDonation(donation).withLocation(location)
+        .withComponentStatusChange(statusChange)
+        .withStatus(ComponentStatus.UNSAFE).build();
+    
+    // Set up expectations
+    when(dateGeneratorService.generateDate()).thenReturn(date);
+
+    // Run test
+    componentCRUDService.markComponentsAsUnsafe(component, ComponentStatusChangeReasonType.INVALID_WEIGHT);
+    
+    // Verify
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(updatedComponent)));
+  }
 }

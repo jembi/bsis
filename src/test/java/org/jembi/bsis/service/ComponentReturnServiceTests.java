@@ -2,14 +2,18 @@ package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
@@ -49,13 +53,16 @@ public class ComponentReturnServiceTests extends UnitTestSuite {
         .withDonation(null).build();
     Location returnedTo = aDistributionSite().build();
     
+    Date date = new Date();
+    ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(date).build();
     Component expectedComponent = aComponent()
         .withLocation(returnedTo)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withDonation(null).build();
+        .withDonation(null).withComponentStatusChange(statusChange).build();
     
     // Set up mocks
+    when(dateGeneratorService.generateDate()).thenReturn(date);
     when(componentCRUDService.updateComponent(argThat(hasSameStateAsComponent(expectedComponent)))).thenReturn(expectedComponent);
     
     // Run test
