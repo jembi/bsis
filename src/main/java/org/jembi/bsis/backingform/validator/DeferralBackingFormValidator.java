@@ -18,7 +18,6 @@ public class DeferralBackingFormValidator extends BaseValidator<DeferralBackingF
   private DonorRepository donorRepository;
   @Autowired
   private DeferralReasonRepository deferralReasonRepository;
-  private boolean isDeferralDateUntilInvalid;
   @Override
   public void validateForm(DeferralBackingForm form, Errors errors) {
 
