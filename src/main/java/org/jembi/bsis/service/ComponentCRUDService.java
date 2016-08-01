@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 
 import javax.persistence.NoResultException;
 
@@ -397,38 +396,32 @@ public class ComponentCRUDService {
    * @param rollbackCategory the rollback category
    * @return the component
    */
-  private Component rollBackComponentStatus(Component component, ComponentStatusChangeReasonCategory rollbackCategory) {   
-    SortedSet<ComponentStatusChange> statusChanges = component.getStatusChanges();
+  private Component rollBackComponentStatus(Component component, ComponentStatusChangeReasonCategory rollBackCategory) {
     
-    // First check for status changes with category UNSAFE and types that can't be rolled back
-    if (component.getStatusChanges() != null) {
-      for (ComponentStatusChange statusChange : statusChanges) {     
-        if (statusChange.getStatusChangeReason().getCategory().equals(ComponentStatusChangeReasonCategory.UNSAFE)
-            && !statusChange.getIsDeleted()
-            && !ComponentStatusChangeReasonType.canBeRolledBack(statusChange.getStatusChangeReason().getType())) {
-          // A change that can't be rolled back was found, set component to UNSAFE, and return the updated component 
-          component.setStatus(ComponentStatus.UNSAFE);
-          return updateComponent(component);       
-        } 
-      }
-    }
+    ComponentStatus componentStatus = ComponentStatus.QUARANTINED;
 
-    // There's no UNSAFE status changes that can't be rolled back. Delete the rollbackCategory status change
     if (component.getStatusChanges() != null) {
-      for (ComponentStatusChange statusChangeToDelete : component.getStatusChanges()) {
-        if (statusChangeToDelete.getStatusChangeReason().getCategory().equals(rollbackCategory) 
-            && !statusChangeToDelete.getIsDeleted()
-            && ComponentStatusChangeReasonType.canBeRolledBack(statusChangeToDelete.getStatusChangeReason().getType())) {
-          // Delete the status change
-          statusChangeToDelete.setIsDeleted(true);
+      for (ComponentStatusChange statusChange : component.getStatusChanges()) {
+        if (!statusChange.getIsDeleted()) {
+          
+          // If an UNSAFE status change that can't be rolled back is found, set the component status to UNSAFE
+          if (statusChange.getStatusChangeReason().getCategory().equals(ComponentStatusChangeReasonCategory.UNSAFE)
+              && !ComponentStatusChangeReasonType.canBeRolledBack(statusChange.getStatusChangeReason().getType())) {
+            componentStatus = ComponentStatus.UNSAFE;
+          }
+
+          // Delete the status changes with reason category rollBackCategory, that can be rolled back
+          if (statusChange.getStatusChangeReason().getCategory().equals(rollBackCategory)
+              && ComponentStatusChangeReasonType.canBeRolledBack(statusChange.getStatusChangeReason().getType())) {
+            statusChange.setIsDeleted(true);
+          }
         }
       }
     }
 
-    LOGGER.info("Rolling back component status change: " + rollbackCategory + " for component id " + component.getId());
+    LOGGER.info("Rolling back component status change: " + rollBackCategory + " for component id " + component.getId());
 
-    // Rollback the component status to QUARANTINED and return the updated component
-    component.setStatus(ComponentStatus.QUARANTINED);
+    component.setStatus(componentStatus);
     return updateComponent(component);
 
   }
