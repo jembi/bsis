@@ -15,6 +15,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -396,7 +397,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withComponentCode("0001")
         .withDonation(donation)
         .withParentComponent(expectedParentComponent)
-        .withStatus(ComponentStatus.UNSAFE)
+        .withStatus(ComponentStatus.QUARANTINED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withCreatedOn(donation.getDonationDate())
         .withExpiresOn(expiryCal1.getTime())
@@ -408,6 +409,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    doReturn(expectedComponent1).when(componentCRUDService).markComponentsAsUnsafe(
+        argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
     // SUT
     componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
@@ -415,6 +418,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
     verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent1)));
+    verify(componentCRUDService).markComponentsAsUnsafe(argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
   }
   
   @Test

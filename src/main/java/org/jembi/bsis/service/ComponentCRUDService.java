@@ -113,10 +113,6 @@ public class ComponentCRUDService {
         newComponents.put(componentType, 1);
       }
     }
-
-    // If the parent is unsafe then set new components to unsafe as well
-    ComponentStatus initialComponentStatus =
-        parentStatus == ComponentStatus.UNSAFE ? ComponentStatus.UNSAFE : ComponentStatus.QUARANTINED;
     
     // Remove parent component from inventory
     if (parentComponent.getInventoryStatus() == InventoryStatus.IN_STOCK) {
@@ -144,7 +140,7 @@ public class ComponentCRUDService {
           component.setComponentType(pt);
           component.setDonation(donation);
           component.setParentComponent(parentComponent);
-          component.setStatus(initialComponentStatus);
+          component.setStatus(ComponentStatus.QUARANTINED);
           component.setCreatedOn(donation.getDonationDate());
           component.setLocation(parentComponent.getLocation());
 
@@ -165,13 +161,17 @@ public class ComponentCRUDService {
           component.setExpiresOn(expiresOn);
 
           add(component);
-
-          // Set source component status to PROCESSED
-          parentComponent.setStatus(ComponentStatus.PROCESSED);
+          
+          if (parentStatus == ComponentStatus.UNSAFE) {
+            markComponentsAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+          }
         }
       }
     }
-    
+
+    // Set source component status to PROCESSED
+    parentComponent.setStatus(ComponentStatus.PROCESSED);
+
     return updateComponent(parentComponent);
   }
 

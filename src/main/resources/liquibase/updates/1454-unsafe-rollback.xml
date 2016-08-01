@@ -16,5 +16,13 @@
       <column name="type" type="VARCHAR(30)"></column>
     </addColumn>
   </changeSet>
+  
+  <changeSet id="20160801-0931" author="bausmeier">
+    <insert tableName="ComponentStatusChangeReason">
+      <column name="category" value="UNSAFE"></column>
+      <column name="type" value="UNSAFE_PARENT"></column>
+      <column name="isDeleted" value="0"></column>
+    </insert>
+  </changeSet>
 
 </databaseChangeLog>
