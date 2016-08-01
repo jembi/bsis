@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 
 import javax.persistence.NoResultException;
 
@@ -236,32 +237,13 @@ public class ComponentCRUDService {
     }
     
     LOGGER.info("Undiscarding component " + componentId);
-
-    // Set the status back to quarantined so that it can be recalculated
-    existingComponent.setStatus(ComponentStatus.QUARANTINED);
     
     // Add component back into inventory if it has previously been removed
     if (existingComponent.getInventoryStatus() == InventoryStatus.REMOVED) {
       existingComponent.setInventoryStatus(InventoryStatus.IN_STOCK);
     }
-    
-    // void the latest discarded ComponentStatusChange
-    ComponentStatusChange lastDiscardComponentStatusChange = null;
-    if (existingComponent.getStatusChanges() != null) {
-      for (ComponentStatusChange statusChange : existingComponent.getStatusChanges()) {
-        if (statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.DISCARDED) {
-          if (lastDiscardComponentStatusChange == null || 
-              statusChange.getStatusChangedOn().after(lastDiscardComponentStatusChange.getStatusChangedOn())) {
-            lastDiscardComponentStatusChange = statusChange;
-          }
-        }
-      }
-    }
-    if (lastDiscardComponentStatusChange != null) {
-      lastDiscardComponentStatusChange.setIsDeleted(true);
-    }
-    
-    return updateComponent(existingComponent);
+
+    return rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.DISCARDED);
   }
   
   public Component recordComponentWeight(long componentId, int componentWeight) {
@@ -284,8 +266,8 @@ public class ComponentCRUDService {
     if (componentStatusCalculator.shouldComponentBeDiscardedForWeight(existingComponent)) {
       existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
     } else if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
-      // re-evaluate the status as it might have been set to UNSAFE because of a previous unsafe weight
-      existingComponent.setStatus(ComponentStatus.QUARANTINED);
+      // need to rollback
+      rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.UNSAFE);
     }
 
     return updateComponent(existingComponent);
@@ -310,8 +292,9 @@ public class ComponentCRUDService {
       child.setIsDeleted(true);
       componentRepository.update(child);
     }
-    parentComponent.setStatus(ComponentStatus.QUARANTINED);
-    return updateComponent(parentComponent);
+
+    // FIXME: Create component status change for when processing a component
+    return rollBackComponentStatus(parentComponent, null);
   }
   
   public Component markComponentAsUnsafe(Component component, ComponentStatusChangeReasonType reasonType) {
@@ -400,6 +383,54 @@ public class ComponentCRUDService {
   public Component putComponentInStock(Component component) {
     component.setInventoryStatus(InventoryStatus.IN_STOCK);
     return updateComponent(component);
+  }
+
+  /**
+   * Roll back component status. This method is called whenever a component status needs to be
+   * rolled back:
+   * 
+   * - when un-discarding: rollbackCategory = DISCARDED 
+   * - when updating the weight: rollbackCategory = UNSAFE 
+   * - when un-processing: Doesn't exist yet
+   *
+   * @param component the component
+   * @param rollbackCategory the rollback category
+   * @return the component
+   */
+  private Component rollBackComponentStatus(Component component, ComponentStatusChangeReasonCategory rollbackCategory) {   
+    SortedSet<ComponentStatusChange> statusChanges = component.getStatusChanges();
+    
+    // First check for status changes with category UNSAFE and types that can't be rolled back
+    if (component.getStatusChanges() != null) {
+      for (ComponentStatusChange statusChange : statusChanges) {     
+        if (statusChange.getStatusChangeReason().getCategory().equals(ComponentStatusChangeReasonCategory.UNSAFE)
+            && !statusChange.getIsDeleted()
+            && !ComponentStatusChangeReasonType.canBeRolledBack(statusChange.getStatusChangeReason().getType())) {
+          // A change that can't be rolled back was found, set component to UNSAFE, and return the updated component 
+          component.setStatus(ComponentStatus.UNSAFE);
+          return updateComponent(component);       
+        } 
+      }
+    }
+
+    // There's no UNSAFE status changes that can't be rolled back. Delete the rollbackCategory status change
+    if (component.getStatusChanges() != null) {
+      for (ComponentStatusChange statusChangeToDelete : component.getStatusChanges()) {
+        if (statusChangeToDelete.getStatusChangeReason().getCategory().equals(rollbackCategory) 
+            && !statusChangeToDelete.getIsDeleted()
+            && ComponentStatusChangeReasonType.canBeRolledBack(statusChangeToDelete.getStatusChangeReason().getType())) {
+          // Delete the status change
+          statusChangeToDelete.setIsDeleted(true);
+        }
+      }
+    }
+
+    LOGGER.info("Rolling back component status change: " + rollbackCategory + " for component id " + component.getId());
+
+    // Rollback the component status to QUARANTINED and return the updated component
+    component.setStatus(ComponentStatus.QUARANTINED);
+    return updateComponent(component);
+
   }
 
   private Component addComponent(Component component) {

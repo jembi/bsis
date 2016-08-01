@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComp
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aComponentStatusChangeReason;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aDiscardReason;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aReturnReason;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.anUnsafeReason;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
@@ -822,37 +823,21 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testUndiscardComponentWithManyStatusChanges_shouldVoidCorrectComponentStatusChange() {
+  public void testUndiscardComponentWithManyStatusChanges_shouldVoidDiscardedComponentStatusChange() {
     // Set up fixture
-    Calendar cal = Calendar.getInstance();
-    cal.add(Calendar.DAY_OF_MONTH, -10);
-    Date discardDate1 = cal.getTime();
-    cal.add(Calendar.DAY_OF_MONTH, 2);
-    Date discardDate2 = cal.getTime();
-    cal.add(Calendar.DAY_OF_MONTH, 2);
-    Date discardDate3 = cal.getTime();
-    cal.add(Calendar.DAY_OF_MONTH, 5);
-    Date returnDate = cal.getTime();
     long componentId = 76L;
     Component component = aComponent()
         .withId(componentId)
         .withStatus(ComponentStatus.DISCARDED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withComponentStatusChange(aComponentStatusChange()
-            .withStatusChangedOn(discardDate1)
             .withStatusChangeReason(aDiscardReason().build())
             .build())
         .withComponentStatusChange(aComponentStatusChange()
-            .withStatusChangedOn(discardDate3)
-            .withStatusChangeReason(aDiscardReason().build())
-            .build())
-        .withComponentStatusChange(aComponentStatusChange()
-            .withStatusChangedOn(returnDate)
             .withStatusChangeReason(aReturnReason().build())
             .build())
         .withComponentStatusChange(aComponentStatusChange()
-            .withStatusChangedOn(discardDate2)
-            .withStatusChangeReason(aDiscardReason().build())
+            .withStatusChangeReason(anUnsafeReason().build())
             .build())
         .build();
     
@@ -867,10 +852,9 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Iterator<ComponentStatusChange> it = returnedComponent.getStatusChanges().iterator();
     assertThat(it.next().getIsDeleted(), is(false));
     assertThat(it.next().getIsDeleted(), is(false));
-    ComponentStatusChange discarded3 = it.next();
-    assertThat(discarded3.getStatusChangedOn(), is(discardDate3));
-    assertThat(discarded3.getIsDeleted(), is(true));
-    assertThat(it.next().getIsDeleted(), is(false));
+    ComponentStatusChange discarded = it.next();
+    assertThat(discarded.getIsDeleted(), is(true));
+    assertThat(discarded.getStatusChangeReason().getCategory(), is(ComponentStatusChangeReasonCategory.DISCARDED));
   }
   
   @Test(expected = IllegalStateException.class)
@@ -1057,4 +1041,151 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedComponent)));
     assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
   }
+
+  @Test
+  public void testUndiscardComponentThatCantRollBack_componentStatusIsUnsafe() {
+    // Set up fixture
+    long componentId = 76L;
+    Component component = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withComponentStatusChange(aComponentStatusChange()
+            .withStatusChangeReason(anUnsafeReason()
+            // type TEST_RESULTS can't be rolled back
+            .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS).build())
+            .build())
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(component);
+    when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.undiscardComponent(componentId);
+    
+    // Verify
+    assertThat(returnedComponent.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
+  public void testUndiscardComponentThatCanRollBack_componentStatusIsQuarantined() {
+    // Set up fixture
+    long componentId = 76L;
+    Component component = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withComponentStatusChange(aComponentStatusChange()
+            .withStatusChangeReason(anUnsafeReason()
+            // type INVALID_WEIGHT can be rolled back
+            .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.INVALID_WEIGHT).build())
+            .build())
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(component);
+    when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.undiscardComponent(componentId);
+    
+    // Verify
+    assertThat(returnedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
+  }
+  
+  @Test
+  public void testUnprocessComponentThatCantRollBack_componentStatusIsUnsafe() {
+    // Set up fixture
+    long componentId = 76L;
+    Component parentComponent = aComponent().withId(componentId).withStatus(ComponentStatus.PROCESSED)
+        .withComponentStatusChange(aComponentStatusChange()
+            .withStatusChangeReason(anUnsafeReason()
+            // type TEST_RESULTS can be rolled back
+            .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS).build())
+            .build())
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canUnprocess(parentComponent)).thenReturn(true);
+    when(componentRepository.update(parentComponent)).thenReturn(parentComponent);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.unprocessComponent(parentComponent);
+
+    // Verify
+    assertThat(returnedComponent.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
+  public void testUnprocessComponentThatCanRollBack_componentStatusIsQuarantined() {
+    // Set up fixture
+    long componentId = 76L;
+    Component parentComponent = aComponent().withId(componentId).withStatus(ComponentStatus.PROCESSED)
+        .withComponentStatusChange(aComponentStatusChange()
+            .withStatusChangeReason(anUnsafeReason()
+            // type INVALID_WEIGHT can be rolled back
+            .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.INVALID_WEIGHT).build())
+            .build())
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canUnprocess(parentComponent)).thenReturn(true);
+    when(componentRepository.update(parentComponent)).thenReturn(parentComponent);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.unprocessComponent(parentComponent);
+
+    // Verify
+    assertThat(returnedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
+  }
+  
+  @Test
+  public void testEditWeightToValidRangeForComponentThatCantRollBack_componentStatusIsUnsafe() {
+    // Set up fixture
+    long componentId = 76L;
+    Component component =
+        aComponent().withId(componentId).withStatus(ComponentStatus.UNSAFE)
+        .withComponentStatusChange(aComponentStatusChange()
+            .withStatusChangeReason(anUnsafeReason()
+            // type TEST_RESULTS can be rolled back
+            .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS).build())
+            .build())
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(component);
+    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(component)).thenReturn(false);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.recordComponentWeight(componentId, 320);
+
+    // Verify
+    assertThat(returnedComponent.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
+  public void testEditWeightToValidRangeForComponentThatCanRollBack_componentStatusQuarantined() {
+    // Set up fixture
+    long componentId = 76L;
+    Component component =
+        aComponent().withId(componentId).withStatus(ComponentStatus.UNSAFE)
+        .withComponentStatusChange(aComponentStatusChange()
+            .withStatusChangeReason(anUnsafeReason()
+            // type INVALID_WEIGHT can be rolled back
+            .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.INVALID_WEIGHT).build())
+            .build())
+        .build();
+    
+    when(componentRepository.findComponentById(componentId)).thenReturn(component);
+    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(component)).thenReturn(false);
+    when(componentRepository.update(component)).thenReturn(component);
+    
+    // Exercise SUT
+    Component returnedComponent = componentCRUDService.recordComponentWeight(componentId, 320);
+
+    // Verify
+    assertThat(returnedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
+  }
+
 }

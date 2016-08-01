@@ -10,7 +10,7 @@ public class ComponentStatusChangeReasonBuilder extends AbstractEntityBuilder<Co
   private String statusChangeReason;
   private ComponentStatusChangeReasonCategory category;
   private Boolean isDeleted = false;
-  private ComponentStatusChangeReasonType type;
+  private ComponentStatusChangeReasonType type = ComponentStatusChangeReasonType.INVALID_WEIGHT;
 
   public ComponentStatusChangeReasonBuilder withId(Long id) {
     this.id = id;
@@ -62,4 +62,5 @@ public class ComponentStatusChangeReasonBuilder extends AbstractEntityBuilder<Co
     return new ComponentStatusChangeReasonBuilder()
         .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.UNSAFE);
   }
+
 }
