@@ -58,4 +58,8 @@ public class ComponentStatusChangeReasonBuilder extends AbstractEntityBuilder<Co
         .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.RETURNED);
   }
 
+  public static ComponentStatusChangeReasonBuilder anUnsafeReason() {
+    return new ComponentStatusChangeReasonBuilder()
+        .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.UNSAFE);
+  }
 }

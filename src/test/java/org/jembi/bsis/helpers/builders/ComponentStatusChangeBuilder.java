@@ -12,6 +12,7 @@ public class ComponentStatusChangeBuilder extends AbstractBuilder<ComponentStatu
   private Long id;
   private Date statusChangedOn;
   private ComponentStatusChangeReason statusChangeReason = aComponentStatusChangeReason().build();
+  private boolean isDeleted = false;
   
   public ComponentStatusChangeBuilder withId(Long id) {
     this.id = id;
@@ -27,6 +28,11 @@ public class ComponentStatusChangeBuilder extends AbstractBuilder<ComponentStatu
     this.statusChangeReason = statusChangeReason;
     return this;
   }
+  
+  public ComponentStatusChangeBuilder thatIsDeleted() {
+    this.isDeleted = true;
+    return this;
+  }
 
   @Override
   public ComponentStatusChange build() {
@@ -34,6 +40,7 @@ public class ComponentStatusChangeBuilder extends AbstractBuilder<ComponentStatu
     entity.setId(id);
     entity.setStatusChangedOn(statusChangedOn);
     entity.setStatusChangeReason(statusChangeReason);
+    entity.setIsDeleted(isDeleted);
     return entity;
   }
 

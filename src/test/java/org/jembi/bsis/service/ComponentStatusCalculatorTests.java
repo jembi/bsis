@@ -5,7 +5,14 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestResultBuilder.aBloodTestResult;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aReturnReason;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.anUnsafeReason;
+import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
+import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aReleasedTestBatch;
+import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -13,15 +20,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
-import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
-import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
-import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aReleasedTestBatch;
-
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -736,5 +741,105 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // verify
     assertThat("status is not changed", statusChanged, is(false));
     assertThat("status is still UNSAFE", component.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
+  public void testUpdateComponentStatusQuarantinedHasUnsafeComponentStatusChange_shouldChangeStatusToUnsafe() throws Exception {
+    // set up data
+    Long donationId = Long.valueOf(1234);
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .thatIsReleased()
+        .build();
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DAY_OF_YEAR, 90);
+    Date expiresOn = cal.getTime();
+    ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(new Date()).withStatusChangeReason(anUnsafeReason().build()).build();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withExpiresOn(expiresOn)
+        .withDonation(donation)
+        .withComponentStatusChange(statusChange)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(true));
+    assertThat("status is UNSAFE", component.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
+  public void testUpdateComponentStatusQuarantinedHasReturnedComponentStatusChange_shouldChangeStatusToAvailable() throws Exception {
+    // set up data
+    Long donationId = Long.valueOf(1234);
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .thatIsReleased()
+        .build();
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DAY_OF_YEAR, 90);
+    Date expiresOn = cal.getTime();
+    ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(new Date()).withStatusChangeReason(aReturnReason().build()).build();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withExpiresOn(expiresOn)
+        .withDonation(donation)
+        .withComponentStatusChange(statusChange)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(true));
+    assertThat("status is AVAILABLE", component.getStatus(), is(ComponentStatus.AVAILABLE));
+  }
+  
+  @Test
+  public void testUpdateComponentStatusQuarantinedHasDeletedUnsafeWeightComponentStatusChange_shouldChangeStatusToAvailable() throws Exception {
+    // set up data
+    Long donationId = Long.valueOf(1234);
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .thatIsReleased()
+        .build();
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DAY_OF_YEAR, 90);
+    Date expiresOn = cal.getTime();
+    ComponentStatusChangeReason statusChangeReason = anUnsafeReason().withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.INVALID_WEIGHT).build();
+    ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(new Date()).withStatusChangeReason(statusChangeReason).thatIsDeleted().build();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withExpiresOn(expiresOn)
+        .withDonation(donation)
+        .withComponentStatusChange(statusChange)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(true));
+    assertThat("status is AVAILABLE", component.getStatus(), is(ComponentStatus.AVAILABLE));
   }
 }

@@ -9,6 +9,8 @@ import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.DonationRepository;
@@ -127,6 +129,15 @@ public class ComponentStatusCalculator {
     // later in the code
     if (component.getExpiresOn().before(new Date())) {
       newComponentStatus = ComponentStatus.EXPIRED;
+    }
+    
+    // if the Component has an undeleted UNSAFE status changes, then it is unsafe
+    if (component.getStatusChanges() != null) {
+      for (ComponentStatusChange statusChange : component.getStatusChanges()) {
+        if (!statusChange.getIsDeleted() && statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE) {
+          newComponentStatus = ComponentStatus.UNSAFE;
+        }
+      }
     }
     
     // If this component belongs to a donation with an unconfirmed blood typing match status
