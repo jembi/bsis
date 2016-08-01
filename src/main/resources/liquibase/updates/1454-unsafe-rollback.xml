@@ -24,5 +24,13 @@
       <column name="isDeleted" value="0"></column>
     </insert>
   </changeSet>
+  
+  <changeSet id="20160801-1038" author="bausmeier">
+    <insert tableName="ComponentStatusChangeReason">
+      <column name="category" value="UNSAFE"></column>
+      <column name="type" value="TEST_RESULTS"></column>
+      <column name="isDeleted" value="0"></column>
+    </insert>
+  </changeSet>
 
 </databaseChangeLog>

@@ -14,9 +14,15 @@ import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
+import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -82,26 +88,54 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
 
   @Test
-  public void testMarkComponentsBelongingToDonorAsUnsafe_shouldDelegateToRepositoryWithCorrectParameters() {
+  public void testMarkComponentsBelongingToDonorAsUnsafe_shouldMarkComponentsAsUnsafe() {
+    // Set up fixture
+    Donation firstDonation = aDonation().withId(1L).build();
+    Donation secondDonation = aDonation().withId(2L).build();
+    Donation deletedDonation = aDonation().thatIsDeleted().withId(3L).build();
+    Donor donor = aDonor()
+        .withDonation(firstDonation)
+        .withDonation(secondDonation)
+        .withDonation(deletedDonation)
+        .build();
+    
+    // Set up expectations
+    doNothing().when(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(any(Donation.class));
 
-    Donor donor = aDonor().build();
-
+    // Exercise SUT
     componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donor);
-
-    verify(componentRepository).updateComponentStatusesForDonor(
-        Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED), ComponentStatus.UNSAFE, donor);
+    
+    // Verify
+    verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(argThat(hasSameStateAsDonation(firstDonation)));
+    verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(argThat(hasSameStateAsDonation(secondDonation)));
+    verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(argThat(hasSameStateAsDonation(deletedDonation)));
   }
 
   @Test
-  public void testMarkComponentsBelongingToDonationAsUnsafe_shouldDelegateToRepositoryWithCorrectParameters() {
+  public void testMarkComponentsBelongingToDonationAsUnsafe_shouldMarkComponentsAsUnsafe() {
+    // Set up fixture
+    Component firstComponent = aComponent().withId(1L).build();
+    Component secondComponent = aComponent().withId(2L).build();
+    Component deletedComponent = aComponent().withId(3L).withIsDeleted(true).build();
 
-    Donation donation = aDonation().build();
+    Donation donation = aDonation()
+        .withComponents(Arrays.asList(firstComponent, secondComponent, deletedComponent))
+        .build();
+    
+    // Set up expectations
+    doAnswer(returnsFirstArg()).when(componentCRUDService).markComponentAsUnsafe(
+        argThat(hasSameStateAsComponent(firstComponent)), eq(ComponentStatusChangeReasonType.TEST_RESULTS));
 
+    // Exercise SUT
     componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
-
-    verify(componentRepository).updateComponentStatusForDonation(
-        Arrays.asList(ComponentStatus.AVAILABLE, ComponentStatus.QUARANTINED), ComponentStatus.UNSAFE,
-        donation);
+    
+    // Verify
+    verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(firstComponent)),
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS));
+    verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(secondComponent)),
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS));
+    verify(componentCRUDService, never()).markComponentAsUnsafe(argThat(hasSameStateAsComponent(deletedComponent)),
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS));
   }
 
   @Test

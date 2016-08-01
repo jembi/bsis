@@ -1,6 +1,5 @@
 package org.jembi.bsis.service;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,8 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ComponentCRUDService {
 
   private static final Logger LOGGER = Logger.getLogger(ComponentCRUDService.class);
-  private static final List<ComponentStatus> UPDATABLE_STATUSES = Arrays.asList(ComponentStatus.AVAILABLE,
-      ComponentStatus.QUARANTINED);
 
   @Autowired
   private ComponentRepository componentRepository;
@@ -63,7 +60,15 @@ public class ComponentCRUDService {
 
     LOGGER.info("Marking components as unsafe for donor: " + donor);
 
-    componentRepository.updateComponentStatusesForDonor(UPDATABLE_STATUSES, ComponentStatus.UNSAFE, donor);
+    for (Donation donation : donor.getDonations()) {
+      
+      if (donation.getIsDeleted()) {
+        // Skip deleted donations
+        continue;
+      }
+      
+      markComponentsBelongingToDonationAsUnsafe(donation);
+    }
   }
 
   /**
@@ -72,8 +77,16 @@ public class ComponentCRUDService {
   public void markComponentsBelongingToDonationAsUnsafe(Donation donation) {
 
     LOGGER.info("Marking components as unsafe for donation: " + donation);
+    
+    for (Component component : donation.getComponents()) {
 
-    componentRepository.updateComponentStatusForDonation(UPDATABLE_STATUSES, ComponentStatus.UNSAFE, donation);
+      if (component.getIsDeleted()) {
+        // Skip deleted components
+        continue;
+      }
+
+      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.TEST_RESULTS);
+    }
   }
 
   public void updateComponentStatusesForDonation(Donation donation) {

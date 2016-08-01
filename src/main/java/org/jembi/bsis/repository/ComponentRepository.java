@@ -11,10 +11,7 @@ import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
-import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donor.Donor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -125,28 +122,6 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .setParameter("initialStatus", ComponentStatus.QUARANTINED)
         .getSingleResult()
         .intValue();
-  }
-
-  @Transactional(propagation = Propagation.MANDATORY)
-  public void updateComponentStatusesForDonor(List<ComponentStatus> oldStatuses, ComponentStatus newStatus,
-                                              Donor donor) {
-
-    em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONOR)
-        .setParameter("oldStatuses", oldStatuses)
-        .setParameter("newStatus", newStatus)
-        .setParameter("donor", donor)
-        .executeUpdate();
-  }
-
-  @Transactional(propagation = Propagation.MANDATORY)
-  public void updateComponentStatusForDonation(List<ComponentStatus> oldStatuses, ComponentStatus newStatus,
-                                               Donation donation) {
-
-    em.createNamedQuery(ComponentNamedQueryConstants.NAME_UPDATE_COMPONENT_STATUSES_FOR_DONATION)
-        .setParameter("oldStatuses", oldStatuses)
-        .setParameter("newStatus", newStatus)
-        .setParameter("donation", donation)
-        .executeUpdate();
   }
   
   public Component findComponentByCodeAndDIN(String componentCode, String donationIdentificationNumber) {
