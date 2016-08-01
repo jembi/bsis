@@ -150,10 +150,10 @@ public class ComponentController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
   
-  @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+  @RequestMapping(value = "{id}/weight", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> updateComponent(
-      @PathVariable("id") Long componentId,
+  public ResponseEntity<Map<String, Object>> updateComponentWeight(
+      @PathVariable("id") long componentId,
       @RequestBody @Valid ComponentBackingForm componentBackingForm) {
 
     componentBackingForm.setId(componentId); // Use the id parameter from the path
