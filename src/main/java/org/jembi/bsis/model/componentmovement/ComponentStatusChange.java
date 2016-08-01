@@ -23,7 +23,7 @@ public class ComponentStatusChange extends BaseEntity implements Comparable<Comp
 
   private static final long serialVersionUID = 1L;
 
-  @ManyToOne
+  @ManyToOne(optional = false)
   private Component component;
 
   @Temporal(TemporalType.TIMESTAMP)
@@ -39,7 +39,7 @@ public class ComponentStatusChange extends BaseEntity implements Comparable<Comp
   @Lob
   private String statusChangeReasonText;
 
-  @ManyToOne
+  @ManyToOne(optional = false)
   private ComponentStatusChangeReason statusChangeReason;
 
   boolean isDeleted = false;

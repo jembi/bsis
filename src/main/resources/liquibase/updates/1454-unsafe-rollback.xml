@@ -1,11 +1,13 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   <changeSet id="20160728-0907" author="bausmeier">
     <dropColumn tableName="ComponentStatusChange" columnName="statusChangeType" />
     <dropColumn tableName="ComponentStatusChange_AUD" columnName="statusChangeType" />
+    <addNotNullConstraint tableName="ComponentStatusChange" columnName="component_id" columnDataType="BIGINT(20)"/>
+    <addNotNullConstraint tableName="ComponentStatusChange" columnName="statusChangeReason_id" columnDataType="BIGINT(20)"/>
   </changeSet>
   
   <changeSet id="20160729-1125" author="bausmeier">

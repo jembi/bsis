@@ -316,11 +316,14 @@ public class ComponentCRUDService {
   
   public Component markComponentAsUnsafe(Component component, ComponentStatusChangeReasonType reasonType) {
 
+    LOGGER.info("Marking component " + component.getId() + " as UNSAFE with reason type: " + reasonType);
+
     // Create a component status change, with category UNSAFE and type reasonType, for the component
     ComponentStatusChange statusChange = new ComponentStatusChange();
     statusChange.setNewStatus(ComponentStatus.UNSAFE);
     statusChange.setStatusChangedOn(dateGeneratorService.generateDate());
     statusChange.setChangedBy(SecurityUtils.getCurrentUser());
+    statusChange.setComponent(component);
     ComponentStatusChangeReason unsafeReason;
     try {
       unsafeReason = componentStatusChangeReasonRepository
