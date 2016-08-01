@@ -1038,4 +1038,23 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Verify
     assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
   }
+  
+  @Test
+  public void testPutComponentInStock_shouldHaveCorrectInventoryStatus() {
+    // Set up data
+    Location location = aLocation().build();
+    Donation donation = aDonation().build();
+    Component componentToPutInStock = aComponent().withInventoryStatus(InventoryStatus.NOT_IN_STOCK).withDonation(donation).withLocation(location).build();
+    Component expectedComponent = aComponent().withInventoryStatus(InventoryStatus.IN_STOCK).withDonation(donation).withLocation(location).build();
+    
+    // Set up mocks
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedComponent)))).thenReturn(expectedComponent);
+    
+    // Run test
+    Component returnedComponent = componentCRUDService.putComponentInStock(componentToPutInStock);
+    
+    // Verify
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedComponent)));
+    assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
+  }
 }
