@@ -15,7 +15,9 @@ import org.jembi.bsis.repository.constant.ComponentStatusChangeReasonNamedQueryC
   @NamedQuery(name = ComponentStatusChangeReasonNamedQueryConstants.NAME_FIND_FIRST_COMPONENT_STATUS_CHANGE_REASON_FOR_CATEGORY,
       query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_FIND_FIRST_COMPONENT_STATUS_CHANGE_REASON_FOR_CATEGORY),
   @NamedQuery(name = ComponentStatusChangeReasonNamedQueryConstants.NAME_COUNT_DISCARD_REASON_WITH_ID,
-      query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_COUNT_DISCARD_REASON_WITH_ID)  
+      query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_COUNT_DISCARD_REASON_WITH_ID),
+  @NamedQuery(name = ComponentStatusChangeReasonNamedQueryConstants.NAME_FIND_COMPONENT_STATUS_CHANGE_REASON_BY_CATEGORY_AND_TYPE,
+      query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_FIND_COMPONENT_STATUS_CHANGE_REASON_BY_CATEGORY_AND_TYPE)
 })
 @Entity
 @Audited

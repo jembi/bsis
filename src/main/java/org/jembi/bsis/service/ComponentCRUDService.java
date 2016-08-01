@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
+
 import org.apache.log4j.Logger;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -21,6 +23,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.repository.ComponentRepository;
+import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +52,9 @@ public class ComponentCRUDService {
 
   @Autowired
   private DateGeneratorService dateGeneratorService;
+
+  @Autowired
+  private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
 
   /**
    * Change the status of components belonging to the donor from AVAILABLE to UNSAFE.
@@ -163,7 +169,7 @@ public class ComponentCRUDService {
           add(component);
           
           if (parentStatus == ComponentStatus.UNSAFE) {
-            markComponentsAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+            markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
           }
         }
       }
@@ -295,20 +301,24 @@ public class ComponentCRUDService {
     return updateComponent(parentComponent);
   }
   
-  public Component markComponentsAsUnsafe(Component component, ComponentStatusChangeReasonType reasonType) {
+  public Component markComponentAsUnsafe(Component component, ComponentStatusChangeReasonType reasonType) {
 
-    // create a component unsafe status change for the component
+    // Create a component status change, with category UNSAFE and type reasonType, for the component
     ComponentStatusChange statusChange = new ComponentStatusChange();
     statusChange.setNewStatus(ComponentStatus.UNSAFE);
     statusChange.setStatusChangedOn(dateGeneratorService.generateDate());
     statusChange.setChangedBy(SecurityUtils.getCurrentUser());
-    ComponentStatusChangeReason unsafeReason = new ComponentStatusChangeReason();
-    unsafeReason.setCategory(ComponentStatusChangeReasonCategory.UNSAFE);
-    unsafeReason.setType(reasonType);
+    ComponentStatusChangeReason unsafeReason;
+    try {
+      unsafeReason = componentStatusChangeReasonRepository
+        .findComponentStatusChangeReasonByCategoryAndType(ComponentStatusChangeReasonCategory.UNSAFE, reasonType);
+    } catch(NoResultException e) {
+      throw new IllegalArgumentException("Component status change reason with category UNSAFE and type " + reasonType + " doesn't exist");
+    }
     statusChange.setStatusChangeReason(unsafeReason);
-    statusChange.setComponent(component);
-
     component.addStatusChange(statusChange);
+
+    // Set component as UNSAFE
     component.setStatus(ComponentStatus.UNSAFE);
     return updateComponent(component);
 

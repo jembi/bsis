@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonType;
 import org.jembi.bsis.repository.constant.ComponentStatusChangeReasonNamedQueryConstants;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,5 +74,16 @@ public class ComponentStatusChangeReasonRepository {
         .setParameter("deleted", false)
         .getResultList()
         .get(0);
+  }
+  
+  public ComponentStatusChangeReason findComponentStatusChangeReasonByCategoryAndType(
+      ComponentStatusChangeReasonCategory category, ComponentStatusChangeReasonType type) {
+    return em.createNamedQuery(
+        ComponentStatusChangeReasonNamedQueryConstants.NAME_FIND_COMPONENT_STATUS_CHANGE_REASON_BY_CATEGORY_AND_TYPE,
+        ComponentStatusChangeReason.class)
+        .setParameter("category", category)
+        .setParameter("type", type)
+        .setParameter("deleted", false)
+        .getSingleResult();
   }
 }

@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
@@ -45,6 +47,7 @@ import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
+import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
@@ -75,6 +78,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   private ComponentConstraintChecker componentConstraintChecker;
   @Mock
   private DateGeneratorService dateGeneratorService;
+  @Mock
+  private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
 
   @Test
   public void testMarkComponentsBelongingToDonorAsUnsafe_shouldDelegateToRepositoryWithCorrectParameters() {
@@ -409,7 +414,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
-    doReturn(expectedComponent1).when(componentCRUDService).markComponentsAsUnsafe(
+    doReturn(expectedComponent1).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
     // SUT
@@ -418,7 +423,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
     verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent1)));
-    verify(componentCRUDService).markComponentsAsUnsafe(argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
+    verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
   }
   
   @Test
@@ -903,14 +908,14 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   
 
   @Test
-  public void testMarkComponentsAsUnsafe_shouldCreateStatusChangeReason() {
+  public void testMarkComponentsAsUnsafe_shouldCreateStatusChange() {
     Date date = new Date();
     Donation donation = aDonation().build();
     Location location = aLocation().build();
     Component component = aComponent().withDonation(donation).withLocation(location).build();
     ComponentStatusChangeReason statusChangeReason = aComponentStatusChangeReason()
         .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.UNSAFE)
-        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.INVALID_WEIGHT)
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.UNSAFE_PARENT)
         .build();
     ComponentStatusChange statusChange =
         aComponentStatusChange().withStatusChangeReason(statusChangeReason).withStatusChangedOn(date).build();
@@ -922,9 +927,35 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(dateGeneratorService.generateDate()).thenReturn(date);
 
     // Run test
-    componentCRUDService.markComponentsAsUnsafe(component, ComponentStatusChangeReasonType.INVALID_WEIGHT);
+    componentCRUDService.markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
     
     // Verify
     verify(componentRepository).update(argThat(hasSameStateAsComponent(updatedComponent)));
+  }
+  
+  @SuppressWarnings("unchecked")
+  @Test(expected = IllegalArgumentException.class)
+  public void testMarkComponentsAsUnsafeWithNonExistingReason_shouldThrow() {
+    Date date = new Date();
+    Donation donation = aDonation().build();
+    Location location = aLocation().build();
+    ComponentStatusChangeReason statusChangeReason = aComponentStatusChangeReason()
+        .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.UNSAFE)
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.UNSAFE_PARENT)
+        .build();
+    ComponentStatusChange statusChange =
+        aComponentStatusChange().withStatusChangeReason(statusChangeReason).withStatusChangedOn(date).build();
+    Component component = aComponent().withDonation(donation).withLocation(location)
+        .withComponentStatusChange(statusChange)
+        .withStatus(ComponentStatus.UNSAFE).build();       
+    
+    // Set up expectations
+    when(dateGeneratorService.generateDate()).thenReturn(date);
+    when(componentStatusChangeReasonRepository.findComponentStatusChangeReasonByCategoryAndType(
+        ComponentStatusChangeReasonCategory.UNSAFE, ComponentStatusChangeReasonType.UNSAFE_PARENT))
+            .thenThrow(NoResultException.class);
+
+    // Run test
+    componentCRUDService.markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
   }
 }
