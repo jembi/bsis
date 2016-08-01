@@ -34,6 +34,7 @@ public class ComponentStatusChangeReasonRepositoryTests extends ContextDependent
 
     // Verify
     Assert.assertNotNull("A reason is returned", returnedReason);
+    Assert.assertEquals("The correct reason is returned", reason1, returnedReason);
     Assert.assertEquals("The correct reason is returned", reason1.getCategory(), returnedReason.getCategory());
     Assert.assertEquals("The correct reason is returned", reason1.getType(), returnedReason.getType());
   }
