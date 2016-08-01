@@ -21,6 +21,7 @@ import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
@@ -179,7 +180,7 @@ public class ComponentCRUDService {
           component.setCreatedOn(createdOn);
           component.setExpiresOn(expiresOn);
 
-          add(component);
+          addComponent(component);
           
           if (parentStatus == ComponentStatus.UNSAFE) {
             markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
@@ -338,14 +339,76 @@ public class ComponentCRUDService {
     return updateComponent(component);
 
   }
+  
+  public Component issueComponent(Component component, Location issueTo) {
+    if (!issueTo.getIsUsageSite()) {
+      throw new IllegalArgumentException("Can't issue a component to a location which is not a usage site: " + issueTo);
+    }
+    
+    Date issuedDate = dateGeneratorService.generateDate();
+    
+    component.setInventoryStatus(InventoryStatus.REMOVED);
+    component.setStatus(ComponentStatus.ISSUED);
+    component.setIssuedOn(issuedDate);
+    component.setLocation(issueTo);
 
-  private Component add(Component component) {
+    // Create a component status change for the component
+    ComponentStatusChange statusChange = new ComponentStatusChange();
+    statusChange.setNewStatus(ComponentStatus.ISSUED);
+    statusChange.setStatusChangedOn(issuedDate);
+    ComponentStatusChangeReason statusChangeReason = componentStatusChangeReasonRepository
+        .findFirstComponentStatusChangeReasonForCategory(ComponentStatusChangeReasonCategory.ISSUED);
+    statusChange.setStatusChangeReason(statusChangeReason);
+    statusChange.setChangedBy(SecurityUtils.getCurrentUser());
+    component.addStatusChange(statusChange);
+
+    return updateComponent(component);
+  }
+  
+  public Component transferComponent(Component component, Location transferTo) {
+    if (!transferTo.getIsDistributionSite()) {
+      throw new IllegalArgumentException("Can't transfer a component to a location which is not a distribution site: " + transferTo);
+    }
+    component.setLocation(transferTo);
+    return updateComponent(component);
+  }
+  
+  public Component returnComponent(Component component, Location returnedTo) {
+    if (!returnedTo.getIsDistributionSite()) {
+      throw new IllegalArgumentException(
+          "Can't return a component to a location which is not a distribution site: " + returnedTo);
+    }
+
+    component.setStatus(ComponentStatus.AVAILABLE);
+    component.setInventoryStatus(InventoryStatus.IN_STOCK);
+    component.setLocation(returnedTo);
+
+    // Create a component status change for the component
+    Date now = dateGeneratorService.generateDate();
+    ComponentStatusChange statusChange = new ComponentStatusChange();
+    statusChange.setNewStatus(component.getStatus());
+    statusChange.setStatusChangedOn(now);
+    ComponentStatusChangeReason statusChangeReason = componentStatusChangeReasonRepository
+        .findFirstComponentStatusChangeReasonForCategory(ComponentStatusChangeReasonCategory.RETURNED);
+    statusChange.setStatusChangeReason(statusChangeReason);
+    statusChange.setChangedBy(SecurityUtils.getCurrentUser());
+    component.addStatusChange(statusChange);
+
+    return updateComponent(component);
+  }
+  
+  public Component putComponentInStock(Component component) {
+    component.setInventoryStatus(InventoryStatus.IN_STOCK);
+    return updateComponent(component);
+  }
+
+  private Component addComponent(Component component) {
     componentStatusCalculator.updateComponentStatus(component);
     componentRepository.save(component);
     return component;
   }
   
-  public Component updateComponent(Component component) {
+  private Component updateComponent(Component component) {
     componentStatusCalculator.updateComponentStatus(component);
     return componentRepository.update(component);
   }

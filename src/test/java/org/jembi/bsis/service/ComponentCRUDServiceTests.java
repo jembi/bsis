@@ -11,7 +11,9 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentTyp
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
@@ -36,7 +38,6 @@ import java.util.List;
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.factory.ComponentFactory;
-import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.matchers.ComponentMatcher;
 import org.jembi.bsis.model.component.Component;
@@ -56,7 +57,6 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
-import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -442,28 +442,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
         .build();
-    Component unsafeComponent = aComponent()
-        .withComponentType(componentType1)
-        .withComponentCode("0001")
-        .withDonation(donation)
-        .withParentComponent(expectedParentComponent)
-        .withStatus(ComponentStatus.UNSAFE)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withCreatedOn(donation.getDonationDate())
-        .withExpiresOn(expiryCal1.getTime())
-        .withLocation(location)
-        .withComponentStatusChange(aComponentStatusChange()
-            .withId(1L)
-            .withStatusChangeReason(aComponentStatusChangeReason().withId(1L).build())
-            .build())
-        .build();
     
     // set up mocks
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
-    doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
+    doReturn(expectedComponent1).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
     // SUT
@@ -642,37 +627,23 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateComponentWeight_shouldDiscardComponent() throws Exception {
     // set up data
-    long componentId = 1L;
-    Donation donation = aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build();
+    Long componentId = Long.valueOf(1);
     Component oldComponent = aComponent()
         .withId(componentId)
-        .withStatus(ComponentStatus.QUARANTINED)
-        .withDonation(donation)
-        .build();
-    Component unsafeComponent = aComponent()
-        .withId(componentId)
-        .withStatus(ComponentStatus.UNSAFE)
-        .withComponentStatusChange(aComponentStatusChange()
-            .withId(1L)
-            .withStatusChangeReason(aComponentStatusChangeReason().withId(27L).build())
-            .build())
-        .withDonation(donation)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
         .build();
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
     when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(true);
-    doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
-        argThat(hasSameStateAsComponent(oldComponent)), eq(ComponentStatusChangeReasonType.INVALID_WEIGHT));
-    when(componentStatusCalculator.updateComponentStatus(unsafeComponent)).thenReturn(false);
-    when(componentRepository.update(unsafeComponent)).thenReturn(unsafeComponent);
+    when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(false);
+    when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
     
     // SUT
     Component updatedComponent = componentCRUDService.recordComponentWeight(componentId, 320);
     
     // check
-    verify(componentCRUDService).markComponentAsUnsafe(oldComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
     assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
   }
   
@@ -918,57 +889,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Exercise SUT
     componentCRUDService.undiscardComponent(componentId);
   }
-  
-  @Test
-  public void testUpdateComponent_shouldUpdateAllFields() {
-    // Set up fixture
-    DateTime now = new DateTime();
-    Date date1 = now.plusDays(10).toDate();
-    Date date2 = now.plusDays(20).toDate();
-    Component component1 = aComponent().withId(1L)
-        .withDonation(aDonation().withId(1L).build())
-        .withCreatedOn(date1)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withStatus(ComponentStatus.QUARANTINED)
-        .withLocation(aLocation().withId(1L).build())
-        .withComponentCode("0001")
-        .withExpiresOn(date1)
-        .withDiscardedOn(date1)
-        .withIssuedOn(date1)
-        .withIsDeleted(true)
-        .withParentComponent(aComponent().withId(1L).build())
-        .withComponentType(aComponentType().withId(1L).build())
-        .withNotes("notes1")
-        .withComponentBatch(ComponentBatchBuilder.aComponentBatch().withId(1L).build())
-        .build();
-    
-    Component component2 = aComponent().withId(1L)
-        .withDonation(aDonation().withId(2L).build())
-        .withCreatedOn(date2)
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withLocation(aLocation().withId(2L).build())
-        .withComponentCode("0002")
-        .withExpiresOn(date2)
-        .withDiscardedOn(date2)
-        .withIssuedOn(date2)
-        .withIsDeleted(false)
-        .withParentComponent(aComponent().withId(2L).build())
-        .withComponentType(aComponentType().withId(2L).build())
-        .withNotes("notes2")
-        .withComponentBatch(ComponentBatchBuilder.aComponentBatch().withId(2L).build())
-        .build();
-
-    // Set up expectations
-    when(componentRepository.findComponentById(1L)).thenReturn(component1);
-
-    // Run test
-    componentCRUDService.updateComponent(component2);
-
-    // Verify
-    verify(componentRepository).update(argThat(hasSameStateAsComponent(component2)));
-  }
-  
 
   @Test
   public void testMarkComponentsAsUnsafe_shouldCreateStatusChange() {
@@ -1020,5 +940,102 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
 
     // Run test
     componentCRUDService.markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+  }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void testTransferComponentWithNonDistributionSite_shouldThrow() {
+    // Set up fixture
+    Component componentToTransfer = aComponent().withLocation(aDistributionSite().build()).build();
+    Location transferTo = aUsageSite().build();
+
+    // Call test method
+    componentCRUDService.transferComponent(componentToTransfer, transferTo);
+  }
+  
+  @Test
+  public void testTransferComponent_shouldUpdateComponentLocation() {
+    // Set up fixture
+    Component componentToTransfer = aComponent().withLocation(aDistributionSite().build()).build();
+    Location transferTo = aDistributionSite().build();
+    
+    // Set up expectations
+    when(componentRepository.update(componentToTransfer)).thenReturn(componentToTransfer);
+    
+    // Call test method
+    Component returnedComponent = componentCRUDService.transferComponent(componentToTransfer, transferTo);
+    
+    // Verify
+    assertThat(returnedComponent, is(componentToTransfer));
+    assertThat(returnedComponent.getLocation(), is(transferTo));
+  }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void testIssueComponentWithNonUsageSite_shouldThrow() {
+    // Set up fixture
+    Component componentToIssue = aComponent().withLocation(aDistributionSite().build()).build();
+    Location issueTo = aDistributionSite().build();
+    
+    // Call test method
+    componentCRUDService.issueComponent(componentToIssue, issueTo);
+  }
+  
+  @Test
+  public void testIssueComponent_shouldUpdateComponentFields() {
+    // Set up fixture
+    Component componentToIssue = aComponent().withLocation(aDistributionSite().build()).build();
+    Location issueTo = aUsageSite().build();
+    Date issuedDate = new Date();
+    
+    // Set up expectations
+    when(dateGeneratorService.generateDate()).thenReturn(issuedDate);
+    when(componentStatusChangeReasonRepository.findFirstComponentStatusChangeReasonForCategory(
+        ComponentStatusChangeReasonCategory.ISSUED)).thenReturn(new ComponentStatusChangeReason());
+    when(componentRepository.update(componentToIssue)).thenReturn(componentToIssue);
+    
+    // Call test method
+    Component returnedComponent = componentCRUDService.issueComponent(componentToIssue, issueTo);
+    
+    // Verify
+    assertThat(returnedComponent, is(componentToIssue));
+    assertThat(returnedComponent.getLocation(), is(issueTo));
+  }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void testReturnComponentToNonDistributionSite_shouldThrow() {
+    // Set up data
+    Component componentToReturn = aComponent().withLocation(aUsageSite().build()).build();
+    Location returnedTo = aUsageSite().build();
+
+    // Run test
+    componentCRUDService.returnComponent(componentToReturn, returnedTo);
+  }
+  
+  @Test
+  public void testReturnComponent_shouldUpdateComponentCorrectly() {
+    // Set up data
+    Component componentToReturn = aComponent()
+        .withLocation(aUsageSite().build())
+        .withStatus(ComponentStatus.ISSUED)
+        .withInventoryStatus(InventoryStatus.REMOVED)
+        .withDonation(null).build();
+    Location returnedTo = aDistributionSite().build();
+    
+    Date date = new Date();
+    ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(date).build();
+    Component expectedComponent = aComponent()
+        .withLocation(returnedTo)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(null).withComponentStatusChange(statusChange).build();
+    
+    // Set up mocks
+    when(dateGeneratorService.generateDate()).thenReturn(date);
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedComponent)))).thenReturn(expectedComponent);
+    
+    // Run test
+    Component returnedComponent = componentCRUDService.returnComponent(componentToReturn, returnedTo);
+    
+    // Verify
+    assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
   }
 }

@@ -14,7 +14,6 @@ import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
@@ -27,9 +26,6 @@ import org.springframework.stereotype.Service;
 @Transactional
 @Service
 public class BloodTestsService {
-
-  @Autowired
-  ComponentRepository componentRepository;
 
   @Autowired
   BloodTestingRepository bloodTestingRepository;
