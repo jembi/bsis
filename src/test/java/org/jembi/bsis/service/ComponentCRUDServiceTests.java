@@ -636,7 +636,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
     when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
-    when(componentStatusCalculator.shouldComponentBeDiscarded(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(true);
     when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(false);
     when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
     
@@ -659,7 +659,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
     when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
-    when(componentStatusCalculator.shouldComponentBeDiscarded(oldComponent)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(false);
     when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(false);
     when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
     
@@ -689,7 +689,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
     when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
-    when(componentStatusCalculator.shouldComponentBeDiscarded(oldComponent)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(false);
     when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(true);
     when(componentRepository.update(reEvaluatedcomponent)).thenReturn(reEvaluatedcomponent);
     

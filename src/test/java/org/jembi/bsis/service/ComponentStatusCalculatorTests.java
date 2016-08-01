@@ -43,7 +43,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   private DonationRepository donationRepository;
 
   @Test
-  public void testShouldComponentsBeDiscardedWithBloodTestNotFlaggedForDiscard_shouldReturnFalse() {
+  public void testShouldComponentsBeDiscardedForTestResultsWithBloodTestNotFlaggedForDiscard_shouldReturnFalse() {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
@@ -56,13 +56,13 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
             .build()
     );
 
-    boolean result = componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults);
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResults(bloodTestResults);
 
     assertThat(result, is(false));
   }
 
   @Test
-  public void testShouldComponentsBeDiscardedWithBloodTestFlaggedForDiscardWithNegativeResult_shouldReturnFalse() {
+  public void testShouldComponentsBeDiscardedForTestResultsWithBloodTestFlaggedForDiscardWithNegativeResult_shouldReturnFalse() {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
@@ -75,13 +75,13 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
             .build()
     );
 
-    boolean result = componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults);
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResults(bloodTestResults);
 
     assertThat(result, is(false));
   }
 
   @Test
-  public void testShouldComponentsBeDiscardedWithBloodTestFlaggedForDiscardWithPositiveResult_shouldReturnTrue() {
+  public void testShouldComponentsBeDiscardedForTestResultsWithBloodTestFlaggedForDiscardWithPositiveResult_shouldReturnTrue() {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
@@ -94,13 +94,13 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
             .build()
     );
 
-    boolean result = componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults);
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResults(bloodTestResults);
 
     assertThat(result, is(true));
   }
   
   @Test
-  public void testShouldComponentBeDiscardedLowWeight_shouldReturnTrue() throws Exception {
+  public void testShouldComponentBeDiscardedForWeightLowWeight_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -111,14 +111,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    boolean discarded = componentStatusCalculator.shouldComponentBeDiscarded(component);
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
     
     // verify
     assertThat("component should be discarded", discarded, is(true));
   }
   
   @Test
-  public void testShouldComponentBeDiscardedHighWeight_shouldReturnTrue() throws Exception {
+  public void testShouldComponentBeDiscardedForWeightHighWeight_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -129,14 +129,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    boolean discarded = componentStatusCalculator.shouldComponentBeDiscarded(component);
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
     
     // verify
     assertThat("component should be discarded", discarded, is(true));
   }
   
   @Test
-  public void testShouldComponentBeDiscarded_shouldReturnFalse() throws Exception {
+  public void testShouldComponentBeDiscardedForWeight_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -147,14 +147,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    boolean discarded = componentStatusCalculator.shouldComponentBeDiscarded(component);
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
     
     // verify
     assertThat("component shouldn't be discarded", discarded, is(false));
   }
   
   @Test(expected=java.lang.IllegalStateException.class)
-  public void testShouldComponentBeDiscardedNoMinAndMaxWeight_shouldThrowAnException() throws Exception {
+  public void testShouldComponentBeDiscardedForWeightNoMinAndMaxWeight_shouldThrowAnException() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -165,11 +165,11 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    componentStatusCalculator.shouldComponentBeDiscarded(component);
+    componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
   }
 
   @Test(expected=java.lang.IllegalStateException.class)
-  public void testShouldComponentBeDiscardedNoMinWeight_shouldThrowAnException() throws Exception {
+  public void testShouldComponentBeDiscardedForWeightNoMinWeight_shouldThrowAnException() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -180,11 +180,11 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    componentStatusCalculator.shouldComponentBeDiscarded(component);
+    componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
   }
   
   @Test(expected=java.lang.IllegalStateException.class)
-  public void testShouldComponentBeDiscardedNoMaxWeight_shouldThrowAnException() throws Exception {
+  public void testShouldComponentBeDiscardedForWeightNoMaxWeight_shouldThrowAnException() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -195,7 +195,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    componentStatusCalculator.shouldComponentBeDiscarded(component);
+    componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
   }
 
   @Test

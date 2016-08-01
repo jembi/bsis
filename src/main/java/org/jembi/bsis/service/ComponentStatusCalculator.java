@@ -23,7 +23,7 @@ public class ComponentStatusCalculator {
   @Autowired
   private DonationRepository donationRepository;
 
-  public boolean shouldComponentsBeDiscarded(List<BloodTestResult> bloodTestResults) {
+  public boolean shouldComponentsBeDiscardedForTestResults(List<BloodTestResult> bloodTestResults) {
 
     for (BloodTestResult bloodTestResult : bloodTestResults) {
 
@@ -53,7 +53,7 @@ public class ComponentStatusCalculator {
    * @param component
    * @return
    */
-  public boolean shouldComponentBeDiscarded(Component component) {
+  public boolean shouldComponentBeDiscardedForWeight(Component component) {
     if (component.getParentComponent() == null && component.getWeight() != null) {
       PackType packType = component.getDonation().getPackType();
       if (packType.getMinWeight() == null || packType.getMaxWeight() == null) {
