@@ -14,7 +14,6 @@ import org.jembi.bsis.model.donordeferral.DeferralReasonType;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.model.donordeferral.DurationType;
 import org.jembi.bsis.repository.DonorDeferralRepository;
-import org.jembi.bsis.service.DeferralConstraintChecker;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,63 +29,6 @@ public class DeferralConstraintCheckerTests {
 
   @Mock
   private DonorDeferralRepository deferralRepository;
-
-  @Test
-  public void testCanDeleteDonorDeferral() {
-    // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
-    DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
-        .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
-    DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralDate(new Date())
-        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
-
-    // set up mocks
-    when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
-
-    // run test
-    boolean result = deferralConstraintChecker.canDeleteDonorDeferral(1l);
-
-    // do asserts
-    Assert.assertTrue("Can delete an automatic deferral", result);
-  }
-
-  @Test
-  public void testCanDeleteDonorDeferralTemporary() {
-    // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
-    DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
-        .withType(DeferralReasonType.NORMAL).build();
-    DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralDate(new Date())
-        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
-
-    // set up mocks
-    when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
-
-    // run test
-    boolean result = deferralConstraintChecker.canDeleteDonorDeferral(1l);
-
-    // do asserts
-    Assert.assertTrue("Can delete this temporary deferral", result);
-  }
-
-  @Test
-  public void testCanDeleteDonorDeferralPermanent() {
-    // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
-    DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
-        .withType(DeferralReasonType.NORMAL).build();
-    DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralDate(new Date())
-        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
-
-    // set up mocks
-    when(deferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
-
-    // run test
-    boolean result = deferralConstraintChecker.canDeleteDonorDeferral(1l);
-
-    // do asserts
-    Assert.assertTrue("Can delete this permanent deferral", result);
-  }
 
   @Test
   public void testCanEditDonorDeferral() {

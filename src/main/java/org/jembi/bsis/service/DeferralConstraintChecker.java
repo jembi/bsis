@@ -29,11 +29,6 @@ public class DeferralConstraintChecker {
     return true;
   }
 
-  public boolean canDeleteDonorDeferral(long donorDeferralId) throws NoResultException {
-    // note: supervisors are able to delete all deferrals (permission VOID_DEFERRAL)
-    return true;
-  }
-
   public boolean canEndDonorDeferral(long donorDeferralId) throws NoResultException {
     DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
 
