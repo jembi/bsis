@@ -29,17 +29,6 @@ public class DeferralConstraintChecker {
     return true;
   }
 
-  public boolean canDeleteDonorDeferral(long donorDeferralId) throws NoResultException {
-    DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
-
-    if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {
-      // not possible to delete and automatic deferral
-      return false;
-    }
-
-    return true;
-  }
-
   public boolean canEndDonorDeferral(long donorDeferralId) throws NoResultException {
     DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
 
