@@ -1,6 +1,6 @@
 package org.jembi.bsis.model.testbatch;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,7 +47,7 @@ public class TestBatch extends BaseModificationTrackerEntity {
   private TestBatchStatus status;
 
   @OneToMany(mappedBy = "testBatch", fetch = FetchType.EAGER)
-  private List<DonationBatch> donationBatches;
+  private Set<DonationBatch> donationBatches;
 
   @ManyToOne(optional = false)
   private Location location;
@@ -93,11 +93,11 @@ public class TestBatch extends BaseModificationTrackerEntity {
     this.status = status;
   }
 
-  public List<DonationBatch> getDonationBatches() {
+  public Set<DonationBatch> getDonationBatches() {
     return donationBatches;
   }
 
-  public void setDonationBatches(List<DonationBatch> donationBatches) {
+  public void setDonationBatches(Set<DonationBatch> donationBatches) {
     this.donationBatches = donationBatches;
   }
 

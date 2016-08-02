@@ -9,9 +9,9 @@ import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -66,7 +66,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.OPEN)
-        .withDonationBatches(Arrays.asList(aDonationBatch().withDonation(donation).build()))
+        .withDonationBatches(new HashSet<>(Arrays.asList(aDonationBatch().withDonation(donation).build())))
         .build();
 
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
@@ -179,7 +179,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatches(Collections.<DonationBatch>emptyList())
+        .withDonationBatches(Collections.<DonationBatch>emptySet())
         .build();
 
     boolean result = testBatchConstraintChecker.canCloseTestBatch(testBatch);
@@ -311,7 +311,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatches(new ArrayList<DonationBatch>())
+        .withDonationBatches(new HashSet<DonationBatch>())
         .build();
 
     when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
