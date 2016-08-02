@@ -164,5 +164,48 @@
 	    	<where>id = 13</where>
 	    </update>
 	</changeSet>
+	
+	<changeSet id="20160727-0847" author="danfuterman">
+		<comment>BSIS-1357 - Remove Add, Edit and Void permissions from Donor Communications role</comment>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 1 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 3 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 4 and roles_id = 5</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 5 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 7 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 8 and roles_id = 5</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 14 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 16 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 17 and roles_id = 5</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 69 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 71 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 72 and roles_id = 5</where>
+	  	</delete>
+	</changeSet>
 		
 </databaseChangeLog>
