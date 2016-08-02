@@ -207,5 +207,27 @@
 	  		<where>permissions_id = 72 and roles_id = 5</where>
 	  	</delete>
 	</changeSet>
+	
+	<changeSet id="20160729-1250" author="danfuterman">
+		<comment>BSIS-1435 - Remove 'Manage Locations' permission from donor clinic roles</comment>
+		<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 3</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 4</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 6</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 7</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 8</where>
+	  	</delete>
+	</changeSet>
 		
 </databaseChangeLog>
