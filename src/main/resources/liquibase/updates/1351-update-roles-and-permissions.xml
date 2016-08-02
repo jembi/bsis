@@ -84,5 +84,48 @@
 	  		<where>permissions_id = 31 and roles_id = 15</where>
 	  	</delete>
 	</changeSet>
+	
+	<changeSet id="20160726-0704" author="danfuterman">
+		<comment>BSIS-1354 - Remove Component-related permissions from Testing roles</comment>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 21 and roles_id = 11</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 33 and roles_id = 11</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 62 and roles_id = 11</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 21 and roles_id = 12</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 33 and roles_id = 12</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 62 and roles_id = 12</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 21 and roles_id = 13</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 33 and roles_id = 13</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 62 and roles_id = 13</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 21 and roles_id = 14</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 33 and roles_id = 14</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 62 and roles_id = 14</where>
+	  	</delete>
+	</changeSet>
 		
 </databaseChangeLog>
