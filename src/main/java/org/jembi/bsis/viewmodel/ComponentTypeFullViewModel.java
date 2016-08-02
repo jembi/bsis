@@ -5,24 +5,15 @@ import java.util.List;
 
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
-import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 
-public class ComponentTypeFullViewModel extends ComponentTypeViewModel {
+public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
 
   public ComponentTypeFullViewModel(ComponentType componentType) {
     super(componentType);
   }
 
-  public boolean isHasBloodGroup() {
+  public Boolean isHasBloodGroup() {
     return componentType.getHasBloodGroup();
-  }
-
-  public Integer getExpiresAfter() {
-    return componentType.getExpiresAfter();
-  }
-
-  public ComponentTypeTimeUnits getExpiresAfterUnits() {
-    return componentType.getExpiresAfterUnits();
   }
 
   public Integer getLowStorageTemperature() {
@@ -37,17 +28,26 @@ public class ComponentTypeFullViewModel extends ComponentTypeViewModel {
     return componentType.getPreparationInfo();
   }
 
+  public String getTransportInfo() {
+    return componentType.getTransportInfo();
+  }
+
+  public String getStorageInfo() {
+    return componentType.getStorageInfo();
+  }
+
   public List<ComponentTypeCombinationViewModel> getProducedComponentTypeCombinations() {
     return getComponentTypeCombinationViewModels(componentType.getProducedComponentTypeCombinations());
   }
 
-  private List<ComponentTypeCombinationViewModel> getComponentTypeCombinationViewModels(
-      List<ComponentTypeCombination> componentTypeCombinations) {
+  private List<ComponentTypeCombinationViewModel> getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations) {
 
-    List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels =
-        new ArrayList<ComponentTypeCombinationViewModel>();
-    for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations)
-      componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
+    List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels = new ArrayList<ComponentTypeCombinationViewModel>();
+    if (componentTypeCombinations != null) {
+      for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations) {
+        componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
+      }
+    }
 
     return componentTypeCombinationViewModels;
   }

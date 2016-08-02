@@ -25,7 +25,9 @@ import org.jembi.bsis.repository.LocationNamedQueryConstants;
   @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_USAGE_SITES,
       query = LocationNamedQueryConstants.QUERY_FIND_USAGE_SITES),
   @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_DISTRIBUTION_SITES,
-      query = LocationNamedQueryConstants.QUERY_FIND_DISTRIBUTION_SITES)
+      query = LocationNamedQueryConstants.QUERY_FIND_DISTRIBUTION_SITES),
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_TESTING_SITES,
+      query = LocationNamedQueryConstants.QUERY_FIND_TESTING_SITES)
 })
 @Entity
 @Audited

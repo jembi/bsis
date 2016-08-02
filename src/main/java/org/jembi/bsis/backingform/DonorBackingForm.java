@@ -263,13 +263,8 @@ public class DonorBackingForm {
       donor.setVenue(null);
     } else {
       Location l = new Location();
-      try {
-        l.setId(venue.getId());
-        donor.setVenue(l);
-      } catch (NumberFormatException ex) {
-        ex.printStackTrace();
-        donor.setVenue(null);
-      }
+      l.setId(venue.getId());
+      donor.setVenue(l);
     }
   }
 
@@ -294,44 +289,32 @@ public class DonorBackingForm {
     }
   }
 
-  public String getDateOfFirstDonation() {
-    return CustomDateFormatter.getDateString(donor.getDateOfFirstDonation());
+  public Date getDateOfFirstDonation() {
+    return donor.getDateOfFirstDonation();
   }
 
-  public void setDateOfFirstDonation(String dateOfFirstDonation) {
-    try {
-      donor.setDateOfFirstDonation(CustomDateFormatter.getDateFromString(dateOfFirstDonation));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      donor.setDateOfFirstDonation(null);
-    }
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setDateOfFirstDonation(Date dateOfFirstDonation) {
+    donor.setDateOfFirstDonation(dateOfFirstDonation);
   }
 
-  public String getDateOfLastDonation() {
-    return CustomDateFormatter.getDateString(donor.getDateOfLastDonation());
+  public Date getDateOfLastDonation() {
+    return donor.getDateOfLastDonation();
   }
 
-  public void setDateOfLastDonation(String dateOfLastDonation) {
-    try {
-      donor.setDateOfLastDonation(CustomDateFormatter.getDateFromString(dateOfLastDonation));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      donor.setDateOfLastDonation(null);
-    }
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setDateOfLastDonation(Date dateOfLastDonation) {
+    donor.setDateOfLastDonation(dateOfLastDonation);
   }
 
-  public String getDueToDonate() {
-    return CustomDateFormatter.getDateString(donor.getDueToDonate());
+  public Date getDueToDonate() {
+    return donor.getDueToDonate();
   }
 
 
-  public void setDueToDonate(String dueToDonate) {
-    try {
-      donor.setDueToDonate(CustomDateFormatter.getDateFromString(dueToDonate));
-    } catch (ParseException ex) {
-      ex.printStackTrace();
-      donor.setDueToDonate(null);
-    }
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public void setDueToDonate(Date dueToDonate) {
+    donor.setDueToDonate(dueToDonate);
   }
 
   public String getBloodAbo() {

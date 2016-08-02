@@ -39,7 +39,7 @@ public class OrderFormFactory {
   private ComponentFactory componentFactory;
 
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   @Autowired
   private OrderFormConstraintChecker orderFormConstraintChecker;
@@ -75,7 +75,7 @@ public class OrderFormFactory {
     OrderFormFullViewModel viewModel = new OrderFormFullViewModel();
     populateBasicViewModel(entity, viewModel);
     viewModel.setItems(orderFormItemFactory.createViewModels(entity.getItems()));
-    viewModel.setComponents(componentFactory.createComponentViewModels(entity.getComponents()));
+    viewModel.setComponents(componentFactory.createComponentFullViewModels(entity.getComponents()));
 
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDispatch", orderFormConstraintChecker.canDispatch(entity));
@@ -103,8 +103,8 @@ public class OrderFormFactory {
   
   private void populateBasicViewModel(OrderForm entity, OrderFormViewModel viewModel) {
     viewModel.setId(entity.getId());
-    viewModel.setDispatchedFrom(locationViewModelFactory.createLocationViewModel(entity.getDispatchedFrom()));
-    viewModel.setDispatchedTo(locationViewModelFactory.createLocationViewModel(entity.getDispatchedTo()));
+    viewModel.setDispatchedFrom(locationFactory.createFullViewModel(entity.getDispatchedFrom()));
+    viewModel.setDispatchedTo(locationFactory.createFullViewModel(entity.getDispatchedTo()));
     viewModel.setOrderDate(entity.getOrderDate());
     viewModel.setStatus(entity.getStatus());
     viewModel.setType(entity.getType());

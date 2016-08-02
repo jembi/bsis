@@ -146,7 +146,7 @@ public class DonationCRUDService {
     donation.setBloodPressureDiastolic(donationBackingForm.getBloodPressureDiastolic());
     donation.setDonorWeight(donationBackingForm.getDonorWeight());
     donation.setNotes(donationBackingForm.getNotes());
-    donation.setPackType(donationBackingForm.getPackType());
+    donation.setPackType(packType);
     donation.setBleedStartTime(donationBackingForm.getBleedStartTime());
     donation.setBleedEndTime(donationBackingForm.getBleedEndTime());
 

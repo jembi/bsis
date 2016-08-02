@@ -8,7 +8,7 @@ public class OrderFormFullViewModel extends OrderFormViewModel {
   
   private List<OrderFormItemViewModel> items = new ArrayList<>();
 
-  private List<ComponentViewModel> components = new ArrayList<>();
+  private List<ComponentFullViewModel> components = new ArrayList<>();
 
   private Map<String, Boolean> permissions;
 
@@ -20,11 +20,11 @@ public class OrderFormFullViewModel extends OrderFormViewModel {
     this.items = items;
   }
 
-  public List<ComponentViewModel> getComponents() {
+  public List<ComponentFullViewModel> getComponents() {
     return components;
   }
 
-  public void setComponents(List<ComponentViewModel> components) {
+  public void setComponents(List<ComponentFullViewModel> components) {
     this.components = components;
   }
 

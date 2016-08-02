@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
@@ -17,6 +18,7 @@ import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidato
 import org.jembi.bsis.controllerservice.ComponentControllerService;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.utils.PermissionConstants;
+import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -108,13 +110,23 @@ public class ComponentController {
       @RequestParam(value = "componentNumber", required = false, defaultValue = "") String componentNumber,
       @RequestParam(value = "donationIdentificationNumber", required = false, defaultValue = "") String donationIdentificationNumber,
       @RequestParam(value = "componentTypes", required = false, defaultValue = "") List<Long> componentTypeIds,
-      @RequestParam(value = "status", required = false) List<ComponentStatus> statuses,
+      @RequestParam(value = "status", required = false) ComponentStatus status,
       @RequestParam(value = "donationDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateFrom,
       @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("components", componentControllerService.findAnyComponent(donationIdentificationNumber, 
-        componentTypeIds, statuses, donationDateFrom, donationDateTo));
+    List<ComponentViewModel> components;
+    
+    if (StringUtils.isBlank(donationIdentificationNumber)) {
+      components = componentControllerService.findAnyComponent(componentTypeIds, status, donationDateFrom, donationDateTo);
+    } else if (status != null) {
+      components = componentControllerService.findComponentsByDonationIdentificationNumberAndStatus(
+          donationIdentificationNumber, status);
+    } else {
+      components = componentControllerService.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    }
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("components", components);
     return map;
   }
 
@@ -124,7 +136,7 @@ public class ComponentController {
       @PathVariable String donationNumber) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("components", componentControllerService.findComponentsByDonationIdentificationNumber(donationNumber));
+    map.put("components", componentControllerService.findManagementComponentsByDonationIdentificationNumber(donationNumber));
     return map;
   }
 

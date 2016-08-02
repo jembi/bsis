@@ -13,6 +13,7 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
   private boolean distributionSite;
   private boolean deleted;
   private String notes;
+  private boolean testingSite;
 
   public LocationBackingFormBuilder withId(long id) {
     this.id = id;
@@ -59,6 +60,11 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
     return this;
   }
 
+  public LocationBackingFormBuilder thatIsTestingSite() {
+    testingSite = true;
+    return this;
+  }
+
   @Override
   public LocationBackingForm build() {
     LocationBackingForm location = new LocationBackingForm();
@@ -71,6 +77,7 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
     location.setIsMobileSite(mobileSite);
     location.setIsDistributionSite(distributionSite);
     location.setIsDeleted(deleted);
+    location.setIsTestingSite(testingSite);
     return location;
   }
 
@@ -92,6 +99,10 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
 
   public static LocationBackingFormBuilder aUsageSiteBackingForm() {
     return new LocationBackingFormBuilder().thatIsUsageSite();
+  }
+
+  public static LocationBackingFormBuilder aTestingSiteBackingForm() {
+    return new LocationBackingFormBuilder().thatIsTestingSite();
   }
 
 }

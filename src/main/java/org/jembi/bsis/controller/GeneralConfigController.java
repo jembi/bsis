@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.GeneralConfigBackingForm;
 import org.jembi.bsis.backingform.validator.GeneralConfigBackingFormValidator;
 import org.jembi.bsis.model.admin.GeneralConfig;
-import org.jembi.bsis.repository.DataTypeRepository;
 import org.jembi.bsis.repository.GeneralConfigRepository;
 import org.jembi.bsis.utils.LoggerUtil;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -27,16 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/configurations")
 public class GeneralConfigController {
 
   @Autowired
   private GeneralConfigRepository configRepository;
-
-  @Autowired
-  private DataTypeRepository dataTypeRepository;
 
   @Autowired
   private GeneralConfigBackingFormValidator generalConfigBackingFormValidator;

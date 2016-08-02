@@ -110,9 +110,9 @@ public class DonationSummaryViewModel {
    *
    * @return the venue
    */
-  public LocationViewModel getVenue() {
+  public LocationFullViewModel getVenue() {
     if (includeVenueInfo) {
-      return new LocationViewModel(donation.getVenue());
+      return new LocationFullViewModel(donation.getVenue());
     } else {
       return null;
     }

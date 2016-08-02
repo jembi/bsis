@@ -4,15 +4,15 @@ import java.util.Date;
 
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
-import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormViewModel;
 
 public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewModel> {
 
   private Long id;
   private Date orderDate;
-  private LocationViewModel dispatchedFrom;
-  private LocationViewModel dispatchedTo;
+  private LocationFullViewModel dispatchedFrom;
+  private LocationFullViewModel dispatchedTo;
   private OrderStatus status = OrderStatus.CREATED;
   private OrderType type = OrderType.ISSUE;
 
@@ -26,12 +26,12 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
     return this;
   }
 
-  public OrderFormViewModelBuilder withDispatchedFrom(LocationViewModel dispatchedFrom) {
+  public OrderFormViewModelBuilder withDispatchedFrom(LocationFullViewModel dispatchedFrom) {
     this.dispatchedFrom = dispatchedFrom;
     return this;
   }
 
-  public OrderFormViewModelBuilder withDispatchedTo(LocationViewModel dispatchedTo) {
+  public OrderFormViewModelBuilder withDispatchedTo(LocationFullViewModel dispatchedTo) {
     this.dispatchedTo = dispatchedTo;
     return this;
   }

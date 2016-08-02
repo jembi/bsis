@@ -4,6 +4,8 @@
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
     <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
+    <Location isTestingSite="1" isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="false"
+              isMobileSite="false" isUsageSite="false" name="Testing" notes=""/>
     <Address id="1"/>
     <Address id="2"/>
     <Address id="3"/>
@@ -53,7 +55,7 @@
            createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
            preferredLanguage_id="1" title="Mr" addressId="5" contactId="5"
            dueToDonate="2015-11-09"/>
-    <TestBatch id="1" batchNumber="000000" isDeleted="false"
+    <TestBatch id="1" batchNumber="000000" isDeleted="false" location_id="2"
                createdDate="2015-08-11 05:44:40.0" lastUpdated="2015-08-11 05:44:40.0"
                status="RELEASED" createdBy_id="1" lastUpdatedBy_id="1"/>
     <DonationBatch id="1" batchNumber="000000" isDeleted="false"
@@ -66,15 +68,15 @@
                collectionDate="2015-08-11 09:06:27.0" deliveryDate="2015-08-11 09:06:27.0"
                createdDate="2015-08-11 09:06:27.0" createdBy_id="1" 
                lastUpdated="2015-08-11 09:06:27.0" lastUpdatedBy_id="1"/>
-    <ComponentType id="1" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
                    componentTypeCode="0011"/>
-    <ComponentType id="14" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="14" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - Paediatric - CPDA"
                    componentTypeCode="2101"/>
-    <ComponentType id="6" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="6" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood - CPDA" componentTypeCode="1001"
                    pediComponentType_id="14"/>

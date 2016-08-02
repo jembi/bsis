@@ -47,8 +47,8 @@ public class ComponentBatchViewModel {
     this.deliveryDate = deliveryDate;
   }
 
-  public LocationViewModel getLocation() {
-    return new LocationViewModel(location);
+  public LocationFullViewModel getLocation() {
+    return new LocationFullViewModel(location);
   }
 
   public void setLocation(Location location) {

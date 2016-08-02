@@ -7,9 +7,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 public class CustomDateFormatter {
+  
+  private static final Logger LOGGER = Logger.getLogger(CustomDateFormatter.class);
 
   private static String datePattern = "yyyy-MM-dd";
   private static String dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
@@ -53,7 +56,7 @@ public class CustomDateFormatter {
         dateFormat.parse(dateString);
         valid = true;
       } catch (ParseException ex) {
-        ex.printStackTrace();
+        LOGGER.error("Could not convert '" + dateString + "' to a date using format '" + dateFormat + "'", ex);
         valid = false;
       }
     }
@@ -69,7 +72,7 @@ public class CustomDateFormatter {
         dateTimeFormat.parse(dateTimeString);
         valid = true;
       } catch (ParseException ex) {
-        ex.printStackTrace();
+        LOGGER.error("Could not convert '" + dateTimeString + "' to a date using format '" + dateTimeFormat + "'", ex);
         valid = false;
       }
     }

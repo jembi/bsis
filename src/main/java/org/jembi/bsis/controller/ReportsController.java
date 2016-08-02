@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.reporting.Report;
@@ -17,6 +17,7 @@ import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TipsRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.service.ReportGeneratorService;
+import org.jembi.bsis.service.TtiPrevalenceReportGeneratorService;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,11 @@ public class ReportsController {
   private TipsRepository tipsRepository;
   
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
   
+  @Autowired
+  private TtiPrevalenceReportGeneratorService ttiPrevalenceReportGeneratorService;
+
   @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
   public Report findStockLevels(@RequestParam(value = "location", required = false) Long locationId,
@@ -65,7 +69,7 @@ public class ReportsController {
     List<Location> distributionSites = locationRepository.getDistributionSites();
 
     Map<String, Object> map = new HashMap<>();
-    map.put("distributionSites", locationViewModelFactory.createLocationViewModels(distributionSites));
+    map.put("distributionSites", locationFactory.createFullViewModels(distributionSites));
     return map;
   }
 
@@ -218,7 +222,7 @@ public class ReportsController {
   public Report getTTIPrevalenceReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-    return reportGeneratorService.generateTTIPrevalenceReport(startDate, endDate);
+    return ttiPrevalenceReportGeneratorService.generateTTIPrevalenceReport(startDate, endDate);
   }
 
 }

@@ -20,6 +20,7 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.service.ComponentCRUDService;
+import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
@@ -52,27 +53,38 @@ public class ComponentControllerService {
   @Autowired
   private ComponentStatusChangeReasonFactory componentStatusChangeReasonFactory;
 
-  public ComponentViewModel findComponentById(Long id) {
+  public ComponentFullViewModel findComponentById(Long id) {
     Component component = componentRepository.findComponentById(id);
-    ComponentViewModel componentViewModel = componentFactory.createComponentViewModel(component);
-    return componentViewModel;
+    ComponentFullViewModel componentFullViewModel = componentFactory.createComponentFullViewModel(component);
+    return componentFullViewModel;
   }
   
-  public ComponentViewModel findComponentByCodeAndDIN(String componentCode, String donationIdentificationNumber) {
+  public ComponentFullViewModel findComponentByCodeAndDIN(String componentCode, String donationIdentificationNumber) {
     Component component = componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
-    return componentFactory.createComponentViewModel(component);
+    return componentFactory.createComponentFullViewModel(component);
   }
   
-  public List<ComponentManagementViewModel> findComponentsByDonationIdentificationNumber(String donationNumber) {
+  public List<ComponentManagementViewModel> findManagementComponentsByDonationIdentificationNumber(String donationNumber) {
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(donationNumber);
     List<ComponentManagementViewModel> componentViewModels = componentFactory.createManagementViewModels(results);
     return componentViewModels;
   }
+  
+  public List<ComponentViewModel> findComponentsByDonationIdentificationNumber(String donationNumber) {
+    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(donationNumber);
+    return componentFactory.createComponentViewModels(results);
+  }
+  
+  public List<ComponentViewModel> findComponentsByDonationIdentificationNumberAndStatus(
+      String donationIdentificationNumber, ComponentStatus status) {
+    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumberAndStatus(
+        donationIdentificationNumber, status);
+    return componentFactory.createComponentViewModels(results);
+  }
 
-  public List<ComponentViewModel> findAnyComponent(String donationIdentificationNumber, List<Long> componentTypeIds,
-      List<ComponentStatus> statusStringToComponentStatus, Date dateFrom, Date dateTo) {
-    List<Component> results = componentRepository.findAnyComponent(donationIdentificationNumber, componentTypeIds,
-        statusStringToComponentStatus, dateFrom, dateTo);
+  public List<ComponentViewModel> findAnyComponent(List<Long> componentTypeIds,
+      ComponentStatus status, Date dateFrom, Date dateTo) {
+    List<Component> results = componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo);
     List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
     return components;
   }

@@ -25,8 +25,7 @@ import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.constraintvalidator.ComponentTypeExists;
-import org.jembi.bsis.constraintvalidator.DonationExists;
+import org.jembi.bsis.constraintvalidator.ComponentStatusIsConsistent;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
@@ -54,6 +53,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
         query = InventoryNamedQueryConstants.QUERY_FIND_STOCK_LEVELS),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN,
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN_AND_STATUS,
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN_AND_STATUS),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN,
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENT_BY_CODE_AND_DIN),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN_IN_STOCK,
@@ -65,19 +66,15 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 })
 @Entity
 @Audited
+@ComponentStatusIsConsistent
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Component extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
-  // A component may not have a corresponding donation. Some components may be
-  // imported from another location. In such a case the corresponding donation
-  // field is allowed to be null.
-  @DonationExists
   @ManyToOne(optional = true, fetch = FetchType.EAGER)
   private Donation donation;
 
-  @ComponentTypeExists
   @ManyToOne
   private ComponentType componentType;
 

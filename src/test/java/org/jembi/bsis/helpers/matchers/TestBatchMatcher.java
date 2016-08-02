@@ -19,7 +19,9 @@ public class TestBatchMatcher extends TypeSafeMatcher<TestBatch> {
     description.appendText("A test batch with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nStatus: ").appendValue(expected.getStatus())
-        .appendText("\nCreated date: ").appendValue(expected.getCreatedDate());
+        .appendText("\nCreated date: ").appendValue(expected.getCreatedDate())
+        .appendText("\nDonation batches: ").appendValue(expected.getDonationBatches())
+        .appendText("\nLocation: ").appendValue(expected.getLocation());
   }
 
   @Override
@@ -47,7 +49,9 @@ public class TestBatchMatcher extends TypeSafeMatcher<TestBatch> {
   public boolean matchesSafely(TestBatch actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
         actual.getStatus() == expected.getStatus() &&
-        Objects.equals(actual.getCreatedDate(), expected.getCreatedDate());
+        Objects.equals(actual.getCreatedDate(), expected.getCreatedDate()) &&
+        Objects.equals(actual.getDonationBatches(), expected.getDonationBatches()) &&
+        Objects.equals(actual.getLocation(), expected.getLocation());
   }
 
   public static TestBatchMatcher hasSameStateAsTestBatch(TestBatch expected) {

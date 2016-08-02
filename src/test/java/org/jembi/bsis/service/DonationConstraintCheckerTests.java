@@ -205,6 +205,23 @@ public class DonationConstraintCheckerTests {
 
     assertThat(result, is(false));
   }
+  
+  @Test
+  public void testDonationHasDiscrepanciesInDeterminateBloodTypingStatus_shouldReturnFalse() {
+    Donation donation = aDonation()
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withPackType(aPackType().build())
+        .build();
+
+    when(bloodTestsService.executeTests(donation))
+        .thenReturn(aBloodTestingRuleResult().build());
+
+    boolean result = donationConstraintChecker.donationHasDiscrepancies(donation);
+
+    assertThat(result, is(false));
+  }
 
   @Test
   public void testDonationHasDiscrepanciesWithMatchBloodTypingMatchStatus_shouldReturnFalse() {

@@ -89,29 +89,11 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testFindAnyComponentDIN() throws Exception {
-    List<Component> all = componentRepository.findAnyComponent("1111111", null, null, null, null);
-    Assert.assertNotNull("There is a Component with DIN 1111111", all);
-    Assert.assertFalse("There is a Component with DIN 1111111", all.isEmpty());
-    Assert.assertEquals("There should be 2 components", 2, all.size());
-  }
-
-  @Test
-  public void testFindAnyComponentDINAndStatus() throws Exception {
-    List<ComponentStatus> status = new ArrayList<ComponentStatus>();
-    status.add(ComponentStatus.QUARANTINED);
-    List<Component> all = componentRepository.findAnyComponent("1111111", null, status, null, null);
-    Assert.assertNotNull("There are matching components", all);
-    Assert.assertEquals("There should be 1 components", 1, all.size());
-  }
-
-  @Test
   public void testFindAnyComponentQuarantinedType1() throws Exception {
-    List<ComponentStatus> status = new ArrayList<ComponentStatus>();
-    status.add(ComponentStatus.QUARANTINED);
+    ComponentStatus status = ComponentStatus.QUARANTINED;
     List<Long> componentTypeIds = new ArrayList<Long>();
     componentTypeIds.add(1l);
-    List<Component> all = componentRepository.findAnyComponent(null, componentTypeIds, status, null, null);
+    List<Component> all = componentRepository.findAnyComponent(componentTypeIds, status, null, null);
     Assert.assertNotNull("There aren't matching components", all);
     Assert.assertTrue("There should be 0 components", all.isEmpty());
   }
@@ -120,7 +102,7 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testFindAnyComponentBetweenDates() throws Exception {
     Date start = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
     Date end = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-    List<Component> all = componentRepository.findAnyComponent(null, null, null, start, end);
+    List<Component> all = componentRepository.findAnyComponent(null, null, start, end);
     Assert.assertNotNull("There are matching components", all);
     Assert.assertEquals("There should be 7 components", 7, all.size());
   }

@@ -1,0 +1,18 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20160721-0907" author="bausmeier">
+    <comment>Add missing non-nullable constraints</comment>
+    <addNotNullConstraint tableName="ComponentType" columnName="componentTypeName" columnDataType="VARCHAR(50)" />
+    <addNotNullConstraint tableName="ComponentType" columnName="componentTypeCode" columnDataType="VARCHAR(30)" />
+    <addNotNullConstraint tableName="ComponentType" columnName="expiresAfter" columnDataType="INT(11)" />
+    <addNotNullConstraint tableName="ComponentType" columnName="expiresAfterUnits" columnDataType="VARCHAR(30)" />
+    <addNotNullConstraint tableName="ComponentType" columnName="isDeleted" columnDataType="TINYINT(1)" />
+    <addNotNullConstraint tableName="ComponentType" columnName="canBeIssued" columnDataType="TINYINT(1)" />
+    <comment>Ensure that component type code is unique</comment>
+    <addUniqueConstraint tableName="ComponentType" columnNames="componentTypeCode" />
+  </changeSet>
+
+</databaseChangeLog>

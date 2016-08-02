@@ -16,6 +16,7 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -44,7 +45,8 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
         .buildAndPersist(entityManager);
 
     Component componentExcludedByStatus = aComponent()
-        .withStatus(ComponentStatus.USED)
+        .withStatus(ComponentStatus.ISSUED)
+        .withInventoryStatus(InventoryStatus.REMOVED)
         .withDonation(aDonation().withDonor(donor).build())
         .buildAndPersist(entityManager);
 
@@ -65,7 +67,7 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
 
     assertThat(firstComponentToUpdate.getStatus(), is(newStatus));
     assertThat(secondComponentToUpdate.getStatus(), is(newStatus));
-    assertThat(componentExcludedByStatus.getStatus(), is(ComponentStatus.USED));
+    assertThat(componentExcludedByStatus.getStatus(), is(ComponentStatus.ISSUED));
     assertThat(componentExcludedByDonor.getStatus(), is(firstOldStatus));
   }
 
@@ -88,7 +90,8 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
         .buildAndPersist(entityManager);
 
     Component componentExcludedByStatus = aComponent()
-        .withStatus(ComponentStatus.USED)
+        .withStatus(ComponentStatus.ISSUED)
+        .withInventoryStatus(InventoryStatus.REMOVED)
         .withDonation(donation)
         .buildAndPersist(entityManager);
 
@@ -101,7 +104,7 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
 
     assertThat(firstComponentToUpdate.getStatus(), is(newStatus));
     assertThat(secondComponentToUpdate.getStatus(), is(newStatus));
-    assertThat(componentExcludedByStatus.getStatus(), is(ComponentStatus.USED));
+    assertThat(componentExcludedByStatus.getStatus(), is(ComponentStatus.ISSUED));
   }
   
   @Test
@@ -168,6 +171,51 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
     Assert.assertTrue("contains child1", children.contains(child1));
     Assert.assertTrue("contains child2", children.contains(child2));
 
+  }
+  
+  @Test
+  public void testFindComponentsByDonationIdentificationNumberAndStatus_shouldReturnCorrectComponents() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Donation donation = aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+    // Excluded by isDeleted
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(donation)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by status
+    aComponent()
+        .withStatus(ComponentStatus.EXPIRED)
+        .withDonation(donation)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by donation
+    aComponent()
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(aDonation().build())
+        .buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumberAndStatus(
+        donationIdentificationNumber, ComponentStatus.DISCARDED);
+    
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
   }
 
 }

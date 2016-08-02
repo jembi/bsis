@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class PackTypeRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Autowired
-  PackTypeRepository packTypeRepository;
+  private PackTypeRepository packTypeRepository;
+
+  @Autowired
+  private ComponentTypeRepository componentTypeRepository;
 
   @Override
   protected IDataSet getDataSet() throws Exception {
@@ -68,10 +71,12 @@ public class PackTypeRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testSavePackType() throws Exception {
+    ComponentType componentType = componentTypeRepository.getComponentTypeById(1l);
     PackType toBeSaved = new PackType();
     toBeSaved.setPackType("Junit");
     toBeSaved.setPeriodBetweenDonations(123);
     toBeSaved.setCountAsDonation(true);
+    toBeSaved.setComponentType(componentType);
 
     packTypeRepository.savePackType(toBeSaved);
 

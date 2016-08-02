@@ -10,12 +10,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.service.TestBatchCRUDService;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -47,6 +49,8 @@ public class TestBatch extends BaseModificationTrackerEntity {
   @OneToMany(mappedBy = "testBatch", fetch = FetchType.EAGER)
   private List<DonationBatch> donationBatches;
 
+  @ManyToOne(optional = false)
+  private Location location;
 
   public TestBatch() {
     super();
@@ -95,6 +99,14 @@ public class TestBatch extends BaseModificationTrackerEntity {
 
   public void setDonationBatches(List<DonationBatch> donationBatches) {
     this.donationBatches = donationBatches;
+  }
+
+  public Location getLocation() {
+    return location;
+  }
+
+  public void setLocation(Location location) {
+    this.location = location;
   }
 
 }

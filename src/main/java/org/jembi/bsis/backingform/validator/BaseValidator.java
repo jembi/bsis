@@ -43,7 +43,7 @@ public abstract class BaseValidator<T> implements Validator {
   @SuppressWarnings("unchecked")
   @Override
   public void validate(Object target, Errors errors) {
-    LOGGER.debug("Start validation for " + getFormName());
+    LOGGER.trace("Start validation for " + getFormName());
 
     if (target == null) {
       return;
@@ -52,7 +52,7 @@ public abstract class BaseValidator<T> implements Validator {
     T backingForm = (T) target;
     validateForm(backingForm, errors);
 
-    LOGGER.debug("End validator for " + getFormName() + " with errors " + errors);
+    LOGGER.trace("End validator for " + getFormName() + " with errors " + errors);
   }
 
   /**

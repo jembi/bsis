@@ -25,7 +25,7 @@ public class ReturnFormFactory {
   private LocationRepository locationRepository;
 
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   @Autowired
   private ComponentFactory componentFactory;
@@ -58,7 +58,7 @@ public class ReturnFormFactory {
   public ReturnFormFullViewModel createFullViewModel(ReturnForm entity) {
     ReturnFormFullViewModel viewModel = new ReturnFormFullViewModel();
     populateBasicViewModel(entity, viewModel);
-    viewModel.setComponents(componentFactory.createComponentViewModels(entity.getComponents()));
+    viewModel.setComponents(componentFactory.createComponentFullViewModels(entity.getComponents()));
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();
@@ -89,8 +89,8 @@ public class ReturnFormFactory {
 
   private void populateBasicViewModel(ReturnForm entity, ReturnFormViewModel viewModel) {
     viewModel.setId(entity.getId());
-    viewModel.setReturnedFrom(locationViewModelFactory.createLocationViewModel(entity.getReturnedFrom()));
-    viewModel.setReturnedTo(locationViewModelFactory.createLocationViewModel(entity.getReturnedTo()));
+    viewModel.setReturnedFrom(locationFactory.createFullViewModel(entity.getReturnedFrom()));
+    viewModel.setReturnedTo(locationFactory.createFullViewModel(entity.getReturnedTo()));
     viewModel.setReturnDate(entity.getReturnDate());
     viewModel.setStatus(entity.getStatus());
   }

@@ -12,11 +12,20 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class DataValue {
 
+  private String id;
   private Date startDate;
   private Date endDate;
   private Object value;
   private Location venue;
   private List<Cohort> cohorts;
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getStartDate() {
@@ -83,12 +92,13 @@ public class DataValue {
         Objects.equals(getEndDate(), other.getEndDate()) &&
         Objects.equals(getValue(), other.getValue()) &&
         Objects.equals(getVenue(), other.getVenue()) &&
-        Objects.equals(getCohorts(), other.getCohorts());
+        Objects.equals(getCohorts(), other.getCohorts()) &&
+        Objects.equals(getId(), other.getId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getStartDate(), getEndDate(), getValue(), getVenue(), getCohorts());
+    return Objects.hash(getId(), getStartDate(), getEndDate(), getValue(), getVenue(), getCohorts());
   }
 
 }

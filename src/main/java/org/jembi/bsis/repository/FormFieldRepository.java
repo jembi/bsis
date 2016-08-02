@@ -10,6 +10,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.log4j.Logger;
 import org.jembi.bsis.model.admin.FormField;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class FormFieldRepository {
+  
+  private static final Logger LOGGER = Logger.getLogger(FormFieldRepository.class);
+      
   @PersistenceContext
   private EntityManager em;
 
@@ -30,17 +34,6 @@ public class FormFieldRepository {
       String queryString = "SELECT f FROM FormField f WHERE f.id = :formFieldId";
       TypedQuery<FormField> query = em.createQuery(queryString, FormField.class);
       return query.setParameter("formFieldId", formFieldId).getSingleResult();
-    } catch (NoResultException ex) {
-      ex.printStackTrace();
-      return null;
-    }
-  }
-
-  public List<FormField> allFormFields() {
-    try {
-      String queryString = "SELECT f FROM FormField f";
-      TypedQuery<FormField> query = em.createQuery(queryString, FormField.class);
-      return query.getResultList();
     } catch (NoResultException ex) {
       ex.printStackTrace();
       return null;
@@ -66,7 +59,7 @@ public class FormFieldRepository {
       query.setParameter("fieldName", fieldName);
       return query.getSingleResult();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      LOGGER.warn("Could not find FormField for Form '" + formName + "' and field '" + fieldName + "'");
       return null;
     }
   }
@@ -78,7 +71,7 @@ public class FormFieldRepository {
       query.setParameter("formName", formName);
       return query.getResultList();
     } catch (NoResultException ex) {
-      ex.printStackTrace();
+      LOGGER.warn("Could not find FormFields for Form '" + formName + "'");
       return Arrays.asList(new FormField[0]);
     }
   }

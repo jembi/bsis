@@ -13,7 +13,7 @@ import org.jembi.bsis.backingform.ComponentBatchBackingForm;
 import org.jembi.bsis.backingform.validator.ComponentBatchBackingFormValidator;
 import org.jembi.bsis.factory.ComponentBatchViewModelFactory;
 import org.jembi.bsis.factory.DonationBatchViewModelFactory;
-import org.jembi.bsis.factory.LocationViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
@@ -64,7 +64,7 @@ public class ComponentBatchController {
   private DonationBatchViewModelFactory donationBatchViewModelFactory;
   
   @Autowired
-  private LocationViewModelFactory locationViewModelFactory;
+  private LocationFactory locationFactory;
 
   public ComponentBatchController() {
   }
@@ -86,7 +86,7 @@ public class ComponentBatchController {
     map.put("donationBatches", donationBatchViewModelFactory.createDonationBatchBasicViewModels(donationBatches));
     map.put("componentBatchFields", formFieldAccessorService.getFormFieldsForForm("ComponentBatch"));
     map.put("bloodTransportBoxFields", formFieldAccessorService.getFormFieldsForForm("BloodTransportBox"));
-    map.put("processingSites", locationViewModelFactory.createLocationViewModels(locations));
+    map.put("processingSites", locationFactory.createFullViewModels(locations));
 
     return map;
   }

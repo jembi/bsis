@@ -21,4 +21,6 @@
               isMobileSite="false" isUsageSite="false" name="Processing" notes=""/>
     <Location isTestingSite="0" isDistributionSite="1" isProcessingSite="0" id="9" isDeleted="false" isVenue="false"
               isMobileSite="false" isUsageSite="false" name="Distribution" notes=""/>
+    <Location isTestingSite="1" isDistributionSite="0" isProcessingSite="0" id="10" isDeleted="false" isVenue="false"
+              isMobileSite="false" isUsageSite="false" name="Testing" notes=""/>
 </dataset>
