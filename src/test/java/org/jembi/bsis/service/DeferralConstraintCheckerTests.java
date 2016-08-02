@@ -47,7 +47,7 @@ public class DeferralConstraintCheckerTests {
     boolean result = deferralConstraintChecker.canDeleteDonorDeferral(1l);
 
     // do asserts
-    Assert.assertFalse("Can not delete an automatic deferral", result);
+    Assert.assertTrue("Can delete an automatic deferral", result);
   }
 
   @Test

@@ -30,13 +30,7 @@ public class DeferralConstraintChecker {
   }
 
   public boolean canDeleteDonorDeferral(long donorDeferralId) throws NoResultException {
-    DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
-
-    if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {
-      // not possible to delete and automatic deferral
-      return false;
-    }
-
+    // note: supervisors are able to delete all deferrals (permission VOID_DEFERRAL)
     return true;
   }
 
