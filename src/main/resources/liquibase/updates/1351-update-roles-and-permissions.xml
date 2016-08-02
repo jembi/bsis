@@ -1,0 +1,71 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20160714-1307" author="danfuterman">
+
+		<comment>BSIS-1352 - Reassign existing users with Medical Officer and Data Entry Clerk roles</comment>
+		<update tableName="User_Role">
+	    	<column name="roles_id" value="2" type="BIGINT(20)"></column>
+	    	<where>roles_id = 8</where>
+	    </update>
+	    <update tableName="User_Role">
+	    	<column name="roles_id" value="2" type="BIGINT(20)"></column>
+	    	<where>roles_id = 8</where>
+	    </update>
+	
+		<comment>BSIS-1352 - Remove Medical Officer and Data Entry Clerk sample users</comment>
+		<delete tableName="User_Role_AUD">
+			<where>users_id = 7</where>
+		</delete>
+		<delete tableName="User_Role_AUD">
+			<where>users_id = 8</where>
+		</delete>
+		<delete tableName="User_Role">
+			<where>users_id = 7</where>
+		</delete>
+		<delete tableName="User_Role">
+			<where>users_id = 8</where>
+		</delete>
+		<delete tableName="User_AUD">
+			<where>id = 7</where>
+		</delete>
+		<delete tableName="User_AUD">
+			<where>id = 8</where>
+		</delete>
+		<delete tableName="User">
+			<where>id = 7</where>
+		</delete>
+		<delete tableName="User">
+			<where>id = 8</where>
+		</delete>
+		
+		<comment>BSIS-1352 - Remove Medical Officer and Data Entry Clerk roles</comment>
+		<delete tableName="Permission_Role_AUD">
+		  <where>roles_id = 7</where>
+		</delete>
+		<delete tableName="Permission_Role_AUD">
+		  <where>roles_id = 8</where>
+		</delete>
+		<delete tableName="Permission_Role">
+		  <where>roles_id = 7</where>
+		</delete>
+		<delete tableName="Permission_Role">
+		  <where>roles_id = 8</where>
+		</delete>
+		<delete tableName="Role_AUD">
+		  <where>id = 7</where>
+		</delete>
+		<delete tableName="Role_AUD">
+		  <where>id = 8</where>
+		</delete>
+		<delete tableName="Role">
+		  <where>id = 7</where>
+		</delete>
+		<delete tableName="Role">
+		  <where>id = 8</where>
+		</delete>
+	</changeSet>
+		
+</databaseChangeLog>
