@@ -344,9 +344,6 @@ public class Donor extends BaseModificationTrackerEntity {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
         .append("hashCode", Integer.toHexString(hashCode()))
         .append("id", getId())
-        .append("firstName", firstName)
-        .append("lastName", lastName)
-        .append("donorNumber", donorNumber)
         .build();
   }
 
