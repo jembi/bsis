@@ -5,7 +5,14 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestResultBuilder.aBloodTestResult;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aReturnReason;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.anUnsafeReason;
+import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
+import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aReleasedTestBatch;
+import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -13,15 +20,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
-import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
-import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
-import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aReleasedTestBatch;
-
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -43,7 +48,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   private DonationRepository donationRepository;
 
   @Test
-  public void testShouldComponentsBeDiscardedWithBloodTestNotFlaggedForDiscard_shouldReturnFalse() {
+  public void testShouldComponentsBeDiscardedForTestResultsWithBloodTestNotFlaggedForDiscard_shouldReturnFalse() {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
@@ -56,13 +61,13 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
             .build()
     );
 
-    boolean result = componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults);
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResults(bloodTestResults);
 
     assertThat(result, is(false));
   }
 
   @Test
-  public void testShouldComponentsBeDiscardedWithBloodTestFlaggedForDiscardWithNegativeResult_shouldReturnFalse() {
+  public void testShouldComponentsBeDiscardedForTestResultsWithBloodTestFlaggedForDiscardWithNegativeResult_shouldReturnFalse() {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
@@ -75,13 +80,13 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
             .build()
     );
 
-    boolean result = componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults);
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResults(bloodTestResults);
 
     assertThat(result, is(false));
   }
 
   @Test
-  public void testShouldComponentsBeDiscardedWithBloodTestFlaggedForDiscardWithPositiveResult_shouldReturnTrue() {
+  public void testShouldComponentsBeDiscardedForTestResultsWithBloodTestFlaggedForDiscardWithPositiveResult_shouldReturnTrue() {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
@@ -94,13 +99,13 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
             .build()
     );
 
-    boolean result = componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults);
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResults(bloodTestResults);
 
     assertThat(result, is(true));
   }
   
   @Test
-  public void testShouldComponentBeDiscardedLowWeight_shouldReturnTrue() throws Exception {
+  public void testShouldComponentBeDiscardedForWeightLowWeight_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -111,14 +116,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    boolean discarded = componentStatusCalculator.shouldComponentBeDiscarded(component);
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
     
     // verify
     assertThat("component should be discarded", discarded, is(true));
   }
   
   @Test
-  public void testShouldComponentBeDiscardedHighWeight_shouldReturnTrue() throws Exception {
+  public void testShouldComponentBeDiscardedForWeightHighWeight_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -129,14 +134,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    boolean discarded = componentStatusCalculator.shouldComponentBeDiscarded(component);
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
     
     // verify
     assertThat("component should be discarded", discarded, is(true));
   }
   
   @Test
-  public void testShouldComponentBeDiscarded_shouldReturnFalse() throws Exception {
+  public void testShouldComponentBeDiscardedForWeight_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -147,14 +152,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    boolean discarded = componentStatusCalculator.shouldComponentBeDiscarded(component);
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
     
     // verify
     assertThat("component shouldn't be discarded", discarded, is(false));
   }
   
   @Test(expected=java.lang.IllegalStateException.class)
-  public void testShouldComponentBeDiscardedNoMinAndMaxWeight_shouldThrowAnException() throws Exception {
+  public void testShouldComponentBeDiscardedForWeightNoMinAndMaxWeight_shouldThrowAnException() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -165,11 +170,11 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    componentStatusCalculator.shouldComponentBeDiscarded(component);
+    componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
   }
 
   @Test(expected=java.lang.IllegalStateException.class)
-  public void testShouldComponentBeDiscardedNoMinWeight_shouldThrowAnException() throws Exception {
+  public void testShouldComponentBeDiscardedForWeightNoMinWeight_shouldThrowAnException() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -180,11 +185,11 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    componentStatusCalculator.shouldComponentBeDiscarded(component);
+    componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
   }
   
   @Test(expected=java.lang.IllegalStateException.class)
-  public void testShouldComponentBeDiscardedNoMaxWeight_shouldThrowAnException() throws Exception {
+  public void testShouldComponentBeDiscardedForWeightNoMaxWeight_shouldThrowAnException() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
@@ -195,7 +200,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up mocks
     
     // SUT
-    componentStatusCalculator.shouldComponentBeDiscarded(component);
+    componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
   }
 
   @Test
@@ -252,6 +257,20 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     
     // verify
     assertThat("status is not changed", component.getStatus(), is(ComponentStatus.USED));
+  }
+  
+  @Test
+  public void testUpdateComponentStatusSplit_shouldNotChange() throws Exception {
+    // set up data
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.SPLIT).build();
+    
+    // set up mocks
+    
+    // SUT
+    componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is not changed", component.getStatus(), is(ComponentStatus.SPLIT));
   }
   
   @Test
@@ -678,6 +697,34 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   }
   
   @Test
+  public void testUpdateComponentWithIndeterminateTTI_shouldChangeStatusToUnsafe() throws Exception {
+    // set up data
+    long donationId = 1234;
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withTTIStatus(TTIStatus.INDETERMINATE)
+        .thatIsReleased()
+        .build();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withExpiresOn(new DateTime().plusDays(90).toDate())
+        .withDonation(donation)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(true));
+    assertThat("status is UNSAFE", component.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
   public void testUpdateComponentStatusQuarantinedBloodGroupingCompleteOldStatusTTIUnSafe_shouldNotChangeStatus() throws Exception {
     // set up data
     Long donationId = Long.valueOf(1234);
@@ -708,5 +755,105 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // verify
     assertThat("status is not changed", statusChanged, is(false));
     assertThat("status is still UNSAFE", component.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
+  public void testUpdateComponentStatusQuarantinedHasUnsafeComponentStatusChange_shouldChangeStatusToUnsafe() throws Exception {
+    // set up data
+    Long donationId = Long.valueOf(1234);
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .thatIsReleased()
+        .build();
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DAY_OF_YEAR, 90);
+    Date expiresOn = cal.getTime();
+    ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(new Date()).withStatusChangeReason(anUnsafeReason().build()).build();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withExpiresOn(expiresOn)
+        .withDonation(donation)
+        .withComponentStatusChange(statusChange)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(true));
+    assertThat("status is UNSAFE", component.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+  
+  @Test
+  public void testUpdateComponentStatusQuarantinedHasReturnedComponentStatusChange_shouldChangeStatusToAvailable() throws Exception {
+    // set up data
+    Long donationId = Long.valueOf(1234);
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .thatIsReleased()
+        .build();
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DAY_OF_YEAR, 90);
+    Date expiresOn = cal.getTime();
+    ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(new Date()).withStatusChangeReason(aReturnReason().build()).build();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withExpiresOn(expiresOn)
+        .withDonation(donation)
+        .withComponentStatusChange(statusChange)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(true));
+    assertThat("status is AVAILABLE", component.getStatus(), is(ComponentStatus.AVAILABLE));
+  }
+  
+  @Test
+  public void testUpdateComponentStatusQuarantinedHasDeletedUnsafeWeightComponentStatusChange_shouldChangeStatusToAvailable() throws Exception {
+    // set up data
+    Long donationId = Long.valueOf(1234);
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .thatIsReleased()
+        .build();
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DAY_OF_YEAR, 90);
+    Date expiresOn = cal.getTime();
+    ComponentStatusChangeReason statusChangeReason = anUnsafeReason().withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.INVALID_WEIGHT).build();
+    ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(new Date()).withStatusChangeReason(statusChangeReason).thatIsDeleted().build();
+    Component component = aComponent().withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withExpiresOn(expiresOn)
+        .withDonation(donation)
+        .withComponentStatusChange(statusChange)
+        .build();
+    
+    // set up mocks
+    when(donationRepository.findDonationById(donationId)).thenReturn(donation);
+    
+    // SUT
+    boolean statusChanged = componentStatusCalculator.updateComponentStatus(component);
+    
+    // verify
+    assertThat("status is changed", statusChanged, is(true));
+    assertThat("status is AVAILABLE", component.getStatus(), is(ComponentStatus.AVAILABLE));
   }
 }

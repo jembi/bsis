@@ -91,9 +91,6 @@ public class DonorDeferralCRUDService {
   }
 
   public void deleteDeferral(Long donorDeferralId) throws IllegalStateException, NoResultException {
-    if (!deferralConstraintChecker.canDeleteDonorDeferral(donorDeferralId)) {
-      throw new IllegalStateException("Cannot delete deferral with constraints");
-    }
     DonorDeferral donorDeferral = findDeferralById(donorDeferralId);
     if (donorDeferral == null) {
       throw new IllegalStateException("DonorDeferral with id " + donorDeferralId
@@ -115,7 +112,7 @@ public class DonorDeferralCRUDService {
   }
 
   public DonorDeferral endDeferral(Long donorDeferralId, String comment) {
-    if (!deferralConstraintChecker.canDeleteDonorDeferral(donorDeferralId)) {
+    if (!deferralConstraintChecker.canEndDonorDeferral(donorDeferralId)) {
       throw new IllegalStateException("Cannot end deferral with constraints");
     }
     DonorDeferral deferral = findDeferralById(donorDeferralId);

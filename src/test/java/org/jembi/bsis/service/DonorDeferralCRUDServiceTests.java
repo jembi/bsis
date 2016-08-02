@@ -171,7 +171,6 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
 
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
-    when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(true);
 
     // run tests
     donorDeferralCRUDService.deleteDeferral(1l);
@@ -181,23 +180,6 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
     Assert.assertEquals("Deferral was deleted by", loggedInUser.getUsername(), donorDeferral.getVoidedBy().getUsername());
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Assert.assertEquals("Deferral was deleted when", sdf.format(new Date()), sdf.format(donorDeferral.getVoidedDate()));
-  }
-
-  @Test(expected = java.lang.IllegalStateException.class)
-  public void testDeleteDeferralWithConstraints() throws Exception {
-    // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
-    DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
-        .withType(DeferralReasonType.NORMAL).build();
-    DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralDate(new Date())
-        .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferredUntil(new Date()).build();
-
-    // set up mocks
-    when(donorDeferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
-    when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(false);
-
-    // run tests
-    donorDeferralCRUDService.deleteDeferral(1l);
   }
 
   @Test
@@ -218,7 +200,6 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
 
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1l)).thenReturn(originalDonorDeferral);
-    when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(true);
     when(donorDeferralRepository.update(originalDonorDeferral)).thenReturn(updatedDonorDeferral);
 
     // run tests
@@ -239,8 +220,8 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
         .withDeferredDonor(deferredDonor).withDeferralReason(deferralReason).withDeferralReasonText("hello").withDeferredUntil(newDeferredUntil).build();
 
     // set up mocks
+    when(deferralConstraintChecker.canEndDonorDeferral(1L)).thenReturn(true);
     when(donorDeferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
-    when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(true);
     when(donorDeferralRepository.update(donorDeferral)).thenReturn(donorDeferral);
 
     // run tests
@@ -262,7 +243,6 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
 
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1l)).thenReturn(donorDeferral);
-    when(deferralConstraintChecker.canDeleteDonorDeferral(1L)).thenReturn(false);
     when(donorDeferralRepository.update(donorDeferral)).thenReturn(donorDeferral);
 
     // run tests
