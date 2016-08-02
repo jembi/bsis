@@ -15,31 +15,15 @@
 	    	<where>roles_id = 8</where>
 	    </update>
 	
-		<comment>BSIS-1352 - Remove Medical Officer and Data Entry Clerk sample users</comment>
-		<delete tableName="User_Role_AUD">
-			<where>users_id = 7</where>
-		</delete>
-		<delete tableName="User_Role_AUD">
-			<where>users_id = 8</where>
-		</delete>
-		<delete tableName="User_Role">
-			<where>users_id = 7</where>
-		</delete>
-		<delete tableName="User_Role">
-			<where>users_id = 8</where>
-		</delete>
-		<delete tableName="User_AUD">
+		<comment>BSIS-1352 - Void Medical Officer and Data Entry Clerk sample users</comment>
+		<update tableName="User">
+			<column name="isDeleted" value="1" type="TINYINT(1)"></column>
 			<where>id = 7</where>
-		</delete>
-		<delete tableName="User_AUD">
+		</update>
+		<update tableName="User">
+			<column name="isDeleted" value="1" type="TINYINT(1)"></column>
 			<where>id = 8</where>
-		</delete>
-		<delete tableName="User">
-			<where>id = 7</where>
-		</delete>
-		<delete tableName="User">
-			<where>id = 8</where>
-		</delete>
+		</update>
 		
 		<comment>BSIS-1352 - Remove Medical Officer and Data Entry Clerk roles</comment>
 		<delete tableName="Permission_Role_AUD">
