@@ -900,6 +900,70 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentRepository).update(argThat(hasSameStateAsComponent(updatedComponent)));
   }
   
+  @Test
+  public void testMarkDiscardedComponentAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus() {
+    testMarkComponentsAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus(ComponentStatus.DISCARDED);
+  }
+  
+  @Test
+  public void testMarkIssuedComponentAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus() {
+    testMarkComponentsAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus(ComponentStatus.ISSUED);
+  }
+  
+  @Test
+  public void testMarkUsedComponentAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus() {
+    testMarkComponentsAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus(ComponentStatus.USED);
+  }
+  
+  @Test
+  public void testMarkSplitComponentAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus() {
+    testMarkComponentsAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus(ComponentStatus.SPLIT);
+  }
+  
+  @Test
+  public void testMarkProcessedComponentAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus() {
+    testMarkComponentsAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus(ComponentStatus.PROCESSED);
+  }
+  
+  @Test
+  public void testMarkUnsafeComponentAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus() {
+    testMarkComponentsAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus(ComponentStatus.UNSAFE);
+  }
+
+  private void testMarkComponentsAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus(ComponentStatus status) {
+    Date date = new Date();
+    Donation donation = aDonation().build();
+    Location location = aLocation().build();
+    Component component = aComponent()
+        .withStatus(status)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    ComponentStatusChangeReason statusChangeReason = aComponentStatusChangeReason()
+        .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.UNSAFE)
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.UNSAFE_PARENT)
+        .build();
+    ComponentStatusChange statusChange = aComponentStatusChange()
+        .withStatusChangeReason(statusChangeReason)
+        .withStatusChangedOn(date)
+        .build();
+    Component updatedComponent = aComponent()
+        .withStatus(status)
+        .withDonation(donation)
+        .withLocation(location)
+        .withComponentStatusChange(statusChange)
+        .build();
+    
+    // Set up expectations
+    when(dateGeneratorService.generateDate()).thenReturn(date);
+
+    // Run test
+    componentCRUDService.markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+    
+    // Verify
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(updatedComponent)));
+  }
+  
   @SuppressWarnings("unchecked")
   @Test(expected = IllegalArgumentException.class)
   public void testMarkComponentsAsUnsafeWithNonExistingReason_shouldThrow() {

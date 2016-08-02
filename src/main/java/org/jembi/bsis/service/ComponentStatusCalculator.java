@@ -92,14 +92,10 @@ public class ComponentStatusCalculator {
    */
   public boolean updateComponentStatus(Component component) {
 
-    List<ComponentStatus> statusNotToBeChanged =
-        Arrays.asList(ComponentStatus.DISCARDED, ComponentStatus.ISSUED,
-            ComponentStatus.USED, ComponentStatus.SPLIT, ComponentStatus.PROCESSED, ComponentStatus.UNSAFE);
-
     ComponentStatus oldComponentStatus = component.getStatus();
 
-    // nothing to do if the component has any of these statuses
-    if (oldComponentStatus != null && statusNotToBeChanged.contains(oldComponentStatus)) {
+    // nothing to do if the component is already in a final state
+    if (ComponentStatus.isFinalStatus(oldComponentStatus)) {
       return false;
     }
 

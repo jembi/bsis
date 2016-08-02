@@ -316,8 +316,11 @@ public class ComponentCRUDService {
     statusChange.setStatusChangeReason(unsafeReason);
     component.addStatusChange(statusChange);
 
-    // Set component as UNSAFE
-    component.setStatus(ComponentStatus.UNSAFE);
+    // Check if the component is already in a final state
+    if (!ComponentStatus.isFinalStatus(component.getStatus())) {
+      // Set component as UNSAFE
+      component.setStatus(ComponentStatus.UNSAFE);
+    }
     return updateComponent(component);
 
   }
