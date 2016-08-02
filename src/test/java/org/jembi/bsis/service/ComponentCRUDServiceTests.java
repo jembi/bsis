@@ -643,23 +643,37 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateComponentWeight_shouldDiscardComponent() throws Exception {
     // set up data
-    Long componentId = Long.valueOf(1);
+    long componentId = 1L;
+    Donation donation = aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build();
     Component oldComponent = aComponent()
         .withId(componentId)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withDonation(donation)
+        .build();
+    Component unsafeComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withComponentStatusChange(aComponentStatusChange()
+            .withId(1L)
+            .withStatusChangeReason(aComponentStatusChangeReason().withId(27L).build())
+            .build())
+        .withDonation(donation)
         .build();
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
     when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(true);
-    when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(false);
-    when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
+    doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
+        argThat(hasSameStateAsComponent(oldComponent)), eq(ComponentStatusChangeReasonType.INVALID_WEIGHT));
+    when(componentStatusCalculator.updateComponentStatus(unsafeComponent)).thenReturn(false);
+    when(componentRepository.update(unsafeComponent)).thenReturn(unsafeComponent);
     
     // SUT
     Component updatedComponent = componentCRUDService.recordComponentWeight(componentId, 320);
     
     // check
+    verify(componentCRUDService).markComponentAsUnsafe(oldComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
     assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
   }
   
