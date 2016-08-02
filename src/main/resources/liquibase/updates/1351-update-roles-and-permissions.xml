@@ -7,8 +7,8 @@
 
 		<comment>BSIS-1352 - Reassign existing users with Medical Officer and Data Entry Clerk roles</comment>
 		<update tableName="User_Role">
-	    	<column name="roles_id" value="2" type="BIGINT(20)"></column>
-	    	<where>roles_id = 8</where>
+	    	<column name="roles_id" value="4" type="BIGINT(20)"></column>
+	    	<where>roles_id = 7</where>
 	    </update>
 	    <update tableName="User_Role">
 	    	<column name="roles_id" value="2" type="BIGINT(20)"></column>
