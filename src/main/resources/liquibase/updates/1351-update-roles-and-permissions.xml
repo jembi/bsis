@@ -127,5 +127,18 @@
 	  		<where>permissions_id = 62 and roles_id = 14</where>
 	  	</delete>
 	</changeSet>
+	
+	<changeSet id="20160726-0720" author="danfuterman">
+		<comment>BSIS-1355 - Remove 'View Testing Information' permission from Donor Clinic Supervisor role</comment>
+		<delete tableName="Permission_Role">
+	  		<where>permissions_id = 63 and roles_id = 3</where>
+	  	</delete>
+	  	
+	 	<comment>BSIS-1355 - Assign 'View Test Outcome' permission to Donor Clinic Supervisor role</comment>
+	  	<insert tableName="Permission_Role">
+	  		<column name="permissions_id" value="74"></column>
+	  		<column name="roles_id" value="3"></column>
+	  	</insert>
+	</changeSet>
 		
 </databaseChangeLog>
