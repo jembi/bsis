@@ -12,6 +12,7 @@ import org.jembi.bsis.helpers.persisters.DonationPersister;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
+import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -30,7 +31,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private Location venue = LocationBuilder.aVenue().build();
   private String donationIdentificationNumber;
   private TTIStatus ttiStatus;
-  private Boolean deleted;
+  private Boolean deleted = Boolean.FALSE;
   private Integer donorPulse;
   private BigDecimal haemoglobinCount;
   private HaemoglobinLevel haemoglobinLevel;
@@ -53,6 +54,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private Date createdDate = new Date();
   private boolean released;
   private boolean ineligibleDonor;
+  private List<Component> components;
 
   public DonationBuilder withId(Long id) {
     this.id = id;
@@ -203,6 +205,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     this.ineligibleDonor = ineligibleDonor;
     return this;
   }
+  
+  public DonationBuilder withComponents(List<Component> components) {
+    this.components = components;
+    return this;
+  }
 
   @Override
   public Donation build() {
@@ -236,6 +243,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     donation.setCreatedDate(createdDate);
     donation.setReleased(released);
     donation.setIneligibleDonor(ineligibleDonor);
+    donation.setComponents(components);
     return donation;
   }
 

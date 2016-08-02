@@ -31,8 +31,7 @@ public class LabellingService {
 
     // If current status is NOT_IN_STOCK, update inventory status to IN_STOCK for this component
     if (component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK)) {
-      component.setInventoryStatus(InventoryStatus.IN_STOCK);
-      componentCRUDService.updateComponent(component);
+      componentCRUDService.putComponentInStock(component);
     }
 
     // Generate label

@@ -18,7 +18,7 @@ public class OrderFormCRUDService {
   private OrderFormRepository orderFormRepository;
   
   @Autowired
-  private ComponentDispatchService componentDispatchService;
+  private ComponentCRUDService componentCRUDService;
   
   @Autowired
   private OrderFormConstraintChecker orderFormConstraintChecker;
@@ -41,9 +41,9 @@ public class OrderFormCRUDService {
 
       for (Component component : updatedOrderForm.getComponents()) {
         if (updatedOrderForm.getType() == OrderType.ISSUE) {
-          componentDispatchService.issueComponent(component, updatedOrderForm.getDispatchedTo());
+          componentCRUDService.issueComponent(component, updatedOrderForm.getDispatchedTo());
         } else if (updatedOrderForm.getType() == OrderType.TRANSFER) {
-          componentDispatchService.transferComponent(component, updatedOrderForm.getDispatchedTo());
+          componentCRUDService.transferComponent(component, updatedOrderForm.getDispatchedTo());
         }
       }
     }

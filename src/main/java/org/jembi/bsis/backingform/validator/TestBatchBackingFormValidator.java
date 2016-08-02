@@ -1,7 +1,8 @@
 package org.jembi.bsis.backingform.validator;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.NoResultException;
 
@@ -29,7 +30,7 @@ public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackin
     
     // Validate donation batches
     List<Long> donationBatchIds = form.getDonationBatchIds();
-    List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
+    Set<DonationBatch> donationBatches = new HashSet<>();
     if (donationBatchIds != null && !donationBatchIds.isEmpty()) {
       for (Long donationBatchId : donationBatchIds) {
         DonationBatch db = donationBatchRepository.findDonationBatchById(donationBatchId);

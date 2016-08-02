@@ -9,6 +9,8 @@ import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.DonationRepository;
@@ -23,7 +25,7 @@ public class ComponentStatusCalculator {
   @Autowired
   private DonationRepository donationRepository;
 
-  public boolean shouldComponentsBeDiscarded(List<BloodTestResult> bloodTestResults) {
+  public boolean shouldComponentsBeDiscardedForTestResults(List<BloodTestResult> bloodTestResults) {
 
     for (BloodTestResult bloodTestResult : bloodTestResults) {
 
@@ -53,7 +55,7 @@ public class ComponentStatusCalculator {
    * @param component
    * @return
    */
-  public boolean shouldComponentBeDiscarded(Component component) {
+  public boolean shouldComponentBeDiscardedForWeight(Component component) {
     if (component.getParentComponent() == null && component.getWeight() != null) {
       PackType packType = component.getDonation().getPackType();
       if (packType.getMinWeight() == null || packType.getMaxWeight() == null) {
@@ -90,14 +92,10 @@ public class ComponentStatusCalculator {
    */
   public boolean updateComponentStatus(Component component) {
 
-    List<ComponentStatus> statusNotToBeChanged =
-        Arrays.asList(ComponentStatus.DISCARDED, ComponentStatus.ISSUED,
-            ComponentStatus.USED, ComponentStatus.SPLIT, ComponentStatus.PROCESSED, ComponentStatus.UNSAFE);
-
     ComponentStatus oldComponentStatus = component.getStatus();
 
-    // nothing to do if the component has any of these statuses
-    if (oldComponentStatus != null && statusNotToBeChanged.contains(oldComponentStatus)) {
+    // nothing to do if the component is already in a final state
+    if (ComponentStatus.isFinalStatus(oldComponentStatus)) {
       return false;
     }
 
@@ -129,11 +127,20 @@ public class ComponentStatusCalculator {
       newComponentStatus = ComponentStatus.EXPIRED;
     }
     
+    // if the Component has an undeleted UNSAFE status changes, then it is unsafe
+    if (component.getStatusChanges() != null) {
+      for (ComponentStatusChange statusChange : component.getStatusChanges()) {
+        if (!statusChange.getIsDeleted() && statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE) {
+          newComponentStatus = ComponentStatus.UNSAFE;
+        }
+      }
+    }
+    
     // If this component belongs to a donation with an unconfirmed blood typing match status
     boolean unconfirmedBloodGroup = donation.isReleased()
         && !BloodTypingMatchStatus.isBloodGroupConfirmed(donation.getBloodTypingMatchStatus());
 
-    if (donation.isIneligibleDonor() || ttiStatus.equals(TTIStatus.TTI_UNSAFE) || unconfirmedBloodGroup) {
+    if (donation.isIneligibleDonor() || TTIStatus.makesComponentsUnsafe(ttiStatus) || unconfirmedBloodGroup) {
       newComponentStatus = ComponentStatus.UNSAFE;
     }
 

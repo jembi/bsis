@@ -30,10 +30,6 @@ public class TestBatchCRUDService {
 
     TestBatch existingTestBatch = testBatchRepository.findTestBatchById(updatedTestBatch.getId());
 
-    if (updatedTestBatch.getStatus() != null) {
-      existingTestBatch = changeTestBatchStatus(existingTestBatch, updatedTestBatch.getStatus());
-    }
-
     if (existingTestBatch.getStatus() != TestBatchStatus.CLOSED && !testBatchConstraintChecker.canEditTestBatch(existingTestBatch)) {
       throw new IllegalStateException("Test batch cannot be updated");
     }
@@ -59,6 +55,10 @@ public class TestBatchCRUDService {
     }
     
     existingTestBatch.setLocation(updatedTestBatch.getLocation());
+
+    if (updatedTestBatch.getStatus() != null) {
+      existingTestBatch = changeTestBatchStatus(existingTestBatch, updatedTestBatch.getStatus());
+    }
 
     return testBatchRepository.update(existingTestBatch);
   }

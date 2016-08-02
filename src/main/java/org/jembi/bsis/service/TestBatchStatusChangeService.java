@@ -96,7 +96,7 @@ public class TestBatchStatusChangeService {
         donorDeferralCRUDService.createDeferralForDonorWithVenueAndDeferralReasonType(donor, donation.getVenue(),
             DeferralReasonType.AUTOMATED_TTI_UNSAFE);
       }
-    } else if (componentStatusCalculator.shouldComponentsBeDiscarded(donation.getBloodTestResults())) {
+    } else if (componentStatusCalculator.shouldComponentsBeDiscardedForTestResults(donation.getBloodTestResults())) {
       LOGGER.info("Handling donation with components flagged for discard: " + donation);
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
 
