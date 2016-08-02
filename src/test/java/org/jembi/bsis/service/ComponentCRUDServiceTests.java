@@ -443,13 +443,28 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
         .build();
+    Component unsafeComponent = aComponent()
+        .withComponentType(componentType1)
+        .withComponentCode("0001")
+        .withDonation(donation)
+        .withParentComponent(expectedParentComponent)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withExpiresOn(expiryCal1.getTime())
+        .withLocation(location)
+        .withComponentStatusChange(aComponentStatusChange()
+            .withId(1L)
+            .withStatusChangeReason(aComponentStatusChangeReason().withId(1L).build())
+            .build())
+        .build();
     
     // set up mocks
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
-    doReturn(expectedComponent1).when(componentCRUDService).markComponentAsUnsafe(
+    doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
     // SUT
