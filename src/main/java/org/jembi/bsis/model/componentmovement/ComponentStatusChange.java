@@ -23,15 +23,11 @@ public class ComponentStatusChange extends BaseEntity implements Comparable<Comp
 
   private static final long serialVersionUID = 1L;
 
-  @ManyToOne
+  @ManyToOne(optional = false)
   private Component component;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date statusChangedOn;
-
-  @Enumerated(EnumType.STRING)
-  @Column(length = 30)
-  private ComponentStatusChangeType statusChangeType;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 30)
@@ -43,7 +39,7 @@ public class ComponentStatusChange extends BaseEntity implements Comparable<Comp
   @Lob
   private String statusChangeReasonText;
 
-  @ManyToOne
+  @ManyToOne(optional = false)
   private ComponentStatusChangeReason statusChangeReason;
 
   boolean isDeleted = false;
@@ -113,14 +109,6 @@ public class ComponentStatusChange extends BaseEntity implements Comparable<Comp
 
   public void setStatusChangeReason(ComponentStatusChangeReason discardReason) {
     this.statusChangeReason = discardReason;
-  }
-
-  public ComponentStatusChangeType getStatusChangeType() {
-    return statusChangeType;
-  }
-
-  public void setStatusChangeType(ComponentStatusChangeType statusChangeType) {
-    this.statusChangeType = statusChangeType;
   }
 
   public boolean getIsDeleted() {

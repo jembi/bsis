@@ -17,7 +17,7 @@ public class ReturnFormCRUDService {
   private ReturnFormRepository returnFormRepository;
 
   @Autowired
-  private ComponentReturnService componentReturnService;
+  private ComponentCRUDService componentCRUDService;
   
   @Autowired
   private ReturnFormConstraintChecker returnFormConstraintChecker;
@@ -43,7 +43,7 @@ public class ReturnFormCRUDService {
       }
       
       for (Component component : updatedReturnForm.getComponents()) {
-        componentReturnService.returnComponent(component, updatedReturnForm.getReturnedTo());
+        componentCRUDService.returnComponent(component, updatedReturnForm.getReturnedTo());
       }
     }
 

@@ -160,7 +160,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(donationWithoutDiscrepancies)).thenReturn(false);
-    when(componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentsBeDiscardedForTestResults(bloodTestResults)).thenReturn(false);
     when(bloodTestsService.executeTests(donationWithoutDiscrepancies)).thenReturn(bloodTestingRuleResult);
     when(donationRepository.updateDonation(donationWithoutDiscrepancies)).thenReturn(donationWithoutDiscrepancies);
 
@@ -194,7 +194,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(donationWithoutDiscrepancies)).thenReturn(false);
-    when(componentStatusCalculator.shouldComponentsBeDiscarded(bloodTestResults)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentsBeDiscardedForTestResults(bloodTestResults)).thenReturn(true);
     when(bloodTestsService.executeTests(donationWithoutDiscrepancies)).thenReturn(bloodTestingRuleResult);
     when(donationRepository.updateDonation(donationWithoutDiscrepancies)).thenReturn(donationWithoutDiscrepancies);
 

@@ -31,6 +31,7 @@ public class ComponentMatcher extends TypeSafeMatcher<Component> {
         .appendText("\nWeight: ").appendValue(expected.getWeight())
         .appendText("\nIsDeleted: ").appendValue(expected.getIsDeleted())
         .appendText("\nNotes: ").appendValue(expected.getNotes())
+        .appendText("\nStatusChanges: ").appendValue(expected.getStatusChanges())
         .appendText("\nComponentBatch: ").appendValue(expected.getComponentBatch())
         ;
   }
@@ -53,6 +54,7 @@ public class ComponentMatcher extends TypeSafeMatcher<Component> {
         Objects.equals(actual.getWeight(), expected.getWeight()) &&
         Objects.equals(actual.getIsDeleted(), expected.getIsDeleted()) &&
         Objects.equals(actual.getNotes(), expected.getNotes()) &&
+        Objects.equals(actual.getStatusChanges(), expected.getStatusChanges()) &&
         Objects.equals(actual.getComponentBatch(), expected.getComponentBatch());
   }
 

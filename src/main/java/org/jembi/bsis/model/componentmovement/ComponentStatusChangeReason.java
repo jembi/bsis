@@ -15,7 +15,9 @@ import org.jembi.bsis.repository.constant.ComponentStatusChangeReasonNamedQueryC
   @NamedQuery(name = ComponentStatusChangeReasonNamedQueryConstants.NAME_FIND_FIRST_COMPONENT_STATUS_CHANGE_REASON_FOR_CATEGORY,
       query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_FIND_FIRST_COMPONENT_STATUS_CHANGE_REASON_FOR_CATEGORY),
   @NamedQuery(name = ComponentStatusChangeReasonNamedQueryConstants.NAME_COUNT_DISCARD_REASON_WITH_ID,
-      query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_COUNT_DISCARD_REASON_WITH_ID)  
+      query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_COUNT_DISCARD_REASON_WITH_ID),
+  @NamedQuery(name = ComponentStatusChangeReasonNamedQueryConstants.NAME_FIND_COMPONENT_STATUS_CHANGE_REASON_BY_CATEGORY_AND_TYPE,
+      query = ComponentStatusChangeReasonNamedQueryConstants.QUERY_FIND_COMPONENT_STATUS_CHANGE_REASON_BY_CATEGORY_AND_TYPE)
 })
 @Entity
 @Audited
@@ -29,6 +31,10 @@ public class ComponentStatusChangeReason extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(length = 30)
   private ComponentStatusChangeReasonCategory category;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length = 30, nullable = true)
+  private ComponentStatusChangeReasonType type;
 
   private Boolean isDeleted;
 
@@ -64,5 +70,14 @@ public class ComponentStatusChangeReason extends BaseEntity {
     this.setCategory(componentStatusChangeReason.getCategory());
     this.setStatusChangeReason(componentStatusChangeReason.getStatusChangeReason());
     this.setIsDeleted(componentStatusChangeReason.getIsDeleted());
+    this.setType(componentStatusChangeReason.getType());
+  }
+
+  public ComponentStatusChangeReasonType getType() {
+    return type;
+  }
+
+  public void setType(ComponentStatusChangeReasonType type) {
+    this.type = type;
   }
 }

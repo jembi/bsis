@@ -4,7 +4,6 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeType;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.utils.CustomDateFormatter;
 
@@ -71,10 +70,6 @@ public class ComponentStatusChangeViewModel {
 
   public ComponentStatusChangeReason getStatusChangeReason() {
     return componentStatusChange.getStatusChangeReason();
-  }
-
-  public ComponentStatusChangeType getStatusChangeType() {
-    return componentStatusChange.getStatusChangeType();
   }
 
 }

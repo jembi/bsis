@@ -3,9 +3,10 @@ package org.jembi.bsis.repository;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -110,7 +111,7 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   public void testSaveTestBatch() throws Exception {
     TestBatch testBatch = new TestBatch();
-    List<DonationBatch> donationBatches = new ArrayList<DonationBatch>();
+    Set<DonationBatch> donationBatches = new HashSet<>();
     donationBatches.add(donationBatchRepository.findDonationBatchById(3l));
     testBatch.setDonationBatches(donationBatches);
     Location location = locationRepository.getLocation(2l);

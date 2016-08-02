@@ -105,7 +105,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(componentCRUDService.updateComponent(component)).thenReturn(component);
+    when(componentCRUDService.putComponentInStock(component)).thenReturn(component);
     
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -149,7 +149,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(componentCRUDService.updateComponent(component)).thenReturn(component);
+    when(componentCRUDService.putComponentInStock(component)).thenReturn(component);
     
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -190,7 +190,17 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withComponentType(componentType)
         .build();
     
-    Component expectedComponent = aComponent()
+    Component labelledComponent = aComponent()
+        .withId(componentId)
+        .withComponentCode(componentCode)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withLocation(component.getLocation())
+        .build();
+    
+    Component finalComponent = aComponent()
         .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
@@ -203,13 +213,13 @@ public class LabellingServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(componentCRUDService.updateComponent(argThat(hasSameStateAsComponent(expectedComponent)))).thenReturn(expectedComponent);
+    when(componentCRUDService.putComponentInStock(argThat(hasSameStateAsComponent(labelledComponent)))).thenReturn(finalComponent);
     
     // run test
     labellingService.printPackLabel(componentId);
     
     // check outcome
-    verify(componentCRUDService).updateComponent(argThat(hasSameStateAsComponent(expectedComponent)));
+    verify(componentCRUDService).putComponentInStock(argThat(hasSameStateAsComponent(labelledComponent)));
   }
   
   @Test(expected = java.lang.IllegalArgumentException.class)
