@@ -111,7 +111,7 @@
       <where>componentTypeCode = 3002</where><!-- Frozen Plasma - Whole Blood -->
     </update>
     <update tableName="ComponentType">
-      <column name="transportInfo" value="Transport at 20-24_c2_b0C" type="text"></column>
+      <column name="transportInfo" value="Transport at 20-24°C" type="text"></column>
       <where>componentTypeCode = 4001</where><!-- Platelets Concentrate - Whole Blood -->
     </update>
     <update tableName="ComponentType">
