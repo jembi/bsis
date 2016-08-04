@@ -7,9 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.model.component.Component;
-import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
@@ -33,37 +31,6 @@ public class ComponentFactory {
 
   @Autowired
   private ComponentConstraintChecker componentConstraintChecker;
-  
-  @Autowired
-  private ComponentRepository componentRepository;
-  
-  public Component createEntity(ComponentBackingForm backingForm) {
-    Component component = new Component();
-    
-    // set values from backing form
-    component.setId(backingForm.getId());
-    component.setWeight(backingForm.getWeight());
-    
-    // set values from existing Component
-    Component existingComponent = componentRepository.findComponent(backingForm.getId());
-    component.setComponentCode(existingComponent.getComponentCode());
-    component.setComponentType(existingComponent.getComponentType());
-    component.setStatus(existingComponent.getStatus());
-    component.setInventoryStatus(existingComponent.getInventoryStatus());
-    component.setParentComponent(existingComponent.getParentComponent());
-    component.setStatusChanges(existingComponent.getStatusChanges());
-    component.setDonation(existingComponent.getDonation());
-    component.setLocation(existingComponent.getLocation());
-    component.setComponentBatch(existingComponent.getComponentBatch());
-    component.setCreatedOn(existingComponent.getCreatedOn());
-    component.setExpiresOn(existingComponent.getExpiresOn());
-    component.setDiscardedOn(existingComponent.getDiscardedOn());
-    component.setIssuedOn(existingComponent.getIssuedOn());
-    component.setNotes(existingComponent.getNotes());
-    component.setIsDeleted(existingComponent.getIsDeleted());
-
-    return component;
-  }
 
   public List<ComponentManagementViewModel> createManagementViewModels(Collection<Component> components) {
     List<ComponentManagementViewModel> viewModels = new ArrayList<>();

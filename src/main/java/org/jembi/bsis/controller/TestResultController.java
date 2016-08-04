@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -100,7 +101,7 @@ public class TestResultController {
     Map<String, Object> map = new HashMap<String, Object>();
     int numberOfDonations = 0;
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-    List<DonationBatch> donationBatches = testBatch.getDonationBatches();
+    Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
     for(DonationBatch donationBatch : donationBatches){
       donationBatchIds.add(donationBatch.getId());
@@ -141,7 +142,7 @@ public class TestResultController {
       @RequestParam(value = "testBatch", required = true) Long testBatchId) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-    List<DonationBatch> donationBatches = testBatch.getDonationBatches();
+    Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
     for(DonationBatch donationBatch : donationBatches){
       donationBatchIds.add(donationBatch.getId());

@@ -162,7 +162,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @Column(length = 20)
   private TTIStatus ttiStatus;
 
-  private Boolean isDeleted;
+  private Boolean isDeleted = Boolean.FALSE;
 
   @Range(min = 0, max = 290)
   private Integer donorPulse;

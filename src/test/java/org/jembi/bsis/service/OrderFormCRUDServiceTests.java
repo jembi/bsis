@@ -38,7 +38,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
   private OrderFormRepository orderFormRepository;
   
   @Mock
-  private ComponentDispatchService componentDispatchService;
+  private ComponentCRUDService componentCRUDService;
   
   @Mock
   private OrderFormConstraintChecker orderFormConstraintChecker;
@@ -122,7 +122,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     
     // Assertions
     assertThat(returnedOrderForm, is(expectedOrderForm));
-    verify(componentDispatchService).transferComponent(component, dispatchedTo);
+    verify(componentCRUDService).transferComponent(component, dispatchedTo);
   }
   
   @Test
@@ -163,7 +163,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     
     // Assertions
     assertThat(returnedOrderForm, is(expectedOrderForm));
-    verify(componentDispatchService).issueComponent(component, dispatchedTo);
+    verify(componentCRUDService).issueComponent(component, dispatchedTo);
   }
 
   @Test(expected = IllegalStateException.class)

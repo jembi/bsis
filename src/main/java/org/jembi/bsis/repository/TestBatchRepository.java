@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -26,7 +27,7 @@ public class TestBatchRepository extends AbstractRepository<TestBatch> {
 
   public void updateDonationWithTestBatch(TestBatch testBatch) {
 
-    List<DonationBatch> donationBatches = testBatch.getDonationBatches();
+    Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     if (donationBatches != null && !donationBatches.isEmpty()) {
       entityManager.persist(testBatch);
       for (DonationBatch donationBatch : donationBatches) {
@@ -92,7 +93,7 @@ public class TestBatchRepository extends AbstractRepository<TestBatch> {
   public void deleteTestBatch(Long id) {
     TestBatch testBatch = findTestBatchById(id);
     testBatch.setIsDeleted(true);
-    List<DonationBatch> donationBatches = testBatch.getDonationBatches();
+    Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     if (donationBatches != null) {
       for (DonationBatch donationBatch : donationBatches) {
         donationBatch.setTestBatch(null); // remove association

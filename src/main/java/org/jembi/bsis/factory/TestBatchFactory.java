@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.model.donation.Donation;
@@ -48,7 +50,7 @@ public class TestBatchFactory {
     testBatch.setId(backingForm.getId());
     testBatch.setStatus(backingForm.getStatus());
     testBatch.setCreatedDate(backingForm.getCreatedDate());
-    List<DonationBatch> donationBatches = new ArrayList<>();
+    Set<DonationBatch> donationBatches = new HashSet<>();
     for (long donationBatchId : backingForm.getDonationBatchIds()) {
       donationBatches.add(donationBatchRepository.findDonationBatchById(donationBatchId));
     }

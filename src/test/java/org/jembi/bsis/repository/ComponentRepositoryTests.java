@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,8 +14,6 @@ import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donor.Donor;
-import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,86 +23,6 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
 
   @Autowired
   private ComponentRepository componentRepository;
-
-  @Test
-  public void testUpdateComponentStatusForDonor_shouldOnlyUpdateMatchingComponents() {
-    ComponentStatus firstOldStatus = ComponentStatus.AVAILABLE;
-    ComponentStatus secondOldStatus = ComponentStatus.QUARANTINED;
-    ComponentStatus newStatus = ComponentStatus.UNSAFE;
-    Donor donor = aDonor().build();
-
-    Component firstComponentToUpdate = aComponent()
-        .withStatus(firstOldStatus)
-        .withDonation(aDonation().withDonor(donor).build())
-        .buildAndPersist(entityManager);
-
-    Component secondComponentToUpdate = aComponent()
-        .withStatus(secondOldStatus)
-        .withDonation(aDonation().withDonor(donor).build())
-        .buildAndPersist(entityManager);
-
-    Component componentExcludedByStatus = aComponent()
-        .withStatus(ComponentStatus.ISSUED)
-        .withInventoryStatus(InventoryStatus.REMOVED)
-        .withDonation(aDonation().withDonor(donor).build())
-        .buildAndPersist(entityManager);
-
-    Component componentExcludedByDonor = aComponent()
-        .withStatus(firstOldStatus)
-        .withDonation(aDonation()
-            .withDonor(aDonor().build())
-            .build())
-        .buildAndPersist(entityManager);
-
-    componentRepository.updateComponentStatusesForDonor(Arrays.asList(firstOldStatus, secondOldStatus), newStatus,
-        donor);
-
-    entityManager.refresh(firstComponentToUpdate);
-    entityManager.refresh(secondComponentToUpdate);
-    entityManager.refresh(componentExcludedByStatus);
-    entityManager.refresh(componentExcludedByDonor);
-
-    assertThat(firstComponentToUpdate.getStatus(), is(newStatus));
-    assertThat(secondComponentToUpdate.getStatus(), is(newStatus));
-    assertThat(componentExcludedByStatus.getStatus(), is(ComponentStatus.ISSUED));
-    assertThat(componentExcludedByDonor.getStatus(), is(firstOldStatus));
-  }
-
-  @Test
-  public void testUpdateComponentStatusForDonation_shouldOnlyUpdateMatchingComponents() {
-    ComponentStatus firstOldStatus = ComponentStatus.AVAILABLE;
-    ComponentStatus secondOldStatus = ComponentStatus.QUARANTINED;
-    ComponentStatus newStatus = ComponentStatus.UNSAFE;
-
-    Donation donation = aDonation().build();
-
-    Component firstComponentToUpdate = aComponent()
-        .withStatus(firstOldStatus)
-        .withDonation(donation)
-        .buildAndPersist(entityManager);
-
-    Component secondComponentToUpdate = aComponent()
-        .withStatus(secondOldStatus)
-        .withDonation(donation)
-        .buildAndPersist(entityManager);
-
-    Component componentExcludedByStatus = aComponent()
-        .withStatus(ComponentStatus.ISSUED)
-        .withInventoryStatus(InventoryStatus.REMOVED)
-        .withDonation(donation)
-        .buildAndPersist(entityManager);
-
-    componentRepository.updateComponentStatusForDonation(Arrays.asList(firstOldStatus, secondOldStatus), newStatus,
-        donation);
-
-    entityManager.refresh(firstComponentToUpdate);
-    entityManager.refresh(secondComponentToUpdate);
-    entityManager.refresh(componentExcludedByStatus);
-
-    assertThat(firstComponentToUpdate.getStatus(), is(newStatus));
-    assertThat(secondComponentToUpdate.getStatus(), is(newStatus));
-    assertThat(componentExcludedByStatus.getStatus(), is(ComponentStatus.ISSUED));
-  }
   
   @Test
   public void testFindComponentByCodeAndDIN_shouldReturnMatchingComponent() {

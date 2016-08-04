@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
@@ -87,7 +88,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     TestBatch testBatch1 =
         aTestBatch().withId(IRRELEVANT_ID).withStatus(IRRELEVANT_STATUS).withBatchNumber(IRRELEVANT_BATCH_NUMBER)
             .withCreatedDate(IRRELEVANT_CREATED_DATE).withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-            .withDonationBatches(Arrays.asList(donationBatch)).withNotes(IRRELEVANT_NOTES).build();
+            .withDonationBatches(new HashSet<>(Arrays.asList(donationBatch))).withNotes(IRRELEVANT_NOTES).build();
 
     TestBatch testBatch2 =
         aTestBatch()
@@ -96,7 +97,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-        .withDonationBatches(Arrays.asList(donationBatch))
+        .withDonationBatches(new HashSet<>(Arrays.asList(donationBatch)))
         .withNotes(IRRELEVANT_NOTES)
         .build();
 
@@ -475,7 +476,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_ID)
         .withStatus(TestBatchStatus.OPEN)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
-        .withDonationBatches(Arrays.asList(firstDonationBatch, secondDonationBatch))
+        .withDonationBatches(new HashSet<>(Arrays.asList(firstDonationBatch, secondDonationBatch)))
         .withLocation(location)
         .build();
     

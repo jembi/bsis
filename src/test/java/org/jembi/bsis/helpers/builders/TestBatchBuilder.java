@@ -1,8 +1,8 @@
 package org.jembi.bsis.helpers.builders;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
@@ -13,7 +13,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
 
   private Long id;
   private TestBatchStatus status;
-  private List<DonationBatch> donationBatches;
+  private Set<DonationBatch> donationBatches;
   private String batchNumber;
   private Date createdDate;
   private Date lastUpdatedDate;
@@ -50,7 +50,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     return this;
   }
 
-  public TestBatchBuilder withDonationBatches(List<DonationBatch> donationBatches) {
+  public TestBatchBuilder withDonationBatches(Set<DonationBatch> donationBatches) {
     this.donationBatches = donationBatches;
     return this;
   }
@@ -62,7 +62,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
 
   public TestBatchBuilder withDonationBatch(DonationBatch donationBatch) {
     if (donationBatches == null) {
-      donationBatches = new ArrayList<>();
+      donationBatches = new HashSet<>();
     }
     donationBatches.add(donationBatch);
     return this;

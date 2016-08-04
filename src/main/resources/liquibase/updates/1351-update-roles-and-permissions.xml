@@ -1,0 +1,217 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20160714-1307" author="danfuterman">
+
+		<comment>BSIS-1352 - Reassign existing users with Medical Officer and Data Entry Clerk roles</comment>
+		<update tableName="User_Role">
+	    	<column name="roles_id" value="4" type="BIGINT(20)"></column>
+	    	<where>roles_id = 7</where>
+	    </update>
+	    <update tableName="User_Role">
+	    	<column name="roles_id" value="2" type="BIGINT(20)"></column>
+	    	<where>roles_id = 8</where>
+	    </update>
+	
+		<comment>BSIS-1352 - Void Medical Officer and Data Entry Clerk sample users</comment>
+		<update tableName="User">
+			<column name="isDeleted" value="1" type="TINYINT(1)"></column>
+			<where>id = 7</where>
+		</update>
+		<update tableName="User">
+			<column name="isDeleted" value="1" type="TINYINT(1)"></column>
+			<where>id = 8</where>
+		</update>
+		
+		<comment>BSIS-1352 - Remove Medical Officer and Data Entry Clerk roles</comment>
+		<delete tableName="Permission_Role_AUD">
+		  <where>roles_id = 7</where>
+		</delete>
+		<delete tableName="Permission_Role_AUD">
+		  <where>roles_id = 8</where>
+		</delete>
+		<delete tableName="Permission_Role">
+		  <where>roles_id = 7</where>
+		</delete>
+		<delete tableName="Permission_Role">
+		  <where>roles_id = 8</where>
+		</delete>
+		<delete tableName="Role_AUD">
+		  <where>id = 7</where>
+		</delete>
+		<delete tableName="Role_AUD">
+		  <where>id = 8</where>
+		</delete>
+		<delete tableName="Role">
+		  <where>id = 7</where>
+		</delete>
+		<delete tableName="Role">
+		  <where>id = 8</where>
+		</delete>
+	</changeSet>
+	
+	<changeSet id="20160726-0647" author="danfuterman">
+		<comment>BSIS-1353 - Assign 'Label Component' permission to Component Staff and Supervisor roles</comment>
+		<insert tableName="Permission_Role">
+	  		<column name="permissions_id" value="31"></column>
+	  		<column name="roles_id" value="9"></column>
+	  	</insert>
+	  	<insert tableName="Permission_Role">
+	 		<column name="permissions_id" value="31"></column>
+	  		<column name="roles_id" value="10"></column>
+	  	</insert>
+	  
+	  	<comment>BSIS-1353 - Remove 'Label Component' permission from Inventory Staff role</comment>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 31 and roles_id = 15</where>
+	  	</delete>
+	</changeSet>
+	
+	<changeSet id="20160726-0704" author="danfuterman">
+		<comment>BSIS-1354 - Remove Component-related permissions from Testing roles</comment>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 21 and roles_id = 11</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 33 and roles_id = 11</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 62 and roles_id = 11</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 21 and roles_id = 12</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 33 and roles_id = 12</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 62 and roles_id = 12</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 21 and roles_id = 13</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 33 and roles_id = 13</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 62 and roles_id = 13</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 21 and roles_id = 14</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 33 and roles_id = 14</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 62 and roles_id = 14</where>
+	  	</delete>
+	</changeSet>
+	
+	<changeSet id="20160726-0720" author="danfuterman">
+		<comment>BSIS-1355 - Remove 'View Testing Information' permission from Donor Clinic Supervisor role</comment>
+		<delete tableName="Permission_Role">
+	  		<where>permissions_id = 63 and roles_id = 3</where>
+	  	</delete>
+	  	
+	 	<comment>BSIS-1355 - Assign 'View Test Outcome' permission to Donor Clinic Supervisor role</comment>
+	  	<insert tableName="Permission_Role">
+	  		<column name="permissions_id" value="74"></column>
+	  		<column name="roles_id" value="3"></column>
+	  	</insert>
+	</changeSet>
+	
+	<changeSet id="20160726-0740" author="danfuterman">
+		<comment>BSIS-1356 -  Update 'Serology Staff' role and sample user to 'Blood Group Serology Staff'</comment>
+		<update tableName="Role">
+	    	<column name="name" value="Blood Group Serology Staff" type="VARCHAR(50)"></column>
+	    	<column name="description" value="Blood Group Serology Staff" type="LONGTEXT"></column>
+	    	<where>id = 14</where>
+	    </update>
+	    <update tableName="User">
+	    	<column name="username" value="bloodgroupserologystaff" type="VARCHAR(30)"></column>
+	    	<where>id = 14</where>
+	    </update>
+	    
+	    <comment>BSIS-1356 -  Update 'Serology Supervisor' role and sample user to 'Blood Group Serology Supervisor'</comment>
+		<update tableName="Role">
+	    	<column name="name" value="Blood Group Serology Supervsior" type="VARCHAR(50)"></column>
+	    	<column name="description" value="Blood Group Serology Supervisor" type="LONGTEXT"></column>
+	    	<where>id = 13</where>
+	    </update>
+	    <update tableName="User">
+	    	<column name="username" value="bloodgroupserologysupervisor" type="VARCHAR(30)"></column>
+	    	<where>id = 13</where>
+	    </update>
+	</changeSet>
+	
+	<changeSet id="20160727-0847" author="danfuterman">
+		<comment>BSIS-1357 - Remove Add, Edit and Void permissions from Donor Communications role</comment>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 1 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 3 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 4 and roles_id = 5</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 5 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 7 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 8 and roles_id = 5</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 14 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 16 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 17 and roles_id = 5</where>
+	  	</delete>
+	  	
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 69 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 71 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 72 and roles_id = 5</where>
+	  	</delete>
+	</changeSet>
+	
+	<changeSet id="20160729-1250" author="danfuterman">
+		<comment>BSIS-1435 - Remove 'Manage Locations' permission from donor clinic roles</comment>
+		<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 3</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 4</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 5</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 6</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 7</where>
+	  	</delete>
+	  	<delete tableName="Permission_Role">
+	  		<where>permissions_id = 42 and roles_id = 8</where>
+	  	</delete>
+	</changeSet>
+		
+</databaseChangeLog>

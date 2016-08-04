@@ -22,9 +22,6 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.returnform.ReturnForm;
 import org.jembi.bsis.model.returnform.ReturnStatus;
 import org.jembi.bsis.repository.ReturnFormRepository;
-import org.jembi.bsis.service.ComponentReturnService;
-import org.jembi.bsis.service.ReturnFormCRUDService;
-import org.jembi.bsis.service.ReturnFormConstraintChecker;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -39,7 +36,7 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
   private ReturnFormRepository returnFormRepository;
 
   @Mock
-  private ComponentReturnService componentReturnService;
+  private ComponentCRUDService componentCRUDService;
   
   @Mock
   private ReturnFormConstraintChecker returnFormConstraintChecker;
@@ -66,7 +63,7 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
 
     // Verify
     verify(returnFormRepository).save(returnFormToPersist);
-    verifyZeroInteractions(componentReturnService);
+    verifyZeroInteractions(componentCRUDService);
   }
   
   @Test(expected = IllegalStateException.class)
@@ -133,7 +130,7 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
     
     // Verify
     assertThat(mergedReturnForm, is(updatedReturnForm));
-    verifyZeroInteractions(componentReturnService);
+    verifyZeroInteractions(componentCRUDService);
     verify(returnFormRepository).update(updatedReturnForm);
   }
   
@@ -169,7 +166,7 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
     
     // Verify
     assertThat(mergedReturnForm, is(updatedReturnForm));
-    verify(componentReturnService).returnComponent(component, returnedTo);
+    verify(componentCRUDService).returnComponent(component, returnedTo);
     verify(returnFormRepository).update(updatedReturnForm);
   }
   
