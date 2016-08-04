@@ -38,5 +38,6 @@
   <include file="./src/main/resources/liquibase/updates/1351-update-roles-and-permissions.xml" />
   <include file="./src/main/resources/liquibase/updates/1133-permanent-deferrals-void.xml" />
   <include file="./src/main/resources/liquibase/updates/1454-unsafe-rollback.xml" />
+  <include file="./src/main/resources/liquibase/updates/1474-release-donations-on-import.xml" />
 
 </databaseChangeLog>
