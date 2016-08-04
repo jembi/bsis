@@ -121,7 +121,7 @@ public class LabellingService {
         "^LL0799" +
         "^LS0" +
         "^BY3,3,77^FT75,140^BCN,,Y,N" +
-        "^FD" + component.getDonationIdentificationNumber() + "^FS" +
+        "^FD" + component.getComponentType().getComponentTypeCode() + "^FS" +
         "^FT415,102^A0N,20,14^FD" + serviceInfoLine1 + "^FS" +
         "^FT416,133^A0N,20,14^FD" + serviceInfoLine2 + "^FS" +
         "^FT224,512^XG000.GRF,1,1^FS" +
