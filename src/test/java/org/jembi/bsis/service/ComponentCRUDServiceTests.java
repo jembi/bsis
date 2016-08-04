@@ -8,6 +8,7 @@ import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aDiscardReason;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aReturnReason;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.anUnsafeReason;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.anIssuedReason;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
@@ -17,6 +18,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
+import static org.jembi.bsis.helpers.matchers.ComponentStatusChangeMatcher.hasSameStateAsComponentStatusChange;
 import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
@@ -1062,11 +1064,16 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Component componentToIssue = aComponent().withLocation(aDistributionSite().build()).build();
     Location issueTo = aUsageSite().build();
     Date issuedDate = new Date();
+    ComponentStatusChangeReason statusChangeReason = anIssuedReason().build();
+    ComponentStatusChange expectedStatusChange = aComponentStatusChange()
+        .withStatusChangedOn(new Date()).withNewStatus(ComponentStatus.ISSUED)
+        .withStatusChangeReason(statusChangeReason).build();
+    expectedStatusChange.setComponent(componentToIssue);
     
     // Set up expectations
     when(dateGeneratorService.generateDate()).thenReturn(issuedDate);
     when(componentStatusChangeReasonRepository.findFirstComponentStatusChangeReasonForCategory(
-        ComponentStatusChangeReasonCategory.ISSUED)).thenReturn(new ComponentStatusChangeReason());
+        ComponentStatusChangeReasonCategory.ISSUED)).thenReturn(statusChangeReason);
     when(componentRepository.update(componentToIssue)).thenReturn(componentToIssue);
     
     // Call test method
@@ -1075,6 +1082,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Verify
     assertThat(returnedComponent, is(componentToIssue));
     assertThat(returnedComponent.getLocation(), is(issueTo));
+    assertThat(returnedComponent.getStatusChanges().iterator().next(), hasSameStateAsComponentStatusChange(expectedStatusChange));
   }
   
   @Test(expected = IllegalArgumentException.class)
@@ -1096,24 +1104,29 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.REMOVED)
         .withDonation(null).build();
     Location returnedTo = aDistributionSite().build();
+    ComponentStatusChangeReason statusChangeReason = aReturnReason().build();
     
     Date date = new Date();
-    ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(date).build();
+    ComponentStatusChange expectedStatusChange = aComponentStatusChange().withStatusChangedOn(date).withStatusChangeReason(statusChangeReason).build();
     Component expectedComponent = aComponent()
         .withLocation(returnedTo)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withDonation(null).withComponentStatusChange(statusChange).build();
+        .withDonation(null).withComponentStatusChange(expectedStatusChange).build();
+    expectedStatusChange.setComponent(expectedComponent);
     
     // Set up mocks
     when(dateGeneratorService.generateDate()).thenReturn(date);
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedComponent)))).thenReturn(expectedComponent);
+    when(componentStatusChangeReasonRepository.findFirstComponentStatusChangeReasonForCategory(ComponentStatusChangeReasonCategory.RETURNED)).thenReturn(statusChangeReason);
     
     // Run test
     Component returnedComponent = componentCRUDService.returnComponent(componentToReturn, returnedTo);
     
     // Verify
     assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
+    assertThat(returnedComponent.getStatusChanges().iterator().next(), hasSameStateAsComponentStatusChange(expectedStatusChange));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedComponent)));
   }
   
   @Test
