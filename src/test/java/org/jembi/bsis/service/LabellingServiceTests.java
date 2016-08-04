@@ -2,6 +2,7 @@ package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.argThat;
@@ -12,18 +13,24 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
-import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 public class LabellingServiceTests extends UnitTestSuite {
+  
+  private static final String DATE_FORMAT = "dd/MM/yyyy";
+  private static final String DATE_TIME_FORMAT = "dd/MM/yyyy hh:mm:ss a";
+  private static final String PREPARATION_INFO = "Prepared from 450 ±50ml";
+  private static final String STORAGE_INFO = "Store below -30°C";
+  private static final String TRANSPORT_INFO = "Transport below -25°C";
 
   @InjectMocks
   LabellingService labellingService;
@@ -59,7 +66,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     assertThat(label, label.contains(donationIdentificationNumber));
   }
   
-  @Test(expected = java.lang.IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testPrintDiscardLabel_throwsException() throws Exception {
     // set up data
     Long componentId = Long.valueOf(1);
@@ -94,9 +101,15 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withBloodRh(bloodRh)
         .build();
     String componentTypeName = "blood";
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().withComponentTypeName(componentTypeName).build();
+    ComponentType componentType = aComponentType()
+        .withComponentTypeName(componentTypeName)
+        .withPreparationInfo(PREPARATION_INFO)
+        .withStorageInfo(STORAGE_INFO)
+        .withTransportInfo(TRANSPORT_INFO)
+        .build();
     Long componentId = Long.valueOf(1);
     String componentCode = "123";
+    Date expiresOn = new DateTime().plusDays(90).toDate();
     Component component = aComponent()
         .withId(componentId)
         .withComponentCode(componentCode)
@@ -104,14 +117,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withDonation(donation)
         .withComponentType(componentType)
-        .withExpiresOn(new Date())
+        .withExpiresOn(expiresOn)
         .build();
     
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn("dd/MM/yyyy");
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn("dd/MM/yyyy hh:mm:ss a");
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(componentCRUDService.putComponentInStock(component)).thenReturn(component);
 
     // run test
@@ -120,9 +133,13 @@ public class LabellingServiceTests extends UnitTestSuite {
     // check outcome
     assertThat(label, label.contains(donationIdentificationNumber));
     assertThat(label, label.contains(bloodAbo));
-    assertThat(label, label.contains("POSITIVE"));
-    assertThat(label, label.contains(new SimpleDateFormat("dd/MM/yyyy").format(donationDate)));
+    assertThat(label, label.contains("RhD POSITIVE"));
+    assertThat(label, label.contains(new SimpleDateFormat(DATE_FORMAT).format(donationDate)));
+    assertThat(label, label.contains(new SimpleDateFormat(DATE_TIME_FORMAT).format(expiresOn)));
     assertThat(label, label.contains(componentTypeName));
+    assertThat(label, label.contains(PREPARATION_INFO));
+    assertThat(label, label.contains(STORAGE_INFO));
+    assertThat(label, label.contains(TRANSPORT_INFO));
   }
   
   @Test
@@ -141,9 +158,15 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withBloodRh(bloodRh)
         .build();
     String componentTypeName = "blood";
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().withComponentTypeName(componentTypeName).build();
+    ComponentType componentType = aComponentType()
+        .withComponentTypeName(componentTypeName)
+        .withPreparationInfo(PREPARATION_INFO)
+        .withStorageInfo(STORAGE_INFO)
+        .withTransportInfo(TRANSPORT_INFO)
+        .build();
     Long componentId = Long.valueOf(1);
     String componentCode = "123";
+    Date expiresOn = new DateTime().plusDays(90).toDate();
     Component component = aComponent()
         .withId(componentId)
         .withComponentCode(componentCode)
@@ -151,14 +174,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withDonation(donation)
         .withComponentType(componentType)
-        .withExpiresOn(new Date())
+        .withExpiresOn(expiresOn)
         .build();
     
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn("dd/MM/yyyy");
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn("dd/MM/yyyy hh:mm:ss a");
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(componentCRUDService.putComponentInStock(component)).thenReturn(component);
     
     // run test
@@ -167,9 +190,13 @@ public class LabellingServiceTests extends UnitTestSuite {
     // check outcome
     assertThat(label, label.contains(donationIdentificationNumber));
     assertThat(label, label.contains(bloodAbo));
-    assertThat(label, label.contains("NEGATIVE"));
-    assertThat(label, label.contains(new SimpleDateFormat("dd/MM/yyyy").format(donationDate)));
+    assertThat(label, label.contains("RhD NEGATIVE"));
+    assertThat(label, label.contains(new SimpleDateFormat(DATE_FORMAT).format(donationDate)));
+    assertThat(label, label.contains(new SimpleDateFormat(DATE_TIME_FORMAT).format(expiresOn)));
     assertThat(label, label.contains(componentTypeName));
+    assertThat(label, label.contains(PREPARATION_INFO));
+    assertThat(label, label.contains(STORAGE_INFO));
+    assertThat(label, label.contains(TRANSPORT_INFO));
   }
   
   @Test
@@ -188,10 +215,15 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withBloodRh(bloodRh)
         .build();
     String componentTypeName = "blood";
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().withComponentTypeName(componentTypeName).build();
+    ComponentType componentType = aComponentType()
+        .withComponentTypeName(componentTypeName)
+        .withPreparationInfo(PREPARATION_INFO)
+        .withStorageInfo(STORAGE_INFO)
+        .withTransportInfo(TRANSPORT_INFO)
+        .build();
     Long componentId = Long.valueOf(1);
     String componentCode = "123";
-    Date expiresOn = new Date();
+    Date expiresOn = new DateTime().plusDays(90).toDate();
     Component component = aComponent()
         .withId(componentId)
         .withComponentCode(componentCode)
@@ -227,8 +259,8 @@ public class LabellingServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn("dd/MM/yyyy");
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn("dd/MM/yyyy hh:mm:ss a");
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(componentCRUDService.putComponentInStock(argThat(hasSameStateAsComponent(labelledComponent)))).thenReturn(finalComponent);
     
     // run test
