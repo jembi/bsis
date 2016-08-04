@@ -1,0 +1,20 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20160802-1245" author="timler">
+	<insert tableName="GeneralConfig">
+		<column name="name" value="packLabel.serviceInfoLine1"></column>
+		<column name="value" value="Not intended for actual use"></column>
+		<column name="description" value="Blood Service information to be printed on Pack Labels (line 1)"></column>
+		<column name="dataType_id" value="1"></column>
+	</insert>
+	<insert tableName="GeneralConfig">
+		<column name="name" value="packLabel.serviceInfoLine2"></column>
+		<column name="value" value=""></column>
+		<column name="description" value="Blood Service information to be printed on Pack Labels (line 2)"></column>
+		<column name="dataType_id" value="1"></column>
+	</insert>
+  </changeSet>
+</databaseChangeLog>

@@ -13,5 +13,13 @@ public class GeneralConfigConstants {
 
   // Components
   public static final String CREATE_INITIAL_COMPONENTS = "components.createInitialComponents";
+  
+  // Labelling
+  public static final String SERVICE_INFO_LINE_1 = "packLabel.serviceInfoLine1";
+  public static final String SERVICE_INFO_LINE_2 = "packLabel.serviceInfoLine2";
+  
+  // General
+  public static final String DATE_FORMAT = "dateFormat";
+  public static final String DATE_TIME_FORMAT = "dateTimeFormat";
 
 }
