@@ -2,9 +2,10 @@ package org.jembi.bsis.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
+import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,13 @@ public class LabellingService {
   private ComponentCRUDService componentCRUDService;
   @Autowired
   private LabellingConstraintChecker labellingConstraintChecker;
+  @Autowired
+  private GeneralConfigAccessorService generalConfigAccessorService;
 
   public String printPackLabel(long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
     Donation donation = component.getDonation();
+    ComponentType componentType = component.getComponentType();
 
     boolean canPrintPackLabel = labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component);
 
@@ -35,53 +39,56 @@ public class LabellingService {
       componentCRUDService.updateComponent(component);
     }
 
-    // Generate label
-    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-    String bloodABO = donation.getBloodAbo();
+    // Set up date formats
+    String dateFormatString = generalConfigAccessorService.getGeneralConfigValueByName("dateFormat");
+    String dateTimeFormatString = generalConfigAccessorService.getGeneralConfigValueByName("dateTimeFormat");
+    
+    DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
+    DateFormat dateTimeFormat = new SimpleDateFormat(dateTimeFormatString);
+    DateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    // Generate element for blood Rh
     String bloodRh = "";
     if (donation.getBloodRh().contains("+")) {
-      bloodRh = "Positive";
+      bloodRh = "^FT487,385^A0N,40,38^FB221,1,0,C^FH^FDRhD POSITIVE^FS";
     } else if (donation.getBloodRh().contains("-")) {
-      bloodRh = "Negative";
+      bloodRh = "^FO482,346^GB233,50,50^FS^FT482,386^A0N,40,38^FB233,1,0,C^FR^FH^FDRhD NEGATIVE^FS";
     }
-    String donationDate = df.format(donation.getDonationDate());
-
-    // TODO: improve calculation of expiry date according to final processed components expiry dates
-    // i.e. expiryDate = df.format(donation.getComponents().get(i).getExpiresOn());
-    // For now, generates expiry date as Donation Date + 35 Days.
-    String expiryDate = "";
-    Calendar c = Calendar.getInstance();
-    c.setTime(donation.getDonationDate());
-    c.add(Calendar.DATE, 35);
-    expiryDate = df.format(c.getTime());
-
+    
+    // Get configured service info values
+    String serviceInfoLine1 = generalConfigAccessorService.getGeneralConfigValueByName(
+        GeneralConfigConstants.SERVICE_INFO_LINE_1);
+    String serviceInfoLine2 = generalConfigAccessorService.getGeneralConfigValueByName(
+        GeneralConfigConstants.SERVICE_INFO_LINE_2);
+    
     String labelZPL = 
         "CT~~CD,~CC^~CT~" +
-            "^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD15^JUS^LRN^CI0^XZ" +
-            "^XA" +
-            "^MMT" +
-            "^PW799" +
-            "^LL0799" +
-            "^LS0" +
-            "^BY3,3,80^FT445,147^BCN,,Y,N" +
-            "^FD>:" + bloodABO + "^FS" +
-            "^FT505,304^A0N,152,148^FB166,1,0,C^FH\\^FD" + bloodABO + "^FS" +
-            "^BY2,3,82^FT451,538^BCN,,Y,N" +
-            "^FD>:" + expiryDate + "^FS" +
-            "^BY3,3,82^FT62,150^BCN,,Y,N" +
-            "^FD>:" + component.getDonationIdentificationNumber() + "^FS" +
-            "^FT66,608^A0N,20,21^FH\\^FD" + component.getComponentType().getComponentTypeName() + "^FS" +
-            "^BY3,3,77^FT69,535^BCN,,Y,N" +
-            "^FD>:" + component.getComponentCode() + "^FS" +
-            "^BY2,3,84^FT65,296^BCN,,Y,N" +
-            "^FD>:" + donationDate + "^FS" +
-            //inverse+
-            "^FT532,387^A0N,28,28^FB113,1,0,C^FH\\^FD" + bloodRh + "^FS" +
-            "^FT450,448^A0N,17,38^FH\\^FDExpiration Date^FS" +
-            "^FT61,64^A0N,17,38^FH\\^FDDIN^FS" +
-            "^FT62,204^A0N,17,38^FH\\^FDDate Bled^FS" +
-            "^FT65,387^A0N,20,24^FH\\^FDNot intended for actual use^FS" +
-            "^PQ1,0,1,Y^XZ";
+        "^CI28" +
+        "^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD15^JUS^LRN^CI28^XZ" +
+        "^XA" +
+        "^MMT" +
+        "^PW799" +
+        "^LL0799" +
+        "^LS0" +
+        "^FT61,64^A0N,17,38^FDDIN^FS" +
+        "^BY3,3,82^FT62,150^BCN,,Y,N^FD" + donation.getDonationIdentificationNumber() + "^FS" +
+        "^BY3,3,80^FT445,147^BCN,,Y,N^FD" + donation.getBloodAbo() + donation.getBloodRh() + "^FS" +
+        "^FT62,208^A0N,17,38^FDCollected On^FS" +
+        "^FT64,331^A0N,23,36^FD" + dateFormat.format(donation.getDonationDate()) + "^FS" +
+        "^FT505,304^A0N,152,148^FB166,1,0,C^FD" + donation.getBloodAbo() + "^FS" +
+        bloodRh +
+        "^FT65,414^A0N,20,14^FD" + serviceInfoLine2 + "^FS" +
+        "^FT65,387^A0N,20,14^FD" + serviceInfoLine1 + "^FS" +
+        "^BY3,3,77^FT65,535^BCN,,Y,N^FD" + component.getComponentCode() + "^FS" +
+        "^FT64,616^A0N,43,16^FD" + componentType.getComponentTypeName() + "^FS" +
+        "^BY2,3,84^FT62,305^BCN,,N,N^FD" + isoDateFormat.format(donation.getDonationDate()) + "^FS" +
+        "^FT450,439^A0N,17,38^FDExpires On^FS" +
+        "^BY2,3,82^FT451,535^BCN,,N,N^FD" + isoDateFormat.format(component.getExpiresOn()) + "^FS" +
+        "^FT452,565^A0N,23,31^FD" + dateTimeFormat.format(component.getExpiresOn()) + "^FS" +
+        "^FT66,661^A0N,23,14^FD" + componentType.getPreparationInfo() + "^FS" +
+        "^FT66,697^A0N,23,14^FD" + componentType.getStorageInfo() + "^FS" +
+        "^FT66,734^A0N,23,14^FD" + componentType.getTransportInfo() + "^FS" +
+        "^PQ1,0,1,Y^XZ";
 
     return labelZPL;
   }
