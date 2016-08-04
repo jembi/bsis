@@ -58,12 +58,16 @@ public class LabellingServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
-    
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.SERVICE_INFO_LINE_1)).thenReturn("Line 1");
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.SERVICE_INFO_LINE_2)).thenReturn("Line 2");
+
     // run test
     String label = labellingService.printDiscardLabel(componentId);
     
     // check outcome
     assertThat(label, label.contains(donationIdentificationNumber));
+    assertThat(label, label.contains("Line 1"));
+    assertThat(label, label.contains("Line 2"));
   }
   
   @Test(expected = IllegalArgumentException.class)
