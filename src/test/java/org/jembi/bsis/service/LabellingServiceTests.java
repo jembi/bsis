@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
+import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -48,11 +49,10 @@ public class LabellingServiceTests extends UnitTestSuite {
   public void testPrintDiscardLabel_shouldReturnZPLContainingText() throws Exception {
     // set up data
     Long componentId = Long.valueOf(1);
-    String donationIdentificationNumber = "1234567";
     Component component = aComponent()
         .withId(componentId)
         .withStatus(ComponentStatus.EXPIRED)
-        .withDonation(aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
+        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
     
     // set up mocks
@@ -65,7 +65,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     String label = labellingService.printDiscardLabel(componentId);
     
     // check outcome
-    assertThat(label, label.contains(donationIdentificationNumber));
+    assertThat(label, label.contains("3001"));
     assertThat(label, label.contains("Line 1"));
     assertThat(label, label.contains("Line 2"));
   }
@@ -74,11 +74,9 @@ public class LabellingServiceTests extends UnitTestSuite {
   public void testPrintDiscardLabel_throwsException() throws Exception {
     // set up data
     Long componentId = Long.valueOf(1);
-    String donationIdentificationNumber = "1234567";
     Component component = aComponent()
         .withId(componentId)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withDonation(aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
         .build();
     
     // set up mocks
