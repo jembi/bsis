@@ -799,6 +799,9 @@ public class DataImportService {
       // Populate the cache for use later when importing outcomes
       donationIdentificationNumberToDonationId.put(donation.getDonationIdentificationNumber(), donation.getId());
 
+      // Set donation released to true
+      donation.setReleased(true);
+
       // Set bloodTypingStatus COMPLETE if bloodAbo and bloodRh are not empty
       if (StringUtils.isNotEmpty(donation.getBloodAbo()) && StringUtils.isNotEmpty(donation.getBloodRh())) {
         donation.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
