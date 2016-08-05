@@ -341,6 +341,7 @@ public class ComponentCRUDService {
     ComponentStatusChange statusChange = new ComponentStatusChange();
     statusChange.setNewStatus(ComponentStatus.ISSUED);
     statusChange.setStatusChangedOn(issuedDate);
+    statusChange.setComponent(component);
     ComponentStatusChangeReason statusChangeReason = componentStatusChangeReasonRepository
         .findFirstComponentStatusChangeReasonForCategory(ComponentStatusChangeReasonCategory.ISSUED);
     statusChange.setStatusChangeReason(statusChangeReason);
@@ -373,6 +374,7 @@ public class ComponentCRUDService {
     ComponentStatusChange statusChange = new ComponentStatusChange();
     statusChange.setNewStatus(component.getStatus());
     statusChange.setStatusChangedOn(now);
+    statusChange.setComponent(component);
     ComponentStatusChangeReason statusChangeReason = componentStatusChangeReasonRepository
         .findFirstComponentStatusChangeReasonForCategory(ComponentStatusChangeReasonCategory.RETURNED);
     statusChange.setStatusChangeReason(statusChangeReason);

@@ -50,12 +50,20 @@ public class ComponentStatusChangeReasonBuilder extends AbstractEntityBuilder<Co
 
   public static ComponentStatusChangeReasonBuilder aDiscardReason() {
     return new ComponentStatusChangeReasonBuilder()
-        .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED);
+        .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED)
+        .withComponentStatusChangeReasonType(null);
+  }
+  
+  public static ComponentStatusChangeReasonBuilder anIssuedReason() {
+    return new ComponentStatusChangeReasonBuilder()
+        .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.ISSUED)
+        .withComponentStatusChangeReasonType(null);
   }
 
   public static ComponentStatusChangeReasonBuilder aReturnReason() {
     return new ComponentStatusChangeReasonBuilder()
-        .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.RETURNED);
+        .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.RETURNED)
+        .withComponentStatusChangeReasonType(null);
   }
 
   public static ComponentStatusChangeReasonBuilder anUnsafeReason() {
