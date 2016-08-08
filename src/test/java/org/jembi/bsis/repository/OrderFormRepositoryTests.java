@@ -236,7 +236,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void testFindBloodUnitsOrdered_shouldReturnRightCount() {
+  public void testFindBloodUnitsOrdered_shouldReturnRightDtos() {
     // Set up
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().minusDays(2).toDate();
@@ -297,6 +297,60 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     Assert.assertEquals("Correct count", 7, dtos.get(2).getCount());
     Assert.assertEquals("Correct componentType", componentType2, dtos.get(2).getComponentType());
     Assert.assertEquals("Correct location", dispatchedFrom2, dtos.get(2).getLocation());
+  }
+  
+  @Test
+  public void testFindBloodUnitsOrderedWithExcludingFields_shouldntReturnDtos() {
+    // Set up
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().minusDays(2).toDate();
+    Location dispatchedFrom = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
+    ComponentType componentType = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
+    
+    // Exclude by order type 'CREATED'
+    OrderForm orderExcludedByType = OrderFormBuilder.anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.CREATED)
+        .withOrderType(OrderType.ISSUE)
+        .buildAndPersist(entityManager);   
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType)
+        .withNumberOfUnits(1)
+        .withOrderForm(orderExcludedByType)
+        .buildAndPersist(entityManager);
+    
+    // Exclude by order status 'TRANSFER'
+    OrderForm orderExcludedByStatus = OrderFormBuilder.anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.TRANSFER)
+        .buildAndPersist(entityManager);   
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType)
+        .withNumberOfUnits(1)
+        .withOrderForm(orderExcludedByStatus)
+        .buildAndPersist(entityManager);
+    
+    // Exclude by date
+    OrderForm orderExcludedByDate = OrderFormBuilder.anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withOrderDate(new DateTime().minusDays(30).toDate())
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .buildAndPersist(entityManager);   
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType)
+        .withNumberOfUnits(1)
+        .withOrderForm(orderExcludedByDate)
+        .buildAndPersist(entityManager);
+
+    // Run test
+    List<BloodUnitsOrderDTO> dtos = orderFormRepository.findBloodUnitsOrdered(startDate, endDate);
+
+    // Verify
+    Assert.assertEquals("Found 0 dtos", 0, dtos.size());
   }
 
 }
