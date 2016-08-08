@@ -1,7 +1,9 @@
 package org.jembi.bsis.repository;
 
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 
@@ -351,6 +353,96 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Verify
     Assert.assertEquals("Found 0 dtos", 0, dtos.size());
+  }
+
+  public void testFindBloodUnitsIssued_shouldReturnCorrectDTOs() {
+    // Set up fixture
+    Date startDate = new DateTime().minusDays(10).toDate();
+    Date endDate = new DateTime().minusDays(1).toDate();
+    
+    ComponentType firstComponentType = aComponentType().buildAndPersist(entityManager);
+    ComponentType secondComponentType = aComponentType().buildAndPersist(entityManager);
+    
+    Location firstLocation = aDistributionSite().buildAndPersist(entityManager);
+    Location secondLocation = aDistributionSite().buildAndPersist(entityManager);
+    
+    // Expected, first location, 2 first components, 1 second component
+    anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .withDispatchedFrom(firstLocation)
+        .buildAndPersist(entityManager);
+
+    // Expected, first location, 1 first component, 1 second component
+    anOrderForm()
+        .withOrderDate(endDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .withDispatchedFrom(firstLocation)
+        .buildAndPersist(entityManager);
+
+    // Expected, second location, 1 first component, 0 second components
+    anOrderForm()
+        .withOrderDate(endDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withDispatchedFrom(secondLocation)
+        .buildAndPersist(entityManager);
+
+    // Excluded by date
+    anOrderForm()
+        .withOrderDate(new DateTime().minusDays(90).toDate())
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .withDispatchedFrom(firstLocation)
+        .buildAndPersist(entityManager);
+
+    // Excluded by order status
+    anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.CREATED)
+        .withOrderType(OrderType.ISSUE)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .withDispatchedFrom(firstLocation)
+        .buildAndPersist(entityManager);
+
+    // Excluded by order type
+    anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.TRANSFER)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .withDispatchedFrom(firstLocation)
+        .buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    List<BloodUnitsOrderDTO> returnedDTOs = orderFormRepository.findBloodUnitsIssued(startDate, endDate);
+    
+    // Verify
+    Assert.assertEquals("Found 2 dtos", 3, returnedDTOs.size());
+    // First location, first component type
+    Assert.assertEquals("Correct count", 3, returnedDTOs.get(0).getCount());
+    Assert.assertEquals("Correct componentType", firstComponentType, returnedDTOs.get(0).getComponentType());
+    Assert.assertEquals("Correct location", firstLocation, returnedDTOs.get(0).getLocation());
+    // First location, second component type
+    Assert.assertEquals("Correct count", 2, returnedDTOs.get(1).getCount());
+    Assert.assertEquals("Correct componentType", secondComponentType, returnedDTOs.get(1).getComponentType());
+    Assert.assertEquals("Correct location", firstLocation, returnedDTOs.get(1).getLocation());
+    // Second location, first component type
+    Assert.assertEquals("Correct count", 1, returnedDTOs.get(2).getCount());
+    Assert.assertEquals("Correct componentType", firstComponentType, returnedDTOs.get(2).getComponentType());
+    Assert.assertEquals("Correct location", secondLocation, returnedDTOs.get(2).getLocation());
   }
 
 }

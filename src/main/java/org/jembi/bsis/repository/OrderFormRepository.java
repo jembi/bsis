@@ -81,4 +81,14 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
         .getResultList();
   }
 
+  public List<BloodUnitsOrderDTO> findBloodUnitsIssued(Date startDate, Date endDate) {
+    return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BLOOD_UNITS_ISSUED, 
+        BloodUnitsOrderDTO.class)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("orderStatus", OrderStatus.DISPATCHED)
+        .setParameter("orderType", OrderType.ISSUE)
+        .getResultList();
+  }
+
 }

@@ -28,8 +28,10 @@ import org.jembi.bsis.repository.OrderFormNamedQueryConstants;
     @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_BY_ID,
         query = OrderFormNamedQueryConstants.QUERY_FIND_BY_ID),
     @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_BLOOD_UNITS_ORDERED,
-        query = OrderFormNamedQueryConstants.QUERY_FIND_BLOOD_UNITS_ORDERED)
-    })
+        query = OrderFormNamedQueryConstants.QUERY_FIND_BLOOD_UNITS_ORDERED),
+    @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_BLOOD_UNITS_ISSUED,
+        query = OrderFormNamedQueryConstants.QUERY_FIND_BLOOD_UNITS_ISSUED)
+})
 @Entity
 @Audited
 public class OrderForm extends BaseModificationTrackerEntity {

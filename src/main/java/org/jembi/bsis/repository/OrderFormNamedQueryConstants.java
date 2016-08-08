@@ -15,5 +15,18 @@ public class OrderFormNamedQueryConstants {
       "AND o.orderDate BETWEEN :startDate AND :endDate " +
       "GROUP BY o.dispatchedFrom, ofi.componentType " +
       "ORDER BY o.dispatchedFrom, ofi.componentType ";
+  
+  
+  public static final String NAME_FIND_BLOOD_UNITS_ISSUED =
+      "OrderForm.findBloodUnitsIssued";
+  public static final String QUERY_FIND_BLOOD_UNITS_ISSUED =
+      "SELECT NEW org.jembi.bsis.dto.BloodUnitsOrderDTO(c.componentType, o.dispatchedFrom, COUNT(c)) " +
+      "FROM OrderForm o " +
+      "INNER JOIN o.components c " +
+      "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
+      "AND o.status = :orderStatus " +
+      "AND o.type = :orderType " +
+      "GROUP BY o.dispatchedFrom, c.componentType " +
+      "ORDER BY o.dispatchedFrom, c.componentType ";
 
 }
