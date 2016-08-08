@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jembi.bsis.controllerservice.ReportsControllerService;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
@@ -54,6 +55,9 @@ public class ReportsController {
   
   @Autowired
   private TtiPrevalenceReportGeneratorService ttiPrevalenceReportGeneratorService;
+
+  @Autowired
+  private ReportsControllerService reportsControllerService;
 
   @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
@@ -223,6 +227,14 @@ public class ReportsController {
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return ttiPrevalenceReportGeneratorService.generateTTIPrevalenceReport(startDate, endDate);
+  }
+
+  @RequestMapping(value = "/unitsissued/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
+  public Map<String, Object> generateUnitsIssuedReport() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("componentTypes", reportsControllerService.getAllComponentTypesThatCanBeIssued());
+    return map;
   }
 
 }
