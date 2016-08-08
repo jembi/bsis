@@ -3,7 +3,6 @@ package org.jembi.bsis.repository;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 
@@ -242,20 +241,16 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     // Set up
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().minusDays(2).toDate();
-    Location dispatchedFrom1 = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
-    Location dispatchedFrom2 = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
     ComponentType componentType1 = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
     ComponentType componentType2 = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
     
     OrderForm order1 = OrderFormBuilder.anOrderForm()
-        .withDispatchedFrom(dispatchedFrom1)
         .withOrderDate(startDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
         .withOrderType(OrderType.ISSUE)
         .buildAndPersist(entityManager);
     
     OrderForm order2 = OrderFormBuilder.anOrderForm()
-        .withDispatchedFrom(dispatchedFrom2)
         .withOrderDate(startDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
         .withOrderType(OrderType.ISSUE)
@@ -289,16 +284,11 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     List<BloodUnitsOrderDTO> dtos = orderFormRepository.findBloodUnitsOrdered(startDate, endDate);
 
     // Verify
-    Assert.assertEquals("Found 3 dtos", 3, dtos.size());
-    Assert.assertEquals("Correct count", 6, dtos.get(0).getCount());
+    Assert.assertEquals("Found 2 dtos", 2, dtos.size());
+    Assert.assertEquals("Correct count", 8, dtos.get(0).getCount());
     Assert.assertEquals("Correct componentType", componentType1, dtos.get(0).getComponentType());
-    Assert.assertEquals("Correct location", dispatchedFrom1, dtos.get(0).getLocation());
-    Assert.assertEquals("Correct count", 2, dtos.get(1).getCount());
-    Assert.assertEquals("Correct componentType", componentType1, dtos.get(1).getComponentType());
-    Assert.assertEquals("Correct location", dispatchedFrom2, dtos.get(1).getLocation());
-    Assert.assertEquals("Correct count", 7, dtos.get(2).getCount());
-    Assert.assertEquals("Correct componentType", componentType2, dtos.get(2).getComponentType());
-    Assert.assertEquals("Correct location", dispatchedFrom2, dtos.get(2).getLocation());
+    Assert.assertEquals("Correct count", 7, dtos.get(1).getCount());
+    Assert.assertEquals("Correct componentType", componentType2, dtos.get(1).getComponentType());
   }
   
   @Test
@@ -306,12 +296,10 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     // Set up
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().minusDays(2).toDate();
-    Location dispatchedFrom = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
     ComponentType componentType = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
     
     // Exclude by order type 'CREATED'
     OrderForm orderExcludedByType = OrderFormBuilder.anOrderForm()
-        .withDispatchedFrom(dispatchedFrom)
         .withOrderDate(startDate)
         .withOrderStatus(OrderStatus.CREATED)
         .withOrderType(OrderType.ISSUE)
@@ -324,7 +312,6 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     
     // Exclude by order status 'TRANSFER'
     OrderForm orderExcludedByStatus = OrderFormBuilder.anOrderForm()
-        .withDispatchedFrom(dispatchedFrom)
         .withOrderDate(startDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
         .withOrderType(OrderType.TRANSFER)
@@ -337,7 +324,6 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     
     // Exclude by date
     OrderForm orderExcludedByDate = OrderFormBuilder.anOrderForm()
-        .withDispatchedFrom(dispatchedFrom)
         .withOrderDate(new DateTime().minusDays(30).toDate())
         .withOrderStatus(OrderStatus.DISPATCHED)
         .withOrderType(OrderType.ISSUE)
@@ -364,10 +350,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     ComponentType firstComponentType = aComponentType().buildAndPersist(entityManager);
     ComponentType secondComponentType = aComponentType().buildAndPersist(entityManager);
     
-    Location firstLocation = aDistributionSite().buildAndPersist(entityManager);
-    Location secondLocation = aDistributionSite().buildAndPersist(entityManager);
-    
-    // Expected, first location, 2 first components, 1 second component
+    // Expected, 2 first components, 1 second component
     anOrderForm()
         .withOrderDate(startDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
@@ -375,26 +358,15 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withComponent(aComponent().withComponentType(firstComponentType).build())
         .withComponent(aComponent().withComponentType(firstComponentType).build())
         .withComponent(aComponent().withComponentType(secondComponentType).build())
-        .withDispatchedFrom(firstLocation)
         .buildAndPersist(entityManager);
 
-    // Expected, first location, 1 first component, 1 second component
+    // Expected, 1 first component, 1 second component
     anOrderForm()
         .withOrderDate(endDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
         .withOrderType(OrderType.ISSUE)
         .withComponent(aComponent().withComponentType(firstComponentType).build())
         .withComponent(aComponent().withComponentType(secondComponentType).build())
-        .withDispatchedFrom(firstLocation)
-        .buildAndPersist(entityManager);
-
-    // Expected, second location, 1 first component, 0 second components
-    anOrderForm()
-        .withOrderDate(endDate)
-        .withOrderStatus(OrderStatus.DISPATCHED)
-        .withOrderType(OrderType.ISSUE)
-        .withComponent(aComponent().withComponentType(firstComponentType).build())
-        .withDispatchedFrom(secondLocation)
         .buildAndPersist(entityManager);
 
     // Excluded by date
@@ -404,7 +376,6 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withOrderType(OrderType.ISSUE)
         .withComponent(aComponent().withComponentType(firstComponentType).build())
         .withComponent(aComponent().withComponentType(secondComponentType).build())
-        .withDispatchedFrom(firstLocation)
         .buildAndPersist(entityManager);
 
     // Excluded by order status
@@ -414,7 +385,6 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withOrderType(OrderType.ISSUE)
         .withComponent(aComponent().withComponentType(firstComponentType).build())
         .withComponent(aComponent().withComponentType(secondComponentType).build())
-        .withDispatchedFrom(firstLocation)
         .buildAndPersist(entityManager);
 
     // Excluded by order type
@@ -424,26 +394,19 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withOrderType(OrderType.TRANSFER)
         .withComponent(aComponent().withComponentType(firstComponentType).build())
         .withComponent(aComponent().withComponentType(secondComponentType).build())
-        .withDispatchedFrom(firstLocation)
         .buildAndPersist(entityManager);
     
     // Exercise SUT
     List<BloodUnitsOrderDTO> returnedDTOs = orderFormRepository.findBloodUnitsIssued(startDate, endDate);
     
     // Verify
-    Assert.assertEquals("Found 3 DTOs", 3, returnedDTOs.size());
-    // First location, first component type
+    Assert.assertEquals("Found 2 DTOs", 2, returnedDTOs.size());
+    // First component type
     Assert.assertEquals("Correct count", 3, returnedDTOs.get(0).getCount());
     Assert.assertEquals("Correct componentType", firstComponentType, returnedDTOs.get(0).getComponentType());
-    Assert.assertEquals("Correct location", firstLocation, returnedDTOs.get(0).getLocation());
-    // First location, second component type
+    // Second component type
     Assert.assertEquals("Correct count", 2, returnedDTOs.get(1).getCount());
     Assert.assertEquals("Correct componentType", secondComponentType, returnedDTOs.get(1).getComponentType());
-    Assert.assertEquals("Correct location", firstLocation, returnedDTOs.get(1).getLocation());
-    // Second location, first component type
-    Assert.assertEquals("Correct count", 1, returnedDTOs.get(2).getCount());
-    Assert.assertEquals("Correct componentType", firstComponentType, returnedDTOs.get(2).getComponentType());
-    Assert.assertEquals("Correct location", secondLocation, returnedDTOs.get(2).getLocation());
   }
 
 }
