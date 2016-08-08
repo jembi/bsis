@@ -355,6 +355,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     Assert.assertEquals("Found 0 dtos", 0, dtos.size());
   }
 
+  @Test
   public void testFindBloodUnitsIssued_shouldReturnCorrectDTOs() {
     // Set up fixture
     Date startDate = new DateTime().minusDays(10).toDate();
