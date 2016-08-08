@@ -7,6 +7,7 @@ import java.util.Map;
 import org.jembi.bsis.controllerservice.ReportsControllerService;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.reporting.Report;
+import org.jembi.bsis.service.BloodUnitsIssuedReportGeneratorService;
 import org.jembi.bsis.service.ReportGeneratorService;
 import org.jembi.bsis.service.TtiPrevalenceReportGeneratorService;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -27,6 +28,9 @@ public class ReportsController {
   
   @Autowired
   private TtiPrevalenceReportGeneratorService ttiPrevalenceReportGeneratorService;
+
+  @Autowired
+  private BloodUnitsIssuedReportGeneratorService bloodUnitsIssuedReportGeneratorService;
 
   @Autowired
   private ReportsControllerService reportsControllerService;
@@ -64,10 +68,18 @@ public class ReportsController {
 
   @RequestMapping(value = "/unitsissued/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
-  public Map<String, Object> generateUnitsIssuedReport() {
+  public Map<String, Object> getUnitsIssuedReportFormFields() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", reportsControllerService.getAllComponentTypesThatCanBeIssued());
     return map;
+  }
+
+  @RequestMapping(value = "/unitsissued/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
+  public Report generateUnitsIssuedReport(
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    return bloodUnitsIssuedReportGeneratorService.generateUnitsIssuedReport(startDate, endDate);
   }
 
 }
