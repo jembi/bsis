@@ -431,7 +431,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     List<BloodUnitsOrderDTO> returnedDTOs = orderFormRepository.findBloodUnitsIssued(startDate, endDate);
     
     // Verify
-    Assert.assertEquals("Found 2 dtos", 3, returnedDTOs.size());
+    Assert.assertEquals("Found 3 DTOs", 3, returnedDTOs.size());
     // First location, first component type
     Assert.assertEquals("Correct count", 3, returnedDTOs.get(0).getCount());
     Assert.assertEquals("Correct componentType", firstComponentType, returnedDTOs.get(0).getComponentType());
