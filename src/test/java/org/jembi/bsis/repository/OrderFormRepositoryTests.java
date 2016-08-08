@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
+import org.jembi.bsis.dto.BloodUnitsOrderDTO;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.OrderFormBuilder;
@@ -24,7 +25,6 @@ import org.jembi.bsis.model.order.OrderFormItem;
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.model.packtype.PackType;
-import org.jembi.bsis.repository.OrderFormRepository;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -233,6 +233,70 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     // Verify
     Assert.assertEquals("Found 1 order", 1, orders.size());
     Assert.assertEquals("Verify right order was returned", dispatchedOrderForm, orders.get(0));
+  }
+
+  @Test
+  public void testFindBloodUnitsOrdered_shouldReturnRightCount() {
+    // Set up
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().minusDays(2).toDate();
+    Location dispatchedFrom1 = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
+    Location dispatchedFrom2 = LocationBuilder.aDistributionSite().buildAndPersist(entityManager);
+    ComponentType componentType1 = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
+    ComponentType componentType2 = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
+    
+    OrderForm order1 = OrderFormBuilder.anOrderForm()
+        .withDispatchedFrom(dispatchedFrom1)
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .buildAndPersist(entityManager);
+    
+    OrderForm order2 = OrderFormBuilder.anOrderForm()
+        .withDispatchedFrom(dispatchedFrom2)
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .buildAndPersist(entityManager);
+    
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType1)
+        .withNumberOfUnits(1)
+        .withOrderForm(order1)
+        .buildAndPersist(entityManager);
+    
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType1)
+        .withNumberOfUnits(5)
+        .withOrderForm(order1)
+        .buildAndPersist(entityManager);
+    
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType1)
+        .withNumberOfUnits(2)
+        .withOrderForm(order2)
+        .buildAndPersist(entityManager);
+
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType2)
+        .withNumberOfUnits(7)
+        .withOrderForm(order2)
+        .buildAndPersist(entityManager);
+
+    // Run test
+    List<BloodUnitsOrderDTO> dtos = orderFormRepository.findBloodUnitsOrdered(startDate, endDate);
+
+    // Verify
+    Assert.assertEquals("Found 3 dtos", 3, dtos.size());
+    Assert.assertEquals("Correct count", 6, dtos.get(0).getCount());
+    Assert.assertEquals("Correct componentType", componentType1, dtos.get(0).getComponentType());
+    Assert.assertEquals("Correct location", dispatchedFrom1, dtos.get(0).getLocation());
+    Assert.assertEquals("Correct count", 2, dtos.get(1).getCount());
+    Assert.assertEquals("Correct componentType", componentType1, dtos.get(1).getComponentType());
+    Assert.assertEquals("Correct location", dispatchedFrom2, dtos.get(1).getLocation());
+    Assert.assertEquals("Correct count", 7, dtos.get(2).getCount());
+    Assert.assertEquals("Correct componentType", componentType2, dtos.get(2).getComponentType());
+    Assert.assertEquals("Correct location", dispatchedFrom2, dtos.get(2).getLocation());
   }
 
 }
