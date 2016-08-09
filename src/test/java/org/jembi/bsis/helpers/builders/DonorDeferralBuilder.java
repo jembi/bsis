@@ -49,6 +49,11 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
     voided = true;
     return this;
   }
+  
+  public DonorDeferralBuilder thatIsNotVoided() {
+    voided = false;
+    return this;
+  }
 
   public DonorDeferralBuilder withVenue(Location venue) {
     this.venue = venue;
