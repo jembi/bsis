@@ -11,7 +11,10 @@ public class OrderFormNamedQueryConstants {
   public static final String QUERY_FIND_BLOOD_UNITS_ORDERED =
       "SELECT NEW org.jembi.bsis.dto.BloodUnitsOrderDTO(ofi.componentType, SUM(ofi.numberOfUnits)) " +
       "FROM OrderFormItem ofi, OrderForm o " +
-      "WHERE ofi.orderForm = o AND o.status = :orderStatus AND o.type = :orderType " +
+      "WHERE ofi.orderForm = o " +
+      "AND o.status = :orderStatus " +
+      "AND o.type = :orderType " +
+      "AND o.isDeleted = :orderDeleted " +
       "AND o.orderDate BETWEEN :startDate AND :endDate " +
       "GROUP BY ofi.componentType " +
       "ORDER BY ofi.componentType ";
@@ -26,6 +29,7 @@ public class OrderFormNamedQueryConstants {
       "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
       "AND o.status = :orderStatus " +
       "AND o.type = :orderType " +
+      "AND o.isDeleted = :orderDeleted " +
       "GROUP BY c.componentType " +
       "ORDER BY c.componentType ";
 

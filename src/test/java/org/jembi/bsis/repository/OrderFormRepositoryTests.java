@@ -333,6 +333,19 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withNumberOfUnits(1)
         .withOrderForm(orderExcludedByDate)
         .buildAndPersist(entityManager);
+    
+    // Exclude by deleted order
+    OrderForm orderExcludedByDeletedOrder = OrderFormBuilder.anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .withIsDeleted(true)
+        .buildAndPersist(entityManager);   
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType)
+        .withNumberOfUnits(1)
+        .withOrderForm(orderExcludedByDeletedOrder)
+        .buildAndPersist(entityManager);
 
     // Run test
     List<BloodUnitsOrderDTO> dtos = orderFormRepository.findBloodUnitsOrdered(startDate, endDate);
@@ -394,6 +407,16 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withOrderType(OrderType.TRANSFER)
         .withComponent(aComponent().withComponentType(firstComponentType).build())
         .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .buildAndPersist(entityManager);
+    
+    // Excluded by deleted order
+    anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .withIsDeleted(true)
         .buildAndPersist(entityManager);
     
     // Exercise SUT
