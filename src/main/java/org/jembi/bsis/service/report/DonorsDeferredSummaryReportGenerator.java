@@ -22,13 +22,11 @@ public class DonorsDeferredSummaryReportGenerator {
   
   public Report generateDonorDeferralSummaryReport(Date startDate, Date endDate) {
     Report report = new Report();
+
     report.setStartDate(startDate);
     report.setEndDate(endDate);
-    
-    List<DataValue> dataValues = new ArrayList<DataValue>();
-    dataValues.addAll(getDeferredDonorsDataValues(startDate, endDate));
+    report.setDataValues(getDeferredDonorsDataValues(startDate, endDate));
 
-    report.setDataValues(dataValues);
     return report;
   }
 
