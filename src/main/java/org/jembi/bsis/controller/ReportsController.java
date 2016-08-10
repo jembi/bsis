@@ -7,10 +7,10 @@ import java.util.Map;
 import org.jembi.bsis.controllerservice.ReportsControllerService;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.reporting.Report;
-import org.jembi.bsis.service.BloodUnitsIssuedReportGeneratorService;
-import org.jembi.bsis.service.DonorsDeferredSummaryReportGeneratorService;
-import org.jembi.bsis.service.ReportGeneratorService;
-import org.jembi.bsis.service.TtiPrevalenceReportGeneratorService;
+import org.jembi.bsis.service.report.BloodUnitsIssuedReportGenerator;
+import org.jembi.bsis.service.report.DonorsDeferredSummaryReportGenerator;
+import org.jembi.bsis.service.report.ReportGeneratorService;
+import org.jembi.bsis.service.report.TtiPrevalenceReportGenerator;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,13 +28,13 @@ public class ReportsController {
   private ReportGeneratorService reportGeneratorService;
   
   @Autowired
-  private TtiPrevalenceReportGeneratorService ttiPrevalenceReportGeneratorService;
+  private TtiPrevalenceReportGenerator ttiPrevalenceReportGenerator;
 
   @Autowired
-  private BloodUnitsIssuedReportGeneratorService bloodUnitsIssuedReportGeneratorService;
+  private BloodUnitsIssuedReportGenerator bloodUnitsIssuedReportGenerator;
   
   @Autowired
-  private DonorsDeferredSummaryReportGeneratorService donorsDeferredSummaryReportGeneratorService;
+  private DonorsDeferredSummaryReportGenerator donorsDeferredSummaryReportGenerator;
 
   @Autowired
   private ReportsControllerService reportsControllerService;
@@ -67,7 +67,7 @@ public class ReportsController {
   public Report getTTIPrevalenceReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-    return ttiPrevalenceReportGeneratorService.generateTTIPrevalenceReport(startDate, endDate);
+    return ttiPrevalenceReportGenerator.generateTTIPrevalenceReport(startDate, endDate);
   }
 
   @RequestMapping(value = "/unitsissued/form", method = RequestMethod.GET)
@@ -83,7 +83,7 @@ public class ReportsController {
   public Report generateUnitsIssuedReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-    return bloodUnitsIssuedReportGeneratorService.generateUnitsIssuedReport(startDate, endDate);
+    return bloodUnitsIssuedReportGenerator.generateUnitsIssuedReport(startDate, endDate);
   }
 
   @RequestMapping(value = "/donorsdeferred/generate", method = RequestMethod.GET)
@@ -91,6 +91,6 @@ public class ReportsController {
   public Report generateDonorsDeferredReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-    return donorsDeferredSummaryReportGeneratorService.generateDonorDeferralSummaryReport(startDate, endDate);
+    return donorsDeferredSummaryReportGenerator.generateDonorDeferralSummaryReport(startDate, endDate);
   }
 }

@@ -1,4 +1,4 @@
-package org.jembi.bsis.service;
+package org.jembi.bsis.service.report;
 
 import java.util.ArrayList;
 import java.util.Date;

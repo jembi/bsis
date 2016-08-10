@@ -1,4 +1,4 @@
-package org.jembi.bsis.service;
+package org.jembi.bsis.service.report;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -30,6 +30,7 @@ import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.InventoryRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.service.report.ReportGeneratorService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;

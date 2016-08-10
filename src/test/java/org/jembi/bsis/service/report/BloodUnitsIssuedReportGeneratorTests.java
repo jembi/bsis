@@ -1,4 +1,4 @@
-package org.jembi.bsis.service;
+package org.jembi.bsis.service.report;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -21,15 +21,16 @@ import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
 import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.repository.OrderFormRepository;
+import org.jembi.bsis.service.report.BloodUnitsIssuedReportGenerator;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class BloodUnitsIssuedReportGeneratorServiceTests extends UnitTestSuite {
+public class BloodUnitsIssuedReportGeneratorTests extends UnitTestSuite {
 
   @InjectMocks
-  private BloodUnitsIssuedReportGeneratorService bloodUnitsIssuedReportGeneratorService;
+  private BloodUnitsIssuedReportGenerator bloodUnitsIssuedReportGenerator;
 
   @Mock
   private OrderFormRepository orderFormRepository;
@@ -75,7 +76,7 @@ public class BloodUnitsIssuedReportGeneratorServiceTests extends UnitTestSuite {
     when(orderFormRepository.findBloodUnitsIssued(startDate, endDate)).thenReturn(unitsIssued);
 
     // Run test
-    Report returnedReport = bloodUnitsIssuedReportGeneratorService.generateUnitsIssuedReport(startDate, endDate);
+    Report returnedReport = bloodUnitsIssuedReportGenerator.generateUnitsIssuedReport(startDate, endDate);
 
     // Verify
     assertThat(returnedReport, is(equalTo(expectedReport)));

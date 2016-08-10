@@ -1,4 +1,4 @@
-package org.jembi.bsis.service;
+package org.jembi.bsis.service.report;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -30,10 +30,10 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class DonorsDeferredSummaryReportGeneratorServiceTests extends UnitTestSuite {
+public class DonorsDeferredSummaryReportGeneratorTests extends UnitTestSuite {
 
   @InjectMocks
-  private DonorsDeferredSummaryReportGeneratorService donorsDeferredSummaryReportGeneratorService;
+  private DonorsDeferredSummaryReportGenerator donorsDeferredSummaryReportGenerator;
 
   @Mock
   private DonorDeferralRepository donorDeferralRepository;
@@ -84,7 +84,7 @@ public class DonorsDeferredSummaryReportGeneratorServiceTests extends UnitTestSu
     when(donorDeferralRepository.countDeferredDonors(startDate, endDate)).thenReturn(deferredDonors);
 
     // Run test
-    Report returnedReport = donorsDeferredSummaryReportGeneratorService.generateDonorDeferralSummaryReport(startDate, endDate);
+    Report returnedReport = donorsDeferredSummaryReportGenerator.generateDonorDeferralSummaryReport(startDate, endDate);
 
     // Verify
     assertThat(returnedReport, is(equalTo(expectedReport)));
