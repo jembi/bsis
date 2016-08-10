@@ -119,7 +119,6 @@ public class PermissionConstants {
   public static final String MANAGE_FORMS = "Manage Forms";
   public static final String MANAGE_BACKUP_DATA = "Manage Backup Data";
   public static final String MANAGE_BLOOD_TESTS = "Manage Blood Tests";
-  public static final String MANAGE_TIPS = "Manage Tips";
   public static final String MANAGE_REQUESTS = "Manage Requests";
   public static final String MANAGE_GENERAL_CONFIGS = "Manage General Configs";
 

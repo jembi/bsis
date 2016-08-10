@@ -40,6 +40,7 @@
   <include file="./src/main/resources/liquibase/updates/1133-permanent-deferrals-void.xml" />
   <include file="./src/main/resources/liquibase/updates/1454-unsafe-rollback.xml" />
   <include file="./src/main/resources/liquibase/updates/1474-release-donations-on-import.xml" />
+  <include file="./src/main/resources/liquibase/updates/1343-units-issued-report.xml" />
   <include file="./src/main/resources/liquibase/updates/1339-header-warning-message.xml" />
 
 </databaseChangeLog>

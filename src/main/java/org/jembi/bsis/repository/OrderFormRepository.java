@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
+import org.jembi.bsis.dto.BloodUnitsOrderDTO;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
@@ -68,6 +69,28 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
     }
 
     return query.getResultList();
+  }
+
+  public List<BloodUnitsOrderDTO> findBloodUnitsOrdered(Date startDate, Date endDate) {
+    return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BLOOD_UNITS_ORDERED, 
+        BloodUnitsOrderDTO.class)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("orderStatus", OrderStatus.DISPATCHED)
+        .setParameter("orderType", OrderType.ISSUE)
+        .setParameter("orderDeleted", false)
+        .getResultList();
+  }
+
+  public List<BloodUnitsOrderDTO> findBloodUnitsIssued(Date startDate, Date endDate) {
+    return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BLOOD_UNITS_ISSUED, 
+        BloodUnitsOrderDTO.class)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("orderStatus", OrderStatus.DISPATCHED)
+        .setParameter("orderType", OrderType.ISSUE)
+        .setParameter("orderDeleted", false)
+        .getResultList();
   }
 
 }
