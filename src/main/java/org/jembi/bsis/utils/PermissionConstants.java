@@ -98,6 +98,7 @@ public class PermissionConstants {
   public static final String TTI_REPORTING = "Reporting - TTI Testing";
   public static final String COMPONENTS_ISSUED_REPORTING = "Reporting - Components";
   public static final String COMPONENTS_DISCARDED_REPORTING = "Reporting - Discards";
+  public static final String DONORS_REPORTING = "Reporting - Donors";
 
   // Admin and Super-User Permissions
   public static final String MANAGE_USERS = "Manage Users";

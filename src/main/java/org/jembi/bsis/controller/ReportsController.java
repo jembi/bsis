@@ -8,6 +8,7 @@ import org.jembi.bsis.controllerservice.ReportsControllerService;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.service.BloodUnitsIssuedReportGeneratorService;
+import org.jembi.bsis.service.DonorsDeferredSummaryReportGeneratorService;
 import org.jembi.bsis.service.ReportGeneratorService;
 import org.jembi.bsis.service.TtiPrevalenceReportGeneratorService;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -31,6 +32,9 @@ public class ReportsController {
 
   @Autowired
   private BloodUnitsIssuedReportGeneratorService bloodUnitsIssuedReportGeneratorService;
+  
+  @Autowired
+  private DonorsDeferredSummaryReportGeneratorService donorsDeferredSummaryReportGeneratorService;
 
   @Autowired
   private ReportsControllerService reportsControllerService;
@@ -82,4 +86,11 @@ public class ReportsController {
     return bloodUnitsIssuedReportGeneratorService.generateUnitsIssuedReport(startDate, endDate);
   }
 
+  @RequestMapping(value = "/donorsdeferred/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.DONORS_REPORTING + "')")
+  public Report generateDonorsDeferredReport(
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    return donorsDeferredSummaryReportGeneratorService.generateDonorDeferralSummaryReport(startDate, endDate);
+  }
 }
