@@ -8,8 +8,9 @@ import org.jembi.bsis.controllerservice.ReportsControllerService;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.service.report.BloodUnitsIssuedReportGenerator;
+import org.jembi.bsis.service.report.CollectedDonationsReportGenerator;
 import org.jembi.bsis.service.report.DonorsDeferredSummaryReportGenerator;
-import org.jembi.bsis.service.report.ReportGeneratorService;
+import org.jembi.bsis.service.report.StockLevelsReportGenerator;
 import org.jembi.bsis.service.report.TtiPrevalenceReportGenerator;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReportsController {
 
   @Autowired
-  private ReportGeneratorService reportGeneratorService;
+  private StockLevelsReportGenerator stockLevelsReportGenerator;
   
   @Autowired
   private TtiPrevalenceReportGenerator ttiPrevalenceReportGenerator;
@@ -35,6 +36,9 @@ public class ReportsController {
   
   @Autowired
   private DonorsDeferredSummaryReportGenerator donorsDeferredSummaryReportGenerator;
+  
+  @Autowired
+  private CollectedDonationsReportGenerator collectedDonationsReportGenerator;
 
   @Autowired
   private ReportsControllerService reportsControllerService;
@@ -43,7 +47,7 @@ public class ReportsController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
   public Report findStockLevels(@RequestParam(value = "location", required = false) Long locationId,
       @RequestParam(value = "inventoryStatus", required = true) InventoryStatus inventoryStatus) {
-    return reportGeneratorService.generateStockLevelsForLocationReport(locationId, inventoryStatus);
+    return stockLevelsReportGenerator.generateStockLevelsForLocationReport(locationId, inventoryStatus);
   }
   
   @RequestMapping(value = "/stockLevels/form", method = RequestMethod.GET)
@@ -59,7 +63,7 @@ public class ReportsController {
   public Report getCollectedDonationsReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-    return reportGeneratorService.generateCollectedDonationsReport(startDate, endDate);
+    return collectedDonationsReportGenerator.generateCollectedDonationsReport(startDate, endDate);
   }
   
   @RequestMapping(value = "/ttiprevalence/generate", method = RequestMethod.GET)
