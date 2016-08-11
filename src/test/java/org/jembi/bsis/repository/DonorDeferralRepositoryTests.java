@@ -5,20 +5,24 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DeferralReasonBuilder.aDeferralReason;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.DonorDeferralBuilder.aDonorDeferral;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.jembi.bsis.dto.DeferredDonorsDTO;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DeferralReasonType;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.model.donordeferral.DurationType;
-import org.jembi.bsis.repository.DonorDeferralRepository;
+import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -200,5 +204,138 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
 
     int numberOfDeferrals = donorDeferralRepository.countDonorDeferralsForDonorOnDate(donor, new Date());
     assertThat(numberOfDeferrals, is(2));
+  }
+  
+  @Test
+  public void testCountDeferredDonors_shouldReturnCorrectDtos() {
+    // set up test data
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().minusDays(0).toDate();
+
+    Location location1 = aVenue().buildAndPersist(entityManager);
+    Location location2 = aVenue().buildAndPersist(entityManager);
+
+    DeferralReason deferralReason1 = aDeferralReason().thatIsNotDeleted().buildAndPersist(entityManager);
+    DeferralReason deferralReason2 = aDeferralReason().thatIsNotDeleted().buildAndPersist(entityManager);
+    DeferralReason deferralReason3 = aDeferralReason().thatIsDeleted().buildAndPersist(entityManager);
+    
+    Date dateInPeriod = new DateTime().minusDays(4).toDate();
+    Date dateNotInPeriod = new DateTime().minusDays(10).toDate();
+    
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.female).withVenue(location1).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason1)
+        .withDeferralDate(dateInPeriod)
+        .thatIsNotVoided()
+        .buildAndPersist(entityManager);
+    
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.male).withVenue(location1).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason1)
+        .withDeferralDate(dateInPeriod)
+        .thatIsNotVoided()
+        .buildAndPersist(entityManager);
+    
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.male).withVenue(location1).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason1)
+        .withDeferralDate(dateInPeriod)
+        .thatIsNotVoided()
+        .buildAndPersist(entityManager);
+    
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.male).withVenue(location2).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason1)
+        .withDeferralDate(dateInPeriod)
+        .thatIsNotVoided()
+        .buildAndPersist(entityManager);
+    
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.female).withVenue(location1).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason2)
+        .withDeferralDate(dateInPeriod)
+        .thatIsNotVoided()
+        .buildAndPersist(entityManager);
+    
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.female).withVenue(location2).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason2)
+        .withDeferralDate(dateInPeriod)
+        .thatIsNotVoided()
+        .buildAndPersist(entityManager);
+    
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.female).withVenue(location2).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason2)
+        .withDeferralDate(dateInPeriod)
+        .thatIsNotVoided()
+        .buildAndPersist(entityManager);
+    
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.male).withVenue(location2).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason2)
+        .withDeferralDate(dateInPeriod)
+        .thatIsNotVoided()
+        .buildAndPersist(entityManager);
+    
+    // excluded due to date out of period
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.female).withVenue(location2).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason1)
+        .withDeferralDate(dateNotInPeriod)
+        .thatIsNotVoided()
+        .buildAndPersist(entityManager);
+    
+    // excluded due to voided deferral
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.male).withVenue(location2).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason1)
+        .withDeferralDate(dateInPeriod)
+        .thatIsVoided()
+        .buildAndPersist(entityManager);
+    
+    // excluded due to deleted deferral reason
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.male).withVenue(location2).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason3)
+        .withDeferralDate(dateInPeriod)
+        .thatIsNotVoided()
+        .buildAndPersist(entityManager);
+    
+    // excluded due to deleted donor
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.male).withVenue(location2).thatIsDeleted().buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason1)
+        .withDeferralDate(dateInPeriod)
+        .thatIsNotVoided()
+        .buildAndPersist(entityManager);
+    
+    List<DeferredDonorsDTO> dtos = donorDeferralRepository.countDeferredDonors(startDate, endDate);
+    
+    Assert.assertEquals("Found dtos", 6, dtos.size());
+    Assert.assertEquals("Correct count", 1, dtos.get(0).getCount()); // location1, female, reason1
+    Assert.assertEquals("Correct venue", location1, dtos.get(0).getVenue());
+    Assert.assertEquals("Correct gender", Gender.female, dtos.get(0).getGender());
+    Assert.assertEquals("Correct reason", deferralReason1, dtos.get(0).getDeferralReason());
+    Assert.assertEquals("Correct count", 1, dtos.get(1).getCount()); // location1, female, reason2
+    Assert.assertEquals("Correct venue", location1, dtos.get(1).getVenue());
+    Assert.assertEquals("Correct gender", Gender.female, dtos.get(1).getGender());
+    Assert.assertEquals("Correct reason", deferralReason2, dtos.get(1).getDeferralReason());
+    Assert.assertEquals("Correct count", 2, dtos.get(2).getCount()); // location1, male, reason1
+    Assert.assertEquals("Correct venue", location1, dtos.get(2).getVenue());
+    Assert.assertEquals("Correct gender", Gender.male, dtos.get(2).getGender());
+    Assert.assertEquals("Correct reason", deferralReason1, dtos.get(2).getDeferralReason());
+    Assert.assertEquals("Correct count", 2, dtos.get(3).getCount()); // location2, female, reason2
+    Assert.assertEquals("Correct venue", location2, dtos.get(3).getVenue());
+    Assert.assertEquals("Correct gender", Gender.female, dtos.get(3).getGender());
+    Assert.assertEquals("Correct reason", deferralReason2, dtos.get(3).getDeferralReason());
+    Assert.assertEquals("Correct count", 1, dtos.get(4).getCount()); // location2, male, reason1
+    Assert.assertEquals("Correct venue", location2, dtos.get(4).getVenue());
+    Assert.assertEquals("Correct gender", Gender.male, dtos.get(4).getGender());
+    Assert.assertEquals("Correct reason", deferralReason1, dtos.get(4).getDeferralReason());
+    Assert.assertEquals("Correct count", 1, dtos.get(5).getCount()); // location2, male, reason2
+    Assert.assertEquals("Correct venue", location2, dtos.get(5).getVenue());
+    Assert.assertEquals("Correct gender", Gender.male, dtos.get(5).getGender());
+    Assert.assertEquals("Correct reason", deferralReason2, dtos.get(5).getDeferralReason());
   }
 }

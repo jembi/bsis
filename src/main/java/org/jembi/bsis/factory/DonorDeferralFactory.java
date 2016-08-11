@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DonorDeferralViewModelFactory {
+public class DonorDeferralFactory {
 
   @Autowired
   private DeferralConstraintChecker deferralConstraintChecker;
@@ -32,6 +32,9 @@ public class DonorDeferralViewModelFactory {
   
   @Autowired
   private LocationRepository locationRepository;
+  
+  @Autowired
+  private DeferralReasonFactory deferralReasonFactory;
   
 
   public DonorDeferral createEntity(DeferralBackingForm backingForm) {
@@ -60,7 +63,7 @@ public class DonorDeferralViewModelFactory {
       viewModel.setCreatedBy(donorDeferral.getCreatedBy().getUsername());
     }
     viewModel.setDeferralDate(donorDeferral.getDeferralDate());
-    viewModel.setDeferralReason(new DeferralReasonViewModel(donorDeferral.getDeferralReason()));
+    viewModel.setDeferralReason(deferralReasonFactory.createViewModel(donorDeferral.getDeferralReason()));
     viewModel.setDeferredUntil(donorDeferral.getDeferredUntil());
     viewModel.setDonorNumber(donorDeferral.getDeferredDonor().getDonorNumber());
     viewModel.setDeferredDonor(new DonorViewModel(donorDeferral.getDeferredDonor()));

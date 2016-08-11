@@ -1,11 +1,11 @@
 package org.jembi.bsis.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import java.util.List;
-
+import org.jembi.bsis.dto.DeferredDonorsDTO;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
@@ -22,6 +22,17 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         .setParameter("donorDeferralId", donorDeferralId)
         .setParameter("voided", false)
         .getSingleResult();
+  }
+  
+  public List<DeferredDonorsDTO> countDeferredDonors(Date startDate, Date endDate) {
+    return entityManager.createNamedQuery(DonorDeferralNamedQueryConstants.NAME_COUNT_DEFERRALS_BY_VENUE_DEFERRAL_REASON_AND_GENDER, 
+        DeferredDonorsDTO.class)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("deferralDeleted", false)
+        .setParameter("deferralReasonDeleted", false)
+        .setParameter("donorDeleted", false)
+        .getResultList();
   }
 
   public int countDonorDeferralsForDonor(Donor donor) {

@@ -1,33 +1,55 @@
 package org.jembi.bsis.viewmodel;
 
-import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DurationType;
 
 public class DeferralReasonViewModel {
 
-  private DeferralReason deferralReason;
+  private Long id;
+  private String reason;
+  private Integer defaultDuration;
+  private DurationType durationType;
+  private boolean isDeleted = false;
 
-  public DeferralReasonViewModel(DeferralReason deferralReason) {
-    this.deferralReason = deferralReason;
+  public DeferralReasonViewModel() {
   }
 
   public Long getId() {
-    return deferralReason.getId();
+    return id;
   }
 
   public String getReason() {
-    return deferralReason.getReason();
+    return reason;
   }
 
   public Boolean getIsDeleted() {
-    return deferralReason.getIsDeleted();
+    return isDeleted;
   }
 
   public Integer getDefaultDuration() {
-    return deferralReason.getDefaultDuration();
+    return defaultDuration;
   }
 
   public DurationType getDurationType() {
-    return deferralReason.getDurationType();
+    return durationType;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setReason(String reason) {
+    this.reason = reason;
+  }
+
+  public void setDefaultDuration(Integer defaultDuration) {
+    this.defaultDuration = defaultDuration;
+  }
+
+  public void setDurationType(DurationType durationType) {
+    this.durationType = durationType;
+  }
+
+  public void setIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

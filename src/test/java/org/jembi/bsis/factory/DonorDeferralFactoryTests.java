@@ -1,32 +1,60 @@
 package org.jembi.bsis.factory;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.jembi.bsis.helpers.builders.DeferralBackingFormBuilder.aDeferralBackingForm;
+import static org.jembi.bsis.helpers.builders.DeferralReasonBackingFormBuilder.aDeferralReasonBackingForm;
+import static org.jembi.bsis.helpers.builders.DeferralReasonBuilder.aDeferralReason;
+import static org.jembi.bsis.helpers.builders.DonorBackingFormBuilder.aDonorBackingForm;
+import static org.jembi.bsis.helpers.builders.DonorDeferralBuilder.aDonorDeferral;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aVenueBackingForm;
+import static org.jembi.bsis.helpers.matchers.DonorDeferralMatcher.hasSameStateAsDonorDeferral;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.jembi.bsis.backingform.DeferralBackingForm;
+import org.jembi.bsis.backingform.DeferralReasonBackingForm;
+import org.jembi.bsis.backingform.DonorBackingForm;
+import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.helpers.builders.DonorBuilder;
 import org.jembi.bsis.helpers.builders.DonorDeferralBuilder;
+import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
+import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.repository.DeferralReasonRepository;
+import org.jembi.bsis.repository.DonorRepository;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.DeferralConstraintChecker;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DonorDeferralViewModel;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DonorDeferralViewModelFactoryTests {
+public class DonorDeferralFactoryTests extends UnitTestSuite {
 
   @InjectMocks
-  private DonorDeferralViewModelFactory donorDeferralViewModelFactory;
+  private DonorDeferralFactory donorDeferralFactory;
 
   @Mock
   private DeferralConstraintChecker deferralConstraintChecker;
+  
+  @Mock
+  private DeferralReasonFactory deferralReasonFactory;
+  
+  @Mock
+  private DeferralReasonRepository deferralReasonRepository;
+  
+  @Mock
+  private DonorRepository donorRepository;
+  
+  @Mock
+  private LocationRepository locationRepository;
 
   @Test
   public void testCreateDonorDeferralViewModel() throws Exception {
@@ -41,7 +69,7 @@ public class DonorDeferralViewModelFactoryTests {
     when(deferralConstraintChecker.canEditDonorDeferral(1L)).thenReturn(true);
 
     // run tests
-    DonorDeferralViewModel donorDeferralViewModel = donorDeferralViewModelFactory.createDonorDeferralViewModel(donorDeferral);
+    DonorDeferralViewModel donorDeferralViewModel = donorDeferralFactory.createDonorDeferralViewModel(donorDeferral);
 
     // asserts
     Assert.assertNotNull("DonorDeferralViewModel exists", donorDeferralViewModel);
@@ -81,7 +109,7 @@ public class DonorDeferralViewModelFactoryTests {
     when(deferralConstraintChecker.canEndDonorDeferral(3L)).thenReturn(true);
 
     // run tests
-    List<DonorDeferralViewModel> donorDeferralViewModels = donorDeferralViewModelFactory.createDonorDeferralViewModels(donorDeferrals);
+    List<DonorDeferralViewModel> donorDeferralViewModels = donorDeferralFactory.createDonorDeferralViewModels(donorDeferrals);
 
     // asserts
     Assert.assertNotNull("DonorDeferralViewModels returned", donorDeferralViewModels);
@@ -97,5 +125,50 @@ public class DonorDeferralViewModelFactoryTests {
     Assert.assertTrue("DonorDeferrals defined", matches[0]);
     Assert.assertTrue("DonorDeferrals defined", matches[1]);
     Assert.assertTrue("DonorDeferrals defined", matches[2]);
+  }
+  
+  @Test
+  public void testCreateEntity_shouldCreateEntities() {
+    // set up test data
+    Date deferralDate = new Date();
+    Date deferredUntilDate = new Date();
+    String deferralReasonText = "testing123";
+    
+    DonorBackingForm donorForm = aDonorBackingForm().withId(1L).build();
+    LocationBackingForm locationForm = aVenueBackingForm().withId(1L).build();
+    DeferralReasonBackingForm deferralReasonForm = aDeferralReasonBackingForm().withId(1L).build();
+
+    DeferralBackingForm deferralForm = aDeferralBackingForm()
+        .withDeferralDate(deferralDate)
+        .withDeferredUntil(deferredUntilDate)
+        .withDeferralReason(deferralReasonForm)
+        .withDeferredDonor(donorForm)
+        .withVenue(locationForm)
+        .withDeferralReasonText(deferralReasonText)
+        .build();
+    
+    Location location = LocationBuilder.aVenue().build();
+    Donor donor = DonorBuilder.aDonor().build();
+    DeferralReason deferralReason = aDeferralReason().build();
+
+    // set up expected result
+    DonorDeferral expectedDonorDeferral = aDonorDeferral()
+        .withDeferralDate(deferralDate)
+        .withDeferredUntil(deferredUntilDate)
+        .withDeferredDonor(donor)
+        .withDeferralReason(deferralReason)
+        .withVenue(location)
+        .build();
+    
+    // set up mocks
+    when(deferralReasonRepository.getDeferralReasonById(1L)).thenReturn(deferralReason);
+    when(donorRepository.findDonorById(1L)).thenReturn(donor);
+    when(locationRepository.getLocation(1L)).thenReturn(location);
+    
+    // run test
+    DonorDeferral createdEntity = donorDeferralFactory.createEntity(deferralForm);
+    
+    // check results
+    assertThat(createdEntity, hasSameStateAsDonorDeferral(expectedDonorDeferral));
   }
 }

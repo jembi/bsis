@@ -7,9 +7,11 @@ import java.util.Map;
 import org.jembi.bsis.controllerservice.ReportsControllerService;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.reporting.Report;
-import org.jembi.bsis.service.BloodUnitsIssuedReportGeneratorService;
-import org.jembi.bsis.service.ReportGeneratorService;
-import org.jembi.bsis.service.TtiPrevalenceReportGeneratorService;
+import org.jembi.bsis.service.report.BloodUnitsIssuedReportGenerator;
+import org.jembi.bsis.service.report.CollectedDonationsReportGenerator;
+import org.jembi.bsis.service.report.DonorsDeferredSummaryReportGenerator;
+import org.jembi.bsis.service.report.StockLevelsReportGenerator;
+import org.jembi.bsis.service.report.TtiPrevalenceReportGenerator;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,13 +26,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReportsController {
 
   @Autowired
-  private ReportGeneratorService reportGeneratorService;
+  private StockLevelsReportGenerator stockLevelsReportGenerator;
   
   @Autowired
-  private TtiPrevalenceReportGeneratorService ttiPrevalenceReportGeneratorService;
+  private TtiPrevalenceReportGenerator ttiPrevalenceReportGenerator;
 
   @Autowired
-  private BloodUnitsIssuedReportGeneratorService bloodUnitsIssuedReportGeneratorService;
+  private BloodUnitsIssuedReportGenerator bloodUnitsIssuedReportGenerator;
+  
+  @Autowired
+  private DonorsDeferredSummaryReportGenerator donorsDeferredSummaryReportGenerator;
+  
+  @Autowired
+  private CollectedDonationsReportGenerator collectedDonationsReportGenerator;
 
   @Autowired
   private ReportsControllerService reportsControllerService;
@@ -39,7 +47,7 @@ public class ReportsController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
   public Report findStockLevels(@RequestParam(value = "location", required = false) Long locationId,
       @RequestParam(value = "inventoryStatus", required = true) InventoryStatus inventoryStatus) {
-    return reportGeneratorService.generateStockLevelsForLocationReport(locationId, inventoryStatus);
+    return stockLevelsReportGenerator.generateStockLevelsForLocationReport(locationId, inventoryStatus);
   }
   
   @RequestMapping(value = "/stockLevels/form", method = RequestMethod.GET)
@@ -55,7 +63,7 @@ public class ReportsController {
   public Report getCollectedDonationsReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-    return reportGeneratorService.generateCollectedDonationsReport(startDate, endDate);
+    return collectedDonationsReportGenerator.generateCollectedDonationsReport(startDate, endDate);
   }
   
   @RequestMapping(value = "/ttiprevalence/generate", method = RequestMethod.GET)
@@ -63,7 +71,7 @@ public class ReportsController {
   public Report getTTIPrevalenceReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-    return ttiPrevalenceReportGeneratorService.generateTTIPrevalenceReport(startDate, endDate);
+    return ttiPrevalenceReportGenerator.generateTTIPrevalenceReport(startDate, endDate);
   }
 
   @RequestMapping(value = "/unitsissued/form", method = RequestMethod.GET)
@@ -79,7 +87,22 @@ public class ReportsController {
   public Report generateUnitsIssuedReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-    return bloodUnitsIssuedReportGeneratorService.generateUnitsIssuedReport(startDate, endDate);
+    return bloodUnitsIssuedReportGenerator.generateUnitsIssuedReport(startDate, endDate);
+  }
+  
+  @RequestMapping(value = "/donorsdeferred/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.DONORS_REPORTING + "')")
+  public Map<String, Object> generateDonorsDeferredFormFields() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("deferralReasons", reportsControllerService.getDeferralReasons());
+    return map;  
   }
 
+  @RequestMapping(value = "/donorsdeferred/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.DONORS_REPORTING + "')")
+  public Report generateDonorsDeferredReport(
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    return donorsDeferredSummaryReportGenerator.generateDonorDeferralSummaryReport(startDate, endDate);
+  }
 }

@@ -34,7 +34,7 @@ public class DeferralReasonRepositoryTest extends DBUnitContextDependentTestSuit
 
   @Test
   public void testGetAll() throws Exception {
-    List<DeferralReason> all = deferralReasonRepository.getAllDeferralReasons();
+    List<DeferralReason> all = deferralReasonRepository.getAllDeferralReasonsIncludDeleted();
     Assert.assertNotNull("There are deferral reasons defined", all);
     Assert.assertEquals("There are 6 deferral reasons defined", 6, all.size());
   }
@@ -77,7 +77,7 @@ public class DeferralReasonRepositoryTest extends DBUnitContextDependentTestSuit
     deferralReason.setReason("New reason");
     deferralReasonRepository.saveDeferralReason(deferralReason);
 
-    List<DeferralReason> all = deferralReasonRepository.getAllDeferralReasons();
+    List<DeferralReason> all = deferralReasonRepository.getAllDeferralReasonsIncludDeleted();
     Assert.assertNotNull("There are deferral reasons defined", all);
     Assert.assertEquals("There are 7 deferral reasons defined", 7, all.size());
   }

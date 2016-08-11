@@ -1,4 +1,4 @@
-package org.jembi.bsis.service;
+package org.jembi.bsis.service.report;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TtiPrevalenceReportGeneratorService {
+public class TtiPrevalenceReportGenerator {
   
   @Autowired
   private BloodTestingRepository bloodTestingRepository;

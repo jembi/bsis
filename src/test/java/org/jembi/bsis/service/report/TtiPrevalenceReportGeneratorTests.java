@@ -1,4 +1,4 @@
-package org.jembi.bsis.service;
+package org.jembi.bsis.service.report;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -25,15 +25,16 @@ import org.jembi.bsis.model.reporting.DataValue;
 import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.service.report.TtiPrevalenceReportGenerator;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class TtiPrevalenceReportGeneratorServiceTests extends UnitTestSuite {
+public class TtiPrevalenceReportGeneratorTests extends UnitTestSuite {
 
   @InjectMocks
-  private TtiPrevalenceReportGeneratorService ttiPrevalenceReportGeneratorService;
+  private TtiPrevalenceReportGenerator ttiPrevalenceReportGenerator;
 
   @Mock
   private BloodTestingRepository bloodTestingRepository;
@@ -99,7 +100,7 @@ public class TtiPrevalenceReportGeneratorServiceTests extends UnitTestSuite {
     when(bloodTestingRepository.findTTIPrevalenceReportTotalUnsafeUnitsTested(irrelevantStartDate, irrelevantEndDate))
         .thenReturn(totalUnsafeUnitsDtos);
 
-    Report returnedReport = ttiPrevalenceReportGeneratorService.generateTTIPrevalenceReport(irrelevantStartDate,
+    Report returnedReport = ttiPrevalenceReportGenerator.generateTTIPrevalenceReport(irrelevantStartDate,
         irrelevantEndDate);
 
     assertThat(returnedReport, is(equalTo(expectedReport)));

@@ -1,7 +1,7 @@
 package org.jembi.bsis.controllerservice;
 
 import org.jembi.bsis.backingform.DeferralBackingForm;
-import org.jembi.bsis.factory.DonorDeferralViewModelFactory;
+import org.jembi.bsis.factory.DonorDeferralFactory;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.service.DonorDeferralCRUDService;
 import org.jembi.bsis.viewmodel.DonorDeferralViewModel;
@@ -17,12 +17,12 @@ public class DeferralControllerService {
   private DonorDeferralCRUDService donorDeferralCRUDService;
 
   @Autowired
-  private DonorDeferralViewModelFactory deferralViewModelFactory;
+  private DonorDeferralFactory deferralFactory;
 
   public DonorDeferralViewModel createDeferral(DeferralBackingForm backingForm) {
-    DonorDeferral donorDeferral = deferralViewModelFactory.createEntity(backingForm);
+    DonorDeferral donorDeferral = deferralFactory.createEntity(backingForm);
     donorDeferral = donorDeferralCRUDService.createDeferral(donorDeferral);
-    return deferralViewModelFactory.createDonorDeferralViewModel(donorDeferral);
+    return deferralFactory.createDonorDeferralViewModel(donorDeferral);
   }
 
 }

@@ -1180,7 +1180,7 @@ public class DataImportService {
 
   private Map<String, DeferralReason> buildDeferralReasonCache() {
     Map<String, DeferralReason>  deferralReasonMap = new HashMap<>();
-    List<DeferralReason> deferralReasons = deferralReasonRepository.getAllDeferralReasons();
+    List<DeferralReason> deferralReasons = deferralReasonRepository.getAllDeferralReasonsIncludDeleted();
     for (DeferralReason deferralReason : deferralReasons) {
       deferralReasonMap.put(deferralReason.getReason(), deferralReason);
     }

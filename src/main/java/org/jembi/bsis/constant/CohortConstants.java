@@ -8,5 +8,6 @@ public class CohortConstants {
   public static final String COMPONENT_TYPE_CATEGORY = "Component Type";
   public static final String BLOOD_TEST_CATEGORY = "Blood Test";
   public static final String BLOOD_TEST_RESULT_CATEGORY = "Blood Test Result";
+  public static final String DEFERRAL_REASON_CATEGORY = "Deferral Reason";
 
 }
