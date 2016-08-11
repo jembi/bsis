@@ -10,15 +10,12 @@ import java.util.List;
 
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DurationType;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DeferralReasonViewModel;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.runners.MockitoJUnitRunner;
 
-
-@RunWith(MockitoJUnitRunner.class)
-public class DeferralReasonFactoryTests {
+public class DeferralReasonFactoryTests extends UnitTestSuite {
   
   @InjectMocks
   private DeferralReasonFactory deferralReasonFactory;

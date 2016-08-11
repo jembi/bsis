@@ -3,6 +3,7 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.DeferralBackingFormBuilder.aDeferralBackingForm;
 import static org.jembi.bsis.helpers.builders.DeferralReasonBackingFormBuilder.aDeferralReasonBackingForm;
+import static org.jembi.bsis.helpers.builders.DeferralReasonBuilder.aDeferralReason;
 import static org.jembi.bsis.helpers.builders.DonorBackingFormBuilder.aDonorBackingForm;
 import static org.jembi.bsis.helpers.builders.DonorDeferralBuilder.aDonorDeferral;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aVenueBackingForm;
@@ -17,7 +18,6 @@ import org.jembi.bsis.backingform.DeferralBackingForm;
 import org.jembi.bsis.backingform.DeferralReasonBackingForm;
 import org.jembi.bsis.backingform.DonorBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
-import static org.jembi.bsis.helpers.builders.DeferralReasonBuilder.aDeferralReason;
 import org.jembi.bsis.helpers.builders.DonorBuilder;
 import org.jembi.bsis.helpers.builders.DonorDeferralBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
@@ -29,16 +29,14 @@ import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.DeferralConstraintChecker;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DonorDeferralViewModel;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DonorDeferralFactoryTests {
+public class DonorDeferralFactoryTests extends UnitTestSuite {
 
   @InjectMocks
   private DonorDeferralFactory donorDeferralFactory;
