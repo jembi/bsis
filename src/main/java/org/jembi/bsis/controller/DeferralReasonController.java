@@ -49,7 +49,7 @@ public class DeferralReasonController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
   public Map<String, Object> getDeferralReasons() {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("allDeferralReasons", deferralReasonFactory.createViewModels(deferralReasonRepository.getAllDeferralReasons()));
+    map.put("allDeferralReasons", deferralReasonFactory.createViewModels(deferralReasonRepository.getAllDeferralReasonsIncludDeleted()));
     return map;
   }
 
