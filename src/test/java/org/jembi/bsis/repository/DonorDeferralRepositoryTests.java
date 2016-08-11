@@ -215,8 +215,9 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
     Location location1 = aVenue().buildAndPersist(entityManager);
     Location location2 = aVenue().buildAndPersist(entityManager);
 
-    DeferralReason deferralReason1 = aDeferralReason().buildAndPersist(entityManager);
-    DeferralReason deferralReason2 = aDeferralReason().buildAndPersist(entityManager);
+    DeferralReason deferralReason1 = aDeferralReason().thatIsNotDeleted().buildAndPersist(entityManager);
+    DeferralReason deferralReason2 = aDeferralReason().thatIsNotDeleted().buildAndPersist(entityManager);
+    DeferralReason deferralReason3 = aDeferralReason().thatIsDeleted().buildAndPersist(entityManager);
     
     Date dateInPeriod = new DateTime().minusDays(4).toDate();
     Date dateNotInPeriod = new DateTime().minusDays(10).toDate();
@@ -291,6 +292,14 @@ public class DonorDeferralRepositoryTests extends ContextDependentTestSuite {
         .withDeferralReason(deferralReason1)
         .withDeferralDate(dateInPeriod)
         .thatIsVoided()
+        .buildAndPersist(entityManager);
+    
+    // excluded due to deleted deferral reason
+    aDonorDeferral()
+        .withDeferredDonor(aDonor().withGender(Gender.male).withVenue(location2).buildAndPersist(entityManager))
+        .withDeferralReason(deferralReason3)
+        .withDeferralDate(dateInPeriod)
+        .thatIsNotVoided()
         .buildAndPersist(entityManager);
     
     // excluded due to deleted donor

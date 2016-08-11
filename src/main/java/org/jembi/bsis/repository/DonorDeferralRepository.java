@@ -30,6 +30,7 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("deferralDeleted", false)
+        .setParameter("deferralReasonDeleted", false)
         .setParameter("donorDeleted", false)
         .getResultList();
   }
