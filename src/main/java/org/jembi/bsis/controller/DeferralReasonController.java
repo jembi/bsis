@@ -1,15 +1,13 @@
 package org.jembi.bsis.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.DeferralReasonBackingForm;
 import org.jembi.bsis.backingform.validator.DeferralReasonBackingFormValidator;
+import org.jembi.bsis.factory.DeferralReasonFactory;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -30,10 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("deferralreasons")
 public class DeferralReasonController {
 
-  private static final Logger LOGGER = Logger.getLogger(DeferralReasonController.class);
-
   @Autowired
   DeferralReasonRepository deferralReasonRepository;
+  
+  @Autowired
+  DeferralReasonFactory deferralReasonFactory;
 
   @Autowired
   DeferralReasonBackingFormValidator deferralReasonBackingFormValidator;
@@ -50,50 +49,36 @@ public class DeferralReasonController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
   public Map<String, Object> getDeferralReasons() {
     Map<String, Object> map = new HashMap<String, Object>();
-    addAllDeferralReasonsToModel(map);
+    map.put("allDeferralReasons", deferralReasonFactory.createViewModels(deferralReasonRepository.getAllDeferralReasons()));
     return map;
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
-  public ResponseEntity<DeferralReason> getDeferralReasonById(@PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> getDeferralReasonById(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(id);
-    map.put("reason", new DeferralReasonViewModel(deferralReason));
-    return new ResponseEntity(map, HttpStatus.OK);
+    map.put("reason", deferralReasonFactory.createViewModel(deferralReason));
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
-  public ResponseEntity saveDeferralReason(@Valid @RequestBody DeferralReasonBackingForm formData) {
+  public ResponseEntity<DeferralReasonViewModel> saveDeferralReason(@Valid @RequestBody DeferralReasonBackingForm formData) {
     DeferralReason deferralReason = formData.getDeferralReason();
     deferralReason = deferralReasonRepository.saveDeferralReason(deferralReason);
-    return new ResponseEntity(new DeferralReasonViewModel(deferralReason), HttpStatus.CREATED);
+    return new ResponseEntity<>(deferralReasonFactory.createViewModel(deferralReason), HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
-  public ResponseEntity updateDeferralReason(@Valid @RequestBody DeferralReasonBackingForm formData, @PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> updateDeferralReason(@Valid @RequestBody DeferralReasonBackingForm formData, @PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     DeferralReason deferralReason = formData.getDeferralReason();
     deferralReason.setId(id);
     deferralReason = deferralReasonRepository.updateDeferralReason(deferralReason);
-    map.put("reason", new DeferralReasonViewModel(deferralReason));
-    return new ResponseEntity(map, HttpStatus.OK);
+    map.put("reason", deferralReasonFactory.createViewModel(deferralReason));
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
-
-  private void addAllDeferralReasonsToModel(Map<String, Object> m) {
-    m.put("allDeferralReasons", getDeferralReasonViewModels(deferralReasonRepository.getAllDeferralReasons()));
-  }
-
-  private List<DeferralReasonViewModel> getDeferralReasonViewModels(List<DeferralReason> deferralReasons) {
-
-    List<DeferralReasonViewModel> viewModels = new ArrayList<DeferralReasonViewModel>();
-    for (DeferralReason reason : deferralReasons) {
-      viewModels.add(new DeferralReasonViewModel(reason));
-    }
-    return viewModels;
-  }
-
 }
 

@@ -18,7 +18,7 @@ import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.controllerservice.DonorControllerService;
 import org.jembi.bsis.dto.DuplicateDonorDTO;
 import org.jembi.bsis.factory.DonationViewModelFactory;
-import org.jembi.bsis.factory.DonorDeferralViewModelFactory;
+import org.jembi.bsis.factory.DonorDeferralFactory;
 import org.jembi.bsis.factory.DonorViewModelFactory;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.PostDonationCounsellingViewModelFactory;
@@ -97,7 +97,7 @@ public class DonorController {
   private DonationViewModelFactory donationViewModelFactory;
 
   @Autowired
-  private DonorDeferralViewModelFactory donorDeferralViewModelFactory;
+  private DonorDeferralFactory donorDeferralFactory;
 
   @Autowired
   private AdverseEventRepository adverseEventRepository;
@@ -310,7 +310,7 @@ public class DonorController {
     List<DonorDeferral> donorDeferrals = donorRepository.getDonorDeferrals(donorId);
 
     Map<String, Object> map = new HashMap<>();
-    map.put("allDonorDeferrals", donorDeferralViewModelFactory.createDonorDeferralViewModels(donorDeferrals));
+    map.put("allDonorDeferrals", donorDeferralFactory.createDonorDeferralViewModels(donorDeferrals));
     map.put("isDonorCurrentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
     return map;
   }
@@ -394,7 +394,7 @@ public class DonorController {
 
     // gather all Deferrals
     List<DonorDeferral> donorDeferrals = duplicateDonorService.getAllDeferralsToMerge(newDonor, donorNumbers);
-    List<DonorDeferralViewModel> donorDeferralViewModels = donorDeferralViewModelFactory
+    List<DonorDeferralViewModel> donorDeferralViewModels = donorDeferralFactory
         .createDonorDeferralViewModels(donorDeferrals);
 
     form = new DuplicateDonorsBackingForm(newDonor);

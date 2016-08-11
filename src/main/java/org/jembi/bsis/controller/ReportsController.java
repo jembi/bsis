@@ -89,6 +89,14 @@ public class ReportsController {
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return bloodUnitsIssuedReportGenerator.generateUnitsIssuedReport(startDate, endDate);
   }
+  
+  @RequestMapping(value = "/donorsdeferred/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.DONORS_REPORTING + "')")
+  public Map<String, Object> generateDonorsDeferredFormFields() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("deferralReasons", reportsControllerService.getDeferralReasons());
+    return map;  
+  }
 
   @RequestMapping(value = "/donorsdeferred/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.DONORS_REPORTING + "')")

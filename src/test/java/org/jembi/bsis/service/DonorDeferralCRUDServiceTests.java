@@ -65,6 +65,8 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
     DonorDeferral expectedDonorDeferral = aDonorDeferral()
         .withDeferredDonor(donor)
         .withDeferralReason(deferralReason)
+        .withDeferralDate(null)
+        .withVenue(irrelevantVenue)
         .withDeferredUntil(DonorDeferralCRUDService.PERMANENT_DEFERRAL_DATE)
         .build();
 
@@ -125,6 +127,8 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
 
     DonorDeferral expectedDonorDeferral = aDonorDeferral()
         .withDeferredDonor(donor)
+        .withDeferralDate(now)
+        .withVenue(irrelevantVenue)
         .withDeferralReason(deferralReason)
         .withDeferredUntil(new DateTime(now).plusDays(irrelevantDuration).toDate())
         .build();

@@ -9,7 +9,7 @@ import org.jembi.bsis.backingform.DeferralBackingForm;
 import org.jembi.bsis.backingform.EndDeferralBackingForm;
 import org.jembi.bsis.backingform.validator.DeferralBackingFormValidator;
 import org.jembi.bsis.controllerservice.DeferralControllerService;
-import org.jembi.bsis.factory.DonorDeferralViewModelFactory;
+import org.jembi.bsis.factory.DonorDeferralFactory;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.LocationRepository;
@@ -40,7 +40,7 @@ public class DeferralController {
   private DonorDeferralCRUDService donorDeferralCRUDService;
 
   @Autowired
-  private DonorDeferralViewModelFactory deferralViewModelFactory;
+  private DonorDeferralFactory deferralFactory;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -72,7 +72,7 @@ public class DeferralController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     DonorDeferral donorDeferral = donorDeferralCRUDService.findDeferralById(id);
-    DonorDeferralViewModel donorDeferralViewModel = deferralViewModelFactory.createDonorDeferralViewModel(donorDeferral);
+    DonorDeferralViewModel donorDeferralViewModel = deferralFactory.createDonorDeferralViewModel(donorDeferral);
     map.put("deferral", donorDeferralViewModel);
     return map;
   }
@@ -96,12 +96,12 @@ public class DeferralController {
     DonorDeferral updatedDeferral = null;
     deferralBackingForm.setId(id);
 
-    DonorDeferral deferral = deferralViewModelFactory.createEntity(deferralBackingForm);
+    DonorDeferral deferral = deferralFactory.createEntity(deferralBackingForm);
     deferral.setIsVoided(false);
 
     updatedDeferral = donorDeferralCRUDService.updateDeferral(deferral);
 
-    map.put("deferral", deferralViewModelFactory.createDonorDeferralViewModel(donorDeferralCRUDService.findDeferralById(updatedDeferral.getId())));
+    map.put("deferral", deferralFactory.createDonorDeferralViewModel(donorDeferralCRUDService.findDeferralById(updatedDeferral.getId())));
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
@@ -121,7 +121,7 @@ public class DeferralController {
     Map<String, Object> map = new HashMap<String, Object>();
 
     DonorDeferral updatedDeferral = donorDeferralCRUDService.endDeferral(id, endDeferralBackingForm.getComment());
-    map.put("deferral", deferralViewModelFactory.createDonorDeferralViewModel(updatedDeferral));
+    map.put("deferral", deferralFactory.createDonorDeferralViewModel(updatedDeferral));
 
     return new ResponseEntity<Map<String, Object>>(map, httpStatus);
   }
