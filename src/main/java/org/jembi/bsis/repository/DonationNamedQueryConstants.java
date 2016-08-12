@@ -50,7 +50,7 @@ public class DonationNamedQueryConstants {
   public static final String NAME_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE =
       "Donation.findLastDonationsByDonorVenueAndDonationDate";
   public static final String QUERY_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE =
-      "SELECT DISTINCT d "
+      "SELECT d "
       + "FROM Donation d "
       + "LEFT JOIN FETCH d.bloodTestResults "
       + "WHERE d.donationDate BETWEEN :startDate AND :endDate "
