@@ -42,6 +42,15 @@ public class MobileClinicController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
+  @RequestMapping(value = "/donoroutcomes/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
+  public @ResponseBody ResponseEntity<Map<String, Object>> getDonorOutcomesForm() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("venues", mobileClinicControllerService.getVenues());
+    map.put("bloodTestNames", mobileClinicControllerService.getBloodTestNames());
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
   @RequestMapping(value = "/donoroutcomes", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
   public @ResponseBody ResponseEntity<Map<String, Object>> getDonorOutcomes(
