@@ -46,7 +46,7 @@ public class PasswordResetService {
  
   public void resetUserPassword(String username) {
     User user = userRepository.findUser(username);
-    if (userRepository.findUser(username) != null) {     
+    if (user != null) {     
       // Generate a new random alphanumeric password
       PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
       String newPassword = RandomStringUtils.randomAlphanumeric(16);
