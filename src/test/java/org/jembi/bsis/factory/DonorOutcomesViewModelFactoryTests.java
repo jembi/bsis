@@ -46,6 +46,8 @@ public class DonorOutcomesViewModelFactoryTests extends UnitTestSuite {
     String lastName = "Donor";
     Gender gender = Gender.female;
     Date birthDate = new DateTime().minusYears(40).toDate();
+    String bloodAbo = "A";
+    String bloodRh = "+";
     
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult().withId(1L).build(),
@@ -61,6 +63,8 @@ public class DonorOutcomesViewModelFactoryTests extends UnitTestSuite {
             .withGender(gender)
             .withLastName(lastName)
             .withBirthDate(birthDate)
+            .withBloodAbo(bloodAbo)
+            .withBloodRh(bloodRh)
             .build())
         .withBloodTestResults(bloodTestResults)
         .build();
@@ -81,6 +85,8 @@ public class DonorOutcomesViewModelFactoryTests extends UnitTestSuite {
         .withBirthDate(birthDate)
         .withDonationDate(donationDate)
         .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withBloodAbo(bloodAbo)
+        .withBloodRh(bloodRh)
         .withBloodTestResults(bloodTestResultViewModels)
         .build();
     

@@ -16,6 +16,8 @@ public class DonorOutcomesViewModelBuilder extends AbstractBuilder<DonorOutcomes
   private Date birthDate;
   private Date donationDate;
   private String donationIdentificationNumber;
+  private String bloodAbo;
+  private String bloodRh;
   private List<BloodTestResultViewModel> bloodTestResults;
 
   public DonorOutcomesViewModelBuilder withDonorNumber(String donorNumber) {
@@ -52,6 +54,16 @@ public class DonorOutcomesViewModelBuilder extends AbstractBuilder<DonorOutcomes
     this.donationIdentificationNumber = donationIdentificationNumber;
     return this;
   }
+  
+  public DonorOutcomesViewModelBuilder withBloodAbo(String bloodAbo) {
+    this.bloodAbo = bloodAbo;
+    return this;
+  }
+  
+  public DonorOutcomesViewModelBuilder withBloodRh(String bloodRh) {
+    this.bloodRh = bloodRh;
+    return this;
+  }
 
   public DonorOutcomesViewModelBuilder withBloodTestResults(List<BloodTestResultViewModel> bloodTestResults) {
     this.bloodTestResults = bloodTestResults;
@@ -68,6 +80,8 @@ public class DonorOutcomesViewModelBuilder extends AbstractBuilder<DonorOutcomes
     viewModel.setBirthDate(birthDate);
     viewModel.setDonationDate(donationDate);
     viewModel.setDonationIdentificationNumber(donationIdentificationNumber);
+    viewModel.setBloodAbo(bloodAbo);
+    viewModel.setBloodRh(bloodRh);
     viewModel.setBloodTestResults(bloodTestResults);
     return viewModel;
   }

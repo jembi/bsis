@@ -26,6 +26,8 @@ public class DonorOutcomesViewModelFactory {
     viewModel.setBirthDate(donor.getBirthDate());
     viewModel.setDonationDate(donation.getDonationDate());
     viewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
+    viewModel.setBloodAbo(donor.getBloodAbo());
+    viewModel.setBloodRh(donor.getBloodRh());
     viewModel.setBloodTestResults(bloodTestResultFactory.createBloodTestResultViewModels(donation.getBloodTestResults()));
     return viewModel;
   }

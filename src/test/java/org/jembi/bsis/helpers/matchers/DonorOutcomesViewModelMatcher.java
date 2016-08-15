@@ -18,13 +18,15 @@ public class DonorOutcomesViewModelMatcher extends TypeSafeMatcher<DonorOutcomes
   public void describeTo(Description description) {
     description.appendText("A DonorOutcomesViewModel with the following state:")
         .appendText("\nDonor number: ").appendValue(expected.getDonorNumber())
-        .appendText("\nLastName: ").appendValue(expected.getLastName())
+        .appendText("\nLast name: ").appendValue(expected.getLastName())
         .appendText("\nFirst name: ").appendValue(expected.getFirstName())
         .appendText("\nGender: ").appendValue(expected.getGender())
-        .appendText("\nBirthDate: ").appendValue(expected.getBirthDate())
-        .appendText("\nDonationDate: ").appendValue(expected.getDonationDate())
-        .appendText("\nDonationIdentificationNumber: ").appendValue(expected.getDonationIdentificationNumber())
-        .appendText("\nBloodTestResults: ").appendValue(expected.getBloodTestResults());
+        .appendText("\nBirth date: ").appendValue(expected.getBirthDate())
+        .appendText("\nDonation date: ").appendValue(expected.getDonationDate())
+        .appendText("\nDIN: ").appendValue(expected.getDonationIdentificationNumber())
+        .appendText("\nBlood ABO: ").appendValue(expected.getBloodAbo())
+        .appendText("\nBlood Rh: ").appendValue(expected.getBloodRh())
+        .appendText("\nBlood test results: ").appendValue(expected.getBloodTestResults());
   }
 
   @Override
@@ -36,6 +38,8 @@ public class DonorOutcomesViewModelMatcher extends TypeSafeMatcher<DonorOutcomes
         && Objects.equals(actual.getBirthDate(), expected.getBirthDate())
         && Objects.equals(actual.getDonationDate(), expected.getDonationDate())
         && Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber())
+        && Objects.equals(actual.getBloodAbo(), expected.getBloodAbo())
+        && Objects.equals(actual.getBloodRh(), expected.getBloodRh())
         && Objects.equals(actual.getBloodTestResults(), expected.getBloodTestResults());
   }
   
