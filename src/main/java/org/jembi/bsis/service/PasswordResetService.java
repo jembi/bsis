@@ -23,7 +23,7 @@ public class PasswordResetService {
   private String passwordResetSubject;
   @Value("${password.reset.message}")
   private String passwordResetMessage;
-  
+
   public UserRepository getUserRepository() {
     return userRepository;
   }
@@ -43,26 +43,24 @@ public class PasswordResetService {
   public void setPasswordResetMessage(String passwordResetMessage) {
     this.passwordResetMessage = passwordResetMessage;
   }
- 
+
   public void resetUserPassword(String username) {
     User user = userRepository.findUser(username);
-    if (user != null) {     
-      // Generate a new random alphanumeric password
-      PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-      String newPassword = RandomStringUtils.randomAlphanumeric(16);
-      user.setPassword(passwordEncoder.encode(newPassword));
-      user.setPasswordReset(true);
-      userRepository.updateUser(user, true);
-      // Send an email containing the new password to the user
-      SimpleMailMessage message = new SimpleMailMessage();
-      message.setTo(user.getEmailId());
-      message.setSubject(passwordResetSubject);
-      message.setText(String.format(passwordResetMessage, newPassword));
-      mailSender.send(message);
-    } else {
+    if (user == null) {
       throw new NoResultException();
     }
-
+    // Generate a new random alphanumeric password
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    String newPassword = RandomStringUtils.randomAlphanumeric(16);
+    user.setPassword(passwordEncoder.encode(newPassword));
+    user.setPasswordReset(true);
+    userRepository.updateUser(user, true);
+    // Send an email containing the new password to the user
+    SimpleMailMessage message = new SimpleMailMessage();
+    message.setTo(user.getEmailId());
+    message.setSubject(passwordResetSubject);
+    message.setText(String.format(passwordResetMessage, newPassword));
+    mailSender.send(message);
 
   }
 

@@ -6,30 +6,28 @@ import static org.mockito.Mockito.verify;
 
 import org.jembi.bsis.backingform.PasswordResetBackingForm;
 import org.jembi.bsis.service.PasswordResetService;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PasswordResetControllerServiceTests {
+public class PasswordResetControllerServiceTests extends UnitTestSuite {
 
   @InjectMocks
   private PasswordResetControllerService controllerService;
   @Mock
   private PasswordResetService passwordResetService;
-  
+
   @Test
-  public void testResetPassword_should() {
+  public void testResetPassword_shouldUpdatePassword() {
     String username = "superuser";
-    
+
     PasswordResetBackingForm form = aPasswordResetBackingForm().withUsername(username).build();
-    
-    //Test
+
+    // Test
     controllerService.resetPassword(form);
-    //Assertions
-    verify(passwordResetService).resetUserPassword(form.getUsername());
-   
+    // Assertions
+    verify(passwordResetService).resetUserPassword(username);
+
   }
 }

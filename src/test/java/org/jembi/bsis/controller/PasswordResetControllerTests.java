@@ -1,36 +1,33 @@
 package org.jembi.bsis.controller;
 
 import static org.jembi.bsis.helpers.builders.PasswordResetBackingFormBuilder.aPasswordResetBackingForm;
-import static org.mockito.Mockito.verify;
 
 import org.jembi.bsis.backingform.PasswordResetBackingForm;
 import org.jembi.bsis.controllerservice.PasswordResetControllerService;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PasswordResetControllerTests {
- 
- @Mock
- private PasswordResetControllerService passwordResetControllerService;
- @InjectMocks
- private PasswordResetController passwordResetController;
+public class PasswordResetControllerTests extends UnitTestSuite {
 
- @Test
- public void testResetPassword_shouldReturnResponseEntityWithCreatedStatus(){
-   String username = "superuser";
-   PasswordResetBackingForm form = aPasswordResetBackingForm().withUsername(username).build();
-  
-   //Test
-   passwordResetController.resetPassword(form);
-   
-   verify(passwordResetControllerService).resetPassword(form);
-   Assert.assertEquals("Response status should be CREATED", HttpStatus.CREATED,  passwordResetController.resetPassword(form).getStatusCode());
+  @Mock
+  private PasswordResetControllerService passwordResetControllerService;
+  @InjectMocks
+  private PasswordResetController passwordResetController;
 
- }
+  @Test
+  public void testResetPassword_shouldReturnResponseEntityWithCreatedStatus() {
+    String username = "superuser";
+    PasswordResetBackingForm form = aPasswordResetBackingForm().withUsername(username).build();
+    HttpStatus statusCode = passwordResetController.resetPassword(form).getStatusCode();
+
+    // Test
+    passwordResetController.resetPassword(form);
+
+    Assert.assertEquals("Response status should be CREATED", HttpStatus.CREATED, statusCode);
+
+  }
 }
