@@ -41,4 +41,15 @@ public class MobileClinicController {
     map.put("donors", mobileClinicControllerService.getMobileClinicDonors(venueId, clinicDate));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
+
+  @RequestMapping(value = "/donoroutcomes", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
+  public @ResponseBody ResponseEntity<Map<String, Object>> getDonorOutcomes(
+      @RequestParam(value = "venueId", required = true) long venueId,
+      @RequestParam(value = "startDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam(value = "endDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("donorOutcomes", mobileClinicControllerService.getDonorOutcomes(venueId, startDate, endDate));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
 }

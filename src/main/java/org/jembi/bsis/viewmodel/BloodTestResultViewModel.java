@@ -15,6 +15,10 @@ public class BloodTestResultViewModel {
 
   private Map<String, Boolean> permissions;
 
+  public BloodTestResultViewModel() {
+    testResult = new BloodTestResult();
+  }
+
   public BloodTestResultViewModel(BloodTestResult testResult) {
     this.testResult = testResult;
   }
@@ -29,6 +33,10 @@ public class BloodTestResultViewModel {
 
   public Long getId() {
     return testResult.getId();
+  }
+  
+  public void setId(long id) {
+    testResult.setId(id);
   }
 
   public BloodTestViewModel getBloodTest() {
