@@ -50,10 +50,11 @@ public class PasswordResetServiceTests extends UnitTestSuite {
   @Test
   public void tesResetUserPassword_shouldUpdateUserPassword() throws MessagingException {
     // Data
-    SimpleMailMessage expectedMessage =
-        aSimpleMailMessage().withTo(TEST_EMAIL).
-        withSubject(BSIS_PASSWORD_RESET_MAIL_SUBJECT).
-        withText(TEXT).build();
+    SimpleMailMessage expectedMessage = aSimpleMailMessage()
+        .withTo(TEST_EMAIL)
+        .withSubject(BSIS_PASSWORD_RESET_MAIL_SUBJECT)
+        .withText(TEXT)
+        .build();
 
     // set up expectations
     User user = aUser().withUsername(USERNAME).withEmailId(TEST_EMAIL).withPasswordReset().build();
@@ -77,7 +78,5 @@ public class PasswordResetServiceTests extends UnitTestSuite {
 
     // Test
     passwordResetService.resetUserPassword(username);
-
   }
-
 }

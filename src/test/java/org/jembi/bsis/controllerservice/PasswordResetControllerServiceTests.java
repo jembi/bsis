@@ -26,8 +26,5 @@ public class PasswordResetControllerServiceTests extends UnitTestSuite {
 
     // Test
     controllerService.resetPassword(form);
-    // Assertions
-    verify(passwordResetService).resetUserPassword(username);
-
   }
 }
