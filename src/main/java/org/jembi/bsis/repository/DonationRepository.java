@@ -30,6 +30,7 @@ import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
@@ -427,6 +428,16 @@ public class DonationRepository {
       }
     }
     return statusMap;
+  }
+  
+  public List<Donation> findLastDonationsByDonorVenueAndDonationDate(Location donorVenue, Date startDate, Date endDate) {
+    return em.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE,
+        Donation.class)
+        .setParameter("venue", donorVenue)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("deleted", false)
+        .getResultList();
   }
 
 }

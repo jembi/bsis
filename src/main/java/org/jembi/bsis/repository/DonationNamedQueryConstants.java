@@ -46,5 +46,17 @@ public class DonationNamedQueryConstants {
           + "WHERE d.donor.id = :donorId "
           + "AND d.isDeleted = :deleted "
           + "ORDER BY dueToDonate DESC ";
+  
+  public static final String NAME_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE =
+      "Donation.findLastDonationsByDonorVenueAndDonationDate";
+  public static final String QUERY_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE =
+      "SELECT DISTINCT d "
+      + "FROM Donation d "
+      + "LEFT JOIN FETCH d.bloodTestResults "
+      + "WHERE d.donationDate BETWEEN :startDate AND :endDate "
+      // Only look at the last donation for each donor
+      + "AND d.donationDate = d.donor.dateOfLastDonation "
+      + "AND d.donor.venue = :venue "
+      + "AND d.isDeleted = :deleted ";
 
 }

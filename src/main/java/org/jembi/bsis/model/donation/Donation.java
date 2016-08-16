@@ -61,7 +61,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE,
         query = DonationNamedQueryConstants.QUERY_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR,
-        query = DonationNamedQueryConstants.QUERY_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR)
+        query = DonationNamedQueryConstants.QUERY_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE,
+        query = DonationNamedQueryConstants.QUERY_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE)
 })
 @Entity
 @Audited

@@ -174,6 +174,60 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
   }
   
   @Test
+  public void testFindLastDonationsByDonorVenueAndDonationDate_shouldReturnCorrectDonations() {
+    // Set up fixture
+    Location venue = aVenue().buildAndPersist(entityManager);
+    Date startDate = new DateTime().minusDays(90).toDate();
+    Date endDate = new DateTime().minusDays(60).toDate();
+    Date outOfRangeDate = new DateTime().minusDays(30).toDate();
+    
+    Donor donorWithLastDonationOnEndDate = aDonor().withDateOfLastDonation(endDate).withVenue(venue).build();
+    
+    // Excluded by last donation date
+    aDonation()
+        .withDonor(donorWithLastDonationOnEndDate)
+        .withDonationDate(startDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded by venue
+    aDonation()
+        .withDonor(aDonor().withDateOfLastDonation(startDate).withVenue(aVenue().build()).build())
+        .withDonationDate(startDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded by donation date
+    aDonation()
+        .withDonor(aDonor().withDateOfLastDonation(outOfRangeDate).withVenue(venue).build())
+        .withDonationDate(outOfRangeDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded by deleted flag
+    aDonation()
+        .thatIsDeleted()
+        .withDonor(aDonor().withDateOfLastDonation(endDate).withVenue(venue).build())
+        .withDonationDate(endDate)
+        .buildAndPersist(entityManager);
+    
+    List<Donation> expectedDonations = Arrays.asList(
+        aDonation()
+            .withDonor(aDonor().withDateOfLastDonation(startDate).withVenue(venue).build())
+            .withDonationDate(startDate)
+            .buildAndPersist(entityManager),
+        aDonation()
+            .withDonor(donorWithLastDonationOnEndDate)
+            .withDonationDate(endDate)
+            .buildAndPersist(entityManager)
+    );
+    
+    // Exercise SUT
+    List<Donation> returnedDonations = donationRepository.findLastDonationsByDonorVenueAndDonationDate(venue, startDate,
+        endDate);
+    
+    // Verify
+    assertThat(returnedDonations, is(expectedDonations));
+  }
+  
+  @Test
   public void testAddDonationToDonationBatchWithoutComponentBatch_shouldSetComponentLocationToVenue() {
     // Set up fixture
     insertConfigToCreateInitialComponents();
