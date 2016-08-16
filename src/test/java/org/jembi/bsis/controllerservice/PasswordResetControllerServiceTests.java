@@ -2,7 +2,6 @@ package org.jembi.bsis.controllerservice;
 
 
 import static org.jembi.bsis.helpers.builders.PasswordResetBackingFormBuilder.aPasswordResetBackingForm;
-import static org.mockito.Mockito.verify;
 
 import org.jembi.bsis.backingform.PasswordResetBackingForm;
 import org.jembi.bsis.service.PasswordResetService;
