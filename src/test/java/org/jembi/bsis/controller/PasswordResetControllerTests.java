@@ -22,8 +22,11 @@ public class PasswordResetControllerTests extends UnitTestSuite {
   public void testResetPassword_shouldReturnResponseEntityWithCreatedStatus() {
     String username = "superuser";
     PasswordResetBackingForm form = aPasswordResetBackingForm().withUsername(username).build();
+
+    // Test
     HttpStatus statusCode = passwordResetController.resetPassword(form).getStatusCode();
-    
+
+    // Assertions
     Assert.assertEquals("Response status should be CREATED", HttpStatus.CREATED, statusCode);
   }
 }
