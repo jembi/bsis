@@ -128,15 +128,19 @@ public class DonationCRUDService {
       throw new IllegalArgumentException("Cannot update donation fields");
     }
 
-    PackType packType = packTypeRepository.getPackTypeById(donationBackingForm.getPackType().getId());
+    if (packTypeUpdated) {
+      PackType packType = packTypeRepository.getPackTypeById(donationBackingForm.getPackType().getId());
 
-    if (packType.getCountAsDonation() && donorConstraintChecker.isDonorDeferred(donation.getDonor().getId())) {
+      if (packType.getCountAsDonation() && donorConstraintChecker.isDonorDeferred(donation.getDonor().getId())) {
 
-      DonationBatch donationBatch = donation.getDonationBatch();
+        DonationBatch donationBatch = donation.getDonationBatch();
 
-      if (!donationBatch.isBackEntry()) {
-        throw new IllegalArgumentException("Cannot set pack type that produces components");
+        if (!donationBatch.isBackEntry()) {
+          throw new IllegalArgumentException("Cannot set pack type that produces components");
+        }
       }
+
+      donation.setPackType(packType);
     }
 
     donation.setDonorPulse(donationBackingForm.getDonorPulse());
@@ -146,7 +150,6 @@ public class DonationCRUDService {
     donation.setBloodPressureDiastolic(donationBackingForm.getBloodPressureDiastolic());
     donation.setDonorWeight(donationBackingForm.getDonorWeight());
     donation.setNotes(donationBackingForm.getNotes());
-    donation.setPackType(packType);
     donation.setBleedStartTime(donationBackingForm.getBleedStartTime());
     donation.setBleedEndTime(donationBackingForm.getBleedEndTime());
 
