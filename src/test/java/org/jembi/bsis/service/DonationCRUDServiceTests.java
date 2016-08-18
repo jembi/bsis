@@ -297,13 +297,13 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packType);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(true);
     when(donationRepository.updateDonation(existingDonation)).thenAnswer(returnsFirstArg());
     
     // Exercise SUT
     Donation returnedDonation = donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
     
     // Verify
+    verify(donorConstraintChecker, never()).isDonorDeferred(IRRELEVANT_DONOR_ID);
     assertThat(returnedDonation, hasSameStateAsDonation(expectedDonation));
   }
 
