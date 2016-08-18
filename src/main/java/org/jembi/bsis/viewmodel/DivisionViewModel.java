@@ -1,6 +1,6 @@
 package org.jembi.bsis.viewmodel;
 
-public class LocationDivisionViewModel {
+public class DivisionViewModel {
   
   private long id;
   private String name;

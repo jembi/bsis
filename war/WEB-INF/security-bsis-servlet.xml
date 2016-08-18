@@ -255,11 +255,11 @@
     <intercept-url pattern="/inventories/**" access="isFullyAuthenticated()" />
   </http>
   
-  <http pattern="/locationdivisions/**" create-session="never" use-expressions="true">
+  <http pattern="/divisions/**" create-session="never" use-expressions="true">
     <http-basic />
     <session-management />
-    <intercept-url pattern="/locationdivisions/**" access="isAnonymous()" method="OPTIONS"/>
-    <intercept-url pattern="/locationdivisions/**" access="isFullyAuthenticated()" />
+    <intercept-url pattern="/divisions/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/divisions/**" access="isFullyAuthenticated()" />
   </http>
   
   <!-- Enable stateful access to swagger-ui  -->
