@@ -19,18 +19,19 @@ public class DivisionViewModelMatcher extends TypeSafeMatcher<DivisionViewModel>
     description.appendText("A DivisionViewModel with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nName: ").appendValue(expected.getName())
-        .appendText("\nLevel: ").appendValue(expected.getLevel());
+        .appendText("\nLevel: ").appendValue(expected.getLevel())
+        .appendText("\nParent division: ").appendValue(expected.getParentDivision());
   }
 
   @Override
   protected boolean matchesSafely(DivisionViewModel actual) {
     return Objects.equals(actual.getId(), expected.getId())
         && Objects.equals(actual.getName(), expected.getName())
-        && Objects.equals(actual.getLevel(), expected.getLevel());
+        && Objects.equals(actual.getLevel(), expected.getLevel())
+        && Objects.equals(actual.getParentDivision(), expected.getParentDivision());
   }
   
-  public static DivisionViewModelMatcher hasSameStateAsDivisionViewModel(
-      DivisionViewModel expected) {
+  public static DivisionViewModelMatcher hasSameStateAsDivisionViewModel(DivisionViewModel expected) {
     return new DivisionViewModelMatcher(expected);
   }
 
