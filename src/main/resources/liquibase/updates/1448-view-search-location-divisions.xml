@@ -1,33 +1,48 @@
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
- logicalFilePath="./liquibase/updates/1448-view-search-location-divisions.xml">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<changeSet id="20160818-1015" author="rowanpi">
+  <changeSet id="20160818-1015" author="rowanpi">
 
-		<createTable tableName="LocationDivision">
-			<column name="id" type="BIGINT(20)" autoIncrement="true">
-				<constraints primaryKey="true" />
-			</column>
-			<column name="name" type="varchar(255)">
-				<constraints nullable="false" unique="true" uniqueConstraintName="locationDivisionName" />
-			</column>
-			<column name="level" type="INT">
-				<constraints nullable="false" />
-			</column>
-			<column name="parent" type="BIGINT(20)">
-				<constraints nullable="true" foreignKeyName="fk_LocationDivision_parent"
-					references="LocationDivision(id)" />
-			</column>
-		</createTable>
+    <createTable tableName="LocationDivision">
+      <column name="id" type="BIGINT(20)" autoIncrement="true">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false" unique="true" uniqueConstraintName="locationDivisionName" />
+      </column>
+      <column name="level" type="INT">
+        <constraints nullable="false" />
+      </column>
+      <column name="parent" type="BIGINT(20)">
+        <constraints nullable="true" foreignKeyName="fk_LocationDivision_parent"
+          references="LocationDivision(id)" />
+      </column>
+    </createTable>
 
-		<createTable tableName="LocationDivision_AUD">
-			<column name="id" type="BIGINT(20)" autoIncrement="true">
-				<constraints primaryKey="true" />
-			</column>
-			<column name="name" type="VARCHAR(255)"/>
-			<column name="level" type="INT"/>
-			<column name="parent" type="BIGINT(20)"/>
-		</createTable>
-	</changeSet>
+    <createTable tableName="LocationDivision_AUD">
+      <column name="id" type="BIGINT(20)" autoIncrement="true">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="name" type="VARCHAR(255)"/>
+      <column name="level" type="INT"/>
+      <column name="parent" type="BIGINT(20)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="20160818-1018" author="bausmeier">
+    <insert tableName="Permission">
+      <column name="name">Add Division Locations</column>
+    </insert>
+    <insert tableName="Permission">
+      <column name="name">Edit Division Locations</column>
+    </insert>
+    <insert tableName="Permission">
+      <column name="name">View Division Locations</column>
+    </insert>
+    <insert tableName="Permission">
+      <column name="name">Void Division Locations</column>
+    </insert>
+  </changeSet>
+
 </databaseChangeLog>
