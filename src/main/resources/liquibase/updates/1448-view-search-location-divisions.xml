@@ -44,5 +44,26 @@
       <column name="name">Void Divisions</column>
     </insert>
   </changeSet>
+  
+  <changeSet id="20160818-1440" author="bausmeier">
+    <insert tableName="GeneralConfig">
+      <column name="name">ui.division.level1.displayName</column>
+      <column name="description">Division level 1 display name</column>
+      <column name="value">Region</column>
+      <column name="dataType_id">1</column>
+    </insert>
+    <insert tableName="GeneralConfig">
+      <column name="name">ui.division.level2.displayName</column>
+      <column name="description">Division level 2 display name</column>
+      <column name="value">District</column>
+      <column name="dataType_id">1</column>
+    </insert>
+    <insert tableName="GeneralConfig">
+      <column name="name">ui.division.level3.displayName</column>
+      <column name="description">Division level 3 display name</column>
+      <column name="value">Sub-district</column>
+      <column name="dataType_id">1</column>
+    </insert>
+  </changeSet>
 
 </databaseChangeLog>
