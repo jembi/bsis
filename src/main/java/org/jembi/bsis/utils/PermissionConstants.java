@@ -155,9 +155,9 @@ public class PermissionConstants {
   public static final String VOID_ADVERSE_EVENT_TYPES = "Void Adverse Event Types";
   
   // Location Divisions
-  public static final String ADD_LOCATION_DIVISIONS = "Add Location Divisions";
-  public static final String EDIT_LOCATION_DIVISIONS = "Edit Location Divisions";
-  public static final String VIEW_LOCATION_DIVISIONS = "View Location Divisions";
-  public static final String VOID_LOCATION_DIVISIONS = "Void Location Divisions";
+  public static final String ADD_DIVISIONS = "Add Divisions";
+  public static final String EDIT_DIVISIONS = "Edit Divisions";
+  public static final String VIEW_DIVISIONS = "View Divisions";
+  public static final String VOID_DIVISIONS = "Void Divisions";
 
 }

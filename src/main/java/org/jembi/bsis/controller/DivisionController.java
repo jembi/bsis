@@ -22,7 +22,7 @@ public class DivisionController {
   private DivisionControllerService divisionControllerService;
 
   @RequestMapping(method = RequestMethod.GET, value = "/search")
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_LOCATION_DIVISIONS + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DIVISIONS + "')")
   public ResponseEntity<Map<String, Object>> findDivisions(
       @RequestParam(required = true) String name,
       @RequestParam(required = true, defaultValue = "false") boolean includeSimilarResults,
