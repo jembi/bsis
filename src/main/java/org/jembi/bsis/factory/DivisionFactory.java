@@ -13,10 +13,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class DivisionFactory {
   
   public DivisionViewModel createDivisionViewModel(Division division) {
+    return createDivisionViewModel(division, true);
+  }
+
+  public DivisionViewModel createDivisionViewModel(Division division, boolean includeParent) {
     DivisionViewModel viewModel = new DivisionViewModel();
     viewModel.setId(division.getId());
     viewModel.setName(division.getName());
     viewModel.setLevel(division.getLevel());
+    
+    if (includeParent && division.getParent() != null) {
+      viewModel.setParent(createDivisionViewModel(division.getParent(), false));
+    }
     return viewModel;
   }
   

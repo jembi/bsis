@@ -26,17 +26,101 @@ public class DivisionFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDivisionViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
-    long id = 769L;
-    String name = "Some Location Division";
-    int level = 1;
+    long divisionId = 769L;
+    String divisionName = "Some Location Division";
+    int divisionLevel = 2;
+
+    long parentDivisionId = 7L;
+    String parentDivisionName = "Parent Division";
+    int parentDivisionLevel = 1;
     
-    Division division = aDivision().withId(id).withName(name).withLevel(level).build();
+    Division division = aDivision()
+        .withId(divisionId)
+        .withName(divisionName)
+        .withLevel(divisionLevel)
+        .withParent(aDivision()
+            .withId(parentDivisionId)
+            .withName(parentDivisionName)
+            .withLevel(parentDivisionLevel)
+            .build())
+        .build();
     
     // Set up expectations
-    DivisionViewModel expectedViewModel = aDivisionViewModel().withId(id).withName(name).withLevel(level).build();
+    DivisionViewModel expectedViewModel = aDivisionViewModel()
+        .withId(divisionId)
+        .withName(divisionName)
+        .withLevel(divisionLevel)
+        .withParent(aDivisionViewModel()
+            .withId(parentDivisionId)
+            .withName(parentDivisionName)
+            .withLevel(parentDivisionLevel)
+            .build())
+        .build();
     
     // Exercise SUT
     DivisionViewModel returnedViewModel = divisionFactory.createDivisionViewModel(division);
+    
+    // Verify
+    assertThat(returnedViewModel, hasSameStateAsDivisionViewModel(expectedViewModel));
+  }
+  
+  @Test
+  public void testCreateDivisionViewModelWithNullParent_shouldReturnViewModelWithTheCorrectState() {
+    // Set up fixture
+    long divisionId = 769L;
+    String name = "Some Location Division";
+    int level = 1;
+    
+    Division division = aDivision()
+        .withId(divisionId)
+        .withName(name)
+        .withLevel(level)
+        .withParent(null)
+        .build();
+    
+    // Set up expectations
+    DivisionViewModel expectedViewModel = aDivisionViewModel()
+        .withId(divisionId)
+        .withName(name)
+        .withLevel(level)
+        .withParent(null)
+        .build();
+    
+    // Exercise SUT
+    DivisionViewModel returnedViewModel = divisionFactory.createDivisionViewModel(division);
+    
+    // Verify
+    assertThat(returnedViewModel, hasSameStateAsDivisionViewModel(expectedViewModel));
+  }
+  
+  @Test
+  public void testCreateDivisionViewModelExcludeParent_shouldReturnViewModelWithTheCorrectState() {
+    // Set up fixture
+    long divisionId = 769L;
+    String divisionName = "Some Location Division";
+    int divisionLevel = 2;
+    
+    Division division = aDivision()
+        .withId(divisionId)
+        .withName(divisionName)
+        .withLevel(divisionLevel)
+        .withParent(aDivision()
+            .withId(9L)
+            .withName("Excluded parent")
+            .withLevel(1)
+            .build())
+        .build();
+    
+    // Set up expectations
+    DivisionViewModel expectedViewModel = aDivisionViewModel()
+        .withId(divisionId)
+        .withName(divisionName)
+        .withLevel(divisionLevel)
+        .withParent(null)
+        .build();
+    
+    // Exercise SUT
+    DivisionViewModel returnedViewModel = divisionFactory.createDivisionViewModel(division, false);
     
     // Verify
     assertThat(returnedViewModel, hasSameStateAsDivisionViewModel(expectedViewModel));
