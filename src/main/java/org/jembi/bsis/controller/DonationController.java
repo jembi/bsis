@@ -15,6 +15,7 @@ import org.jembi.bsis.backingform.BloodTypingResolutionsBackingForm;
 import org.jembi.bsis.backingform.DonationBackingForm;
 import org.jembi.bsis.backingform.validator.BloodTypingResolutionsBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DonationBackingFormValidator;
+import org.jembi.bsis.controllerservice.DonationControllerService;
 import org.jembi.bsis.factory.DonationSummaryViewModelFactory;
 import org.jembi.bsis.factory.DonationTypeFactory;
 import org.jembi.bsis.factory.DonationViewModelFactory;
@@ -24,7 +25,6 @@ import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
-import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonationTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.PackTypeRepository;
@@ -56,7 +56,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DonationController {
 
   @Autowired
-  private DonationRepository donationRepository;
+  private DonationControllerService donationControllerService;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -164,12 +164,10 @@ public class DonationController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONATION + "')")
-  public Map<String, Object> getDonation(@PathVariable("id") Long donationId) {
+  public Map<String, Object> getDonation(@PathVariable("id") long donationId) {
     
-    Donation donation = donationRepository.findDonationById(donationId);
-
     Map<String, Object> map = new HashMap<>();
-    map.put("donation", donationViewModelFactory.createDonationViewModelWithPermissions(donation));
+    map.put("donation", donationControllerService.findDonationById(donationId));
     return map;
   }
 
