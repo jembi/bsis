@@ -10,7 +10,7 @@ import static org.mockito.Mockito.doReturn;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jembi.bsis.model.location.LocationDivision;
+import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DivisionViewModel;
 import org.junit.Test;
@@ -26,101 +26,17 @@ public class DivisionFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDivisionViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
-    long divisionId = 769L;
-    String divisionName = "Some Location Division";
-    int divisionLevel = 2;
-
-    long parentDivisionId = 7L;
-    String parentDivisionName = "Parent Division";
-    int parentDivisionLevel = 1;
-    
-    LocationDivision division = aDivision()
-        .withId(divisionId)
-        .withName(divisionName)
-        .withLevel(divisionLevel)
-        .withParentDivision(aDivision()
-            .withId(parentDivisionId)
-            .withName(parentDivisionName)
-            .withLevel(parentDivisionLevel)
-            .build())
-        .build();
-    
-    // Set up expectations
-    DivisionViewModel expectedViewModel = aDivisionViewModel()
-        .withId(divisionId)
-        .withName(divisionName)
-        .withLevel(divisionLevel)
-        .withParentDivision(aDivisionViewModel()
-            .withId(parentDivisionId)
-            .withName(parentDivisionName)
-            .withLevel(parentDivisionLevel)
-            .build())
-        .build();
-    
-    // Exercise SUT
-    DivisionViewModel returnedViewModel = divisionFactory.createDivisionViewModel(division);
-    
-    // Verify
-    assertThat(returnedViewModel, hasSameStateAsDivisionViewModel(expectedViewModel));
-  }
-  
-  @Test
-  public void testCreateDivisionViewModelWithNullParent_shouldReturnViewModelWithTheCorrectState() {
-    // Set up fixture
-    long divisionId = 769L;
+    long id = 769L;
     String name = "Some Location Division";
     int level = 1;
     
-    LocationDivision division = aDivision()
-        .withId(divisionId)
-        .withName(name)
-        .withLevel(level)
-        .withParentDivision(null)
-        .build();
+    Division division = aDivision().withId(id).withName(name).withLevel(level).build();
     
     // Set up expectations
-    DivisionViewModel expectedViewModel = aDivisionViewModel()
-        .withId(divisionId)
-        .withName(name)
-        .withLevel(level)
-        .withParentDivision(null)
-        .build();
+    DivisionViewModel expectedViewModel = aDivisionViewModel().withId(id).withName(name).withLevel(level).build();
     
     // Exercise SUT
     DivisionViewModel returnedViewModel = divisionFactory.createDivisionViewModel(division);
-    
-    // Verify
-    assertThat(returnedViewModel, hasSameStateAsDivisionViewModel(expectedViewModel));
-  }
-  
-  @Test
-  public void testCreateDivisionViewModelExcludeParent_shouldReturnViewModelWithTheCorrectState() {
-    // Set up fixture
-    long divisionId = 769L;
-    String divisionName = "Some Location Division";
-    int divisionLevel = 2;
-    
-    LocationDivision division = aDivision()
-        .withId(divisionId)
-        .withName(divisionName)
-        .withLevel(divisionLevel)
-        .withParentDivision(aDivision()
-            .withId(9L)
-            .withName("Excluded parent")
-            .withLevel(1)
-            .build())
-        .build();
-    
-    // Set up expectations
-    DivisionViewModel expectedViewModel = aDivisionViewModel()
-        .withId(divisionId)
-        .withName(divisionName)
-        .withLevel(divisionLevel)
-        .withParentDivision(null)
-        .build();
-    
-    // Exercise SUT
-    DivisionViewModel returnedViewModel = divisionFactory.createDivisionViewModel(division, false);
     
     // Verify
     assertThat(returnedViewModel, hasSameStateAsDivisionViewModel(expectedViewModel));
@@ -129,9 +45,9 @@ public class DivisionFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDivisionViewModels_shouldReturnExpectedViewModels() {
     // Set up fixture
-    LocationDivision firstDivision = aDivision().withId(1L).withName("First").withLevel(1).build();
-    LocationDivision secondDivision = aDivision().withId(3L).withName("Second").withLevel(2).build();
-    List<LocationDivision> divisions = Arrays.asList(firstDivision, secondDivision);
+    Division firstDivision = aDivision().withId(1L).withName("First").withLevel(1).build();
+    Division secondDivision = aDivision().withId(3L).withName("Second").withLevel(2).build();
+    List<Division> divisions = Arrays.asList(firstDivision, secondDivision);
     
     // Set up expectations
     DivisionViewModel firstViewModel = aDivisionViewModel().withId(1L).withName("First").withLevel(1).build();

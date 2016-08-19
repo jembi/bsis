@@ -7,7 +7,7 @@ public class DivisionViewModelBuilder extends AbstractBuilder<DivisionViewModel>
   private long id;
   private String name;
   private int level;
-  private DivisionViewModel parentDivision;
+  private DivisionViewModel parent;
   
   public DivisionViewModelBuilder withId(long id) {
     this.id = id;
@@ -24,8 +24,8 @@ public class DivisionViewModelBuilder extends AbstractBuilder<DivisionViewModel>
     return this;
   }
   
-  public DivisionViewModelBuilder withParentDivision(DivisionViewModel parentDivision) {
-    this.parentDivision = parentDivision;
+  public DivisionViewModelBuilder withParent(DivisionViewModel parent) {
+    this.parent = parent;
     return this;
   }
 
@@ -35,7 +35,7 @@ public class DivisionViewModelBuilder extends AbstractBuilder<DivisionViewModel>
     viewModel.setId(id);
     viewModel.setName(name);
     viewModel.setLevel(level);
-    viewModel.setParentDivision(parentDivision);
+    viewModel.setParent(parent);
     return viewModel;
   }
   

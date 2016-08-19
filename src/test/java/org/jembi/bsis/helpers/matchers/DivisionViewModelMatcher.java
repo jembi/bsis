@@ -20,7 +20,7 @@ public class DivisionViewModelMatcher extends TypeSafeMatcher<DivisionViewModel>
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nName: ").appendValue(expected.getName())
         .appendText("\nLevel: ").appendValue(expected.getLevel())
-        .appendText("\nParent division: ").appendValue(expected.getParentDivision());
+        .appendText("\nParent: ").appendValue(expected.getParent());
   }
 
   @Override
@@ -28,7 +28,7 @@ public class DivisionViewModelMatcher extends TypeSafeMatcher<DivisionViewModel>
     return Objects.equals(actual.getId(), expected.getId())
         && Objects.equals(actual.getName(), expected.getName())
         && Objects.equals(actual.getLevel(), expected.getLevel())
-        && Objects.equals(actual.getParentDivision(), expected.getParentDivision());
+        && Objects.equals(actual.getParent(), expected.getParent());
   }
   
   public static DivisionViewModelMatcher hasSameStateAsDivisionViewModel(DivisionViewModel expected) {

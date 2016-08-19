@@ -1,13 +1,15 @@
 package org.jembi.bsis.helpers.builders;
 
-import org.jembi.bsis.model.location.LocationDivision;
+import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
+import org.jembi.bsis.helpers.persisters.DivisionPersister;
+import org.jembi.bsis.model.location.Division;
 
-public class DivisionBuilder extends AbstractEntityBuilder<LocationDivision> {
+public class DivisionBuilder extends AbstractEntityBuilder<Division> {
   
-  private long id;
+  private Long id;
   private String name = "default.division.name";
   private int level;
-  private LocationDivision parentDivision;
+  private Division parent;
 
   public DivisionBuilder withId(long id) {
     this.id = id;
@@ -24,22 +26,28 @@ public class DivisionBuilder extends AbstractEntityBuilder<LocationDivision> {
     return this;
   }
   
-  public DivisionBuilder withParentDivision(LocationDivision parentDivision) {
-    this.parentDivision = parentDivision;
+  public DivisionBuilder withParent(Division parent) {
+    this.parent = parent;
     return this;
   }
 
   @Override
-  public LocationDivision build() {
-    LocationDivision division = new LocationDivision();
+  public Division build() {
+    Division division = new Division();
     division.setId(id);
     division.setName(name);
     division.setLevel(level);
-    division.setParentDivision(parentDivision);
+    division.setParent(parent);
     return division;
   }
-  
+
+  @Override
+  public AbstractEntityPersister<Division> getPersister() {
+    return new DivisionPersister();
+  }
+
   public static DivisionBuilder aDivision() {
     return new DivisionBuilder();
   }
+
 }

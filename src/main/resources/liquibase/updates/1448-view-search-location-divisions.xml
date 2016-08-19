@@ -4,26 +4,44 @@
 
   <changeSet id="20160818-1015" author="rowanpi">
 
-    <createTable tableName="LocationDivision">
+    <createTable tableName="Division">
       <column name="id" type="BIGINT(20)" autoIncrement="true">
         <constraints primaryKey="true" />
       </column>
+      <column name="createdDate" type="TIMESTAMP">
+        <constraints nullable="false" />
+      </column>
+      <column name="createdBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_Division_createdBy" references="User(id)" />
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_Division_lastUpdatedBy" references="User(id)" />
+      </column>
       <column name="name" type="varchar(255)">
-        <constraints nullable="false" unique="true" uniqueConstraintName="locationDivisionName" />
+        <constraints nullable="false" unique="true" uniqueConstraintName="uq_divisionName" />
       </column>
       <column name="level" type="INT">
         <constraints nullable="false" />
       </column>
       <column name="parent" type="BIGINT(20)">
-        <constraints nullable="true" foreignKeyName="fk_LocationDivision_parent"
-          references="LocationDivision(id)" />
+        <constraints nullable="true" foreignKeyName="fk_Division_parent"
+          references="Division(id)" />
       </column>
     </createTable>
-
-    <createTable tableName="LocationDivision_AUD">
+ 
+    <createTable tableName="Division_AUD">
       <column name="id" type="BIGINT(20)" autoIncrement="true">
         <constraints primaryKey="true" />
       </column>
+      <column name="REV" type="INT(11)">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="REVTYPE" type="TINYINT(4)"/>
+      <column name="createdDate" type="TIMESTAMP"/>
+      <column name="createdBy_id" type="BIGINT(20)"/>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)"/>
       <column name="name" type="VARCHAR(255)"/>
       <column name="level" type="INT"/>
       <column name="parent" type="BIGINT(20)"/>

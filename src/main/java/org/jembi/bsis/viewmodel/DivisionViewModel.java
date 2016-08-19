@@ -7,7 +7,7 @@ public class DivisionViewModel {
   private long id;
   private String name;
   private int level;
-  private DivisionViewModel parentDivision;
+  private DivisionViewModel parent;
    
   public long getId() {
     return id;
@@ -33,12 +33,12 @@ public class DivisionViewModel {
     this.level = level;
   }
 
-  public DivisionViewModel getParentDivision() {
-    return parentDivision;
+  public DivisionViewModel getParent() {
+    return parent;
   }
 
-  public void setParentDivision(DivisionViewModel parentDivision) {
-    this.parentDivision = parentDivision;
+  public void setParent(DivisionViewModel parent) {
+    this.parent = parent;
   }
 
   @Override
@@ -52,6 +52,6 @@ public class DivisionViewModel {
     return Objects.equals(otherViewModel.getId(), getId())
         && Objects.equals(otherViewModel.getName(), getName())
         && Objects.equals(otherViewModel.getLevel(), getLevel())
-        && Objects.equals(otherViewModel.getParentDivision(), getParentDivision());
+        && Objects.equals(otherViewModel.getParent(), getParent());
   }
 }
