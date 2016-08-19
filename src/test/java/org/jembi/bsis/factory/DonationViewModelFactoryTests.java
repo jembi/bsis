@@ -70,6 +70,7 @@ public class DonationViewModelFactoryTests {
     boolean irrelevantCanUpdatePermission = true;
     boolean irrelevantCanDonatePermission = true;
     boolean irrelevantIsBackEntryPermission = true;
+    boolean irrelevantCanEditPackTypePermission = true;
 
     Long irrelevantAdverseEventId = 11L;
     Date donationDate = new Date();
@@ -129,6 +130,7 @@ public class DonationViewModelFactoryTests {
         .withPermission("canDelete", irrelevantCanDeletePermission)
         .withPermission("canUpdateDonationFields", irrelevantCanUpdatePermission)
         .withPermission("canDonate", irrelevantCanDonatePermission)
+        .withPermission("canEditPackType", irrelevantCanEditPackTypePermission)
         .withPermission("isBackEntry", irrelevantIsBackEntryPermission)
         .withAdverseEvent(adverseEventViewModel)
             .withPackType(packTypeFullViewModel)
@@ -157,6 +159,7 @@ public class DonationViewModelFactoryTests {
 
     when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanDeletePermission);
     when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanUpdatePermission);
+    when(donationConstraintChecker.canEditPackType(donation)).thenReturn(irrelevantCanEditPackTypePermission);
     when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(irrelevantCanDonatePermission);
     when(adverseEventViewModelFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
     when(locationFactory.createFullViewModel(venue)).thenReturn(new LocationFullViewModel(venue));
@@ -197,6 +200,7 @@ public class DonationViewModelFactoryTests {
         .withId(IRRELEVANT_DONATION_ID)
         .withPermission("canDelete", true)
         .withPermission("canUpdateDonationFields", true)
+        .withPermission("canEditPackType", true)
         .withPermission("canDonate", true)
         .withPermission("isBackEntry", true)
         .withAdverseEvent(adverseEventViewModel)
@@ -207,6 +211,7 @@ public class DonationViewModelFactoryTests {
         .withId(ANOTHER_IRRELEVANT_DONATION_ID)
         .withPermission("canDelete", true)
         .withPermission("canUpdateDonationFields", true)
+        .withPermission("canEditPackType", false)
         .withPermission("canDonate", false)
         .withPermission("isBackEntry", false)
         .withPackType(packTypeFullViewModel)
@@ -215,11 +220,13 @@ public class DonationViewModelFactoryTests {
 
     when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(donationConstraintChecker.canEditPackType(donation1)).thenReturn(true);
     when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(true);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONATION_ID)).thenReturn(false);
     when(adverseEventViewModelFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
     when(donationConstraintChecker.canDeleteDonation(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canUpdateDonationFields(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(donationConstraintChecker.canEditPackType(donation2)).thenReturn(false);
     when(donorConstraintChecker.isDonorEligibleToDonate(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donorConstraintChecker.isDonorDeferred(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);

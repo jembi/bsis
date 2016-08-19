@@ -3,7 +3,10 @@ package org.jembi.bsis.service;
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
+import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.BloodTestResultRepository;
@@ -139,6 +142,25 @@ public class DonationConstraintChecker {
 	public boolean donationHasSavedTestResults(Donation donation) {
 		int numberOfTestResults = bloodTestResultRepository.countBloodTestResultsForDonation(donation.getId());
 		return numberOfTestResults > 0;
+	}
+	
+	public boolean canEditPackType(Donation donation) {
+	  
+	  for (Component component : donation.getComponents()) {
+
+	    if (component.getIsDeleted()) {
+	      // Ignore deleted components
+	      continue;
+	    }
+
+	    // Check if the component has been processed, discarded or labelled
+	    if (component.getStatus() == ComponentStatus.PROCESSED || component.getStatus() == ComponentStatus.DISCARDED
+	        || component.getInventoryStatus() == InventoryStatus.IN_STOCK) {
+	      return false;
+	    }
+	  }
+	  
+	  return true;
 	}
 
 }

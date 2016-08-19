@@ -55,6 +55,7 @@ public class DonationViewModelFactory {
     permissions.put("canDelete", donationConstraintChecker.canDeleteDonation(donation.getId()));
     permissions.put("canUpdateDonationFields", donationConstraintChecker.canUpdateDonationFields(donation.getId()));
     permissions.put("canDonate", canDonate);
+    permissions.put("canEditPackType", donationConstraintChecker.canEditPackType(donation));
     permissions.put("isBackEntry", isBackEntry);
     donationViewModel.setPermissions(permissions);
 
