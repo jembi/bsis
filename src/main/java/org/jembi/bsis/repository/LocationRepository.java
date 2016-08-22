@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class LocationRepository {
+public class LocationRepository extends AbstractRepository<Location>{
   @PersistenceContext
   private EntityManager em;
 
@@ -185,14 +185,5 @@ public class LocationRepository {
 
     // execute Query
     return query.getResultList();
-  }
-  
-  private void addWhereCondition(StringBuilder whereClause, String condition) {
-    if (StringUtils.isBlank(whereClause)) {
-      whereClause.append("WHERE ");
-    } else {
-      whereClause.append("AND ");
-    }
-    whereClause.append(condition);
   }
 }
