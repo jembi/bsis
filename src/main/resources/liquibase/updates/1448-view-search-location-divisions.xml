@@ -24,7 +24,7 @@
       <column name="level" type="INT">
         <constraints nullable="false" />
       </column>
-      <column name="parent" type="BIGINT(20)">
+      <column name="parent_id" type="BIGINT(20)">
         <constraints nullable="true" foreignKeyName="fk_Division_parent"
           references="Division(id)" />
       </column>
@@ -44,7 +44,7 @@
       <column name="lastUpdatedBy_id" type="BIGINT(20)"/>
       <column name="name" type="VARCHAR(255)"/>
       <column name="level" type="INT"/>
-      <column name="parent" type="BIGINT(20)"/>
+      <column name="parent_id" type="BIGINT(20)"/>
     </createTable>
   </changeSet>
 
