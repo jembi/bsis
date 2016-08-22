@@ -3,6 +3,7 @@ package org.jembi.bsis.controllerservice;
 import org.jembi.bsis.backingform.DonationBackingForm;
 import org.jembi.bsis.factory.DonationViewModelFactory;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.service.DonationCRUDService;
 import org.jembi.bsis.viewmodel.DonationViewModel;
@@ -34,6 +35,14 @@ public class DonationControllerService {
   public DonationViewModel findDonationById(long donationId) {
     Donation donation = donationRepository.findDonationById(donationId);
     return donationViewModelFactory.createDonationViewModelWithPermissions(donation);
+  }
+  
+  public TestBatchStatus getTestBatchStatusForDonation(long donationId) {
+    Donation donation = donationRepository.findDonationById(donationId);
+    if (donation.getDonationBatch() == null || donation.getDonationBatch().getTestBatch() == null) {
+      return null;
+    }
+    return donation.getDonationBatch().getTestBatch().getStatus();
   }
 
 }

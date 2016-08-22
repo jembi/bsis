@@ -22,7 +22,6 @@ import org.jembi.bsis.factory.PackTypeFactory;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donationtype.DonationType;
-import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
 import org.jembi.bsis.repository.DonationTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
@@ -34,7 +33,6 @@ import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.utils.PermissionUtils;
 import org.jembi.bsis.viewmodel.DonationSummaryViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
-import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -138,6 +136,16 @@ public class DonationController {
     map.put("donationFields", formFieldAccessorService.getFormFieldsForForm("donation"));
     return new ResponseEntity<>(map, HttpStatus.CREATED);
   }
+  
+  @RequestMapping(value = "{id}/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
+  public ResponseEntity<Map<String, Object>> getEditDonationForm(@PathVariable("id") long donationId) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("testBatchStatus", donationControllerService.getTestBatchStatusForDonation(donationId));
+    map.put("packTypes", packTypeFactory.createFullViewModels(packTypeRepository.getAllEnabledPackTypes()));
+    map.put("adverseEventTypes", adverseEventTypeRepository.findNonDeletedAdverseEventTypeViewModels());
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
@@ -201,7 +209,7 @@ public class DonationController {
     m.put("venues", locationRepository.getVenues());
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
     m.put("donationTypes", donationTypeFactory.createDonationTypeViewModels(donationTypes));
-    m.put("packTypes", getPackTypeViewModels(packTypeRepository.getAllEnabledPackTypes()));
+    m.put("packTypes", packTypeFactory.createFullViewModels(packTypeRepository.getAllEnabledPackTypes()));
     List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
     for (HaemoglobinLevel value : HaemoglobinLevel.values()) {
       Map<String, Object> haemoglobinLevel = new HashMap<>();
@@ -211,14 +219,5 @@ public class DonationController {
     }
     m.put("haemoglobinLevels", haemoglobinLevels);
     m.put("adverseEventTypes", adverseEventTypeRepository.findNonDeletedAdverseEventTypeViewModels());
-  }
-  
-  private List<PackTypeFullViewModel> getPackTypeViewModels(List<PackType> packTypes) {
-    // FIXME: use a factory
-    List<PackTypeFullViewModel> viewModels = new ArrayList<PackTypeFullViewModel>();
-    for (PackType packtType : packTypes) {
-      viewModels.add(packTypeFactory.createFullViewModel(packtType));
-    }
-    return viewModels;
   }
 }
