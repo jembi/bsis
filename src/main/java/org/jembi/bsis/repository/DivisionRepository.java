@@ -2,8 +2,6 @@ package org.jembi.bsis.repository;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,12 +10,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class DivisionRepository extends AbstractRepository<Division> {
-  @PersistenceContext
-  private EntityManager em;
-
-  public Division findById(long id) {
-    return entityManager.find(Division.class, id);
-  }
 
   public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level) {
     // build up Query string
@@ -37,14 +29,14 @@ public class DivisionRepository extends AbstractRepository<Division> {
       addWhereCondition(whereClause, "div.level = :level ");
     }
     
-    if(!whereClause.toString().isEmpty()) {
+    if(!StringUtils.isBlank(whereClause.toString())) {
       queryBuilder.append(whereClause);
     }
     
     //ORDER BY
     queryBuilder.append("ORDER BY div.name ASC");
 
-    TypedQuery<Division> query = em.createQuery(queryBuilder.toString(), Division.class);
+    TypedQuery<Division> query = entityManager.createQuery(queryBuilder.toString(), Division.class);
 
     //SET NAMED PARAMS
     if (!StringUtils.isBlank(name)) {
