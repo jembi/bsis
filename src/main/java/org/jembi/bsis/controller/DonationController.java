@@ -18,7 +18,6 @@ import org.jembi.bsis.backingform.validator.DonationBackingFormValidator;
 import org.jembi.bsis.controllerservice.DonationControllerService;
 import org.jembi.bsis.factory.DonationSummaryViewModelFactory;
 import org.jembi.bsis.factory.DonationTypeFactory;
-import org.jembi.bsis.factory.DonationViewModelFactory;
 import org.jembi.bsis.factory.PackTypeFactory;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
@@ -34,6 +33,7 @@ import org.jembi.bsis.service.FormFieldAccessorService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.utils.PermissionUtils;
 import org.jembi.bsis.viewmodel.DonationSummaryViewModel;
+import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -78,9 +78,6 @@ public class DonationController {
 
   @Autowired
   private AdverseEventTypeRepository adverseEventTypeRepository;
-
-  @Autowired
-  private DonationViewModelFactory donationViewModelFactory;
 
   @Autowired
   private DonationBackingFormValidator donationBackingFormValidator;
@@ -130,14 +127,14 @@ public class DonationController {
   public ResponseEntity<Map<String, Object>> addDonation(@RequestBody @Valid DonationBackingForm donationBackingForm) {
 
     // Create the donation
-    Donation savedDonation = donationCRUDService.createDonation(donationBackingForm);
+    DonationViewModel donationViewModel = donationControllerService.createDonation(donationBackingForm);
 
     // Populate the response map
     Map<String, Object> map = new HashMap<>();
     addEditSelectorOptions(map);
     map.put("hasErrors", false);
-    map.put("donationId", savedDonation.getId());
-    map.put("donation", donationViewModelFactory.createDonationViewModelWithPermissions(savedDonation));
+    map.put("donationId", donationViewModel.getId());
+    map.put("donation", donationViewModel);
     map.put("donationFields", formFieldAccessorService.getFormFieldsForForm("donation"));
     return new ResponseEntity<>(map, HttpStatus.CREATED);
   }
@@ -145,14 +142,14 @@ public class DonationController {
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
   public ResponseEntity<Map<String, Object>> updateDonation(
-      @PathVariable("id") Long donationId,
+      @PathVariable("id") long donationId,
       @RequestBody @Valid DonationBackingForm donationBackingForm) {
 
-    Donation updatedDonation = donationCRUDService.updateDonation(donationId, donationBackingForm);
+    donationBackingForm.setId(donationId);
 
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("donation", donationViewModelFactory.createDonationViewModelWithPermissions(updatedDonation));
-    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    Map<String, Object> map = new HashMap<>();
+    map.put("donation", donationControllerService.updateDonation(donationBackingForm));
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
