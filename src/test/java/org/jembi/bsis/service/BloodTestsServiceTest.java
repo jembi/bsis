@@ -25,6 +25,7 @@ import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.TestBatchBuilder;
 import org.jembi.bsis.helpers.builders.TestResultsBackingFormBuilder;
+import org.jembi.bsis.helpers.matchers.BloodTestResultMatcher;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
@@ -32,6 +33,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
+import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
@@ -43,6 +45,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -72,6 +75,9 @@ public class BloodTestsServiceTest {
   @Mock
   TestBatchStatusChangeService testBatchStatusChangeService;
   
+  @Mock
+  private BloodTestResultRepository bloodTestResultRepository;
+
   @Mock
   private GeneralConfigAccessorService generalConfigAccessorService;
 
@@ -432,9 +438,11 @@ public class BloodTestsServiceTest {
     when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
+    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE "
+        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted",
         BloodTestResult.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -486,9 +494,10 @@ public class BloodTestsServiceTest {
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
+    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted",
         BloodTestResult.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -542,9 +551,10 @@ public class BloodTestsServiceTest {
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults)).thenReturn(ruleResult).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
+    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted",
         BloodTestResult.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -590,9 +600,10 @@ public class BloodTestsServiceTest {
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
+    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted",
         BloodTestResult.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -648,9 +659,10 @@ public class BloodTestsServiceTest {
         .thenReturn(donation1);
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_2))
         .thenReturn(donation2);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId",
+    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE " + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted",
         BloodTestResult.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -673,6 +685,39 @@ public class BloodTestsServiceTest {
     // check asserts
     verify(ruleEngine, times(2)).applyBloodTests(donation1, bloodTestResults);
     verify(ruleEngine, times(2)).applyBloodTests(donation2, bloodTestResults);
+
+  }
+
+  @Test
+  public void testSetTestOutcomesAsDeleted_shouldDeleteAllTestOutcomesForDonation() {
+    // Set up data
+    Donation donation = DonationBuilder.aDonation().build();
+    List<BloodTestResult> bloodTestResultList = new ArrayList<>();
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1L).withDonation(donation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(2L).withDonation(donation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(3L).withDonation(donation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(4L).withDonation(donation).build());
+    
+    BloodTestResult deleted1 = bloodTestResultList.get(0);
+    deleted1.setIsDeleted(true);
+    BloodTestResult deleted2 = bloodTestResultList.get(1);
+    deleted1.setIsDeleted(true);
+    BloodTestResult deleted3 = bloodTestResultList.get(2);
+    deleted1.setIsDeleted(true);
+    BloodTestResult deleted4 = bloodTestResultList.get(3);
+    deleted1.setIsDeleted(true);
+
+    // Mocks
+    when(bloodTestResultRepository.getTestOutcomes(donation)).thenReturn(bloodTestResultList);
+
+    // Run test
+    service.setTestOutcomesAsDeleted(donation);
+
+    // Verify  
+    Mockito.verify(bloodTestResultRepository).save(Mockito.argThat(BloodTestResultMatcher.hasSameStateAsBloodTestResult(deleted1)));
+    Mockito.verify(bloodTestResultRepository).save(Mockito.argThat(BloodTestResultMatcher.hasSameStateAsBloodTestResult(deleted2)));
+    Mockito.verify(bloodTestResultRepository).save(Mockito.argThat(BloodTestResultMatcher.hasSameStateAsBloodTestResult(deleted3)));
+    Mockito.verify(bloodTestResultRepository).save(Mockito.argThat(BloodTestResultMatcher.hasSameStateAsBloodTestResult(deleted4))); 
 
   }
 }
