@@ -11,6 +11,7 @@ import org.jembi.bsis.backingform.BloodTypingResolutionsBackingForm;
 import org.jembi.bsis.backingform.DonationBackingForm;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.adverseevent.AdverseEventType;
+import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
@@ -155,6 +156,21 @@ public class DonationCRUDService {
         if (!donationBatch.isBackEntry()) {
           throw new IllegalArgumentException("Cannot set pack type that produces components");
         }
+      }
+
+      // If the new pack type doesn't count as a donation, perform deletion of component and test
+      // outcomes and clear statuses
+      if (!newPackType.getCountAsDonation()) {
+        if (donation.getComponents().size() > 0) {
+          // delete initial component
+          donation.getComponents().get(0).setIsDeleted(true);
+        }
+        // delete test outcomes
+        bloodTestsService.setTestOutcomesAsDeleted(donation);
+        // clear tti status and blood grouping
+        donation.setTTIStatus(TTIStatus.NOT_DONE);
+        donation.setBloodAbo(null);
+        donation.setBloodRh(null);
       }
 
       donation.setPackType(newPackType);
