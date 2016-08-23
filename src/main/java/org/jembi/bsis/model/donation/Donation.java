@@ -23,6 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Index;
+import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -115,6 +116,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
    * List of components created from this donation.
    */
   @OneToMany(mappedBy = "donation")
+  @Where(clause = "isDeleted = 0")
   private List<Component> components;
 
   @NotAudited
