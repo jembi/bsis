@@ -210,16 +210,18 @@ public class DonationRepository {
     em.flush();
     em.refresh(donation.getDonor());
 
-    // Create initial component only if the countAsDonation is true and the config option is enabled
-    if (donation.getPackType().getCountAsDonation() &&
-        generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)) {
-      createInitialComponent(donation);
-    }
+    createInitialComponent(donation);
 
     return donation;
   }
 
-  private void createInitialComponent(Donation donation) {
+  public void createInitialComponent(Donation donation) {
+
+    // Create initial component only if the countAsDonation is true and the config option is enabled
+    if (!donation.getPackType().getCountAsDonation() && 
+        !generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)) {
+      return;
+    }
 
     ComponentType componentType = donation.getPackType().getComponentType();
 
