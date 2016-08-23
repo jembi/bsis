@@ -8,9 +8,7 @@ import javax.persistence.PersistenceContext;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.donation.Donation;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(readOnly = true)
 @Repository
 public class BloodTestResultRepository extends AbstractRepository<BloodTestResult> {
 
