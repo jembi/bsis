@@ -29,12 +29,16 @@ import java.util.Date;
 import org.jembi.bsis.backingform.AdverseEventBackingForm;
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.backingform.DonationBackingForm;
+import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
+import org.jembi.bsis.helpers.builders.TestBatchBuilder;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.model.testbatch.TestBatch;
+import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
@@ -76,6 +80,10 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
   @Mock
   private TestBatchStatusChangeService testBatchStatusChangeService;
+  @Mock
+  private BloodTestResultRepository bloodTestResultRepository;
+  @Mock
+  private BloodTestsService bloodTestsService;
 
   @Test(expected = IllegalStateException.class)
   public void testDeleteDonationWithConstraints_shouldThrow() {
@@ -229,6 +237,105 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     // Exercise SUT
     donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
   }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void testUpdateDonationWithDifferentPackTypeThatCantEditPackType_shouldThrow() {
+    // Set up fixture 
+    PackType newPackType = aPackType().withId(2L).build();
+    Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
+    Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
+
+    Donation existingDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withPackType(aPackType().withId(1L).build())
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .build();
+    DonationBackingForm donationBackingForm = aDonationBackingForm()
+        .withPackType(newPackType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .build();
+    
+    // Set up expectations
+    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+    when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(false);
+    
+    // Exercise SUT
+    donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+  }
+  
+  @Test
+  public void testUpdateDonationWithSamePackType_shouldNotCheckCanEditPackType() {
+    // Set up fixture 
+    PackType packType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build();
+    Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
+    Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
+
+    Donation existingDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withPackType(packType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .build();
+    DonationBackingForm donationBackingForm = aDonationBackingForm()
+        .withPackType(packType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .build();
+    
+    // Set up expectations
+    Donation expectedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withPackType(packType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .build();
+    
+    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+    when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packType);
+    when(donationRepository.updateDonation(existingDonation)).thenAnswer(returnsFirstArg());
+    
+    // Exercise SUT
+    Donation returnedDonation = donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    
+    // Verify
+    verify(donationConstraintChecker, never()).canEditPackType(existingDonation);
+    assertThat(returnedDonation, hasSameStateAsDonation(expectedDonation));
+  }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void testUpdateDonationWithDifferentPackTypeThatProducesTestSamplesWithNotOpenTestBatch_shouldThrow() {
+    // Set up fixture 
+    PackType newPackType = aPackType().withId(2L).withTestSampleProduced(true).build();
+    Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
+    Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
+    TestBatch testBatch = TestBatchBuilder.aReleasedTestBatch().build();
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
+
+    Donation existingDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withPackType(aPackType().withTestSampleProduced(false).withId(1L).build())
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .withDonationBatch(donationBatch)
+        .build();
+    DonationBackingForm donationBackingForm = aDonationBackingForm()
+        .withPackType(newPackType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .build();
+    
+    // Set up expectations
+    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+    when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
+    when(packTypeRepository.getPackTypeById(2L)).thenReturn(newPackType);
+    
+    // Exercise SUT
+    donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+  }
 
   @Test(expected = IllegalArgumentException.class)
   public void testUpdateDonationWithDifferentPackTypeAndDeferredDonor_shouldThrow() {
@@ -255,6 +362,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     // Set up expectations
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(packTypeRepository.getPackTypeById(2L)).thenReturn(newPackType);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(true);
     when(donationRepository.updateDonation(existingDonation)).thenAnswer(returnsFirstArg());
@@ -296,7 +404,6 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
     
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
-    when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packType);
     when(donationRepository.updateDonation(existingDonation)).thenAnswer(returnsFirstArg());
     
     // Exercise SUT
@@ -378,6 +485,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenReturn(expectedDonation);
     when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(irrelevantPackType);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);

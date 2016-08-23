@@ -49,6 +49,9 @@ public class DonationCRUDService {
   private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
   @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
+  @Autowired
+  private BloodTestsService bloodTestsService;
+
 
   public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
 
@@ -129,18 +132,32 @@ public class DonationCRUDService {
     }
 
     if (packTypeUpdated) {
-      PackType packType = packTypeRepository.getPackTypeById(donationBackingForm.getPackType().getId());
 
-      if (packType.getCountAsDonation() && donorConstraintChecker.isDonorDeferred(donation.getDonor().getId())) {
+      // Check if the packType can be updated for this donation
+      if (!donationConstraintChecker.canEditPackType(donation)) {
+        throw new IllegalArgumentException("Cannot edit pack type");
+      }
 
+      // Check that if the newPackType produces test samples, and the existing one
+      // doesn't, the test batch linked to this donation must be OPEN for the packType to be edited
+      PackType newPackType = packTypeRepository.getPackTypeById(donationBackingForm.getPackType().getId());
+      if (newPackType.getTestSampleProduced() &&
+          !donation.getPackType().getTestSampleProduced() &&
+          donation.getDonationBatch().getTestBatch() != null &&
+          !donation.getDonationBatch().getTestBatch().getStatus().equals(TestBatchStatus.OPEN)) {
+        throw new IllegalArgumentException("Cannot set pack type that produces test samples");
+      }
+
+      // Check that if the donor is deferred, the packType can't be updated to one that produces
+      // components (doesn't apply to back entry)
+      if (newPackType.getCountAsDonation() && donorConstraintChecker.isDonorDeferred(donation.getDonor().getId())) {
         DonationBatch donationBatch = donation.getDonationBatch();
-
         if (!donationBatch.isBackEntry()) {
           throw new IllegalArgumentException("Cannot set pack type that produces components");
         }
       }
 
-      donation.setPackType(packType);
+      donation.setPackType(newPackType);
     }
 
     donation.setDonorPulse(donationBackingForm.getDonorPulse());
