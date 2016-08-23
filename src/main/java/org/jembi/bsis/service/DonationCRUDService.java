@@ -53,7 +53,6 @@ public class DonationCRUDService {
   @Autowired
   private BloodTestsService bloodTestsService;
 
-
   public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
 
     if (!donationConstraintChecker.canDeleteDonation(donationId)) {
@@ -158,6 +157,9 @@ public class DonationCRUDService {
         }
       }
 
+      // Set new pack type
+      donation.setPackType(newPackType);
+
       // If the new pack type doesn't count as a donation, perform deletion of component and test
       // outcomes and clear statuses
       if (!newPackType.getCountAsDonation()) {
@@ -171,9 +173,12 @@ public class DonationCRUDService {
         donation.setTTIStatus(TTIStatus.NOT_DONE);
         donation.setBloodAbo(null);
         donation.setBloodRh(null);
+        
+      // If the new pack type counts as a donation, but there's no initial component, create it
+      } else if (donation.getComponents().size() == 0) {
+        donationRepository.createInitialComponent(donation);
       }
 
-      donation.setPackType(newPackType);
     }
 
     donation.setDonorPulse(donationBackingForm.getDonorPulse());
