@@ -119,7 +119,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donationWithNotes);
     when(bloodTestResultRepository.countBloodTestResultsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(1);
 
-    boolean canDelete = donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID);
+    boolean canDelete = donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID);
 
     assertThat(canDelete, is(false));
   }
@@ -129,7 +129,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     when(bloodTestResultRepository.countBloodTestResultsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(0);
     when(componentRepository.countChangedComponentsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(1);
 
-    boolean canDelete = donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID);
+    boolean canDelete = donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID);
 
     assertThat(canDelete, is(false));
   }
@@ -139,7 +139,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     when(bloodTestResultRepository.countBloodTestResultsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(0);
     when(componentRepository.countChangedComponentsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(0);
 
-    boolean canDelete = donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID);
+    boolean canDelete = donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID);
 
     assertThat(canDelete, is(true));
   }

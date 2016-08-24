@@ -53,7 +53,7 @@ public class DonationViewModelFactory {
     // Populate permissions
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDelete", donationConstraintChecker.canDeleteDonation(donation.getId()));
-    permissions.put("canUpdateDonationFields", donationConstraintChecker.canUpdateDonationFields(donation.getId()));
+    permissions.put("canEditBleedTimes", donationConstraintChecker.canEditBleedTimes(donation.getId()));
     permissions.put("canDonate", canDonate);
     permissions.put("canEditPackType", donationConstraintChecker.canEditPackType(donation));
     permissions.put("isBackEntry", isBackEntry);

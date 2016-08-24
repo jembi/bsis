@@ -121,14 +121,15 @@ public class DonationCRUDService {
   public Donation updateDonation(long donationId, DonationBackingForm donationBackingForm) {
     Donation donation = donationRepository.findDonationById(donationId);
 
-    // Check if pack type or bleed times have been updated
+    // Check if pack type has been updated
     boolean packTypeUpdated = !Objects.equals(donation.getPackType(), donationBackingForm.getPackType());
-    boolean donationFieldsUpdated = packTypeUpdated ||
-        donation.getBleedStartTime().getTime() != donationBackingForm.getBleedStartTime().getTime() ||
+
+    // Check if bleed times have been updated
+    boolean bleedTimesUpdated = donation.getBleedStartTime().getTime() != donationBackingForm.getBleedStartTime().getTime() ||
         donation.getBleedEndTime().getTime() != donationBackingForm.getBleedEndTime().getTime();
 
-    if (donationFieldsUpdated && !donationConstraintChecker.canUpdateDonationFields(donationId)) {
-      throw new IllegalArgumentException("Cannot update donation fields");
+    if (bleedTimesUpdated && !donationConstraintChecker.canEditBleedTimes(donationId)) {
+      throw new IllegalArgumentException("Cannot edit bleed times");
     }
 
     if (packTypeUpdated) {

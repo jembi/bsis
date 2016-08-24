@@ -61,7 +61,7 @@ public class DonationConstraintChecker {
     return true;
   }
 
-  public boolean canUpdateDonationFields(long donationId) {
+  public boolean canEditBleedTimes(long donationId) {
 
     // Check for recorded test results
     if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {
