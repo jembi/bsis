@@ -186,23 +186,6 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testUpdateDonationWithUpdatedPackTypeAndCannotUpdate_shouldThrow() {
-
-    // Set up fixture
-    Donation existingDonation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
-        .withPackType(aPackType().withId(7l).build())
-        .build();
-
-    // Set up expectations
-    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
-    when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(false);
-
-    // Exercise SUT
-    donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
   public void testUpdateDonationWithUpdatedBleedStartTimeAndCannotUpdate_shouldThrow() {
 
     // Set up fixture
@@ -634,6 +617,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withPackType(aPackType().withId(8l).withCountAsDonation(true).build())
         .withDonor(expectedDonor)
         .withAdverseEvent(irrelevantAdverseEvent)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
         .build();
 
     DonationBackingForm donationBackingForm = aDonationBackingForm()
