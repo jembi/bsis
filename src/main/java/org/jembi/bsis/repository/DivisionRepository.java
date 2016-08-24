@@ -6,10 +6,17 @@ import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.location.Division;
+import org.jembi.bsis.repository.constant.DivisionNamedQueryConstants;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class DivisionRepository extends AbstractRepository<Division> {
+  
+  public Division findDivisionById(long id) {
+    return entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_ID, Division.class)
+        .setParameter("id", id)
+        .getSingleResult();
+  }
 
   public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level) {
     // build up Query string

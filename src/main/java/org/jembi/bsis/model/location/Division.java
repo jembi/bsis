@@ -3,14 +3,21 @@ package org.jembi.bsis.model.location;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.repository.constant.DivisionNamedQueryConstants;
 
 /**
  * Entity representing a Division to which a Location belongs.
  */
+@NamedQueries({
+    @NamedQuery(name = DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_ID,
+        query = DivisionNamedQueryConstants.QUERY_FIND_DIVISION_BY_ID)
+})
 @Entity
 @Audited
 public class Division extends BaseModificationTrackerEntity {
