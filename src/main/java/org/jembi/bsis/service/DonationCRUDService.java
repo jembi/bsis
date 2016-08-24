@@ -161,25 +161,23 @@ public class DonationCRUDService {
       // Set new pack type
       donation.setPackType(newPackType);
 
-      // If the new pack type doesn't count as a donation, perform deletion of component and test
-      // outcomes and clear statuses
-      if (!newPackType.getCountAsDonation()) {
-        if (donation.getComponents().size() > 0) {
-          // delete initial component
-          donation.getComponents().get(0).setIsDeleted(true);
-        }
-        // delete test outcomes
+      // If an initial component was created previously, delete it
+      if (!donation.getComponents().isEmpty()) {
+        donation.getComponents().get(0).setIsDeleted(true);
+      }
+
+      // If the new pack type produces components, create a new initial component
+      if (newPackType.getCountAsDonation()) {
+        donationRepository.createInitialComponent(donation);
+      }
+      
+      // If the new pack type doesn't produce test samples, delete test outcomes and clear statuses
+      if (!newPackType.getTestSampleProduced()) {
         bloodTestsService.setTestOutcomesAsDeleted(donation);
-        // clear tti status and blood grouping
         donation.setTTIStatus(TTIStatus.NOT_DONE);
         donation.setBloodAbo(null);
         donation.setBloodRh(null);
-        
-      // If the new pack type counts as a donation, but there's no initial component, create it
-      } else if (donation.getComponents().size() == 0) {
-        donationRepository.createInitialComponent(donation);
       }
-
     }
 
     donation.setDonorPulse(donationBackingForm.getDonorPulse());
