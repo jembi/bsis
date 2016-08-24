@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DivisionBackingFormBuilder.aDivisionBackingForm;
 import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
 import static org.jembi.bsis.helpers.builders.DivisionViewModelBuilder.aDivisionViewModel;
+import static org.jembi.bsis.helpers.matchers.DivisionMatcher.hasSameStateAsDivision;
 import static org.jembi.bsis.helpers.matchers.DivisionViewModelMatcher.hasSameStateAsDivisionViewModel;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -156,12 +157,19 @@ public class DivisionFactoryTests extends UnitTestSuite {
     // Verify
     assertThat(returnedViewModels, is(expectedViewModels));
   }
-  
+
   @Test
-  public void testConvertDivisionBackingFormToDivisionEntity_shouldReturnExpectedEntity() {    
+  public void testConvertDivisionBackingFormToDivisionEntity_shouldReturnExpectedEntity() {
     long id = 5L;
     String name = "aDiv";
     int level = 1;
+
+    Division expectedEntity = aDivision()
+        .withId(id)
+        .withLevel(level)
+        .withName(name)
+        .build();
+
     DivisionBackingForm form = aDivisionBackingForm()
         .withId(id)
         .withName(name)
@@ -171,11 +179,7 @@ public class DivisionFactoryTests extends UnitTestSuite {
     Division convertedEntity = divisionFactory.createEntity(form);
 
     Assert.assertNotNull("Entity was created", convertedEntity);
-    Assert.assertEquals("Entity id is correct", id, form.getId());
-    Assert.assertEquals("Entity name is correct", name, form.getName());
-    Assert.assertEquals("Entity level is correct", level, form.getLevel());
-    Assert.assertNull("Entity parent is null", form.getParent());
-    
+    assertThat(convertedEntity, hasSameStateAsDivision(expectedEntity));
   }
 
   @Test
@@ -192,6 +196,13 @@ public class DivisionFactoryTests extends UnitTestSuite {
     Division parent = aDivision()
         .withLevel(parentLevel)
         .withName(parentName)
+        .build();
+
+    Division expectedEntity = aDivision()
+        .withId(id)
+        .withLevel(level)
+        .withName(name)
+        .withParent(parent)
         .build();
 
     DivisionBackingForm parentForm = aDivisionBackingForm()
@@ -212,16 +223,10 @@ public class DivisionFactoryTests extends UnitTestSuite {
     Division convertedEntity = divisionFactory.createEntity(form);
 
     Assert.assertNotNull("Entity was created", convertedEntity);
-    Assert.assertEquals("Entity id is correct",  Long.valueOf(id), convertedEntity.getId());
-    Assert.assertEquals("Entity name is correct", name, convertedEntity.getName());
-    Assert.assertEquals("Entity level is correct", level, convertedEntity.getLevel());
-
+    assertThat(convertedEntity, hasSameStateAsDivision(expectedEntity));
+    
     Division convertedEntityParent = convertedEntity.getParent();
-
     Assert.assertNotNull("Entity Parent was set", convertedEntityParent);
-    Assert.assertEquals("Entity parent name is correct", parentName, convertedEntityParent.getName());
-    Assert.assertEquals("Entity parent level is correct", parentLevel, convertedEntityParent.getLevel());
-    Assert.assertNull("Entity parent's parent is not set", convertedEntityParent.getParent());
   }
 
 }
