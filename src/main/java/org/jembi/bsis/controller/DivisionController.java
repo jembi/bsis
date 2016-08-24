@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,14 @@ public class DivisionController {
     
     Map<String, Object> map = new HashMap<>();
     map.put("divisions", divisionControllerService.findDivisions(name, includeSimilarResults, level));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
+  @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DIVISIONS + "')")
+  public ResponseEntity<Map<String, Object>> findDivisionById(@PathVariable("id") long id) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("division", divisionControllerService.findDivisionById(id));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 

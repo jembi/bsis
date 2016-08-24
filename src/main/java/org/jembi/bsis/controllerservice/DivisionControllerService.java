@@ -24,5 +24,10 @@ public class DivisionControllerService {
     List<Division> divisions = divisionRepository.findDivisions(name, includeSimilarResults, level);
     return divisionFactory.createDivisionViewModels(divisions);
   }
+  
+  public DivisionViewModel findDivisionById(long id) {
+    Division division = divisionRepository.findDivisionById(id);
+    return divisionFactory.createDivisionViewModel(division);
+  }
 
 }
