@@ -9,14 +9,12 @@ import static org.mockito.Mockito.verify;
 
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.repository.DivisionRepository;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DivisionCRUDServiceTests {
+public class DivisionCRUDServiceTests extends UnitTestSuite {
 
   @InjectMocks
   private DivisionCRUDService divisionCRUDService;
