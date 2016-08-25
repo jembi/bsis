@@ -2,13 +2,10 @@ package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.AdverseEventBackingFormBuilder.anAdverseEventBackingForm;
 import static org.jembi.bsis.helpers.builders.AdverseEventBuilder.anAdverseEvent;
-import static org.jembi.bsis.helpers.builders.AdverseEventTypeBackingFormBuilder.anAdverseEventTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
 import static org.jembi.bsis.helpers.builders.BloodTypingResolutionBackingFormBuilder.aBloodTypingResolutionBackingForm;
 import static org.jembi.bsis.helpers.builders.BloodTypingResolutionsBackingFormBuilder.aBloodTypingResolutionsBackingForm;
-import static org.jembi.bsis.helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
@@ -28,9 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.backingform.AdverseEventBackingForm;
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
-import org.jembi.bsis.backingform.DonationBackingForm;
 import org.jembi.bsis.helpers.builders.BloodTestResultBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
@@ -38,6 +33,7 @@ import org.jembi.bsis.helpers.builders.TestBatchBuilder;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
+import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -192,7 +188,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedEndTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .withBleedStartTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .build();
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
+    Donation updatedDonation = aDonation().withId(IRRELEVANT_DONATION_ID)
         .withBleedStartTime(new Date())
         .withBleedEndTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .build();
@@ -202,7 +198,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(false);
 
     // Exercise SUT
-    donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    donationCRUDService.updateDonation(updatedDonation);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -214,7 +210,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedEndTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .withBleedStartTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .build();
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
+    Donation updatedDonation = aDonation().withId(IRRELEVANT_DONATION_ID)
         .withBleedEndTime(new Date())
         .withBleedStartTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .build();
@@ -224,7 +220,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(false);
 
     // Exercise SUT
-    donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    donationCRUDService.updateDonation(updatedDonation);
   }
   
   @Test(expected = IllegalArgumentException.class)
@@ -240,7 +236,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .build();
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
         .withPackType(newPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
@@ -252,7 +249,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(false);
     
     // Exercise SUT
-    donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    donationCRUDService.updateDonation(updatedDonation);
   }
   
   @Test
@@ -268,10 +265,11 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .build();
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
         .withPackType(packType)
         .withBleedStartTime(irrelevantBleedStartTime)
-        .withBleedEndTime(irrelevantBleedEndTime)
+        .withBleedEndTime(irrelevantBleedEndTime) 
         .build();
     
     // Set up expectations
@@ -283,11 +281,10 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
     
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
-    when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packType);
     when(donationRepository.updateDonation(existingDonation)).thenAnswer(returnsFirstArg());
     
     // Exercise SUT
-    Donation returnedDonation = donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    Donation returnedDonation = donationCRUDService.updateDonation(updatedDonation);
     
     // Verify
     verify(donationConstraintChecker, never()).canEditPackType(existingDonation);
@@ -310,7 +307,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedEndTime(irrelevantBleedEndTime)
         .withDonationBatch(donationBatch)
         .build();
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
         .withPackType(newPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
@@ -320,10 +318,9 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
-    when(packTypeRepository.getPackTypeById(2L)).thenReturn(newPackType);
     
     // Exercise SUT
-    donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    donationCRUDService.updateDonation(updatedDonation);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -341,7 +338,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .build();
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
         .withPackType(newPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
@@ -352,12 +350,11 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
-    when(packTypeRepository.getPackTypeById(2L)).thenReturn(newPackType);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(true);
     when(donationRepository.updateDonation(existingDonation)).thenAnswer(returnsFirstArg());
     
     // Exercise SUT
-    donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    donationCRUDService.updateDonation(updatedDonation);
   }
 
   @Test
@@ -369,14 +366,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
 
-    Donation existingDonation = aDonation()
+    Donation donation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
-        .withDonor(donor)
-        .withPackType(packType)
-        .withBleedStartTime(irrelevantBleedStartTime)
-        .withBleedEndTime(irrelevantBleedEndTime)
-        .build();
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
         .withDonor(donor)
         .withPackType(packType)
         .withBleedStartTime(irrelevantBleedStartTime)
@@ -384,27 +375,20 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
     
     // Set up expectations
-    Donation expectedDonation = aDonation()
-        .withId(IRRELEVANT_DONATION_ID)
-        .withDonor(donor)
-        .withPackType(packType)
-        .withBleedStartTime(irrelevantBleedStartTime)
-        .withBleedEndTime(irrelevantBleedEndTime)
-        .build();
     
-    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
-    when(donationRepository.updateDonation(existingDonation)).thenAnswer(returnsFirstArg());
+    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donation);
+    when(donationRepository.updateDonation(donation)).thenAnswer(returnsFirstArg());
     
     // Exercise SUT
-    Donation returnedDonation = donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    Donation returnedDonation = donationCRUDService.updateDonation(donation);
     
     // Verify
     verify(donorConstraintChecker, never()).isDonorDeferred(IRRELEVANT_DONOR_ID);
-    assertThat(returnedDonation, hasSameStateAsDonation(expectedDonation));
+    assertThat(returnedDonation, hasSameStateAsDonation(donation));
   }
   
   @Test
-  public void testUpdateDonationWithDifferentPackType_shouldCreateNewInitialComponent() {
+  public void testUpdateDonationWithDifferentPackType_shouldCreateNewInitialComponentAndDeleteExistingOne() {
     // Set up fixture 
     Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
     PackType packType = aPackType().withTestSampleProduced(true).withCountAsDonation(true).build();
@@ -412,15 +396,17 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
 
+    Component existingComponent = ComponentBuilder.aComponent().build();
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
         .withPackType(packType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
-        .withComponent(ComponentBuilder.aComponent().build())
+        .withComponent(existingComponent)
         .build();
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
         .withPackType(newPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
@@ -435,13 +421,12 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
-    when(packTypeRepository.getPackTypeById(2l)).thenReturn(newPackType);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation))))
         .thenAnswer(returnsFirstArg());
     
     // Exercise SUT
-    Donation returnedDonation = donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    Donation returnedDonation = donationCRUDService.updateDonation(updatedDonation);
 
     // Verify
     verify(donationRepository).createInitialComponent(existingDonation);
@@ -452,8 +437,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   public void testUpdateDonationWithDifferentPackTypeThatDoesntProduceTestSamples_shouldDeleteExistingTestOutcomes() {
     // Set up fixture 
     Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
-    PackType packType = aPackType().withId(1L).withTestSampleProduced(false).build();
-    PackType newPackType = aPackType().withId(2L).withTestSampleProduced(false).build();
+    PackType packType = aPackType().withId(1L).withTestSampleProduced(false).withCountAsDonation(false).build();
+    PackType newPackType = aPackType().withId(2L).withTestSampleProduced(false).withCountAsDonation(false).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
 
@@ -463,12 +448,12 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withPackType(packType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
-        .withComponent(ComponentBuilder.aComponent().build())
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .withBloodAbo("A")
         .withBloodRh("+")
         .build();
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
         .withPackType(newPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
@@ -486,7 +471,6 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withPackType(newPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
-        .withComponent(ComponentBuilder.aComponent().build())
         .withTTIStatus(TTIStatus.NOT_DONE)
         .withBloodAbo(null)
         .withBloodRh(null)
@@ -495,13 +479,12 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
-    when(packTypeRepository.getPackTypeById(2l)).thenReturn(newPackType);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenAnswer(returnsFirstArg());
     when(bloodTestResultRepository.getTestOutcomes(existingDonation)).thenReturn(bloodTestResultList);
     
     // Exercise SUT
-    Donation returnedDonation = donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    Donation returnedDonation = donationCRUDService.updateDonation(updatedDonation);
 
     // Verify
     verify(bloodTestsService).setTestOutcomesAsDeleted(existingDonation);
@@ -528,25 +511,20 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withId(irrelevantAdverseEventId)
         .withType(anAdverseEventType().withId(irrelevantAdverseEventTypeId).build())
         .build();
-    AdverseEventBackingForm irrelevantAdverseEventBackingForm = anAdverseEventBackingForm()
-        .withType(anAdverseEventTypeBackingForm().withId(irrelevantAdverseEventTypeId).build())
-        .withId(irrelevantAdverseEventId)
-        .build();
-
-    String donationBatchNumber = "000001";
 
     Donor expectedDonor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
 
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
-        .withPackType(aPackType().withId(8l).withCountAsDonation(true).build())
+        .withPackType(irrelevantPackType)
         .withDonor(expectedDonor)
         .withAdverseEvent(irrelevantAdverseEvent)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .build();
 
-    DonationBackingForm donationBackingForm = aDonationBackingForm()
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
         .withDonor(expectedDonor)
         .withDonorPulse(irrelevantDonorPulse)
         .withHaemoglobinCount(irrelevantHaemoglobinCount)
@@ -558,8 +536,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withPackType(irrelevantPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
-        .withAdverseEvent(irrelevantAdverseEventBackingForm)
-        .withDonationBatchNumber(donationBatchNumber)
+        .withAdverseEvent(irrelevantAdverseEvent)
         .build();
 
     // Set up expectations
@@ -579,43 +556,35 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withAdverseEvent(irrelevantAdverseEvent)
         .build();
 
-
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenReturn(expectedDonation);
-    when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(irrelevantPackType);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(expectedDonor);
-
-
+ 
     // Exercise SUT
-    Donation returnedDonation = donationCRUDService.updateDonation(IRRELEVANT_DONATION_ID, donationBackingForm);
+    Donation returnedDonation = donationCRUDService.updateDonation(updatedDonation);
 
     // Verify
     verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
-    verify(donorService).setDonorDueToDonate(argThat(hasSameStateAsDonor(expectedDonor)));
     assertThat(returnedDonation, is(expectedDonation));
   }
 
   @Test
   public void testCreateDonationWithDonationWithEligibleDonor_shouldAddDonation() {
 
-    Donation donation = aDonation().build();
     long donorId = 993L;
-
-    DonationBackingForm backingForm = aDonationBackingForm()
-        .withDonation(donation)
+    PackType packTypeThatCountsAsDonation = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).withCountAsDonation(true).build();
+    Donation donation = aDonation()
+        .withDonationDate(new Date())
         .withDonor(aDonor().withId(donorId).build())
-        .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
+        .withPackType(packTypeThatCountsAsDonation)
         .build();
 
-    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
-
-    when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
     when(donorConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(true);
 
-    Donation returnedDonation = donationCRUDService.createDonation(backingForm);
+    Donation returnedDonation = donationCRUDService.createDonation(donation);
 
     verify(donationRepository).addDonation(donation);
     verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(donation);
@@ -625,20 +594,16 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDonationWithDonationWithPackTypeThatDoesNotCountAsDonation_shouldAddDonation() {
 
-    Donation donation = aDonation().build();
     long donorId = 993L;
+    PackType packTypeThatCountsAsDonation = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).withCountAsDonation(false).build();
 
-    DonationBackingForm backingForm = aDonationBackingForm()
-        .withDonation(donation)
+    Donation donation = aDonation()
+        .withDonationDate(new Date())
         .withDonor(aDonor().withId(donorId).build())
-        .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
+        .withPackType(packTypeThatCountsAsDonation)
         .build();
 
-    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(false).build();
-
-    when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
-
-    Donation returnedDonation = donationCRUDService.createDonation(backingForm);
+    Donation returnedDonation = donationCRUDService.createDonation(donation);
 
     verify(donationRepository).addDonation(donation);
     verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(donation);
@@ -648,26 +613,21 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test(expected = IllegalArgumentException.class)
   public void testCreateDonationWithDonationWithIneligibleDonorAndNotBackEntry_shouldThrow() {
 
-    Donation donation = aDonation().build();
     long donorId = 993L;
     String donationBatchNumber = "000001";
+    DonationBatch donationBatch = aDonationBatch().withBatchNumber(donationBatchNumber).build();
 
-    DonationBackingForm backingForm = aDonationBackingForm()
-        .withDonation(donation)
+    Donation donation = aDonation()
         .withDonor(aDonor().withId(donorId).build())
-        .withDonationBatchNumber(donationBatchNumber)
+        .withDonationBatch(donationBatch)
         .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
+        .withDonationBatch(donationBatch)
         .build();
 
-    DonationBatch donationBatch = aDonationBatch().build();
-
-    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
-
-    when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
     when(donorConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
     when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
 
-    donationCRUDService.createDonation(backingForm);
+    donationCRUDService.createDonation(donation);
 
     verify(donationRepository, never()).addDonation(donation);
     verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(donation);
@@ -676,27 +636,22 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDonationWithDonationWithIneligibleDonorAndBackEntry_shouldAddDonationAndDiscardComponents() {
 
-    Donation donation = aDonation().build();
     long donorId = 993L;
     String donationBatchNumber = "000001";
+    DonationBatch donationBatch = aDonationBatch().withBatchNumber(donationBatchNumber).thatIsBackEntry().build();
+    PackType packTypeThatCountsAsDonation = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).withCountAsDonation(true).build();
 
-    DonationBackingForm backingForm = aDonationBackingForm()
-        .withDonation(donation)
+    Donation donation = aDonation()
+        .withDonationDate(new Date())
         .withDonor(aDonor().withId(donorId).build())
-        .withDonationBatchNumber(donationBatchNumber)
-        .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
+        .withDonationBatch(donationBatch)
+        .withPackType(packTypeThatCountsAsDonation)
         .build();
 
-
-    DonationBatch donationBatch = aDonationBatch().thatIsBackEntry().build();
-
-    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
-
-    when(packTypeRepository.getPackTypeById(IRRELEVANT_PACK_TYPE_ID)).thenReturn(packTypeThatCountsAsDonation);
     when(donorConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
     when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
 
-    Donation returnedDonation = donationCRUDService.createDonation(backingForm);
+    Donation returnedDonation = donationCRUDService.createDonation(donation);
 
     verify(donationRepository).addDonation(donation);
     verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(donation);

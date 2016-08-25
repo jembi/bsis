@@ -23,12 +23,14 @@ public class DonationControllerService {
   private DonationCRUDService donationCRUDService;
   
   public DonationViewModel createDonation(DonationBackingForm backingForm) {
-    Donation donation = donationCRUDService.createDonation(backingForm);
+    Donation donation = donationFactory.createEntity(backingForm);
+    donation = donationCRUDService.createDonation(donation);
     return donationFactory.createDonationViewModelWithPermissions(donation);
   }
   
   public DonationViewModel updateDonation(DonationBackingForm backingForm) {
-    Donation donation = donationCRUDService.updateDonation(backingForm.getId(), backingForm);
+    Donation donation = donationFactory.createEntity(backingForm);
+    donation = donationCRUDService.updateDonation(donation);
     return donationFactory.createDonationViewModelWithPermissions(donation);
   }
   
