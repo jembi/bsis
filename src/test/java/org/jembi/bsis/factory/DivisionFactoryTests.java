@@ -224,9 +224,6 @@ public class DivisionFactoryTests extends UnitTestSuite {
 
     Assert.assertNotNull("Entity was created", convertedEntity);
     assertThat(convertedEntity, hasSameStateAsDivision(expectedEntity));
-    
-    Division convertedEntityParent = convertedEntity.getParent();
-    Assert.assertNotNull("Entity Parent was set", convertedEntityParent);
   }
 
 }
