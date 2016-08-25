@@ -162,7 +162,7 @@ public class DivisionFactoryTests extends UnitTestSuite {
   public void testConvertDivisionBackingFormToDivisionEntity_shouldReturnExpectedEntity() {
     long id = 5L;
     String name = "aDiv";
-    int level = 1;
+    Integer level = 1;
 
     Division expectedEntity = aDivision()
         .withId(id)

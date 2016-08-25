@@ -18,6 +18,12 @@ public class DivisionRepository extends AbstractRepository<Division> {
         .getSingleResult();
   }
 
+  public Division findDivisionByName(String name) {
+    return entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_NAME, Division.class)
+        .setParameter("name", name)
+        .getSingleResult();
+  }
+
   public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level) {
     // build up Query string
     StringBuilder queryBuilder = new StringBuilder("SELECT div FROM Division div ");
@@ -61,4 +67,5 @@ public class DivisionRepository extends AbstractRepository<Division> {
     //EXECUTE QUERY
     return query.getResultList();
   }
+
 }

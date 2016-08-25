@@ -16,7 +16,9 @@ import org.jembi.bsis.repository.constant.DivisionNamedQueryConstants;
  */
 @NamedQueries({
     @NamedQuery(name = DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_ID,
-        query = DivisionNamedQueryConstants.QUERY_FIND_DIVISION_BY_ID)
+        query = DivisionNamedQueryConstants.QUERY_FIND_DIVISION_BY_ID),
+    @NamedQuery(name = DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_NAME,
+        query = DivisionNamedQueryConstants.QUERY_FIND_DIVISION_BY_NAME)
 })
 @Entity
 @Audited

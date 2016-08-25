@@ -6,7 +6,7 @@ public class DivisionBackingFormBuilder extends AbstractBuilder<DivisionBackingF
   
   private long id;
   private String name;
-  private int level;
+  private Integer level;
   private DivisionBackingForm parent;
   
   public DivisionBackingFormBuilder withId(long id) {
@@ -19,7 +19,7 @@ public class DivisionBackingFormBuilder extends AbstractBuilder<DivisionBackingF
     return this;
   }
 
-  public DivisionBackingFormBuilder withLevel(int level) {
+  public DivisionBackingFormBuilder withLevel(Integer level) {
     this.level = level;
     return this;
   }

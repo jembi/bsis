@@ -7,7 +7,7 @@ public class DivisionBackingForm {
 
   private String name;
 
-  private int level;
+  private Integer level;
 
   private DivisionBackingForm parent;
 
@@ -27,11 +27,11 @@ public class DivisionBackingForm {
     this.name = name;
   }
 
-  public int getLevel() {
+  public Integer getLevel() {
     return level;
   }
 
-  public void setLevel(int level) {
+  public void setLevel(Integer level) {
     this.level = level;
   }
 
