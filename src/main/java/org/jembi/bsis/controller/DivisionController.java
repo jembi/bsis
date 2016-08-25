@@ -43,7 +43,7 @@ public class DivisionController {
       @RequestBody @Valid DivisionBackingForm form) {
     Map<String, Object> map = new HashMap<>();
     map.put("division", divisionControllerService.createDivision(form));
-    return new ResponseEntity<>(map, HttpStatus.OK);
+    return new ResponseEntity<>(map, HttpStatus.CREATED);
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/search")
