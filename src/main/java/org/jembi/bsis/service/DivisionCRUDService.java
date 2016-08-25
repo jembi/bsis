@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class DivisionCRUDService {
 
   @Autowired
-  DivisionRepository divisionRepository;
+  private DivisionRepository divisionRepository;
 
   public Division createDivision(Division division) {
     divisionRepository.save(division);
