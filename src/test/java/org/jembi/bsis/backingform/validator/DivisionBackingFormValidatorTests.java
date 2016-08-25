@@ -13,17 +13,15 @@ import org.jembi.bsis.helpers.builders.DivisionBuilder;
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.repository.DivisionRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DivisionBackingFormValidatorTests {
+public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
   @InjectMocks
   private DivisionBackingFormValidator validator;
@@ -34,7 +32,6 @@ public class DivisionBackingFormValidatorTests {
   @Mock
   private FormFieldRepository formFieldRepository;
 
-  @SuppressWarnings("unchecked")
   @Test
   public void testValidateValidForm_shouldntGetErrors() {
     // Set up data
@@ -52,7 +49,7 @@ public class DivisionBackingFormValidatorTests {
     // Set up mocks
     when(divisionRepository.findDivisionById(1L)).thenReturn(parent);
     when(formFieldRepository.getRequiredFormFields("division")).thenReturn(Arrays.asList(new String[] {"name", "level"}));
-    when(divisionRepository.findDivisionByName("Level2Division")).thenThrow(NoResultException.class);
+    when(divisionRepository.findDivisionByName("Level2Division")).thenThrow(new NoResultException());
     
     // Run test
     validator.validateForm(divisionForm, errors);
@@ -80,8 +77,7 @@ public class DivisionBackingFormValidatorTests {
     Assert.assertEquals("requiredField.error", errors.getFieldErrors().get(0).getCode());
     Assert.assertEquals("name", errors.getFieldErrors().get(0).getField());
   }
-  
-  @SuppressWarnings("unchecked")
+
   @Test
   public void testValidateFormWithEmptyName_shouldGetError() throws Exception {
     // Set up data
@@ -92,7 +88,7 @@ public class DivisionBackingFormValidatorTests {
 
     // Set up mocks
     when(formFieldRepository.getRequiredFormFields("division")).thenReturn(Arrays.asList(new String[] {"name", "level"}));
-    when(divisionRepository.findDivisionByName("")).thenThrow(NoResultException.class);
+    when(divisionRepository.findDivisionByName("")).thenThrow(new NoResultException());
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -149,7 +145,6 @@ public class DivisionBackingFormValidatorTests {
     Assert.assertEquals("No error", 0, errors.getErrorCount());
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void testValidateFormWithNullLevel_shouldGetError() throws Exception {
     // Set up data
@@ -160,7 +155,7 @@ public class DivisionBackingFormValidatorTests {
 
     // Set up mocks
     when(formFieldRepository.getRequiredFormFields("division")).thenReturn(Arrays.asList(new String[] {"name", "level"}));
-    when(divisionRepository.findDivisionByName("Division")).thenThrow(NoResultException.class);
+    when(divisionRepository.findDivisionByName("Division")).thenThrow(new NoResultException());
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -171,7 +166,6 @@ public class DivisionBackingFormValidatorTests {
     Assert.assertEquals("level", errors.getFieldErrors().get(0).getField());
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void testValidateFormWithLevelGreaterThanThree_shouldGetError() throws Exception {
     // Set up data
@@ -182,7 +176,7 @@ public class DivisionBackingFormValidatorTests {
 
     // Set up mocks
     when(formFieldRepository.getRequiredFormFields("division")).thenReturn(Arrays.asList(new String[] {"name", "level"}));
-    when(divisionRepository.findDivisionByName("Division")).thenThrow(NoResultException.class);
+    when(divisionRepository.findDivisionByName("Division")).thenThrow(new NoResultException());
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -193,7 +187,6 @@ public class DivisionBackingFormValidatorTests {
     Assert.assertEquals("level", errors.getFieldErrors().get(0).getField());
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void testValidateFormWithLevelLowerThanOne_shouldGetError() throws Exception {
     // Set up data
@@ -204,7 +197,7 @@ public class DivisionBackingFormValidatorTests {
 
     // Set up mocks
     when(formFieldRepository.getRequiredFormFields("division")).thenReturn(Arrays.asList(new String[] {"name", "level"}));
-    when(divisionRepository.findDivisionByName("Division")).thenThrow(NoResultException.class);
+    when(divisionRepository.findDivisionByName("Division")).thenThrow(new NoResultException());
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -215,7 +208,30 @@ public class DivisionBackingFormValidatorTests {
     Assert.assertEquals("level", errors.getFieldErrors().get(0).getField());
   }
   
-  @SuppressWarnings("unchecked")
+  @Test
+  public void testValidateFormWithNullParentId_shouldGetError() throws Exception {
+    // Set up data
+    DivisionBackingForm parentForm = DivisionBackingFormBuilder.aDivisionBackingForm()
+        .withId(null).withLevel(1).withName("Level1Division").build();
+    
+    DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
+        .withId(2L).withLevel(2).withName("Level2Division").withParent(parentForm).build();
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
+    
+    // Set up mocks
+    when(divisionRepository.findDivisionByName("Level2Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
+
+    // Run test
+    validator.validate(divisionForm, errors);
+
+    // Verify
+    Assert.assertEquals("One error", 1, errors.getErrorCount());
+    Assert.assertEquals("required", errors.getFieldErrors().get(0).getCode());
+    Assert.assertEquals("parent.id", errors.getFieldErrors().get(0).getField());
+  }
+  
   @Test
   public void testValidateFormWithNonExistentParent_shouldGetError() throws Exception {
     // Set up data
@@ -228,7 +244,8 @@ public class DivisionBackingFormValidatorTests {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
-    when(divisionRepository.findDivisionByName("Level2Division")).thenThrow(NoResultException.class);
+    when(divisionRepository.findDivisionByName("Level2Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -239,7 +256,6 @@ public class DivisionBackingFormValidatorTests {
     Assert.assertEquals("parent", errors.getFieldErrors().get(0).getField());
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void testValidateFormWithLevel2AndParentLevelNot1_shouldGetError() throws Exception {
     // Set up data
@@ -252,7 +268,8 @@ public class DivisionBackingFormValidatorTests {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
-    when(divisionRepository.findDivisionByName("Level2Division")).thenThrow(NoResultException.class);
+    when(divisionRepository.findDivisionByName("Level2Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -263,7 +280,6 @@ public class DivisionBackingFormValidatorTests {
     Assert.assertEquals("parent", errors.getFieldErrors().get(0).getField());
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void testValidateFormWithLevel3AndParentLevelNot2_shouldGetError() throws Exception {
     // Set up data
@@ -276,7 +292,8 @@ public class DivisionBackingFormValidatorTests {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
-    when(divisionRepository.findDivisionByName("Level3Division")).thenThrow(NoResultException.class);
+    when(divisionRepository.findDivisionByName("Level3Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
 
     // Run test
     validator.validate(divisionForm, errors);

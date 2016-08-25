@@ -4,12 +4,12 @@ import org.jembi.bsis.backingform.DivisionBackingForm;
 
 public class DivisionBackingFormBuilder extends AbstractBuilder<DivisionBackingForm> {
   
-  private long id;
+  private Long id;
   private String name;
   private Integer level;
   private DivisionBackingForm parent;
   
-  public DivisionBackingFormBuilder withId(long id) {
+  public DivisionBackingFormBuilder withId(Long id) {
     this.id = id;
     return this;
   }

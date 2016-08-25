@@ -2,7 +2,6 @@ package org.jembi.bsis.backingform.validator;
 
 import javax.persistence.NoResultException;
 
-import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.DivisionBackingForm;
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.repository.DivisionRepository;
@@ -12,8 +11,6 @@ import org.springframework.validation.Errors;
 
 @Component
 public class DivisionBackingFormValidator extends BaseValidator<DivisionBackingForm> {
-
-  private static final Logger LOGGER = Logger.getLogger(DivisionBackingFormValidator.class);
 
   @Autowired
   private DivisionRepository divisionRepository;
@@ -28,13 +25,7 @@ public class DivisionBackingFormValidator extends BaseValidator<DivisionBackingF
     }
 
     // Validate parent
-    Division parent = null;
-    if (form.getParent() != null) {
-      parent = divisionRepository.findDivisionById(form.getParent().getId());
-      if (parent == null) {
-        errors.rejectValue("parent", "invalid", "Parent division is invalid");
-      }
-    }
+    Division parent = validateParent(form, errors);
 
     // Validate level
     Integer level = form.getLevel();
@@ -71,10 +62,25 @@ public class DivisionBackingFormValidator extends BaseValidator<DivisionBackingF
     return false;
   }
 
+  private Division validateParent(DivisionBackingForm form, Errors errors) {
+    Division parent = null;
+    if (form.getParent() != null) {
+      if (form.getParent().getId() == null) {
+        errors.rejectValue("parent.id", "required", "Parent division id is required");
+      } else {
+        try {
+          parent = divisionRepository.findDivisionById(form.getParent().getId());
+        } catch (NoResultException e) {
+          errors.rejectValue("parent", "invalid", "Parent division is invalid");
+        }
+      }
+    }
+    return parent;
+  }
+
   private boolean isDuplicateDivisionName(DivisionBackingForm form) {
-    Division existingDivision = null;
     try {
-      existingDivision = divisionRepository.findDivisionByName(form.getName());
+      Division existingDivision = divisionRepository.findDivisionByName(form.getName());
       if (!existingDivision.getId().equals(form.getId())) {
         return true;
       }
