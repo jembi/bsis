@@ -11,7 +11,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class DivisionRepository extends AbstractRepository<Division> {
-  
+
+  public Division createDivision(Division division) {
+    entityManager.persist(division);
+    entityManager.flush();
+    return division;
+  }
+
   public Division findDivisionById(long id) {
     return entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_ID, Division.class)
         .setParameter("id", id)
