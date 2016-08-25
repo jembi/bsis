@@ -15,10 +15,10 @@ public class DivisionCRUDService {
   DivisionRepository divisionRepository;
 
   public Division createDivision(Division division) {
-    Division div = divisionRepository.createDivision(division);
-    return div;
+    divisionRepository.save(division);
+    return division;
   }
-  
+
   public Division updateDivision(Division division) {
     Division existingDivision = divisionRepository.findDivisionById(division.getId());
     existingDivision.setName(division.getName());
