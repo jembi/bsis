@@ -17,7 +17,7 @@ import org.jembi.bsis.backingform.validator.DonorBackingFormValidator;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.controllerservice.DonorControllerService;
 import org.jembi.bsis.dto.DuplicateDonorDTO;
-import org.jembi.bsis.factory.DonationViewModelFactory;
+import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.factory.DonorDeferralFactory;
 import org.jembi.bsis.factory.DonorViewModelFactory;
 import org.jembi.bsis.factory.LocationFactory;
@@ -94,7 +94,7 @@ public class DonorController {
   private DonorViewModelFactory donorViewModelFactory;
 
   @Autowired
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
 
   @Autowired
   private DonorDeferralFactory donorDeferralFactory;
@@ -169,7 +169,7 @@ public class DonorController {
     map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
     map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
     if (donations.size() > 0) {
-      map.put("lastDonation", donationViewModelFactory.createDonationViewModelWithoutPermissions(donations.get(donations.size() - 1)));
+      map.put("lastDonation", donationFactory.createDonationViewModelWithoutPermissions(donations.get(donations.size() - 1)));
       map.put("dateOfFirstDonation", CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
       map.put("totalDonations", getNumberOfDonations(donations));
       map.put("dueToDonate", CustomDateFormatter.getDateString(donor.getDueToDonate()));
@@ -389,7 +389,7 @@ public class DonorController {
 
     // Get all the Donations, process the Test Results and update necessary newDonor and Donation fields
     List<Donation> donations = duplicateDonorService.getAllDonationsToMerge(newDonor, donorNumbers);
-    List<DonationViewModel> donationViewModels = donationViewModelFactory
+    List<DonationViewModel> donationViewModels = donationFactory
         .createDonationViewModelsWithoutPermissions(donations);
 
     // gather all Deferrals

@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DonationViewModelFactory {
+public class DonationFactory {
 
   @Autowired
   private DonationConstraintChecker donationConstraintChecker;

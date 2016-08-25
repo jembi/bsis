@@ -42,7 +42,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DonationViewModelFactoryTests {
+public class DonationFactoryTests {
 
   private static final long IRRELEVANT_DONATION_ID = 89;
   private static final long ANOTHER_IRRELEVANT_DONATION_ID = 90;
@@ -51,7 +51,7 @@ public class DonationViewModelFactoryTests {
   private static final long IRRELEVANT_PACKTYPE_ID = 99;
 
   @InjectMocks
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
   @Mock
   private DonationConstraintChecker donationConstraintChecker;
   @Mock
@@ -165,7 +165,7 @@ public class DonationViewModelFactoryTests {
     when(locationFactory.createFullViewModel(venue)).thenReturn(new LocationFullViewModel(venue));
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
 
-    DonationViewModel returnedDonationViewModel = donationViewModelFactory.createDonationViewModelWithPermissions(
+    DonationViewModel returnedDonationViewModel = donationFactory.createDonationViewModelWithPermissions(
         donation);
 
     assertThat(returnedDonationViewModel, hasSameStateAsDonationViewModel(expectedDonationViewModel));
@@ -231,7 +231,7 @@ public class DonationViewModelFactoryTests {
     when(donorConstraintChecker.isDonorDeferred(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
 
-    List<DonationViewModel> returnedDonationViewModels = donationViewModelFactory.createDonationViewModelsWithPermissions(donations);
+    List<DonationViewModel> returnedDonationViewModels = donationFactory.createDonationViewModelsWithPermissions(donations);
 
     assertThat(returnedDonationViewModels.get(0), hasSameStateAsDonationViewModel(expectedDonation1ViewModel));
     assertThat(returnedDonationViewModels.get(1), hasSameStateAsDonationViewModel(expectedDonation2ViewModel));

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class DonationBatchViewModelFactory {
 
   @Autowired
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
 
   @Autowired
   private DonationBatchConstraintChecker donationBatchConstraintChecker;
@@ -153,7 +153,7 @@ public class DonationBatchViewModelFactory {
           // This donation did not produce a test sample so skip it
           continue;
         }
-        donationViewModels.add(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation));
+        donationViewModels.add(donationFactory.createDonationViewModelWithoutPermissions(donation));
       }
     }
     return donationViewModels;
