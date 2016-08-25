@@ -9,7 +9,7 @@ import static org.jembi.bsis.helpers.matchers.AdverseEventViewModelMatcher.hasSa
 import static org.mockito.Mockito.when;
 
 import org.jembi.bsis.factory.AdverseEventTypeViewModelFactory;
-import org.jembi.bsis.factory.AdverseEventViewModelFactory;
+import org.jembi.bsis.factory.AdverseEventFactory;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.adverseevent.AdverseEventType;
 import org.jembi.bsis.viewmodel.AdverseEventTypeViewModel;
@@ -21,10 +21,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AdverseEventViewModelFactoryTests {
+public class AdverseEventFactoryTests {
 
   @InjectMocks
-  private AdverseEventViewModelFactory adverseEventViewModelFactory;
+  private AdverseEventFactory adverseEventFactory;
   @Mock
   private AdverseEventTypeViewModelFactory adverseEventTypeViewModelFactory;
 
@@ -52,7 +52,7 @@ public class AdverseEventViewModelFactoryTests {
     when(adverseEventTypeViewModelFactory.createAdverseEventTypeViewModel(adverseEventType))
         .thenReturn(adverseEventTypeViewModel);
 
-    AdverseEventViewModel returnedAdverseEventViewModel = adverseEventViewModelFactory.createAdverseEventViewModel(
+    AdverseEventViewModel returnedAdverseEventViewModel = adverseEventFactory.createAdverseEventViewModel(
         adverseEvent);
 
     assertThat(returnedAdverseEventViewModel, hasSameStateAsAdverseEventViewModel(expectedAdverseEventViewModel));

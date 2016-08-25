@@ -20,7 +20,7 @@ public class DonationFactory {
   @Autowired
   private DonationConstraintChecker donationConstraintChecker;
   @Autowired
-  private AdverseEventViewModelFactory adverseEventViewModelFactory;
+  private AdverseEventFactory adverseEventFactory;
   @Autowired
   private DonorConstraintChecker donorConstraintChecker;
   @Autowired
@@ -93,7 +93,7 @@ public class DonationFactory {
 
     if (donation.getAdverseEvent() != null) {
       AdverseEventViewModel adverseEventViewModel =
-          adverseEventViewModelFactory.createAdverseEventViewModel(donation.getAdverseEvent());
+          adverseEventFactory.createAdverseEventViewModel(donation.getAdverseEvent());
       donationViewModel.setAdverseEvent(adverseEventViewModel);
     }
 

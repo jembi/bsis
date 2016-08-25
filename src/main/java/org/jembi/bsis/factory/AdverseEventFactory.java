@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AdverseEventViewModelFactory {
+public class AdverseEventFactory {
 
   @Autowired
   private AdverseEventTypeViewModelFactory adverseEventTypeViewModelFactory;

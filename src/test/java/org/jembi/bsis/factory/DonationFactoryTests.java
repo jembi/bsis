@@ -55,7 +55,7 @@ public class DonationFactoryTests {
   @Mock
   private DonationConstraintChecker donationConstraintChecker;
   @Mock
-  private AdverseEventViewModelFactory adverseEventViewModelFactory;
+  private AdverseEventFactory adverseEventFactory;
   @Mock
   private DonorConstraintChecker donorConstraintChecker;
   @Mock
@@ -161,7 +161,7 @@ public class DonationFactoryTests {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanUpdatePermission);
     when(donationConstraintChecker.canEditPackType(donation)).thenReturn(irrelevantCanEditPackTypePermission);
     when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(irrelevantCanDonatePermission);
-    when(adverseEventViewModelFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
+    when(adverseEventFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
     when(locationFactory.createFullViewModel(venue)).thenReturn(new LocationFullViewModel(venue));
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
 
@@ -223,7 +223,7 @@ public class DonationFactoryTests {
     when(donationConstraintChecker.canEditPackType(donation1)).thenReturn(true);
     when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(true);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONATION_ID)).thenReturn(false);
-    when(adverseEventViewModelFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
+    when(adverseEventFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
     when(donationConstraintChecker.canDeleteDonation(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditBleedTimes(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(donation2)).thenReturn(false);
