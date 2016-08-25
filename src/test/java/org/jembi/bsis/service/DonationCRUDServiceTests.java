@@ -188,9 +188,10 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedEndTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .withBleedStartTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .build();
-    Donation updatedDonation = aDonation().withId(IRRELEVANT_DONATION_ID)
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
         .withBleedStartTime(new Date())
-        .withBleedEndTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
+        .withBleedEndTime(IRRELEVANT_DATE_OF_FIRST_DONATION) 
         .build();
 
     // Set up expectations
@@ -210,9 +211,10 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedEndTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .withBleedStartTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .build();
-    Donation updatedDonation = aDonation().withId(IRRELEVANT_DONATION_ID)
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
         .withBleedEndTime(new Date())
-        .withBleedStartTime(IRRELEVANT_DATE_OF_FIRST_DONATION)
+        .withBleedStartTime(IRRELEVANT_DATE_OF_FIRST_DONATION) 
         .build();
 
     // Set up expectations
@@ -269,7 +271,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withId(IRRELEVANT_DONATION_ID)
         .withPackType(packType)
         .withBleedStartTime(irrelevantBleedStartTime)
-        .withBleedEndTime(irrelevantBleedEndTime) 
+        .withBleedEndTime(irrelevantBleedEndTime)
         .build();
     
     // Set up expectations
@@ -414,14 +416,21 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
 
     // Set up expectations
-    Donation expectedDonation = aDonation().withId(IRRELEVANT_DONATION_ID).withDonor(donor).withPackType(newPackType)
-        .withBleedStartTime(irrelevantBleedStartTime).withBleedEndTime(irrelevantBleedEndTime)
-        .withComponent(ComponentBuilder.aComponent().build()).build();
+    Component newComponent = ComponentBuilder.aComponent().build();
+    Donation expectedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(donor)
+        .withPackType(newPackType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .withComponent(existingComponent).withComponent(newComponent)
+        .build();
     
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(componentCRUDService.createInitialComponent(updatedDonation)).thenReturn(newComponent);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation))))
         .thenAnswer(returnsFirstArg());
     
@@ -429,8 +438,10 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation returnedDonation = donationCRUDService.updateDonation(updatedDonation);
 
     // Verify
-    verify(donationRepository).createInitialComponent(existingDonation);
+    verify(componentCRUDService).createInitialComponent(existingDonation);
     assertThat(returnedDonation, hasSameStateAsDonation(expectedDonation));
+    assertThat("For existing component, isDeleted = true", returnedDonation.getComponents().get(0).getIsDeleted());
+    assertThat("For new component, isDeleted = false", !returnedDonation.getComponents().get(1).getIsDeleted());
   }
   
   @Test
@@ -514,6 +525,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     Donor expectedDonor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
 
+    Component component = ComponentBuilder.aComponent().build();
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withPackType(irrelevantPackType)
@@ -562,7 +574,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenReturn(expectedDonation);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(expectedDonor);
- 
+    when(componentCRUDService.createInitialComponent(existingDonation)).thenReturn(component);
+
     // Exercise SUT
     Donation returnedDonation = donationCRUDService.updateDonation(updatedDonation);
 
@@ -586,7 +599,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     Donation returnedDonation = donationCRUDService.createDonation(donation);
 
-    verify(donationRepository).addDonation(donation);
+    verify(donationRepository).saveDonation(donation);
     verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(donation);
     assertThat(returnedDonation, is(donation));
   }
@@ -595,7 +608,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   public void testCreateDonationWithDonationWithPackTypeThatDoesNotCountAsDonation_shouldAddDonation() {
 
     long donorId = 993L;
-    PackType packTypeThatCountsAsDonation = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).withCountAsDonation(false).build();
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(false).build();
 
     Donation donation = aDonation()
         .withDonationDate(new Date())
@@ -605,7 +618,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     Donation returnedDonation = donationCRUDService.createDonation(donation);
 
-    verify(donationRepository).addDonation(donation);
+    verify(donationRepository).saveDonation(donation);
     verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(donation);
     assertThat(returnedDonation, is(donation));
   }
@@ -629,7 +642,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     donationCRUDService.createDonation(donation);
 
-    verify(donationRepository, never()).addDonation(donation);
+    verify(donationRepository, never()).saveDonation(donation);
     verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(donation);
   }
 
@@ -639,7 +652,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     long donorId = 993L;
     String donationBatchNumber = "000001";
     DonationBatch donationBatch = aDonationBatch().withBatchNumber(donationBatchNumber).thatIsBackEntry().build();
-    PackType packTypeThatCountsAsDonation = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).withCountAsDonation(true).build();
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
 
     Donation donation = aDonation()
         .withDonationDate(new Date())
@@ -653,7 +666,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     Donation returnedDonation = donationCRUDService.createDonation(donation);
 
-    verify(donationRepository).addDonation(donation);
+    verify(donationRepository).saveDonation(donation);
     verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(donation);
     verify(postDonationCounsellingCRUDService).createPostDonationCounsellingForDonation(donation);
     assertThat(returnedDonation, is(donation));
@@ -720,6 +733,32 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build());
     
     verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
+  }
+  
+  @Test
+  public void testCreateDonationWithPackTypeThatProducesComponents_shouldCreateNewInitialComponent() {
+    // Set up fixture 
+    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    PackType packType = aPackType().withCountAsDonation(true).build();
+    String donationBatchNumber = "000001";
+    Donation donation = aDonation()
+        .withDonationDate(new Date())
+        .withDonor(donor)
+        .withPackType(packType)
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withBatchNumber(donationBatchNumber).build())
+        .build();
+
+    // Set up expectations
+    when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber))
+        .thenReturn(donation.getDonationBatch());
+    when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(true);
+
+    
+    // Exercise SUT
+    donationCRUDService.createDonation(donation);
+
+    // Verify
+    verify(componentCRUDService).createInitialComponent(donation);
   }
 
 }

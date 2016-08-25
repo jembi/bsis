@@ -1,5 +1,6 @@
 package org.jembi.bsis.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -8,6 +9,7 @@ import javax.persistence.NoResultException;
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.backingform.BloodTypingResolutionsBackingForm;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
+import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
@@ -18,6 +20,7 @@ import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
+import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,6 +84,11 @@ public class DonationCRUDService {
   }
 
   public Donation createDonation(Donation donation) {
+  
+    donation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    donation.setTTIStatus(TTIStatus.NOT_DONE);
+    donation.setIsDeleted(false);
 
     boolean discardComponents = false;
 
@@ -99,7 +107,7 @@ public class DonationCRUDService {
       donation.setIneligibleDonor(true);
     }
 
-    donationRepository.addDonation(donation);
+    componentCRUDService.createInitialComponent(donation);
 
     if (discardComponents) {
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
@@ -107,6 +115,9 @@ public class DonationCRUDService {
       postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
     }
 
+    donationRepository.saveDonation(donation);
+    // update donor
+    updateDonorFields(donation);
     return donation;
   }
 
@@ -161,7 +172,8 @@ public class DonationCRUDService {
 
       // If the new pack type produces components, create a new initial component
       if (newPackType.getCountAsDonation()) {
-        donationRepository.createInitialComponent(existingDonation);
+        Component component = componentCRUDService.createInitialComponent(existingDonation);
+        existingDonation.getComponents().add(component);
       }
       
       // If the new pack type doesn't produce test samples, delete test outcomes and clear statuses
@@ -183,14 +195,13 @@ public class DonationCRUDService {
     existingDonation.setBleedStartTime(updatedDonation.getBleedStartTime());
     existingDonation.setBleedEndTime(updatedDonation.getBleedEndTime());
     existingDonation.setAdverseEvent(updatedDonation.getAdverseEvent());
-
-    existingDonation = donationRepository.updateDonation(existingDonation);
+    Donation donation = donationRepository.updateDonation(existingDonation);
 
     if (packTypeUpdated) {
       donorService.setDonorDueToDonate(existingDonation.getDonor());
     }
 
-    return existingDonation;
+    return donation;
   }
   
   public void updateDonationsBloodTypingResolutions(BloodTypingResolutionsBackingForm backingForm) {
@@ -215,6 +226,34 @@ public class DonationCRUDService {
     if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
       testBatchStatusChangeService.handleRelease(donation);
     }
+  }
+
+  private Donor updateDonorFields(Donation donation) {
+    Donor donor = donation.getDonor();
+
+    // set date of first donation
+    if (donation.getDonor().getDateOfFirstDonation() == null) {
+      donor.setDateOfFirstDonation(donation.getDonationDate());
+    }
+    // set dueToDonate
+    PackType packType = donation.getPackType();
+    int periodBetweenDays = packType.getPeriodBetweenDonations();
+    Calendar dueToDonateDate = Calendar.getInstance();
+    dueToDonateDate.setTime(donation.getDonationDate());
+    dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
+
+    if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
+      donor.setDueToDonate(dueToDonateDate.getTime());
+    }
+
+    // set dateOfLastDonation
+    Date dateOfLastDonation = donor.getDateOfLastDonation();
+    if (dateOfLastDonation == null || donation.getDonationDate().after(dateOfLastDonation)) {
+      donor.setDateOfLastDonation(donation.getDonationDate());
+    }
+
+    donorRepository.saveDonor(donor);
+    return donor;
   }
 
 }

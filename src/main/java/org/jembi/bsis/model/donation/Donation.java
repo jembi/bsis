@@ -2,6 +2,7 @@ package org.jembi.bsis.model.donation;
 
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -117,7 +118,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
    */
   @OneToMany(mappedBy = "donation")
   @Where(clause = "isDeleted = 0")
-  private List<Component> components;
+  private List<Component> components = new ArrayList<>();
 
   @NotAudited
   @ManyToMany(mappedBy = "donations")

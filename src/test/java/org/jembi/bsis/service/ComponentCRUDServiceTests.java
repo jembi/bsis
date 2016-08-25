@@ -2,6 +2,7 @@ package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aComponentStatusChangeReason;
@@ -11,11 +12,14 @@ import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.anUnsafeReason;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.jembi.bsis.helpers.matchers.ComponentStatusChangeMatcher.hasSameStateAsComponentStatusChange;
@@ -40,7 +44,9 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
+import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.factory.ComponentFactory;
+import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.matchers.ComponentMatcher;
 import org.jembi.bsis.model.component.Component;
@@ -53,23 +59,22 @@ import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
 public class ComponentCRUDServiceTests extends UnitTestSuite {
 
   @Spy
@@ -89,6 +94,119 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   private DateGeneratorService dateGeneratorService;
   @Mock
   private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
+  @Mock
+  private GeneralConfigAccessorService generalConfigAccessorService;
+  
+  @Test
+  public void testCreateInitialComponentWithFalseConfig_shouldReturnNull() {
+    // Set up data
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
+    Donation donation = aDonation().withPackType(packTypeThatCountsAsDonation).build();
+
+    // Set up mocks
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(false);
+
+    // Run test
+    Component component = componentCRUDService.createInitialComponent(donation);
+    
+    // Verify
+    assertThat("Component is null", component == null);
+  }
+  
+  @Test
+  public void testCreateInitialComponent_shouldCreateCorrectComponent() {
+    // Set up data
+    ComponentType componentType = ComponentTypeBuilder.aComponentType().build();
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).withComponentType(componentType).build();
+    Location donationBatchVenue = aVenue().build();
+    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
+        .withVenue(donationBatchVenue)
+        .withComponentBatch(null)
+        .build();
+    Donor existingDonor = aDonor().build();
+    Location donationVenue = aVenue().build();
+    Donation donation = aDonation()
+        .withPackType(packTypeThatCountsAsDonation)
+        .withDonationBatch(donationBatchWithComponentBatch)
+        .withDonor(existingDonor)
+        .withDonationDate(new Date())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withVenue(donationVenue)
+        .build();
+    
+    // Set up mocks
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
+
+    // Run test
+    Component component = componentCRUDService.createInitialComponent(donation);
+    
+    // Verify
+    assertThat(component.getComponentType(), is(componentType));
+    assertThat(component.getStatus(), is(ComponentStatus.QUARANTINED));
+    assertThat(component.getInventoryStatus(), is(InventoryStatus.NOT_IN_STOCK));
+  }
+
+  @Test
+  public void testCreateInitialComponentForDonationBatchWithComponentBatch_shouldSetComponentLocationToProcessingSite() {
+    // Set up data
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
+    Location componentBatchProcessingSite = aProcessingSite().build();
+    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
+        .withComponentBatch(aComponentBatch().withLocation(componentBatchProcessingSite).build())
+        .build();
+    Donor existingDonor = aDonor().build();
+    Location venue = aVenue().build();
+    Donation donation = aDonation()
+        .withPackType(packTypeThatCountsAsDonation)
+        .withDonationBatch(donationBatchWithComponentBatch)
+        .withDonor(existingDonor)
+        .withDonationDate(new Date())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withVenue(venue)
+        .build();
+    
+    // Set up mocks
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
+
+    // Run test
+    Component component = componentCRUDService.createInitialComponent(donation);
+    
+    // Verify
+    assertThat(component.getLocation(), is(componentBatchProcessingSite));
+  }
+  
+  @Test
+  public void testCreateInitialComponentForDonationBatchWithoutComponentBatch_shouldSetComponentLocationToDonationBatchVenue() {
+    // Set up data
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
+    Location donationBatchVenue = aVenue().build();
+    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
+        .withVenue(donationBatchVenue)
+        .withComponentBatch(null)
+        .build();
+    Donor existingDonor = aDonor().build();
+    Location donationVenue = aVenue().build();
+    Donation donation = aDonation()
+        .withPackType(packTypeThatCountsAsDonation)
+        .withDonationBatch(donationBatchWithComponentBatch)
+        .withDonor(existingDonor)
+        .withDonationDate(new Date())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withVenue(donationVenue)
+        .build();
+    
+    // Set up mocks
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
+
+    // Run test
+    Component component = componentCRUDService.createInitialComponent(donation);
+    
+    // Verify
+    assertThat(component.getLocation(), is(donationBatchVenue));
+  }
 
   @Test
   public void testMarkComponentsBelongingToDonorAsUnsafe_shouldMarkComponentsAsUnsafe() {
