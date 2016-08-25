@@ -39,5 +39,11 @@ public class DivisionControllerService {
     Division division = divisionRepository.findDivisionById(id);
     return divisionFactory.createDivisionViewModel(division);
   }
+  
+  public DivisionViewModel updateDivision(DivisionBackingForm backingForm) {
+    Division division = divisionFactory.createEntity(backingForm);
+    division = divisionCRUDService.updateDivision(division);
+    return divisionFactory.createDivisionViewModel(division);
+  }
 
 }

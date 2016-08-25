@@ -65,4 +65,17 @@ public class DivisionController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
+  @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DIVISIONS + "')")
+  public ResponseEntity<Map<String, Object>> updateDivision(@PathVariable("id") long id,
+      @Valid @RequestBody DivisionBackingForm backingForm) {
+    
+    // Update backing form id to match path
+    backingForm.setId(id);
+    
+    Map<String, Object> map = new HashMap<>();
+    map.put("division", divisionControllerService.updateDivision(backingForm));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
 }

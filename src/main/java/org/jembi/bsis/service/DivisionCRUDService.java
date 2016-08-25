@@ -18,5 +18,13 @@ public class DivisionCRUDService {
     Division div = divisionRepository.createDivision(division);
     return div;
   }
+  
+  public Division updateDivision(Division division) {
+    Division existingDivision = divisionRepository.findDivisionById(division.getId());
+    existingDivision.setName(division.getName());
+    existingDivision.setLevel(division.getLevel());
+    existingDivision.setParent(division.getParent());
+    return divisionRepository.update(existingDivision);
+  }
 
 }
