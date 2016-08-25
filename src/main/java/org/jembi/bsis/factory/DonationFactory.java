@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jembi.bsis.backingform.DonationBackingForm;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.repository.DonorRepository;
+import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.service.DonationConstraintChecker;
 import org.jembi.bsis.service.DonorConstraintChecker;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
@@ -27,6 +30,18 @@ public class DonationFactory {
   private LocationFactory locationFactory;
   @Autowired
   private PackTypeFactory packTypeFactory;
+  @Autowired
+  private DonorRepository donorRepository;
+  @Autowired
+  private PackTypeRepository packTypeRepository;
+
+  public Donation createEntity(DonationBackingForm form) {
+    Donation donation = form.getDonation();
+    donation.setDonor(donorRepository.findDonorById(donation.getDonor().getId()));
+    donation.setPackType(packTypeRepository.getPackTypeById(donation.getPackType().getId()));
+    donation.setAdverseEvent(adverseEventFactory.createEntity(form.getAdverseEvent()));
+    return donation;
+  }
 
   public List<DonationViewModel> createDonationViewModelsWithPermissions(List<Donation> donations) {
     List<DonationViewModel> donationViewModels = new ArrayList<>();

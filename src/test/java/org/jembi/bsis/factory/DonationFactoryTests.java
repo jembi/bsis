@@ -1,8 +1,10 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.jembi.bsis.helpers.builders.AdverseEventBackingFormBuilder.anAdverseEventBackingForm;
 import static org.jembi.bsis.helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static org.jembi.bsis.helpers.builders.AdverseEventViewModelBuilder.anAdverseEventViewModel;
+import static org.jembi.bsis.helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationTypeBuilder.aDonationType;
@@ -19,13 +21,22 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.jembi.bsis.backingform.AdverseEventBackingForm;
+import org.jembi.bsis.backingform.DonationBackingForm;
+import org.jembi.bsis.helpers.builders.AdverseEventBuilder;
+import org.jembi.bsis.helpers.builders.DonationBuilder;
+import org.jembi.bsis.helpers.builders.PackTypeBuilder;
+import org.jembi.bsis.helpers.matchers.DonationMatcher;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donationtype.DonationType;
+import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.repository.DonorRepository;
+import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.service.DonationConstraintChecker;
@@ -62,6 +73,41 @@ public class DonationFactoryTests {
   private LocationFactory locationFactory;
   @Mock
   private PackTypeFactory packTypeFactory;
+  @Mock
+  private PackTypeRepository packTypeRepository;
+  @Mock
+  private DonorRepository donorRepository;
+
+  @Test
+  public void testCreateEntity_shouldReturnCorrectEntity() {
+    // Set up data
+    AdverseEventBackingForm adverseEventForm = anAdverseEventBackingForm().build();
+    Donor donor = aDonor().withId(1L).build();
+    PackType packType = PackTypeBuilder.aPackType().withId(1L).build();
+    DonationBackingForm donationForm = aDonationBackingForm()
+        .withAdverseEvent(adverseEventForm)
+        .withDonor(donor)
+        .withPackType(packType)
+        .build();
+    
+    AdverseEvent adverseEvent = AdverseEventBuilder.anAdverseEvent().build(); 
+    Donation expectedEntity = DonationBuilder.aDonation()
+        .withAdverseEvent(adverseEvent)
+        .withDonor(donor)
+        .withPackType(packType)
+        .build();
+
+    // Set up mocks
+    when(packTypeRepository.getPackTypeById(1L)).thenReturn(packType);
+    when(donorRepository.findDonorById(1L)).thenReturn(donor);
+    when(adverseEventFactory.createEntity(adverseEventForm)).thenReturn(adverseEvent);
+
+    // Run test
+    Donation convertedEntity = donationFactory.createEntity(donationForm);
+   
+    // Verify
+    assertThat(convertedEntity, DonationMatcher.hasSameStateAsDonation(expectedEntity));
+  }
 
   @Test
   public void testCreateDonationViewModelWithPermissions_shouldReturnViewModelWithCorrectDonationAndPermissions() {
