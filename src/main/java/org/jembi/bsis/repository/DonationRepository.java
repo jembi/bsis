@@ -218,7 +218,7 @@ public class DonationRepository {
   public void createInitialComponent(Donation donation) {
 
     // Create initial component only if the countAsDonation is true and the config option is enabled
-    if (!donation.getPackType().getCountAsDonation() && 
+    if (!donation.getPackType().getCountAsDonation() || 
         !generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)) {
       return;
     }
