@@ -229,7 +229,7 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
   }
   
   @Test
-  public void testCountDivisionsByParent_shouldReturnCorrectCount() {
+  public void testCountDivisionsWithParent_shouldReturnCorrectCount() {
     Division parent = aDivision().buildAndPersist(entityManager);
     
     // Expected
@@ -238,8 +238,10 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
     aDivision().withParent(aDivision().build()).buildAndPersist(entityManager);
     // Expected
     aDivision().withParent(parent).buildAndPersist(entityManager);
+    // Excluded by no parent
+    aDivision().withParent(null).buildAndPersist(entityManager);
     
-    long returnedCount = divisionRepository.countDivisionsByParent(parent);
+    long returnedCount = divisionRepository.countDivisionsWithParent(parent);
     
     assertThat(returnedCount, is(2L));
   }

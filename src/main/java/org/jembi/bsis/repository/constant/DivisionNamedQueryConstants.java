@@ -16,9 +16,9 @@ public class DivisionNamedQueryConstants {
       + "FROM Division d "
       + "WHERE d.name = :name ";
   
-  public static final String NAME_COUNT_DIVISIONS_BY_PARENT =
-      "Division.countDivisionsByParent";
-  public static final String QUERY_COUNT_DIVISIONS_BY_PARENT =
+  public static final String NAME_COUNT_DIVISIONS_WITH_PARENT =
+      "Division.countDivisionsWithParent";
+  public static final String QUERY_COUNT_DIVISIONS_WITH_PARENT =
       "SELECT COUNT(d) "
       + "FROM Division d "
       + "WHERE d.parent = :parent ";

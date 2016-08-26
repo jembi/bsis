@@ -13,7 +13,7 @@ public class DivisionConstraintChecker {
   
   public boolean canEditLevel(Division division) {
     // Can't edit level if the division has child divisions
-    return divisionRepository.countDivisionsByParent(division) == 0;
+    return divisionRepository.countDivisionsWithParent(division) == 0;
   }
 
 }

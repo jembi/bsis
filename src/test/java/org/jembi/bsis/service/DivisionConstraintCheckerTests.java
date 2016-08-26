@@ -23,7 +23,7 @@ public class DivisionConstraintCheckerTests extends UnitTestSuite {
   public void testCanEditLevelWithNoChildren_shouldReturnTrue() {
     Division division = aDivision().withId(8L).build();
     
-    when(divisionRepository.countDivisionsByParent(division)).thenReturn(0L);
+    when(divisionRepository.countDivisionsWithParent(division)).thenReturn(0L);
     
     boolean canEditLevel = divisionConstraintChecker.canEditLevel(division);
     
@@ -34,7 +34,7 @@ public class DivisionConstraintCheckerTests extends UnitTestSuite {
   public void testCanEditLevelWithChildren_shouldReturnFalse() {
     Division division = aDivision().withId(7L).build();
     
-    when(divisionRepository.countDivisionsByParent(division)).thenReturn(1L);
+    when(divisionRepository.countDivisionsWithParent(division)).thenReturn(1L);
     
     boolean canEditLevel = divisionConstraintChecker.canEditLevel(division);
     

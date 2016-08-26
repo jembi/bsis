@@ -68,8 +68,14 @@ public class DivisionRepository extends AbstractRepository<Division> {
     return query.getResultList();
   }
   
-  public long countDivisionsByParent(Division parent) {
-    return entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_COUNT_DIVISIONS_BY_PARENT, Long.class)
+  /**
+   * Count the number of divisions which have the given division as their parent.
+   * 
+   * @param parent The parent division.
+   * @return The count.
+   */
+  public long countDivisionsWithParent(Division parent) {
+    return entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_COUNT_DIVISIONS_WITH_PARENT, Long.class)
         .setParameter("parent", parent)
         .getSingleResult();
   }

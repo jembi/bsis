@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DivisionFullViewModel extends DivisionViewModel {
-  
+
   Map<String, Boolean> permissions = new HashMap<>();
 
   public Map<String, Boolean> getPermissions() {
