@@ -1,7 +1,9 @@
 package org.jembi.bsis.controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.NoResultException;
@@ -51,15 +53,22 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("userMessage", "Please provide valid inputs");
     errorMap.put("moreInfo", errors.getMessage());
     errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
-    Map<String, Map<String, String>> fieldErrors = new HashMap<>();
+    Map<String, List<Map<String, String>>> fieldErrors = new HashMap<>();
     for (FieldError error : errors.getBindingResult().getFieldErrors()) {
       errorMap.put(error.getField(), error.getDefaultMessage());
       
-      // Add a structured field error
+      // Add this error to the list of errors for this field
+      List<Map<String, String>> errorsForField = fieldErrors.get(error.getField());
+      if (errorsForField == null) {
+        errorsForField = new ArrayList<>();
+      }
+      
       Map<String, String> fieldError = new HashMap<>();
       fieldError.put("code", error.getCode());
       fieldError.put("message", error.getDefaultMessage());
-      fieldErrors.put(error.getField(), fieldError);
+      errorsForField.add(fieldError);
+
+      fieldErrors.put(error.getField(), errorsForField);
     }
     errorMap.put("fieldErrors", fieldErrors);
 
