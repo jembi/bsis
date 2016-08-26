@@ -34,8 +34,6 @@ public class DonationConstraintChecker {
   private ComponentRepository componentRepository;
   @Autowired
   private BloodTestsService bloodTestsService;
-  @Autowired
-  private DonorConstraintChecker donorConstraintChecker;
 
   public boolean canDeleteDonation(long donationId) throws NoResultException {
 
