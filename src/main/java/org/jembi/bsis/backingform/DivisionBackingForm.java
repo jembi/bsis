@@ -1,6 +1,10 @@
 
 package org.jembi.bsis.backingform;
 
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class DivisionBackingForm {
 
   private Long id;
@@ -41,6 +45,11 @@ public class DivisionBackingForm {
 
   public void setParent(DivisionBackingForm parent) {
     this.parent = parent;
+  }
+  
+  @JsonIgnore
+  public void setPermissions(Map<String, Boolean> permissions) {
+    // Ignore field from view model
   }
   
 }

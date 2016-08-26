@@ -4,7 +4,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DivisionBackingFormBuilder.aDivisionBackingForm;
 import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
+import static org.jembi.bsis.helpers.builders.DivisionFullViewModelBuilder.aDivisionFullViewModel;
 import static org.jembi.bsis.helpers.builders.DivisionViewModelBuilder.aDivisionViewModel;
+import static org.jembi.bsis.helpers.matchers.DivisionFullViewModelMatcher.hasSameStateAsDivisionFullViewModel;
 import static org.jembi.bsis.helpers.matchers.DivisionMatcher.hasSameStateAsDivision;
 import static org.jembi.bsis.helpers.matchers.DivisionViewModelMatcher.hasSameStateAsDivisionViewModel;
 import static org.mockito.Mockito.doReturn;
@@ -16,7 +18,9 @@ import java.util.List;
 import org.jembi.bsis.backingform.DivisionBackingForm;
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.repository.DivisionRepository;
+import org.jembi.bsis.service.DivisionConstraintChecker;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.jembi.bsis.viewmodel.DivisionFullViewModel;
 import org.jembi.bsis.viewmodel.DivisionViewModel;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,7 +35,8 @@ public class DivisionFactoryTests extends UnitTestSuite {
   private DivisionFactory divisionFactory;
   @Mock
   private DivisionRepository divisionRepository;
-
+  @Mock
+  private DivisionConstraintChecker divisionConstraintChecker;
   
   @Test
   public void testCreateDivisionViewModel_shouldReturnViewModelWithTheCorrectState() {
@@ -72,6 +77,50 @@ public class DivisionFactoryTests extends UnitTestSuite {
     
     // Verify
     assertThat(returnedViewModel, hasSameStateAsDivisionViewModel(expectedViewModel));
+  }
+  
+  @Test
+  public void testCreateDivisionFullViewModel_shouldReturnViewModelWithTheCorrectState() {
+    // Set up fixture
+    long divisionId = 769L;
+    String divisionName = "Some Location Division";
+    int divisionLevel = 2;
+
+    long parentDivisionId = 7L;
+    String parentDivisionName = "Parent Division";
+    int parentDivisionLevel = 1;
+    
+    Division division = aDivision()
+        .withId(divisionId)
+        .withName(divisionName)
+        .withLevel(divisionLevel)
+        .withParent(aDivision()
+            .withId(parentDivisionId)
+            .withName(parentDivisionName)
+            .withLevel(parentDivisionLevel)
+            .build())
+        .build();
+    
+    // Set up expectations
+    DivisionFullViewModel expectedViewModel = aDivisionFullViewModel()
+        .withId(divisionId)
+        .withName(divisionName)
+        .withLevel(divisionLevel)
+        .withParent(aDivisionViewModel()
+            .withId(parentDivisionId)
+            .withName(parentDivisionName)
+            .withLevel(parentDivisionLevel)
+            .build())
+        .withPermission("canEditLevel", true)
+        .build();
+    
+    when(divisionConstraintChecker.canEditLevel(division)).thenReturn(true);
+    
+    // Exercise SUT
+    DivisionFullViewModel returnedViewModel = divisionFactory.createDivisionFullViewModel(division);
+    
+    // Verify
+    assertThat(returnedViewModel, hasSameStateAsDivisionFullViewModel(expectedViewModel));
   }
   
   @Test

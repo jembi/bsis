@@ -6,6 +6,8 @@ import java.util.List;
 import org.jembi.bsis.backingform.DivisionBackingForm;
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.repository.DivisionRepository;
+import org.jembi.bsis.service.DivisionConstraintChecker;
+import org.jembi.bsis.viewmodel.DivisionFullViewModel;
 import org.jembi.bsis.viewmodel.DivisionViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ public class DivisionFactory {
 
   @Autowired
   private DivisionRepository divisionRepository;
+  @Autowired
+  private DivisionConstraintChecker divisionConstraintChecker;
 
   public DivisionViewModel createDivisionViewModel(Division division) {
     return createDivisionViewModel(division, true);
@@ -24,6 +28,18 @@ public class DivisionFactory {
 
   public DivisionViewModel createDivisionViewModel(Division division, boolean includeParent) {
     DivisionViewModel viewModel = new DivisionViewModel();
+    populateBasicFields(viewModel, division, includeParent);
+    return viewModel;
+  }
+  
+  public DivisionFullViewModel createDivisionFullViewModel(Division division) {
+    DivisionFullViewModel viewModel = new DivisionFullViewModel();
+    populateBasicFields(viewModel, division, true);
+    viewModel.setPermission("canEditLevel", divisionConstraintChecker.canEditLevel(division));
+    return viewModel;
+  }
+  
+  private void populateBasicFields(DivisionViewModel viewModel, Division division, boolean includeParent) {
     viewModel.setId(division.getId());
     viewModel.setName(division.getName());
     viewModel.setLevel(division.getLevel());
@@ -31,7 +47,6 @@ public class DivisionFactory {
     if (includeParent && division.getParent() != null) {
       viewModel.setParent(createDivisionViewModel(division.getParent(), false));
     }
-    return viewModel;
   }
 
   public List<DivisionViewModel> createDivisionViewModels(List<Division> divisions) {
