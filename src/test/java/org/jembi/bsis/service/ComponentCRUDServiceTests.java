@@ -142,6 +142,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Component component = componentCRUDService.createInitialComponent(donation);
     
     // Verify
+    verify(componentRepository).save(component);
     assertThat(component.getComponentType(), is(componentType));
     assertThat(component.getStatus(), is(ComponentStatus.QUARANTINED));
     assertThat(component.getInventoryStatus(), is(InventoryStatus.NOT_IN_STOCK));
