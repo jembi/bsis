@@ -74,8 +74,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     Assert.assertEquals("One error", 1, errors.getErrorCount());
-    Assert.assertEquals("requiredField.error", errors.getFieldErrors().get(0).getCode());
-    Assert.assertEquals("name", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("requiredField.error", errors.getFieldError("name").getCode());
   }
 
   @Test
@@ -95,8 +94,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     Assert.assertEquals("One error", 1, errors.getErrorCount());
-    Assert.assertEquals("requiredField.error", errors.getFieldErrors().get(0).getCode());
-    Assert.assertEquals("name", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("requiredField.error", errors.getFieldError("name").getCode());
   }
   
   @Test
@@ -119,8 +117,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     Assert.assertEquals("One error", 1, errors.getErrorCount());
-    Assert.assertEquals("duplicate", errors.getFieldErrors().get(0).getCode());
-    Assert.assertEquals("name", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("duplicate", errors.getFieldError("name").getCode());
   }
   
   @Test
@@ -162,8 +159,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     Assert.assertEquals("One error", 1, errors.getErrorCount());
-    Assert.assertEquals("requiredField.error", errors.getFieldErrors().get(0).getCode());
-    Assert.assertEquals("level", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("requiredField.error", errors.getFieldError("level").getCode());
   }
   
   @Test
@@ -183,8 +179,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     Assert.assertEquals("One error", 1, errors.getErrorCount());
-    Assert.assertEquals("invalid", errors.getFieldErrors().get(0).getCode());
-    Assert.assertEquals("level", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("invalid", errors.getFieldError("level").getCode());
   }
   
   @Test
@@ -204,8 +199,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     Assert.assertEquals("One error", 1, errors.getErrorCount());
-    Assert.assertEquals("invalid", errors.getFieldErrors().get(0).getCode());
-    Assert.assertEquals("level", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("invalid", errors.getFieldError("level").getCode());
   }
   
   @Test
@@ -228,8 +222,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     Assert.assertEquals("One error", 1, errors.getErrorCount());
-    Assert.assertEquals("required", errors.getFieldErrors().get(0).getCode());
-    Assert.assertEquals("parent.id", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("required", errors.getFieldError("parent.id").getCode());
   }
   
   @Test
@@ -252,8 +245,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     Assert.assertEquals("One error", 1, errors.getErrorCount());
-    Assert.assertEquals("invalid", errors.getFieldErrors().get(0).getCode());
-    Assert.assertEquals("parent", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("invalid", errors.getFieldError("parent").getCode());
   }
   
   @Test
@@ -276,8 +268,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     Assert.assertEquals("One error", 1, errors.getErrorCount());
-    Assert.assertEquals("invalid", errors.getFieldErrors().get(0).getCode());
-    Assert.assertEquals("parent", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("invalid", errors.getFieldError("parent").getCode());
   }
   
   @Test
@@ -300,8 +291,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     Assert.assertEquals("One error", 1, errors.getErrorCount());
-    Assert.assertEquals("invalid", errors.getFieldErrors().get(0).getCode());
-    Assert.assertEquals("parent", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("invalid", errors.getFieldError("parent").getCode());
   }
 
 }
