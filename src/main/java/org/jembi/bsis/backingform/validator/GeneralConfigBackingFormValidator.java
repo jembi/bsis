@@ -33,7 +33,7 @@ public class GeneralConfigBackingFormValidator extends BaseValidator<GeneralConf
         if (!formItem.getValue().matches("[0-9]+"))
           errors.rejectValue("value", "400", "Invalid integer value");
         break;
-      case DECIMAL:
+      case DECIMAL:  
         if (!formItem.getValue().matches("[0-9]*\\.?[0-9]+"))
           errors.rejectValue("value", "400", "Invalid decimal value");
         break;
@@ -41,12 +41,14 @@ public class GeneralConfigBackingFormValidator extends BaseValidator<GeneralConf
         if (!(formItem.getValue().equalsIgnoreCase("true") || formItem.getValue().equalsIgnoreCase("false")))
           errors.rejectValue("value", "400", "Invalid boolean value");
         break;
-
+      case PASSWORD:
+        if (formItem.getValue() == null || formItem.getValue().equalsIgnoreCase(""))
+          errors.rejectValue("value", "400", "Invalid password value");
+        break;
     }
 
-
     GeneralConfig generalConfig = new GeneralConfig();
-    generalConfig.setId(formItem.getId()); // I would like to get the Id from the url for put requests
+    generalConfig.setId(formItem.getId()); // I would like to get the Id from the url for put requests                                       
     generalConfig.setName(formItem.getName());
     generalConfig.setValue(formItem.getValue());
     generalConfig.setDescription(formItem.getDescription());
