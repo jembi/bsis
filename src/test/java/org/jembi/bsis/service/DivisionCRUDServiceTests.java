@@ -21,9 +21,10 @@ public class DivisionCRUDServiceTests extends UnitTestSuite {
 
   @InjectMocks
   private DivisionCRUDService divisionCRUDService;
-
   @Mock
   private DivisionRepository divisionRepository;
+  @Mock
+  private DivisionConstraintChecker divisionConstraintChecker;
 
   @Test
   public void testCreateDivision_shouldSaveDivisionCorrectly() {
@@ -66,6 +67,66 @@ public class DivisionCRUDServiceTests extends UnitTestSuite {
     
     // Set up expectations
     when(divisionRepository.findDivisionById(divisionId)).thenReturn(existingDivision);
+    when(divisionConstraintChecker.canEditLevel(existingDivision)).thenReturn(true);
+    when(divisionRepository.update(any(Division.class))).thenAnswer(returnsFirstArg());
+    
+    // Exercise SUT
+    Division returnedDivision = divisionCRUDService.updateDivision(updatedDivision);
+    
+    // Verify
+    verify(divisionRepository).update(argThat(hasSameStateAsDivision(updatedDivision)));
+    assertThat(returnedDivision, hasSameStateAsDivision(updatedDivision));
+  }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void testUpdateDivisionWhenCannotEditLevel_shouldThrow() {
+    // Set up fixture
+    long divisionId = 877L;
+
+    Division existingDivision = aDivision()
+        .withId(divisionId)
+        .withName("Existing")
+        .withLevel(1)
+        .withParent(null)
+        .build();
+    
+    Division updatedDivision = aDivision()
+        .withId(divisionId)
+        .withName("Updated")
+        .withLevel(2)
+        .withParent(aDivision().withId(1003L).build())
+        .build();
+    
+    // Set up expectations
+    when(divisionRepository.findDivisionById(divisionId)).thenReturn(existingDivision);
+    when(divisionConstraintChecker.canEditLevel(existingDivision)).thenReturn(false);
+    
+    // Exercise SUT
+    divisionCRUDService.updateDivision(updatedDivision);
+  }
+  
+  @Test
+  public void testUpdateDivisionWithoutChangingLevel_shouldSetCorrectFieldsAndUpdate() {
+    // Set up fixture
+    long divisionId = 877L;
+
+    Division existingDivision = aDivision()
+        .withId(divisionId)
+        .withName("Existing")
+        .withLevel(1)
+        .withParent(null)
+        .build();
+    
+    Division updatedDivision = aDivision()
+        .withId(divisionId)
+        .withName("Updated")
+        .withLevel(1)
+        .withParent(aDivision().withId(1003L).build())
+        .build();
+    
+    // Set up expectations
+    when(divisionRepository.findDivisionById(divisionId)).thenReturn(existingDivision);
+    when(divisionConstraintChecker.canEditLevel(existingDivision)).thenReturn(false);
     when(divisionRepository.update(any(Division.class))).thenAnswer(returnsFirstArg());
     
     // Exercise SUT
