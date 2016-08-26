@@ -50,10 +50,18 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("developerMessage", "There are validation issues, please provide valid inputs");
     errorMap.put("userMessage", "Please provide valid inputs");
     errorMap.put("moreInfo", errors.getMessage());
-    errorMap.put("errorCode", HttpStatus.BAD_REQUEST);   
+    errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
+    Map<String, Map<String, String>> fieldErrors = new HashMap<>();
     for (FieldError error : errors.getBindingResult().getFieldErrors()) {
       errorMap.put(error.getField(), error.getDefaultMessage());
+      
+      // Add a structured field error
+      Map<String, String> fieldError = new HashMap<>();
+      fieldError.put("code", error.getCode());
+      fieldError.put("message", error.getDefaultMessage());
+      fieldErrors.put(error.getField(), fieldError);
     }
+    errorMap.put("fieldErrors", fieldErrors);
 
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
