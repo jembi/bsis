@@ -7,6 +7,7 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.BloodTestResultRepository;
@@ -33,6 +34,8 @@ public class DonationConstraintChecker {
   private ComponentRepository componentRepository;
   @Autowired
   private BloodTestsService bloodTestsService;
+  @Autowired
+  private DonorConstraintChecker donorConstraintChecker;
 
   public boolean canDeleteDonation(long donationId) throws NoResultException {
 
@@ -160,6 +163,20 @@ public class DonationConstraintChecker {
           || component.getInventoryStatus() == InventoryStatus.IN_STOCK) {
         return false;
       }
+    }
+
+    return true;
+  }
+
+  public boolean canEditToNewPackType(Donation existingDonation, PackType newPackType) {
+
+    // Check that if the newPackType produces test samples, and the existing one
+    // doesn't, the test batch linked to this donation must be OPEN for the packType to be edited
+    if (newPackType.getTestSampleProduced() && 
+        !existingDonation.getPackType().getTestSampleProduced() && 
+        existingDonation.getDonationBatch().getTestBatch() != null && 
+        !existingDonation.getDonationBatch().getTestBatch().getStatus().equals(TestBatchStatus.OPEN)) {
+      return false;
     }
 
     return true;

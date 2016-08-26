@@ -29,7 +29,6 @@ import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.helpers.builders.BloodTestResultBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
-import org.jembi.bsis.helpers.builders.TestBatchBuilder;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
@@ -39,7 +38,6 @@ import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.packtype.PackType;
-import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
@@ -294,20 +292,17 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test(expected = IllegalArgumentException.class)
-  public void testUpdateDonationWithDifferentPackTypeThatProducesTestSamplesWithNotOpenTestBatch_shouldThrow() {
+  public void testUpdateDonationWithDifferentPackTypeThatCantEditToNewPackType_shouldThrow() {
     // Set up fixture 
-    PackType newPackType = aPackType().withId(2L).withTestSampleProduced(true).build();
+    PackType newPackType = aPackType().withId(2L).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
-    TestBatch testBatch = TestBatchBuilder.aReleasedTestBatch().build();
-    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
 
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
-        .withPackType(aPackType().withTestSampleProduced(false).withId(1L).build())
+        .withPackType(aPackType().withId(1L).build())
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
-        .withDonationBatch(donationBatch)
         .build();
     Donation updatedDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
@@ -320,6 +315,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
+    when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(false);
     
     // Exercise SUT
     donationCRUDService.updateDonation(updatedDonation);
@@ -429,6 +425,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
+    when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
     when(componentCRUDService.createInitialComponent(updatedDonation)).thenReturn(newComponent);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation))))
@@ -490,6 +487,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
+    when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenAnswer(returnsFirstArg());
     when(bloodTestResultRepository.getTestOutcomes(existingDonation)).thenReturn(bloodTestResultList);

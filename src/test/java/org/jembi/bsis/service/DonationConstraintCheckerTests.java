@@ -14,11 +14,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jembi.bsis.helpers.builders.AdverseEventBuilder;
+import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
+import org.jembi.bsis.helpers.builders.TestBatchBuilder;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.BloodTestResultRepository;
@@ -553,5 +556,112 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     
     // Verify
     assertThat(canEditPackType, is(true));
+  }
+
+  @Test
+  public void testCanEditToNewPackTypeThatDoesntProducesTestSamples_shouldReturnTrue() {
+    // Set up fixture
+    Donation donation = aDonation().build();
+    PackType newPackType = aPackType().withTestSampleProduced(false).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(true));
+  }
+
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatAlsoDoesWithNoTestBatch_shouldReturnTrue() {
+    // Set up fixture
+    Donation donation = aDonation().withPackType(aPackType().withTestSampleProduced(true).build()).build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(true));
+  }
+
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatAlsoDoesWithTestBatch_shouldReturnTrue() {
+    // Set up fixture
+    TestBatch testBatch = TestBatchBuilder.aTestBatch().build();
+    Donation donation = aDonation()
+        .withPackType(aPackType().withTestSampleProduced(true).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(true));
+  }
+
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatDoesntWithNoTestBatch_shouldReturnTrue() {
+    // Set up fixture
+    Donation donation = aDonation().withPackType(aPackType().withTestSampleProduced(false).build()).build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(true));
+  }
+
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatDoesntWithClosedTestBatch_shouldReturnFalse() {
+    // Set up fixture
+    TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.CLOSED).build();
+    Donation donation = aDonation()
+        .withPackType(aPackType().withTestSampleProduced(false).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(false));
+  }
+  
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatDoesntWithReleasedTestBatch_shouldReturnFalse() {
+    // Set up fixture
+    TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
+    Donation donation = aDonation()
+        .withPackType(aPackType().withTestSampleProduced(false).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(false));
+  }
+  
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatDoesntWithOpenTestBatch_shouldReturnTrue() {
+    // Set up fixture
+    TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
+    Donation donation = aDonation()
+        .withPackType(aPackType().withTestSampleProduced(false).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(true));
   }
 }

@@ -18,7 +18,6 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
-import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +38,6 @@ public class DonationCRUDService {
   private DonationBatchRepository donationBatchRepository;
   @Autowired
   private ComponentCRUDService componentCRUDService;
-  @Autowired
-  private PackTypeRepository packTypeRepository;
   @Autowired
   private DonorConstraintChecker donorConstraintChecker;
   @Autowired
@@ -142,14 +139,10 @@ public class DonationCRUDService {
         throw new IllegalArgumentException("Cannot edit pack type");
       }
 
-      // Check that if the newPackType produces test samples, and the existing one
-      // doesn't, the test batch linked to this donation must be OPEN for the packType to be edited
+      // Check if the packType can be edited to newPackType
       PackType newPackType = updatedDonation.getPackType();
-      if (newPackType.getTestSampleProduced() &&
-          !existingDonation.getPackType().getTestSampleProduced() && 
-          existingDonation.getDonationBatch().getTestBatch() != null && 
-          !existingDonation.getDonationBatch().getTestBatch().getStatus().equals(TestBatchStatus.OPEN)) {
-        throw new IllegalArgumentException("Cannot set pack type that produces test samples");
+      if (!donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)) {
+        throw new IllegalArgumentException("Cannot edit to this new pack type");
       }
 
       // Check that if the donor is deferred, the packType can't be updated to one that produces
