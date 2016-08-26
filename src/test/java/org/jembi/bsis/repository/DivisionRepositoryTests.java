@@ -227,5 +227,21 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
     // Exercise SUT
     divisionRepository.findDivisionById(1L);
   }
+  
+  @Test
+  public void testCountDivisionsByParent_shouldReturnCorrectCount() {
+    Division parent = aDivision().buildAndPersist(entityManager);
+    
+    // Expected
+    aDivision().withParent(parent).buildAndPersist(entityManager);
+    // Excluded by parent
+    aDivision().withParent(aDivision().build()).buildAndPersist(entityManager);
+    // Expected
+    aDivision().withParent(parent).buildAndPersist(entityManager);
+    
+    long returnedCount = divisionRepository.countDivisionsByParent(parent);
+    
+    assertThat(returnedCount, is(2L));
+  }
 
 }
