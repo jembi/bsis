@@ -1,5 +1,8 @@
 package org.jembi.bsis.factory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jembi.bsis.model.admin.GeneralConfig;
 import org.jembi.bsis.viewmodel.GeneralConfigViewModel;
 import org.springframework.stereotype.Service;
@@ -24,5 +27,15 @@ public class GeneralConfigFactory {
       return "";
     }
     return generalConfig.getValue();
+  }
+
+  public List<GeneralConfigViewModel> createViewModels(List<GeneralConfig> entities) {
+    List<GeneralConfigViewModel> viewModels = new ArrayList<>();
+    if (entities != null) {
+      for (GeneralConfig entity : entities) {
+        viewModels.add(createViewModel(entity));
+      }
+    }
+    return viewModels;
   }
 }

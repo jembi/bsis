@@ -5,6 +5,9 @@ import static org.jembi.bsis.helpers.builders.GeneralConfigBuilder.aGeneralConfi
 import static org.jembi.bsis.helpers.builders.GeneralConfigViewModelBuilder.aGeneralConfigViewModelBuilder;
 import static org.jembi.bsis.helpers.matchers.GeneralConfigViewModelMatcher.hasSameStateAsGeneralConfigViewModel;
 
+import java.util.List;
+import java.util.Arrays;
+
 import org.jembi.bsis.helpers.builders.DataTypeBuilder;
 import org.jembi.bsis.model.admin.DataType;
 import org.jembi.bsis.model.admin.GeneralConfig;
@@ -56,16 +59,16 @@ public class GeneralConfigFactoryTests extends UnitTestSuite{
         .withId(2l)
         .withName("name")
         .withDescription("description")
-        .withValue("1234")
         .withDataType(dataType)
+        .withValue("1234")
         .build();
     
     GeneralConfigViewModel expectedViewModel = aGeneralConfigViewModelBuilder()
         .withId(2l)
         .withName("name")
         .withDescription("description")
-        .withValue("1234")
         .withDataType(dataType)
+        .withValue("1234")
         .build();
     
     //Test
@@ -78,22 +81,22 @@ public class GeneralConfigFactoryTests extends UnitTestSuite{
   @Test
   public void testConvertGenConfigEntityToViewModelWithDecimalDataType_shouldReturnExpectedViewModel() {
     //Data SetUp
-    DataType dataType = DataTypeBuilder.aDataType().withId(3l).withDataType("Integer").build();
+    DataType dataType = DataTypeBuilder.aDataType().withId(3l).withDataType("Decimal").build();
     
     GeneralConfig generalConfig = aGeneralConfig()
         .withId(3l)
         .withName("name")
         .withDescription("description")
-        .withValue("12.25")
         .withDataType(dataType)
+        .withValue("12.25")
         .build();
     
     GeneralConfigViewModel expectedViewModel = aGeneralConfigViewModelBuilder()
         .withId(3l)
         .withName("name")
         .withDescription("description")
-        .withValue("12.25")
         .withDataType(dataType)
+        .withValue("12.25")
         .build();
     
     //Test
@@ -106,22 +109,22 @@ public class GeneralConfigFactoryTests extends UnitTestSuite{
   @Test
   public void testConvertGenConfigEntityToViewModelBooleanDataType_shouldReturnExpectedViewModel() {
     //Data SetUp
-    DataType dataType = DataTypeBuilder.aDataType().withId(4l).withDataType("Integer").build();
+    DataType dataType = DataTypeBuilder.aDataType().withId(4l).withDataType("Boolean").build();
     
     GeneralConfig generalConfig = aGeneralConfig()
         .withId(4l)
         .withName("name")
         .withDescription("description")
-        .withValue("1234")
         .withDataType(dataType)
+        .withValue("true")
         .build();
     
     GeneralConfigViewModel expectedViewModel = aGeneralConfigViewModelBuilder()
         .withId(4l)
         .withName("name")
         .withDescription("description")
-        .withValue("1234")
         .withDataType(dataType)
+        .withValue("true")
         .build();
     
     //Test
@@ -140,16 +143,16 @@ public class GeneralConfigFactoryTests extends UnitTestSuite{
         .withId(4l)
         .withName("name")
         .withDescription("description")
-        .withValue("1234")
         .withDataType(dataType)
+        .withValue("1234")
         .build();
     
     GeneralConfigViewModel expectedViewModel = aGeneralConfigViewModelBuilder()
         .withId(4l)
         .withName("name")
         .withDescription("description")
-        .withValue("1234")
         .withDataType(dataType)
+        .withValue("1234")
         .build();
     
     //Test
@@ -168,8 +171,8 @@ public class GeneralConfigFactoryTests extends UnitTestSuite{
         .withId(5l)
         .withName("name")
         .withDescription("description")
-        .withValue("")
         .withDataType(dataType)
+        .withValue("")
         .build();
     
     GeneralConfigViewModel expectedViewModel = aGeneralConfigViewModelBuilder()
@@ -186,5 +189,39 @@ public class GeneralConfigFactoryTests extends UnitTestSuite{
     //Assertions
     assertThat(viewModel, hasSameStateAsGeneralConfigViewModel(expectedViewModel)); 
   }
-
+  
+  @Test
+  public void testConvertGenConfigViewModel_shouldReturnExpectedViewModels () {
+    // Data setUp
+    DataType password = DataTypeBuilder.aDataType().withId(5l).withDataType("Password").build();
+    DataType booolean = DataTypeBuilder.aDataType().withId(4l).withDataType("Boolean").build();
+    DataType integer = DataTypeBuilder.aDataType().withId(3l).withDataType("Integer").build();
+    DataType decimal = DataTypeBuilder.aDataType().withId(2l).withDataType("Decimal").build();
+    DataType text = DataTypeBuilder.aDataType().withId(1l).withDataType("Text").build();
+    
+    List<GeneralConfig> configs = Arrays.asList(
+        aGeneralConfig().withId(5L).withName("name").withDescription("description").withDataType(password).withValue("").build(),
+        aGeneralConfig().withId(4L).withName("name").withDescription("description").withDataType(booolean).withValue("true").build(),
+        aGeneralConfig().withId(3L).withName("name").withDescription("description").withDataType(integer).withValue("1234").build(),
+        aGeneralConfig().withId(2L).withName("name").withDescription("description").withDataType(decimal).withValue("12.34").build(),
+        aGeneralConfig().withId(1L).withName("name").withDescription("description").withDataType(text).withValue("text").build());
+    
+    List<GeneralConfigViewModel> expectedConfigs = Arrays.asList(
+        aGeneralConfigViewModelBuilder().withId(5L).withName("name").withDescription("description").withDataType(password).withValue("").build(),
+        aGeneralConfigViewModelBuilder().withId(4L).withName("name").withDescription("description").withDataType(booolean).withValue("true").build(),
+        aGeneralConfigViewModelBuilder().withId(3L).withName("name").withDescription("description").withDataType(integer).withValue("1234").build(),
+        aGeneralConfigViewModelBuilder().withId(2L).withName("name").withDescription("description").withDataType(decimal).withValue("12.34").build(),
+        aGeneralConfigViewModelBuilder().withId(1L).withName("name").withDescription("description").withDataType(text).withValue("text").build());       
+    
+    // Test
+    List<GeneralConfigViewModel> viewModels = generalConfigFactory.createViewModels(configs);
+   
+    //Assertions
+    assertThat("View models are created", viewModels.size() == 5);
+    assertThat(viewModels.get(0), hasSameStateAsGeneralConfigViewModel(expectedConfigs.get(0)));
+    assertThat(viewModels.get(1), hasSameStateAsGeneralConfigViewModel(expectedConfigs.get(1)));
+    assertThat(viewModels.get(2), hasSameStateAsGeneralConfigViewModel(expectedConfigs.get(2)));
+    assertThat(viewModels.get(3), hasSameStateAsGeneralConfigViewModel(expectedConfigs.get(3)));
+    assertThat(viewModels.get(4), hasSameStateAsGeneralConfigViewModel(expectedConfigs.get(4)));
+  }
 }

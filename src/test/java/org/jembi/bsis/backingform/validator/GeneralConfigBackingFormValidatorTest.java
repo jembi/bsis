@@ -1,11 +1,11 @@
 package org.jembi.bsis.backingform.validator;
 
+import static org.jembi.bsis.helpers.builders.GeneralConfigBackingFormBuilder.aGeneralConfigBackingFormBuilder;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 
 import org.jembi.bsis.backingform.GeneralConfigBackingForm;
-import org.jembi.bsis.backingform.validator.GeneralConfigBackingFormValidator;
 import org.jembi.bsis.helpers.builders.DataTypeBuilder;
 import org.jembi.bsis.helpers.builders.GeneralConfigBuilder;
 import org.jembi.bsis.model.admin.DataType;
@@ -277,7 +277,7 @@ public class GeneralConfigBackingFormValidatorTest {
 
   @Test
   public void testValidBooleanFalse() throws Exception {
-    // set up data
+    // set up data""
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("BOOLEAN").build();
 
     GeneralConfigBackingForm form = new GeneralConfigBackingForm();
@@ -303,10 +303,11 @@ public class GeneralConfigBackingFormValidatorTest {
     // Data setUp
     DataType dataType = DataTypeBuilder.aDataType().withId(5l).withDataType("password").build();
     
-    GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    form.setName("passwordName");
-    form.setDescription("Passord DataType");
-    form.setDataType(dataType);
+    GeneralConfigBackingForm form = aGeneralConfigBackingFormBuilder()
+        .withName("name")
+        .withDescription("description")
+        .withDataType(dataType)
+        .build();
     
     // Mocks
     when(dataTypeRepository.getDataTypeByid(5l)).thenReturn(dataType);
@@ -325,15 +326,16 @@ public class GeneralConfigBackingFormValidatorTest {
     // Data setUp
     DataType dataType = DataTypeBuilder.aDataType().withId(5l).withDataType("password").build();
     
-    GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    form.setName("passwordName");
-    form.setDescription("Passord DataType");
-    form.setValue("");
-    form.setDataType(dataType);
+    GeneralConfigBackingForm form = aGeneralConfigBackingFormBuilder()
+        .withName("name")
+        .withDescription("description")
+        .withDataType(dataType)
+        .withValue("")
+        .build();
     
-    // Mocks'
+    // Mocks
     when(dataTypeRepository.getDataTypeByid(5l)).thenReturn(dataType);
-    when(generalConfigRepository.getGeneralConfigByName("passwordName")).thenReturn(null);
+    when(generalConfigRepository.getGeneralConfigByName("name")).thenReturn(null);
     
     // Test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "generalconfig");
@@ -342,15 +344,17 @@ public class GeneralConfigBackingFormValidatorTest {
     Assert.assertEquals("Error on password dataType", 1, errors.getErrorCount());
     Assert.assertNotNull("Error: Invalid password", errors.getFieldError("value"));
   }
-  
+  @Test
   public void testValidPassword_shouldSaveValue() {
     // Data setUp
     DataType dataType = DataTypeBuilder.aDataType().withId(5l).withDataType("password").build();
     
-    GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    form.setName("configName");
-    form.setDescription("Paasword DataType");
-    form.setDataType(dataType);
+    GeneralConfigBackingForm form = aGeneralConfigBackingFormBuilder()
+        .withName("name")
+        .withDescription("description")
+        .withDataType(dataType)
+        .withValue("123")
+        .build();
     
     //Mocks
     when(dataTypeRepository.getDataTypeByid(5l)).thenReturn(dataType);

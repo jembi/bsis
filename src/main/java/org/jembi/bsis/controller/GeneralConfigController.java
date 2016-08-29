@@ -50,11 +50,7 @@ public class GeneralConfigController {
   public ResponseEntity<Map<String, Object>> generalConfigGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    List<GeneralConfigViewModel> configs = new ArrayList<GeneralConfigViewModel>();
-    for (GeneralConfig config : configRepository.getAll()) {
-      configs.add(generalConfigFactory.createViewModel(config));
-    }
-    map.put("configurations", configs);
+    map.put("configurations", generalConfigFactory.createViewModels(configRepository.getAll()));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
