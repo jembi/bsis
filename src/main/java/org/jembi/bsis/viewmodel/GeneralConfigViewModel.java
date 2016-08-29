@@ -1,34 +1,53 @@
 package org.jembi.bsis.viewmodel;
 
 import org.jembi.bsis.model.admin.DataType;
-import org.jembi.bsis.model.admin.GeneralConfig;
 
 public class GeneralConfigViewModel {
 
-  private GeneralConfig generalConfig;
-
-  public GeneralConfigViewModel(GeneralConfig generalConfig) {
-    this.generalConfig = generalConfig;
-  }
+  private Long   id;
+  private String name;
+  private String value;
+  private String description;
+  private DataType dataType;
 
   public Long getId() {
-    return generalConfig.getId();
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getName() {
-    return generalConfig.getName();
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getValue() {
-    return generalConfig.getValue();
+    return value;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
   }
 
   public String getDescription() {
-    return generalConfig.getDescription();
+    return description;
   }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+  
   public DataType getDataType() {
-    return generalConfig.getDataType();
+    return dataType;
+  }
+
+  public void setDataType(DataType dataType) {
+    this.dataType = dataType;
   }
 
 }

@@ -1,11 +1,11 @@
 package org.jembi.bsis.backingform.validator;
 
+import static org.jembi.bsis.helpers.builders.GeneralConfigBackingFormBuilder.aGeneralConfigBackingFormBuilder;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 
 import org.jembi.bsis.backingform.GeneralConfigBackingForm;
-import org.jembi.bsis.backingform.validator.GeneralConfigBackingFormValidator;
 import org.jembi.bsis.helpers.builders.DataTypeBuilder;
 import org.jembi.bsis.helpers.builders.GeneralConfigBuilder;
 import org.jembi.bsis.model.admin.DataType;
@@ -277,7 +277,7 @@ public class GeneralConfigBackingFormValidatorTest {
 
   @Test
   public void testValidBooleanFalse() throws Exception {
-    // set up data
+    // set up data""
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("BOOLEAN").build();
 
     GeneralConfigBackingForm form = new GeneralConfigBackingForm();
@@ -296,5 +296,75 @@ public class GeneralConfigBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+  
+ @Test
+  public void testPasswordValueNotSpecified_shouldSendErrorMessage() throws Exception{
+    // Data setUp
+    DataType dataType = DataTypeBuilder.aDataType().withId(5l).withDataType("password").build();
+    
+    GeneralConfigBackingForm form = aGeneralConfigBackingFormBuilder()
+        .withName("name")
+        .withDescription("description")
+        .withDataType(dataType)
+        .build();
+    
+    // Mocks
+    when(dataTypeRepository.getDataTypeByid(5l)).thenReturn(dataType);
+    when(generalConfigRepository.getGeneralConfigByName("passwordName")).thenReturn(null);
+    
+    //Test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "generalconfig");
+    generalConfigBackingFormValidator.validate(form, errors);
+    
+    Assert.assertEquals("Error on password dataType", 1, errors.getErrorCount());
+    Assert.assertNotNull("Error: Invalid password", errors.getFieldError("value"));
+  }
+  
+  @Test
+  public void testEmptyStringPasswordValue_shouldSendErrorMessage() throws Exception {
+    // Data setUp
+    DataType dataType = DataTypeBuilder.aDataType().withId(5l).withDataType("password").build();
+    
+    GeneralConfigBackingForm form = aGeneralConfigBackingFormBuilder()
+        .withName("name")
+        .withDescription("description")
+        .withDataType(dataType)
+        .withValue("")
+        .build();
+    
+    // Mocks
+    when(dataTypeRepository.getDataTypeByid(5l)).thenReturn(dataType);
+    when(generalConfigRepository.getGeneralConfigByName("name")).thenReturn(null);
+    
+    // Test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "generalconfig");
+    generalConfigBackingFormValidator.validate(form, errors);
+    
+    Assert.assertEquals("Error on password dataType", 1, errors.getErrorCount());
+    Assert.assertNotNull("Error: Invalid password", errors.getFieldError("value"));
+  }
+  @Test
+  public void testValidPassword_shouldSaveValue() {
+    // Data setUp
+    DataType dataType = DataTypeBuilder.aDataType().withId(5l).withDataType("password").build();
+    
+    GeneralConfigBackingForm form = aGeneralConfigBackingFormBuilder()
+        .withName("name")
+        .withDescription("description")
+        .withDataType(dataType)
+        .withValue("123")
+        .build();
+    
+    //Mocks
+    when(dataTypeRepository.getDataTypeByid(5l)).thenReturn(dataType);
+    when(generalConfigRepository.getGeneralConfigByName("configName")).thenReturn(null);
+    
+    //Test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "generalConfig");
+    generalConfigBackingFormValidator.validate(form, errors);
+    
+    //Asserts
+    Assert.assertEquals("No errors exists ",0, errors.getErrorCount());
   }
 }

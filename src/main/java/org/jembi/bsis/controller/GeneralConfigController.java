@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.GeneralConfigBackingForm;
 import org.jembi.bsis.backingform.validator.GeneralConfigBackingFormValidator;
+import org.jembi.bsis.factory.GeneralConfigFactory;
 import org.jembi.bsis.model.admin.GeneralConfig;
 import org.jembi.bsis.repository.GeneralConfigRepository;
 import org.jembi.bsis.utils.LoggerUtil;
@@ -36,6 +37,9 @@ public class GeneralConfigController {
   @Autowired
   private GeneralConfigBackingFormValidator generalConfigBackingFormValidator;
 
+  @Autowired
+  private GeneralConfigFactory generalConfigFactory;
+  
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(generalConfigBackingFormValidator);
@@ -46,11 +50,7 @@ public class GeneralConfigController {
   public ResponseEntity<Map<String, Object>> generalConfigGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    List<GeneralConfigViewModel> configs = new ArrayList<GeneralConfigViewModel>();
-    for (GeneralConfig config : configRepository.getAll()) {
-      configs.add(new GeneralConfigViewModel(config));
-    }
-    map.put("configurations", configs);
+    map.put("configurations", generalConfigFactory.createViewModels(configRepository.getAll()));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
@@ -58,13 +58,15 @@ public class GeneralConfigController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
   public ResponseEntity<GeneralConfigViewModel> addGeneralConfig(@RequestBody @Valid GeneralConfigBackingForm form) {
     configRepository.save(form.getGeneralConfig());
-    return new ResponseEntity<GeneralConfigViewModel>(new GeneralConfigViewModel(configRepository.getGeneralConfigByName(form.getName())), HttpStatus.CREATED);
+    return new ResponseEntity<GeneralConfigViewModel>(generalConfigFactory.createViewModel(
+        configRepository.getGeneralConfigByName(form.getName())), HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
   public ResponseEntity<GeneralConfigViewModel> getGeneralConfig(@PathVariable Long id) {
-    return new ResponseEntity<GeneralConfigViewModel>(new GeneralConfigViewModel(configRepository.getGeneralConfigById(id)), HttpStatus.OK);
+    return new ResponseEntity<GeneralConfigViewModel>(generalConfigFactory.createViewModel(
+        configRepository.getGeneralConfigById(id)), HttpStatus.OK);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -79,6 +81,6 @@ public class GeneralConfigController {
     if (form.getName().equalsIgnoreCase("log.level"))
       LoggerUtil.setLogLevel(configRepository.getGeneralConfigByName("log.level").getValue());
 
-    return new ResponseEntity<GeneralConfigViewModel>(new GeneralConfigViewModel(updatedConfig), HttpStatus.OK);
+    return new ResponseEntity<GeneralConfigViewModel>(generalConfigFactory.createViewModel(updatedConfig), HttpStatus.OK);
   }
 }
