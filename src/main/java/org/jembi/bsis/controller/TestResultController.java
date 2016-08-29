@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.TestResultsBackingForms;
 import org.jembi.bsis.backingform.validator.TestResultsBackingFormsValidator;
-import org.jembi.bsis.factory.DonationViewModelFactory;
+import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
@@ -68,7 +68,7 @@ public class TestResultController {
   private TestResultsBackingFormsValidator testResultsBackingFormsValidator;
 
   @Autowired
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
 
   @InitBinder
   protected void initDonationFormBinder(WebDataBinder binder) {
@@ -81,7 +81,7 @@ public class TestResultController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    map.put("donation", donationViewModelFactory.createDonationViewModelWithoutPermissions(c));
+    map.put("donation", donationFactory.createDonationViewModelWithoutPermissions(c));
 
     if (c.getPackType().getTestSampleProduced()) {
       BloodTestingRuleResult results = bloodTestingRepository.getAllTestsStatusForDonation(c.getId());

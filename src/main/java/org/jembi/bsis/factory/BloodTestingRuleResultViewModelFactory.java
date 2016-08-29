@@ -26,14 +26,14 @@ public class BloodTestingRuleResultViewModelFactory {
   private DonationConstraintChecker donationConstraintChecker;
 
   @Autowired
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
 
   public BloodTestingRuleResult createBloodTestResultViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet) {
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
 
     // the blood donation
     Donation donation = bloodTestingRuleResultSet.getDonation();
-    ruleResult.setDonation(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation));
+    ruleResult.setDonation(donationFactory.createDonationViewModelWithoutPermissions(donation));
 
     // pending tests
     List<String> pendingBloodTypingTestsIds = new ArrayList<String>();

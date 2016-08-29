@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jembi.bsis.backingform.DonationBackingForm;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.repository.DonorRepository;
+import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.service.DonationConstraintChecker;
 import org.jembi.bsis.service.DonorConstraintChecker;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
@@ -15,18 +18,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DonationViewModelFactory {
+public class DonationFactory {
 
   @Autowired
   private DonationConstraintChecker donationConstraintChecker;
   @Autowired
-  private AdverseEventViewModelFactory adverseEventViewModelFactory;
+  private AdverseEventFactory adverseEventFactory;
   @Autowired
   private DonorConstraintChecker donorConstraintChecker;
   @Autowired
   private LocationFactory locationFactory;
   @Autowired
   private PackTypeFactory packTypeFactory;
+  @Autowired
+  private DonorRepository donorRepository;
+  @Autowired
+  private PackTypeRepository packTypeRepository;
+
+  public Donation createEntity(DonationBackingForm form) {
+    Donation donation = form.getDonation();
+    donation.setDonor(donorRepository.findDonorById(donation.getDonor().getId()));
+    donation.setPackType(packTypeRepository.getPackTypeById(donation.getPackType().getId()));
+    donation.setAdverseEvent(adverseEventFactory.createEntity(form.getAdverseEvent()));
+    return donation;
+  }
 
   public List<DonationViewModel> createDonationViewModelsWithPermissions(List<Donation> donations) {
     List<DonationViewModel> donationViewModels = new ArrayList<>();
@@ -53,8 +68,9 @@ public class DonationViewModelFactory {
     // Populate permissions
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDelete", donationConstraintChecker.canDeleteDonation(donation.getId()));
-    permissions.put("canUpdateDonationFields", donationConstraintChecker.canUpdateDonationFields(donation.getId()));
+    permissions.put("canEditBleedTimes", donationConstraintChecker.canEditBleedTimes(donation.getId()));
     permissions.put("canDonate", canDonate);
+    permissions.put("canEditPackType", donationConstraintChecker.canEditPackType(donation));
     permissions.put("isBackEntry", isBackEntry);
     donationViewModel.setPermissions(permissions);
 
@@ -92,7 +108,7 @@ public class DonationViewModelFactory {
 
     if (donation.getAdverseEvent() != null) {
       AdverseEventViewModel adverseEventViewModel =
-          adverseEventViewModelFactory.createAdverseEventViewModel(donation.getAdverseEvent());
+          adverseEventFactory.createAdverseEventViewModel(donation.getAdverseEvent());
       donationViewModel.setAdverseEvent(adverseEventViewModel);
     }
 

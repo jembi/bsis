@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jembi.bsis.controllerservice.DonorControllerService;
-import org.jembi.bsis.factory.DonationViewModelFactory;
+import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.repository.DonorRepository;
@@ -30,7 +30,7 @@ public class DonorControllerServiceTests extends UnitTestSuite {
   @Mock
   private DonorRepository donorRepository;
   @Mock
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
   
   @Test
   public void testFindDonationsForDonor_shouldReturnViewModel() {
@@ -48,7 +48,7 @@ public class DonorControllerServiceTests extends UnitTestSuite {
     );
     
     when(donorRepository.findDonorById(DONOR_ID)).thenReturn(donor);
-    when(donationViewModelFactory.createDonationViewModelsWithPermissions(donations)).thenReturn(expectedViewModels);
+    when(donationFactory.createDonationViewModelsWithPermissions(donations)).thenReturn(expectedViewModels);
     
     // Test
     List<DonationViewModel> returnedViewModels = donorControllerService.findDonationsForDonor(DONOR_ID);

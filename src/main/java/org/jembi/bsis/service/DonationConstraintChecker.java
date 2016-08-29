@@ -3,7 +3,11 @@ package org.jembi.bsis.service;
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
+import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.BloodTestResultRepository;
@@ -21,124 +25,159 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 @Service
 public class DonationConstraintChecker {
-    
-    @Autowired
-    private DonationRepository donationRepository;
-    @Autowired
-    private BloodTestResultRepository bloodTestResultRepository;
-    @Autowired
-    private ComponentRepository componentRepository;
-    @Autowired
-    private BloodTestsService bloodTestsService;
-    
-    public boolean canDeleteDonation(long donationId) throws NoResultException {
 
-        Donation donation = donationRepository.findDonationById(donationId);
-        
-        // Check for comments
-        if (donation.getNotes() != null && !donation.getNotes().isEmpty()) {
-            return false;
-        }
-        
-        // Check for adverse events
-        if (donation.getAdverseEvent() != null) {
-          return false;
-        }
-        
-        // Check for recorded test results
-        if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {
-            return false;
-        }
-        
-        // Check for processed components
-        if (componentRepository.countChangedComponentsForDonation(donationId) > 0) {
-            return false;
-        }
-        
-        return true;
-    }
-    
-    public boolean canUpdateDonationFields(long donationId) {
+  @Autowired
+  private DonationRepository donationRepository;
+  @Autowired
+  private BloodTestResultRepository bloodTestResultRepository;
+  @Autowired
+  private ComponentRepository componentRepository;
+  @Autowired
+  private BloodTestsService bloodTestsService;
 
-        // Check for recorded test results
-        if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {
-            return false;
-        }
-        
-        // Check for processed components
-        if (componentRepository.countChangedComponentsForDonation(donationId) > 0) {
-            return false;
-        }
-        
-        return true;
+  public boolean canDeleteDonation(long donationId) throws NoResultException {
+
+    Donation donation = donationRepository.findDonationById(donationId);
+
+    // Check for comments
+    if (donation.getNotes() != null && !donation.getNotes().isEmpty()) {
+      return false;
     }
-    
-    /**
-     * Test outcome discrepancies: tti tests that require confirmatory testing, blood group serology test outcomes that
-     * are ambiguous, or require a confirmatory outcome.
-     */
-    public boolean donationHasDiscrepancies(Donation donation) {
-        
-        if (!donation.getPackType().getTestSampleProduced()) {
-            return false;
-        }
-        
-        return donationHasDiscrepancies(donation, bloodTestsService.executeTests(donation));
+
+    // Check for adverse events
+    if (donation.getAdverseEvent() != null) {
+      return false;
     }
-    
-    /**
-     * @return true if the Donation has any pending TTI tests or requires confirmation of blood typing tests, false otherwise
-     */
-    public boolean donationHasDiscrepancies(Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
-        if (bloodTestingRuleResult.getPendingTTITestsIds() != null &&
-                bloodTestingRuleResult.getPendingTTITestsIds().size() > 0) {
-            
-            // Donation has pending TTI tests
-            return true;
-        }
-        
-        if (!BloodTypingMatchStatus.isEndState(donation.getBloodTypingMatchStatus()) 
-            || donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE) {
-            return true;
-        }
-        
+
+    // Check for recorded test results
+    if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {
+      return false;
+    }
+
+    // Check for processed components
+    if (componentRepository.countChangedComponentsForDonation(donationId) > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public boolean canEditBleedTimes(long donationId) {
+
+    // Check for recorded test results
+    if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {
+      return false;
+    }
+
+    // Check for processed components
+    if (componentRepository.countChangedComponentsForDonation(donationId) > 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Test outcome discrepancies: tti tests that require confirmatory testing, blood group serology
+   * test outcomes that are ambiguous, or require a confirmatory outcome.
+   */
+  public boolean donationHasDiscrepancies(Donation donation) {
+
+    if (!donation.getPackType().getTestSampleProduced()) {
+      return false;
+    }
+
+    return donationHasDiscrepancies(donation, bloodTestsService.executeTests(donation));
+  }
+
+  /**
+   * @return true if the Donation has any pending TTI tests or requires confirmation of blood typing
+   *         tests, false otherwise
+   */
+  public boolean donationHasDiscrepancies(Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
+    if (bloodTestingRuleResult.getPendingTTITestsIds() != null
+        && bloodTestingRuleResult.getPendingTTITestsIds().size() > 0) {
+
+      // Donation has pending TTI tests
+      return true;
+    }
+
+    if (!BloodTypingMatchStatus.isEndState(donation.getBloodTypingMatchStatus())
+        || donation.getBloodTypingStatus() != BloodTypingStatus.COMPLETE) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * @return true if the Donation has no discrepancies and is in a TestBatch that is either closed
+   *         or released
+   */
+  public boolean donationIsReleased(TestBatch testBatch, Donation donation,
+      BloodTestingRuleResult bloodTestingRuleResult) {
+    boolean donationReleased = testBatch != null && testBatch.getStatus() != TestBatchStatus.OPEN
+        && !donationHasDiscrepancies(donation, bloodTestingRuleResult);
+    return donationReleased;
+  }
+
+  public boolean donationHasOutstandingOutcomes(Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
+
+    if (!donation.getPackType().getTestSampleProduced()) {
+      return false;
+    }
+
+    // {@link BloodTestsService#updateDonationWithTestResults} has side effects so create a copy of
+    // the donation
+    Donation copy = new Donation(donation);
+    bloodTestsService.updateDonationWithTestResults(copy, bloodTestingRuleResult);
+
+    return copy.getTTIStatus() == TTIStatus.NOT_DONE || copy.getBloodTypingStatus() == BloodTypingStatus.NOT_DONE
+        || copy.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE;
+  }
+
+  /**
+   * Determines if there are any blood test results recorded for the specified donation.
+   * 
+   * @param donation Donation to check
+   * @return boolean true if the donation has saved test results, false otherwise
+   */
+  public boolean donationHasSavedTestResults(Donation donation) {
+    int numberOfTestResults = bloodTestResultRepository.countBloodTestResultsForDonation(donation.getId());
+    return numberOfTestResults > 0;
+  }
+
+  public boolean canEditPackType(Donation donation) {
+
+    for (Component component : donation.getComponents()) {
+
+      if (component.getIsDeleted()) {
+        // Ignore deleted components
+        continue;
+      }
+
+      // Check if the component has been processed, discarded or labelled
+      if (component.getStatus() == ComponentStatus.PROCESSED || component.getStatus() == ComponentStatus.DISCARDED
+          || component.getInventoryStatus() == InventoryStatus.IN_STOCK) {
         return false;
-    }
-    
-    /**
-     * @return true if the Donation has no discrepancies and is in a TestBatch that is either closed or released 
-     */
-    public boolean donationIsReleased(TestBatch testBatch, Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
-        boolean donationReleased = testBatch != null &&
-                testBatch.getStatus() != TestBatchStatus.OPEN &&
-                !donationHasDiscrepancies(donation, bloodTestingRuleResult);
-        return donationReleased;
-    }
-    
-    public boolean donationHasOutstandingOutcomes(Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
-        
-        if (!donation.getPackType().getTestSampleProduced()) {
-            return false;
-        }
-        
-        // {@link BloodTestsService#updateDonationWithTestResults} has side effects so create a copy of the donation
-        Donation copy = new Donation(donation);
-        bloodTestsService.updateDonationWithTestResults(copy, bloodTestingRuleResult);
-
-        return copy.getTTIStatus() == TTIStatus.NOT_DONE ||
-                copy.getBloodTypingStatus() == BloodTypingStatus.NOT_DONE ||
-                copy.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NOT_DONE;
+      }
     }
 
-	/**
-	 * Determines if there are any blood test results recorded for the specified donation.
-	 * 
-	 * @param donation Donation to check
-	 * @return boolean true if the donation has saved test results, false otherwise
-	 */
-	public boolean donationHasSavedTestResults(Donation donation) {
-		int numberOfTestResults = bloodTestResultRepository.countBloodTestResultsForDonation(donation.getId());
-		return numberOfTestResults > 0;
-	}
+    return true;
+  }
+
+  public boolean canEditToNewPackType(Donation existingDonation, PackType newPackType) {
+
+    // Check that if the newPackType produces test samples, and the existing one
+    // doesn't, the test batch linked to this donation must be OPEN for the packType to be edited
+    if (newPackType.getTestSampleProduced() && 
+        !existingDonation.getPackType().getTestSampleProduced() && 
+        existingDonation.getDonationBatch().getTestBatch() != null && 
+        !existingDonation.getDonationBatch().getTestBatch().getStatus().equals(TestBatchStatus.OPEN)) {
+      return false;
+    }
+
+    return true;
+  }
 
 }
