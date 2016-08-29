@@ -16,7 +16,7 @@ import org.jembi.bsis.viewmodel.GeneralConfigViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 
-public class GeneralConfigFactoryTests extends UnitTestSuite{
+public class GeneralConfigFactoryTests extends UnitTestSuite {
   
   @InjectMocks
   private GeneralConfigFactory generalConfigFactory;
@@ -135,34 +135,6 @@ public class GeneralConfigFactoryTests extends UnitTestSuite{
   }
   
   @Test
-  public void testConvertGenConfigEntityToViewModelPasswordDataType_shouldReturnExpectedViewModel() {
-    //Data SetUp
-    DataType dataType = DataTypeBuilder.aDataType().withId(4l).withDataType("Integer").build();
-    
-    GeneralConfig generalConfig = aGeneralConfig()
-        .withId(4l)
-        .withName("name")
-        .withDescription("description")
-        .withDataType(dataType)
-        .withValue("1234")
-        .build();
-    
-    GeneralConfigViewModel expectedViewModel = aGeneralConfigViewModelBuilder()
-        .withId(4l)
-        .withName("name")
-        .withDescription("description")
-        .withDataType(dataType)
-        .withValue("1234")
-        .build();
-    
-    //Test
-    GeneralConfigViewModel viewModel = generalConfigFactory.createViewModel(generalConfig);
-    
-    //Assertions
-    assertThat(viewModel, hasSameStateAsGeneralConfigViewModel(expectedViewModel));
-  }
-  
-  @Test
   public void testConvertGenConfigEntityToViewModelWithPassword_shouldReturnExpectedViewModel() {
     //Data SetUp
     DataType dataType = DataTypeBuilder.aDataType().withId(5l).withDataType("password").build();
@@ -172,7 +144,7 @@ public class GeneralConfigFactoryTests extends UnitTestSuite{
         .withName("name")
         .withDescription("description")
         .withDataType(dataType)
-        .withValue("")
+        .withValue("*****")
         .build();
     
     GeneralConfigViewModel expectedViewModel = aGeneralConfigViewModelBuilder()
