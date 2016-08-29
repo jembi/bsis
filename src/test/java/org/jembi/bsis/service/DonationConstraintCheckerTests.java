@@ -3,15 +3,25 @@ package org.jembi.bsis.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.jembi.bsis.helpers.builders.AdverseEventBuilder;
+import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
+import org.jembi.bsis.helpers.builders.TestBatchBuilder;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
+import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.BloodTestResultRepository;
@@ -20,18 +30,13 @@ import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
-import org.jembi.bsis.service.BloodTestsService;
-import org.jembi.bsis.service.DonationConstraintChecker;
-import org.jembi.bsis.service.DonorDeferralStatusCalculator;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DonationConstraintCheckerTests {
+public class DonationConstraintCheckerTests extends UnitTestSuite {
 
   private static final long IRRELEVANT_DONATION_ID = 17;
 
@@ -117,7 +122,7 @@ public class DonationConstraintCheckerTests {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donationWithNotes);
     when(bloodTestResultRepository.countBloodTestResultsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(1);
 
-    boolean canDelete = donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID);
+    boolean canDelete = donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID);
 
     assertThat(canDelete, is(false));
   }
@@ -127,7 +132,7 @@ public class DonationConstraintCheckerTests {
     when(bloodTestResultRepository.countBloodTestResultsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(0);
     when(componentRepository.countChangedComponentsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(1);
 
-    boolean canDelete = donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID);
+    boolean canDelete = donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID);
 
     assertThat(canDelete, is(false));
   }
@@ -137,7 +142,7 @@ public class DonationConstraintCheckerTests {
     when(bloodTestResultRepository.countBloodTestResultsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(0);
     when(componentRepository.countChangedComponentsForDonation(IRRELEVANT_DONATION_ID)).thenReturn(0);
 
-    boolean canDelete = donationConstraintChecker.canUpdateDonationFields(IRRELEVANT_DONATION_ID);
+    boolean canDelete = donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID);
 
     assertThat(canDelete, is(true));
   }
@@ -475,5 +480,188 @@ public class DonationConstraintCheckerTests {
 
     assertThat(result, is(false));
 
+  }
+  
+  @Test
+  public void testCanEditPackTypeWithNoConstraints_shouldReturnTrue() {
+    // Set up fixture
+    Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).build();
+    
+    // Exercise SUT
+    boolean canEditPackType = donationConstraintChecker.canEditPackType(donation);
+    
+    // Verify
+    assertThat(canEditPackType, is(true));
+  }
+  
+  @Test
+  public void testCanEditPackTypeWithProcessedComponent_shouldReturnFalse() {
+    // Set up fixture
+    Component processedComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    List<Component> components = Arrays.asList(
+        processedComponent,
+        aComponent().withId(2L).withParentComponent(processedComponent).withStatus(ComponentStatus.QUARANTINED).build(),
+        aComponent().withId(3L).withParentComponent(processedComponent).withStatus(ComponentStatus.QUARANTINED).build()
+    );
+    Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withComponents(components).build();
+    
+    // Exercise SUT
+    boolean canEditPackType = donationConstraintChecker.canEditPackType(donation);
+    
+    // Verify
+    assertThat(canEditPackType, is(false));
+  }
+  
+  @Test
+  public void testCanEditPackTypeWithDiscardedComponent_shouldReturnFalse() {
+    // Set up fixture
+    Component discardedComponent = aComponent().withId(1L).withStatus(ComponentStatus.DISCARDED).build();
+    Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withComponent(discardedComponent).build();
+    
+    // Exercise SUT
+    boolean canEditPackType = donationConstraintChecker.canEditPackType(donation);
+    
+    // Verify
+    assertThat(canEditPackType, is(false));
+  }
+  
+  @Test
+  public void testCanEditPackTypeWithLabelledComponent_shouldReturnFalse() {
+    // Set up fixture
+    Component discardedComponent = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .build();
+    Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withComponent(discardedComponent).build();
+    
+    // Exercise SUT
+    boolean canEditPackType = donationConstraintChecker.canEditPackType(donation);
+    
+    // Verify
+    assertThat(canEditPackType, is(false));
+  }
+  
+  @Test
+  public void testCanEditPackTypeWithDeletedDiscardedComponent_shouldReturnTrue() {
+    // Set up fixture
+    List<Component> components = Arrays.asList(
+        aComponent().withId(1L).withStatus(ComponentStatus.DISCARDED).withIsDeleted(true).build(),
+        aComponent().withId(2L).withStatus(ComponentStatus.QUARANTINED).build()
+    );
+    Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withComponents(components).build();
+    
+    // Exercise SUT
+    boolean canEditPackType = donationConstraintChecker.canEditPackType(donation);
+    
+    // Verify
+    assertThat(canEditPackType, is(true));
+  }
+
+  @Test
+  public void testCanEditToNewPackTypeThatDoesntProducesTestSamples_shouldReturnTrue() {
+    // Set up fixture
+    Donation donation = aDonation().build();
+    PackType newPackType = aPackType().withTestSampleProduced(false).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(true));
+  }
+
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatAlsoDoesWithNoTestBatch_shouldReturnTrue() {
+    // Set up fixture
+    Donation donation = aDonation().withPackType(aPackType().withTestSampleProduced(true).build()).build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(true));
+  }
+
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatAlsoDoesWithTestBatch_shouldReturnTrue() {
+    // Set up fixture
+    TestBatch testBatch = TestBatchBuilder.aTestBatch().build();
+    Donation donation = aDonation()
+        .withPackType(aPackType().withTestSampleProduced(true).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(true));
+  }
+
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatDoesntWithNoTestBatch_shouldReturnTrue() {
+    // Set up fixture
+    Donation donation = aDonation().withPackType(aPackType().withTestSampleProduced(false).build()).build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(true));
+  }
+
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatDoesntWithClosedTestBatch_shouldReturnFalse() {
+    // Set up fixture
+    TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.CLOSED).build();
+    Donation donation = aDonation()
+        .withPackType(aPackType().withTestSampleProduced(false).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(false));
+  }
+  
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatDoesntWithReleasedTestBatch_shouldReturnFalse() {
+    // Set up fixture
+    TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
+    Donation donation = aDonation()
+        .withPackType(aPackType().withTestSampleProduced(false).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(false));
+  }
+  
+  @Test
+  public void testCanEditToNewPackTypeThatProducesTestSamplesFromPackTypeThatDoesntWithOpenTestBatch_shouldReturnTrue() {
+    // Set up fixture
+    TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
+    Donation donation = aDonation()
+        .withPackType(aPackType().withTestSampleProduced(false).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .build();
+    PackType newPackType = aPackType().withTestSampleProduced(true).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(true));
   }
 }

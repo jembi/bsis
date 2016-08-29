@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jembi.bsis.factory.DonationBatchViewModelFactory;
-import org.jembi.bsis.factory.DonationViewModelFactory;
+import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.donation.Donation;
@@ -39,7 +39,7 @@ public class DonationBatchViewModelFactoryTests {
   @Mock
   private DonationBatchConstraintChecker donationBatchConstraintChecker;
   @Mock
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
 
 
   @Test
@@ -101,7 +101,7 @@ public class DonationBatchViewModelFactoryTests {
         .build();
 
     // set up mocks
-    when(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
+    when(donationFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
     when(donationBatchConstraintChecker.canDeleteDonationBatch(donationBatchId)).thenReturn(false);
     when(donationBatchConstraintChecker.canCloseDonationBatch(donationBatchId)).thenReturn(false);
     when(donationBatchConstraintChecker.canReopenDonationBatch(donationBatchId)).thenReturn(false);
@@ -151,7 +151,7 @@ public class DonationBatchViewModelFactoryTests {
         .build();
 
     // set up mocks
-    when(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation1)).thenReturn(expectedDonation1ViewModel);
+    when(donationFactory.createDonationViewModelWithoutPermissions(donation1)).thenReturn(expectedDonation1ViewModel);
 
     // run tests
     DonationBatchFullViewModel returnedDonationBatchViewModel =

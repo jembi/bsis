@@ -4,6 +4,7 @@ import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatc
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private Date createdDate = new Date();
   private boolean released;
   private boolean ineligibleDonor;
-  private List<Component> components;
+  private List<Component> components = new ArrayList<>();
 
   public DonationBuilder withId(Long id) {
     this.id = id;
@@ -208,6 +209,14 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   
   public DonationBuilder withComponents(List<Component> components) {
     this.components = components;
+    return this;
+  }
+  
+  public DonationBuilder withComponent(Component component) {
+    if (components == null) {
+      components = new ArrayList<>();
+    }
+    components.add(component);
     return this;
   }
 

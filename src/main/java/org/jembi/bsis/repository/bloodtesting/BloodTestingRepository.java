@@ -222,10 +222,11 @@ public class BloodTestingRepository {
   public Map<Long, BloodTestResult> getRecentTestResultsForDonation(
       Long donationId) {
     String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId";
+        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted";
     TypedQuery<BloodTestResult> query = em.createQuery(queryStr,
         BloodTestResult.class);
     query.setParameter("donationId", donationId);
+    query.setParameter("testOutcomeDeleted", false);
     List<BloodTestResult> bloodTestResults = query.getResultList();
     Map<Long, BloodTestResult> recentBloodTestResults = new HashMap<Long, BloodTestResult>();
     for (BloodTestResult bt : bloodTestResults) {
@@ -283,7 +284,8 @@ public class BloodTestingRepository {
         BloodTestResultDTO.class)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
-        .setParameter("deleted", false)
+        .setParameter("donationDeleted", false)
+        .setParameter("testOutcomeDeleted", false)
         .setParameter("released", true)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
         .getResultList();
@@ -295,7 +297,8 @@ public class BloodTestingRepository {
         BloodTestTotalDTO.class)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
-        .setParameter("deleted", false)
+        .setParameter("donationDeleted", false)
+        .setParameter("testOutcomeDeleted", false)
         .setParameter("released", true)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
         .getResultList();
@@ -307,7 +310,8 @@ public class BloodTestingRepository {
         BloodTestTotalDTO.class)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
-        .setParameter("deleted", false)
+        .setParameter("donationDeleted", false)
+        .setParameter("testOutcomeDeleted", false)
         .setParameter("released", true)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
         .setParameter("ttiStatus", TTIStatus.TTI_UNSAFE)

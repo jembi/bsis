@@ -11,9 +11,11 @@ import javax.transaction.Transactional;
 import org.jembi.bsis.backingform.TestResultsBackingForm;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
+import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
+import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
@@ -28,7 +30,10 @@ import org.springframework.stereotype.Service;
 public class BloodTestsService {
 
   @Autowired
-  BloodTestingRepository bloodTestingRepository;
+  private BloodTestingRepository bloodTestingRepository;
+
+  @Autowired
+  private BloodTestResultRepository bloodTestResultRepository;
 
   @Autowired
   private DonationRepository donationRepository;
@@ -143,5 +148,13 @@ public class BloodTestsService {
     map.put("repeatBloodTypingTestNames", repeatBloodTypingTestNames);
 
     return map;
+  }
+
+  public void setTestOutcomesAsDeleted(Donation donation) {
+    List<BloodTestResult> testOutcomes = bloodTestResultRepository.getTestOutcomes(donation);
+    for (BloodTestResult testOutcome:testOutcomes) {
+      testOutcome.setIsDeleted(true);
+      bloodTestResultRepository.save(testOutcome);
+    }
   }
 }

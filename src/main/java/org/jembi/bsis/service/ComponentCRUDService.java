@@ -9,8 +9,10 @@ import java.util.Map;
 import javax.persistence.NoResultException;
 
 import org.apache.log4j.Logger;
+import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
@@ -53,6 +55,77 @@ public class ComponentCRUDService {
 
   @Autowired
   private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
+
+  @Autowired
+  private GeneralConfigAccessorService generalConfigAccessorService;
+
+  public Component createInitialComponent(Donation donation) {
+
+    // Create initial component only if the countAsDonation is true and the config option is enabled
+    if (!donation.getPackType().getCountAsDonation() ||
+        !generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)) {
+      return null;
+    }
+
+    ComponentType componentType = donation.getPackType().getComponentType();
+
+    Component component = new Component();
+    component.setIsDeleted(false);
+    component.setComponentCode(componentType.getComponentTypeCode());
+    component.setDonation(donation);
+    component.setStatus(ComponentStatus.QUARANTINED);
+    component.setCreatedDate(donation.getCreatedDate());
+
+    // set new component creation date to match donation date
+    component.setCreatedOn(donation.getDonationDate());
+    // if bleed time is provided, update component creation time to match bleed start time
+    if (donation.getBleedStartTime() != null) {
+      Calendar donationDate = Calendar.getInstance();
+      donationDate.setTime(donation.getDonationDate());
+      Calendar bleedTime = Calendar.getInstance();
+      bleedTime.setTime(donation.getBleedStartTime());
+      donationDate.set(Calendar.HOUR_OF_DAY, bleedTime.get(Calendar.HOUR_OF_DAY));
+      donationDate.set(Calendar.MINUTE, bleedTime.get(Calendar.MINUTE));
+      donationDate.set(Calendar.SECOND, bleedTime.get(Calendar.SECOND));
+      donationDate.set(Calendar.MILLISECOND, bleedTime.get(Calendar.MILLISECOND));
+      component.setCreatedOn(donationDate.getTime());
+    }
+    component.setCreatedBy(donation.getCreatedBy());
+
+    // set cal to donationDate Date
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(donation.getDonationDate());
+
+    // second calendar to store bleedStartTime
+    Calendar bleedStartTime = Calendar.getInstance();
+    bleedStartTime.setTime(donation.getBleedStartTime());
+
+    // update cal to set time to bleedStartTime
+    cal.set(Calendar.HOUR_OF_DAY, bleedStartTime.get(Calendar.HOUR_OF_DAY));
+    cal.set(Calendar.MINUTE, bleedStartTime.get(Calendar.MINUTE));
+    cal.set(Calendar.SECOND, bleedStartTime.get(Calendar.SECOND));
+
+    // update cal with initial component expiry period
+    cal.add(Calendar.DATE, componentType.getExpiresAfter());
+    Date expiresOn = cal.getTime();
+
+    ComponentBatch componentBatch = donation.getDonationBatch().getComponentBatch();
+    if (componentBatch == null) {
+      // Set the location to the venue of the donation batch
+      component.setLocation(donation.getDonationBatch().getVenue());
+    } else {
+      // Assign the component to the component batch
+      component.setComponentBatch(componentBatch);
+      // Set the location to the processing site of the component batch
+      component.setLocation(componentBatch.getLocation());
+    }
+
+    component.setExpiresOn(expiresOn);
+    component.setComponentType(componentType);
+    componentRepository.save(component);
+    return component;
+
+  }
 
   /**
    * Change the status of components belonging to the donor from AVAILABLE to UNSAFE.

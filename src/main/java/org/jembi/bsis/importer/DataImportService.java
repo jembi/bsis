@@ -28,8 +28,10 @@ import org.jembi.bsis.backingform.validator.DeferralBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DonationBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DonorBackingFormValidator;
 import org.jembi.bsis.backingform.validator.LocationBackingFormValidator;
+import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.model.address.AddressType;
 import org.jembi.bsis.model.address.ContactMethodType;
+import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.adverseevent.AdverseEventType;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
@@ -106,6 +108,8 @@ public class DataImportService {
   private DonationBatchRepository donationBatchRepository;
   @Autowired
   private DonationCRUDService donationCRUDService;
+  @Autowired
+  private DonationFactory donationFactory;
   @Autowired
   private TestBatchRepository testBatchRepository;
   @Autowired
@@ -576,6 +580,7 @@ public class DataImportService {
       AdverseEventTypeBackingForm adverseEventTypeBackingForm = null;
       String adverseEventComment = null;
       Location venue = null;
+      AdverseEventType adverseEventType = null;
 
       for (Cell cell : row) {
 
@@ -711,7 +716,7 @@ public class DataImportService {
           case "adverseEventType":
             cell.setCellType(Cell.CELL_TYPE_STRING);
             if (!cell.getStringCellValue().isEmpty()) {
-              AdverseEventType adverseEventType = adverseEventTypeCache.get(cell.getStringCellValue());
+              adverseEventType = adverseEventTypeCache.get(cell.getStringCellValue());
               if (adverseEventType == null) {
                 errors.rejectValue("donation.adverseEvent.type", "type.invalid", "Invalid adverseEventType");
                 break;
@@ -795,7 +800,15 @@ public class DataImportService {
       }
 
       // Save donation
-      Donation donation = donationCRUDService.createDonation(donationBackingForm);
+      Donation donation = donationBackingForm.getDonation();
+      donation.setPackType(packTypeCache.get(donation.getPackType().getPackType()));
+      if (donationBackingForm.getAdverseEvent() != null) {
+        AdverseEvent adverseEvent = new AdverseEvent();
+        adverseEvent.setComment(adverseEventComment);
+        adverseEvent.setType(adverseEventType);
+        donation.setAdverseEvent(adverseEvent);
+      }
+      donation = donationCRUDService.createDonation(donation);
       // Populate the cache for use later when importing outcomes
       donationIdentificationNumberToDonationId.put(donation.getDonationIdentificationNumber(), donation.getId());
 

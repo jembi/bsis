@@ -3,14 +3,9 @@ package org.jembi.bsis.repository;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.CollectedDonationDTOBuilder.aCollectedDonationDTO;
-import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
-import static org.jembi.bsis.helpers.builders.DataTypeBuilder.aBooleanDataType;
-import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationTypeBuilder.aDonationType;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
-import static org.jembi.bsis.helpers.builders.GeneralConfigBuilder.aGeneralConfig;
-import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 
@@ -18,11 +13,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.dto.CollectedDonationDTO;
-import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
@@ -225,76 +217,6 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
     
     // Verify
     assertThat(returnedDonations, is(expectedDonations));
-  }
-  
-  @Test
-  public void testAddDonationToDonationBatchWithoutComponentBatch_shouldSetComponentLocationToVenue() {
-    // Set up fixture
-    insertConfigToCreateInitialComponents();
-    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).buildAndPersist(entityManager);
-    Location donationBatchVenue = aVenue().build();
-    DonationBatch donationBatchWithoutComponentBatch = aDonationBatch()
-        .withVenue(donationBatchVenue)
-        .withComponentBatch(null)
-        .buildAndPersist(entityManager);
-    Donor existingDonor = aDonor().buildAndPersist(entityManager);
-    Location venue = aVenue().buildAndPersist(entityManager);
-    Donation donation = aDonation()
-        .withPackType(packTypeThatCountsAsDonation)
-        .withDonationBatch(donationBatchWithoutComponentBatch)
-        .withDonor(existingDonor)
-        .withDonationDate(new Date())
-        .withBleedStartTime(new Date())
-        .withBleedEndTime(new Date())
-        .withVenue(venue)
-        .build();
-    
-    // Call the method being tested
-    Donation addedDonation = donationRepository.addDonation(donation);
-    
-    // Verify results
-    List<Component> components = addedDonation.getComponents();
-    assertThat(components.size(), is(1));
-    assertThat(components.get(0).getLocation(), is(donationBatchVenue));
-  }
-  
-  @Test
-  public void testAddDonationToDonationBatchWithComponentBatch_shouldSetComponentLocationToProcessingSite() {
-    // Set up fixture
-    insertConfigToCreateInitialComponents();
-    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).buildAndPersist(entityManager);
-    Location componentBatchProcessingSite = aProcessingSite().build();
-    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
-        .withComponentBatch(aComponentBatch().withLocation(componentBatchProcessingSite).build())
-        .buildAndPersist(entityManager);
-    Donor existingDonor = aDonor().buildAndPersist(entityManager);
-    Location venue = aVenue().buildAndPersist(entityManager);
-    Donation donation = aDonation()
-        .withPackType(packTypeThatCountsAsDonation)
-        .withDonationBatch(donationBatchWithComponentBatch)
-        .withDonor(existingDonor)
-        .withDonationDate(new Date())
-        .withBleedStartTime(new Date())
-        .withBleedEndTime(new Date())
-        .withVenue(venue)
-        .build();
-    
-    // Call the method being tested
-    Donation addedDonation = donationRepository.addDonation(donation);
-    
-    // Verify results
-    List<Component> components = addedDonation.getComponents();
-    assertThat(components.size(), is(1));
-    assertThat(components.get(0).getLocation(), is(componentBatchProcessingSite));
-  }
-  
-  private void insertConfigToCreateInitialComponents() {
-    // General config to enable creation of initial components
-    aGeneralConfig()
-        .withName(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)
-        .withDataType(aBooleanDataType().build())
-        .withValue("true")
-        .buildAndPersist(entityManager);
   }
 
 }

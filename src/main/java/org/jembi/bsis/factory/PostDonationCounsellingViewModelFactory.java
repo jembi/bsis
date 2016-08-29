@@ -16,13 +16,13 @@ public class PostDonationCounsellingViewModelFactory {
   @Autowired
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
   @Autowired
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
 
   public PostDonationCounsellingViewModel createPostDonationCounsellingViewModel(
       PostDonationCounselling postDonationCounselling) {
 
     PostDonationCounsellingViewModel viewModel = new PostDonationCounsellingViewModel(postDonationCounselling);
-    DonationViewModel donationViewModel = donationViewModelFactory.createDonationViewModelWithoutPermissions(
+    DonationViewModel donationViewModel = donationFactory.createDonationViewModelWithoutPermissions(
         postDonationCounselling.getDonation());
     viewModel.setDonation(donationViewModel);
     // Populate permissions

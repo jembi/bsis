@@ -32,7 +32,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_UNITS_TESTED_FOR_DATE_RANGE,
         query = BloodTestResultNamedQueryConstants.QUERY_FIND_TOTAL_UNITS_TESTED_FOR_DATE_RANGE),
     @NamedQuery(name = BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE,
-        query = BloodTestResultNamedQueryConstants.QUERY_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE)
+        query = BloodTestResultNamedQueryConstants.QUERY_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE),
+    @NamedQuery(name = BloodTestResultNamedQueryConstants.NAME_GET_TEST_OUTCOMES_FOR_DONATION,
+        query = BloodTestResultNamedQueryConstants.QUERY_GET_TEST_OUTCOMES_FOR_DONATION)
+
 })
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
@@ -59,6 +62,8 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
   private String reagentLotNumber;
 
   private Boolean reEntryRequired;
+
+  private boolean isDeleted = false;
 
   public BloodTestResult() {
     super();
@@ -120,5 +125,12 @@ public class BloodTestResult extends BaseModificationTrackerEntity {
     this.reEntryRequired = reEntryRequired;
   }
 
+  public boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
 
 }

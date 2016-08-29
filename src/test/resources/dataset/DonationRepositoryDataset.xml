@@ -190,11 +190,11 @@
 		context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
 		negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
 		testName="ABO" testNameShort="ABO" validResults="A,B,AB,O" flagComponentsForDiscard="0" />
-	<BloodTestResult id="1" createdDate="2015-02-06 02:09:23.0"
+	<BloodTestResult isDeleted="false" id="1" createdDate="2015-02-06 02:09:23.0"
 		lastUpdated="2015-02-06 02:09:23.0" notes="" result="O"
 		testedOn="2015-02-06 02:09:23.0" bloodTest_id="1" donation_id="1"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="2" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="2" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
