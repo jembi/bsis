@@ -1,8 +1,12 @@
 package org.jembi.bsis.repository;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
 
 import java.util.List;
+
+import javax.persistence.NoResultException;
 
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
@@ -202,6 +206,44 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
     Assert.assertTrue("Verify division 3 present", divisions.contains(division3));
     Assert.assertTrue("Verify division 4 present", divisions.contains(division4));
     Assert.assertTrue("Verify division 5 present", divisions.contains(division5));
+  }
+  
+  @Test
+  public void testFindDivisionById_shouldReturnCorrectDivision() {
+    // Set up fixture
+    aDivision().buildAndPersist(entityManager);
+    Division expectedDivision = aDivision().buildAndPersist(entityManager);
+    aDivision().buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    Division returnedDivision = divisionRepository.findDivisionById(expectedDivision.getId());
+    
+    // Verify
+    assertThat(returnedDivision, is(expectedDivision));
+  }
+  
+  @Test(expected = NoResultException.class)
+  public void testFindDivisionByIdWithMissingDivision_shouldThrow() {
+    // Exercise SUT
+    divisionRepository.findDivisionById(1L);
+  }
+  
+  @Test
+  public void testCountDivisionsWithParent_shouldReturnCorrectCount() {
+    Division parent = aDivision().buildAndPersist(entityManager);
+    
+    // Expected
+    aDivision().withParent(parent).buildAndPersist(entityManager);
+    // Excluded by parent
+    aDivision().withParent(aDivision().build()).buildAndPersist(entityManager);
+    // Expected
+    aDivision().withParent(parent).buildAndPersist(entityManager);
+    // Excluded by no parent
+    aDivision().withParent(null).buildAndPersist(entityManager);
+    
+    long returnedCount = divisionRepository.countDivisionsWithParent(parent);
+    
+    assertThat(returnedCount, is(2L));
   }
 
 }

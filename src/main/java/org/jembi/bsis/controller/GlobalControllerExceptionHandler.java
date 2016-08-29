@@ -1,7 +1,9 @@
 package org.jembi.bsis.controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.NoResultException;
@@ -50,10 +52,25 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("developerMessage", "There are validation issues, please provide valid inputs");
     errorMap.put("userMessage", "Please provide valid inputs");
     errorMap.put("moreInfo", errors.getMessage());
-    errorMap.put("errorCode", HttpStatus.BAD_REQUEST);   
+    errorMap.put("errorCode", HttpStatus.BAD_REQUEST);
+    Map<String, List<Map<String, String>>> fieldErrors = new HashMap<>();
     for (FieldError error : errors.getBindingResult().getFieldErrors()) {
       errorMap.put(error.getField(), error.getDefaultMessage());
+      
+      // Add this error to the list of errors for this field
+      List<Map<String, String>> errorsForField = fieldErrors.get(error.getField());
+      if (errorsForField == null) {
+        errorsForField = new ArrayList<>();
+      }
+      
+      Map<String, String> fieldError = new HashMap<>();
+      fieldError.put("code", error.getCode());
+      fieldError.put("message", error.getDefaultMessage());
+      errorsForField.add(fieldError);
+
+      fieldErrors.put(error.getField(), errorsForField);
     }
+    errorMap.put("fieldErrors", fieldErrors);
 
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.BAD_REQUEST);
   }
