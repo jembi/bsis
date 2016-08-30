@@ -75,7 +75,7 @@ public class DonorViewModel {
   }
 
   public String getBirthDate() {
-    return CustomDateFormatter.getDateTimeString(donor.getBirthDate());
+    return CustomDateFormatter.getDateString(donor.getBirthDate());
   }
 
   public String getDateOfFirstDonation() {

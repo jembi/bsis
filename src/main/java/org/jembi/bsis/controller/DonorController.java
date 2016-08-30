@@ -167,7 +167,7 @@ public class DonorController {
     map.put("deferral", donorRepository.getLastDonorDeferral(id));
     map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
     map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
-    map.put("birthDate", CustomDateFormatter.getDateTimeString(donor.getBirthDate()));
+    map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
     if (donations.size() > 0) {
       map.put("lastDonation", donationFactory.createDonationViewModelWithoutPermissions(donations.get(donations.size() - 1)));
       map.put("dateOfFirstDonation", CustomDateFormatter.getDateTimeString(donations.get(0).getDonationDate()));

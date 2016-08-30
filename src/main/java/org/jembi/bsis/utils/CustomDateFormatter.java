@@ -9,6 +9,7 @@ import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 public class CustomDateFormatter {
   
@@ -29,10 +30,8 @@ public class CustomDateFormatter {
 
   public static Date getDateFromString(String dateString) throws ParseException {
     Date date = null;
-
     if (!isDateEmpty(dateString))
-      date = new DateTime(dateString).toDate();
-
+      date = new LocalDate(dateString).toDate();
     return date;
   }
 
@@ -87,6 +86,15 @@ public class CustomDateFormatter {
     return "Invalid Date specified.";
   }
 
+  public static String getDateString(Date date) {
+    if (date == null)
+      return "";
+    else {
+      LocalDate localDate = new LocalDate(date);
+      return localDate.toString();
+    }
+  }
+
   public static String getDateTimeString(Date date) {
     if (date == null)
       return "";
@@ -114,7 +122,7 @@ public class CustomDateFormatter {
   }
 
   public static Date parse(String dateStr) throws ParseException {
-    return getDateFromString(dateStr);
+    return getDateTimeFromString(dateStr);
   }
 
   private static String getISO8601StringForDate(Date date) {
