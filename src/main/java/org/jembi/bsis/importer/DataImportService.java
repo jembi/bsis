@@ -2,6 +2,9 @@ package org.jembi.bsis.importer;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,12 +22,14 @@ import org.jembi.bsis.backingform.AdverseEventBackingForm;
 import org.jembi.bsis.backingform.AdverseEventTypeBackingForm;
 import org.jembi.bsis.backingform.DeferralBackingForm;
 import org.jembi.bsis.backingform.DeferralReasonBackingForm;
+import org.jembi.bsis.backingform.DivisionBackingForm;
 import org.jembi.bsis.backingform.DonationBackingForm;
 import org.jembi.bsis.backingform.DonationTypeBackingForm;
 import org.jembi.bsis.backingform.DonorBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.TestResultsBackingForm;
 import org.jembi.bsis.backingform.validator.DeferralBackingFormValidator;
+import org.jembi.bsis.backingform.validator.DivisionBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DonationBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DonorBackingFormValidator;
 import org.jembi.bsis.backingform.validator.LocationBackingFormValidator;
@@ -42,6 +47,7 @@ import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.model.idtype.IdType;
+import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
@@ -51,6 +57,7 @@ import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
 import org.jembi.bsis.repository.ContactMethodTypeRepository;
 import org.jembi.bsis.repository.DeferralReasonRepository;
+import org.jembi.bsis.repository.DivisionRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonationTypeRepository;
@@ -112,6 +119,10 @@ public class DataImportService {
   private BloodTestingRepository bloodTestingRepository;
   @Autowired
   private DonorDeferralRepository donorDeferralRepository;
+  @Autowired
+  private DivisionRepository divisionRepository;
+  @Autowired
+  private DivisionBackingFormValidator divisionBackingFormValidator;
   @PersistenceContext
   private EntityManager entityManager;
 
@@ -134,6 +145,7 @@ public class DataImportService {
     importDonationsData(workbook.getSheet("Donations"));
     importDeferralData(workbook.getSheet("Deferrals"));
     importOutcomeData(workbook.getSheet("Outcomes"));
+    importDivisionsData(workbook.getSheet("Divisions"));
     
     System.out.println("Finished import at " + new Date());
     
@@ -1035,6 +1047,117 @@ public class DataImportService {
     entityManager.clear();
   }
   
+  private void importDivisionsData(Sheet sheet) {
+    Map<String, Division> divisionCache = buildDivisionCache();
+
+    // Keep a reference to the row containing the headers
+    Row headers = null;
+
+    List<DivisionBackingForm> tempDivisionList = new ArrayList<DivisionBackingForm>();
+    for (Row row : sheet) {
+
+      if (headers == null) {
+        headers = row;
+        continue;
+      }
+
+      DivisionBackingForm tempDivisionBackingForm = new DivisionBackingForm();
+      BindException errors = new BindException(tempDivisionBackingForm, "DivisionBackingForm");
+
+      for (Cell cell : row) {
+        Cell header = headers.getCell(cell.getColumnIndex());
+
+        switch (header.getStringCellValue()) {
+          case "name":
+            if (cell.getStringCellValue().isEmpty()) {
+              errors.rejectValue("name", "division.nameInvalid", "Division name is required");
+            }
+            else {
+              tempDivisionBackingForm.setName(cell.getStringCellValue());
+            }
+            break;
+
+          case "level":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            if (!cell.getStringCellValue().isEmpty()) {
+              try {
+                tempDivisionBackingForm.setLevel(Integer.valueOf(cell.getStringCellValue()));
+              } catch (Exception e) {
+                errors.rejectValue("level", "division.levelInvalid", "Invalid Division Level");
+              }
+            }
+            break;
+
+          case "parent":
+            if (!cell.getStringCellValue().isEmpty()) {
+                DivisionBackingForm parentBackingForm = null;
+                parentBackingForm = new DivisionBackingForm();
+                parentBackingForm.setName(cell.getStringCellValue());
+                tempDivisionBackingForm.setParent(parentBackingForm);
+            }
+            break;
+
+          default:
+            System.out.println("Unknown division column: " + header.getStringCellValue());
+            break;
+        }
+      }
+
+      if (errors.hasErrors()) {
+        System.out.println("Invalid division on row " + (row.getRowNum() + 1) + " with name: " + tempDivisionBackingForm.getName() + "." + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid division");
+      }
+      tempDivisionList.add(tempDivisionBackingForm);
+    }
+
+    //sort list so that parents are before children. This Comparator orders based on level.
+    //This is important because the parent needs to be cached before children can reference them.
+    Collections.sort(tempDivisionList, new DivisionBackingFormComparator());
+
+    int divisionCount = 0;
+    for(DivisionBackingForm divisionBackingForm : tempDivisionList) {
+      BindException errors = new BindException(divisionBackingForm, "DivisionBackingForm");
+
+      //fill out parent backing form details from cached data (if needed)
+      DivisionBackingForm parentBackingForm = divisionBackingForm.getParent();
+      if(parentBackingForm != null) {
+        Division parent = divisionCache.get(parentBackingForm.getName());
+        if(parent == null) {
+          System.out.println("Invalid parent division with name: " + parentBackingForm.getName() +
+                               " configured on division row with name: " + divisionBackingForm.getName());
+          throw new IllegalArgumentException("Invalid division");
+        }
+        parentBackingForm.setId(parent.getId());
+        parentBackingForm.setName(parent.getName());
+        parentBackingForm.setLevel(parent.getLevel());
+      }
+
+      divisionBackingFormValidator.validateForm(divisionBackingForm, errors);
+
+      if (errors.hasErrors()) {
+        System.out.println("Invalid division with name: " + divisionBackingForm.getName() + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid division");
+      }
+
+      // Save division
+      Division division = new Division();
+      division.setName(divisionBackingForm.getName());
+      division.setLevel(divisionBackingForm.getLevel());
+      if(parentBackingForm != null) {
+        division.setParent(divisionCache.get(parentBackingForm.getName()));
+      }
+      divisionRepository.save(division);
+      divisionCache.put(division.getName(), division);
+      divisionCount += 1;
+      displayProgressMessage(action + " " + divisionCount + " out of " + sheet.getLastRowNum() + " division(s)");
+    }
+    System.out.println(); // clear logging
+
+    // Flush remaining data
+    entityManager.flush();
+    entityManager.clear();
+  }
+
   private boolean isValidBloodTyping(String value, DonationField donationField, List<BloodTestingRule> bloodTestingRules) {
     for (BloodTestingRule bloodTestingRule : bloodTestingRules) {
       if (bloodTestingRule.getDonationFieldChanged().equals(donationField)) {
@@ -1187,6 +1310,15 @@ public class DataImportService {
     return deferralReasonMap;
   }
 
+  private Map<String, Division> buildDivisionCache () {
+    Map<String, Division>  divisionCache = new HashMap<>();
+    List<Division> divisions = divisionRepository.getAllDivisions();
+    for (Division division : divisions) {
+      divisionCache.put(division.getName(), division);
+    }
+    return divisionCache;
+  }
+
   private String getErrorsString(BindException errors) {
     String errorsStr = errors.getAllErrors().size() + " errors:";
     for (ObjectError error : errors.getAllErrors()) {
@@ -1205,5 +1337,51 @@ public class DataImportService {
     } catch (Exception e) {
       // just ignore
     }
+  }
+
+  /**
+   * Simple DivisionBackingForm Comparator that compares two Division Backing Forms. Divisions
+   * with lower levels receive priority in the ordering.
+   */
+  public static class DivisionBackingFormComparator implements Comparator<DivisionBackingForm>
+  {
+
+    @Override
+    public int compare(DivisionBackingForm div1, DivisionBackingForm div2) {
+      if(div1 == null && div2 == null) {
+        return 0;
+      }
+      else if(div2 == null) {
+        return 1;
+      }
+      else if (div1 == null) {
+        return -1;
+      }
+      else {
+        Integer level1 = div1.getLevel();
+        Integer level2 = div2.getLevel();
+        if(level1 == null && level2==null) {
+          return 0;
+        }
+        else if(level2 == null) {
+          return -1;
+        }
+        else if (level1 == null) {
+          return 1;
+        }
+        else {
+          if(level1 == level2) {
+            return 0;
+          }
+          else if(level1 > level2) {
+            return 1;
+          }
+          else {
+            return -1;
+          }
+        }
+      }
+    }
+
   }
 }
