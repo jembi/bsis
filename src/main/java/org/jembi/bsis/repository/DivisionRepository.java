@@ -68,6 +68,12 @@ public class DivisionRepository extends AbstractRepository<Division> {
     return query.getResultList();
   }
   
+  public List<Division> getAllDivisions() {
+    TypedQuery<Division> query =
+        entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_GET_ALL_DIVISIONS, Division.class);
+    return query.getResultList();
+  }
+  
   /**
    * Count the number of divisions which have the given division as their parent.
    * 
