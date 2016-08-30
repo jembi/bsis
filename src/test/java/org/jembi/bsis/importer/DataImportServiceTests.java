@@ -8,6 +8,8 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.matchers.LocationMatcher.hasSameStateAsLocation;
+import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
+import static org.jembi.bsis.helpers.matchers.DivisionMatcher.hasSameStateAsDivision;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -41,9 +43,11 @@ import org.jembi.bsis.model.donor.DonorStatus;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.model.idtype.IdType;
+import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
 import org.jembi.bsis.model.util.Gender;
+import org.jembi.bsis.repository.DivisionRepository;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +57,9 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
   @Autowired
   private DataImportService dataImportService;
   
+  @Autowired
+  private DivisionRepository divisionRepository;
+
   @Test
   public void testDataImport() throws EncryptedDocumentException, InvalidFormatException, IOException, ParseException {
     // Set up fixture and data
@@ -72,6 +79,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     assertImportDonationData_shouldCreateDonationsFromSpreadsheet();
     assertImportDonationData_shouldCreateDeferralsFromSpreadsheet();
     assertImportDonationData_shouldCreateOutcomesFromSpreadsheet();
+    assertImportDivisionData_shouldCreateDivisionsFromSpreadsheet();
   }
   
   private void createSupportingTestData() {
@@ -163,6 +171,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     FormFieldBuilder.aFormField().withForm("donor").withField("donorNumber")
         .withAutoGenerate(true).withMaxLength(15)
         .buildAndPersist(entityManager);
+
     entityManager.flush();
 
     // set up test data (Donation)
@@ -218,7 +227,23 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     rhBloodTestingRule2.setNewInformation("-");
     rhBloodTestingRule2.setIsActive(true);
     entityManager.persist(rhBloodTestingRule2);
-    
+
+    FormFieldBuilder.aFormField()
+    .withForm("division")
+    .withField("name")
+    .withMaxLength(0)
+    .thatIsRequired(true)
+    .thatIsHidden(false)
+    .buildAndPersist(entityManager);
+
+    FormFieldBuilder.aFormField()
+    .withForm("division")
+    .withField("level")
+    .thatIsRequired(true)
+    .thatIsHidden(false)
+    .withMaxLength(0)
+    .buildAndPersist(entityManager);
+
     // Synchronize entities to the database before running the test
     entityManager.flush();
   }
@@ -478,4 +503,106 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .setParameter("donation", donation)
         .getSingleResult();
   }
+
+  private void assertImportDivisionData_shouldCreateDivisionsFromSpreadsheet() {
+    // Verify
+    String prov1Name = "province1";
+    Division divisionProv1 = divisionRepository.findDivisionByName(prov1Name);
+
+    String prov1Mun1Name = "prov1-municipality1";
+    Division divisionProv1Mun1 = divisionRepository.findDivisionByName(prov1Mun1Name);
+
+    String prov1Mun1Ward1Name = "prov1-mun1-ward1";
+    Division divisionProv1Mun1Ward1 = divisionRepository.findDivisionByName(prov1Mun1Ward1Name);
+
+    String prov1Mun1Ward2Name = "prov1-mun1-ward2";
+    Division divisionProv1Mun1Ward2 = divisionRepository.findDivisionByName(prov1Mun1Ward2Name);
+
+    String prov1Mun2Name = "prov1-municipality2";
+    Division divisionProv1Mun2 = divisionRepository.findDivisionByName(prov1Mun2Name);
+
+    String prov1Mun2Ward1Name = "prov1-mun2-ward1";
+    Division divisionProv1Mun2Ward1 = divisionRepository.findDivisionByName(prov1Mun2Ward1Name);
+
+    String prov2Name = "province2";
+    Division divisionProv2 = divisionRepository.findDivisionByName(prov2Name);
+
+    String prov2Mun1Name = "prov2-municipality1";
+    Division divisionProv2Mun1 = divisionRepository.findDivisionByName(prov2Mun1Name);
+
+    String prov2Mun2Ward1Name = "prov2-mun2-ward1";
+    Division divisionProv2Mun2Ward1 = divisionRepository.findDivisionByName(prov2Mun2Ward1Name);
+
+    Division expectedProv1Division = aDivision()
+        .withId(divisionProv1.getId())
+        .withName(prov1Name)
+        .withLevel(1)
+        .build();
+
+    Division expectedProv1Mun1Division = aDivision()
+        .withId(divisionProv1Mun1.getId())
+        .withName(prov1Mun1Name)
+        .withLevel(2)
+        .withParent(divisionProv1)
+        .build();
+
+    Division expectedProv1Mun1Ward1Division = aDivision()
+        .withId(divisionProv1Mun1Ward1.getId())
+        .withName(prov1Mun1Ward1Name)
+        .withLevel(3)
+        .withParent(divisionProv1Mun1)
+        .build();
+
+    Division expectedProv1Mun1Ward2Division = aDivision()
+        .withId(divisionProv1Mun1Ward2.getId())
+        .withName(prov1Mun1Ward2Name)
+        .withLevel(3)
+        .withParent(divisionProv1Mun1)
+        .build();
+
+    Division expectedProv1Mun2Division = aDivision()
+        .withId(divisionProv1Mun2.getId())
+        .withName(prov1Mun2Name)
+        .withLevel(2)
+        .withParent(divisionProv1)
+        .build();
+
+    Division expectedProv1Mun2Ward1Division = aDivision()
+        .withId(divisionProv1Mun2Ward1.getId())
+        .withName(prov1Mun2Ward1Name)
+        .withLevel(3)
+        .withParent(divisionProv1Mun2)
+        .build();
+
+    Division expectedProv2Division = aDivision()
+        .withId(divisionProv2.getId())
+        .withName(prov2Name)
+        .withLevel(1)
+        .build();
+
+    Division expectedProv2Mun1Division = aDivision()
+        .withId(divisionProv2Mun1.getId())
+        .withName(prov2Mun1Name)
+        .withLevel(2)
+        .withParent(divisionProv2)
+        .build();
+
+    Division expectedProv2Mun2Ward1Division = aDivision()
+        .withId(divisionProv2Mun2Ward1.getId())
+        .withName(prov2Mun2Ward1Name)
+        .withLevel(3)
+        .withParent(divisionProv2Mun1)
+        .build();
+
+    assertThat(divisionProv1, hasSameStateAsDivision(expectedProv1Division));
+    assertThat(divisionProv1Mun1, hasSameStateAsDivision(expectedProv1Mun1Division));
+    assertThat(divisionProv1Mun1Ward1, hasSameStateAsDivision(expectedProv1Mun1Ward1Division));
+    assertThat(divisionProv1Mun1Ward2, hasSameStateAsDivision(expectedProv1Mun1Ward2Division));
+    assertThat(divisionProv1Mun2, hasSameStateAsDivision(expectedProv1Mun2Division));
+    assertThat(divisionProv1Mun2Ward1, hasSameStateAsDivision(expectedProv1Mun2Ward1Division));
+    assertThat(divisionProv2, hasSameStateAsDivision(expectedProv2Division));
+    assertThat(divisionProv2Mun1, hasSameStateAsDivision(expectedProv2Mun1Division));
+    assertThat(divisionProv2Mun2Ward1, hasSameStateAsDivision(expectedProv2Mun2Ward1Division));
+  }
+
 }
