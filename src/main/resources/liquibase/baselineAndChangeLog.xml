@@ -47,4 +47,5 @@
   <include file="./src/main/resources/liquibase/updates/1154-edit-pack-type-rules.xml" />
   <include file="./src/main/resources/liquibase/updates/1448-view-search-location-divisions.xml" />
   <include file="./src/main/resources/liquibase/updates/1449-add-divisions.xml" />
+  <include file="./src/main/resources/liquibase/updates/749-customise-header-logo.xml" />
 </databaseChangeLog>
