@@ -69,7 +69,7 @@ public class DonorSummaryViewModel {
   }
 
   public String getBirthDate() {
-    return CustomDateFormatter.getDateString(birthDate);
+    return CustomDateFormatter.getDateTimeString(birthDate);
   }
 
   public void setBirthDate(Date birthDate) {

@@ -163,16 +163,16 @@ public class DonorController {
     map.put("currentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
     map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("hasCounselling", hasCounselling);
-    map.put("deferredUntil", CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
+    map.put("deferredUntil", CustomDateFormatter.getDateTimeString(donorRepository.getLastDonorDeferralDate(id)));
     map.put("deferral", donorRepository.getLastDonorDeferral(id));
     map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
     map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
-    map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
+    map.put("birthDate", CustomDateFormatter.getDateTimeString(donor.getBirthDate()));
     if (donations.size() > 0) {
       map.put("lastDonation", donationFactory.createDonationViewModelWithoutPermissions(donations.get(donations.size() - 1)));
-      map.put("dateOfFirstDonation", CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
+      map.put("dateOfFirstDonation", CustomDateFormatter.getDateTimeString(donations.get(0).getDonationDate()));
       map.put("totalDonations", getNumberOfDonations(donations));
-      map.put("dueToDonate", CustomDateFormatter.getDateString(donor.getDueToDonate()));
+      map.put("dueToDonate", CustomDateFormatter.getDateTimeString(donor.getDueToDonate()));
       map.put("totalAdverseEvents", adverseEventRepository.countAdverseEventsForDonor(donor));
     } else {
       map.put("lastDonation", "");

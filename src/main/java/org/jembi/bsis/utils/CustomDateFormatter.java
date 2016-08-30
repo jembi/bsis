@@ -87,13 +87,6 @@ public class CustomDateFormatter {
     return "Invalid Date specified.";
   }
 
-  public static String getDateString(Date date) {
-    if (date == null)
-      return "";
-    else
-      return getISO8601StringForDate(date);
-  }
-
   public static String getDateTimeString(Date date) {
     if (date == null)
       return "";
@@ -117,7 +110,7 @@ public class CustomDateFormatter {
   }
 
   public static String format(Date date) {
-    return getDateString(date);
+    return getDateTimeString(date);
   }
 
   public static Date parse(String dateStr) throws ParseException {

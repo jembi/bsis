@@ -45,7 +45,7 @@ public class MobileClinicLookUpDonorViewModel {
   }
 
   public String getBirthDate() {
-    return CustomDateFormatter.getDateString(mobileClinicDonorDTO.getBirthDate());
+    return CustomDateFormatter.getDateTimeString(mobileClinicDonorDTO.getBirthDate());
   }
 
   public String getBloodType() {
