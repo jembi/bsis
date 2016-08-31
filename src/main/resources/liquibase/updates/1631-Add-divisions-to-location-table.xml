@@ -1,0 +1,17 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20160831-1534" author="tumijacob">
+		<addColumn tableName="Location">
+			<column name="divisionLevel1" type="VARCHAR(255)"></column>
+		</addColumn>
+		<addColumn tableName="Location">
+			<column name="divisionLevel2" type="VARCHAR(255)"></column>
+		</addColumn>
+		<addColumn tableName="Location">
+			<column name="divisionLevel3" type="VARCHAR(255)"></column>
+		</addColumn>
+	</changeSet>
+</databaseChangeLog>
