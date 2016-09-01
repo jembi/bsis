@@ -12,13 +12,13 @@
 		</addColumn>
 		<addColumn tableName="Location">
 			<column name="divisionLevel2" type="BIGINT(20)">
-				<constraints nullable="true" foreignKeyName="fk_Location_divisionLevel1"
+				<constraints nullable="true" foreignKeyName="fk_Location_divisionLevel2"
 					references="Division(id)" />
 			</column>
 		</addColumn>
 		<addColumn tableName="Location">
 			<column name="divisionLevel3" type="BIGINT(20)">
-				<constraints nullable="true" foreignKeyName="fk_Location_divisionLevel1"
+				<constraints nullable="true" foreignKeyName="fk_Location_divisionLevel3"
 					references="Division(id)" />
 			</column>
 		</addColumn>
