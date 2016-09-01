@@ -23,4 +23,11 @@
 			</column>
 		</addColumn>
 	</changeSet>
+	<changeSet id="20160901-1716" author="tumijacob">
+		<addColumn tableName="Location_AUD">
+			<column name="divisionLevel1_id" type="BIGINT(20)"></column>
+			<column name="divisionLevel2_id" type="BIGINT(20)"></column>
+			<column name="divisionLevel3_id" type="BIGINT(20)"></column>
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>
