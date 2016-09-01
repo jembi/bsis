@@ -20,14 +20,14 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
   private DivisionRepository divisionRepository;
 
   @Test
-  public void testFindDivisionByExactNameAndNullLevel_verifyCorrectDivisionReturned() {
+  public void testFindDivisionByExactName_verifyCorrectDivisionReturned() {
     Division division1 = aDivision().withName("division1").buildAndPersist(entityManager); // match 
     Division division2 = aDivision().withName("division2").buildAndPersist(entityManager);
     Division division3 = aDivision().withName("division3").buildAndPersist(entityManager); 
     Division division4 = aDivision().withName("division4").buildAndPersist(entityManager);
     Division division5 = aDivision().withName("division5").buildAndPersist(entityManager); 
 
-    List<Division> divisions = divisionRepository.findDivisions("division1", false, null);
+    List<Division> divisions = divisionRepository.findDivisions("division1", false, null, null);
 
     // Verify only 1 division returned
     Assert.assertEquals("Verify divisions returned", 1, divisions.size());
@@ -41,14 +41,14 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
   }
 
   @Test
-  public void testFindDivisionBySimilarNameAndNullLevel_verifyCorrectDivisionsReturned() {
+  public void testFindDivisionBySimilarName_verifyCorrectDivisionsReturned() {
     Division division1 = aDivision().withName("division1").buildAndPersist(entityManager); // match
     Division division2 = aDivision().withName("division2").buildAndPersist(entityManager); // match
     Division division3 = aDivision().withName("division3").buildAndPersist(entityManager); // match
     Division division4 = aDivision().withName("division4").buildAndPersist(entityManager); // match
     Division division5 = aDivision().withName("test").buildAndPersist(entityManager); 
 
-    List<Division> divisions = divisionRepository.findDivisions("division", true, null);
+    List<Division> divisions = divisionRepository.findDivisions("division", true, null, null);
 
     // Verify only 4 divisions are returned
     Assert.assertEquals("Verify divisions returned", 4, divisions.size());
@@ -69,7 +69,7 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
     Division division4 = aDivision().withName("division4").buildAndPersist(entityManager);
     Division division5 = aDivision().withName("testPostfix").buildAndPersist(entityManager); // match
 
-    List<Division> divisions = divisionRepository.findDivisions("Postfix", true, null);
+    List<Division> divisions = divisionRepository.findDivisions("Postfix", true, null, null);
 
     // Verify only 1 division returned
     Assert.assertEquals("Verify divisions returned", 1, divisions.size());
@@ -90,7 +90,7 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
     Division division4 = aDivision().withName("division4").withParent(division1).withLevel(2).buildAndPersist(entityManager); // match
     Division division5 = aDivision().withName("test").withLevel(1).buildAndPersist(entityManager); 
 
-    List<Division> divisions = divisionRepository.findDivisions("division", true, 2);
+    List<Division> divisions = divisionRepository.findDivisions("division", true, 2, null);
 
     // Verify only 2 divisions are returned
     Assert.assertEquals("Verify divisions returned", 2, divisions.size());
@@ -111,7 +111,7 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
     Division division4 = aDivision().withName("division4").withParent(division1).withLevel(2).buildAndPersist(entityManager);
     Division division5 = aDivision().withName("test").withLevel(1).buildAndPersist(entityManager);
 
-    List<Division> divisions = divisionRepository.findDivisions("division", true, 3);
+    List<Division> divisions = divisionRepository.findDivisions("division", true, 3, null);
 
     // Verify no divisions are returned
     Assert.assertEquals("Verify divisions returned", 0, divisions.size());
@@ -125,14 +125,14 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
   }
   
   @Test
-  public void testFindDivisionBySimilarNameAndNullLevel_verifyNoDivisionsReturned() {
+  public void testFindDivisionBySimilarName_verifyNoDivisionsReturned() {
     Division division1 = aDivision().withName("division1").buildAndPersist(entityManager); 
     Division division2 = aDivision().withName("division2").buildAndPersist(entityManager);
     Division division3 = aDivision().withName("division3").buildAndPersist(entityManager); 
     Division division4 = aDivision().withName("division4").buildAndPersist(entityManager);
     Division division5 = aDivision().withName("test").buildAndPersist(entityManager);
 
-    List<Division> divisions = divisionRepository.findDivisions("tester", true, null);
+    List<Division> divisions = divisionRepository.findDivisions("tester", true, null, null);
 
     // Verify no divisions are returned
     Assert.assertEquals("Verify divisions returned", 0, divisions.size());
@@ -146,14 +146,14 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
   }
   
   @Test
-  public void testFindDivisionWithBlankNameAndNullLevel_verifyAllDivisionsReturned() {
+  public void testFindDivisionWithBlankName_verifyAllDivisionsReturned() {
     Division division1 = aDivision().withName("division1").buildAndPersist(entityManager);  // match 
     Division division2 = aDivision().withName("division2").buildAndPersist(entityManager);  // match
     Division division3 = aDivision().withName("division3").buildAndPersist(entityManager);  // match
     Division division4 = aDivision().withName("division4").buildAndPersist(entityManager);  // match
     Division division5 = aDivision().withName("test").buildAndPersist(entityManager);       // match
 
-    List<Division> divisions = divisionRepository.findDivisions("", false, null);
+    List<Division> divisions = divisionRepository.findDivisions("", false, null, null);
 
     // Verify all divisions are returned
     Assert.assertEquals("Verify all divisions returned", 5, divisions.size());
@@ -167,14 +167,77 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
   }
 
   @Test
-  public void testFindDivisionWithNullNameAndNullLevel_verifyAllDivisionsReturned() {
+  public void testFindDivisionBySimilarNameAndLevelTypeAndParent_verifyCorrectDivisionsReturned() {
+    Division division1 = aDivision().withName("division1").withLevel(1).buildAndPersist(entityManager);
+    Division division2 = aDivision().withName("division2").withLevel(1).buildAndPersist(entityManager);
+    Division division3 = aDivision().withName("division3").withParent(division1).withLevel(2).buildAndPersist(entityManager); // match
+    Division division4 = aDivision().withName("division4").withParent(division2).withLevel(2).buildAndPersist(entityManager);
+    Division division5 = aDivision().withName("test").withLevel(1).buildAndPersist(entityManager); 
+
+    List<Division> divisions = divisionRepository.findDivisions("division", true, 2, division1.getId());
+
+    // Verify only 1 divisions are returned
+    Assert.assertEquals("Verify divisions returned", 1, divisions.size());
+
+    // Verify right divisions were returned
+    Assert.assertFalse("Verify division 1 absent", divisions.contains(division1));
+    Assert.assertFalse("Verify division 2 absent", divisions.contains(division2));
+    Assert.assertTrue("Verify division 3 present", divisions.contains(division3));
+    Assert.assertFalse("Verify division 4 absent", divisions.contains(division4));
+    Assert.assertFalse("Verify division 5 absent", divisions.contains(division5));
+  }
+  
+  @Test
+  public void testFindDivisionByLevelTypeAndParent_verifyCorrectDivisionsReturned() {
+    Division division1 = aDivision().withName("division1").withLevel(1).buildAndPersist(entityManager);
+    Division division2 = aDivision().withName("division2").withLevel(1).buildAndPersist(entityManager);
+    Division division3 = aDivision().withName("division3").withParent(division1).withLevel(2).buildAndPersist(entityManager); // match
+    Division division4 = aDivision().withName("division4").withParent(division2).withLevel(2).buildAndPersist(entityManager);
+    Division division5 = aDivision().withName("test").withParent(division1).withLevel(2).buildAndPersist(entityManager); // match
+
+    List<Division> divisions = divisionRepository.findDivisions("", true, 2, division1.getId());
+
+    // Verify only 2 divisions are returned
+    Assert.assertEquals("Verify divisions returned", 2, divisions.size());
+
+    // Verify right divisions were returned
+    Assert.assertFalse("Verify division 1 absent", divisions.contains(division1));
+    Assert.assertFalse("Verify division 2 absent", divisions.contains(division2));
+    Assert.assertTrue("Verify division 3 present", divisions.contains(division3));
+    Assert.assertFalse("Verify division 4 absent", divisions.contains(division4));
+    Assert.assertTrue("Verify division 5 present", divisions.contains(division5));
+  }
+  
+  @Test
+  public void testFindDivisionByParent_verifyCorrectDivisionsReturned() {
+    Division division1 = aDivision().withName("division1").withLevel(1).buildAndPersist(entityManager);
+    Division division2 = aDivision().withName("division2").withLevel(1).buildAndPersist(entityManager);
+    Division division3 = aDivision().withName("division3").withParent(division1).withLevel(2).buildAndPersist(entityManager); // match
+    Division division4 = aDivision().withName("division4").withParent(division2).withLevel(2).buildAndPersist(entityManager);
+    Division division5 = aDivision().withName("test").withParent(division1).withLevel(2).buildAndPersist(entityManager); // match
+
+    List<Division> divisions = divisionRepository.findDivisions("", true, 2, division1.getId());
+
+    // Verify only 2 divisions are returned
+    Assert.assertEquals("Verify divisions returned", 2, divisions.size());
+
+    // Verify right divisions were returned
+    Assert.assertFalse("Verify division 1 absent", divisions.contains(division1));
+    Assert.assertFalse("Verify division 2 absent", divisions.contains(division2));
+    Assert.assertTrue("Verify division 3 present", divisions.contains(division3));
+    Assert.assertFalse("Verify division 4 absent", divisions.contains(division4));
+    Assert.assertTrue("Verify division 5 present", divisions.contains(division5));
+  }
+
+  @Test
+  public void testFindDivisionWithNullValues_verifyAllDivisionsReturned() {
     Division division1 = aDivision().withName("division1").buildAndPersist(entityManager); // match  
     Division division2 = aDivision().withName("division2").buildAndPersist(entityManager); // match
     Division division3 = aDivision().withName("division3").buildAndPersist(entityManager); // match
     Division division4 = aDivision().withName("division4").buildAndPersist(entityManager); // match
     Division division5 = aDivision().withName("test").buildAndPersist(entityManager);      // match
 
-    List<Division> divisions = divisionRepository.findDivisions(null, false, null);
+    List<Division> divisions = divisionRepository.findDivisions(null, false, null, null);
 
     // Verify all divisions are returned
     Assert.assertEquals("Verify all divisions returned", 5, divisions.size());
@@ -195,7 +258,7 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
     Division division4 = aDivision().withName("division4").withLevel(2).buildAndPersist(entityManager); // match  
     Division division5 = aDivision().withName("test").withLevel(2).buildAndPersist(entityManager);      // match  
 
-    List<Division> divisions = divisionRepository.findDivisions("", false, 2);
+    List<Division> divisions = divisionRepository.findDivisions("", false, 2, null);
 
     // Verify correct amount of divisions are returned
     Assert.assertEquals("Verify all divisions returned", 3, divisions.size());

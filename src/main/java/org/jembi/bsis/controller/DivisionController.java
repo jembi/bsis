@@ -51,9 +51,10 @@ public class DivisionController {
   public ResponseEntity<Map<String, Object>> findDivisions(
       @RequestParam(required = false) String name,
       @RequestParam(required = true, defaultValue = "false") boolean includeSimilarResults,
-      @RequestParam(required = false) Integer level) {  
+      @RequestParam(required = false) Integer level,
+      @RequestParam(required = false) Long parentId) {  
     Map<String, Object> map = new HashMap<>();
-    map.put("divisions", divisionControllerService.findDivisions(name, includeSimilarResults, level));
+    map.put("divisions", divisionControllerService.findDivisions(name, includeSimilarResults, level, parentId));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
