@@ -24,12 +24,6 @@ public class DivisionRepository extends AbstractRepository<Division> {
         .getSingleResult();
   }
 
-  public List<Division> findDivisionByParent(long parentId) {
-    return entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_PARENT, Division.class)
-        .setParameter("parentId", parentId)
-        .getResultList();
-  }
-
   public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level, Long parentId) {
     // build up Query string
     StringBuilder queryBuilder = new StringBuilder("SELECT div FROM Division div ");
