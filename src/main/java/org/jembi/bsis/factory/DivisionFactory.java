@@ -57,6 +57,14 @@ public class DivisionFactory {
     return viewModels;
   }
 
+  public List<DivisionViewModel> createDivisionViewModels(List<Division> divisions, boolean includeParent) {
+    List<DivisionViewModel> viewModels = new ArrayList<>();
+    for (Division division : divisions) {
+      viewModels.add(createDivisionViewModel(division, includeParent));
+    }
+    return viewModels;
+  }
+
   public Division createEntity(DivisionBackingForm form) {
     Division division = new Division();
     division.setId(form.getId());

@@ -49,6 +49,14 @@ public class LocationsController {
 
   }
 
+  @RequestMapping(method = RequestMethod.GET, value = "/form")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
+  public ResponseEntity<Map<String, Object>> getForm() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("level1Divisions", locationControllerService.getLevel1Divisions());
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_LOCATIONS + "')")
   public ResponseEntity<Map<String, Object>> updateLocation(@PathVariable long id,
