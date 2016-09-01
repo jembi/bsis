@@ -3,21 +3,21 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<changeSet id="20160901-1404" author="tumijacob">
+	<changeSet id="20160901-1506" author="tumijacob">
 		<addColumn tableName="Location">
-			<column name="divisionLevel1" type="BIGINT(20)">
+			<column name="divisionLevel1_id" type="BIGINT(20)">
 				<constraints nullable="true" foreignKeyName="fk_Location_divisionLevel1"
 					references="Division(id)" />
 			</column>
 		</addColumn>
 		<addColumn tableName="Location">
-			<column name="divisionLevel2" type="BIGINT(20)">
+			<column name="divisionLevel2_id" type="BIGINT(20)">
 				<constraints nullable="true" foreignKeyName="fk_Location_divisionLevel2"
 					references="Division(id)" />
 			</column>
 		</addColumn>
 		<addColumn tableName="Location">
-			<column name="divisionLevel3" type="BIGINT(20)">
+			<column name="divisionLevel3_id" type="BIGINT(20)">
 				<constraints nullable="true" foreignKeyName="fk_Location_divisionLevel3"
 					references="Division(id)" />
 			</column>
