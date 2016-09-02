@@ -5,7 +5,7 @@
     <name>BSIS</name>
     <description>Blood Safety Information System (BSIS)</description>
     <artifactId>bsis</artifactId>
-    <version>0.1</version>
+    <version>1.0.0</version>
     <packaging>war</packaging>
 
     <properties>
