@@ -5,6 +5,8 @@ branches:
   only:
     - master
     - develop
+    - /^release\//
+    - /^support\//
 
 before_install:
   - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
