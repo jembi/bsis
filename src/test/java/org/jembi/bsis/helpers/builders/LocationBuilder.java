@@ -1,5 +1,6 @@
 package org.jembi.bsis.helpers.builders;
 
+import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
 
 public class LocationBuilder extends AbstractEntityBuilder<Location> {
@@ -14,6 +15,9 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
   private boolean testingSite;
   private boolean deleted;
   private String notes;
+  private Division divisionLevel1;
+  private Division divisionLevel2;
+  private Division divisionLevel3;
 
   public LocationBuilder withId(long id) {
     this.id = id;
@@ -65,6 +69,21 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
     return this;
   }
 
+  public LocationBuilder withDivisionLevel1(Division divisionLevel1) {
+    this.divisionLevel1 = divisionLevel1;
+    return this;
+  }
+
+  public LocationBuilder withDivisionLevel2(Division divisionLevel2) {
+    this.divisionLevel2 = divisionLevel2;
+    return this;
+  }
+
+  public LocationBuilder withDivisionLevel3(Division divisionLevel3) {
+    this.divisionLevel3 = divisionLevel3;
+    return this;
+  }
+
   @Override
   public Location build() {
     Location location = new Location();
@@ -78,6 +97,9 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
     location.setIsDistributionSite(distributionSite);
     location.setIsDeleted(deleted);
     location.setIsTestingSite(testingSite);
+    location.setDivisionLevel1(divisionLevel1);
+    location.setDivisionLevel2(divisionLevel2);
+    location.setDivisionLevel3(divisionLevel3);
     return location;
   }
 

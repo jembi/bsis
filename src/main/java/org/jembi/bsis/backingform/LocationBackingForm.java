@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform;
 
 import javax.validation.Valid;
 
+import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -108,4 +109,29 @@ public class LocationBackingForm {
   public void setIsTestingSite(boolean isTestingSite) {
     location.setIsTestingSite(isTestingSite);
   }
+
+  public void setDivisionLevel3(DivisionBackingForm divisionLevel3) {
+    Division entity3 = new Division();
+    entity3.setId(divisionLevel3.getId());
+    location.setDivisionLevel3(entity3);
+
+    Division entity2 = new Division();
+    entity2.setId(divisionLevel3.getParent().getId());
+    location.setDivisionLevel2(entity2);
+
+    Division entity1 = new Division();
+    entity1.setId(divisionLevel3.getParent().getParent().getId());
+    location.setDivisionLevel1(entity1);
+  }
+
+  @JsonIgnore
+  public void setDivisionLevel1(DivisionBackingForm divisionLevel1) {
+    // ignore
+  }
+
+  @JsonIgnore
+  public void setDivisionLevel2(DivisionBackingForm divisionLevel2) {
+    // ignore
+  }
+
 }

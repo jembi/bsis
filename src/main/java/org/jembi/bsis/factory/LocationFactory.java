@@ -6,20 +6,34 @@ import java.util.List;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LocationFactory {
   
+  @Autowired
+  private DivisionFactory divisionFactory;
+
   public LocationFullViewModel createFullViewModel(Location location) {
-    return new LocationFullViewModel(location);
+    LocationFullViewModel viewModel = new LocationFullViewModel(location);
+    if (location.getDivisionLevel1() != null) {
+      viewModel.setDivisionLevel1(divisionFactory.createDivisionViewModel(location.getDivisionLevel1()));
+    }
+    if (location.getDivisionLevel2() != null) {
+      viewModel.setDivisionLevel2(divisionFactory.createDivisionViewModel(location.getDivisionLevel2()));
+    }
+    if (location.getDivisionLevel3() != null) {
+      viewModel.setDivisionLevel3(divisionFactory.createDivisionViewModel(location.getDivisionLevel3()));
+    }
+    return viewModel;
   }
 
   public List<LocationFullViewModel> createFullViewModels(List<Location> locations) {
     List<LocationFullViewModel> viewModels = new ArrayList<>();
     if (locations != null) {
       for (Location location : locations) {
-        viewModels.add(new LocationFullViewModel(location));
+        viewModels.add(createFullViewModel(location));
       }
     }
     return viewModels;
