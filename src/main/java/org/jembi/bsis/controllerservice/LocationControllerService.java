@@ -33,13 +33,13 @@ public class LocationControllerService {
   private DivisionFactory divisionFactory;
 
   public LocationFullViewModel addLocation(LocationBackingForm form) {
-    Location location = form.getLocation();
+    Location location = locationFactory.createEntity(form);
     locationRepository.saveLocation(location);
     return locationFactory.createFullViewModel(location);
   }
 
   public LocationFullViewModel updateLocation(LocationBackingForm form) {
-    Location location = form.getLocation();
+    Location location = locationFactory.createEntity(form);
     Location updatedLocation = locationRepository.updateLocation(location);
     return locationFactory.createFullViewModel(updatedLocation);
   }

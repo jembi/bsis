@@ -3,7 +3,10 @@ package org.jembi.bsis.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jembi.bsis.backingform.LocationBackingForm;
+import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.repository.DivisionRepository;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,8 @@ public class LocationFactory {
   
   @Autowired
   private DivisionFactory divisionFactory;
+  @Autowired
+  private DivisionRepository divisionRepository;
 
   public LocationFullViewModel createFullViewModel(Location location) {
     LocationFullViewModel viewModel = new LocationFullViewModel(location);
@@ -55,6 +60,19 @@ public class LocationFactory {
       }
     }
     return viewModels;
+  }
+  
+  public Location createEntity(LocationBackingForm backingForm) {
+    Location location = backingForm.getLocation();
+
+    // Populate division levels
+    Division divisionLevel3 = divisionRepository.findDivisionById(backingForm.getDivisionLevel3().getId());
+    location.setDivisionLevel3(divisionLevel3);
+    Division divisionLevel2 = divisionLevel3.getParent();
+    location.setDivisionLevel2(divisionLevel2);
+    location.setDivisionLevel1(divisionLevel2.getParent());
+
+    return location;
   }
 
 }

@@ -1,34 +1,41 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.jembi.bsis.helpers.builders.DivisionBackingFormBuilder.aDivisionBackingForm;
+import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aVenueBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.matchers.DivisionViewModelMatcher.hasSameStateAsDivisionViewModel;
+import static org.jembi.bsis.helpers.matchers.LocationMatcher.hasSameStateAsLocation;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.helpers.builders.DivisionBuilder;
 import org.jembi.bsis.helpers.builders.DivisionViewModelBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.repository.DivisionRepository;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DivisionViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class LocationFactoryTests {
+public class LocationFactoryTests extends UnitTestSuite {
 
   @InjectMocks
   private LocationFactory locationFactory;
   @Mock
   private DivisionFactory divisionFactory;
+  @Mock
+  private DivisionRepository divisionRepository;
 
   @Test
   public void testCreateLocationFullViewModel_shouldReturnViewModelWithTheCorrectState() {
@@ -108,5 +115,36 @@ public class LocationFactoryTests {
     List<LocationViewModel> locationViewModels = locationFactory.createViewModels(locations);
     Assert.assertNotNull("location view models were created", locationViewModels);
     Assert.assertEquals("there are 2 location view models", 2, locationViewModels.size());
+  }
+  
+  @Test
+  public void testCreateEntity_shouldReturnEntityWithTheCorrectState() {
+    // Set up fixture
+    LocationBackingForm backingForm = aVenueBackingForm()
+        .withId(1L)
+        .withName("Location")
+        .withDivisionLevel3(aDivisionBackingForm().withId(3L).build())
+        .build();
+    
+    Division divisionLevel1 = aDivision().withId(1L).withName("Level 1").build();
+    Division divisionLevel2 = aDivision().withId(2L).withName("Level 2").withParent(divisionLevel1).build();
+    Division divisionLevel3 = aDivision().withId(3L).withName("Level 3").withParent(divisionLevel2).build();
+    
+    // Set up expectations
+    Location expectedLocation = aVenue()
+        .withId(1L)
+        .withName("Location")
+        .withDivisionLevel1(divisionLevel1)
+        .withDivisionLevel2(divisionLevel2)
+        .withDivisionLevel3(divisionLevel3)
+        .build();
+    
+    when(divisionRepository.findDivisionById(3L)).thenReturn(divisionLevel3);
+    
+    // Exercise SUT
+    Location returnedLocation = locationFactory.createEntity(backingForm);
+    
+    // Verify
+    assertThat(returnedLocation, hasSameStateAsLocation(expectedLocation));
   }
 }
