@@ -8,7 +8,6 @@ import org.jembi.bsis.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class PasswordResetService {
   @Autowired
   private UserRepository userRepository;
   @Autowired
-  private JavaMailSender mailSender;
+  private BsisEmailSender bsisEmailSender;
   @Value("${password.reset.subject}")
   private String passwordResetSubject;
   @Value("${password.reset.message}")
@@ -30,10 +29,6 @@ public class PasswordResetService {
 
   public void setUserRepository(UserRepository userRepository) {
     this.userRepository = userRepository;
-  }
-
-  public void setMailSender(JavaMailSender mailSender) {
-    this.mailSender = mailSender;
   }
 
   public void setPasswordResetSubject(String passwordResetSubject) {
@@ -60,8 +55,7 @@ public class PasswordResetService {
     message.setTo(user.getEmailId());
     message.setSubject(passwordResetSubject);
     message.setText(String.format(passwordResetMessage, newPassword));
-    mailSender.send(message);
-
+    bsisEmailSender.sendEmail(message);
   }
 
 }
