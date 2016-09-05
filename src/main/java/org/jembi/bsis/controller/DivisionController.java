@@ -47,7 +47,7 @@ public class DivisionController {
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/search")
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DIVISIONS + "')")
+  @PreAuthorize("hasAnyRole('" + PermissionConstants.VIEW_DIVISIONS + "', '" + PermissionConstants.MANAGE_LOCATIONS + "')")
   public ResponseEntity<Map<String, Object>> findDivisions(
       @RequestParam(required = false) String name,
       @RequestParam(required = true, defaultValue = "false") boolean includeSimilarResults,
