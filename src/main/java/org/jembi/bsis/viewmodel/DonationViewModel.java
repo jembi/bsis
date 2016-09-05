@@ -48,7 +48,7 @@ public class DonationViewModel extends BaseViewModel {
   }
   
   public String getDonationDate() {
-    return CustomDateFormatter.getDateString(donationDate);
+    return CustomDateFormatter.getDateTimeString(donationDate);
   }
 
   public void setDonationIdentificationNumber(String donationIdentificationNumber) {
