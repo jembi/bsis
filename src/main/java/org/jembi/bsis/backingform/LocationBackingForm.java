@@ -111,17 +111,24 @@ public class LocationBackingForm {
   }
 
   public void setDivisionLevel3(DivisionBackingForm divisionLevel3) {
+    if (divisionLevel3 == null) {
+      return;
+    }
+
     Division entity3 = new Division();
     entity3.setId(divisionLevel3.getId());
     location.setDivisionLevel3(entity3);
+  }
+  
+  public DivisionBackingForm getDivisionLevel3() {
+    Division divisionLevel3 = location.getDivisionLevel3();
 
-    Division entity2 = new Division();
-    entity2.setId(divisionLevel3.getParent().getId());
-    location.setDivisionLevel2(entity2);
-
-    Division entity1 = new Division();
-    entity1.setId(divisionLevel3.getParent().getParent().getId());
-    location.setDivisionLevel1(entity1);
+    if (divisionLevel3 == null) {
+      return null;
+    }
+    DivisionBackingForm divisionForm = new DivisionBackingForm();
+    divisionForm.setId(divisionLevel3.getId());
+    return divisionForm;
   }
 
   @JsonIgnore
