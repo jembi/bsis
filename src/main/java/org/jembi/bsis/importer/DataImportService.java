@@ -2,9 +2,6 @@ package org.jembi.bsis.importer;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -140,15 +137,15 @@ public class DataImportService {
 
     System.out.println("Started import at " + new Date());
 
+    importDivisionsData(workbook.getSheet("Divisions"));
     importLocationData(workbook.getSheet("Locations"));
     importDonorData(workbook.getSheet("Donors"));
     importDonationsData(workbook.getSheet("Donations"));
     importDeferralData(workbook.getSheet("Deferrals"));
     importOutcomeData(workbook.getSheet("Outcomes"));
-    importDivisionsData(workbook.getSheet("Divisions"));
-    
+
     System.out.println("Finished import at " + new Date());
-    
+
     if (this.validationOnly) {
       throw new RollbackException();
     }
@@ -158,7 +155,106 @@ public class DataImportService {
    * Exception class to handle rollbacks for validation only executions
    */
   class RollbackException extends RuntimeException { private static final long serialVersionUID = 1L; }
-  
+
+  private void importDivisionsData(Sheet sheet) {
+    Map<String, Division> divisionCache = buildDivisionCache();
+
+    // Keep a reference to the row containing the headers
+    Row headers = null;
+
+    int divisionCount = 0;
+    
+    for (Row row : sheet) {
+
+      if (headers == null) {
+        headers = row;
+        continue;
+      }
+
+      divisionCount += 1;
+
+      DivisionBackingForm divisionBackingForm = new DivisionBackingForm();
+      BindException errors = new BindException(divisionBackingForm, "DivisionBackingForm");
+
+      for (Cell cell : row) {
+        Cell header = headers.getCell(cell.getColumnIndex());
+
+        switch (header.getStringCellValue()) {
+          case "name":
+            divisionBackingForm.setName(cell.getStringCellValue());
+            break;
+
+          case "level":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            if (!cell.getStringCellValue().isEmpty()) {
+              try {
+                divisionBackingForm.setLevel(Integer.valueOf(cell.getStringCellValue()));
+              } catch (Exception e) {
+                errors.rejectValue("level", "division.levelInvalid",
+                    "Invalid Division Level");
+              }
+            }
+            break;
+
+          case "parent":
+            if (!cell.getStringCellValue().isEmpty()) {
+              Division parent = divisionCache.get(cell.getStringCellValue());
+              if (parent != null) {
+                DivisionBackingForm parentBackingForm = new DivisionBackingForm();
+                parentBackingForm.setId(parent.getId());
+                parentBackingForm.setName(parent.getName());
+                parentBackingForm.setLevel(parent.getLevel());
+                divisionBackingForm.setParent(parentBackingForm);
+              } else {
+                errors.rejectValue("parent", "division.parentInvalid", "Invalid Division Parent");
+              }
+            }
+            break;
+
+          default:
+            System.out.println("Unknown division column: " + header.getStringCellValue());
+            break;
+        }
+      }
+
+      if (errors.hasErrors()) {
+        System.out.println("Invalid division on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid division");
+      }
+
+      displayProgressMessage(action + " " + divisionCount + " out of " + sheet.getLastRowNum() + " division(s)");
+
+      divisionBackingFormValidator.validateForm(divisionBackingForm, errors);
+
+      if (errors.hasErrors()) {
+        System.out.println("Invalid division on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid division");
+      }
+
+      // Save division
+      Division division = createDivisionEntity(divisionBackingForm, divisionCache);
+      divisionRepository.save(division);
+      divisionCache.put(division.getName(), division);
+    }
+
+    System.out.println(); // clear logging
+
+    // Flush remaining data
+    entityManager.flush();
+    entityManager.clear();
+  }
+
+  private Division createDivisionEntity(DivisionBackingForm divisionBackingForm, Map<String, Division> divisionCache) {
+    Division division = new Division();
+    division.setName(divisionBackingForm.getName());
+    division.setLevel(divisionBackingForm.getLevel());
+    DivisionBackingForm parent = divisionBackingForm.getParent();
+    if (parent != null) {
+      division.setParent(divisionCache.get(parent.getName()));
+    }
+    return division;
+  }
+
   private void importLocationData(Sheet sheet) {
     
     // Keep a reference to the row containing the headers
@@ -1046,117 +1142,6 @@ public class DataImportService {
     entityManager.flush();
     entityManager.clear();
   }
-  
-  private void importDivisionsData(Sheet sheet) {
-    Map<String, Division> divisionCache = buildDivisionCache();
-
-    // Keep a reference to the row containing the headers
-    Row headers = null;
-
-    List<DivisionBackingForm> tempDivisionList = new ArrayList<DivisionBackingForm>();
-    for (Row row : sheet) {
-
-      if (headers == null) {
-        headers = row;
-        continue;
-      }
-
-      DivisionBackingForm tempDivisionBackingForm = new DivisionBackingForm();
-      BindException errors = new BindException(tempDivisionBackingForm, "DivisionBackingForm");
-
-      for (Cell cell : row) {
-        Cell header = headers.getCell(cell.getColumnIndex());
-
-        switch (header.getStringCellValue()) {
-          case "name":
-            if (cell.getStringCellValue().isEmpty()) {
-              errors.rejectValue("name", "division.nameInvalid", "Division name is required");
-            }
-            else {
-              tempDivisionBackingForm.setName(cell.getStringCellValue());
-            }
-            break;
-
-          case "level":
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (!cell.getStringCellValue().isEmpty()) {
-              try {
-                tempDivisionBackingForm.setLevel(Integer.valueOf(cell.getStringCellValue()));
-              } catch (Exception e) {
-                errors.rejectValue("level", "division.levelInvalid", "Invalid Division Level");
-              }
-            }
-            break;
-
-          case "parent":
-            if (!cell.getStringCellValue().isEmpty()) {
-                DivisionBackingForm parentBackingForm = null;
-                parentBackingForm = new DivisionBackingForm();
-                parentBackingForm.setName(cell.getStringCellValue());
-                tempDivisionBackingForm.setParent(parentBackingForm);
-            }
-            break;
-
-          default:
-            System.out.println("Unknown division column: " + header.getStringCellValue());
-            break;
-        }
-      }
-
-      if (errors.hasErrors()) {
-        System.out.println("Invalid division on row " + (row.getRowNum() + 1) + " with name: " + tempDivisionBackingForm.getName() + "." + getErrorsString(errors));
-        throw new IllegalArgumentException("Invalid division");
-      }
-      tempDivisionList.add(tempDivisionBackingForm);
-    }
-
-    //sort list so that parents are before children. This Comparator orders based on level.
-    //This is important because the parent needs to be cached before children can reference them.
-    Collections.sort(tempDivisionList, new DivisionBackingFormComparator());
-
-    int divisionCount = 0;
-    for(DivisionBackingForm divisionBackingForm : tempDivisionList) {
-      BindException errors = new BindException(divisionBackingForm, "DivisionBackingForm");
-
-      //fill out parent backing form details from cached data (if needed)
-      DivisionBackingForm parentBackingForm = divisionBackingForm.getParent();
-      if(parentBackingForm != null) {
-        Division parent = divisionCache.get(parentBackingForm.getName());
-        if(parent == null) {
-          System.out.println("Invalid parent division with name: " + parentBackingForm.getName() +
-                               " configured on division row with name: " + divisionBackingForm.getName());
-          throw new IllegalArgumentException("Invalid division");
-        }
-        parentBackingForm.setId(parent.getId());
-        parentBackingForm.setName(parent.getName());
-        parentBackingForm.setLevel(parent.getLevel());
-      }
-
-      divisionBackingFormValidator.validateForm(divisionBackingForm, errors);
-
-      if (errors.hasErrors()) {
-        System.out.println("Invalid division with name: " + divisionBackingForm.getName() + ". " + getErrorsString(errors));
-        throw new IllegalArgumentException("Invalid division");
-      }
-
-      // Save division
-      Division division = new Division();
-      division.setName(divisionBackingForm.getName());
-      division.setLevel(divisionBackingForm.getLevel());
-      if(parentBackingForm != null) {
-        division.setParent(divisionCache.get(parentBackingForm.getName()));
-      }
-      divisionRepository.save(division);
-      divisionCache.put(division.getName(), division);
-      divisionCount += 1;
-      displayProgressMessage(action + " " + divisionCount + " out of " + sheet.getLastRowNum() + " division(s)");
-    }
-    System.out.println(); // clear logging
-
-    // Flush remaining data
-    entityManager.flush();
-    entityManager.clear();
-  }
 
   private boolean isValidBloodTyping(String value, DonationField donationField, List<BloodTestingRule> bloodTestingRules) {
     for (BloodTestingRule bloodTestingRule : bloodTestingRules) {
@@ -1337,51 +1322,5 @@ public class DataImportService {
     } catch (Exception e) {
       // just ignore
     }
-  }
-
-  /**
-   * Simple DivisionBackingForm Comparator that compares two Division Backing Forms. Divisions
-   * with lower levels receive priority in the ordering.
-   */
-  public static class DivisionBackingFormComparator implements Comparator<DivisionBackingForm>
-  {
-
-    @Override
-    public int compare(DivisionBackingForm div1, DivisionBackingForm div2) {
-      if(div1 == null && div2 == null) {
-        return 0;
-      }
-      else if(div2 == null) {
-        return 1;
-      }
-      else if (div1 == null) {
-        return -1;
-      }
-      else {
-        Integer level1 = div1.getLevel();
-        Integer level2 = div2.getLevel();
-        if(level1 == null && level2==null) {
-          return 0;
-        }
-        else if(level2 == null) {
-          return -1;
-        }
-        else if (level1 == null) {
-          return 1;
-        }
-        else {
-          if(level1 == level2) {
-            return 0;
-          }
-          else if(level1 > level2) {
-            return 1;
-          }
-          else {
-            return -1;
-          }
-        }
-      }
-    }
-
   }
 }
