@@ -249,11 +249,11 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
   
   @Test
   public void testGetAllDivisions_verifyAllDivisionsReturned() {
-    Division division1 = aDivision().withName("division1").buildAndPersist(entityManager);  
-    Division division2 = aDivision().withName("division2").buildAndPersist(entityManager);
+    Division division1 = aDivision().withName("division1").buildAndPersist(entityManager); // match
+    Division division2 = aDivision().withName("division2").buildAndPersist(entityManager); // match
     Division division3 = aDivision().withName("division3").withLevel(2).buildAndPersist(entityManager); // match  
     Division division4 = aDivision().withName("division4").withLevel(2).buildAndPersist(entityManager); // match  
-    Division division5 = aDivision().withName("test").withLevel(2).buildAndPersist(entityManager);      // match  
+    Division division5 = aDivision().withName("test").withLevel(2).buildAndPersist(entityManager); // match
 
     List<Division> divisions = divisionRepository.getAllDivisions();
 
