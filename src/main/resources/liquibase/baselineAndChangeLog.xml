@@ -48,4 +48,5 @@
   <include file="./src/main/resources/liquibase/updates/1448-view-search-location-divisions.xml" />
   <include file="./src/main/resources/liquibase/updates/1449-add-divisions.xml" />
   <include file="./src/main/resources/liquibase/updates/749-customise-header-logo.xml" />
+  <include file="./src/main/resources/liquibase/updates/1060-change-email-properties-at-runtime.xml" />
 </databaseChangeLog>
