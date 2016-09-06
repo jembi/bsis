@@ -18,10 +18,25 @@ public class DivisionRepository extends AbstractRepository<Division> {
         .getSingleResult();
   }
 
+  /**
+   * Finds Division by name, and returns null if there is no division with the given name.
+   *
+   * @param name
+   * @return The division
+   */
   public Division findDivisionByName(String name) {
-    return entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_NAME, Division.class)
-        .setParameter("name", name)
-        .getSingleResult();
+    TypedQuery<Division> query =
+        entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_NAME, Division.class);
+    query.setParameter("name", name);
+    List<Division> divisions = query.getResultList();
+    Division division = null;
+
+    if (divisions.size() > 0) {
+      // there should only ever be 0 or 1 division with a given name, so if there is > 0 we can
+      // safely take the first division
+      division = divisions.get(0);
+    }
+    return division;
   }
 
   public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level) {
