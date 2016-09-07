@@ -8,6 +8,7 @@ import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.DivisionRepository;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
+import org.jembi.bsis.viewmodel.LocationManagementViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,6 +74,26 @@ public class LocationFactory {
     location.setDivisionLevel1(divisionLevel2.getParent());
 
     return location;
+  }
+  
+  public LocationManagementViewModel createLocationViewModel(Location location) {
+    LocationManagementViewModel viewModel = new LocationManagementViewModel();
+    viewModel.setId(location.getId());
+    viewModel.setName(location.getName());
+    if (location.getDivisionLevel3() != null) {
+      viewModel.setDivisionLevel3(location.getDivisionLevel3().getName());
+    }
+    return viewModel;
+  }
+  
+  public List<LocationManagementViewModel> createLocationViewModels(List<Location> locations) {
+    List<LocationManagementViewModel> viewModels = new ArrayList<>();
+    if (locations != null) {
+      for (Location location : locations) {
+        viewModels.add(createLocationViewModel(location));
+      }
+    }
+    return viewModels;
   }
 
 }

@@ -11,6 +11,7 @@ import org.jembi.bsis.repository.DivisionRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.viewmodel.DivisionViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
+import org.jembi.bsis.viewmodel.LocationManagementViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,6 +61,11 @@ public class LocationControllerService {
 
   public List<DivisionViewModel> getLevel1Divisions() {
     return divisionFactory.createDivisionViewModels(divisionRepository.findDivisions("", false, 1, null), false);
+  }
+  
+  public List<LocationManagementViewModel> SearchLocations(String name, boolean includeSimilarResults, LocationType locationType) {
+    List<Location> locations = locationRepository.findLocations(name, includeSimilarResults, locationType, true);
+    return locationFactory.createLocationViewModels(locations);
   }
 
 }

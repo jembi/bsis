@@ -99,7 +99,7 @@ public class LocationsController {
       @RequestParam(value = "includeSimilarResults", required = false) boolean includeSimilarResults,
       @RequestParam(value = "locationType", required = false) LocationType locationType) {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("locations", locationControllerService.findLocations(name, includeSimilarResults, locationType));
+    map.put("locations", locationControllerService.SearchLocations(name, includeSimilarResults, locationType));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 }
