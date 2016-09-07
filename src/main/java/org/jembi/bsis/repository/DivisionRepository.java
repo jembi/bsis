@@ -29,14 +29,14 @@ public class DivisionRepository extends AbstractRepository<Division> {
         entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_NAME, Division.class);
     query.setParameter("name", name);
     List<Division> divisions = query.getResultList();
-    Division division = null;
 
-    if (divisions.size() > 0) {
-      // there should only ever be 0 or 1 division with a given name, so if there is > 0 we can
-      // safely take the first division
-      division = divisions.get(0);
+    if (divisions.isEmpty()) {
+      return null;
     }
-    return division;
+
+    // there should only ever be 0 or 1 division with a given name, so if there is > 0 we can
+    // safely take the first division
+    return divisions.get(0);
   }
 
   public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level) {
