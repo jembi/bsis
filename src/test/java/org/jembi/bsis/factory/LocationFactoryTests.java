@@ -175,7 +175,7 @@ public class LocationFactoryTests extends UnitTestSuite {
         .build();
     
     //Test
-    LocationManagementViewModel viewModel = locationFactory.createLocationViewModel(location);
+    LocationManagementViewModel viewModel = locationFactory.createManagementViewModel(location);
     
     assertThat(viewModel, hasSameStateAsLocationManagementViewModel(expectedViewModel));
   }
@@ -197,7 +197,7 @@ public class LocationFactoryTests extends UnitTestSuite {
         aLocationManagementViewModelBuilder().withId(3l).withName("Level 3").withDivisionLevel3Name(divisionLevel3.getName()).build());
     
     //Test
-    List<LocationManagementViewModel> viewModels = locationFactory.createLocationViewModels(locations);
+    List<LocationManagementViewModel> viewModels = locationFactory.createManagementViewModels(locations);
   
     //Assertions
     assertThat("View models are created", viewModels.size() == 3);

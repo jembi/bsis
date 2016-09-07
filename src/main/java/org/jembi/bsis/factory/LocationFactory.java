@@ -76,7 +76,7 @@ public class LocationFactory {
     return location;
   }
   
-  public LocationManagementViewModel createLocationViewModel(Location location) {
+  public LocationManagementViewModel createManagementViewModel(Location location) {
     LocationManagementViewModel viewModel = new LocationManagementViewModel();
     viewModel.setId(location.getId());
     viewModel.setName(location.getName());
@@ -86,11 +86,11 @@ public class LocationFactory {
     return viewModel;
   }
   
-  public List<LocationManagementViewModel> createLocationViewModels(List<Location> locations) {
+  public List<LocationManagementViewModel> createManagementViewModels(List<Location> locations) {
     List<LocationManagementViewModel> viewModels = new ArrayList<>();
     if (locations != null) {
       for (Location location : locations) {
-        viewModels.add(createLocationViewModel(location));
+        viewModels.add(createManagementViewModel(location));
       }
     }
     return viewModels;
