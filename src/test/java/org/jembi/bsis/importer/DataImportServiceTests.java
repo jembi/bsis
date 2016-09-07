@@ -532,7 +532,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     String pretoria = "Pretoria";
     Division pretoriaDivision = findDivisionByName(pretoria);
 
-    Division expectedProv1Division = aDivision()
+    Division expectedWesternCapeDivision = aDivision()
         .withId(westernCapeDivision.getId())
         .withName(westernCape)
         .withLevel(1)
@@ -594,7 +594,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .withParent(tshwaneDivision)
         .build();
 
-    assertThat(westernCapeDivision, hasSameStateAsDivision(expectedProv1Division));
+    assertThat(westernCapeDivision, hasSameStateAsDivision(expectedWesternCapeDivision));
     assertThat(cityOfCapeTownDivision, hasSameStateAsDivision(expectedCityOfCapeTownDivision));
     assertThat(khayelitshaDivision, hasSameStateAsDivision(expectedKhayelitshaDivision));
     assertThat(mitchellsPlainDivision, hasSameStateAsDivision(expectedMitchellsPlainDivision));
