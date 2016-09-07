@@ -14,6 +14,7 @@ import org.jembi.bsis.helpers.builders.DonorBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.OrderFormBuilder;
 import org.jembi.bsis.helpers.builders.PackTypeBuilder;
+import org.jembi.bsis.helpers.builders.UserBuilder;
 import org.jembi.bsis.model.admin.DataType;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.adverseevent.AdverseEventType;
@@ -28,6 +29,7 @@ import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.model.user.User;
 
 public class EntityPersisterFactory {
 
@@ -85,6 +87,10 @@ public class EntityPersisterFactory {
 
   public static AbstractEntityPersister<Component> aComponentPersister() {
     return new ComponentBuilder().getPersister();
+  }
+  
+  public static AbstractEntityPersister<User> aUserPersister() {
+    return new UserBuilder().getPersister();
   }
 
 }
