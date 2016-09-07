@@ -199,14 +199,14 @@ public class DataImportService {
           case "parent":
             if (!cell.getStringCellValue().isEmpty()) {
               Division parent = divisionCache.get(cell.getStringCellValue());
-              if (parent != null) {
+              if (parent == null) {
+                errors.rejectValue("parent", "division.parentInvalid", "Invalid Division Parent");
+              } else {
                 DivisionBackingForm parentBackingForm = new DivisionBackingForm();
                 parentBackingForm.setId(parent.getId());
                 parentBackingForm.setName(parent.getName());
                 parentBackingForm.setLevel(parent.getLevel());
                 divisionBackingForm.setParent(parentBackingForm);
-              } else {
-                errors.rejectValue("parent", "division.parentInvalid", "Invalid Division Parent");
               }
             }
             break;
