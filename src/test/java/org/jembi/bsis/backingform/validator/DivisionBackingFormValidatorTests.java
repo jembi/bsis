@@ -49,7 +49,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
     // Set up mocks
     when(divisionRepository.findDivisionById(1L)).thenReturn(parent);
     when(formFieldRepository.getRequiredFormFields("division")).thenReturn(Arrays.asList(new String[] {"name", "level"}));
-    when(divisionRepository.findDivisionByName("Level2Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionByName("Level2Division")).thenReturn(null);
     
     // Run test
     validator.validateForm(divisionForm, errors);
@@ -87,7 +87,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Set up mocks
     when(formFieldRepository.getRequiredFormFields("division")).thenReturn(Arrays.asList(new String[] {"name", "level"}));
-    when(divisionRepository.findDivisionByName("")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionByName("")).thenReturn(null);
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -152,7 +152,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Set up mocks
     when(formFieldRepository.getRequiredFormFields("division")).thenReturn(Arrays.asList(new String[] {"name", "level"}));
-    when(divisionRepository.findDivisionByName("Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionByName("Division")).thenReturn(null);
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -172,7 +172,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Set up mocks
     when(formFieldRepository.getRequiredFormFields("division")).thenReturn(Arrays.asList(new String[] {"name", "level"}));
-    when(divisionRepository.findDivisionByName("Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionByName("Division")).thenReturn(null);
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -192,7 +192,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
 
     // Set up mocks
     when(formFieldRepository.getRequiredFormFields("division")).thenReturn(Arrays.asList(new String[] {"name", "level"}));
-    when(divisionRepository.findDivisionByName("Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionByName("Division")).thenReturn(null);
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -214,7 +214,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
-    when(divisionRepository.findDivisionByName("Level2Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionByName("Level2Division")).thenReturn(null);
     when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
 
     // Run test
@@ -237,7 +237,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
-    when(divisionRepository.findDivisionByName("Level2Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionByName("Level2Division")).thenReturn(null);
     when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
 
     // Run test
@@ -260,7 +260,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
-    when(divisionRepository.findDivisionByName("Level2Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionByName("Level2Division")).thenReturn(null);
     when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
 
     // Run test
@@ -283,7 +283,7 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
-    when(divisionRepository.findDivisionByName("Level3Division")).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionByName("Level3Division")).thenReturn(null);
     when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
 
     // Run test

@@ -19,16 +19,18 @@ import org.jembi.bsis.backingform.AdverseEventBackingForm;
 import org.jembi.bsis.backingform.AdverseEventTypeBackingForm;
 import org.jembi.bsis.backingform.DeferralBackingForm;
 import org.jembi.bsis.backingform.DeferralReasonBackingForm;
+import org.jembi.bsis.backingform.DivisionBackingForm;
 import org.jembi.bsis.backingform.DonationBackingForm;
 import org.jembi.bsis.backingform.DonationTypeBackingForm;
 import org.jembi.bsis.backingform.DonorBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.TestResultsBackingForm;
 import org.jembi.bsis.backingform.validator.DeferralBackingFormValidator;
+import org.jembi.bsis.backingform.validator.DivisionBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DonationBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DonorBackingFormValidator;
 import org.jembi.bsis.backingform.validator.LocationBackingFormValidator;
-import org.jembi.bsis.factory.DonationFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.address.AddressType;
 import org.jembi.bsis.model.address.ContactMethodType;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
@@ -44,6 +46,7 @@ import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.model.idtype.IdType;
+import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
@@ -53,6 +56,7 @@ import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
 import org.jembi.bsis.repository.ContactMethodTypeRepository;
 import org.jembi.bsis.repository.DeferralReasonRepository;
+import org.jembi.bsis.repository.DivisionRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonationTypeRepository;
@@ -109,13 +113,17 @@ public class DataImportService {
   @Autowired
   private DonationCRUDService donationCRUDService;
   @Autowired
-  private DonationFactory donationFactory;
+  private LocationFactory locationFactory;
   @Autowired
   private TestBatchRepository testBatchRepository;
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
   @Autowired
   private DonorDeferralRepository donorDeferralRepository;
+  @Autowired
+  private DivisionRepository divisionRepository;
+  @Autowired
+  private DivisionBackingFormValidator divisionBackingFormValidator;
   @PersistenceContext
   private EntityManager entityManager;
 
@@ -133,14 +141,15 @@ public class DataImportService {
 
     System.out.println("Started import at " + new Date());
 
+    importDivisionsData(workbook.getSheet("Divisions"));
     importLocationData(workbook.getSheet("Locations"));
     importDonorData(workbook.getSheet("Donors"));
     importDonationsData(workbook.getSheet("Donations"));
     importDeferralData(workbook.getSheet("Deferrals"));
     importOutcomeData(workbook.getSheet("Outcomes"));
-    
+
     System.out.println("Finished import at " + new Date());
-    
+
     if (this.validationOnly) {
       throw new RollbackException();
     }
@@ -150,8 +159,108 @@ public class DataImportService {
    * Exception class to handle rollbacks for validation only executions
    */
   class RollbackException extends RuntimeException { private static final long serialVersionUID = 1L; }
-  
+
+  private void importDivisionsData(Sheet sheet) {
+    Map<String, Division> divisionCache = buildDivisionCache();
+
+    // Keep a reference to the row containing the headers
+    Row headers = null;
+
+    int divisionCount = 0;
+    
+    for (Row row : sheet) {
+
+      if (headers == null) {
+        headers = row;
+        continue;
+      }
+
+      divisionCount += 1;
+
+      DivisionBackingForm divisionBackingForm = new DivisionBackingForm();
+      BindException errors = new BindException(divisionBackingForm, "DivisionBackingForm");
+
+      for (Cell cell : row) {
+        Cell header = headers.getCell(cell.getColumnIndex());
+
+        switch (header.getStringCellValue()) {
+          case "name":
+            divisionBackingForm.setName(cell.getStringCellValue());
+            break;
+
+          case "level":
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            if (!cell.getStringCellValue().isEmpty()) {
+              try {
+                divisionBackingForm.setLevel(Integer.valueOf(cell.getStringCellValue()));
+              } catch (Exception e) {
+                errors.rejectValue("level", "division.levelInvalid",
+                    "Invalid Division Level");
+              }
+            }
+            break;
+
+          case "parent":
+            if (!cell.getStringCellValue().isEmpty()) {
+              Division parent = divisionCache.get(cell.getStringCellValue());
+              if (parent == null) {
+                errors.rejectValue("parent", "division.parentInvalid", "Invalid Division Parent");
+              } else {
+                DivisionBackingForm parentBackingForm = new DivisionBackingForm();
+                parentBackingForm.setId(parent.getId());
+                parentBackingForm.setName(parent.getName());
+                parentBackingForm.setLevel(parent.getLevel());
+                divisionBackingForm.setParent(parentBackingForm);
+              }
+            }
+            break;
+
+          default:
+            System.out.println("Unknown division column: " + header.getStringCellValue());
+            break;
+        }
+      }
+
+      if (errors.hasErrors()) {
+        System.out.println("Invalid division on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid division");
+      }
+
+      displayProgressMessage(action + " " + divisionCount + " out of " + sheet.getLastRowNum() + " division(s)");
+
+      divisionBackingFormValidator.validateForm(divisionBackingForm, errors);
+
+      if (errors.hasErrors()) {
+        System.out.println("Invalid division on row " + (row.getRowNum() + 1) + ". " + getErrorsString(errors));
+        throw new IllegalArgumentException("Invalid division");
+      }
+
+      // Save division
+      Division division = createDivisionEntity(divisionBackingForm, divisionCache);
+      divisionRepository.save(division);
+      divisionCache.put(division.getName(), division);
+    }
+
+    System.out.println(); // clear logging
+
+    // Flush remaining data
+    entityManager.flush();
+    entityManager.clear();
+  }
+
+  private Division createDivisionEntity(DivisionBackingForm divisionBackingForm, Map<String, Division> divisionCache) {
+    Division division = new Division();
+    division.setName(divisionBackingForm.getName());
+    division.setLevel(divisionBackingForm.getLevel());
+    DivisionBackingForm parent = divisionBackingForm.getParent();
+    if (parent != null) {
+      division.setParent(divisionCache.get(parent.getName()));
+    }
+    return division;
+  }
+
   private void importLocationData(Sheet sheet) {
+    Map<String, Division> divisionCache = buildDivisionCache();
     
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -168,6 +277,7 @@ public class DataImportService {
       locationCount += 1;
         
       LocationBackingForm locationBackingForm = new LocationBackingForm();
+      BindException errors = new BindException(locationBackingForm, "LocationBackingForm");
       
       for (Cell cell : row) {
         
@@ -210,6 +320,17 @@ public class DataImportService {
           case "notes":
             locationBackingForm.setNotes(cell.getStringCellValue());
             break;
+            
+          case "divisionLevel3":
+            Division division = divisionCache.get(cell.getStringCellValue());
+            if (division == null) {
+              errors.rejectValue("divisionLevel3", "required", "Division level 3 is required.");
+            } else {
+              DivisionBackingForm divisionLevel3 = new DivisionBackingForm();
+              divisionLevel3.setId(division.getId());
+              locationBackingForm.setDivisionLevel3(divisionLevel3);
+            }
+            break;
           
           default:
             System.out.println("Unknown location column: " + header.getStringCellValue());
@@ -218,8 +339,7 @@ public class DataImportService {
       }
       
       displayProgressMessage(action + " " + locationCount + " out of " + sheet.getLastRowNum() + " locations(s)");
-      
-      BindException errors = new BindException(locationBackingForm, "LocationBackingForm");
+
       locationBackingFormValidator.validate(locationBackingForm, errors);
       
       if (errors.hasErrors()) {
@@ -227,7 +347,9 @@ public class DataImportService {
         throw new IllegalArgumentException("Invalid location");
       }
 
-      locationRepository.saveLocation(locationBackingForm.getLocation());
+      // Use factory to populate divisions
+      Location location = locationFactory.createEntity(locationBackingForm);
+      locationRepository.saveLocation(location);
     }
     System.out.println(); // clear logging
 
@@ -1047,7 +1169,7 @@ public class DataImportService {
     entityManager.flush();
     entityManager.clear();
   }
-  
+
   private boolean isValidBloodTyping(String value, DonationField donationField, List<BloodTestingRule> bloodTestingRules) {
     for (BloodTestingRule bloodTestingRule : bloodTestingRules) {
       if (bloodTestingRule.getDonationFieldChanged().equals(donationField)) {
@@ -1198,6 +1320,15 @@ public class DataImportService {
       deferralReasonMap.put(deferralReason.getReason(), deferralReason);
     }
     return deferralReasonMap;
+  }
+
+  private Map<String, Division> buildDivisionCache () {
+    Map<String, Division>  divisionCache = new HashMap<>();
+    List<Division> divisions = divisionRepository.getAllDivisions();
+    for (Division division : divisions) {
+      divisionCache.put(division.getName(), division);
+    }
+    return divisionCache;
   }
 
   private String getErrorsString(BindException errors) {
