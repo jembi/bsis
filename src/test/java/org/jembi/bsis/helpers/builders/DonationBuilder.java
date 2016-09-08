@@ -2,6 +2,7 @@ package org.jembi.bsis.helpers.builders;
 
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 
@@ -40,7 +42,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private Integer bloodPressureDiastolic;
   private BigDecimal donorWeight;
   private String notes;
-  private PackType packType;
+  private PackType packType = aPackType().build();
   private Date bleedStartTime;
   private Date bleedEndTime;
   private AdverseEvent adverseEvent;
@@ -56,6 +58,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private boolean released;
   private boolean ineligibleDonor;
   private List<Component> components = new ArrayList<>();
+  private User createdBy;
 
   public DonationBuilder withId(Long id) {
     this.id = id;
@@ -219,6 +222,16 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     components.add(component);
     return this;
   }
+  
+  public DonationBuilder withCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+    return this;
+  }
+  
+  public DonationBuilder withCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+    return this;
+  }
 
   @Override
   public Donation build() {
@@ -249,6 +262,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     donation.setBloodTypingStatus(bloodTypingStatus);
     donation.setDonationBatch(donationBatch);
     donation.setExtraBloodTypeInformation(extraBloodTypeInformation);
+    donation.setCreatedBy(createdBy);
     donation.setCreatedDate(createdDate);
     donation.setReleased(released);
     donation.setIneligibleDonor(ineligibleDonor);

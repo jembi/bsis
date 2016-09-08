@@ -1,7 +1,9 @@
 package org.jembi.bsis.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
+import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
@@ -18,14 +20,13 @@ public class DonationExportDTO extends ModificationTrackerExportDTO {
   private TTIStatus ttiStatus;
   private Date bleedStartTime;
   private Date bleedEndTime;
-  private int donorWeight;
-  private int bloodPressureSystolic;
-  private int bloodPressureDiastolic;
-  private int donorPulse;
-  private int haemoglobinCount;
+  private BigDecimal donorWeight;
+  private Integer bloodPressureSystolic;
+  private Integer bloodPressureDiastolic;
+  private Integer donorPulse;
+  private BigDecimal haemoglobinCount;
   private HaemoglobinLevel haemoglobinLevel;
-  private String adverseEventType;
-  private String adverseEventComment;
+  private AdverseEvent adverseEvent;
   private String bloodAbo;
   private String bloodRh;
   private boolean released;
@@ -35,8 +36,8 @@ public class DonationExportDTO extends ModificationTrackerExportDTO {
   public DonationExportDTO(String donorNumber, String donationIdentificationNumber, Date createdDate, String createdBy,
       Date lastUpdated, String lastUpdatedBy, String packType, Date donationDate, BloodTypingStatus bloodTypingStatus,
       BloodTypingMatchStatus bloodTypingMatchStatus, TTIStatus ttiStatus, Date bleedStartTime, Date bleedEndTime,
-      int donorWeight, int bloodPressureSystolic, int bloodPressureDiastolic, int donorPulse, int haemoglobinCount,
-      HaemoglobinLevel haemoglobinLevel, String adverseEventType, String adverseEventComment, String bloodAbo,
+      BigDecimal donorWeight, Integer bloodPressureSystolic, Integer bloodPressureDiastolic, Integer donorPulse,
+      BigDecimal haemoglobinCount, HaemoglobinLevel haemoglobinLevel, AdverseEvent adverseEvent, String bloodAbo,
       String bloodRh, boolean released, boolean ineligbleDonor, String notes) {
     this.donorNumber = donorNumber;
     this.donationIdentificationNumber = donationIdentificationNumber;
@@ -57,8 +58,7 @@ public class DonationExportDTO extends ModificationTrackerExportDTO {
     this.donorPulse = donorPulse;
     this.haemoglobinCount = haemoglobinCount;
     this.haemoglobinLevel = haemoglobinLevel;
-    this.adverseEventType = adverseEventType;
-    this.adverseEventComment = adverseEventComment;
+    this.adverseEvent = adverseEvent;
     this.bloodAbo = bloodAbo;
     this.bloodRh = bloodRh;
     this.released = released;
@@ -138,43 +138,43 @@ public class DonationExportDTO extends ModificationTrackerExportDTO {
     this.bleedEndTime = bleedEndTime;
   }
 
-  public int getDonorWeight() {
+  public BigDecimal getDonorWeight() {
     return donorWeight;
   }
 
-  public void setDonorWeight(int donorWeight) {
+  public void setDonorWeight(BigDecimal donorWeight) {
     this.donorWeight = donorWeight;
   }
 
-  public int getBloodPressureSystolic() {
+  public Integer getBloodPressureSystolic() {
     return bloodPressureSystolic;
   }
 
-  public void setBloodPressureSystolic(int bloodPressureSystolic) {
+  public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
     this.bloodPressureSystolic = bloodPressureSystolic;
   }
 
-  public int getBloodPressureDiastolic() {
+  public Integer getBloodPressureDiastolic() {
     return bloodPressureDiastolic;
   }
 
-  public void setBloodPressureDiastolic(int bloodPressureDiastolic) {
+  public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
     this.bloodPressureDiastolic = bloodPressureDiastolic;
   }
 
-  public int getDonorPulse() {
+  public Integer getDonorPulse() {
     return donorPulse;
   }
 
-  public void setDonorPulse(int donorPulse) {
+  public void setDonorPulse(Integer donorPulse) {
     this.donorPulse = donorPulse;
   }
 
-  public int getHaemoglobinCount() {
+  public BigDecimal getHaemoglobinCount() {
     return haemoglobinCount;
   }
 
-  public void setHaemoglobinCount(int haemoglobinCount) {
+  public void setHaemoglobinCount(BigDecimal haemoglobinCount) {
     this.haemoglobinCount = haemoglobinCount;
   }
 
@@ -186,20 +186,12 @@ public class DonationExportDTO extends ModificationTrackerExportDTO {
     this.haemoglobinLevel = haemoglobinLevel;
   }
 
-  public String getAdverseEventType() {
-    return adverseEventType;
+  public AdverseEvent getAdverseEvent() {
+    return adverseEvent;
   }
 
-  public void setAdverseEventType(String adverseEventType) {
-    this.adverseEventType = adverseEventType;
-  }
-
-  public String getAdverseEventComment() {
-    return adverseEventComment;
-  }
-
-  public void setAdverseEventComment(String adverseEventComment) {
-    this.adverseEventComment = adverseEventComment;
+  public void setAdverseEvent(AdverseEvent adverseEvent) {
+    this.adverseEvent = adverseEvent;
   }
 
   public String getBloodAbo() {
