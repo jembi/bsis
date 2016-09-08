@@ -80,8 +80,9 @@ public class LocationFactory {
     LocationManagementViewModel viewModel = new LocationManagementViewModel();
     viewModel.setId(location.getId());
     viewModel.setName(location.getName());
+    viewModel.setIsDeleted(location.getIsDeleted());
     if (location.getDivisionLevel3() != null) {
-      viewModel.setDivisionLevel3(location.getDivisionLevel3().getName());
+      viewModel.setDivisionLevel3(divisionFactory.createDivisionViewModel(location.getDivisionLevel3(), false));
     }
     return viewModel;
   }
