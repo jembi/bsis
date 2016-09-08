@@ -30,7 +30,7 @@ import org.jembi.bsis.backingform.validator.DivisionBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DonationBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DonorBackingFormValidator;
 import org.jembi.bsis.backingform.validator.LocationBackingFormValidator;
-import org.jembi.bsis.factory.DonationFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.address.AddressType;
 import org.jembi.bsis.model.address.ContactMethodType;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
@@ -113,7 +113,7 @@ public class DataImportService {
   @Autowired
   private DonationCRUDService donationCRUDService;
   @Autowired
-  private DonationFactory donationFactory;
+  private LocationFactory locationFactory;
   @Autowired
   private TestBatchRepository testBatchRepository;
   @Autowired
@@ -260,6 +260,7 @@ public class DataImportService {
   }
 
   private void importLocationData(Sheet sheet) {
+    Map<String, Division> divisionCache = buildDivisionCache();
     
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -276,6 +277,7 @@ public class DataImportService {
       locationCount += 1;
         
       LocationBackingForm locationBackingForm = new LocationBackingForm();
+      BindException errors = new BindException(locationBackingForm, "LocationBackingForm");
       
       for (Cell cell : row) {
         
@@ -318,6 +320,17 @@ public class DataImportService {
           case "notes":
             locationBackingForm.setNotes(cell.getStringCellValue());
             break;
+            
+          case "divisionLevel3":
+            Division division = divisionCache.get(cell.getStringCellValue());
+            if (division == null) {
+              errors.rejectValue("divisionLevel3", "required", "Division level 3 is required.");
+            } else {
+              DivisionBackingForm divisionLevel3 = new DivisionBackingForm();
+              divisionLevel3.setId(division.getId());
+              locationBackingForm.setDivisionLevel3(divisionLevel3);
+            }
+            break;
           
           default:
             System.out.println("Unknown location column: " + header.getStringCellValue());
@@ -326,8 +339,7 @@ public class DataImportService {
       }
       
       displayProgressMessage(action + " " + locationCount + " out of " + sheet.getLastRowNum() + " locations(s)");
-      
-      BindException errors = new BindException(locationBackingForm, "LocationBackingForm");
+
       locationBackingFormValidator.validate(locationBackingForm, errors);
       
       if (errors.hasErrors()) {
@@ -335,7 +347,9 @@ public class DataImportService {
         throw new IllegalArgumentException("Invalid location");
       }
 
-      locationRepository.saveLocation(locationBackingForm.getLocation());
+      // Use factory to populate divisions
+      Location location = locationFactory.createEntity(locationBackingForm);
+      locationRepository.saveLocation(location);
     }
     System.out.println(); // clear logging
 
