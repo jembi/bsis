@@ -23,4 +23,8 @@ public class DivisionNamedQueryConstants {
       + "FROM Division d "
       + "WHERE d.parent = :parent ";
 
+  public static final String NAME_GET_ALL_DIVISIONS = 
+      "Division.getAllDivisions";
+  public static final String QUERY_GET_ALL_DIVISIONS = 
+      "SELECT d FROM Division d ORDER BY name ASC";
 }

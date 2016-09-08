@@ -58,7 +58,7 @@ public class BloodTestResultViewModel {
   public String getTestedOn() {
     Date testedOn = testResult.getTestedOn();
     if (testedOn != null) {
-      return CustomDateFormatter.getDateString(testedOn);
+      return CustomDateFormatter.getDateTimeString(testedOn);
     } else {
       return "";
     }

@@ -20,7 +20,7 @@ public class DivisionBackingFormValidator extends BaseValidator<DivisionBackingF
     commonFieldChecks(form, errors);
 
     // Validate name
-    if (form.getName() != null && isDuplicateDivisionName(form)) {
+    if (form.getName() != null && isDuplicateDivision(form)) {
       errors.rejectValue("name", "duplicate", "Division name already exists");
     }
 
@@ -78,14 +78,12 @@ public class DivisionBackingFormValidator extends BaseValidator<DivisionBackingF
     return parent;
   }
 
-  private boolean isDuplicateDivisionName(DivisionBackingForm form) {
-    try {
-      Division existingDivision = divisionRepository.findDivisionByName(form.getName());
-      if (!existingDivision.getId().equals(form.getId())) {
-        return true;
-      }
-    } catch (NoResultException e) {
-      // ignore
+  private boolean isDuplicateDivision(DivisionBackingForm form) {
+    Division existingDivision = divisionRepository.findDivisionByName(form.getName());
+    // If there is an existing division and the division IDs are different then this is an invalid
+    // duplicate.
+    if (existingDivision != null && !existingDivision.getId().equals(form.getId())) {
+      return true;
     }
     return false;
   }

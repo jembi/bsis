@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
+import static org.jembi.bsis.helpers.matchers.DivisionMatcher.hasSameStateAsDivision;
 
 import java.util.List;
 
@@ -307,6 +308,47 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
     long returnedCount = divisionRepository.countDivisionsWithParent(parent);
     
     assertThat(returnedCount, is(2L));
+  }
+  
+  @Test
+  public void testGetAllDivisions_verifyAllDivisionsReturned() {
+    Division division1 = aDivision().withName("division1").buildAndPersist(entityManager); // match
+    Division division2 = aDivision().withName("division2").buildAndPersist(entityManager); // match
+    Division division3 = aDivision().withName("division3").withLevel(2).buildAndPersist(entityManager); // match  
+    Division division4 = aDivision().withName("division4").withLevel(2).buildAndPersist(entityManager); // match  
+    Division division5 = aDivision().withName("test").withLevel(2).buildAndPersist(entityManager); // match
+
+    List<Division> divisions = divisionRepository.getAllDivisions();
+
+    // Verify correct amount of divisions are returned
+    Assert.assertEquals("Verify all divisions returned", 5, divisions.size());
+
+    // Verify all divisions were returned
+    Assert.assertTrue("Verify division 1 present", divisions.contains(division1));
+    Assert.assertTrue("Verify division 2 present", divisions.contains(division2));
+    Assert.assertTrue("Verify division 3 present", divisions.contains(division3));
+    Assert.assertTrue("Verify division 4 present", divisions.contains(division4));
+    Assert.assertTrue("Verify division 5 present", divisions.contains(division5));
+  }
+
+  @Test
+  public void testFindDivisionByName_verifyCorrectDivisionReturned() {
+    Division division1 = aDivision().withName("division1").buildAndPersist(entityManager); // match
+    aDivision().withName("division2").buildAndPersist(entityManager);
+
+    Division divisionFound = divisionRepository.findDivisionByName("division1");
+
+    assertThat(divisionFound, hasSameStateAsDivision(division1));
+  }
+
+  @Test
+  public void testFindDivisionByName_verifyNullReturned() {
+    aDivision().withName("division1").buildAndPersist(entityManager);
+    aDivision().withName("division2").buildAndPersist(entityManager);
+
+    Division divisionFound = divisionRepository.findDivisionByName("division3");
+
+    Assert.assertNull(divisionFound);
   }
 
 }
