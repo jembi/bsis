@@ -17,10 +17,11 @@ public class LocationManagementViewModelMatcher extends TypeSafeMatcher<Location
 
   @Override
   public void describeTo(Description description) {
-    description.appendText("A LocationManagementViewModel with the following state:").appendText("\nId: ")
-        .appendValue(expected.getId()).appendText("\nName: ").appendValue(expected.getName())
-        .appendText("\nIsDeleted: ").appendValue(expected.getIsDeleted()).appendText("\nDivisionLevel3: ")
-        .appendValue(expected.getDivisionLevel3());
+    description.appendText("A LocationManagementViewModel with the following state:")
+         .appendText("\nId: ").appendValue(expected.getId())
+         .appendText("\nName: ").appendValue(expected.getName())
+         .appendText("\nIsDeleted: ").appendValue(expected.getIsDeleted())
+         .appendText("\nDivisionLevel3: ").appendValue(expected.getDivisionLevel3());
   }
 
   @Override

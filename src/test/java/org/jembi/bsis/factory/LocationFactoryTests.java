@@ -181,7 +181,7 @@ public class LocationFactoryTests extends UnitTestSuite {
   }
   
   @Test
-  public void testCreateManagementViewModels_shouldReturnViewModelWithTheCorrectState() {
+  public void testCreateManagementViewModels_shouldReturnViewModelsWithTheCorrectStates() {
     Division divisionLevel1 = aDivision().withId(1L).withName("Level 1").build();
     Division divisionLevel2 = aDivision().withId(2L).withName("Level 2").withParent(divisionLevel1).build();
     Division divisionLevel3 = aDivision().withId(3L).withName("Level 3").withParent(divisionLevel2).build();
