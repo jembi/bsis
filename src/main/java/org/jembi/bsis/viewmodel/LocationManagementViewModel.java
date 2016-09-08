@@ -2,14 +2,14 @@ package org.jembi.bsis.viewmodel;
 
 public class LocationManagementViewModel extends LocationViewModel {
 
-  private String divisionLevel3Name;
+  private DivisionViewModel divisionLevel3;
 
-  public String getDivisionLevel3() {
-    return divisionLevel3Name;
+  public DivisionViewModel getDivisionLevel3() {
+    return divisionLevel3;
   }
 
-  public void setDivisionLevel3(String divisionLevel3) {
-    this.divisionLevel3Name = divisionLevel3;
+  public void setDivisionLevel3(DivisionViewModel divisionLevel3) {
+    this.divisionLevel3 = divisionLevel3;
   }
 
 }

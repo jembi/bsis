@@ -1,11 +1,12 @@
 package org.jembi.bsis.helpers.builders;
 
+import org.jembi.bsis.viewmodel.DivisionViewModel;
 import org.jembi.bsis.viewmodel.LocationManagementViewModel;
 
 public class LocationManagementViewModelBuilder extends AbstractBuilder<LocationManagementViewModel> {
 
   private Long id;
-  private String divisionLevel3Name;
+  private DivisionViewModel divisionLevel3;
   private boolean isDeleted;
   private String name;
 
@@ -14,8 +15,8 @@ public class LocationManagementViewModelBuilder extends AbstractBuilder<Location
     return this;
   }
 
-  public LocationManagementViewModelBuilder withDivisionLevel3Name(String divisionLevel3Name) {
-    this.divisionLevel3Name = divisionLevel3Name;
+  public LocationManagementViewModelBuilder withDivisionLevel3(DivisionViewModel divisionLevel32) {
+    this.divisionLevel3 = divisionLevel32;
     return this;
   }
 
@@ -35,12 +36,12 @@ public class LocationManagementViewModelBuilder extends AbstractBuilder<Location
     viewModel.setId(id);
     viewModel.setIsDeleted(isDeleted);
     viewModel.setName(name);
-    viewModel.setDivisionLevel3(divisionLevel3Name);
+    viewModel.setDivisionLevel3(divisionLevel3);
 
     return viewModel;
   }
 
-  public static LocationManagementViewModelBuilder aLocationManagementViewModelBuilder() {
+  public static LocationManagementViewModelBuilder aLocationManagementViewModel() {
     return new LocationManagementViewModelBuilder();
   }
 
