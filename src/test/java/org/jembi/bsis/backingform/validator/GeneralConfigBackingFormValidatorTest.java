@@ -297,53 +297,7 @@ public class GeneralConfigBackingFormValidatorTest {
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
   }
-  
- @Test
-  public void testPasswordValueNotSpecified_shouldSendErrorMessage() throws Exception{
-    // Data setUp
-    DataType dataType = DataTypeBuilder.aDataType().withId(5l).withDataType("password").build();
-    
-    GeneralConfigBackingForm form = aGeneralConfigBackingFormBuilder()
-        .withName("name")
-        .withDescription("description")
-        .withDataType(dataType)
-        .build();
-    
-    // Mocks
-    when(dataTypeRepository.getDataTypeByid(5l)).thenReturn(dataType);
-    when(generalConfigRepository.getGeneralConfigByName("passwordName")).thenReturn(null);
-    
-    //Test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "generalconfig");
-    generalConfigBackingFormValidator.validate(form, errors);
-    
-    Assert.assertEquals("Error on password dataType", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: Invalid password", errors.getFieldError("value"));
-  }
-  
-  @Test
-  public void testEmptyStringPasswordValue_shouldSendErrorMessage() throws Exception {
-    // Data setUp
-    DataType dataType = DataTypeBuilder.aDataType().withId(5l).withDataType("password").build();
-    
-    GeneralConfigBackingForm form = aGeneralConfigBackingFormBuilder()
-        .withName("name")
-        .withDescription("description")
-        .withDataType(dataType)
-        .withValue("")
-        .build();
-    
-    // Mocks
-    when(dataTypeRepository.getDataTypeByid(5l)).thenReturn(dataType);
-    when(generalConfigRepository.getGeneralConfigByName("name")).thenReturn(null);
-    
-    // Test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "generalconfig");
-    generalConfigBackingFormValidator.validate(form, errors);
-    
-    Assert.assertEquals("Error on password dataType", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: Invalid password", errors.getFieldError("value"));
-  }
+
   @Test
   public void testValidPassword_shouldSaveValue() {
     // Data setUp
