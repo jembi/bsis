@@ -347,7 +347,7 @@ public class DataImportService {
         throw new IllegalArgumentException("Invalid location");
       }
 
-      // Use factory to populate divisions
+      // Use factory to populate divisions at all levels - the backing form only contains level 3
       Location location = locationFactory.createEntity(locationBackingForm);
       locationRepository.saveLocation(location);
     }
