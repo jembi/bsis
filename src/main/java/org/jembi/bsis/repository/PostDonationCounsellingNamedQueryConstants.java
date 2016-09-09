@@ -35,5 +35,6 @@ public class PostDonationCounsellingNamedQueryConstants {
       + "pdc.modificationTracker.createdDate, pdc.modificationTracker.createdBy.username, "
       + "pdc.modificationTracker.lastUpdated, pdc.modificationTracker.lastUpdatedBy.username, pdc.counsellingDate)"
       + "FROM PostDonationCounselling pdc "
-      + "WHERE pdc.isDeleted = :deleted ";
+      + "WHERE pdc.isDeleted = :deleted "
+      + "ORDER BY pdc.modificationTracker.createdDate ASC ";
 }

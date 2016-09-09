@@ -454,4 +454,29 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     assertThat(returnedDTO.getLastUpdated(), isSameDayAs(new Date()));
     assertThat(returnedDTO.getCounsellingDate(), isSameDayAs(counsellingDate));
   }
+
+  @Test
+  public void testFindPostDonationCounsellingsForExports_shouldReturnPostDonationCounsellingExportDTOsOrderedByCreatedDate() {
+    // Set up fixture
+    String firstDonationIdentificationNumber = "1233219";
+    String secondDonationIdentificationNumber = "99887765";
+    
+    aPostDonationCounselling()
+        .withDonation(aDonation().withDonationIdentificationNumber(secondDonationIdentificationNumber).build())
+        .withCreatedDate(new DateTime().minusDays(30).toDate())
+        .buildAndPersist(entityManager);
+    aPostDonationCounselling()
+        .withDonation(aDonation().withDonationIdentificationNumber(firstDonationIdentificationNumber).build())
+        .withCreatedDate(new DateTime().minusDays(91).toDate())
+        .buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    List<PostDonationCounsellingExportDTO> returnedDTOs =
+        postDonationCounsellingRepository.findPostDonationCounsellingsForExport();
+    
+    // Verify
+    assertThat(returnedDTOs.size(), is(2));
+    assertThat(returnedDTOs.get(0).getDonationIdentificationNumber(), is(firstDonationIdentificationNumber));
+    assertThat(returnedDTOs.get(1).getDonationIdentificationNumber(), is(secondDonationIdentificationNumber));
+  }
 }
