@@ -2,6 +2,7 @@ package org.jembi.bsis.model.location;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -52,11 +53,17 @@ public class Location extends BaseEntity {
 
   private Boolean isDeleted = Boolean.FALSE;
 
+  @ManyToOne(optional = true)
+  private Division divisionLevel1;
+
+  @ManyToOne(optional = true)
+  private Division divisionLevel2;
+
+  @ManyToOne(optional = true)
+  private Division divisionLevel3;
+
   @Lob
   private String notes;
-
-  public Location() {
-  }
 
   public void copy(Location location) {
     this.name = location.name;
@@ -68,6 +75,9 @@ public class Location extends BaseEntity {
     this.isTestingSite = location.isTestingSite;
     this.isDeleted = location.isDeleted;
     this.notes = location.notes;
+    this.divisionLevel1 = location.divisionLevel1;
+    this.divisionLevel2 = location.divisionLevel2;
+    this.divisionLevel3 = location.divisionLevel3;
   }
 
   public String getName() {
@@ -141,4 +151,29 @@ public class Location extends BaseEntity {
   public void setIsTestingSite(boolean isTestingSite) {
     this.isTestingSite = isTestingSite;
   }
+
+  public Division getDivisionLevel1() {
+    return divisionLevel1;
+  }
+
+  public void setDivisionLevel1(Division divisionLevel1) {
+    this.divisionLevel1 = divisionLevel1;
+  }
+
+  public Division getDivisionLevel2() {
+    return divisionLevel2;
+  }
+
+  public void setDivisionLevel2(Division divisionLevel2) {
+    this.divisionLevel2 = divisionLevel2;
+  }
+
+  public Division getDivisionLevel3() {
+    return divisionLevel3;
+  }
+
+  public void setDivisionLevel3(Division divisionLevel3) {
+    this.divisionLevel3 = divisionLevel3;
+  }
+
 }

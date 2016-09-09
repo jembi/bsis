@@ -39,7 +39,7 @@ public class DivisionRepository extends AbstractRepository<Division> {
     return divisions.get(0);
   }
 
-  public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level) {
+  public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level, Long parentId) {
     // build up Query string
     StringBuilder queryBuilder = new StringBuilder("SELECT div FROM Division div ");
 
@@ -57,6 +57,10 @@ public class DivisionRepository extends AbstractRepository<Division> {
       addWhereCondition(whereClause, "div.level = :level ");
     }
     
+    if (parentId != null) {
+      addWhereCondition(whereClause, "div.parent.id = :parentId ");
+    }
+
     if(!StringUtils.isBlank(whereClause.toString())) {
       queryBuilder.append(whereClause);
     }
@@ -79,6 +83,10 @@ public class DivisionRepository extends AbstractRepository<Division> {
       query.setParameter("level", level);
     }
     
+    if (parentId != null) {
+      query.setParameter("parentId", parentId);
+    }
+
     //EXECUTE QUERY
     return query.getResultList();
   }

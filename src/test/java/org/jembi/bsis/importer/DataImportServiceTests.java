@@ -253,11 +253,24 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     Location secondLocation = findLocationByName("Second");
     Location thirdLocation = findLocationByName("Third");
     Location fourthLocation = findLocationByName("Fourth");
+    
+    Division westernCapeDivision = findDivisionByName("Western Cape");
+    Division cityOfCapeTownDivision = findDivisionByName("City of Cape Town");
+    Division khayelitshaDivision = findDivisionByName("Khayelitsha");
+    Division capeWinelandsDivision = findDivisionByName("Cape Winelands");
+    Division stellenboschDivision = findDivisionByName("Stellenbosch");
+    Division gautengDivision = findDivisionByName("Gauteng");
+    Division tshwaneDivision = findDivisionByName("Tshwane");
+    Division pretoriaDivision = findDivisionByName("Pretoria");
+
     Location expectedFirstLocation = aLocation()
         .withId(firstLocation.getId())
         .withName("First")
         .withNotes("First Location")
         .thatIsVenue()
+        .withDivisionLevel1(gautengDivision)
+        .withDivisionLevel2(tshwaneDivision)
+        .withDivisionLevel3(pretoriaDivision)
         .build();
     Location expectedSecondLocation = aLocation()
         .withId(secondLocation.getId())
@@ -265,6 +278,9 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .thatIsMobileSite()
         .thatIsVenue()
         .thatIsDeleted()
+        .withDivisionLevel1(westernCapeDivision)
+        .withDivisionLevel2(cityOfCapeTownDivision)
+        .withDivisionLevel3(khayelitshaDivision)
         .build();
     Location expectedThirdLocation = aLocation()
         .withId(thirdLocation.getId())
@@ -273,12 +289,18 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .thatIsProcessingSite()
         .thatIsDistributionSite()
         .thatIsTestingSite()
+        .withDivisionLevel1(westernCapeDivision)
+        .withDivisionLevel2(capeWinelandsDivision)
+        .withDivisionLevel3(stellenboschDivision)
         .build();
     Location expectedFourthLocation = aLocation()
         .withId(fourthLocation.getId())
         .withName("Fourth")
         .thatIsVenue()
         .withNotes("A venue")
+        .withDivisionLevel1(westernCapeDivision)
+        .withDivisionLevel2(cityOfCapeTownDivision)
+        .withDivisionLevel3(khayelitshaDivision)
         .build();
     
     assertThat(firstLocation, hasSameStateAsLocation(expectedFirstLocation));
