@@ -7,9 +7,8 @@ import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.DonorDeferralBuilder.aDonorDeferral;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
+import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -376,18 +375,11 @@ public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSu
     DeferralExportDTO returnedDTO = returnedDTOs.get(0);
     assertThat(returnedDTO.getDonorNumber(), is(donorNumber));
     assertThat(returnedDTO.getDeferralReasonText(), is(deferralReasonText));
-    assertSameDate(returnedDTO.getDeferralDate(), deferralDate);
-    assertSameDate(returnedDTO.getDeferredUntil(), deferredUntil);
+    assertThat(returnedDTO.getDeferralDate(), isSameDayAs(deferralDate));
+    assertThat(returnedDTO.getDeferredUntil(), isSameDayAs(deferredUntil));
     assertThat(returnedDTO.getCreatedBy(), is(createdByUsername));
-    assertSameDate(returnedDTO.getCreatedDate(), createdDate);
+    assertThat(returnedDTO.getCreatedDate(), isSameDayAs(createdDate));
     assertThat(returnedDTO.getLastUpdatedBy(), is(USERNAME));
-    assertSameDate(returnedDTO.getLastUpdated(), new Date());
-  }
-  
-  private void assertSameDate(Date first, Date second) {
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    String firstFormatted = dateFormat.format(first);
-    String secondFormatted = dateFormat.format(second);
-    assertThat(firstFormatted, is(secondFormatted));
+    assertThat(returnedDTO.getLastUpdated(), isSameDayAs(new Date()));
   }
 }

@@ -10,10 +10,9 @@ import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
+import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -298,16 +297,16 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat(returnedDTO.getDonorNumber(), is(donorNumber));
     assertThat(returnedDTO.getDonationIdentificationNumber(), is(donationIdentificationNumber));
     assertThat(returnedDTO.getCreatedBy(), is(createdByUsername));
-    assertSameDate(returnedDTO.getCreatedDate(), createdDate);
+    assertThat(returnedDTO.getCreatedDate(), isSameDayAs(createdDate));
     assertThat(returnedDTO.getLastUpdatedBy(), is(USERNAME));
-    assertSameDate(returnedDTO.getLastUpdated(), new Date());
+    assertThat(returnedDTO.getLastUpdated(), isSameDayAs(new Date()));
     assertThat(returnedDTO.getPackType(), is(packType));
-    assertSameDate(returnedDTO.getDonationDate(), donationDate);
+    assertThat(returnedDTO.getDonationDate(), isSameDayAs(donationDate));
     assertThat(returnedDTO.getBloodTypingStatus(), is(bloodTypingStatus));
     assertThat(returnedDTO.getBloodTypingMatchStatus(), is(bloodTypingMatchStatus));
     assertThat(returnedDTO.getTtiStatus(), is(ttiStatus));
-    assertSameDate(returnedDTO.getBleedStartTime(), bleedStartTime);
-    assertSameDate(returnedDTO.getBleedEndTime(), bleedEndTime);
+    assertThat(returnedDTO.getBleedStartTime(), isSameDayAs(bleedStartTime));
+    assertThat(returnedDTO.getBleedEndTime(), isSameDayAs(bleedEndTime));
     assertThat(returnedDTO.getDonorWeight().compareTo(donorWeight), is(0));
     assertThat(returnedDTO.getBloodPressureSystolic(), is(bloodPressureSystolic));
     assertThat(returnedDTO.getBloodPressureDiastolic(), is(bloodPressureDiastolic));
@@ -332,13 +331,6 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     
     // Verify
     assertThat(returnedDTOs.size(), is(1));
-  }
-  
-  private void assertSameDate(Date first, Date second) {
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    String firstFormatted = dateFormat.format(first);
-    String secondFormatted = dateFormat.format(second);
-    assertThat(firstFormatted, is(secondFormatted));
   }
 
 }
