@@ -1,6 +1,8 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.jembi.bsis.helpers.builders.DivisionBackingFormBuilder.aDivisionBackingForm;
 import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aVenueBackingForm;
@@ -9,16 +11,12 @@ import static org.jembi.bsis.helpers.builders.LocationManagementViewModelBuilder
 import static org.jembi.bsis.helpers.matchers.DivisionViewModelMatcher.hasSameStateAsDivisionViewModel;
 import static org.jembi.bsis.helpers.matchers.LocationManagementViewModelMatcher.hasSameStateAsLocationManagementViewModel;
 import static org.jembi.bsis.helpers.matchers.LocationMatcher.hasSameStateAsLocation;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hamcrest.Matchers;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.helpers.builders.DivisionBuilder;
 import org.jembi.bsis.helpers.builders.DivisionViewModelBuilder;
