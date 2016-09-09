@@ -76,6 +76,7 @@ public class DonationNamedQueryConstants {
       + "FROM Donation d "
       // Make sure that donations without adverse events are returned
       + "LEFT JOIN d.adverseEvent "
-      + "WHERE d.isDeleted = :deleted ";
+      + "WHERE d.isDeleted = :deleted "
+      + "ORDER BY d.modificationTracker.createdDate ASC ";
 
 }

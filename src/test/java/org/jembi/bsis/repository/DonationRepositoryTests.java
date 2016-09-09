@@ -333,4 +333,28 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat(returnedDTOs.size(), is(1));
   }
 
+  @Test
+  public void testFindDonationsForExport_shouldReturnDonationExportDTOsOrderedByCreatedDate() {
+    // Set up fixture
+    String firstDonationIdentificationNumber = "1111111";
+    String secondDonationIdentificationNumber = "2222222";
+
+    aDonation()
+        .withCreatedDate(new DateTime().minusDays(3).toDate())
+        .withDonationIdentificationNumber(secondDonationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    aDonation()
+        .withCreatedDate(new DateTime().minusDays(7).toDate())
+        .withDonationIdentificationNumber(firstDonationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    List<DonationExportDTO> returnedDTOs = donationRepository.findDonationsForExport();
+    
+    // Verify
+    assertThat(returnedDTOs.size(), is(2));
+    assertThat(returnedDTOs.get(0).getDonationIdentificationNumber(), is(firstDonationIdentificationNumber));
+    assertThat(returnedDTOs.get(1).getDonationIdentificationNumber(), is(secondDonationIdentificationNumber));
+  }
+
 }
