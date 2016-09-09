@@ -9,6 +9,7 @@ import static org.jembi.bsis.helpers.builders.LocationManagementViewModelBuilder
 import static org.jembi.bsis.helpers.matchers.DivisionViewModelMatcher.hasSameStateAsDivisionViewModel;
 import static org.jembi.bsis.helpers.matchers.LocationManagementViewModelMatcher.hasSameStateAsLocationManagementViewModel;
 import static org.jembi.bsis.helpers.matchers.LocationMatcher.hasSameStateAsLocation;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.is;
 
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.helpers.builders.DivisionBuilder;
 import org.jembi.bsis.helpers.builders.DivisionViewModelBuilder;
@@ -156,24 +158,26 @@ public class LocationFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateManagementViewModel_shouldReturnViewModelWithTheCorrectState() {
    // data setUp
-    long divisionId = 3L;
-    String divisionLevelName = "name";
-    Division divisionLevel3 = aDivision().withId(3L).withName("divisionLevel3").build();
+    long locationId = 1L;
+    long divisionId = 3l;
+    String divisionName = "aDivision";
+    String locationName = "aLocation";
+    Division divisionLevel3 = aDivision().withId(divisionId).withName(divisionName).build();
     
     DivisionViewModel divisionLevel3ViewModel = DivisionViewModelBuilder.aDivisionViewModel()
         .withId(divisionId)
-        .withName(divisionLevelName)
+        .withName(divisionName)
         .build();  
     
     Location location = LocationBuilder.aLocation()
-        .withId(divisionId)
-        .withName(divisionLevelName)
+        .withId(locationId)
+        .withName(locationName)
         .withDivisionLevel3(divisionLevel3)
         .build();
     
     LocationManagementViewModel expectedViewModel = aLocationManagementViewModel()
-        .withId(divisionId)
-        .withName(divisionLevelName)
+        .withId(locationId)
+        .withName(locationName)
         .isDeleted(false)
         .withDivisionLevel3(divisionLevel3ViewModel)
         .build();
@@ -188,30 +192,40 @@ public class LocationFactoryTests extends UnitTestSuite {
   
   @Test
   public void testCreateManagementViewModels_shouldReturnViewModelsWithTheCorrectStates() {
+    long divisionId = 3L;
+    String divisionName = "aDivision";
     Division divisionLevel3 = aDivision()
-        .withId(3L)
-        .withName("Division Level 3")
+        .withId(divisionId)
+        .withName(divisionName)
         .build();
     
     DivisionViewModel divisionLevel3ViewModel = DivisionViewModelBuilder.aDivisionViewModel()
-        .withId(3L)
-        .withName("divisionLevel3ViewModel")
+        .withId(divisionId)
+        .withName(divisionName)
         .build();  
     
+    String locationName1 = "aLocation1";
+    String locationName2 = "aLocation2";
+    String locationName3 = "aLocation3";
+    
     List<Location> locations = Arrays.asList(
-        LocationBuilder.aLocation().withId(1L).withName("name").withDivisionLevel3(divisionLevel3).build(),
-        LocationBuilder.aLocation().withId(2L).withName("name").withDivisionLevel3(divisionLevel3).build(),
-        LocationBuilder.aLocation().withId(3L).withName("name").withDivisionLevel3(divisionLevel3).build()); 
+        LocationBuilder.aLocation().withId(1L).withName(locationName1).withDivisionLevel3(divisionLevel3).build(),
+        LocationBuilder.aLocation().withId(2L).withName(locationName2).withDivisionLevel3(divisionLevel3).build(),
+        LocationBuilder.aLocation().withId(3L).withName(locationName3).withDivisionLevel3(divisionLevel3).build()); 
     
     List<LocationManagementViewModel> expectedLocations = Arrays.asList(
-        aLocationManagementViewModel().withId(1L).withName("name").withDivisionLevel3(divisionLevel3ViewModel).build(),
-        aLocationManagementViewModel().withId(2L).withName("name").withDivisionLevel3(divisionLevel3ViewModel).build(),
-        aLocationManagementViewModel().withId(3L).withName("name").withDivisionLevel3(divisionLevel3ViewModel).build());
+        aLocationManagementViewModel().withId(1L).withName(locationName1).withDivisionLevel3(divisionLevel3ViewModel).build(),
+        aLocationManagementViewModel().withId(2L).withName(locationName2).withDivisionLevel3(divisionLevel3ViewModel).build(),
+        aLocationManagementViewModel().withId(3L).withName(locationName3).withDivisionLevel3(divisionLevel3ViewModel).build());
     
+    when(divisionFactory.createDivisionViewModel(divisionLevel3, false)).thenReturn(divisionLevel3ViewModel);
     //Test
     List<LocationManagementViewModel> viewModels = locationFactory.createManagementViewModels(locations);
   
     //Assertion
-    assertThat(viewModels, is(expectedLocations));
+    assertThat(viewModels, Matchers.notNullValue());
+    assertThat(viewModels.get(0), hasSameStateAsLocationManagementViewModel(expectedLocations.get(0)));    
+    assertThat(viewModels.get(1), hasSameStateAsLocationManagementViewModel(expectedLocations.get(1)));   
+    assertThat(viewModels.get(2), hasSameStateAsLocationManagementViewModel(expectedLocations.get(2)));
   }
 }
