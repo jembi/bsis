@@ -12,6 +12,7 @@ import static org.jembi.bsis.helpers.matchers.LocationMatcher.hasSameStateAsLoca
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -223,7 +224,8 @@ public class LocationFactoryTests extends UnitTestSuite {
     List<LocationManagementViewModel> viewModels = locationFactory.createManagementViewModels(locations);
   
     //Assertion
-    assertThat(viewModels, Matchers.notNullValue());
+    assertThat(viewModels, is(notNullValue()));
+    assertThat(viewModels.size(), is(3));
     assertThat(viewModels.get(0), hasSameStateAsLocationManagementViewModel(expectedLocations.get(0)));    
     assertThat(viewModels.get(1), hasSameStateAsLocationManagementViewModel(expectedLocations.get(1)));   
     assertThat(viewModels.get(2), hasSameStateAsLocationManagementViewModel(expectedLocations.get(2)));
