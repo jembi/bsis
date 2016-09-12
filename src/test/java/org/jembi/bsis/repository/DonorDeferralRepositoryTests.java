@@ -345,41 +345,62 @@ public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSu
   @Test
   public void testFindDeferralsForExport_shouldReturnDeferralsExportDTOsWithTheCorrectState() {
     // Set up fixture
-    String donorNumber = "123321";
+    String firstDonorNumber = "123321";
+    String secondDonorNumber = "923321";
     String deferralReasonText = "deferral reason text";
     Date deferralDate = new DateTime().minusDays(9).toDate();
     Date deferredUntil = new DateTime().plusDays(10).toDate();
     String createdByUsername = "created.by";
-    Date createdDate = new DateTime().minusDays(10).toDate();
+    String anotherCreatedByUsername = "another.created.by";
+    Date firstCreatedDate = new DateTime().minusDays(10).toDate();
+    Date secondCreatedDate = new DateTime().minusDays(8).toDate();
     
-    // Expected deferral
+    // Expected deferrals
     aDonorDeferral()
-        .withDeferredDonor(aDonor().withDonorNumber(donorNumber).build())
+        .withDeferredDonor(aDonor().withDonorNumber(secondDonorNumber).build())
         .withDeferralReasonText(deferralReasonText)
         .withDeferralDate(deferralDate)
         .withDeferredUntil(deferredUntil)
         .withCreatedBy(aUser().withUsername(createdByUsername).build())
-        .withCreatedDate(createdDate)
+        .withCreatedDate(secondCreatedDate)
         .buildAndPersist(entityManager);
     
+    
+    aDonorDeferral()
+    .withDeferredDonor(aDonor().withDonorNumber(firstDonorNumber).build())
+    .withDeferralReasonText(deferralReasonText)
+    .withDeferralDate(deferralDate)
+    .withDeferredUntil(deferredUntil)
+    .withCreatedBy(aUser().withUsername(anotherCreatedByUsername).build())
+    .withCreatedDate(firstCreatedDate)
+    .buildAndPersist(entityManager);
+    
     // Deferral excluded by voided
-    aDonorDeferral().thatIsVoided().buildAndPersist(entityManager);
+ //   aDonorDeferral().thatIsVoided().buildAndPersist(entityManager);
     
     // Exercise SUT
     List<DeferralExportDTO> returnedDTOs = donorDeferralRepository.findDeferralsForExport();
     
     // Verify
-    assertThat(returnedDTOs.size(), is(1));
+    assertThat(returnedDTOs.size(), is(2));
     
-    // Verify DTO state
-    DeferralExportDTO returnedDTO = returnedDTOs.get(0);
-    assertThat(returnedDTO.getDonorNumber(), is(donorNumber));
-    assertThat(returnedDTO.getDeferralReasonText(), is(deferralReasonText));
-    assertThat(returnedDTO.getDeferralDate(), isSameDayAs(deferralDate));
-    assertThat(returnedDTO.getDeferredUntil(), isSameDayAs(deferredUntil));
-    assertThat(returnedDTO.getCreatedBy(), is(createdByUsername));
-    assertThat(returnedDTO.getCreatedDate(), isSameDayAs(createdDate));
-    assertThat(returnedDTO.getLastUpdatedBy(), is(USERNAME));
-    assertThat(returnedDTO.getLastUpdated(), isSameDayAs(new Date()));
+    //assertThat)
+    assertThat(returnedDTOs.get(0).getDonorNumber(), is(firstDonorNumber));
+    assertThat(returnedDTOs.get(0).getDeferralReasonText(), is(deferralReasonText));
+    assertThat(returnedDTOs.get(0).getDeferralDate(), isSameDayAs(deferralDate));
+    assertThat(returnedDTOs.get(0).getDeferredUntil(), isSameDayAs(deferredUntil));
+    assertThat(returnedDTOs.get(0).getCreatedBy(), is(anotherCreatedByUsername));
+    assertThat(returnedDTOs.get(0).getCreatedDate(), isSameDayAs(firstCreatedDate));
+    assertThat(returnedDTOs.get(0).getLastUpdatedBy(), is(USERNAME));
+    assertThat(returnedDTOs.get(0).getLastUpdated(), isSameDayAs(new Date()));
+    
+    assertThat(returnedDTOs.get(1).getDonorNumber(), is(secondDonorNumber));
+    assertThat(returnedDTOs.get(1).getDeferralReasonText(), is(deferralReasonText));
+    assertThat(returnedDTOs.get(1).getDeferralDate(), isSameDayAs(deferralDate));
+    assertThat(returnedDTOs.get(1).getDeferredUntil(), isSameDayAs(deferredUntil));
+    assertThat(returnedDTOs.get(1).getCreatedBy(), is(createdByUsername));
+    assertThat(returnedDTOs.get(1).getCreatedDate(), isSameDayAs(secondCreatedDate));
+    assertThat(returnedDTOs.get(1).getLastUpdatedBy(), is(USERNAME));
+    assertThat(returnedDTOs.get(1).getLastUpdated(), isSameDayAs(new Date()));
   }
 }
