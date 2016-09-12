@@ -5,6 +5,7 @@ import org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder;
 import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
+import org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.DataTypeBuilder;
 import org.jembi.bsis.helpers.builders.DeferralReasonBuilder;
@@ -22,6 +23,7 @@ import org.jembi.bsis.model.adverseevent.AdverseEventType;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -97,6 +99,10 @@ public class EntityPersisterFactory {
   
   public static AbstractEntityPersister<BloodTest> aBloodTestPersister() {
     return new BloodTestBuilder().getPersister();
+  }
+  
+  public static AbstractEntityPersister<ComponentStatusChangeReason> aComponentStatusChangeReasonPersister() {
+    return new ComponentStatusChangeReasonBuilder().getPersister();
   }
 
 }

@@ -1,15 +1,17 @@
 package org.jembi.bsis.dto;
 
 import java.util.Date;
+import java.util.Objects;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 
 public class ComponentExportDTO extends ModificationTrackerExportDTO {
 
+  private long id; // Used only for removing duplicates
   private String donationIdentificationNumber;
   private String componentCode;
-  private String parentComponent;
+  private String parentComponentCode;
   private Date createdOn;
   private ComponentStatus status;
   private String location;
@@ -20,17 +22,18 @@ public class ComponentExportDTO extends ModificationTrackerExportDTO {
   private Date expiresOn;
   private String notes;
 
-  public ComponentExportDTO(String donationIdentificationNumber, String componentCode, Date createdDate,
-      String createdBy, Date lastUpdated, String lastUpdatedBy, String parentComponent, Date createdOn,
+  public ComponentExportDTO(long id, String donationIdentificationNumber, String componentCode, Date createdDate,
+      String createdBy, Date lastUpdated, String lastUpdatedBy, String parentComponentCode, Date createdOn,
       ComponentStatus status, String location, Date issuedOn, InventoryStatus inventoryStatus, Date discardedOn,
       String discardReason, Date expiresOn, String notes) {
+    this.id = id;
     this.donationIdentificationNumber = donationIdentificationNumber;
     this.componentCode = componentCode;
     this.createdDate = createdDate;
     this.createdBy = createdBy;
     this.lastUpdated = lastUpdated;
     this.lastUpdatedBy = lastUpdatedBy;
-    this.parentComponent = parentComponent;
+    this.parentComponentCode = parentComponentCode;
     this.createdOn = createdOn;
     this.status = status;
     this.location = location;
@@ -58,12 +61,12 @@ public class ComponentExportDTO extends ModificationTrackerExportDTO {
     this.componentCode = componentCode;
   }
 
-  public String getParentComponent() {
-    return parentComponent;
+  public String getParentComponentCode() {
+    return parentComponentCode;
   }
 
-  public void setParentComponent(String parentComponent) {
-    this.parentComponent = parentComponent;
+  public void setParentComponentCode(String parentComponentCode) {
+    this.parentComponentCode = parentComponentCode;
   }
 
   public Date getCreatedOn() {
@@ -136,6 +139,19 @@ public class ComponentExportDTO extends ModificationTrackerExportDTO {
 
   public void setNotes(String notes) {
     this.notes = notes;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof ComponentExportDTO)) {
+      return false;
+    }
+    return ((ComponentExportDTO) other).id == id;
   }
 
 }
