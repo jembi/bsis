@@ -2,6 +2,7 @@ package org.jembi.bsis.helpers.persisters;
 
 import org.jembi.bsis.helpers.builders.AdverseEventBuilder;
 import org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder;
+import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
@@ -18,6 +19,7 @@ import org.jembi.bsis.helpers.builders.UserBuilder;
 import org.jembi.bsis.model.admin.DataType;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.adverseevent.AdverseEventType;
+import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -91,6 +93,10 @@ public class EntityPersisterFactory {
   
   public static AbstractEntityPersister<User> aUserPersister() {
     return new UserBuilder().getPersister();
+  }
+  
+  public static AbstractEntityPersister<BloodTest> aBloodTestPersister() {
+    return new BloodTestBuilder().getPersister();
   }
 
 }

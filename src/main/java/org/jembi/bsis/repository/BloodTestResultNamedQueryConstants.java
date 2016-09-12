@@ -59,4 +59,15 @@ public class BloodTestResultNamedQueryConstants {
       "SELECT DISTINCT btr FROM BloodTestResult btr, Donation d " +
       "WHERE btr.donation = :donation " +
       "AND btr.isDeleted = :testOutcomeDeleted";
+  
+  public static final String NAME_FIND_BLOOD_TEST_RESULTS_FOR_EXPORT =
+      "BloodTestResult.findBloodTestResultsForExport";
+  public static final String QUERY_FIND_BLOOD_TEST_RESULTS_FOR_EXPORT =
+      "SELECT NEW org.jembi.bsis.dto.BloodTestResultExportDTO(btr.donation.donationIdentificationNumber, "
+      + "btr.modificationTracker.createdDate, btr.modificationTracker.createdBy.username, "
+      + "btr.modificationTracker.lastUpdated, btr.modificationTracker.lastUpdatedBy.username, btr.result,"
+      + "btr.bloodTest.testNameShort) "
+      + "FROM BloodTestResult btr "
+      + "WHERE btr.isDeleted = :deleted "
+      + "ORDER BY btr.modificationTracker.createdDate ASC ";
 }
