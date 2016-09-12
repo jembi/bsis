@@ -670,7 +670,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat(exportedDonors.size(), is(2));
     
     // Assert state
-    assertThat(exportedDonors.get(0).getDonorNumber(), is(donorNumber1));
-    assertThat(exportedDonors.get(1).getDonorNumber(), is(donorNumber2));
+    assertThat(exportedDonors.get(0).getDonorNumber(), is(donorNumber2)); // was created first
+    assertThat(exportedDonors.get(1).getDonorNumber(), is(donorNumber1));
   }
 }

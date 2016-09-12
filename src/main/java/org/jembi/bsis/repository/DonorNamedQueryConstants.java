@@ -66,5 +66,5 @@ public class DonorNamedQueryConstants {
       + "LEFT JOIN d.idType "
       + "LEFT JOIN d.preferredLanguage "
       + "WHERE d.isDeleted = :deleted "
-      + "ORDER BY d.donorNumber";
+      + "ORDER BY d.modificationTracker.createdDate";
 }
