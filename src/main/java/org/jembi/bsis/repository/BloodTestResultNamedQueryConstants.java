@@ -65,8 +65,8 @@ public class BloodTestResultNamedQueryConstants {
   public static final String QUERY_FIND_BLOOD_TEST_RESULTS_FOR_EXPORT =
       "SELECT NEW org.jembi.bsis.dto.BloodTestResultExportDTO(btr.donation.donationIdentificationNumber, "
       + "btr.modificationTracker.createdDate, btr.modificationTracker.createdBy.username, "
-      + "btr.modificationTracker.lastUpdated, btr.modificationTracker.lastUpdatedBy.username, btr.result,"
-      + "btr.bloodTest.testNameShort) "
+      + "btr.modificationTracker.lastUpdated, btr.modificationTracker.lastUpdatedBy.username, "
+      + "btr.bloodTest.testNameShort, btr.result) "
       + "FROM BloodTestResult btr "
       + "WHERE btr.isDeleted = :deleted "
       + "ORDER BY btr.modificationTracker.createdDate ASC ";

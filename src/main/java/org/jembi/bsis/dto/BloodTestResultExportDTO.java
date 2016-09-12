@@ -9,14 +9,14 @@ public class BloodTestResultExportDTO extends ModificationTrackerExportDTO {
   private String testName;
 
   public BloodTestResultExportDTO(String donationIdentificationNumber, Date createdDate, String createdBy,
-      Date lastUpdated, String lastUpdatedBy, String result, String testName) {
+      Date lastUpdated, String lastUpdatedBy, String testName, String result) {
     this.donationIdentificationNumber = donationIdentificationNumber;
     this.createdDate = createdDate;
     this.createdBy = createdBy;
     this.lastUpdated = lastUpdated;
     this.lastUpdatedBy = lastUpdatedBy;
-    this.result = result;
     this.testName = testName;
+    this.result = result;
   }
 
   public String getDonationIdentificationNumber() {
