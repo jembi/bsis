@@ -635,4 +635,42 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
     // Assert state
     assertThat(exportedDonors.get(0), is(DonorExportDTOMatcher.hasSameStateAsDonorExport(expectedDonorDTO)));
   }
+  
+  @Test
+  public void testFindDonorsForExport_shouldReturnDonorsExportDTOInCorrectOrder() {
+    Location venue = aVenue().withName("DonateHere").buildAndPersist(entityManager);
+
+    String donorNumber1 = "1234567";
+    String donorNumber2 = "1234568";
+ 
+    // Expected Donor #1
+    aDonor()
+      .withDonorNumber(donorNumber2)
+      .withFirstName("Sample")
+      .withLastName("Donor")
+      .withGender(Gender.female)
+      .withVenue(venue)
+      .thatIsNotDeleted()
+      .buildAndPersist(entityManager);
+    
+    // Expected Donor #2
+    aDonor()
+      .withDonorNumber(donorNumber1)
+      .withFirstName("Sample")
+      .withMiddleName("Too")
+      .withLastName("Donor")
+      .withGender(Gender.male)
+      .withVenue(venue)
+      .thatIsNotDeleted()
+      .buildAndPersist(entityManager);
+    
+    List<DonorExportDTO> exportedDonors = donorRepository.findDonorsForExport();
+    
+    // Verify
+    assertThat(exportedDonors.size(), is(2));
+    
+    // Assert state
+    assertThat(exportedDonors.get(0).getDonorNumber(), is(donorNumber1));
+    assertThat(exportedDonors.get(1).getDonorNumber(), is(donorNumber2));
+  }
 }
