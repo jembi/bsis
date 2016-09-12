@@ -18,6 +18,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.jembi.bsis.dto.DonorExportDTO;
 import org.jembi.bsis.dto.DuplicateDonorDTO;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.model.address.AddressType;
@@ -342,5 +343,11 @@ public class DonorRepository {
       return true;
     }
     return false;
+  }
+  
+  public List<DonorExportDTO> findDonorsForExport() {
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_DONORS_FOR_EXPORT, DonorExportDTO.class)
+        .setParameter("deleted", false)
+        .getResultList();
   }
 }

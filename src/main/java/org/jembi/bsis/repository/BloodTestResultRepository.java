@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.jembi.bsis.dto.BloodTestResultExportDTO;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.donation.Donation;
 import org.springframework.stereotype.Repository;
@@ -31,6 +32,13 @@ public class BloodTestResultRepository extends AbstractRepository<BloodTestResul
         BloodTestResultNamedQueryConstants.NAME_GET_TEST_OUTCOMES_FOR_DONATION, BloodTestResult.class)
         .setParameter("donation", donation)
         .setParameter("testOutcomeDeleted", false)
+        .getResultList();
+  }
+  
+  public List<BloodTestResultExportDTO> findBloodTestResultsForExport() {
+    return entityManager.createNamedQuery(BloodTestResultNamedQueryConstants.NAME_FIND_BLOOD_TEST_RESULTS_FOR_EXPORT,
+        BloodTestResultExportDTO.class)
+        .setParameter("deleted", false)
         .getResultList();
   }
 

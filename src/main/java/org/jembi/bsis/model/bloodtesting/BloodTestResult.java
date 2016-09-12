@@ -34,7 +34,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE,
         query = BloodTestResultNamedQueryConstants.QUERY_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE),
     @NamedQuery(name = BloodTestResultNamedQueryConstants.NAME_GET_TEST_OUTCOMES_FOR_DONATION,
-        query = BloodTestResultNamedQueryConstants.QUERY_GET_TEST_OUTCOMES_FOR_DONATION)
+        query = BloodTestResultNamedQueryConstants.QUERY_GET_TEST_OUTCOMES_FOR_DONATION),
+    @NamedQuery(name = BloodTestResultNamedQueryConstants.NAME_FIND_BLOOD_TEST_RESULTS_FOR_EXPORT,
+        query = BloodTestResultNamedQueryConstants.QUERY_FIND_BLOOD_TEST_RESULTS_FOR_EXPORT)
 
 })
 @Entity

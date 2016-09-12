@@ -2,6 +2,14 @@ package org.jembi.bsis.dto;
 
 import java.util.Date;
 
+import org.jembi.bsis.model.address.Address;
+import org.jembi.bsis.model.address.AddressType;
+import org.jembi.bsis.model.address.Contact;
+import org.jembi.bsis.model.address.ContactMethodType;
+import org.jembi.bsis.model.idtype.IdType;
+import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
+import org.jembi.bsis.model.util.Gender;
+
 public class DonorExportDTO extends ModificationTrackerExportDTO {
 
   private String donorNumber;
@@ -10,7 +18,7 @@ public class DonorExportDTO extends ModificationTrackerExportDTO {
   private String middleName;
   private String lastName;
   private String callingName;
-  private String gender;
+  private Gender gender;
   private Date birthDate;
   private String preferredLanguage;
   private String venue;
@@ -52,14 +60,85 @@ public class DonorExportDTO extends ModificationTrackerExportDTO {
   private String postalAddressCountry;
   private String postalAddressState;
   private String postalAddressZipcode;
+  
+  public DonorExportDTO(String donorNumber, Date createdDate, String createdBy, Date lastUpdated, String lastUpdatedBy,
+      String title, String firstName, String middleName, String lastName, String callingName, Gender gender,
+      Date birthDate, PreferredLanguage preferredLanguage, String venue, String bloodABO, String bloodRh, String notes,
+      IdType idType, String idNumber, Date dateOfFirstDonation, Date dateOfLastDonation, Date dueToDonate,
+      ContactMethodType contactMethodType, Contact contact, AddressType preferredAddressType, Address address) {
+    this.donorNumber = donorNumber;
+    this.createdDate = createdDate;
+    this.createdBy = createdBy;
+    this.lastUpdated = lastUpdated;
+    this.lastUpdatedBy = lastUpdatedBy;
+    this.title = title;
+    this.firstName = firstName;
+    this.middleName = middleName;
+    this.lastName = lastName;
+    this.callingName = callingName;
+    this.gender = gender;
+    this.birthDate = birthDate;
+    if (preferredLanguage != null) {
+      this.preferredLanguage = preferredLanguage.getPreferredLanguage();
+    }
+    this.venue = venue;
+    this.bloodABO = bloodABO;
+    this.bloodRh = bloodRh;
+    this.notes = notes;
+    if (idType != null) {
+      this.idType = idType.getIdType();
+    }
+    this.idNumber = idNumber;
+    this.dateOfFirstDonation = dateOfFirstDonation;
+    this.dateOfLastDonation = dateOfLastDonation;
+    this.dueToDonate = dueToDonate;
+    if (contactMethodType != null) {
+      this.contactMethodType = contactMethodType.getContactMethodType();
+    }
+    if (contact != null) {
+      this.mobileNumber = contact.getMobileNumber();
+      this.homeNumber = contact.getHomeNumber();
+      this.workNumber = contact.getWorkNumber();
+      this.email = contact.getEmail();
+    }
+    if (preferredAddressType != null) {
+      this.preferredAddressType = preferredAddressType.getPreferredAddressType();
+    }
+    if (address != null) {
+      this.homeAddressLine1 = address.getHomeAddressLine1();
+      this.homeAddressLine2 = address.getHomeAddressLine2();
+      this.homeAddressCity = address.getHomeAddressCity();
+      this.homeAddressProvince = address.getHomeAddressProvince();
+      this.homeAddressDistrict = address.getHomeAddressDistrict();
+      this.homeAddressCountry = address.getHomeAddressCountry();
+      this.homeAddressState = address.getHomeAddressState();
+      this.homeAddressZipcode = address.getHomeAddressZipcode();
+      this.workAddressLine1 = address.getWorkAddressLine1();
+      this.workAddressLine2 = address.getWorkAddressLine2();
+      this.workAddressCity = address.getWorkAddressCity();
+      this.workAddressProvince = address.getWorkAddressProvince();
+      this.workAddressDistrict = address.getWorkAddressDistrict();
+      this.workAddressCountry = address.getWorkAddressCountry();
+      this.workAddressState = address.getWorkAddressState();
+      this.workAddressZipcode = address.getWorkAddressZipcode();
+      this.postalAddressLine1 = address.getPostalAddressLine1();
+      this.postalAddressLine2 = address.getPostalAddressLine2();
+      this.postalAddressCity = address.getPostalAddressCity();
+      this.postalAddressProvince = address.getPostalAddressProvince();
+      this.postalAddressDistrict = address.getPostalAddressDistrict();
+      this.postalAddressCountry = address.getPostalAddressCountry();
+      this.postalAddressState = address.getPostalAddressState();
+      this.postalAddressZipcode = address.getPostalAddressZipcode();
+    }
+  }
 
   public DonorExportDTO(String donorNumber, Date createdDate, String createdBy, Date lastUpdated, String lastUpdatedBy,
-      String title, String firstName, String middleName, String lastName, String callingName, String gender,
+      String title, String firstName, String middleName, String lastName, String callingName, Gender gender,
       Date birthDate, String preferredLanguage, String venue, String bloodABO, String bloodRh, String notes,
       String idType, String idNumber, Date dateOfFirstDonation, Date dateOfLastDonation, Date dueToDonate,
       String contactMethodType, String mobileNumber, String homeNumber, String workNumber, String email,
       String preferredAddressType, String homeAddressLine1, String homeAddressLine2, String homeAddressCity,
-      String homeAddressProvince, String homeAddressDistrict, String homeAddressState, String homeAddressCountry,
+      String homeAddressProvince, String homeAddressDistrict, String homeAddressCountry, String homeAddressState,
       String homeAddressZipcode, String workAddressLine1, String workAddressLine2, String workAddressCity,
       String workAddressProvince, String workAddressDistrict, String workAddressCountry, String workAddressState,
       String workAddressZipcode, String postalAddressLine1, String postalAddressLine2, String postalAddressCity,
@@ -98,8 +177,8 @@ public class DonorExportDTO extends ModificationTrackerExportDTO {
     this.homeAddressCity = homeAddressCity;
     this.homeAddressProvince = homeAddressProvince;
     this.homeAddressDistrict = homeAddressDistrict;
-    this.homeAddressState = homeAddressState;
     this.homeAddressCountry = homeAddressCountry;
+    this.homeAddressState = homeAddressState;
     this.homeAddressZipcode = homeAddressZipcode;
     this.workAddressLine1 = workAddressLine1;
     this.workAddressLine2 = workAddressLine2;
@@ -167,11 +246,11 @@ public class DonorExportDTO extends ModificationTrackerExportDTO {
     this.callingName = callingName;
   }
 
-  public String getGender() {
+  public Gender getGender() {
     return gender;
   }
 
-  public void setGender(String gender) {
+  public void setGender(Gender gender) {
     this.gender = gender;
   }
 
@@ -502,5 +581,4 @@ public class DonorExportDTO extends ModificationTrackerExportDTO {
   public void setPostalAddressZipcode(String postalAddressZipcode) {
     this.postalAddressZipcode = postalAddressZipcode;
   }
-
 }

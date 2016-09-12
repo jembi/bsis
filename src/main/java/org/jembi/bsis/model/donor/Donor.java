@@ -57,7 +57,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
   @NamedQuery(name = DonorNamedQueryConstants.NAME_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER,
       query = DonorNamedQueryConstants.QUERY_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER),
   @NamedQuery(name = DonorNamedQueryConstants.NAME_COUNT_DONOR_WITH_ID,
-      query = DonorNamedQueryConstants.QUERY_COUNT_DONOR_WITH_ID)
+      query = DonorNamedQueryConstants.QUERY_COUNT_DONOR_WITH_ID),
+  @NamedQuery(name = DonorNamedQueryConstants.NAME_FIND_DONORS_FOR_EXPORT,
+      query = DonorNamedQueryConstants.QUERY_FIND_DONORS_FOR_EXPORT)
 })
 @Entity
 @Audited
