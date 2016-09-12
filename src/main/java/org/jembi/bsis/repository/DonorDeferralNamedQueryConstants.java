@@ -55,5 +55,6 @@ public class DonorDeferralNamedQueryConstants {
       + "d.modificationTracker.createdBy.username, d.modificationTracker.lastUpdated, "
       + "d.modificationTracker.lastUpdatedBy.username, d.deferralReasonText, d.deferralDate, d.deferredUntil) "
       + "FROM DonorDeferral d "
-      + "WHERE d.isVoided = :voided ";
+      + "WHERE d.isVoided = :voided "
+      + "ORDER BY d.modificationTracker.createdDate ASC "; 
 }
