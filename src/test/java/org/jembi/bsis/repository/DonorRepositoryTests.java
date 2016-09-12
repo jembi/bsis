@@ -4,28 +4,45 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.NoResultException;
 
+import org.jembi.bsis.dto.DonorExportDTO;
 import org.jembi.bsis.dto.DuplicateDonorDTO;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
+import org.jembi.bsis.helpers.builders.AddressBuilder;
+import org.jembi.bsis.helpers.builders.AddressTypeBuilder;
+import org.jembi.bsis.helpers.builders.ContactBuilder;
+import org.jembi.bsis.helpers.builders.ContactMethodTypeBuilder;
 import org.jembi.bsis.helpers.builders.DonorBuilder;
+import org.jembi.bsis.helpers.builders.IdTypeBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
+import org.jembi.bsis.helpers.builders.PreferredLanguageBuilder;
+import org.jembi.bsis.helpers.matchers.DonorExportDTOMatcher;
+import org.jembi.bsis.model.address.Address;
+import org.jembi.bsis.model.address.AddressType;
+import org.jembi.bsis.model.address.Contact;
+import org.jembi.bsis.model.address.ContactMethodType;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donor.DonorStatus;
+import org.jembi.bsis.model.idtype.IdType;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
 import org.jembi.bsis.model.util.Gender;
-import org.jembi.bsis.repository.DonorRepository;
-import org.jembi.bsis.suites.ContextDependentTestSuite;
+import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class DonorRepositoryTests extends ContextDependentTestSuite {
+public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
   
   @Autowired
   DonorRepository donorRepository;
@@ -425,5 +442,197 @@ public class DonorRepositoryTests extends ContextDependentTestSuite {
   public void testVerifyDonorExistsThatIsDeleted_shouldNotExist() {
     Donor deletedDonor = DonorBuilder.aDonor().thatIsDeleted().buildAndPersist(entityManager);
     Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(deletedDonor.getId()));
+  }
+
+  @Test
+  public void testFindDonorsForExport_shouldReturnDonorsExportDTOsWithTheCorrectState() {
+    String donorNumber = "1234567";
+    String title = "Ms";
+    String firstName = "A";
+    String middleName = "Sample";
+    String lastName = "Donor";
+    String callingName = "Sue";
+    Gender gender = Gender.female;
+    Date birthDate = new DateTime(1977,10,20,0,0,0).toDate();
+    PreferredLanguage language = PreferredLanguageBuilder.anEnglishPreferredLanguage().buildAndPersist(entityManager);
+    Location venue = aVenue().withName("DonateHere").buildAndPersist(entityManager);
+    String bloodAbo = "A";
+    String bloodRh = "+";
+    String notes = "noted";
+    IdType idType = IdTypeBuilder.aNationalId().buildAndPersist(entityManager);
+    String idNumber = "77102089390328";
+    Date dateOfFirstDonation = new LocalDate(2000,1,1).toDate();
+    Date dateOfLastDonation = new DateTime(2016,9,9,9,9,9).toDate();
+    Date dueToDonate = new DateTime(2019,12,12,0,0,0).toDate();
+    String homeAddressLine1 = "123 Apartment";
+    String homeAddressLine2 = "4 Street Rd";
+    String city = "Cape Town";
+    String province = "Western Cape";
+    String district = "Cape Peninsula";
+    String state = "Western Cape";
+    String country = "South Africa";
+    String zipcode = "8001";
+    String workAddressLine1 = "Office 123";
+    String workAddressLine2 = "4 Road Avenue";
+    String postalAddressLine1 = "P.O. Box 1234";
+    String postalAddressLine2 = "Centre";
+    Address address = AddressBuilder.anAddress()
+          .withHomeAddress(homeAddressLine1, homeAddressLine2, city, province, district, country, state, zipcode)
+          .withWorkAddress(workAddressLine1, workAddressLine2, city, province, district, country, state, zipcode)
+          .withPostalAddress(postalAddressLine1, postalAddressLine2, city, province, district, country, state, zipcode)
+          .buildAndPersist(entityManager);
+    AddressType addressType = AddressTypeBuilder.aHomeAddressType().buildAndPersist(entityManager);
+    String homeNumber = "0214561212";
+    String workNumber = "0211234567";
+    String mobileNumber = "0734567827";
+    String email = "email@jembi.org";
+    Contact contact = ContactBuilder.aContact()
+          .withHomeNumber(homeNumber)
+          .withWorkNumber(workNumber)
+          .withMobileNumber(mobileNumber)
+          .withEmail(email)
+          .buildAndPersist(entityManager);
+    ContactMethodType contactMethodType = ContactMethodTypeBuilder.anEmailContactMethodType().buildAndPersist(entityManager);
+    
+    DonorExportDTO expectedDonorDTO = new DonorExportDTO(donorNumber, new Date(), USERNAME, new Date(), USERNAME,
+        title, firstName, middleName, lastName, callingName, gender,
+        birthDate, language.getPreferredLanguage(), venue.getName(), bloodAbo, bloodRh, notes,
+        idType.getIdType(), idNumber, dateOfFirstDonation, dateOfLastDonation, dueToDonate,
+        contactMethodType.getContactMethodType(), mobileNumber, homeNumber, workNumber, email,
+        addressType.getPreferredAddressType(), 
+        homeAddressLine1, homeAddressLine2, city, province, district, country, state, zipcode, 
+        workAddressLine1, workAddressLine2, city, province, district, country, state, zipcode, 
+        postalAddressLine1, postalAddressLine2, city, province, district, country, state, zipcode);
+    
+    // Expected Donor
+    aDonor()
+      .withDonorNumber(donorNumber)
+      .withTitle(title)
+      .withFirstName(firstName)
+      .withMiddleName(middleName)
+      .withLastName(lastName)
+      .withCallingName(callingName)
+      .withGender(gender)
+      .withBirthDate(birthDate)
+      .withVenue(venue)
+      .withPreferredLanguage(language)
+      .withBloodAbo(bloodAbo)
+      .withBloodRh(bloodRh)
+      .withNotes(notes)
+      .withIdType(idType)
+      .withIdNumber(idNumber)
+      .withDateOfFirstDonation(dateOfFirstDonation)
+      .withDateOfLastDonation(dateOfLastDonation)
+      .withDueToDonate(dueToDonate)
+      .withContact(contact)
+      .withAddress(address)
+      .withAddressType(addressType)
+      .withContactMethodType(contactMethodType)
+      .thatIsNotDeleted()
+      .buildAndPersist(entityManager);
+    
+    // Deleted donor (excluded from export)
+    aDonor()
+      .thatIsDeleted()
+      .buildAndPersist(entityManager);
+    
+    List<DonorExportDTO> exportedDonors = donorRepository.findDonorsForExport();
+    
+    // Verify
+    assertThat(exportedDonors.size(), is(1));
+    
+    // Assert state
+    assertThat(exportedDonors.get(0), is(DonorExportDTOMatcher.hasSameStateAsDonorExport(expectedDonorDTO)));
+  }
+  
+  @Test
+  public void testFindDonorsForExportWithNullAddressTypeAndContactType_shouldReturnDonorsExportDTO() {
+    String donorNumber = "1234567";
+    String title = "Ms";
+    String firstName = "A";
+    String middleName = "Sample";
+    String lastName = "Donor";
+    String callingName = "Sue";
+    Gender gender = Gender.female;
+    Date birthDate = new DateTime(1977,10,20,0,0,0).toDate();
+    PreferredLanguage language = PreferredLanguageBuilder.anEnglishPreferredLanguage().buildAndPersist(entityManager);
+    Location venue = aVenue().withName("DonateHere").buildAndPersist(entityManager);
+    String bloodAbo = "A";
+    String bloodRh = "+";
+    String notes = "noted";
+    IdType idType = IdTypeBuilder.aNationalId().buildAndPersist(entityManager);
+    String idNumber = "77102089390328";
+    Date dateOfFirstDonation = new LocalDate(2000,1,1).toDate();
+    Date dateOfLastDonation = new DateTime(2016,9,9,9,9,9).toDate();
+    Date dueToDonate = new DateTime(2019,12,12,0,0,0).toDate();
+    String homeAddressLine1 = "123 Apartment";
+    String homeAddressLine2 = "4 Street Rd";
+    String city = "Cape Town";
+    String province = "Western Cape";
+    String district = "Cape Peninsula";
+    String state = "Western Cape";
+    String country = "South Africa";
+    String zipcode = "8001";
+    String workAddressLine1 = "Office 123";
+    String workAddressLine2 = "4 Road Avenue";
+    String postalAddressLine1 = "P.O. Box 1234";
+    String postalAddressLine2 = "Centre";
+    Address address = AddressBuilder.anAddress()
+          .withHomeAddress(homeAddressLine1, homeAddressLine2, city, province, district, country, state, zipcode)
+          .withWorkAddress(workAddressLine1, workAddressLine2, city, province, district, country, state, zipcode)
+          .withPostalAddress(postalAddressLine1, postalAddressLine2, city, province, district, country, state, zipcode)
+          .buildAndPersist(entityManager);
+    String homeNumber = "0214561212";
+    String workNumber = "0211234567";
+    String mobileNumber = "0734567827";
+    String email = "email@jembi.org";
+    Contact contact = ContactBuilder.aContact()
+          .withHomeNumber(homeNumber)
+          .withWorkNumber(workNumber)
+          .withMobileNumber(mobileNumber)
+          .withEmail(email)
+          .buildAndPersist(entityManager);
+    
+    DonorExportDTO expectedDonorDTO = new DonorExportDTO(donorNumber, new Date(), USERNAME, new Date(), USERNAME,
+        title, firstName, middleName, lastName, callingName, gender,
+        birthDate, language.getPreferredLanguage(), venue.getName(), bloodAbo, bloodRh, notes,
+        idType.getIdType(), idNumber, dateOfFirstDonation, dateOfLastDonation, dueToDonate,
+        (String)null, mobileNumber, homeNumber, workNumber, email,
+        (String)null, homeAddressLine1, homeAddressLine2, city, province, district, country, state, zipcode, 
+        workAddressLine1, workAddressLine2, city, province, district, country, state, zipcode, 
+        postalAddressLine1, postalAddressLine2, city, province, district, country, state, zipcode);
+    
+    // Expected Donor
+    aDonor()
+      .withDonorNumber(donorNumber)
+      .withTitle(title)
+      .withFirstName(firstName)
+      .withMiddleName(middleName)
+      .withLastName(lastName)
+      .withCallingName(callingName)
+      .withGender(gender)
+      .withBirthDate(birthDate)
+      .withVenue(venue)
+      .withPreferredLanguage(language)
+      .withBloodAbo(bloodAbo)
+      .withBloodRh(bloodRh)
+      .withNotes(notes)
+      .withIdType(idType)
+      .withIdNumber(idNumber)
+      .withDateOfFirstDonation(dateOfFirstDonation)
+      .withDateOfLastDonation(dateOfLastDonation)
+      .withDueToDonate(dueToDonate)
+      .withContact(contact)
+      .withAddress(address)
+      .thatIsNotDeleted()
+      .buildAndPersist(entityManager);
+    
+    List<DonorExportDTO> exportedDonors = donorRepository.findDonorsForExport();
+    
+    // Verify
+    assertThat(exportedDonors.size(), is(1));
+    
+    // Assert state
+    assertThat(exportedDonors.get(0), is(DonorExportDTOMatcher.hasSameStateAsDonorExport(expectedDonorDTO)));
   }
 }

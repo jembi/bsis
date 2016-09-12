@@ -44,4 +44,26 @@ public class DonorNamedQueryConstants {
   public static final String NAME_COUNT_DONOR_WITH_ID = "Donor.countDonorWithId";
   public static final String QUERY_COUNT_DONOR_WITH_ID =
       "SELECT count(*) FROM Donor d WHERE d.id=:id AND d.isDeleted = :isDeleted AND d.donorStatus NOT IN :excludedStatuses";
+  
+  public static final String NAME_FIND_DONORS_FOR_EXPORT =
+      "Donor.findDonorsForExport";
+  public static final String QUERY_FIND_DONORS_FOR_EXPORT =
+      "SELECT NEW org.jembi.bsis.dto.DonorExportDTO(d.donorNumber, "
+      + "d.modificationTracker.createdDate, d.modificationTracker.createdBy.username, "
+      + "d.modificationTracker.lastUpdated, d.modificationTracker.lastUpdatedBy.username, "
+      + "d.title, d.firstName, d.middleName, d.lastName, d.callingName, d.gender, "
+      + "d.birthDate, d.preferredLanguage, d.venue.name, "
+      + "d.bloodAbo, d.bloodRh, d.notes, "
+      + "d.idType, d.idNumber, "
+      + "d.dateOfFirstDonation, d.dateOfLastDonation, d.dueToDonate, "
+      + "d.contactMethodType, d.contact, d.addressType, d.address) "
+      + "FROM Donor d "
+      // ensures that even if the Donor doesn't have these entities, they will still be included in the result
+      + "LEFT JOIN d.addressType "
+      + "LEFT JOIN d.address "
+      + "LEFT JOIN d.contactMethodType "
+      + "LEFT JOIN d.contact "
+      + "LEFT JOIN d.idType "
+      + "LEFT JOIN d.preferredLanguage "
+      + "WHERE d.isDeleted = :deleted ";
 }
