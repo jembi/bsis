@@ -106,7 +106,7 @@ public class DataExportService {
   
   @SuppressWarnings("resource")
   private void exportDonorData(OutputStreamWriter writer) throws IOException {
-    LOGGER.info("Exporting donor data...");
+    LOGGER.debug("Exporting donor data...");
 
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
@@ -176,7 +176,7 @@ public class DataExportService {
   
   @SuppressWarnings("resource")
   private void exportDonationData(OutputStreamWriter writer) throws IOException {
-    LOGGER.info("Exporting donation data...");
+    LOGGER.debug("Exporting donation data...");
 
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
@@ -224,7 +224,7 @@ public class DataExportService {
   
   @SuppressWarnings("resource")
   private void exportPostDonationCounsellingData(OutputStreamWriter writer) throws IOException {
-    LOGGER.info("Exporting post donation counselling data...");
+    LOGGER.debug("Exporting post donation counselling data...");
 
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
@@ -249,7 +249,7 @@ public class DataExportService {
   
   @SuppressWarnings("resource")
   private void exportDeferralData(OutputStreamWriter writer) throws IOException {
-    LOGGER.info("Exporting deferral data...");
+    LOGGER.debug("Exporting deferral data...");
 
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
@@ -276,7 +276,7 @@ public class DataExportService {
   
   @SuppressWarnings("resource")
   private void exportBloodTestResultData(OutputStreamWriter writer) throws IOException {
-    LOGGER.info("Exporting blood test result data...");
+    LOGGER.debug("Exporting blood test result data...");
 
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
@@ -302,7 +302,7 @@ public class DataExportService {
   
   @SuppressWarnings("resource")
   private void exportComponentData(OutputStreamWriter writer) throws IOException {
-    LOGGER.info("Exporting component data...");
+    LOGGER.debug("Exporting component data...");
 
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
