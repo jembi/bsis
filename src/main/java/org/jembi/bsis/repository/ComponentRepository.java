@@ -150,7 +150,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .getResultList();
   }
   
-  public Set<ComponentExportDTO> findComponentForExport() {
+  public Set<ComponentExportDTO> findComponentsForExport() {
     List<ComponentExportDTO> componentExportDTOs = em.createNamedQuery(
         ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_FOR_EXPORT, ComponentExportDTO.class)
         .setParameter("discarded", ComponentStatusChangeReasonCategory.DISCARDED)

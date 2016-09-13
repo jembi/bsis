@@ -298,7 +298,7 @@ public class DataExportService {
         "inventoryStatus", "discardedOn", "discardReason", "expiresOn", "notes"));
     
     // Write rows
-    for (ComponentExportDTO component : componentRepository.findComponentForExport()) {
+    for (ComponentExportDTO component : componentRepository.findComponentsForExport()) {
       List<String> componentRecord = new ArrayList<>();
       componentRecord.add(component.getDonationIdentificationNumber());
       componentRecord.add(component.getComponentCode());

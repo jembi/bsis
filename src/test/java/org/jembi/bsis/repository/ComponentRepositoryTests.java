@@ -226,7 +226,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     aComponent().thatIsDeleted().buildAndPersist(entityManager);
     
     // Exercise SUT
-    Set<ComponentExportDTO> returnedDTOs = componentRepository.findComponentForExport();
+    Set<ComponentExportDTO> returnedDTOs = componentRepository.findComponentsForExport();
     
     // Verify
     assertThat(returnedDTOs.size(), is(2));
@@ -284,7 +284,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .buildAndPersist(entityManager);
     
     // Exercise SUT
-    Set<ComponentExportDTO> returnedDTOs = componentRepository.findComponentForExport();
+    Set<ComponentExportDTO> returnedDTOs = componentRepository.findComponentsForExport();
     
     // Verify
     assertThat(returnedDTOs.size(), is(3));
