@@ -26,7 +26,8 @@ public class DonationExportDTO extends ModificationTrackerExportDTO {
   private Integer donorPulse;
   private BigDecimal haemoglobinCount;
   private HaemoglobinLevel haemoglobinLevel;
-  private AdverseEvent adverseEvent;
+  private String adverseEventType;
+  private String adverseEventComment;
   private String bloodAbo;
   private String bloodRh;
   private boolean released;
@@ -58,7 +59,10 @@ public class DonationExportDTO extends ModificationTrackerExportDTO {
     this.donorPulse = donorPulse;
     this.haemoglobinCount = haemoglobinCount;
     this.haemoglobinLevel = haemoglobinLevel;
-    this.adverseEvent = adverseEvent;
+    if (adverseEvent != null) {
+      adverseEventType = adverseEvent.getType().getName();
+      adverseEventComment = adverseEvent.getComment();
+    }
     this.bloodAbo = bloodAbo;
     this.bloodRh = bloodRh;
     this.released = released;
@@ -186,12 +190,20 @@ public class DonationExportDTO extends ModificationTrackerExportDTO {
     this.haemoglobinLevel = haemoglobinLevel;
   }
 
-  public AdverseEvent getAdverseEvent() {
-    return adverseEvent;
+  public String getAdverseEventType() {
+    return adverseEventType;
   }
 
-  public void setAdverseEvent(AdverseEvent adverseEvent) {
-    this.adverseEvent = adverseEvent;
+  public void setAdverseEventType(String adverseEventType) {
+    this.adverseEventType = adverseEventType;
+  }
+
+  public String getAdverseEventComment() {
+    return adverseEventComment;
+  }
+
+  public void setAdverseEventComment(String adverseEventComment) {
+    this.adverseEventComment = adverseEventComment;
   }
 
   public String getBloodAbo() {

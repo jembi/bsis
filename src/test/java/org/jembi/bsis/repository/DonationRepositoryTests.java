@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.AdverseEventBuilder.anAdverseEvent;
+import static org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
 import static org.jembi.bsis.helpers.builders.CollectedDonationDTOBuilder.aCollectedDonationDTO;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationTypeBuilder.aDonationType;
@@ -19,7 +20,6 @@ import java.util.List;
 
 import org.jembi.bsis.dto.CollectedDonationDTO;
 import org.jembi.bsis.dto.DonationExportDTO;
-import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
@@ -253,8 +253,8 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     String bloodRh = "+";
     boolean ineliligibleDonor = true;
     String notes = "NOOOTES";
-    
-    AdverseEvent adverseEvent = anAdverseEvent().buildAndPersist(entityManager);
+    String adverseEventType = "Fainting";
+    String adverseEventComment = "Passed out";
 
     // Expected donation
     aDonation()
@@ -275,7 +275,10 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .withDonorPulse(donorPulse)
         .withHaemoglobinCount(haemoglobinCount)
         .withHaemoglobinLevel(haemoglobinLevel)
-        .withAdverseEvent(adverseEvent)
+        .withAdverseEvent(anAdverseEvent()
+            .withType(anAdverseEventType().withName(adverseEventType).build())
+            .withComment(adverseEventComment)
+            .build())
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
         .thatIsReleased()
@@ -313,7 +316,8 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat(returnedDTO.getDonorPulse(), is(donorPulse));
     assertThat(returnedDTO.getHaemoglobinCount().compareTo(haemoglobinCount), is(0));
     assertThat(returnedDTO.getHaemoglobinLevel(), is(haemoglobinLevel));
-    assertThat(returnedDTO.getAdverseEvent(), is(adverseEvent));
+    assertThat(returnedDTO.getAdverseEventType(), is(adverseEventType));
+    assertThat(returnedDTO.getAdverseEventComment(), is(adverseEventComment));
     assertThat(returnedDTO.getBloodAbo(), is(bloodAbo));
     assertThat(returnedDTO.getBloodRh(), is(bloodRh));
     assertThat(returnedDTO.isReleased(), is(true));
