@@ -15,11 +15,13 @@ import java.util.zip.ZipOutputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.jembi.bsis.dto.BloodTestResultExportDTO;
+import org.jembi.bsis.dto.ComponentExportDTO;
 import org.jembi.bsis.dto.DeferralExportDTO;
 import org.jembi.bsis.dto.DonationExportDTO;
 import org.jembi.bsis.dto.DonorExportDTO;
 import org.jembi.bsis.dto.PostDonationCounsellingExportDTO;
 import org.jembi.bsis.repository.BloodTestResultRepository;
+import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorDeferralRepository;
 import org.jembi.bsis.repository.DonorRepository;
@@ -43,6 +45,8 @@ public class DataExportService {
   private DonorDeferralRepository deferralRepository;
   @Autowired
   private BloodTestResultRepository bloodTestResultRepository;
+  @Autowired
+  private ComponentRepository componentRepository;
   
   public void exportData(OutputStream outputStream) throws IOException {
     ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
@@ -267,7 +271,38 @@ public class DataExportService {
     printer.flush();
   }
   
+  @SuppressWarnings("resource")
   private void exportComponentData(OutputStreamWriter writer) throws IOException {
+    CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
+    // Write headers
+    printer.printRecord(Arrays.asList("donationIdentificationNumber", "componentCode", "createdDate", "createdBy",
+        "lastUpdated", "lastUpdatedBy", "parentComponentCode", "createdOn", "status", "location", "issuedOn",
+        "inventoryStatus", "discardedOn", "discardReason", "expiresOn", "notes"));
+    
+    // Write rows
+    for (ComponentExportDTO component : componentRepository.findComponentForExport()) {
+      List<String> componentRecord = new ArrayList<>();
+      componentRecord.add(component.getDonationIdentificationNumber());
+      componentRecord.add(component.getComponentCode());
+      componentRecord.add(formatDate(component.getCreatedDate()));
+      componentRecord.add(component.getCreatedBy());
+      componentRecord.add(formatDate(component.getLastUpdated()));
+      componentRecord.add(component.getLastUpdatedBy());
+      componentRecord.add(component.getParentComponentCode());
+      componentRecord.add(formatDate(component.getCreatedOn()));
+      componentRecord.add(formatObject(component.getStatus()));
+      componentRecord.add(component.getLocation());
+      componentRecord.add(formatDate(component.getIssuedOn()));
+      componentRecord.add(formatObject(component.getInventoryStatus()));
+      componentRecord.add(formatDate(component.getDiscardedOn()));
+      componentRecord.add(component.getDiscardReason());
+      componentRecord.add(formatDate(component.getExpiresOn()));
+      componentRecord.add(component.getNotes());
+      printer.printRecord(componentRecord);
+    }
+    
+    printer.flush();
   }
   
   private String formatDate(Date date) {
