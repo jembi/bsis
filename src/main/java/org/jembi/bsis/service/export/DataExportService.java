@@ -137,6 +137,14 @@ public class DataExportService {
       donorRecord.add(formatObject(donor.getGender()));
       donorRecord.add(formatDate(donor.getBirthDate()));
       donorRecord.add(donor.getPreferredLanguage());
+      donorRecord.add(donor.getVenue());
+      donorRecord.add(donor.getBloodABO());
+      donorRecord.add(donor.getBloodRh());
+      donorRecord.add(donor.getNotes());
+      donorRecord.add(donor.getIdType());
+      donorRecord.add(donor.getIdNumber());
+      donorRecord.add(formatDate(donor.getDateOfFirstDonation()));
+      donorRecord.add(formatDate(donor.getDateOfLastDonation()));
       donorRecord.add(formatDate(donor.getDueToDonate()));
       donorRecord.add(donor.getContactMethodType());
       donorRecord.add(donor.getMobileNumber());
@@ -157,16 +165,16 @@ public class DataExportService {
       donorRecord.add(donor.getWorkAddressCity());
       donorRecord.add(donor.getWorkAddressProvince());
       donorRecord.add(donor.getWorkAddressDistrict());
-      donorRecord.add(donor.getWorkAddressState());
       donorRecord.add(donor.getWorkAddressCountry());
+      donorRecord.add(donor.getWorkAddressState());
       donorRecord.add(donor.getWorkAddressZipcode());
       donorRecord.add(donor.getPostalAddressLine1());
       donorRecord.add(donor.getPostalAddressLine2());
       donorRecord.add(donor.getPostalAddressCity());
       donorRecord.add(donor.getPostalAddressProvince());
       donorRecord.add(donor.getPostalAddressDistrict());
-      donorRecord.add(donor.getPostalAddressState());
       donorRecord.add(donor.getPostalAddressCountry());
+      donorRecord.add(donor.getPostalAddressState());
       donorRecord.add(donor.getPostalAddressZipcode());
       printer.printRecord(donorRecord);
     }
