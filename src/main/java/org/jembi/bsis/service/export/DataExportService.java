@@ -17,9 +17,11 @@ import org.apache.commons.csv.CSVPrinter;
 import org.jembi.bsis.dto.DeferralExportDTO;
 import org.jembi.bsis.dto.DonationExportDTO;
 import org.jembi.bsis.dto.DonorExportDTO;
+import org.jembi.bsis.dto.PostDonationCounsellingExportDTO;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorDeferralRepository;
 import org.jembi.bsis.repository.DonorRepository;
+import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,8 @@ public class DataExportService {
   private DonorRepository donorRepository;
   @Autowired
   private DonationRepository donationRepository;
+  @Autowired
+  private PostDonationCounsellingRepository postDonationCounsellingRepository;
   @Autowired
   private DonorDeferralRepository deferralRepository;
   
@@ -187,7 +191,27 @@ public class DataExportService {
     printer.flush();
   }
   
+  @SuppressWarnings("resource")
   private void exportPostDonationCounsellingData(OutputStreamWriter writer) throws IOException {
+    CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
+    // Write headers
+    printer.printRecord(Arrays.asList("donationIdentificationNumber", "createdDate", "createdBy", "lastUpdated",
+        "lastUpdatedBy", "counsellingDate"));
+    
+    // Write rows
+    for (PostDonationCounsellingExportDTO counselling : postDonationCounsellingRepository.findPostDonationCounsellingsForExport()) {
+      List<String> counsellingRecord = new ArrayList<>();
+      counsellingRecord.add(counselling.getDonationIdentificationNumber());
+      counsellingRecord.add(formatDate(counselling.getCreatedDate()));
+      counsellingRecord.add(counselling.getCreatedBy());
+      counsellingRecord.add(formatDate(counselling.getLastUpdated()));
+      counsellingRecord.add(counselling.getLastUpdatedBy());
+      counsellingRecord.add(formatDate(counselling.getCounsellingDate()));
+      printer.printRecord(counsellingRecord);
+    }
+    
+    printer.flush();
   }
   
   @SuppressWarnings("resource")
