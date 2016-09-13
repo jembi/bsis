@@ -25,6 +25,10 @@ public class AddressTypeBuilder extends AbstractEntityBuilder<AddressType> {
     return addressType;
   }
   
+  public static AddressTypeBuilder anAddressType() {
+    return new AddressTypeBuilder();
+  }
+  
   public static AddressTypeBuilder aHomeAddressType() {
     return new AddressTypeBuilder().withAddressType("Home");
   }

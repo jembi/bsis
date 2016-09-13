@@ -25,6 +25,11 @@ public class ContactMethodTypeBuilder extends AbstractEntityBuilder<ContactMetho
     return contactMethodType;
   }
   
+  public static ContactMethodTypeBuilder aContactMethodType() {
+    return new ContactMethodTypeBuilder();
+  }
+
+  
   public static ContactMethodTypeBuilder anEmailContactMethodType() {
     return new ContactMethodTypeBuilder().withContactMethodType("Email");
   }

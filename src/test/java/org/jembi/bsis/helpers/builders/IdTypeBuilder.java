@@ -25,7 +25,7 @@ public class IdTypeBuilder extends AbstractEntityBuilder<IdType> {
     return idType;
   }
 
-  public static IdTypeBuilder aPreferredLanguage() {
+  public static IdTypeBuilder anIdType() {
     return new IdTypeBuilder();
   }
   
