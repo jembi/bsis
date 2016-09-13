@@ -1,5 +1,6 @@
 package org.jembi.bsis.controller;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -474,6 +475,21 @@ public class GlobalControllerExceptionHandler {
     errorMap.put("errorCode", HttpStatus.FORBIDDEN);
 
     return new ResponseEntity<Map<String, Object>>(errorMap, HttpStatus.FORBIDDEN);
+  }
+  
+  @ExceptionHandler(IOException.class)
+  public ResponseEntity<Map<String, Object>> handleIOException(IOException ex) {
+    
+    LOGGER.error(ex.getMessage(), ex);
+    
+    Map<String, Object> errorMap = new HashMap<String, Object>();
+    errorMap.put("hasErrors", "true");
+    errorMap.put("developerMessage", "An IOException occurred while performing the request");
+    errorMap.put("userMessage", "");
+    errorMap.put("moreInfo", ex.getMessage());
+    errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
+
+    return new ResponseEntity<>(errorMap, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }
