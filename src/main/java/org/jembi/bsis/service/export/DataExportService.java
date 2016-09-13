@@ -30,12 +30,46 @@ public class DataExportService {
     ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
     OutputStreamWriter writer = new OutputStreamWriter(zipOutputStream);
     
+    // Export donor data
+    zipOutputStream.putNextEntry(new ZipEntry("Donors.csv"));
+    exportDonorData(writer);
+    zipOutputStream.closeEntry();
+
+    // Export donation data
+    zipOutputStream.putNextEntry(new ZipEntry("Donations.csv"));
+    exportDonationData(writer);
+    zipOutputStream.closeEntry();
+
+    // Export post donation counselling data
+    zipOutputStream.putNextEntry(new ZipEntry("Post-donation Counselling.csv"));
+    exportPostDonationCounsellingData(writer);
+    zipOutputStream.closeEntry();
+    
     // Export deferral data
-    zipOutputStream.putNextEntry(new ZipEntry("deferrals.csv"));
+    zipOutputStream.putNextEntry(new ZipEntry("Deferrals.csv"));
     exportDeferralData(writer);
     zipOutputStream.closeEntry();
     
+    // Export blood test result data
+    zipOutputStream.putNextEntry(new ZipEntry("Test Outcomes.csv"));
+    exportBloodTestResultData(writer);
+    zipOutputStream.closeEntry();
+    
+    // Export component data
+    zipOutputStream.putNextEntry(new ZipEntry("Components.csv"));
+    exportComponentData(writer);
+    zipOutputStream.closeEntry();
+    
     writer.close();
+  }
+  
+  private void exportDonorData(OutputStreamWriter writer) throws IOException {
+  }
+  
+  private void exportDonationData(OutputStreamWriter writer) throws IOException {
+  }
+  
+  private void exportPostDonationCounsellingData(OutputStreamWriter writer) throws IOException {
   }
   
   @SuppressWarnings("resource")
@@ -61,6 +95,12 @@ public class DataExportService {
     }
 
     printer.flush();
+  }
+  
+  private void exportBloodTestResultData(OutputStreamWriter writer) throws IOException {
+  }
+  
+  private void exportComponentData(OutputStreamWriter writer) throws IOException {
   }
 
 }
