@@ -14,10 +14,12 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.jembi.bsis.dto.BloodTestResultExportDTO;
 import org.jembi.bsis.dto.DeferralExportDTO;
 import org.jembi.bsis.dto.DonationExportDTO;
 import org.jembi.bsis.dto.DonorExportDTO;
 import org.jembi.bsis.dto.PostDonationCounsellingExportDTO;
+import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorDeferralRepository;
 import org.jembi.bsis.repository.DonorRepository;
@@ -39,6 +41,8 @@ public class DataExportService {
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
   @Autowired
   private DonorDeferralRepository deferralRepository;
+  @Autowired
+  private BloodTestResultRepository bloodTestResultRepository;
   
   public void exportData(OutputStream outputStream) throws IOException {
     ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
@@ -239,7 +243,28 @@ public class DataExportService {
     printer.flush();
   }
   
+  @SuppressWarnings("resource")
   private void exportBloodTestResultData(OutputStreamWriter writer) throws IOException {
+    CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
+    // Write headers
+    printer.printRecord(Arrays.asList("donationIdentificationNumber", "createdDate", "createdBy", "lastUpdated",
+        "lastUpdatedBy", "testName", "outcome"));
+    
+    // Write rows
+    for (BloodTestResultExportDTO bloodTestResult : bloodTestResultRepository.findBloodTestResultsForExport()) {
+      List<String> bloodTestResultRecord = new ArrayList<>();
+      bloodTestResultRecord.add(bloodTestResult.getDonationIdentificationNumber());
+      bloodTestResultRecord.add(formatDate(bloodTestResult.getCreatedDate()));
+      bloodTestResultRecord.add(bloodTestResult.getCreatedBy());
+      bloodTestResultRecord.add(formatDate(bloodTestResult.getLastUpdated()));
+      bloodTestResultRecord.add(bloodTestResult.getLastUpdatedBy());
+      bloodTestResultRecord.add(bloodTestResult.getTestName());
+      bloodTestResultRecord.add(bloodTestResult.getResult());
+      printer.printRecord(bloodTestResultRecord);
+    }
+    
+    printer.flush();
   }
   
   private void exportComponentData(OutputStreamWriter writer) throws IOException {
