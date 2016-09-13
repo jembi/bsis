@@ -14,6 +14,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.log4j.Logger;
 import org.jembi.bsis.dto.BloodTestResultExportDTO;
 import org.jembi.bsis.dto.ComponentExportDTO;
 import org.jembi.bsis.dto.DeferralExportDTO;
@@ -34,6 +35,7 @@ public class DataExportService {
   
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
   private static final DateFormat TIME_FORMAT = new SimpleDateFormat("hh:mm aaa");
+  private static final Logger LOGGER = Logger.getLogger(DataExportService.class);
   
   @Autowired
   private DonorRepository donorRepository;
@@ -49,6 +51,8 @@ public class DataExportService {
   private ComponentRepository componentRepository;
   
   public void exportData(OutputStream outputStream) throws IOException {
+    LOGGER.info("Starting data export...");
+
     ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
     OutputStreamWriter writer = new OutputStreamWriter(zipOutputStream);
     
@@ -83,10 +87,13 @@ public class DataExportService {
     zipOutputStream.closeEntry();
     
     writer.close();
+    LOGGER.info("Data export complete.");
   }
   
   @SuppressWarnings("resource")
   private void exportDonorData(OutputStreamWriter writer) throws IOException {
+    LOGGER.info("Exporting donor data...");
+
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
     // Write headers
@@ -155,6 +162,8 @@ public class DataExportService {
   
   @SuppressWarnings("resource")
   private void exportDonationData(OutputStreamWriter writer) throws IOException {
+    LOGGER.info("Exporting donation data...");
+
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
     // Write headers
@@ -201,6 +210,8 @@ public class DataExportService {
   
   @SuppressWarnings("resource")
   private void exportPostDonationCounsellingData(OutputStreamWriter writer) throws IOException {
+    LOGGER.info("Exporting post donation counselling data...");
+
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
     // Write headers
@@ -224,6 +235,8 @@ public class DataExportService {
   
   @SuppressWarnings("resource")
   private void exportDeferralData(OutputStreamWriter writer) throws IOException {
+    LOGGER.info("Exporting deferral data...");
+
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
     // Write headers
@@ -249,6 +262,8 @@ public class DataExportService {
   
   @SuppressWarnings("resource")
   private void exportBloodTestResultData(OutputStreamWriter writer) throws IOException {
+    LOGGER.info("Exporting blood test result data...");
+
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
     // Write headers
@@ -273,6 +288,8 @@ public class DataExportService {
   
   @SuppressWarnings("resource")
   private void exportComponentData(OutputStreamWriter writer) throws IOException {
+    LOGGER.info("Exporting component data...");
+
     CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
     // Write headers
