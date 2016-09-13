@@ -47,7 +47,7 @@ public class DataExportServiceTests extends UnitTestSuite {
    * ensure that it is correct. If changes are made to the test then the output should be validated
    * again and this value should be updated to be the MD5 sum of the updated zip.
    */
-  private static final String EXPECTED_DIGEST = "68c1ffaca368752193088c2208e43f30";
+  private static final String EXPECTED_DIGEST = "1deb5e4c12fe43d3ab860ceaf0d7b3e8";
   
   @InjectMocks
   private DataExportService dataExportService;
@@ -83,7 +83,7 @@ public class DataExportServiceTests extends UnitTestSuite {
     donor.setLastName("Smith");
     donor.setCallingName("Johnny");
     donor.setGender(Gender.male);
-    donor.setBirthDate(new Date());
+    donor.setBirthDate(new Date(400768342090L));
     donor.setPreferredLanguage("English");
     donor.setVenue("Earth");
     donor.setBloodABO("AB");
