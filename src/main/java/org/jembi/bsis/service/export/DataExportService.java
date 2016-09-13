@@ -3,7 +3,6 @@ package org.jembi.bsis.service.export;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,8 +33,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class DataExportService {
   
-  private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-  private static final DateFormat TIME_FORMAT = new SimpleDateFormat("hh:mm aaa");
   private static final Logger LOGGER = Logger.getLogger(DataExportService.class);
   
   @Autowired
@@ -343,14 +340,14 @@ public class DataExportService {
     if (date == null) {
       return "";
     }
-    return DATE_FORMAT.format(date);
+    return new SimpleDateFormat("yyyy-MM-dd").format(date);
   }
   
   private String formatTime(Date date) {
     if (date == null) {
       return "";
     }
-    return TIME_FORMAT.format(date);
+    return new SimpleDateFormat("hh:mm aaa").format(date);
   }
   
   private String formatBoolean(Boolean value) {

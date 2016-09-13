@@ -12,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.TimeZone;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.output.NullOutputStream;
@@ -36,6 +37,8 @@ import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.service.DateGeneratorService;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -65,6 +68,16 @@ public class DataExportServiceTests extends UnitTestSuite {
   private BloodTestResultRepository bloodTestResultRepository;
   @Mock
   private ComponentRepository componentRepository;
+  
+  @BeforeClass
+  public static void setTimeZone() {
+    TimeZone.setDefault(TimeZone.getTimeZone("Africa/Johannesburg"));
+  }
+  
+  @AfterClass
+  public static void unsetTimeZone() {
+    TimeZone.setDefault(null);
+  }
   
   @Test
   public void testExportData_shouldGenerateCorrectOutput() throws NoSuchAlgorithmException, IOException {
