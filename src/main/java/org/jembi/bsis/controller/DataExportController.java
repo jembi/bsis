@@ -7,7 +7,6 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.jembi.bsis.service.export.DataExportService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
