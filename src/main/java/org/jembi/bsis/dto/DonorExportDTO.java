@@ -2,12 +2,6 @@ package org.jembi.bsis.dto;
 
 import java.util.Date;
 
-import org.jembi.bsis.model.address.Address;
-import org.jembi.bsis.model.address.AddressType;
-import org.jembi.bsis.model.address.Contact;
-import org.jembi.bsis.model.address.ContactMethodType;
-import org.jembi.bsis.model.idtype.IdType;
-import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
 import org.jembi.bsis.model.util.Gender;
 
 public class DonorExportDTO extends ModificationTrackerExportDTO {
@@ -63,77 +57,6 @@ public class DonorExportDTO extends ModificationTrackerExportDTO {
 
   public DonorExportDTO() {
     // Default constructor
-  }
-  
-  public DonorExportDTO(String donorNumber, Date createdDate, String createdBy, Date lastUpdated, String lastUpdatedBy,
-      String title, String firstName, String middleName, String lastName, String callingName, Gender gender,
-      Date birthDate, PreferredLanguage preferredLanguage, String venue, String bloodABO, String bloodRh, String notes,
-      IdType idType, String idNumber, Date dateOfFirstDonation, Date dateOfLastDonation, Date dueToDonate,
-      ContactMethodType contactMethodType, Contact contact, AddressType preferredAddressType, Address address) {
-    this.donorNumber = donorNumber;
-    this.createdDate = createdDate;
-    this.createdBy = createdBy;
-    this.lastUpdated = lastUpdated;
-    this.lastUpdatedBy = lastUpdatedBy;
-    this.title = title;
-    this.firstName = firstName;
-    this.middleName = middleName;
-    this.lastName = lastName;
-    this.callingName = callingName;
-    this.gender = gender;
-    this.birthDate = birthDate;
-    if (preferredLanguage != null) {
-      this.preferredLanguage = preferredLanguage.getPreferredLanguage();
-    }
-    this.venue = venue;
-    this.bloodABO = bloodABO;
-    this.bloodRh = bloodRh;
-    this.notes = notes;
-    if (idType != null) {
-      this.idType = idType.getIdType();
-    }
-    this.idNumber = idNumber;
-    this.dateOfFirstDonation = dateOfFirstDonation;
-    this.dateOfLastDonation = dateOfLastDonation;
-    this.dueToDonate = dueToDonate;
-    if (contactMethodType != null) {
-      this.contactMethodType = contactMethodType.getContactMethodType();
-    }
-    if (contact != null) {
-      this.mobileNumber = contact.getMobileNumber();
-      this.homeNumber = contact.getHomeNumber();
-      this.workNumber = contact.getWorkNumber();
-      this.email = contact.getEmail();
-    }
-    if (preferredAddressType != null) {
-      this.preferredAddressType = preferredAddressType.getPreferredAddressType();
-    }
-    if (address != null) {
-      this.homeAddressLine1 = address.getHomeAddressLine1();
-      this.homeAddressLine2 = address.getHomeAddressLine2();
-      this.homeAddressCity = address.getHomeAddressCity();
-      this.homeAddressProvince = address.getHomeAddressProvince();
-      this.homeAddressDistrict = address.getHomeAddressDistrict();
-      this.homeAddressCountry = address.getHomeAddressCountry();
-      this.homeAddressState = address.getHomeAddressState();
-      this.homeAddressZipcode = address.getHomeAddressZipcode();
-      this.workAddressLine1 = address.getWorkAddressLine1();
-      this.workAddressLine2 = address.getWorkAddressLine2();
-      this.workAddressCity = address.getWorkAddressCity();
-      this.workAddressProvince = address.getWorkAddressProvince();
-      this.workAddressDistrict = address.getWorkAddressDistrict();
-      this.workAddressCountry = address.getWorkAddressCountry();
-      this.workAddressState = address.getWorkAddressState();
-      this.workAddressZipcode = address.getWorkAddressZipcode();
-      this.postalAddressLine1 = address.getPostalAddressLine1();
-      this.postalAddressLine2 = address.getPostalAddressLine2();
-      this.postalAddressCity = address.getPostalAddressCity();
-      this.postalAddressProvince = address.getPostalAddressProvince();
-      this.postalAddressDistrict = address.getPostalAddressDistrict();
-      this.postalAddressCountry = address.getPostalAddressCountry();
-      this.postalAddressState = address.getPostalAddressState();
-      this.postalAddressZipcode = address.getPostalAddressZipcode();
-    }
   }
 
   public DonorExportDTO(String donorNumber, Date createdDate, String createdBy, Date lastUpdated, String lastUpdatedBy,
