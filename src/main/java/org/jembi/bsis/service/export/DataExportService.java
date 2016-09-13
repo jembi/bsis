@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -14,7 +15,9 @@ import java.util.zip.ZipOutputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.jembi.bsis.dto.DeferralExportDTO;
+import org.jembi.bsis.dto.DonorExportDTO;
 import org.jembi.bsis.repository.DonorDeferralRepository;
+import org.jembi.bsis.repository.DonorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,8 @@ public class DataExportService {
   
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
   
+  @Autowired
+  private DonorRepository donorRepository;
   @Autowired
   private DonorDeferralRepository deferralRepository;
   
@@ -63,7 +68,72 @@ public class DataExportService {
     writer.close();
   }
   
+  @SuppressWarnings("resource")
   private void exportDonorData(OutputStreamWriter writer) throws IOException {
+    CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
+    // Write headers
+    printer.printRecord(Arrays.asList("donorNumber", "createdDate", "createdBy", "lastUpdated", "lastUpdatedBy",
+        "title", "firstName", "middleName", "lastName", "callingName", "gender", "birthDate", "preferredLanguage",
+        "venue", "bloodABO", "bloodRh", "notes", "idType", "idNumber", "dateOfFirstDonation", "dateOfLastDonation",
+        "dueToDonate", "contactMethodType", "mobileNumber", "homeNumber", "workNumber", "email", "preferredAddressType",
+        "homeAddressLine1", "homeAddressLine2", "homeAddressCity", "homeAddressProvince", "homeAddressDistrict",
+        "homeAddressState", "homeAddressCountry", "homeAddressZipcode", "workAddressLine1", "workAddressLine2",
+        "workAddressCity", "workAddressProvince", "workAddressDistrict", "workAddressCountry", "workAddressState",
+        "workAddressZipcode", "postalAddressLine1", "postalAddressLine2", "postalAddressCity", "postalAddressProvince",
+        "postalAddressDistrict", "postalAddressCountry", "postalAddressState", "postalAddressZipcode"));
+    
+    // Write rows
+    for (DonorExportDTO donor : donorRepository.findDonorsForExport()) {
+      List<String> donorRecord = new ArrayList<>();
+      donorRecord.add(donor.getDonorNumber());
+      donorRecord.add(formatDate(donor.getCreatedDate()));
+      donorRecord.add(donor.getCreatedBy());
+      donorRecord.add(formatDate(donor.getLastUpdated()));
+      donorRecord.add(donor.getLastUpdatedBy());
+      donorRecord.add(donor.getTitle());
+      donorRecord.add(donor.getFirstName());
+      donorRecord.add(donor.getMiddleName());
+      donorRecord.add(donor.getLastName());
+      donorRecord.add(donor.getCallingName());
+      donorRecord.add(donor.getGender() == null ? null : donor.getGender().toString());
+      donorRecord.add(formatDate(donor.getBirthDate()));
+      donorRecord.add(donor.getPreferredLanguage());
+      donorRecord.add(formatDate(donor.getDueToDonate()));
+      donorRecord.add(donor.getContactMethodType());
+      donorRecord.add(donor.getMobileNumber());
+      donorRecord.add(donor.getHomeNumber());
+      donorRecord.add(donor.getWorkNumber());
+      donorRecord.add(donor.getEmail());
+      donorRecord.add(donor.getPreferredAddressType());
+      donorRecord.add(donor.getHomeAddressLine1());
+      donorRecord.add(donor.getHomeAddressLine2());
+      donorRecord.add(donor.getHomeAddressCity());
+      donorRecord.add(donor.getHomeAddressProvince());
+      donorRecord.add(donor.getHomeAddressDistrict());
+      donorRecord.add(donor.getHomeAddressState());
+      donorRecord.add(donor.getHomeAddressCountry());
+      donorRecord.add(donor.getHomeAddressZipcode());
+      donorRecord.add(donor.getWorkAddressLine1());
+      donorRecord.add(donor.getWorkAddressLine2());
+      donorRecord.add(donor.getWorkAddressCity());
+      donorRecord.add(donor.getWorkAddressProvince());
+      donorRecord.add(donor.getWorkAddressDistrict());
+      donorRecord.add(donor.getWorkAddressState());
+      donorRecord.add(donor.getWorkAddressCountry());
+      donorRecord.add(donor.getWorkAddressZipcode());
+      donorRecord.add(donor.getPostalAddressLine1());
+      donorRecord.add(donor.getPostalAddressLine2());
+      donorRecord.add(donor.getPostalAddressCity());
+      donorRecord.add(donor.getPostalAddressProvince());
+      donorRecord.add(donor.getPostalAddressDistrict());
+      donorRecord.add(donor.getPostalAddressState());
+      donorRecord.add(donor.getPostalAddressCountry());
+      donorRecord.add(donor.getPostalAddressZipcode());
+      printer.printRecord(donorRecord);
+    }
+    
+    printer.flush();
   }
   
   private void exportDonationData(OutputStreamWriter writer) throws IOException {
@@ -84,13 +154,13 @@ public class DataExportService {
     for (DeferralExportDTO deferral : deferralRepository.findDeferralsForExport()) {
       List<String> deferralRecord = new ArrayList<>();
       deferralRecord.add(deferral.getDonorNumber());
-      deferralRecord.add(DATE_FORMAT.format(deferral.getCreatedDate()));
+      deferralRecord.add(formatDate(deferral.getCreatedDate()));
       deferralRecord.add(deferral.getCreatedBy());
-      deferralRecord.add(DATE_FORMAT.format(deferral.getLastUpdated()));
+      deferralRecord.add(formatDate(deferral.getLastUpdated()));
       deferralRecord.add(deferral.getLastUpdatedBy());
       deferralRecord.add(deferral.getDeferralReasonText());
-      deferralRecord.add(DATE_FORMAT.format(deferral.getDeferralDate()));
-      deferralRecord.add(DATE_FORMAT.format(deferral.getDeferredUntil()));
+      deferralRecord.add(formatDate(deferral.getDeferralDate()));
+      deferralRecord.add(formatDate(deferral.getDeferredUntil()));
       printer.printRecord(deferralRecord);
     }
 
@@ -101,6 +171,13 @@ public class DataExportService {
   }
   
   private void exportComponentData(OutputStreamWriter writer) throws IOException {
+  }
+  
+  private String formatDate(Date date) {
+    if (date == null) {
+      return "";
+    }
+    return DATE_FORMAT.format(date);
   }
 
 }
