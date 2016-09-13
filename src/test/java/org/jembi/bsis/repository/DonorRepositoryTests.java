@@ -641,26 +641,31 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
     Location venue = aVenue().withName("DonateHere").buildAndPersist(entityManager);
 
     String donorNumber1 = "1234567";
+    Date createdDate1 = new DateTime(2016,9,9,11,44).toDate();
+
     String donorNumber2 = "1234568";
+    Date createdDate2 = new DateTime(2016,9,1,15,30).toDate();
  
     // Expected Donor #1
     aDonor()
-      .withDonorNumber(donorNumber2)
+      .withDonorNumber(donorNumber1)
       .withFirstName("Sample")
       .withLastName("Donor")
       .withGender(Gender.female)
       .withVenue(venue)
+      .withCreatedDate(createdDate1)
       .thatIsNotDeleted()
       .buildAndPersist(entityManager);
     
     // Expected Donor #2
     aDonor()
-      .withDonorNumber(donorNumber1)
+      .withDonorNumber(donorNumber2)
       .withFirstName("Sample")
       .withMiddleName("Too")
       .withLastName("Donor")
       .withGender(Gender.male)
       .withVenue(venue)
+      .withCreatedDate(createdDate2)
       .thatIsNotDeleted()
       .buildAndPersist(entityManager);
     
@@ -670,7 +675,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat(exportedDonors.size(), is(2));
     
     // Assert state
-    assertThat(exportedDonors.get(0).getDonorNumber(), is(donorNumber2)); // was created first
+    assertThat(exportedDonors.get(0).getDonorNumber(), is(donorNumber2));
     assertThat(exportedDonors.get(1).getDonorNumber(), is(donorNumber1));
   }
 }

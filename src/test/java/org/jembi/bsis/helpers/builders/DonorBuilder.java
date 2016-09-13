@@ -50,6 +50,7 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
   private ContactMethodType contactMethodType;
   private Address address;
   private AddressType addressType;
+  private Date createdDate;
 
   public DonorBuilder withId(Long id) {
     this.id = id;
@@ -204,6 +205,11 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     this.addressType = addressType;
     return this;
   }
+  
+  public DonorBuilder withCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+    return this;
+  }
 
   @Override
   public Donor build() {
@@ -235,6 +241,7 @@ public class DonorBuilder extends AbstractEntityBuilder<Donor> {
     donor.setAddressType(addressType);
     donor.setContact(contact);
     donor.setContactMethodType(contactMethodType);
+    donor.setCreatedDate(createdDate);
     return donor;
   }
 
