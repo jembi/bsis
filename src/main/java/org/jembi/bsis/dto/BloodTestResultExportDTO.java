@@ -7,6 +7,10 @@ public class BloodTestResultExportDTO extends ModificationTrackerExportDTO {
   private String donationIdentificationNumber;
   private String result;
   private String testName;
+  
+  public BloodTestResultExportDTO() {
+    // Default constructor
+  }
 
   public BloodTestResultExportDTO(String donationIdentificationNumber, Date createdDate, String createdBy,
       Date lastUpdated, String lastUpdatedBy, String testName, String result) {

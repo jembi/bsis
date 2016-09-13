@@ -27,6 +27,7 @@ import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorDeferralRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
+import org.jembi.bsis.service.DateGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,8 @@ public class DataExportService {
   private BloodTestResultRepository bloodTestResultRepository;
   @Autowired
   private ComponentRepository componentRepository;
+  @Autowired
+  private DateGeneratorService dateGeneratorService;
   
   public void exportData(OutputStream outputStream) throws IOException {
     LOGGER.info("Starting data export...");
@@ -56,37 +59,51 @@ public class DataExportService {
     ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
     OutputStreamWriter writer = new OutputStreamWriter(zipOutputStream);
     
+    long now = dateGeneratorService.generateDate().getTime();
+    
     // Export donor data
-    zipOutputStream.putNextEntry(new ZipEntry("Donors.csv"));
+    ZipEntry donorsCSV = new ZipEntry("Donors.csv");
+    donorsCSV.setTime(now);
+    zipOutputStream.putNextEntry(donorsCSV);
     exportDonorData(writer);
     zipOutputStream.closeEntry();
 
     // Export donation data
-    zipOutputStream.putNextEntry(new ZipEntry("Donations.csv"));
+    ZipEntry donationsCSV = new ZipEntry("Donations.csv");
+    donationsCSV.setTime(now);
+    zipOutputStream.putNextEntry(donationsCSV);
     exportDonationData(writer);
     zipOutputStream.closeEntry();
 
     // Export post donation counselling data
-    zipOutputStream.putNextEntry(new ZipEntry("Post-donation Counselling.csv"));
+    ZipEntry postDonationCounsellingsCSV = new ZipEntry("Post-donation Counselling.csv");
+    postDonationCounsellingsCSV.setTime(now);
+    zipOutputStream.putNextEntry(postDonationCounsellingsCSV);
     exportPostDonationCounsellingData(writer);
     zipOutputStream.closeEntry();
     
     // Export deferral data
-    zipOutputStream.putNextEntry(new ZipEntry("Deferrals.csv"));
+    ZipEntry deferralsCSV = new ZipEntry("Deferrals.csv");
+    deferralsCSV.setTime(now);
+    zipOutputStream.putNextEntry(deferralsCSV);
     exportDeferralData(writer);
     zipOutputStream.closeEntry();
     
     // Export blood test result data
-    zipOutputStream.putNextEntry(new ZipEntry("Test Outcomes.csv"));
+    ZipEntry testOutcomesCSV = new ZipEntry("Test Outcomes.csv");
+    testOutcomesCSV.setTime(now);
+    zipOutputStream.putNextEntry(testOutcomesCSV);
     exportBloodTestResultData(writer);
     zipOutputStream.closeEntry();
     
     // Export component data
-    zipOutputStream.putNextEntry(new ZipEntry("Components.csv"));
+    ZipEntry componentsCSV = new ZipEntry("Components.csv");
+    componentsCSV.setTime(now);
+    zipOutputStream.putNextEntry(componentsCSV);
     exportComponentData(writer);
     zipOutputStream.closeEntry();
     
-    writer.close();
+    zipOutputStream.finish();
     LOGGER.info("Data export complete.");
   }
   

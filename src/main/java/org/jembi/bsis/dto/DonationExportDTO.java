@@ -34,6 +34,10 @@ public class DonationExportDTO extends ModificationTrackerExportDTO {
   private boolean ineligbleDonor;
   private String notes;
 
+  public DonationExportDTO() {
+    // Default constructor
+  }
+
   public DonationExportDTO(String donorNumber, String donationIdentificationNumber, Date createdDate, String createdBy,
       Date lastUpdated, String lastUpdatedBy, String packType, Date donationDate, BloodTypingStatus bloodTypingStatus,
       BloodTypingMatchStatus bloodTypingMatchStatus, TTIStatus ttiStatus, Date bleedStartTime, Date bleedEndTime,

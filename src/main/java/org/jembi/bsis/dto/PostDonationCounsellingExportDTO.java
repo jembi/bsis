@@ -6,6 +6,10 @@ public class PostDonationCounsellingExportDTO extends ModificationTrackerExportD
 
   private String donationIdentificationNumber;
   private Date counsellingDate;
+  
+  public PostDonationCounsellingExportDTO() {
+    // Default constructor
+  }
 
   public PostDonationCounsellingExportDTO(String donationIdentificationNumber, Date createdDate, String createdBy,
       Date lastUpdated, String lastUpdatedBy, Date counsellingDate) {

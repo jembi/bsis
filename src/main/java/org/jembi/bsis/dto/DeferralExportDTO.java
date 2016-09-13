@@ -9,6 +9,10 @@ public class DeferralExportDTO extends ModificationTrackerExportDTO {
   private Date deferralDate;
   private Date deferredUntil;
   
+  public DeferralExportDTO() {
+    // Default constructor
+  }
+  
   public DeferralExportDTO(String donorNumber, Date createdDate, String createdBy, Date lastUpdated,
       String lastUpdatedBy, String deferralReasonText, Date deferralDate, Date deferredUntil) {
     this.donorNumber = donorNumber;

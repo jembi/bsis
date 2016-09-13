@@ -21,6 +21,10 @@ public class ComponentExportDTO extends ModificationTrackerExportDTO {
   private String discardReason;
   private Date expiresOn;
   private String notes;
+  
+  public ComponentExportDTO() {
+    // Default constructor
+  }
 
   public ComponentExportDTO(long id, String donationIdentificationNumber, String componentCode, Date createdDate,
       String createdBy, Date lastUpdated, String lastUpdatedBy, String parentComponentCode, Date createdOn,

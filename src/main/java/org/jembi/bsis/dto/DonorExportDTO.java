@@ -60,6 +60,10 @@ public class DonorExportDTO extends ModificationTrackerExportDTO {
   private String postalAddressCountry;
   private String postalAddressState;
   private String postalAddressZipcode;
+
+  public DonorExportDTO() {
+    // Default constructor
+  }
   
   public DonorExportDTO(String donorNumber, Date createdDate, String createdBy, Date lastUpdated, String lastUpdatedBy,
       String title, String firstName, String middleName, String lastName, String callingName, Gender gender,
