@@ -445,7 +445,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
   }
 
   @Test
-  public void testFindDonorsForExport_shouldReturnDonorsExportDTOsWithTheCorrectState() {
+  public void testFindDonorsForExport_shouldReturnDonorsExportDTOsThatAreNotDeleted() {
     String donorNumber = "1234567";
     String title = "Ms";
     String firstName = "A";
