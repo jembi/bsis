@@ -42,8 +42,7 @@ public class GeneralConfigBackingFormValidator extends BaseValidator<GeneralConf
           errors.rejectValue("value", "400", "Invalid boolean value");
         break;
       case PASSWORD:
-        if (formItem.getValue() == null || formItem.getValue().equalsIgnoreCase(""))
-          errors.rejectValue("value", "400", "Invalid password value");
+        // Allow all
         break;
     }
 

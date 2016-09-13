@@ -20,7 +20,9 @@ import org.jembi.bsis.repository.constant.DivisionNamedQueryConstants;
     @NamedQuery(name = DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_NAME,
         query = DivisionNamedQueryConstants.QUERY_FIND_DIVISION_BY_NAME),
     @NamedQuery(name = DivisionNamedQueryConstants.NAME_COUNT_DIVISIONS_WITH_PARENT,
-        query = DivisionNamedQueryConstants.QUERY_COUNT_DIVISIONS_WITH_PARENT)
+        query = DivisionNamedQueryConstants.QUERY_COUNT_DIVISIONS_WITH_PARENT),
+    @NamedQuery(name = DivisionNamedQueryConstants.NAME_GET_ALL_DIVISIONS,
+        query = DivisionNamedQueryConstants.QUERY_GET_ALL_DIVISIONS)
 })
 @Entity
 @Audited

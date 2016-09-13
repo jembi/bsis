@@ -18,13 +18,28 @@ public class DivisionRepository extends AbstractRepository<Division> {
         .getSingleResult();
   }
 
+  /**
+   * Finds Division by name, and returns null if there is no division with the given name.
+   *
+   * @param name
+   * @return The division
+   */
   public Division findDivisionByName(String name) {
-    return entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_NAME, Division.class)
-        .setParameter("name", name)
-        .getSingleResult();
+    TypedQuery<Division> query =
+        entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_NAME, Division.class);
+    query.setParameter("name", name);
+    List<Division> divisions = query.getResultList();
+
+    if (divisions.isEmpty()) {
+      return null;
+    }
+
+    // there should only ever be 0 or 1 division with a given name, so if there is > 0 we can
+    // safely take the first division
+    return divisions.get(0);
   }
 
-  public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level) {
+  public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level, Long parentId) {
     // build up Query string
     StringBuilder queryBuilder = new StringBuilder("SELECT div FROM Division div ");
 
@@ -42,6 +57,10 @@ public class DivisionRepository extends AbstractRepository<Division> {
       addWhereCondition(whereClause, "div.level = :level ");
     }
     
+    if (parentId != null) {
+      addWhereCondition(whereClause, "div.parent.id = :parentId ");
+    }
+
     if(!StringUtils.isBlank(whereClause.toString())) {
       queryBuilder.append(whereClause);
     }
@@ -64,7 +83,17 @@ public class DivisionRepository extends AbstractRepository<Division> {
       query.setParameter("level", level);
     }
     
+    if (parentId != null) {
+      query.setParameter("parentId", parentId);
+    }
+
     //EXECUTE QUERY
+    return query.getResultList();
+  }
+  
+  public List<Division> getAllDivisions() {
+    TypedQuery<Division> query =
+        entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_GET_ALL_DIVISIONS, Division.class);
     return query.getResultList();
   }
   

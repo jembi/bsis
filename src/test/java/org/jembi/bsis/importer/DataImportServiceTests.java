@@ -6,13 +6,18 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.matchers.DivisionMatcher.hasSameStateAsDivision;
 import static org.jembi.bsis.helpers.matchers.LocationMatcher.hasSameStateAsLocation;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+
+import javax.persistence.TypedQuery;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -41,6 +46,7 @@ import org.jembi.bsis.model.donor.DonorStatus;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.model.idtype.IdType;
+import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
 import org.jembi.bsis.model.util.Gender;
@@ -52,7 +58,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
   
   @Autowired
   private DataImportService dataImportService;
-  
+
   @Test
   public void testDataImport() throws EncryptedDocumentException, InvalidFormatException, IOException, ParseException {
     // Set up fixture and data
@@ -72,8 +78,9 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     assertImportDonationData_shouldCreateDonationsFromSpreadsheet();
     assertImportDonationData_shouldCreateDeferralsFromSpreadsheet();
     assertImportDonationData_shouldCreateOutcomesFromSpreadsheet();
+    assertImportDivisionData_shouldCreateDivisionsFromSpreadsheet();
   }
-  
+
   private void createSupportingTestData() {
     // Setup user
     UserBuilder.aUser().withUsername("superuser").thatIsNotDeleted().buildAndPersist(entityManager);
@@ -163,6 +170,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     FormFieldBuilder.aFormField().withForm("donor").withField("donorNumber")
         .withAutoGenerate(true).withMaxLength(15)
         .buildAndPersist(entityManager);
+
     entityManager.flush();
 
     // set up test data (Donation)
@@ -218,7 +226,23 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     rhBloodTestingRule2.setNewInformation("-");
     rhBloodTestingRule2.setIsActive(true);
     entityManager.persist(rhBloodTestingRule2);
-    
+
+    FormFieldBuilder.aFormField()
+        .withForm("division")
+        .withField("name")
+        .withMaxLength(0)
+        .thatIsRequired(true)
+        .thatIsHidden(false)
+        .buildAndPersist(entityManager);
+
+    FormFieldBuilder.aFormField()
+        .withForm("division")
+        .withField("level")
+        .thatIsRequired(true)
+        .thatIsHidden(false)
+        .withMaxLength(0)
+        .buildAndPersist(entityManager);
+
     // Synchronize entities to the database before running the test
     entityManager.flush();
   }
@@ -229,11 +253,24 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     Location secondLocation = findLocationByName("Second");
     Location thirdLocation = findLocationByName("Third");
     Location fourthLocation = findLocationByName("Fourth");
+    
+    Division westernCapeDivision = findDivisionByName("Western Cape");
+    Division cityOfCapeTownDivision = findDivisionByName("City of Cape Town");
+    Division khayelitshaDivision = findDivisionByName("Khayelitsha");
+    Division capeWinelandsDivision = findDivisionByName("Cape Winelands");
+    Division stellenboschDivision = findDivisionByName("Stellenbosch");
+    Division gautengDivision = findDivisionByName("Gauteng");
+    Division tshwaneDivision = findDivisionByName("Tshwane");
+    Division pretoriaDivision = findDivisionByName("Pretoria");
+
     Location expectedFirstLocation = aLocation()
         .withId(firstLocation.getId())
         .withName("First")
         .withNotes("First Location")
         .thatIsVenue()
+        .withDivisionLevel1(gautengDivision)
+        .withDivisionLevel2(tshwaneDivision)
+        .withDivisionLevel3(pretoriaDivision)
         .build();
     Location expectedSecondLocation = aLocation()
         .withId(secondLocation.getId())
@@ -241,6 +278,9 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .thatIsMobileSite()
         .thatIsVenue()
         .thatIsDeleted()
+        .withDivisionLevel1(westernCapeDivision)
+        .withDivisionLevel2(cityOfCapeTownDivision)
+        .withDivisionLevel3(khayelitshaDivision)
         .build();
     Location expectedThirdLocation = aLocation()
         .withId(thirdLocation.getId())
@@ -249,12 +289,18 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .thatIsProcessingSite()
         .thatIsDistributionSite()
         .thatIsTestingSite()
+        .withDivisionLevel1(westernCapeDivision)
+        .withDivisionLevel2(capeWinelandsDivision)
+        .withDivisionLevel3(stellenboschDivision)
         .build();
     Location expectedFourthLocation = aLocation()
         .withId(fourthLocation.getId())
         .withName("Fourth")
         .thatIsVenue()
         .withNotes("A venue")
+        .withDivisionLevel1(westernCapeDivision)
+        .withDivisionLevel2(cityOfCapeTownDivision)
+        .withDivisionLevel3(khayelitshaDivision)
         .build();
     
     assertThat(firstLocation, hasSameStateAsLocation(expectedFirstLocation));
@@ -478,4 +524,122 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .setParameter("donation", donation)
         .getSingleResult();
   }
+
+  private void assertImportDivisionData_shouldCreateDivisionsFromSpreadsheet() {
+    // Verify
+    String westernCape = "Western Cape";
+    Division westernCapeDivision = findDivisionByName(westernCape);
+
+    String cityOfCapeTown = "City of Cape Town";
+    Division cityOfCapeTownDivision = findDivisionByName(cityOfCapeTown);
+
+    String khayelitsha = "Khayelitsha";
+    Division khayelitshaDivision = findDivisionByName(khayelitsha);
+
+    String mitchellsPlain = "Mitchell’s Plain";
+    Division mitchellsPlainDivision = findDivisionByName(mitchellsPlain);
+
+    String capeWinelands = "Cape Winelands";
+    Division capeWinelandsDivision = findDivisionByName(capeWinelands);
+
+    String stellenbosch = "Stellenbosch";
+    Division stellenboschDivision = findDivisionByName(stellenbosch);
+
+    String gauteng = "Gauteng";
+    Division gautengDivision = findDivisionByName(gauteng);
+
+    String tshwane = "Tshwane";
+    Division tshwaneDivision = findDivisionByName(tshwane);
+
+    String pretoria = "Pretoria";
+    Division pretoriaDivision = findDivisionByName(pretoria);
+
+    Division expectedWesternCapeDivision = aDivision()
+        .withId(westernCapeDivision.getId())
+        .withName(westernCape)
+        .withLevel(1)
+        .build();
+
+    Division expectedCityOfCapeTownDivision = aDivision()
+        .withId(cityOfCapeTownDivision.getId())
+        .withName(cityOfCapeTown)
+        .withLevel(2)
+        .withParent(westernCapeDivision)
+        .build();
+
+    Division expectedKhayelitshaDivision = aDivision()
+        .withId(khayelitshaDivision.getId())
+        .withName(khayelitsha)
+        .withLevel(3)
+        .withParent(cityOfCapeTownDivision)
+        .build();
+
+    Division expectedMitchellsPlainDivision = aDivision()
+        .withId(mitchellsPlainDivision.getId())
+        .withName(mitchellsPlain)
+        .withLevel(3)
+        .withParent(cityOfCapeTownDivision)
+        .build();
+
+    Division expectedCapeWinelandsDivision = aDivision()
+        .withId(capeWinelandsDivision.getId())
+        .withName(capeWinelands)
+        .withLevel(2)
+        .withParent(westernCapeDivision)
+        .build();
+
+    Division expectedStellenboschDivision = aDivision()
+        .withId(stellenboschDivision.getId())
+        .withName(stellenbosch)
+        .withLevel(3)
+        .withParent(capeWinelandsDivision)
+        .build();
+
+    Division expectedGautengDivision =
+        aDivision()
+        .withId(gautengDivision.getId())
+        .withName(gauteng)
+        .withLevel(1)
+        .build();
+
+    Division expectedTshwaneDivision = aDivision()
+        .withId(tshwaneDivision.getId())
+        .withName(tshwane)
+        .withLevel(2)
+        .withParent(gautengDivision)
+        .build();
+
+    Division expectedPretoriaDivision = aDivision()
+        .withId(pretoriaDivision.getId())
+        .withName(pretoria)
+        .withLevel(3)
+        .withParent(tshwaneDivision)
+        .build();
+
+    assertThat(westernCapeDivision, hasSameStateAsDivision(expectedWesternCapeDivision));
+    assertThat(cityOfCapeTownDivision, hasSameStateAsDivision(expectedCityOfCapeTownDivision));
+    assertThat(khayelitshaDivision, hasSameStateAsDivision(expectedKhayelitshaDivision));
+    assertThat(mitchellsPlainDivision, hasSameStateAsDivision(expectedMitchellsPlainDivision));
+    assertThat(capeWinelandsDivision, hasSameStateAsDivision(expectedCapeWinelandsDivision));
+    assertThat(stellenboschDivision, hasSameStateAsDivision(expectedStellenboschDivision));
+    assertThat(gautengDivision, hasSameStateAsDivision(expectedGautengDivision));
+    assertThat(tshwaneDivision, hasSameStateAsDivision(expectedTshwaneDivision));
+    assertThat(pretoriaDivision, hasSameStateAsDivision(expectedPretoriaDivision));
+  }
+
+  private Division findDivisionByName(String name) {
+    TypedQuery<Division> query =
+        entityManager.createQuery("SELECT d FROM Division d WHERE d.name = :name ", Division.class);
+    query.setParameter("name", name);
+    List<Division> divisions = query.getResultList();
+
+    if (divisions.isEmpty()) {
+      return null;
+    }
+
+    // there should only ever be 0 or 1 division with a given name, so if there is > 0 we can
+    // safely take the first division
+    return divisions.get(0);
+  }
+
 }

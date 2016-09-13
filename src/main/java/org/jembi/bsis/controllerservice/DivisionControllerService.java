@@ -31,8 +31,9 @@ public class DivisionControllerService {
     return divisionFactory.createDivisionFullViewModel(createdDivision);
   }
 
-  public List<DivisionViewModel> findDivisions(String name, boolean includeSimilarResults, Integer level) {
-    List<Division> divisions = divisionRepository.findDivisions(name, includeSimilarResults, level);
+  public List<DivisionViewModel> findDivisions(String name, boolean includeSimilarResults, Integer level,
+      Long parentId) {
+    List<Division> divisions = divisionRepository.findDivisions(name, includeSimilarResults, level, parentId);
     return divisionFactory.createDivisionViewModels(divisions);
   }
 
