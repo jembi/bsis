@@ -15,7 +15,9 @@ import java.util.zip.ZipOutputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.jembi.bsis.dto.DeferralExportDTO;
+import org.jembi.bsis.dto.DonationExportDTO;
 import org.jembi.bsis.dto.DonorExportDTO;
+import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorDeferralRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +27,12 @@ import org.springframework.stereotype.Service;
 public class DataExportService {
   
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+  private static final DateFormat TIME_FORMAT = new SimpleDateFormat("hh:mm aaa");
   
   @Autowired
   private DonorRepository donorRepository;
+  @Autowired
+  private DonationRepository donationRepository;
   @Autowired
   private DonorDeferralRepository deferralRepository;
   
@@ -96,7 +101,7 @@ public class DataExportService {
       donorRecord.add(donor.getMiddleName());
       donorRecord.add(donor.getLastName());
       donorRecord.add(donor.getCallingName());
-      donorRecord.add(donor.getGender() == null ? null : donor.getGender().toString());
+      donorRecord.add(formatObject(donor.getGender()));
       donorRecord.add(formatDate(donor.getBirthDate()));
       donorRecord.add(donor.getPreferredLanguage());
       donorRecord.add(formatDate(donor.getDueToDonate()));
@@ -136,7 +141,50 @@ public class DataExportService {
     printer.flush();
   }
   
+  @SuppressWarnings("resource")
   private void exportDonationData(OutputStreamWriter writer) throws IOException {
+    CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
+    // Write headers
+    printer.printRecord(Arrays.asList("donorNumber", "donationIdentificationNumber", "createdDate", "createdBy",
+        "lastUpdated", "lastUpdatedBy", "packType", "donationDate", "bloodTypingStatus", "bloodTypingMatchStatus",
+        "ttiStatus", "bleedStartTime", "bleedEndTime", "donorWeight", "bloodPressureSystolic", "bloodPressureDiastolic",
+        "donorPulse", "haemoglobinCount", "haemoglobinLevel", "adverseEventType", "adverseEventComment", "bloodAbo",
+        "bloodRh", "released", "ineligbleDonor", "notes"));
+    
+    // Write rows
+    for (DonationExportDTO donation : donationRepository.findDonationsForExport()) {
+      List<String> donationRecord = new ArrayList<>();
+      donationRecord.add(donation.getDonorNumber());
+      donationRecord.add(donation.getDonationIdentificationNumber());
+      donationRecord.add(formatDate(donation.getCreatedDate()));
+      donationRecord.add(donation.getCreatedBy());
+      donationRecord.add(formatDate(donation.getLastUpdated()));
+      donationRecord.add(donation.getLastUpdatedBy());
+      donationRecord.add(donation.getPackType());
+      donationRecord.add(formatDate(donation.getDonationDate()));
+      donationRecord.add(formatObject(donation.getBloodTypingStatus()));
+      donationRecord.add(formatObject(donation.getBloodTypingMatchStatus()));
+      donationRecord.add(formatObject(donation.getTtiStatus()));
+      donationRecord.add(formatTime(donation.getBleedStartTime()));
+      donationRecord.add(formatTime(donation.getBleedEndTime()));
+      donationRecord.add(formatObject(donation.getDonorWeight()));
+      donationRecord.add(formatObject(donation.getBloodPressureSystolic()));
+      donationRecord.add(formatObject(donation.getBloodPressureDiastolic()));
+      donationRecord.add(formatObject(donation.getDonorPulse()));
+      donationRecord.add(formatObject(donation.getHaemoglobinCount()));
+      donationRecord.add(formatObject(donation.getHaemoglobinLevel()));
+      donationRecord.add(donation.getAdverseEventType());
+      donationRecord.add(donation.getAdverseEventComment());
+      donationRecord.add(donation.getBloodAbo());
+      donationRecord.add(donation.getBloodRh());
+      donationRecord.add(formatBoolean(donation.isReleased()));
+      donationRecord.add(formatBoolean(donation.isIneligbleDonor()));
+      donationRecord.add(donation.getNotes());
+      printer.printRecord(donationRecord);
+    }
+    
+    printer.flush();
   }
   
   private void exportPostDonationCounsellingData(OutputStreamWriter writer) throws IOException {
@@ -178,6 +226,27 @@ public class DataExportService {
       return "";
     }
     return DATE_FORMAT.format(date);
+  }
+  
+  private String formatTime(Date date) {
+    if (date == null) {
+      return "";
+    }
+    return TIME_FORMAT.format(date);
+  }
+  
+  private String formatBoolean(Boolean value) {
+    if (value == null) {
+      return "";
+    }
+    return value ? "Y" : "N";
+  }
+  
+  private String formatObject(Object object) {
+    if (object == null) {
+      return "";
+    }
+    return object.toString();
   }
 
 }
