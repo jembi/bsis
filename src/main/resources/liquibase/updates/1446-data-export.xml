@@ -2,7 +2,14 @@
   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-  <changeSet id="20160913-0936" author="dagmar">
+  <changeSet id="20160913-2036" author="timler">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0"> 
+        <![CDATA[
+        SELECT count(*) FROM Permission where name = 'Data Export';
+        ]]>
+      </sqlCheck>
+    </preConditions>
     <comment>Add Data Export permission</comment>
     <insert tableName="Permission">
       <column name="id">115</column>
@@ -17,5 +24,5 @@
       <column name="roles_id" value="2"></column><!-- Admin -->
     </insert>
   </changeSet>
-  
+
 </databaseChangeLog>
