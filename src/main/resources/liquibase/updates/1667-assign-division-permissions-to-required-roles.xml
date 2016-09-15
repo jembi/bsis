@@ -4,6 +4,7 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet id="20160913-1520" author="tumijacob">
+		<comment>BSIS-1688 - Assign permissions view, edit and add division to superuser </comment>
 		<insert tableName="Permission_Role">
 			<column name="permissions_id" value="111"></column>
 			<column name="roles_id" value="1"></column>
@@ -16,6 +17,7 @@
 			<column name="permissions_id" value="113"></column>
 			<column name="roles_id" value="1"></column>
 		</insert>
+		<comment>BSIS-1688 - Assign permissions view, edit and add division to admin user</comment>
 		<insert tableName="Permission_Role">
 			<column name="permissions_id" value="111"></column>
 			<column name="roles_id" value="2"></column>
