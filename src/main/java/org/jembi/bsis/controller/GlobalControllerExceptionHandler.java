@@ -484,8 +484,8 @@ public class GlobalControllerExceptionHandler {
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");
-    errorMap.put("developerMessage", "An IOException occurred while performing the request");
-    errorMap.put("userMessage", "An error happened while reading or writing a file or data. Please try again later");
+    errorMap.put("developerMessage", "An IOException occurred while performing the request.");
+    errorMap.put("userMessage", "An error occurred while reading or writing a file or data. Please try again later.");
     errorMap.put("moreInfo", ex.getMessage());
     errorMap.put("errorCode", HttpStatus.INTERNAL_SERVER_ERROR);
 
