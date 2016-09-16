@@ -26,12 +26,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @NamedQueries({
-  @NamedQuery(name = ComponentTypeQueryConstants.NAME_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS,
-      query = ComponentTypeQueryConstants.QUERY_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS),
-  @NamedQuery(name = ComponentTypeQueryConstants.NAME_FIND_COMPONENT_TYPE_BY_CODE,
-      query = ComponentTypeQueryConstants.QUERY_FIND_COMPONENT_TYPE_BY_CODE),
-  @NamedQuery(name = ComponentTypeQueryConstants.NAME_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED,
-      query = ComponentTypeQueryConstants.QUERY_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED)
+    @NamedQuery(name = ComponentTypeQueryConstants.NAME_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS,
+        query = ComponentTypeQueryConstants.QUERY_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS),
+    @NamedQuery(name = ComponentTypeQueryConstants.NAME_FIND_COMPONENT_TYPE_BY_CODE,
+        query = ComponentTypeQueryConstants.QUERY_FIND_COMPONENT_TYPE_BY_CODE),
+    @NamedQuery(name = ComponentTypeQueryConstants.NAME_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED,
+        query = ComponentTypeQueryConstants.QUERY_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED)
 })
 @Entity
 @Audited
@@ -98,7 +98,7 @@ public class ComponentType extends BaseEntity {
 
   private boolean canBeIssued = true;
 
-  private Boolean containsPlasma = false;
+  private boolean containsPlasma = true;
 
   public Boolean getIsDeleted() {
     return isDeleted;
@@ -261,11 +261,11 @@ public class ComponentType extends BaseEntity {
     this.canBeIssued = canBeIssued;
   }
 
-  public Boolean getContainsPlasma() {
+  public boolean getContainsPlasma() {
     return containsPlasma;
   }
 
-  public void setContainsPlasma(Boolean containsPlasma) {
+  public void setContainsPlasma(boolean containsPlasma) {
     this.containsPlasma = containsPlasma;
   }
 

@@ -60,7 +60,7 @@
     <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
-                   componentTypeCode="0011"/>
+                   componentTypeCode="0011" containsPlasma="true"/>
     <PackType id="1" packType="Single" isDeleted="false" testSampleProduced="true"
               componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>
     <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
