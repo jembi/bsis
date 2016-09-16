@@ -56,45 +56,48 @@ public class DataExportService {
     ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
     OutputStreamWriter writer = new OutputStreamWriter(zipOutputStream);
     
-    long now = dateGeneratorService.generateDate().getTime();
+    Date currentDateTime = dateGeneratorService.generateDate(); 
+    long now = currentDateTime.getTime();
+    
+    String dateTimeStamp = new SimpleDateFormat("yyyyMMddHHmm").format(currentDateTime);
     
     // Export donor data
-    ZipEntry donorsCSV = new ZipEntry("Donors.csv");
+    ZipEntry donorsCSV = new ZipEntry("Donors" + dateTimeStamp + ".csv");
     donorsCSV.setTime(now);
     zipOutputStream.putNextEntry(donorsCSV);
     exportDonorData(writer);
     zipOutputStream.closeEntry();
 
     // Export donation data
-    ZipEntry donationsCSV = new ZipEntry("Donations.csv");
+    ZipEntry donationsCSV = new ZipEntry("Donations" + dateTimeStamp + ".csv");
     donationsCSV.setTime(now);
     zipOutputStream.putNextEntry(donationsCSV);
     exportDonationData(writer);
     zipOutputStream.closeEntry();
 
     // Export post donation counselling data
-    ZipEntry postDonationCounsellingsCSV = new ZipEntry("Post-donation Counselling.csv");
+    ZipEntry postDonationCounsellingsCSV = new ZipEntry("Post-donation Counselling" + dateTimeStamp + ".csv");
     postDonationCounsellingsCSV.setTime(now);
     zipOutputStream.putNextEntry(postDonationCounsellingsCSV);
     exportPostDonationCounsellingData(writer);
     zipOutputStream.closeEntry();
     
     // Export deferral data
-    ZipEntry deferralsCSV = new ZipEntry("Deferrals.csv");
+    ZipEntry deferralsCSV = new ZipEntry("Deferrals" + dateTimeStamp + ".csv");
     deferralsCSV.setTime(now);
     zipOutputStream.putNextEntry(deferralsCSV);
     exportDeferralData(writer);
     zipOutputStream.closeEntry();
     
     // Export blood test result data
-    ZipEntry testOutcomesCSV = new ZipEntry("Test Outcomes.csv");
+    ZipEntry testOutcomesCSV = new ZipEntry("Test Outcomes" + dateTimeStamp + ".csv");
     testOutcomesCSV.setTime(now);
     zipOutputStream.putNextEntry(testOutcomesCSV);
     exportBloodTestResultData(writer);
     zipOutputStream.closeEntry();
     
     // Export component data
-    ZipEntry componentsCSV = new ZipEntry("Components.csv");
+    ZipEntry componentsCSV = new ZipEntry("Components" + dateTimeStamp + ".csv");
     componentsCSV.setTime(now);
     zipOutputStream.putNextEntry(componentsCSV);
     exportComponentData(writer);
