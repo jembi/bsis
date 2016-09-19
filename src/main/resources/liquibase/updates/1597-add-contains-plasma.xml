@@ -6,6 +6,7 @@
     <changeSet id="20160915-1406" author="micnice">
         <addColumn tableName="ComponentType">
             <column name="containsPlasma" type="TINYINT(1)" defaultValue="1">
+                <constraints nullable="0" />
             </column>
         </addColumn>
         <addColumn tableName="ComponentType_AUD">
@@ -43,7 +44,7 @@
             <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
             <where>id = 6</where>
         </update>
-        <!-- Whole Blood Poor Platelets - CPDAWhole Blood Poor Platelets - CPDA -->
+        <!-- Whole Blood Poor Platelets - CPDA -->
         <update tableName="ComponentType">
             <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
             <where>id = 7</where>
