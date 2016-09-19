@@ -1,54 +1,83 @@
 package org.jembi.bsis.viewmodel;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 
 public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
 
-  public ComponentTypeFullViewModel(ComponentType componentType) {
-    super(componentType);
-  }
+  private boolean hasBloodGroup;
+  private Integer lowStorageTemperature;
+  private Integer highStorageTemperature;
+  private String preparationInfo;
+  private String storageInfo;
+  List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations;
 
-  public Boolean isHasBloodGroup() {
-    return componentType.getHasBloodGroup();
+  public boolean isHasBloodGroup() {
+    return hasBloodGroup;
   }
 
   public Integer getLowStorageTemperature() {
-    return componentType.getLowStorageTemperature();
+    return lowStorageTemperature;
   }
 
   public Integer getHighStorageTemperature() {
-    return componentType.getHighStorageTemperature();
+    return highStorageTemperature;
   }
 
   public String getPreparationInfo() {
-    return componentType.getPreparationInfo();
-  }
-
-  public String getTransportInfo() {
-    return componentType.getTransportInfo();
+    return preparationInfo;
   }
 
   public String getStorageInfo() {
-    return componentType.getStorageInfo();
+    return storageInfo;
   }
 
   public List<ComponentTypeCombinationViewModel> getProducedComponentTypeCombinations() {
-    return getComponentTypeCombinationViewModels(componentType.getProducedComponentTypeCombinations());
+    return producedComponentTypeCombinations;
   }
 
-  private List<ComponentTypeCombinationViewModel> getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations) {
-
-    List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels = new ArrayList<ComponentTypeCombinationViewModel>();
-    if (componentTypeCombinations != null) {
-      for (ComponentTypeCombination componentTypeCombination : componentTypeCombinations) {
-        componentTypeCombinationViewModels.add(new ComponentTypeCombinationViewModel(componentTypeCombination));
-      }
-    }
-
-    return componentTypeCombinationViewModels;
+  public void setHasBloodGroup(boolean hasBloodGroup) {
+    this.hasBloodGroup = hasBloodGroup;
   }
+
+  public void setLowStorageTemperature(Integer lowStorageTemperature) {
+    this.lowStorageTemperature = lowStorageTemperature;
+  }
+
+  public void setHighStorageTemperature(Integer highStorageTemperature) {
+    this.highStorageTemperature = highStorageTemperature;
+  }
+
+  public void setPreparationInfo(String preparationInfo) {
+    this.preparationInfo = preparationInfo;
+  }
+
+  public void setStorageInfo(String storageInfo) {
+    this.storageInfo = storageInfo;
+  }
+
+  public void getProducedComponentTypeCombinations(
+      List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations) {
+    this.producedComponentTypeCombinations = producedComponentTypeCombinations;
+  }
+
+  public void setProducedComponentTypeCombinations(
+      List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations) {
+    this.producedComponentTypeCombinations = producedComponentTypeCombinations;
+  }
+
+  
+  // should use factory
+  /*
+   * private List<ComponentTypeCombinationViewModel>
+   * getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations)
+   * {
+   * 
+   * List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels = new
+   * ArrayList<ComponentTypeCombinationViewModel>(); if (componentTypeCombinations != null) { for
+   * (ComponentTypeCombination componentTypeCombination : componentTypeCombinations) {
+   * componentTypeCombinationViewModels.add(new
+   * ComponentTypeCombinationViewModel(componentTypeCombination)); } }
+   * 
+   * return componentTypeCombinationViewModels; }
+   */
 }
