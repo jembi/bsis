@@ -136,11 +136,11 @@
     <ComponentType canBeIssued="true" id="8" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - CPDA"
-                   componentTypeCode="2001" containsPlasma="true"/>
+                   componentTypeCode="2001" containsPlasma="false"/>
     <ComponentType canBeIssued="true" id="9" description="" expiresAfter="42"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - SAGM"
-                   componentTypeCode="2011" containsPlasma="true"/>
+                   componentTypeCode="2011" containsPlasma="false"/>
     <ComponentType canBeIssued="true" id="10" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Fresh Frozen Plasma - Whole Blood"
