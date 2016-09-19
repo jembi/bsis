@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
+import org.jembi.bsis.dto.DeferralExportDTO;
 import org.jembi.bsis.dto.DeferredDonorsDTO;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
@@ -79,6 +80,14 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         DonorDeferral.class)
         .setParameter("donor", donor)
         .setParameter("deferralReason", deferralReason)
+        .setParameter("voided", false)
+        .getResultList();
+  }
+  
+  public List<DeferralExportDTO> findDeferralsForExport() {
+    return entityManager.createNamedQuery(
+        DonorDeferralNamedQueryConstants.NAME_FIND_DEFERRALS_FOR_EXPORT,
+        DeferralExportDTO.class)
         .setParameter("voided", false)
         .getResultList();
   }

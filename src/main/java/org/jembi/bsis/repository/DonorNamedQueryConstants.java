@@ -44,4 +44,34 @@ public class DonorNamedQueryConstants {
   public static final String NAME_COUNT_DONOR_WITH_ID = "Donor.countDonorWithId";
   public static final String QUERY_COUNT_DONOR_WITH_ID =
       "SELECT count(*) FROM Donor d WHERE d.id=:id AND d.isDeleted = :isDeleted AND d.donorStatus NOT IN :excludedStatuses";
+  
+  public static final String NAME_FIND_DONORS_FOR_EXPORT =
+      "Donor.findDonorsForExport";
+  public static final String QUERY_FIND_DONORS_FOR_EXPORT =
+      "SELECT NEW org.jembi.bsis.dto.DonorExportDTO(d.donorNumber, "
+      + "d.modificationTracker.createdDate, d.modificationTracker.createdBy.username, "
+      + "d.modificationTracker.lastUpdated, d.modificationTracker.lastUpdatedBy.username, "
+      + "d.title, d.firstName, d.middleName, d.lastName, d.callingName, d.gender, "
+      + "d.birthDate, d.preferredLanguage.preferredLanguage, d.venue.name, "
+      + "d.bloodAbo, d.bloodRh, d.notes, "
+      + "d.idType.idType, d.idNumber, "
+      + "d.dateOfFirstDonation, d.dateOfLastDonation, d.dueToDonate, "
+      + "d.contactMethodType.contactMethodType, d.contact.mobileNumber, d.contact.homeNumber, d.contact.workNumber, d.contact.email, "
+      + "d.addressType.preferredAddressType, "
+      + "d.address.homeAddressLine1, d.address.homeAddressLine2, d.address.homeAddressCity, d.address.homeAddressProvince, "
+      + "d.address.homeAddressDistrict, d.address.homeAddressCountry, d.address.homeAddressState, d.address.homeAddressZipcode, "
+      + "d.address.workAddressLine1, d.address.workAddressLine2, d.address.workAddressCity, d.address.workAddressProvince, "
+      + "d.address.workAddressDistrict, d.address.workAddressCountry, d.address.workAddressState, d.address.workAddressZipcode, "
+      + "d.address.postalAddressLine1, d.address.postalAddressLine2, d.address.postalAddressCity, d.address.postalAddressProvince, "
+      + "d.address.postalAddressDistrict, d.address.postalAddressCountry, d.address.postalAddressState, d.address.postalAddressZipcode) "
+      + "FROM Donor d "
+      // ensures that even if the Donor doesn't have these entities, they will still be included in the result
+      + "LEFT JOIN d.addressType "
+      + "LEFT JOIN d.address "
+      + "LEFT JOIN d.contactMethodType "
+      + "LEFT JOIN d.contact "
+      + "LEFT JOIN d.idType "
+      + "LEFT JOIN d.preferredLanguage "
+      + "WHERE d.isDeleted = :deleted "
+      + "ORDER BY d.modificationTracker.createdDate ASC";
 }

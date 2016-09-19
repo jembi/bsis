@@ -51,5 +51,6 @@
   <include file="./src/main/resources/liquibase/updates/1060-change-email-properties-at-runtime.xml" />
   <include file="./src/main/resources/liquibase/updates/1609-report-header-logos.xml" />
   <include file="./src/main/resources/liquibase/updates/1451-Assign-locations-to-an-administrative-division.xml" />
+  <include file="./src/main/resources/liquibase/updates/1446-data-export.xml" />
   <include file="./src/main/resources/liquibase/updates/1667-assign-division-permissions-to-required-roles.xml" />
 </databaseChangeLog>

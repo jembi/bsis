@@ -47,4 +47,14 @@ public class DonorDeferralNamedQueryConstants {
           "LEFT JOIN FETCH dd.deferredDonor " +
           "WHERE dd.id = :donorDeferralId " +
           "AND dd.isVoided = :voided";
+  
+  public static final String NAME_FIND_DEFERRALS_FOR_EXPORT =
+      "DonorDeferral.findDeferralsForExport";
+  public static final String QUERY_FIND_DEFERRALS_FOR_EXPORT =
+      "SELECT NEW org.jembi.bsis.dto.DeferralExportDTO(d.deferredDonor.donorNumber, d.modificationTracker.createdDate, "
+      + "d.modificationTracker.createdBy.username, d.modificationTracker.lastUpdated, "
+      + "d.modificationTracker.lastUpdatedBy.username, d.deferralReasonText, d.deferralDate, d.deferredUntil) "
+      + "FROM DonorDeferral d "
+      + "WHERE d.isVoided = :voided "
+      + "ORDER BY d.modificationTracker.createdDate ASC "; 
 }

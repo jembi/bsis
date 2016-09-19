@@ -16,6 +16,7 @@ import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.user.User;
 
 public class ComponentBuilder extends AbstractEntityBuilder<Component> {
 
@@ -36,6 +37,8 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private Date issuedOn;
   private String notes;
   private ComponentBatch componentBatch;
+  private Date createdDate;
+  private User createdBy;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -69,6 +72,11 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
 
   public ComponentBuilder withIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
+    return this;
+  }
+  
+  public ComponentBuilder thatIsDeleted() {
+    isDeleted = true;
     return this;
   }
 
@@ -124,6 +132,16 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     this.componentBatch = componentBatch;
     return this;
   }
+  
+  public ComponentBuilder withCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+    return this;
+  }
+  
+  public ComponentBuilder withCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+    return this;
+  }
 
   @Override
   public Component build() {
@@ -145,6 +163,8 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setIssuedOn(issuedOn);
     component.setComponentBatch(componentBatch);
     component.setNotes(notes);
+    component.setCreatedDate(createdDate);
+    component.setCreatedBy(createdBy);
     return component;
   }
 

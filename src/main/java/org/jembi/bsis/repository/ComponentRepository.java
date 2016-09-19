@@ -1,7 +1,9 @@
 package org.jembi.bsis.repository;
 
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -9,8 +11,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.jembi.bsis.dto.ComponentExportDTO;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -144,5 +148,21 @@ public class ComponentRepository extends AbstractRepository<Component> {
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_CHILD_COMPONENTS, Component.class)
         .setParameter("parentComponent", parentComponent)
         .getResultList();
+  }
+  
+  public Set<ComponentExportDTO> findComponentsForExport() {
+    List<ComponentExportDTO> componentExportDTOs = em.createNamedQuery(
+        ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_FOR_EXPORT, ComponentExportDTO.class)
+        .setParameter("discarded", ComponentStatusChangeReasonCategory.DISCARDED)
+        .setParameter("statusChangeDeleted", false)
+        .setParameter("componentDeleted", false)
+        .getResultList();
+    
+    /*
+     * As a result of joining on status change multiple rows may be returned for the same component.
+     * Adding the rows to a set makes sure that each component only has one row.
+     * The rows with discard reasons are sorted ahead of those without so that they added to the set first.
+     */
+    return new LinkedHashSet<>(componentExportDTOs);
   }
 }
