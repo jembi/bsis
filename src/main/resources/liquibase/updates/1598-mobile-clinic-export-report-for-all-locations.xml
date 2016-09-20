@@ -10,4 +10,27 @@
 			<column name="name" value="View Mobile Clinic Export"></column>
 		</insert>
 	</changeSet>
+	<changeSet id="20160920-1113" author="micnice">
+		<comment>Mapping View Mobile Clinic Export Permissions with Roles</comment>
+		<!-- Superuer -->
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="116"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
+		<!-- Admin -->
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="116"></column>
+			<column name="roles_id" value="2"></column>
+		</insert>
+		<!-- Donor Clinic Supervisor -->
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="116"></column>
+			<column name="roles_id" value="3"></column>
+		</insert>
+		<!-- Donor Clinic Staff -->
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="116"></column>
+			<column name="roles_id" value="4"></column>
+		</insert>
+	</changeSet>
 </databaseChangeLog>
