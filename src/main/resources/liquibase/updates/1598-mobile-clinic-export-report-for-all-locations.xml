@@ -1,0 +1,13 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20160920-0940" author="micnice">
+		<comment>Add permissions "View Mobile Clinic Export"</comment>
+		<insert tableName="Permission">
+			<column name="id" value="116"></column>
+			<column name="name" value="View Mobile Clinic Export"></column>
+		</insert>
+	</changeSet>
+</databaseChangeLog>
