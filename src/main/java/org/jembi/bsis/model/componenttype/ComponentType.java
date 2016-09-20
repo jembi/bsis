@@ -98,7 +98,7 @@ public class ComponentType extends BaseEntity {
 
   private boolean canBeIssued = true;
 
-  private Boolean containsPlasma = false;
+  private boolean containsPlasma = true;
 
   public Boolean getIsDeleted() {
     return isDeleted;
@@ -261,11 +261,11 @@ public class ComponentType extends BaseEntity {
     this.canBeIssued = canBeIssued;
   }
 
-  public Boolean getContainsPlasma() {
+  public boolean getContainsPlasma() {
     return containsPlasma;
   }
 
-  public void setContainsPlasma(Boolean containsPlasma) {
+  public void setContainsPlasma(boolean containsPlasma) {
     this.containsPlasma = containsPlasma;
   }
 

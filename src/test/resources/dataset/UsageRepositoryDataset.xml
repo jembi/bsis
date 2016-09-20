@@ -56,19 +56,19 @@
     <DonationBatch id="1" batchNumber="000000" isDeleted="false"
                    createdDate="2015-08-11 09:05:56.0" lastUpdated="2015-08-11 09:07:10.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1"
-                   backEntry="false"/>
+                   backEntry="false" />
     <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
-                   componentTypeCode="0011"/>
+                   componentTypeCode="0011" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="14" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - Paediatric - CPDA"
-                   componentTypeCode="2101"/>
+                   componentTypeCode="2101" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="6" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood - CPDA" componentTypeCode="1001"
-                   pediComponentType_id="14"/>
+                   pediComponentType_id="14" containsPlasma="true"/>
     <PackType id="1" packType="Single" isDeleted="false" testSampleProduced="true"
               componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>
     <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
