@@ -27,10 +27,5 @@
 			<column name="permissions_id" value="116"></column>
 			<column name="roles_id" value="3"></column>
 		</insert>
-		<!-- Donor Clinic Staff -->
-		<insert tableName="Permission_Role">
-			<column name="permissions_id" value="116"></column>
-			<column name="roles_id" value="4"></column>
-		</insert>
 	</changeSet>
 </databaseChangeLog>
