@@ -34,6 +34,7 @@ public class PermissionConstants {
   // Mobile Clinic Permissions
   public static final String IMPORT_CLINIC_DATA = "Import Clinic Data";
   public static final String EXPORT_CLINIC_DATA = "Export Clinic Data";
+  public static final String VIEW_MOBILE_CLINIC_EXPORT = "View Mobile Clinic Export";
 
   // Component Permissions
   public static final String ADD_COMPONENT = "Add Component";
