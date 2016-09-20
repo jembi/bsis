@@ -41,7 +41,6 @@ public class InventoryFactoryTests {
 
     // Setup
     Date createdOn = new Date();
-    // Date expiresOn = new DateTime().plusDays(10).toDate();
     ComponentType aComponentType = aComponentType().withId(1L).build();
     Component component = 
         aComponent()
@@ -79,40 +78,17 @@ public class InventoryFactoryTests {
 
   @Test
   public void testExpiryStatusWithFutureExpiryDate_shouldReturnDaysUntilExpiry() {
-
     // Setup
-    Date createdOn = new Date();
     Date expiresOn = new DateTime().plusHours(99).toDate();
-    ComponentType aComponentType = aComponentType().withId(1L).build();
-    Component component = 
-        aComponent()
-          .withComponentType(aComponentType)
-          .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
-          .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
-          .withCreatedOn(createdOn)
-          .withExpiresOn(expiresOn)
-          .build();   
-    
-    // Setup mocks
-    LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
-    when(locationFactory.createFullViewModel(component.getLocation()))
-        .thenReturn(locationFullViewModel);
-    ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(aComponentType);
-    when(componentTypeFactory.createViewModel(component.getComponentType()))
-        .thenReturn(componentTypeViewModel);
+    Component component = aComponent().withExpiresOn(expiresOn).build();
     
     InventoryViewModel expectedInventoryViewModel =
         anInventoryViewModel()
-          .withLocation(locationFullViewModel)
           .withInventoryStatus(component.getInventoryStatus())
-          .withId(component.getId())
-          .withDonationIdentificationNumber(component.getDonationIdentificationNumber())
-          .withComponentCode(component.getComponentCode())
-          .withCreatedOn(createdOn)
-          .withComponentType(componentTypeViewModel)
           .withExpiresOn(expiresOn)
           .withExpiryStatus("4 days to expire")
           .build();
+
     // Run test
     InventoryViewModel createdInventoryviewModel = inventoryFactory.createViewModel(component);
     
@@ -122,43 +98,20 @@ public class InventoryFactoryTests {
   
   @Test
   public void testExpiryStatusWithPastExpiryDate_shouldReturnAlreadyExpiredMsg() {
-
     // Setup
-    Date createdOn = new Date();
     Date expiresOn = new DateTime().minusDays(20).toDate();
-    ComponentType aComponentType = aComponentType().withId(1L).build();
-    Component component = 
-        aComponent()
-          .withComponentType(aComponentType)
-          .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
-          .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
-          .withCreatedOn(createdOn)
-          .withExpiresOn(expiresOn)
-          .build();
-    
-    // Setup mocks
-    LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
-    when(locationFactory.createFullViewModel(component.getLocation()))
-        .thenReturn(locationFullViewModel);
-    ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(aComponentType);
-    when(componentTypeFactory.createViewModel(component.getComponentType()))
-        .thenReturn(componentTypeViewModel);
+    Component component = aComponent().withExpiresOn(expiresOn).build();
     
     InventoryViewModel expectedInventoryViewModel =
         anInventoryViewModel()
-          .withLocation(locationFullViewModel)
           .withInventoryStatus(component.getInventoryStatus())
-          .withId(component.getId())
-          .withDonationIdentificationNumber(component.getDonationIdentificationNumber())
-          .withComponentCode(component.getComponentCode())
-          .withCreatedOn(createdOn)
-          .withComponentType(componentTypeViewModel)
           .withExpiresOn(expiresOn)
           .withExpiryStatus("Already expired")
           .build();
+
     // Run test
     InventoryViewModel createdInventoryviewModel = inventoryFactory.createViewModel(component);
-    
+
     // Verify
     assertThat(createdInventoryviewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
   }
