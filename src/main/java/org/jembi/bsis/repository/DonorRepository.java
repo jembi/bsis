@@ -3,7 +3,10 @@ package org.jembi.bsis.repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -22,6 +25,7 @@ import org.jembi.bsis.dto.DonorExportDTO;
 import org.jembi.bsis.dto.DuplicateDonorDTO;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.model.address.AddressType;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donor.DonorStatus;
 import org.jembi.bsis.model.donor.DuplicateDonorBackup;
@@ -325,12 +329,28 @@ public class DonorRepository {
         .getResultList();
   }
 
-  public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenue(Long venueId) throws NoResultException {
-    return em.createNamedQuery(DonorNamedQueryConstants.NAME_MOBILE_CLINIC_LOOKUP, MobileClinicDonorDTO.class)
-        .setParameter("venueId", venueId)
-        .setParameter("isDeleted", false)
-        .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
-        .getResultList();
+  public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenue(Set<Long> venueIds) throws NoResultException {
+    StringBuilder queryBuilder = new StringBuilder()
+    .append("SELECT NEW org.jembi.bsis.dto.MobileClinicDonorDTO(d.id, d.donorNumber, d.firstName, ")
+    .append("d.lastName, d.gender, d.bloodAbo, d.bloodRh, d.donorStatus, d.birthDate, d.venue, d.isDeleted) ")
+    .append("FROM Donor d WHERE d.isDeleted = :isDeleted AND d.donorStatus NOT IN :excludedStatuses ");
+
+    Map<String,Object> parameters = new HashMap<>();
+    parameters.put("isDeleted", false);
+    parameters.put("excludedStatuses", Arrays.asList(DonorStatus.MERGED));
+
+    if (venueIds != null && !venueIds.isEmpty()) {
+      queryBuilder.append("AND d.venue.id IN :venueIds ");
+      parameters.put("venueIds", venueIds);
+    }
+
+    queryBuilder.append("ORDER BY d.lastName asc, d.firstName asc");
+
+    TypedQuery<MobileClinicDonorDTO> query = em.createQuery(queryBuilder.toString(), MobileClinicDonorDTO.class);
+    for (Map.Entry<String, Object> param : parameters.entrySet()) {
+      query.setParameter(param.getKey(), param.getValue());
+    }
+    return query.getResultList();
   }
   
   public boolean verifyDonorExists(Long id) {

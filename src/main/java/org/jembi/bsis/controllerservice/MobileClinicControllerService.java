@@ -3,6 +3,7 @@ package org.jembi.bsis.controllerservice;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.factory.DonorOutcomesViewModelFactory;
@@ -50,8 +51,8 @@ public class MobileClinicControllerService {
     return locationFactory.createViewModels(locationRepository.getVenues());
   }
 
-  public List<MobileClinicLookUpDonorViewModel> getMobileClinicDonors(Long venueId, Date clinicDate) {
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venueId);
+  public List<MobileClinicLookUpDonorViewModel> getMobileClinicDonors(Set<Long> venueIds, Date clinicDate) {
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venueIds);
     return mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonorDTOs, clinicDate);
   }
   
