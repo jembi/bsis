@@ -8,7 +8,9 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -222,7 +224,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
 
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venue.getId());
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(new HashSet<Long>(Arrays.asList(venue.getId())));
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(3));
     // check sorting
@@ -262,7 +264,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsDeleted()
         .buildAndPersist(entityManager);
 
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venue.getId());
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(new HashSet<Long>(Arrays.asList(venue.getId())));
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(1));
     Assert.assertFalse("Deleted MobileClinicDonor not returned", mobileClinicDonorDTOs.contains(donor2));
@@ -296,7 +298,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
 
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venue.getId());
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(new HashSet<Long>(Arrays.asList(venue.getId())));
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(1));
     Assert.assertFalse("Deleted MobileClinicDonor not returned", mobileClinicDonorDTOs.contains(donor2));
@@ -333,7 +335,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
 
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venue1.getId());
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(new HashSet<Long>(Arrays.asList(venue1.getId())));
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(1));
     for (MobileClinicDonorDTO d : mobileClinicDonorDTOs) {
