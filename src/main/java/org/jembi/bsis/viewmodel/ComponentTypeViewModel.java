@@ -2,11 +2,9 @@ package org.jembi.bsis.viewmodel;
 
 public class ComponentTypeViewModel extends BaseViewModel{
 
- // private Long id;
   private String componentTypeName;
   private String componentTypeCode;
   private String description;
-  private boolean containsPlasma;
 
   public String getComponentTypeName() {
     return componentTypeName;
@@ -31,13 +29,4 @@ public class ComponentTypeViewModel extends BaseViewModel{
   public void setDescription(String description) {
     this.description = description;
   }
-
-  public boolean isContainsPlasma() {
-    return containsPlasma;
-  }
-
-  public void setContainsPlasma(boolean containsPlasma) {
-    this.containsPlasma = containsPlasma;
-  }
- 
 }

@@ -2,7 +2,11 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.ComponentTypeFullViewModelBuilder.aComponentTypeFullViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasSameStateAsComponentFullViewModel;
@@ -14,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder;
-import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -64,19 +66,28 @@ public class ComponentFactoryTests {
     // set up data
     Donation donation = DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build();
     Location location = aLocation().build();
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().build();
+    
+    ComponentType componentType = aComponentType().build();
+    
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+          .withId(componentType.getId())
+          .withComponentTypeName(componentType.getComponentTypeName())
+          .withComponentTypeCode(componentType.getComponentTypeCode())
+          .build();
+    
     Component component = aComponent()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
-            .withComponentType(componentType)
+        .withComponentType(componentType)
         .withLocation(location)
         .withDonation(donation).build();
-    ComponentFullViewModel expectedViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel()
+    
+    ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withComponentType(new ComponentTypeViewModel(componentType))
+        .withComponentType(componentTypeViewModel)
         .withLocation(new LocationFullViewModel(location))
         .withBloodAbo(donation.getBloodAbo())
         .withBloodRh(donation.getBloodRh())
@@ -84,7 +95,7 @@ public class ComponentFactoryTests {
 
     // setup mocks
     when(locationFactory.createFullViewModel(location)).thenReturn(new LocationFullViewModel(location));
-    when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
+    when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
 
     // run test
     ComponentFullViewModel convertedViewModel = componentFactory.createComponentFullViewModel(component);
@@ -129,7 +140,7 @@ public class ComponentFactoryTests {
   public void createManagementViewModel_oneComponent() {
     // set up data
     Date createdOn = new Date();
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().build();
+    ComponentType componentType = aComponentType().build();
     Component component = aComponent()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
@@ -138,11 +149,16 @@ public class ComponentFactoryTests {
         .withCreatedOn(createdOn)
         .withWeight(222)
         .build();
+    
+    ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
+        .withId(1L)
+        .build();
+    
     ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentCode("0011")
-        .withComponentType(new ComponentTypeFullViewModel(componentType))
+        .withComponentType(componentTypeFullViewModel)
         .withCreatedOn(createdOn)
         .withWeigth(222)
         .withPermission("canDiscard", true)
@@ -154,7 +170,7 @@ public class ComponentFactoryTests {
         .build();
 
     // setup mocks
-    when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(new ComponentTypeFullViewModel(componentType));
+    when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(componentTypeFullViewModel);
     when(componentConstraintChecker.canDiscard(component)).thenReturn(true);
     when(componentConstraintChecker.canProcess(component)).thenReturn(true);
     when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
@@ -172,8 +188,8 @@ public class ComponentFactoryTests {
   @Test
   public void createComponentViewModel_oneComponent() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber("1234567").build();
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().build();
+   Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber("1234567").build();
+    ComponentType componentType = aComponentType().build();
     Component component = aComponent().withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(componentType)
@@ -181,9 +197,16 @@ public class ComponentFactoryTests {
         .withCreatedOn(new Date())
         .withDonation(donation)
         .build();
+    
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+        .withId(1L)
+        .withComponentTypeName(componentType.getComponentTypeName())
+        .withComponentTypeCode(componentType.getComponentTypeCode())
+        .build();
+    
     ComponentViewModel expectedViewModel = aComponentViewModel().withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withComponentType(new ComponentTypeViewModel(componentType))
+        .withComponentType(componentTypeViewModel)
         .withComponentCode("componentCode")
         .withCreatedOn(new Date())
         .withDonationIdentificationNumber("1234567")
@@ -191,7 +214,7 @@ public class ComponentFactoryTests {
         .build();
 
     // setup mocks
-    when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
+    when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
 
     // run test
     ComponentViewModel convertedViewModel = componentFactory.createComponentViewModel(component);

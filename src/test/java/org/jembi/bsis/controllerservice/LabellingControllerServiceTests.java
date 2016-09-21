@@ -8,6 +8,7 @@ import java.util.List;
 import org.jembi.bsis.controllerservice.LabellingControllerService;
 import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
+import org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
@@ -30,12 +31,12 @@ public class LabellingControllerServiceTests extends UnitTestSuite {
   @Test
   public void testFindReturnForms_shouldCallRepositoryAndFactory() throws Exception {
     List<ComponentType> entities = Arrays.asList(
-        ComponentTypeBuilder.aComponentType().build(),
-        ComponentTypeBuilder.aComponentType().build()
+        ComponentTypeBuilder.aComponentType().withId(1L).build(),
+        ComponentTypeBuilder.aComponentType().withId(2L).build()
     );
     List<ComponentTypeViewModel> viewModels = Arrays.asList(
-        new ComponentTypeViewModel(entities.get(0)),
-        new ComponentTypeViewModel(entities.get(1))
+        ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder().withId(1L).build(),
+        ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder().withId(2L).build()
     );
     
     // set up mocks

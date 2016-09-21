@@ -1,13 +1,11 @@
 package org.jembi.bsis.factory;
 
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
-import org.jembi.bsis.factory.ComponentTypeFactory;
-import org.jembi.bsis.factory.InventoryFactory;
-import org.jembi.bsis.factory.LocationFactory;
-import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
@@ -40,7 +38,7 @@ public class InventoryFactoryTests {
 
     // Setup
     Date createdOn = new Date();
-    Component component = ComponentBuilder.aComponent()
+    Component component = aComponent()
         .withComponentType(ComponentTypeBuilder.aComponentType().withId(1L).build())
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
         .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
@@ -52,7 +50,10 @@ public class InventoryFactoryTests {
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
     when(locationFactory.createFullViewModel(component.getLocation()))
         .thenReturn(locationFullViewModel);
-    ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(component.getComponentType());
+
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+        .withId(1L)
+        .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
     
@@ -77,16 +78,18 @@ public class InventoryFactoryTests {
   public void testExpiryStatusWithNoExpiryDate_shouldBeEmpty() {
 
     // Setup
-    Component component = ComponentBuilder.aComponent()
+    Component component = aComponent()
         .withDonation(DonationBuilder.aDonation().build())
         .withExpiresOn(null).build();
 
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
     when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
-    ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(component.getComponentType());
-    when(componentTypeFactory.createViewModel(component.getComponentType())).thenReturn(componentTypeViewModel);
-
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+        .build();
+    when(componentTypeFactory.createViewModel(component.getComponentType()))
+        .thenReturn(componentTypeViewModel);
+    
     // Run test
     InventoryViewModel viewModel = inventoryFactory.createViewModel(component);
 
@@ -100,16 +103,17 @@ public class InventoryFactoryTests {
 
     // Setup
     DateTime expiresOn = (new DateTime()).plusHours(99);
-    Component component = ComponentBuilder.aComponent()
+    Component component = aComponent()
         .withDonation(DonationBuilder.aDonation().build())
         .withExpiresOn(expiresOn.toDate()).build();
 
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
     when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
-    ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(component.getComponentType());
-    when(componentTypeFactory.createViewModel(component.getComponentType())).thenReturn(componentTypeViewModel);
-
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+        .build();
+    when(componentTypeFactory.createViewModel(component.getComponentType()))
+        .thenReturn(componentTypeViewModel);
     // Run test
     InventoryViewModel viewModel = inventoryFactory.createViewModel(component);
 
@@ -123,15 +127,17 @@ public class InventoryFactoryTests {
 
     // Setup
     DateTime expiresOn = (new DateTime()).minusDays(20);
-    Component component = ComponentBuilder.aComponent()
+    Component component = aComponent()
         .withDonation(DonationBuilder.aDonation().build())
         .withExpiresOn(expiresOn.toDate()).build();
 
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
     when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
-    ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(component.getComponentType());
-    when(componentTypeFactory.createViewModel(component.getComponentType())).thenReturn(componentTypeViewModel);
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+        .build();
+    when(componentTypeFactory.createViewModel(component.getComponentType()))
+        .thenReturn(componentTypeViewModel);
 
     // Run test
     InventoryViewModel viewModel = inventoryFactory.createViewModel(component);

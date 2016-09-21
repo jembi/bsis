@@ -8,6 +8,7 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
   private Integer lowStorageTemperature;
   private Integer highStorageTemperature;
   private String preparationInfo;
+  private String transportInfo;
   private String storageInfo;
   List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations;
 
@@ -64,20 +65,12 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
       List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations) {
     this.producedComponentTypeCombinations = producedComponentTypeCombinations;
   }
-
   
-  // should use factory
-  /*
-   * private List<ComponentTypeCombinationViewModel>
-   * getComponentTypeCombinationViewModels(List<ComponentTypeCombination> componentTypeCombinations)
-   * {
-   * 
-   * List<ComponentTypeCombinationViewModel> componentTypeCombinationViewModels = new
-   * ArrayList<ComponentTypeCombinationViewModel>(); if (componentTypeCombinations != null) { for
-   * (ComponentTypeCombination componentTypeCombination : componentTypeCombinations) {
-   * componentTypeCombinationViewModels.add(new
-   * ComponentTypeCombinationViewModel(componentTypeCombination)); } }
-   * 
-   * return componentTypeCombinationViewModels; }
-   */
+  public String getTransportInfo() {
+    return transportInfo;
+  }
+
+  public void setTransportInfo(String transportInfo) {
+    this.transportInfo = transportInfo;
+  }
 }
