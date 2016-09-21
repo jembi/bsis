@@ -31,7 +31,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
   @NamedQuery(name = ComponentTypeQueryConstants.NAME_FIND_COMPONENT_TYPE_BY_CODE,
       query = ComponentTypeQueryConstants.QUERY_FIND_COMPONENT_TYPE_BY_CODE),
   @NamedQuery(name = ComponentTypeQueryConstants.NAME_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED,
-      query = ComponentTypeQueryConstants.QUERY_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED)
+      query = ComponentTypeQueryConstants.QUERY_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED),
+  @NamedQuery(name = ComponentTypeQueryConstants.NAME_VERIFY_UNIQUE_COMPONENT_TYPE_NAME,
+      query = ComponentTypeQueryConstants.QUERY_VERIFY_UNIQUE_COMPONENT_TYPE_NAME),    
 })
 @Entity
 @Audited

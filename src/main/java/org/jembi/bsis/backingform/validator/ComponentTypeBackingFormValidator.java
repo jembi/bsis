@@ -21,6 +21,10 @@ public class ComponentTypeBackingFormValidator extends BaseValidator<ComponentTy
     
     if (StringUtils.isBlank(form.getComponentTypeName())) {
       errors.rejectValue("componentTypeName", "errors.required", "Component type name is required");
+    } else {
+      if (!componentTypeRepository.isUniqueComponentTypeName(form.getId(), form.getComponentTypeName())) {
+        errors.rejectValue("componentTypeName", "errors.nonUnique", "Component type name already exists");
+      }
     }
     
     if (StringUtils.isBlank(form.getComponentTypeCode())) {

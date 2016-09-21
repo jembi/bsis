@@ -23,6 +23,7 @@ import org.springframework.validation.MapBindingResult;
 public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
   
   private static final String COMPONENT_TYPE_CODE = "666";
+  private static final String COMPONENT_TYPE_NAME = "Blood";
 
   @InjectMocks
   private ComponentTypeBackingFormValidator componentTypeBackingFormValidator;
@@ -56,10 +57,11 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
         .withExpiresAfter(35)
         .build();
     
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(2L, "Component Type")).thenReturn(Boolean.TRUE);
+    
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
     componentTypeBackingFormValidator.validateForm(backingForm, errors);
-
-    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
     
     assertThat(errors.getFieldErrorCount(), is(1));
     assertThat(errors.getFieldError("componentTypeCode").getCode(), is("errors.required"));
@@ -77,6 +79,7 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
     ComponentType existingComponentType = aComponentType().withId(7L).withComponentTypeCode(COMPONENT_TYPE_CODE).build();
     
     when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenReturn(existingComponentType);
+    when(componentTypeRepository.isUniqueComponentTypeName(2L, "Component Type")).thenReturn(Boolean.TRUE);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
     componentTypeBackingFormValidator.validateForm(backingForm, errors);
@@ -102,11 +105,31 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
         .build();
     
     when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenReturn(existingComponentType);
+    when(componentTypeRepository.isUniqueComponentTypeName(componentTypeId, "Component Type")).thenReturn(Boolean.TRUE);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
     componentTypeBackingFormValidator.validateForm(backingForm, errors);
     
     assertThat(errors.getErrorCount(), is(0));
+  }
+  
+  @Test
+  public void testValidateFormWithDuplicateName_shouldHaveOneError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(2L)
+        .withComponentTypeName(COMPONENT_TYPE_NAME)
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(35)
+        .build();
+    
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(2L, COMPONENT_TYPE_NAME)).thenReturn(Boolean.FALSE);
+    
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+    
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("componentTypeName").getCode(), is("errors.nonUnique"));
   }
   
   @Test
@@ -119,6 +142,7 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
         .build();
 
     when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(2L, "Component Type")).thenReturn(Boolean.TRUE);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
     componentTypeBackingFormValidator.validateForm(backingForm, errors);
@@ -137,6 +161,7 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
         .build();
 
     when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(2L, "Component Type")).thenReturn(Boolean.TRUE);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
     componentTypeBackingFormValidator.validateForm(backingForm, errors);
@@ -155,6 +180,7 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
         .build();
 
     when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(2L, "Component Type")).thenReturn(Boolean.TRUE);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
     componentTypeBackingFormValidator.validateForm(backingForm, errors);

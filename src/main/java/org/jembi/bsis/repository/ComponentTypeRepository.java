@@ -44,6 +44,14 @@ public class ComponentTypeRepository {
         .setParameter("deleted", false)
         .getSingleResult();
   }
+  
+  public boolean isUniqueComponentTypeName(Long id, String componentTypeName) {
+    return em.createNamedQuery(ComponentTypeQueryConstants.NAME_VERIFY_UNIQUE_COMPONENT_TYPE_NAME, Boolean.class)
+        .setParameter("id", id)
+        .setParameter("componentTypeName", componentTypeName)
+        .setParameter("deleted", false)
+        .getSingleResult();
+  }
 
   public ComponentType getComponentTypeById(Long id) throws NoResultException, NonUniqueResultException {
     TypedQuery<ComponentType> query;
