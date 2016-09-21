@@ -8,6 +8,7 @@ public class ComponentTypeViewModelBuilder extends AbstractBuilder<ComponentType
   private String componentTypeName;
   private String componentTypeCode;
   private String description;
+  private boolean containsPlasma;
 
   public ComponentTypeViewModelBuilder withId(Long id) {
     this.id = id;
@@ -28,6 +29,11 @@ public class ComponentTypeViewModelBuilder extends AbstractBuilder<ComponentType
     this.description = description;
     return this;
   }
+  
+  public ComponentTypeViewModelBuilder withContainsPlasma(boolean containsPlasma) {
+    this.containsPlasma = containsPlasma;
+    return this;
+  }
 
   @Override
   public ComponentTypeViewModel build() {
@@ -36,6 +42,7 @@ public class ComponentTypeViewModelBuilder extends AbstractBuilder<ComponentType
     viewModel.setComponentTypeName(componentTypeName);
     viewModel.setComponentTypeCode(componentTypeCode);
     viewModel.setDescription(description);
+    viewModel.setIsContainsPlasma(containsPlasma);
 
     return viewModel;
   }

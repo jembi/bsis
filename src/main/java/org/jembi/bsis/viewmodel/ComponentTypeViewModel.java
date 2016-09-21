@@ -5,6 +5,7 @@ public class ComponentTypeViewModel extends BaseViewModel{
   private String componentTypeName;
   private String componentTypeCode;
   private String description;
+  private boolean containsPlasma;
 
   public String getComponentTypeName() {
     return componentTypeName;
@@ -28,5 +29,13 @@ public class ComponentTypeViewModel extends BaseViewModel{
 
   public void setDescription(String description) {
     this.description = description;
+  }
+  
+  public boolean getIsContainsPlasma() {
+    return containsPlasma;
+  }
+
+  public void setIsContainsPlasma(boolean containsPlasma) {
+    this.containsPlasma = containsPlasma;
   }
 }

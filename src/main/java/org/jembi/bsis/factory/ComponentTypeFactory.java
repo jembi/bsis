@@ -63,6 +63,7 @@ public class ComponentTypeFactory {
     componentTypeViewModel.setComponentTypeName(componentType.getComponentTypeName());
     componentTypeViewModel.setComponentTypeCode(componentType.getComponentTypeCode());
     componentTypeViewModel.setDescription(componentType.getDescription());
+    componentTypeViewModel.setIsContainsPlasma(componentType.getContainsPlasma());
   }
 
   private void populateComponentTypeSearchViewModelFields(

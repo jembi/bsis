@@ -1,15 +1,31 @@
 package org.jembi.bsis.factory;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder;
+import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
+import static org.jembi.bsis.helpers.matchers.ComponentTypeViewModelMatcher.hasSameStateAsComponentTypeViewModel;
+import static org.mockito.Mockito.when;
+
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
+import org.jembi.bsis.helpers.builders.DonationBuilder;
+import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeSearchViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -126,4 +142,33 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", Long.valueOf(1), viewModels.get(0).getId());
     Assert.assertEquals("View Model correct", Long.valueOf(2), viewModels.get(1).getId());
   }
+  
+  @Test
+  public void testComponentTypeViewModelWithContainsPlasma_shouldReturnExpectedViewModel() {
+    boolean containsPlasma = true;
+    ComponentType componentType = aComponentType()
+        .withId(1L)
+        .withComponentTypeCode("0000")
+        .withComponentTypeName("name")
+        .withDescription("description")
+        .withContainsPlasma(containsPlasma)
+        .build();
+    
+    ComponentTypeViewModel expectedViewModel = aComponentTypeViewModelBuilder()
+        .withId(1L)
+        .withComponentTypeCode("0000")
+        .withComponentTypeName("name")
+        .withDescription("description")
+        .withContainsPlasma(containsPlasma)
+        .build();
+    
+    // run test
+    ComponentTypeViewModel convertedViewModel = componentTypeFactory.createViewModel(componentType);
+
+    // do asserts
+    assertThat(convertedViewModel, is(notNullValue()));
+    assertThat("Correct view model", convertedViewModel, hasSameStateAsComponentTypeViewModel(expectedViewModel));
+    
+  }
+
 }

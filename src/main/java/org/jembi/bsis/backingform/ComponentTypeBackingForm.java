@@ -120,4 +120,5 @@ public class ComponentTypeBackingForm {
   public void setContainsPlasma(boolean containsPlasma) {
     componentType.setContainsPlasma(containsPlasma);
   }
+  
 }

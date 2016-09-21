@@ -24,6 +24,7 @@ public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<Component
   private boolean isDeleted;
   private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
   private List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations = new ArrayList<>();
+  private boolean containsPlasma;
 
   public ComponentTypeFullViewModelBuilder withId(Long Id) {
     this.Id = Id;
@@ -107,6 +108,11 @@ public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<Component
     return this;
   }
   
+  public ComponentTypeFullViewModelBuilder withContainsPlasma(boolean containsPlasma) {
+    this.containsPlasma = containsPlasma;
+    return this;
+  }
+  
   @Override
   public ComponentTypeFullViewModel build() {
     ComponentTypeFullViewModel viewModel = new ComponentTypeFullViewModel();
@@ -125,6 +131,7 @@ public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<Component
     viewModel.setComponentTypeName(componentTypeName);
     viewModel.setComponentTypeCode(componentTypeCode);
     viewModel.setDescription(description);
+    viewModel.setIsContainsPlasma(containsPlasma);
 
     return viewModel;
   }
