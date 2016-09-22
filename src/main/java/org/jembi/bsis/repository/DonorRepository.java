@@ -329,7 +329,7 @@ public class DonorRepository {
         .getResultList();
   }
 
-  public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenue(Set<Long> venueIds) throws NoResultException {
+  public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenues(Set<Long> venueIds) throws NoResultException {
     StringBuilder queryBuilder = new StringBuilder()
     .append("SELECT NEW org.jembi.bsis.dto.MobileClinicDonorDTO(d.id, d.donorNumber, d.firstName, ")
     .append("d.lastName, d.gender, d.bloodAbo, d.bloodRh, d.donorStatus, d.birthDate, d.venue, d.isDeleted) ")
