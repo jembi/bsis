@@ -1,7 +1,7 @@
 package org.jembi.bsis.factory;
 
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
-import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
@@ -51,7 +51,7 @@ public class InventoryFactoryTests {
     when(locationFactory.createFullViewModel(component.getLocation()))
         .thenReturn(locationFullViewModel);
 
-    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .withId(1L)
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
@@ -85,7 +85,7 @@ public class InventoryFactoryTests {
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
     when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
-    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
@@ -110,7 +110,7 @@ public class InventoryFactoryTests {
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
     when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
-    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
@@ -134,7 +134,7 @@ public class InventoryFactoryTests {
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
     when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
-    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);

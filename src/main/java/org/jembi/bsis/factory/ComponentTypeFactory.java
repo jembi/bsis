@@ -53,7 +53,7 @@ public class ComponentTypeFactory {
     ComponentTypeCombinationViewModel viewModel = new ComponentTypeCombinationViewModel();
     viewModel.setId(componentTypeCombination.getId());
     viewModel.setCombinationName(componentTypeCombination.getCombinationName());
-    viewModel.setComponentTypes(componentTypeCombination.getComponentTypes());
+    viewModel.setComponentTypes(createViewModels(componentTypeCombination.getComponentTypes()));
     return viewModel;
 
   }
@@ -96,21 +96,33 @@ public class ComponentTypeFactory {
     viewModel.setProducedComponentTypeCombinations(producedComponentTypeCombinationViewModels);
   }
   
-  public List<ComponentTypeSearchViewModel> createSearchViewModels(List<ComponentType> entities) {
+  /**
+   * Converts a List of Component Type Entities to a List of Component Type Search View Models.
+   * 
+   * @param componentTypes
+   * @return
+   */
+  public List<ComponentTypeSearchViewModel> createSearchViewModels(List<ComponentType> componentTypes) {
     List<ComponentTypeSearchViewModel> viewModels = new ArrayList<>();
-    if (entities != null) {
-      for (ComponentType entity : entities) {
-        viewModels.add(createSearchViewModel(entity));
+    if (componentTypes != null) {
+      for (ComponentType componentType : componentTypes) {
+        viewModels.add(createSearchViewModel(componentType));
       }
     }
     return viewModels;
   }
 
-  public List<ComponentTypeViewModel> createViewModels(List<ComponentType> entities) {
+  /**
+   * Converts a List of Component Type Entities to a List of Component Type View Models.
+   * 
+   * @param componentTypes
+   * @return
+   */
+  public List<ComponentTypeViewModel> createViewModels(List<ComponentType> componentTypes) {
     List<ComponentTypeViewModel> viewModels = new ArrayList<>();
-    if (entities != null) {
-      for (ComponentType entity : entities) {
-        viewModels.add(createViewModel(entity));
+    if (componentTypes != null) {
+      for (ComponentType componentType : componentTypes) {
+        viewModels.add(createViewModel(componentType));
       }
     }
     return viewModels;

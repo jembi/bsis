@@ -6,7 +6,7 @@ import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aCom
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeFullViewModelBuilder.aComponentTypeFullViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasSameStateAsComponentFullViewModel;
@@ -67,9 +67,13 @@ public class ComponentFactoryTests {
     Donation donation = DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build();
     Location location = aLocation().build();
     
-    ComponentType componentType = aComponentType().build();
+    ComponentType componentType = aComponentType()
+        .withId(1L)
+        .withComponentTypeName("name")
+        .withComponentTypeCode("0000")
+        .build();
     
-    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
           .withId(componentType.getId())
           .withComponentTypeName(componentType.getComponentTypeName())
           .withComponentTypeCode(componentType.getComponentTypeCode())
@@ -190,7 +194,8 @@ public class ComponentFactoryTests {
     // set up data
    Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber("1234567").build();
     ComponentType componentType = aComponentType().build();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent()
+        .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(componentType)
         .withComponentCode("componentCode")
@@ -198,10 +203,8 @@ public class ComponentFactoryTests {
         .withDonation(donation)
         .build();
     
-    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModelBuilder()
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .withId(1L)
-        .withComponentTypeName(componentType.getComponentTypeName())
-        .withComponentTypeCode(componentType.getComponentTypeCode())
         .build();
     
     ComponentViewModel expectedViewModel = aComponentViewModel().withId(1L)

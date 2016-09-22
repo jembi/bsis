@@ -47,7 +47,7 @@ public class ComponentTypeViewModelBuilder extends AbstractBuilder<ComponentType
     return viewModel;
   }
 
-  public static ComponentTypeViewModelBuilder aComponentTypeViewModelBuilder() {
+  public static ComponentTypeViewModelBuilder aComponentTypeViewModel() {
     return new ComponentTypeViewModelBuilder();
   }
 }

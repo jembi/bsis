@@ -6,7 +6,7 @@ import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aCompo
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -253,8 +253,8 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
         ComponentTypeBuilder.aComponentType().withId(2L).build()
     );
     List<ComponentTypeViewModel> componentTypeViewModels = Arrays.asList(
-        aComponentTypeViewModelBuilder().withId(1L).build(),
-        aComponentTypeViewModelBuilder().withId(2L).build()
+        aComponentTypeViewModel().withId(1L).build(),
+        aComponentTypeViewModel().withId(2L).build()
     );
     
     // setup mocks

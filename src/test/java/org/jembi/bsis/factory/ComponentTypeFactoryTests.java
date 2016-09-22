@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
-import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentTypeViewModelMatcher.hasSameStateAsComponentTypeViewModel;
 import static org.mockito.Mockito.when;
@@ -144,7 +144,7 @@ public class ComponentTypeFactoryTests {
   }
   
   @Test
-  public void testComponentTypeViewModelWithContainsPlasma_shouldReturnExpectedViewModel() {
+  public void testComponentTypeSeatchViewModelWithContainsPlasma_shouldReturnExpectedViewModel() {
     boolean containsPlasma = true;
     ComponentType componentType = aComponentType()
         .withId(1L)
@@ -154,7 +154,7 @@ public class ComponentTypeFactoryTests {
         .withContainsPlasma(containsPlasma)
         .build();
     
-    ComponentTypeViewModel expectedViewModel = aComponentTypeViewModelBuilder()
+    ComponentTypeViewModel expectedViewModel = aComponentTypeViewModel()
         .withId(1L)
         .withComponentTypeCode("0000")
         .withComponentTypeName("name")

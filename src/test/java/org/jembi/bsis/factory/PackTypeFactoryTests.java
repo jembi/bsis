@@ -35,7 +35,7 @@ public class PackTypeFactoryTests extends UnitTestSuite {
   public void testConvertEntityToPackTypeFullViewModel_shouldReturnExpectedViewModel() {
     ComponentType componentType = ComponentTypeBuilder.aComponentType().withId(1L).build();
     
-    ComponentTypeViewModel componentTypeViewModel = ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder()
+    ComponentTypeViewModel componentTypeViewModel = ComponentTypeViewModelBuilder.aComponentTypeViewModel()
         .withId(componentType.getId())
         .build();
     

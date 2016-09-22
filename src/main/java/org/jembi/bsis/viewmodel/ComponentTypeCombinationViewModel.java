@@ -2,13 +2,11 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.List;
 
-import org.jembi.bsis.model.componenttype.ComponentType;
-
 public class ComponentTypeCombinationViewModel {
   
   private Long id;
   private String combinationName;
-  List<ComponentType> componentTypes;
+  List<ComponentTypeViewModel> componentTypes;
   
   public Long getId() {
     return this.id;
@@ -18,8 +16,7 @@ public class ComponentTypeCombinationViewModel {
     return this.combinationName;
   }
 
-  public List<ComponentType> getComponentTypes() {
-    // FIXME: use factory
+  public List<ComponentTypeViewModel> getComponentTypes() {
     return componentTypes;
   }
 
@@ -30,19 +27,9 @@ public class ComponentTypeCombinationViewModel {
   public void setCombinationName(String combinationName) {
     this.combinationName = combinationName;
   }
-
-  public void setComponentTypes(List<ComponentType> componentTypes) {
+  
+  public void setComponentTypes(List<ComponentTypeViewModel> componentTypes) {
     this.componentTypes = componentTypes;
   }
   
-  /*
-   * public List<ComponentTypeViewModel> getComponentTypes() { // FIXME: use factory return
-   * getComponentTypeViewModels(componentTypeCombination.getComponentTypes()); }
-   * 
-   * private List<ComponentTypeViewModel> getComponentTypeViewModels(List<ComponentType>
-   * componentTypes) { List<ComponentTypeViewModel> componentTypeViewModels = new
-   * ArrayList<ComponentTypeViewModel>(); for (ComponentType componentType : componentTypes) {
-   * componentTypeViewModels.add(new ComponentTypeViewModel(componentType)); } return
-   * componentTypeViewModels; }
-   */
 }

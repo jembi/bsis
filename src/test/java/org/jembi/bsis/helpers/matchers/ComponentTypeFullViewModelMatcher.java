@@ -23,7 +23,6 @@ public class ComponentTypeFullViewModelMatcher extends TypeSafeMatcher<Component
     .appendText("\nHigh storage temperature: ").appendValue(expected.getHighStorageTemperature())
     .appendText("\nPreparation Info: ").appendValue(expected.getPreparationInfo())
     .appendText("\nStorage Info: ").appendValue(expected.getStorageInfo())
-    .appendText("\nComponent type combinations: ").appendValue(expected.getProducedComponentTypeCombinations())
     .appendText("\nExpires after: ").appendValue(expected.getExpiresAfter())
     .appendText("\nCan be issued: ").appendValue(expected.getCanBeIssued())
     .appendText("\nDeleted: ").appendValue(expected.getIsDeleted())
@@ -42,7 +41,6 @@ public class ComponentTypeFullViewModelMatcher extends TypeSafeMatcher<Component
         Objects.equals(actual.getHighStorageTemperature(), expected.getHighStorageTemperature()) &&
         Objects.equals(actual.getPreparationInfo(), expected.getPreparationInfo()) &&
         Objects.equals(actual.getStorageInfo(), expected.getStorageInfo()) &&
-        Objects.equals(actual.getProducedComponentTypeCombinations(), expected.getProducedComponentTypeCombinations()) &&
         Objects.equals(actual.getExpiresAfter(), expected.getExpiresAfter()) &&
         Objects.equals(actual.getCanBeIssued(), expected.getCanBeIssued()) &&
         Objects.equals(actual.getIsDeleted(), expected.getIsDeleted()) &&

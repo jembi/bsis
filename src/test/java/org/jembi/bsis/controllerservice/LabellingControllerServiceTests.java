@@ -35,8 +35,8 @@ public class LabellingControllerServiceTests extends UnitTestSuite {
         ComponentTypeBuilder.aComponentType().withId(2L).build()
     );
     List<ComponentTypeViewModel> viewModels = Arrays.asList(
-        ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder().withId(1L).build(),
-        ComponentTypeViewModelBuilder.aComponentTypeViewModelBuilder().withId(2L).build()
+        ComponentTypeViewModelBuilder.aComponentTypeViewModel().withId(1L).build(),
+        ComponentTypeViewModelBuilder.aComponentTypeViewModel().withId(2L).build()
     );
     
     // set up mocks
