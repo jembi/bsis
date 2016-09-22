@@ -42,10 +42,10 @@ public class ComponentType extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length = 50, nullable = false)
+  @Column(length = 50, nullable = false, unique = true)
   private String componentTypeName;
 
-  @Column(length = 30, nullable = false)
+  @Column(length = 30, nullable = false, unique = true)
   private String componentTypeCode;
 
   @Column(nullable = false)
