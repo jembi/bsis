@@ -38,7 +38,7 @@ public class MobileClinicController {
       @RequestParam(value = "venueId", required = true) Long venueId,
       @RequestParam(value = "clinicDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date clinicDate) {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("donors", mobileClinicControllerService.getMobileClinicDonors(venueId, clinicDate));
+    map.put("donors", mobileClinicControllerService.getMobileClinicDonorsByVenue(venueId, clinicDate));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 

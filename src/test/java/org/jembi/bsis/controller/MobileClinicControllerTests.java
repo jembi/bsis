@@ -81,7 +81,7 @@ public class MobileClinicControllerTests extends UnitTestSuite {
     clinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor1));
     clinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor2));
 
-    when(mobileClinicControllerService.getMobileClinicDonors(1L, clinicDate)).thenReturn(clinicDonorsViewModels);
+    when(mobileClinicControllerService.getMobileClinicDonorsByVenue(1L, clinicDate)).thenReturn(clinicDonorsViewModels);
 
     ResponseEntity<Map<String, Object>> response = mobileClinicController.getMobileClinicDonors(1L, clinicDate);
     Map<String, Object> map = response.getBody();
