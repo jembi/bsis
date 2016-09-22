@@ -16,11 +16,11 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
     return hasBloodGroup;
   }
 
-  public Integer getLowStorageTemperature() {
+  public int getLowStorageTemperature() {
     return lowStorageTemperature;
   }
 
-  public Integer getHighStorageTemperature() {
+  public int getHighStorageTemperature() {
     return highStorageTemperature;
   }
 
