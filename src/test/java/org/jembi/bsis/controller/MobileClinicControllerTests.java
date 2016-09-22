@@ -4,9 +4,7 @@ import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -83,9 +81,9 @@ public class MobileClinicControllerTests extends UnitTestSuite {
     clinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor1));
     clinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor2));
 
-    when(mobileClinicControllerService.getMobileClinicDonors(new HashSet<Long>(Arrays.asList(1L,2L)), clinicDate)).thenReturn(clinicDonorsViewModels);
+    when(mobileClinicControllerService.getMobileClinicDonorsByVenue(1L, clinicDate)).thenReturn(clinicDonorsViewModels);
 
-    ResponseEntity<Map<String, Object>> response = mobileClinicController.getMobileClinicDonors(new HashSet<Long>(Arrays.asList(1L,2L)), clinicDate);
+    ResponseEntity<Map<String, Object>> response = mobileClinicController.getMobileClinicDonors(1L, clinicDate);
     Map<String, Object> map = response.getBody();
     Assert.assertNotNull("map is returned", map);
     Object donorsValue = map.get("donors");
