@@ -1,7 +1,9 @@
 package org.jembi.bsis.controllerservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,8 +53,13 @@ public class MobileClinicControllerService {
     return locationFactory.createViewModels(locationRepository.getVenues());
   }
 
-  public List<MobileClinicLookUpDonorViewModel> getMobileClinicDonors(Set<Long> venueIds, Date clinicDate) {
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenue(venueIds);
+  public List<MobileClinicLookUpDonorViewModel> getMobileClinicDonorsByVenue(Long venueId, Date clinicDate) {
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venueId)));
+    return mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonorDTOs, clinicDate);
+  }
+
+  public List<MobileClinicLookUpDonorViewModel> getMobileClinicDonorsByVenues(Set<Long> venueIds, Date clinicDate) {
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(venueIds);
     return mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonorDTOs, clinicDate);
   }
   
