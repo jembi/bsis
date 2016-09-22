@@ -8,8 +8,9 @@ public class ComponentTypeSearchViewModel extends ComponentTypeViewModel {
   private boolean canBeIssued;
   private boolean isDeleted;
   private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
+  private boolean containsPlasma;;
 
-  public Integer getExpiresAfter() {
+  public int getExpiresAfter() {
     return expiresAfter;
   }
 
@@ -39,5 +40,13 @@ public class ComponentTypeSearchViewModel extends ComponentTypeViewModel {
 
   public void setExpiresAfterUnits(ComponentTypeTimeUnits expiresAfterUnits) {
     this.expiresAfterUnits = expiresAfterUnits;
+  }
+
+  public boolean getIsContainsPlasma() {
+    return containsPlasma;
+  }
+
+  public void setIsContainsPlasma(boolean containsPlasma) {
+    this.containsPlasma = containsPlasma;
   }
 }

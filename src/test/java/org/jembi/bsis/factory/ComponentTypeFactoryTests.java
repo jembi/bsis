@@ -3,29 +3,20 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
-import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
-import static org.jembi.bsis.helpers.matchers.ComponentTypeViewModelMatcher.hasSameStateAsComponentTypeViewModel;
-import static org.mockito.Mockito.when;
+import static org.jembi.bsis.helpers.builders.ComponentTypeSearchViewModelBuilder.aComponentTypeSearchViewModel;
+import static org.jembi.bsis.helpers.matchers.ComponentTypeSearchViewModelMatcher.hasSameStateAsComponentTypeSearchViewModel;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
-import org.jembi.bsis.helpers.builders.DonationBuilder;
-import org.jembi.bsis.model.component.Component;
-import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
-import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeSearchViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
-import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,7 +54,7 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", "name", viewModel.getComponentTypeName());
     Assert.assertEquals("View Model correct", "0001", viewModel.getComponentTypeCode());
     Assert.assertEquals("View Model correct", "descr", viewModel.getDescription());
-    Assert.assertEquals("View Model correct", Integer.valueOf(90), viewModel.getExpiresAfter());
+    Assert.assertEquals("View Model correct", 90, viewModel.getExpiresAfter());
     Assert.assertEquals("View Model correct", ComponentTypeTimeUnits.DAYS, viewModel.getExpiresAfterUnits());
     Assert.assertEquals("View Model correct", 10, viewModel.getHighStorageTemperature());
     Assert.assertEquals("View Model correct", 0, viewModel.getLowStorageTemperature());
@@ -93,7 +84,7 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", "name", viewModel.getComponentTypeName());
     Assert.assertEquals("View Model correct", "0001", viewModel.getComponentTypeCode());
     Assert.assertEquals("View Model correct", "descr", viewModel.getDescription());
-    Assert.assertEquals("View Model correct", Integer.valueOf(90), viewModel.getExpiresAfter());
+    Assert.assertEquals("View Model correct", 90, viewModel.getExpiresAfter());
     Assert.assertEquals("View Model correct", ComponentTypeTimeUnits.DAYS, viewModel.getExpiresAfterUnits());
     Assert.assertEquals("View Model correct", false, viewModel.getCanBeIssued());
     Assert.assertEquals("View Model correct", false, viewModel.getIsDeleted());
@@ -144,7 +135,7 @@ public class ComponentTypeFactoryTests {
   }
   
   @Test
-  public void testComponentTypeViewModelWithContainsPlasma_shouldReturnExpectedViewModel() {
+  public void testComponentTypeSearchViewModelWithContainsPlasma_shouldReturnExpectedViewModel() {
     boolean containsPlasma = true;
     ComponentType componentType = aComponentType()
         .withId(1L)
@@ -154,7 +145,7 @@ public class ComponentTypeFactoryTests {
         .withContainsPlasma(containsPlasma)
         .build();
     
-    ComponentTypeViewModel expectedViewModel = aComponentTypeViewModel()
+    ComponentTypeSearchViewModel expectedViewModel = aComponentTypeSearchViewModel()
         .withId(1L)
         .withComponentTypeCode("0000")
         .withComponentTypeName("name")
@@ -163,11 +154,11 @@ public class ComponentTypeFactoryTests {
         .build();
     
     // run test
-    ComponentTypeViewModel convertedViewModel = componentTypeFactory.createViewModel(componentType);
+    ComponentTypeSearchViewModel convertedViewModel = componentTypeFactory.createSearchViewModel(componentType);
 
     // do asserts
     assertThat(convertedViewModel, is(notNullValue()));
-    assertThat("Correct view model", convertedViewModel, hasSameStateAsComponentTypeViewModel(expectedViewModel));
+    assertThat("Correct view model", convertedViewModel, hasSameStateAsComponentTypeSearchViewModel(expectedViewModel));
     
   }
 
