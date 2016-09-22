@@ -27,10 +27,10 @@ public class ComponentTypeRepositoryTests extends ContextDependentTestSuite {
     aComponentType().withComponentTypeCode(componentTypeCode).withComponentTypeName(componentTypeName).buildAndPersist(entityManager);
     
     // Run test
-    Boolean unique = componentTypeRepository.isUniqueComponentTypeName(2L, componentTypeName);
+    boolean unique = componentTypeRepository.isUniqueComponentTypeName(2L, componentTypeName);
     
     // Verify result
-    assertThat(unique, is(Boolean.FALSE));
+    assertThat(unique, is(false));
   }
   
   @Test
@@ -42,10 +42,10 @@ public class ComponentTypeRepositoryTests extends ContextDependentTestSuite {
     ComponentType componentType = aComponentType().withComponentTypeCode(componentTypeCode).withComponentTypeName(componentTypeName).buildAndPersist(entityManager);
     
     // Run test
-    Boolean unique = componentTypeRepository.isUniqueComponentTypeName(componentType.getId(), componentTypeName);
+    boolean unique = componentTypeRepository.isUniqueComponentTypeName(componentType.getId(), componentTypeName);
     
     // Verify result
-    assertThat(unique, is(Boolean.TRUE));
+    assertThat(unique, is(true));
   }
   
   @Test
@@ -57,10 +57,10 @@ public class ComponentTypeRepositoryTests extends ContextDependentTestSuite {
     aComponentType().withComponentTypeCode(componentTypeCode).withComponentTypeName(componentTypeName).buildAndPersist(entityManager);
     
     // Run test
-    Boolean unique = componentTypeRepository.isUniqueComponentTypeName(null, "More Blood");
+    boolean unique = componentTypeRepository.isUniqueComponentTypeName(null, "More Blood");
     
     // Verify result
-    assertThat(unique, is(Boolean.TRUE));
+    assertThat(unique, is(true));
   }
   
   @Test
