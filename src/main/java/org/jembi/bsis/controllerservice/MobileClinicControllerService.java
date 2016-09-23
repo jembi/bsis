@@ -10,6 +10,7 @@ import java.util.Set;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.factory.DonorOutcomesViewModelFactory;
 import org.jembi.bsis.factory.LocationFactory;
+import org.jembi.bsis.factory.MobileClinicDonorDTOFactory;
 import org.jembi.bsis.factory.MobileClinicDonorViewModelFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
@@ -21,6 +22,7 @@ import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.viewmodel.DonorOutcomesViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.MobileClinicExportDonorViewModel;
 import org.jembi.bsis.viewmodel.MobileClinicLookUpDonorViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,13 +41,16 @@ public class MobileClinicControllerService {
 
   @Autowired
   private MobileClinicDonorViewModelFactory mobileClinicDonorViewModelFactory;
-  
+
   @Autowired
   private DonationRepository donationRepository;
-  
+
+  @Autowired
+  private MobileClinicDonorDTOFactory mobileClinicDonorDTOFactory;
+
   @Autowired
   private DonorOutcomesViewModelFactory donorOutcomesViewModelFactory;
-  
+
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
 
@@ -54,18 +59,20 @@ public class MobileClinicControllerService {
   }
 
   public List<MobileClinicLookUpDonorViewModel> getMobileClinicDonorsByVenue(Long venueId, Date clinicDate) {
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venueId)));
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs =
+        donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venueId)));
     return mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonorDTOs, clinicDate);
   }
 
-  public List<MobileClinicLookUpDonorViewModel> getMobileClinicDonorsByVenues(Set<Long> venueIds, Date clinicDate) {
+  public List<MobileClinicExportDonorViewModel> getMobileClinicDonorsByVenues(Set<Long> venueIds, Date clinicDate) {
     List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(venueIds);
-    return mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonorDTOs, clinicDate);
+    return mobileClinicDonorDTOFactory.createMobileClinicDonorExportViewModels(mobileClinicDonorDTOs, clinicDate);
   }
-  
+
   public List<DonorOutcomesViewModel> getDonorOutcomes(long venueId, Date startDate, Date endDate) {
     Location donorVenue = locationRepository.getLocation(venueId);
-    List<Donation> donations = donationRepository.findLastDonationsByDonorVenueAndDonationDate(donorVenue, startDate, endDate);
+    List<Donation> donations =
+        donationRepository.findLastDonationsByDonorVenueAndDonationDate(donorVenue, startDate, endDate);
     return donorOutcomesViewModelFactory.createDonorOutcomesViewModels(donations);
   }
 
