@@ -1,7 +1,6 @@
 package org.jembi.bsis.controllerservice;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
@@ -9,14 +8,11 @@ import static org.jembi.bsis.helpers.builders.DonorOutcomesViewModelBuilder.aDon
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.mockito.Mockito.when;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.factory.DonorOutcomesViewModelFactory;
@@ -27,9 +23,7 @@ import org.jembi.bsis.helpers.builders.MobileClinicDonorBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donor.DonorStatus;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.LocationRepository;
@@ -39,11 +33,9 @@ import org.jembi.bsis.viewmodel.DonorOutcomesViewModel;
 import org.jembi.bsis.viewmodel.MobileClinicExportDonorViewModel;
 import org.jembi.bsis.viewmodel.MobileClinicLookUpDonorViewModel;
 import org.joda.time.DateTime;
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.http.ResponseEntity;
 
 public class MobileClinicControllerServiceTests extends UnitTestSuite {
 
@@ -119,7 +111,6 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
     // Set up
     Date clinicDate = new Date();
     Location venue = LocationBuilder.aLocation().withId(1L).withName("test").build();
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     MobileClinicDonorDTO donor1 = MobileClinicDonorBuilder.aMobileClinicDonor()
         .withVenue(venue)
         .build();
