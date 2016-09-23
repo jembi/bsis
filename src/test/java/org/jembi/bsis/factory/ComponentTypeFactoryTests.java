@@ -54,13 +54,13 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", "name", viewModel.getComponentTypeName());
     Assert.assertEquals("View Model correct", "0001", viewModel.getComponentTypeCode());
     Assert.assertEquals("View Model correct", "descr", viewModel.getDescription());
-    Assert.assertEquals("View Model correct", 90, viewModel.getExpiresAfter());
+    Assert.assertEquals("View Model correct", Integer.valueOf(90), viewModel.getExpiresAfter());
     Assert.assertEquals("View Model correct", ComponentTypeTimeUnits.DAYS, viewModel.getExpiresAfterUnits());
-    Assert.assertEquals("View Model correct", 10, viewModel.getHighStorageTemperature());
-    Assert.assertEquals("View Model correct", 0, viewModel.getLowStorageTemperature());
+    Assert.assertEquals("View Model correct", Integer.valueOf(10), viewModel.getHighStorageTemperature());
+    Assert.assertEquals("View Model correct", Integer.valueOf(0), viewModel.getLowStorageTemperature());
     Assert.assertEquals("View Model correct", "preparationInfo", viewModel.getPreparationInfo());
     Assert.assertNotNull("View Model correct", viewModel.getProducedComponentTypeCombinations());
-    Assert.assertEquals("View Model correct", 1, viewModel.getProducedComponentTypeCombinations().size());
+    Assert.assertEquals("View Model correct",  1, viewModel.getProducedComponentTypeCombinations().size());
     Assert.assertEquals("View Model correct", "transportInfo", viewModel.getTransportInfo());
     Assert.assertEquals("View Model correct", "storageInfo", viewModel.getStorageInfo());
     Assert.assertEquals("View Model correct", false, viewModel.getCanBeIssued());
@@ -84,7 +84,7 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", "name", viewModel.getComponentTypeName());
     Assert.assertEquals("View Model correct", "0001", viewModel.getComponentTypeCode());
     Assert.assertEquals("View Model correct", "descr", viewModel.getDescription());
-    Assert.assertEquals("View Model correct", 90, viewModel.getExpiresAfter());
+    Assert.assertEquals("View Model correct", Integer.valueOf(90), viewModel.getExpiresAfter());
     Assert.assertEquals("View Model correct", ComponentTypeTimeUnits.DAYS, viewModel.getExpiresAfterUnits());
     Assert.assertEquals("View Model correct", false, viewModel.getCanBeIssued());
     Assert.assertEquals("View Model correct", false, viewModel.getIsDeleted());

@@ -13,15 +13,15 @@ public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<Component
   private String componentTypeName;
   private String componentTypeCode;
   private String description;
-  private boolean hasBloodGroup;
+  private Boolean hasBloodGroup;
   private Integer lowStorageTemperature;
   private Integer highStorageTemperature;
   private String preparationInfo;
   private String transportInfo;
   private String storageInfo;
-  private int expiresAfter;
-  private boolean canBeIssued;
-  private boolean isDeleted;
+  private Integer expiresAfter;
+  private Boolean canBeIssued;
+  private Boolean isDeleted;
   private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
   private List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations = new ArrayList<>();
   private boolean containsPlasma;
@@ -46,7 +46,7 @@ public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<Component
     return this;
   }
   
-  public ComponentTypeFullViewModelBuilder withHasBloodGroup(boolean hasBloodGroup) {
+  public ComponentTypeFullViewModelBuilder withHasBloodGroup(Boolean hasBloodGroup) {
     this.hasBloodGroup = hasBloodGroup;
     return this;
   }
@@ -76,17 +76,17 @@ public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<Component
     return this;
   }
   
-  public ComponentTypeFullViewModelBuilder withExpiresAfter(int expiresAfter) {
+  public ComponentTypeFullViewModelBuilder withExpiresAfter(Integer expiresAfter) {
     this.expiresAfter = expiresAfter;
     return this;
   }
 
-  public ComponentTypeFullViewModelBuilder withIsDeleted(boolean isDeleted) {
+  public ComponentTypeFullViewModelBuilder withIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
     return this;
   }
 
-  public ComponentTypeFullViewModelBuilder withCanBeIssued(boolean canBeIssued) {
+  public ComponentTypeFullViewModelBuilder withCanBeIssued(Boolean canBeIssued) {
     this.canBeIssued = canBeIssued;
     return this;
   }

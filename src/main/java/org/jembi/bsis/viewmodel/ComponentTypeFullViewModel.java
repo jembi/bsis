@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
 
-  private boolean hasBloodGroup;
+  private Boolean hasBloodGroup;
   private Integer lowStorageTemperature;
   private Integer highStorageTemperature;
   private String preparationInfo;
@@ -12,15 +12,15 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
   private String storageInfo;
   List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations;
 
-  public boolean isHasBloodGroup() {
+  public Boolean isHasBloodGroup() {
     return hasBloodGroup;
   }
 
-  public int getLowStorageTemperature() {
+  public Integer getLowStorageTemperature() {
     return lowStorageTemperature;
   }
 
-  public int getHighStorageTemperature() {
+  public Integer getHighStorageTemperature() {
     return highStorageTemperature;
   }
 
@@ -36,7 +36,7 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
     return producedComponentTypeCombinations;
   }
 
-  public void setHasBloodGroup(boolean hasBloodGroup) {
+  public void setHasBloodGroup(Boolean hasBloodGroup) {
     this.hasBloodGroup = hasBloodGroup;
   }
 
@@ -54,11 +54,6 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
 
   public void setStorageInfo(String storageInfo) {
     this.storageInfo = storageInfo;
-  }
-
-  public void getProducedComponentTypeCombinations(
-      List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations) {
-    this.producedComponentTypeCombinations = producedComponentTypeCombinations;
   }
 
   public void setProducedComponentTypeCombinations(
