@@ -112,7 +112,6 @@ public class DonationCRUDService {
       //Also flag for counselling
       postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
     }
-
     
     // update donor
     updateDonorFields(donation);
