@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.factory.DonorOutcomesViewModelFactory;
+import org.jembi.bsis.factory.MobileClinicDonorDTOFactory;
 import org.jembi.bsis.factory.MobileClinicDonorViewModelFactory;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.MobileClinicDonorBuilder;
@@ -35,6 +36,7 @@ import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DonorOutcomesViewModel;
+import org.jembi.bsis.viewmodel.MobileClinicExportDonorViewModel;
 import org.jembi.bsis.viewmodel.MobileClinicLookUpDonorViewModel;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -59,6 +61,8 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   private DonorRepository donorRepository;
   @Mock
   private MobileClinicDonorViewModelFactory mobileClinicDonorViewModelFactory;
+  @Mock
+  private MobileClinicDonorDTOFactory mobileClinicDonorDTOFactory;
 
   @Test
   public void testGetDonorOutcomes_shouldReturnCorrectViewModels() {
@@ -159,17 +163,17 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
     clinicDonorDTOs.add(donor2);
 
     // Set expectations
-    List<MobileClinicLookUpDonorViewModel> expectedClinicDonorsViewModels = new ArrayList<>();
-    expectedClinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor1));
-    expectedClinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor2));
+    List<MobileClinicExportDonorViewModel> expectedClinicDonorsViewModels = new ArrayList<>();
+    expectedClinicDonorsViewModels.add(new MobileClinicExportDonorViewModel(donor1));
+    expectedClinicDonorsViewModels.add(new MobileClinicExportDonorViewModel(donor2));
 
     //Mock
     when(mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())), clinicDate)).thenReturn(expectedClinicDonorsViewModels);
     when(donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())))).thenReturn(clinicDonorDTOs);
-    when(mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(clinicDonorDTOs,clinicDate)).thenReturn(expectedClinicDonorsViewModels);
+    when(mobileClinicDonorDTOFactory.createMobileClinicDonorExportViewModels(clinicDonorDTOs,clinicDate)).thenReturn(expectedClinicDonorsViewModels);
 
     // Exercise SUT
-    List<MobileClinicLookUpDonorViewModel> returnedClinicDonorsViewModels = mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())), clinicDate);
+    List<MobileClinicExportDonorViewModel> returnedClinicDonorsViewModels = mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())), clinicDate);
 
     // Verify
     assertThat(returnedClinicDonorsViewModels, is(expectedClinicDonorsViewModels));
