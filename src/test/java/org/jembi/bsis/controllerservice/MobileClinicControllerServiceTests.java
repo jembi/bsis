@@ -117,26 +117,11 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
     Location venue = LocationBuilder.aLocation().withId(1L).withName("test").build();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     MobileClinicDonorDTO donor1 = MobileClinicDonorBuilder.aMobileClinicDonor()
-        .withDonorNumber("D1")
-        .withFirstName("Test")
-        .withLastName("DonorOne")
-        .withBirthDate(sdf.parse("20/02/1975"))
-        .withGender(Gender.female)
-        .withDonorStatus(DonorStatus.NORMAL)
         .withVenue(venue)
-        .thatIsNotDeleted()
         .build();
     MobileClinicDonorDTO donor2 = MobileClinicDonorBuilder.aMobileClinicDonor()
-        .withDonorNumber("D2")
-        .withFirstName("Test")
-        .withLastName("DonorTwo")
-        .withBirthDate(sdf.parse("02/12/1982"))
-        .withGender(Gender.male)
-        .withDonorStatus(DonorStatus.NORMAL)
         .withVenue(venue)
-        .thatIsNotDeleted()
         .build();
-
     List<MobileClinicDonorDTO> clinicDonorDTOs = new ArrayList<>();
     clinicDonorDTOs.add(donor1);
     clinicDonorDTOs.add(donor2);
@@ -163,60 +148,20 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
     // Set up
     Date clinicDate = new Date();
     Location venue = LocationBuilder.aLocation().withId(1L).withName("test").build();
-    Location venue1 = LocationBuilder.aLocation().withId(2L).withName("test1").build();
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     MobileClinicDonorDTO donor1 = MobileClinicDonorBuilder.aMobileClinicDonor()
-        .withDonorNumber("D1")
-        .withFirstName("Test")
-        .withLastName("DonorOne")
-        .withBirthDate(sdf.parse("20/02/1975"))
-        .withGender(Gender.female)
-        .withDonorStatus(DonorStatus.NORMAL)
         .withVenue(venue)
-        .thatIsNotDeleted()
         .build();
     MobileClinicDonorDTO donor2 = MobileClinicDonorBuilder.aMobileClinicDonor()
-        .withDonorNumber("D2")
-        .withFirstName("Test")
-        .withLastName("DonorTwo")
-        .withBirthDate(sdf.parse("02/12/1982"))
-        .withGender(Gender.male)
-        .withDonorStatus(DonorStatus.NORMAL)
         .withVenue(venue)
-        .thatIsNotDeleted()
-        .build();
-    MobileClinicDonorDTO donor3 = MobileClinicDonorBuilder.aMobileClinicDonor()
-        .withDonorNumber("D3")
-        .withFirstName("Test")
-        .withLastName("DonorThree")
-        .withBirthDate(sdf.parse("08/09/1985"))
-        .withGender(Gender.male)
-        .withDonorStatus(DonorStatus.NORMAL)
-        .withVenue(venue1)
-        .thatIsNotDeleted()
-        .build();
-    MobileClinicDonorDTO donor4 = MobileClinicDonorBuilder.aMobileClinicDonor()
-        .withDonorNumber("D4")
-        .withFirstName("Test")
-        .withLastName("DonorFour")
-        .withBirthDate(sdf.parse("07/06/1988"))
-        .withGender(Gender.male)
-        .withDonorStatus(DonorStatus.NORMAL)
-        .withVenue(venue1)
-        .thatIsNotDeleted()
         .build();
     List<MobileClinicDonorDTO> clinicDonorDTOs = new ArrayList<>();
     clinicDonorDTOs.add(donor1);
     clinicDonorDTOs.add(donor2);
-    clinicDonorDTOs.add(donor3);
-    clinicDonorDTOs.add(donor4);
 
     // Set expectations
     List<MobileClinicLookUpDonorViewModel> expectedClinicDonorsViewModels = new ArrayList<>();
     expectedClinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor1));
     expectedClinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor2));
-    expectedClinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor3));
-    expectedClinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor4));
 
     //Mock
     when(mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())), clinicDate)).thenReturn(expectedClinicDonorsViewModels);
@@ -224,7 +169,7 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
     when(mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(clinicDonorDTOs,clinicDate)).thenReturn(expectedClinicDonorsViewModels);
 
     // Exercise SUT
-    List<MobileClinicLookUpDonorViewModel> returnedClinicDonorsViewModels = mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId(), venue1.getId())), clinicDate);
+    List<MobileClinicLookUpDonorViewModel> returnedClinicDonorsViewModels = mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())), clinicDate);
 
     // Verify
     assertThat(returnedClinicDonorsViewModels, is(expectedClinicDonorsViewModels));
