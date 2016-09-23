@@ -104,6 +104,7 @@ public class DonationCRUDService {
       donation.setIneligibleDonor(true);
     }
 
+    donationRepository.saveDonation(donation);
     componentCRUDService.createInitialComponent(donation);
 
     if (discardComponents) {
@@ -112,7 +113,7 @@ public class DonationCRUDService {
       postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
     }
 
-    donationRepository.saveDonation(donation);
+    
     // update donor
     updateDonorFields(donation);
     return donation;
