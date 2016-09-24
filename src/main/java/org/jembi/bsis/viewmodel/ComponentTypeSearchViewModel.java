@@ -5,8 +5,8 @@ import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 public class ComponentTypeSearchViewModel extends ComponentTypeViewModel {
 
   private Integer expiresAfter;
-  private Boolean canBeIssued;
-  private Boolean isDeleted;
+  private boolean canBeIssued;
+  private boolean isDeleted;
   private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
   private boolean containsPlasma;;
 
@@ -22,7 +22,7 @@ public class ComponentTypeSearchViewModel extends ComponentTypeViewModel {
     return canBeIssued;
   }
 
-  public void setCanBeIssued(Boolean canBeIssued) {
+  public void setCanBeIssued(boolean canBeIssued) {
     this.canBeIssued = canBeIssued;
   }
 

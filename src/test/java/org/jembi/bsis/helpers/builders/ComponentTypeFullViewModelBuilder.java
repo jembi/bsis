@@ -20,8 +20,8 @@ public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<Component
   private String transportInfo;
   private String storageInfo;
   private Integer expiresAfter;
-  private Boolean canBeIssued;
-  private Boolean isDeleted;
+  private boolean canBeIssued;
+  private boolean isDeleted;
   private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
   private List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations = new ArrayList<>();
   private boolean containsPlasma;
@@ -86,7 +86,7 @@ public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<Component
     return this;
   }
 
-  public ComponentTypeFullViewModelBuilder withCanBeIssued(Boolean canBeIssued) {
+  public ComponentTypeFullViewModelBuilder withCanBeIssued(boolean canBeIssued) {
     this.canBeIssued = canBeIssued;
     return this;
   }
