@@ -59,3 +59,22 @@ Important Coding Conventions
   * Use 2 spaces instead of tabs to indent your code. 
   * Use the appropriate [codestyles](codestyles) template for your IDE. These codestyles are based on the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).
   * Only auto format the code you are working on.
+
+Git Commit Messages
+-------------------
+Use the supplied Git commit message template to ensure that commit messages conform to the project standards. The first line of
+the commit message should contain a JIRA ticket reference and a short description of the commit (50 characters max). The following
+lines (72 characters max) should describe why the changes is being made, what the problem was and contain external references.
+
+In your BSIS Git repository folder, run the following command:
+
+```
+git config commit.template .git.template
+```
+
+This will set the git commit template for the local git repository only. If you'd like to set the template for all your Git 
+repositories, then run the following command:
+
+```
+git config --global commit.template .git.template
+``` 
