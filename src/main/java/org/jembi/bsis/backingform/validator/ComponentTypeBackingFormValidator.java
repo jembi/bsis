@@ -13,6 +13,9 @@ import org.springframework.validation.Errors;
 @Component
 public class ComponentTypeBackingFormValidator extends BaseValidator<ComponentTypeBackingForm> {
   
+  private static final Integer MAX_LENGTH_NAME = 50;
+  private static final Integer MAX_LENGTH_CODE = 30;
+  
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
 
@@ -21,6 +24,8 @@ public class ComponentTypeBackingFormValidator extends BaseValidator<ComponentTy
     
     if (StringUtils.isBlank(form.getComponentTypeName())) {
       errors.rejectValue("componentTypeName", "errors.required", "Component type name is required");
+    } else if (form.getComponentTypeName().length() > MAX_LENGTH_NAME) {
+      errors.rejectValue("componentTypeName", "fieldLength.error", "Maximum length for this field is " + MAX_LENGTH_NAME);
     } else {
       if (!componentTypeRepository.isUniqueComponentTypeName(form.getId(), form.getComponentTypeName())) {
         errors.rejectValue("componentTypeName", "errors.nonUnique", "Component type name already exists");
@@ -29,6 +34,8 @@ public class ComponentTypeBackingFormValidator extends BaseValidator<ComponentTy
     
     if (StringUtils.isBlank(form.getComponentTypeCode())) {
       errors.rejectValue("componentTypeCode", "errors.required", "Component type code is required");
+    } else if (form.getComponentTypeCode().length() > MAX_LENGTH_CODE) {
+      errors.rejectValue("componentTypeCode", "fieldLength.error", "Maximum length for this field is " + MAX_LENGTH_CODE);
     } else {
       try {
         ComponentType componentType = componentTypeRepository.findComponentTypeByCode(form.getComponentTypeCode());

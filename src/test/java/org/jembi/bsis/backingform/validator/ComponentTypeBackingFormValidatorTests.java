@@ -49,6 +49,44 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
   }
   
   @Test
+  public void testValidateFormWithTooLongName_shouldHaveOneError() {
+    String tooLongName = "BloodBloodBloodBloodBloodBloodBloodBloodBloodBloodBlood";
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName(tooLongName)
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(35)
+        .build();
+    
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+    
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("componentTypeName").getCode(), is("fieldLength.error"));
+  }
+  
+  @Test
+  public void testValidateFormWithLongName_shouldHaveNoError() {
+    String longName = "1010101010101010101010101010";
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName(longName)
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(35)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, longName)).thenReturn(true);
+    
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+    
+    assertThat(errors.getFieldErrorCount(), is(0));
+  }
+  
+  @Test
   public void testValidateFormWithNoCode_shouldHaveOneError() {
     ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
         .withId(2L)
@@ -65,6 +103,45 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
     
     assertThat(errors.getFieldErrorCount(), is(1));
     assertThat(errors.getFieldError("componentTypeCode").getCode(), is("errors.required"));
+  }
+
+  @Test
+  public void testValidateFormWithTooLongCode_shouldHaveOneError() {
+    String tooLongCode = "1010101010101010101010101010101";
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName(COMPONENT_TYPE_NAME)
+        .withComponentTypeCode(tooLongCode)
+        .withExpiresAfter(35)
+        .build();
+    
+    when(componentTypeRepository.findComponentTypeByCode(tooLongCode)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, COMPONENT_TYPE_NAME)).thenReturn(true);
+    
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+    
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("componentTypeCode").getCode(), is("fieldLength.error"));
+  }
+  
+  @Test
+  public void testValidateFormWithLongCode_shouldHaveOneError() {
+    String longCode = "1010101010101010101010101010";
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName(COMPONENT_TYPE_NAME)
+        .withComponentTypeCode(longCode)
+        .withExpiresAfter(35)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(longCode)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, COMPONENT_TYPE_NAME)).thenReturn(true);
+    
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+    
+    assertThat(errors.getFieldErrorCount(), is(0));
   }
   
   @Test
