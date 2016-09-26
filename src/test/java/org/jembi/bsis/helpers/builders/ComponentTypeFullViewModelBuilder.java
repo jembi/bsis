@@ -126,12 +126,12 @@ public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<Component
     viewModel.setExpiresAfter(expiresAfter);
     viewModel.setTransportInfo(transportInfo);
     viewModel.setCanBeIssued(canBeIssued);
-    viewModel.thatIsDeleted(isDeleted);
+    viewModel.setIsDeleted(isDeleted);
     viewModel.setExpiresAfterUnits(expiresAfterUnits);
     viewModel.setComponentTypeName(componentTypeName);
     viewModel.setComponentTypeCode(componentTypeCode);
     viewModel.setDescription(description);
-    viewModel.thatContainsPlasma(containsPlasma);
+    viewModel.setIsContainsPlasma(containsPlasma);
     return viewModel;
   }
 

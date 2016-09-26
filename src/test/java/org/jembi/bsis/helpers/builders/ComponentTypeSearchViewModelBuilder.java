@@ -66,13 +66,13 @@ public class ComponentTypeSearchViewModelBuilder extends AbstractBuilder<Compone
     viewModel.setId(id);
     viewModel.setExpiresAfter(expiresAfter);
     viewModel.setCanBeIssued(canBeIssued);
-    viewModel.thatIsDeleted(isDeleted);
+    viewModel.setIsDeleted(isDeleted);
     viewModel.setExpiresAfterUnits(expiresAfterUnits);
-    viewModel.thatContainsPlasma(containsPlasma);
+    viewModel.setIsContainsPlasma(containsPlasma);
     viewModel.setComponentTypeName(componentTypeName);
     viewModel.setComponentTypeCode(componentTypeCode);
     viewModel.setDescription(description);
-    viewModel.thatContainsPlasma(containsPlasma);
+    viewModel.setIsContainsPlasma(containsPlasma);
     return viewModel;
   }
   
