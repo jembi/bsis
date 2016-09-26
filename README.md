@@ -47,20 +47,15 @@ Development Environment
    You may use another IDE if you wish to.
     * Download and unpack Eclipse Indigo 3.7 or Eclipse Juno 4.2 from http://www.eclipse.org/downloads/.
     * Install Apache Tomcat 7 and integrate with Eclipse (you may follow http://www.coreservlets.com/Apache-Tomcat-Tutorial/tomcat-7-with-eclipse.html).
-    * Fork and clone the master branch into a local directory preferrably housed in your eclipse workspace.
+    * Clone the master branch into a local directory preferably housed in your eclipse workspace.
     * The project dependencies are configured using [Maven] (http://maven.apache.org/). Install Eclipse plugin [m2eclipse] (http://maven.apache.org/eclipse-plugin.html) for easier integration of Maven with your development environment. In Eclipse, select Help>Install New Software and add the site http://download.eclipse.org/technology/m2e/releases to add the m2eclipse plugin.Setup m2eclipse so that it automatically downloads all the required dependencies, sources, javadocs.
     * Import the source code into Eclipse by using 'Import Existing project' option. The master branch contains the required eclipse project files (e.g. .project and .settings), so you should be able to start working right away. For other IDE's you will need to more work.
-    * If there are issues with Maven dependencies, try run > mvn dependency:tree in the Workspace folder of the BSIS project (see http://stackoverflow.com/questions/4262186/missing-maven-dependencies-in-eclipse-project).
-    * Sometimes we get NoClassDefFound errors for ContextLoaderListener and some other classes. To fix this error right click Project, select properties, then Deployment Assembly and then add Maven Dependencies to WEB-INF/lib. This should fix the errors.
-      http://stackoverflow.com/questions/6083501/maven-dependencies-not-visible-in-web-inf-lib
-      Note that the Maven Dependencies are removed from Deployment Assembly and need to readded when Maven update project is run.
 2. You will also need to setup a MySQL database:
     *  Run the Maven build `mvn clean install` which will call the liquibase scripts to create and initialise your database.
     * `BSIS/src/database.properties` contains your database connection information.
 
 Important Coding Conventions
 ----------------------------
-  * Use spaces instead of tabs for formatting. You may configure your IDE to use spaces instead of tabs for all files Java, XML, HTML, JS.
-    To setup Eclipse to do this for you by default you may read [this] (http://stackoverflow.com/questions/3460994/inserting-spaces-instead-of-tabs-in-all-files).
-    This will ensure uniform rendering of files across editors.
-  * Use 2 spaces to indent your code. Java code tends to have long variable names and hence it is easier to read code with smaller indentation.
+  * Use 2 spaces instead of tabs to indent your code. 
+  * Use the appropriate [codestyles](codestyles) template for your IDE. These codestyles are based on the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).
+  * Only auto format the code you are working on.
