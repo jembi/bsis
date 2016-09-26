@@ -57,6 +57,25 @@ public class ComponentNamedQueryConstants {
   public static final String QUERY_FIND_CHILD_COMPONENTS =
       "SELECT c FROM Component c WHERE c.parentComponent=:parentComponent AND c.isDeleted = false";
 
-
+  public static final String NAME_FIND_COMPONENTS_FOR_EXPORT =
+      "Component.findComponentsForExport";
+  public static final String QUERY_FIND_COMPONENTS_FOR_EXPORT =
+      "SELECT DISTINCT NEW org.jembi.bsis.dto.ComponentExportDTO(c.id, c.donation.donationIdentificationNumber, "
+      + "c.componentCode, c.modificationTracker.createdDate, c.modificationTracker.createdBy.username, "
+      + "c.modificationTracker.lastUpdated, c.modificationTracker.lastUpdatedBy.username, "
+      + "c.parentComponent.componentCode, c.createdOn, c.status, c.location.name, c.issuedOn, c.inventoryStatus, "
+      + "c.discardedOn, r.statusChangeReason, c.expiresOn, c.notes) "
+      + "FROM Component c "
+      // Make sure that components without parents are returned
+      + "LEFT JOIN c.parentComponent "
+      // Join to status change to get status change reason
+      + "LEFT JOIN c.statusChanges AS sc "
+      + "WITH sc.isDeleted = :statusChangeDeleted "
+      // Join to status change reason to find discarded
+      + "LEFT JOIN sc.statusChangeReason AS r "
+      + "WITH r.category = :discarded "
+      + "WHERE c.isDeleted = :componentDeleted "
+      // Sort by created date then status change reason with nulls last so that discards come first
+      + "ORDER BY c.modificationTracker.createdDate ASC, r.statusChangeReason ASC NULLS LAST ";
 
 }

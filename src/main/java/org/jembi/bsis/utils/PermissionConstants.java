@@ -159,5 +159,8 @@ public class PermissionConstants {
   public static final String EDIT_DIVISIONS = "Edit Divisions";
   public static final String VIEW_DIVISIONS = "View Divisions";
   public static final String VOID_DIVISIONS = "Void Divisions";
+  
+  // Data Export
+  public static final String DATA_EXPORT = "Data Export";
 
 }

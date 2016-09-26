@@ -8,6 +8,7 @@ import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.user.User;
 
 public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
 
@@ -19,6 +20,8 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
   private String deferralReasonText;
   private Location venue = LocationBuilder.aLocation().build();
   private Date deferralDate = new Date();
+  private User createdBy;
+  private Date createdDate;
 
   public DonorDeferralBuilder withId(Long id) {
     this.id = id;
@@ -64,11 +67,23 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
     this.deferralDate = deferralDate;
     return this;
   }
+  
+  public DonorDeferralBuilder withCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+    return this;
+  }
+  
+  public DonorDeferralBuilder withCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+    return this;
+  }
 
   @Override
   public DonorDeferral build() {
     DonorDeferral donorDeferral = new DonorDeferral();
     donorDeferral.setId(id);
+    donorDeferral.setCreatedBy(createdBy);
+    donorDeferral.setCreatedDate(createdDate);
     donorDeferral.setDeferredDonor(deferredDonor);
     donorDeferral.setDeferralReason(deferralReason);
     donorDeferral.setDeferredUntil(deferredUntil);

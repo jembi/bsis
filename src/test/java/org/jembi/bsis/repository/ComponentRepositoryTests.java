@@ -3,23 +3,35 @@ package org.jembi.bsis.repository;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aComponentStatusChangeReason;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
+import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.NoResultException;
 
+import org.jembi.bsis.dto.ComponentExportDTO;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.suites.ContextDependentTestSuite;
+import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ComponentRepositoryTests extends ContextDependentTestSuite {
+public class ComponentRepositoryTests extends SecurityContextDependentTestSuite {
 
   @Autowired
   private ComponentRepository componentRepository;
@@ -133,6 +145,153 @@ public class ComponentRepositoryTests extends ContextDependentTestSuite {
     
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
+  }
+  
+  @Test
+  public void testFindComponentsForExport_shouldReturnComponentExportDTOsWithTheCorrectState() {
+    // Set up fixture
+    String donationIdentificationNumber = "9955741";
+    String componentCode = "2011-01";
+    String createdByUsername = "created.by";
+    Date createdDate = new DateTime().minusDays(29).toDate();
+    String parentComponentCode = "0011";
+    Date createdOn = new DateTime().minusDays(7).toDate();
+    ComponentStatus status = ComponentStatus.DISCARDED;
+    String locationName = "Somewhere";
+    Date issuedOn = new DateTime().minusDays(6).toDate();
+    InventoryStatus inventoryStatus = InventoryStatus.REMOVED;
+    Date discardedOn = new DateTime().minusDays(5).toDate();
+    Date expiresOn = new DateTime().plusDays(30).toDate();
+    String notes = "It's green!";
+    String discardReason = "Bad blood";
+    
+    // Expected
+    Component component = aComponent()
+        .withDonation(aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
+        .withComponentCode(componentCode)
+        .withCreatedBy(aUser().withUsername(createdByUsername).build())
+        .withCreatedDate(createdDate)
+        .withParentComponent(aComponent()
+            .withCreatedDate(new DateTime(createdDate).minusDays(1).toDate()) // Create parent before child
+            .withComponentCode(parentComponentCode)
+            .build())
+        .withCreatedOn(createdOn)
+        .withStatus(status)
+        .withLocation(aVenue().withName(locationName).build())
+        .withIssuedOn(issuedOn)
+        .withInventoryStatus(inventoryStatus)
+        .withDiscardedOn(discardedOn)
+        .withExpiresOn(expiresOn)
+        .withNotes(notes)
+        .buildAndPersist(entityManager);
+
+    // Excluded issued status change reason
+    aComponentStatusChange()
+        .withComponent(component)
+        .withStatusChangeReason(aComponentStatusChangeReason()
+            .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.ISSUED)
+            .withStatusChangeReason("Issued component")
+            .build())
+        .buildAndPersist(entityManager);
+
+    // Excluded returned status change reason
+    aComponentStatusChange()
+        .withComponent(component)
+        .withStatusChangeReason(aComponentStatusChangeReason()
+            .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.RETURNED)
+            .withStatusChangeReason("Returned component")
+            .build())
+        .buildAndPersist(entityManager);
+    
+    // Expected discard status change reason
+    aComponentStatusChange()
+        .withComponent(component)
+        .withStatusChangeReason(aComponentStatusChangeReason()
+            .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED)
+            .withStatusChangeReason(discardReason)
+            .build())
+        .buildAndPersist(entityManager);
+    
+    // Deleted discard status change reason
+    aComponentStatusChange()
+        .thatIsDeleted()
+        .withComponent(component)
+        .withStatusChangeReason(aComponentStatusChangeReason()
+            .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED)
+            .withStatusChangeReason("Deleted undiscard")
+            .build())
+        .buildAndPersist(entityManager);
+    
+    // Excluded by deleted
+    aComponent().thatIsDeleted().buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    Set<ComponentExportDTO> returnedDTOs = componentRepository.findComponentsForExport();
+    
+    // Verify
+    assertThat(returnedDTOs.size(), is(2));
+    
+    // Verify DTO parent state
+    Iterator<ComponentExportDTO> iterator = returnedDTOs.iterator();
+    assertThat(iterator.next().getComponentCode(), is(parentComponentCode));
+    
+    // Verify DTO state
+    ComponentExportDTO returnedDTO = iterator.next();
+    assertThat(returnedDTO.getDonationIdentificationNumber(), is(donationIdentificationNumber));
+    assertThat(returnedDTO.getComponentCode(), is(componentCode));
+    assertThat(returnedDTO.getCreatedBy(), is(createdByUsername));
+    assertThat(returnedDTO.getCreatedDate(), isSameDayAs(createdDate));
+    assertThat(returnedDTO.getLastUpdatedBy(), is(USERNAME));
+    assertThat(returnedDTO.getLastUpdated(), isSameDayAs(new Date()));
+    assertThat(returnedDTO.getParentComponentCode(), is(parentComponentCode));
+    assertThat(returnedDTO.getCreatedOn(), isSameDayAs(createdOn));
+    assertThat(returnedDTO.getStatus(), is(status));
+    assertThat(returnedDTO.getLocation(), is(locationName));
+    assertThat(returnedDTO.getIssuedOn(), isSameDayAs(issuedOn));
+    assertThat(returnedDTO.getInventoryStatus(), is(inventoryStatus));
+    assertThat(returnedDTO.getDiscardedOn(), isSameDayAs(discardedOn));
+    assertThat(returnedDTO.getExpiresOn(), isSameDayAs(expiresOn));
+    assertThat(returnedDTO.getNotes(), is(notes));
+    assertThat(returnedDTO.getDiscardReason(), is(discardReason));
+  }
+  
+  @Test
+  public void testFindComponentsForExport_shouldOrderResultsByCreatedDate() {
+    // Set up fixture
+    String firstDonationIdentificationNumber = "1233322";
+    String secondDonationIdentificationNumber = "6666666";
+    String thirdDonationIdentificationNumber = "333333";
+    
+    Component componentWithStatusChanges = aComponent()
+        .withDonation(aDonation().withDonationIdentificationNumber(secondDonationIdentificationNumber).build())
+        .withCreatedDate(new DateTime().minusDays(5).toDate())
+        .buildAndPersist(entityManager);
+    aComponent()
+        .withDonation(aDonation().withDonationIdentificationNumber(firstDonationIdentificationNumber).build())
+        .withCreatedDate(new DateTime().minusDays(10).toDate())
+        .buildAndPersist(entityManager);
+    aComponent()
+        .withDonation(aDonation().withDonationIdentificationNumber(thirdDonationIdentificationNumber).build())
+        .withCreatedDate(new DateTime().minusDays(1).toDate())
+        .buildAndPersist(entityManager);
+
+    // Add a status change to make sure that it does not affect sort order
+    aComponentStatusChange()
+        .withComponent(componentWithStatusChanges)
+        .withStatusChangeReason(aComponentStatusChangeReason()
+            .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED)
+            .build())
+        .buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    Set<ComponentExportDTO> returnedDTOs = componentRepository.findComponentsForExport();
+    
+    // Verify
+    assertThat(returnedDTOs.size(), is(3));
+    Iterator<ComponentExportDTO> iterator = returnedDTOs.iterator();
+    assertThat(iterator.next().getDonationIdentificationNumber(), is(firstDonationIdentificationNumber));
+    assertThat(iterator.next().getDonationIdentificationNumber(), is(secondDonationIdentificationNumber));
+    assertThat(iterator.next().getDonationIdentificationNumber(), is(thirdDonationIdentificationNumber));
   }
 
 }

@@ -97,6 +97,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   public void testDeleteDonationWithFirstDonation_shouldSoftDeleteDonationAndUpdateDonorFirstDonationDate() {
 
     // Set up fixture
+    PackType packType = aPackType().withId(7L).build();
     Donor existingDonor = aDonor()
         .withId(IRRELEVANT_DONOR_ID)
         .withDateOfFirstDonation(IRRELEVANT_DATE_OF_FIRST_DONATION)
@@ -106,6 +107,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(existingDonor)
         .withDonationDate(IRRELEVANT_DATE_OF_FIRST_DONATION)
+        .withPackType(packType)
         .build();
 
     // Set up expectations
@@ -114,6 +116,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(existingDonor)
         .withDonationDate(IRRELEVANT_DATE_OF_FIRST_DONATION)
+        .withPackType(packType)
         .build();
     Date expectedDateOfFirstDonation = new Date();
     Donor expectedDonor = aDonor()
@@ -139,6 +142,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   public void testDeleteDonationWithLastDonation_shouldSoftDeleteDonationAndUpdateDonorLastDonationDate() {
 
     // Set up fixture
+    PackType packType = aPackType().withId(7L).build();
     Donor existingDonor = aDonor()
         .withId(IRRELEVANT_DONOR_ID)
         .withDateOfFirstDonation(IRRELEVANT_DATE_OF_FIRST_DONATION)
@@ -148,6 +152,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(existingDonor)
         .withDonationDate(IRRELEVANT_DATE_OF_LAST_DONATION)
+        .withPackType(packType)
         .build();
 
     // Set up expectations
@@ -156,6 +161,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(existingDonor)
         .withDonationDate(IRRELEVANT_DATE_OF_LAST_DONATION)
+        .withPackType(packType)
         .build();
     Date expectedDateOfLastDonation = new Date();
     Donor expectedDonor = aDonor()
@@ -672,6 +678,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   
   @Test
   public void testUpdateDonationsBloodTypingResolutions_withResolvedStatus() {
+    PackType packType = aPackType().withId(7L).build();
     BloodTypingResolutionBackingForm bloodTypingResolutionBackingForm = aBloodTypingResolutionBackingForm()
         .withDonationId(IRRELEVANT_DONATION_ID)
         .withStatus(BloodTypingMatchStatus.RESOLVED)
@@ -685,6 +692,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBloodAbo("B")
         .withBloodRh("NEG")
         .withDonationBatch(donationBatch)
+        .withPackType(packType)
         .build();
     Donation expectedDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
@@ -692,6 +700,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBloodAbo("A")
         .withBloodRh("POS")
         .withDonationBatch(donationBatch)
+        .withPackType(packType)
         .build();
     
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donation);
@@ -712,15 +721,18 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .build();
     DonationBatch donationBatch = aDonationBatch().withTestBatch(aTestBatch().build()).build();
+    PackType packType = aPackType().withId(7L).build();
     Donation donation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
         .withDonationBatch(donationBatch)
+        .withPackType(packType)
         .build();
     Donation expectedDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .withDonationBatch(donationBatch)
+        .withPackType(packType)
         .build();
     
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(donation);

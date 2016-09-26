@@ -4,12 +4,14 @@ import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder
 
 import java.util.Date;
 
+import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
+import org.jembi.bsis.helpers.persisters.ComponentStatusChangePersister;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 
-public class ComponentStatusChangeBuilder extends AbstractBuilder<ComponentStatusChange> {
+public class ComponentStatusChangeBuilder extends AbstractEntityBuilder<ComponentStatusChange> {
   
   private Long id;
   private Date statusChangedOn;
@@ -17,6 +19,7 @@ public class ComponentStatusChangeBuilder extends AbstractBuilder<ComponentStatu
   private ComponentStatus newStatus = ComponentStatus.AVAILABLE;
   private Component component;
   private boolean isDeleted = false;
+  private String statusChangeReasonText;
   
   public ComponentStatusChangeBuilder withId(Long id) {
     this.id = id;
@@ -47,6 +50,11 @@ public class ComponentStatusChangeBuilder extends AbstractBuilder<ComponentStatu
     this.isDeleted = true;
     return this;
   }
+  
+  public ComponentStatusChangeBuilder withStatusChangeReasonText(String statusChangeReasonText) {
+    this.statusChangeReasonText = statusChangeReasonText;
+    return this;
+  }
 
   @Override
   public ComponentStatusChange build() {
@@ -57,7 +65,13 @@ public class ComponentStatusChangeBuilder extends AbstractBuilder<ComponentStatu
     entity.setStatusChangeReason(statusChangeReason);
     entity.setComponent(component);
     entity.setIsDeleted(isDeleted);
+    entity.setStatusChangeReasonText(statusChangeReasonText);
     return entity;
+  }
+
+  @Override
+  public AbstractEntityPersister<ComponentStatusChange> getPersister() {
+    return new ComponentStatusChangePersister();
   }
 
   public static ComponentStatusChangeBuilder aComponentStatusChange() {

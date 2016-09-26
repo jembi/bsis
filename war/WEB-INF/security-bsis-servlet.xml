@@ -262,6 +262,13 @@
     <intercept-url pattern="/divisions/**" access="isFullyAuthenticated()" />
   </http>
   
+  <http pattern="/dataexport/**" create-session="never" use-expressions="true">
+    <http-basic />
+    <session-management />
+    <intercept-url pattern="/dataexport/**" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/dataexport/**" access="isFullyAuthenticated()" />
+  </http>
+  
   <!-- Enable stateful access to swagger-ui  -->
   <http auto-config="true" use-expressions="true">
     <intercept-url pattern="/login.html*" access="isAnonymous()" />

@@ -1,15 +1,19 @@
 package org.jembi.bsis.factory;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
+import static org.jembi.bsis.helpers.builders.InventoryViewModelBuilder.anInventoryViewModel;
+import static org.jembi.bsis.helpers.matchers.InventoryViewModelMatcher.hasSameStateAsInventoryViewModel;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
-import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.InventoryViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
@@ -34,16 +38,16 @@ public class InventoryFactoryTests {
   private LocationFactory locationFactory;
 
   @Test
-  public void testCreateInventoryViewModel_shouldReturnViewModelWithTheCorrectState() {
+  public void testCreateInventoryViewModel_shouldReturnViewModelWithTheCorrectStateAndNoExpiryStatus() {
 
     // Setup
     Date createdOn = new Date();
+    ComponentType aComponentType = aComponentType().withId(1L).build();
     Component component = aComponent()
-        .withComponentType(ComponentTypeBuilder.aComponentType().withId(1L).build())
+        .withComponentType(aComponentType)
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
         .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
         .withCreatedOn(createdOn)
-        .withExpiresOn(new Date())
         .build();   
     
     // Setup mocks
@@ -57,21 +61,22 @@ public class InventoryFactoryTests {
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
     
+    InventoryViewModel expectedInventoryViewModel =
+        anInventoryViewModel()
+          .withLocation(locationFullViewModel)
+          .withInventoryStatus(component.getInventoryStatus())
+          .withId(component.getId())
+          .withDonationIdentificationNumber(component.getDonationIdentificationNumber())
+          .withComponentCode(component.getComponentCode())
+          .withCreatedOn(createdOn)
+          .withComponentType(componentTypeViewModel)
+          .withExpiryStatus("")
+          .build();
     // Run test
-    InventoryViewModel viewModel = inventoryFactory.createViewModel(component);
-
+    InventoryViewModel createdInventoryviewModel = inventoryFactory.createViewModel(component);
+    
     // Verify
-    Assert.assertNotNull("view model was created", viewModel);
-    Assert.assertEquals("location is correct", locationFullViewModel, viewModel.getLocation());
-    Assert.assertEquals("inventory status is correct", component.getInventoryStatus(), viewModel.getInventoryStatus());
-    Assert.assertEquals("id is correct", component.getId(), viewModel.getId());
-    Assert.assertEquals("donationIdentificationNumber is correct", component.getDonationIdentificationNumber(),
-        viewModel.getDonationIdentificationNumber());
-    Assert.assertEquals("componentCode is correct", component.getComponentCode(), viewModel.getComponentCode());
-    Assert.assertEquals("createdOn is correct", component.getCreatedOn(), viewModel.getCreatedOn());
-    Assert.assertEquals("id is correct", component.getId(), viewModel.getId());
-    Assert.assertEquals("componentType is correct", componentTypeViewModel, viewModel.getComponentType());
-
+    assertThat(createdInventoryviewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
   }
 
   @Test
@@ -100,12 +105,9 @@ public class InventoryFactoryTests {
 
   @Test
   public void testExpiryStatusWithFutureExpiryDate_shouldReturnDaysUntilExpiry() {
-
     // Setup
-    DateTime expiresOn = (new DateTime()).plusHours(99);
-    Component component = aComponent()
-        .withDonation(DonationBuilder.aDonation().build())
-        .withExpiresOn(expiresOn.toDate()).build();
+    Date expiresOn = new DateTime().plusHours(99).toDate();
+    Component component = aComponent().withExpiresOn(expiresOn).build();
 
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
@@ -114,22 +116,29 @@ public class InventoryFactoryTests {
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
+    
+    InventoryViewModel expectedInventoryViewModel =
+        anInventoryViewModel()
+          .withInventoryStatus(component.getInventoryStatus())
+          .withExpiresOn(expiresOn)
+          .withExpiryStatus("4 days to expire")
+          .withComponentType(componentTypeViewModel)
+          .withLocation(locationFullViewModel)
+          .build();
+
     // Run test
-    InventoryViewModel viewModel = inventoryFactory.createViewModel(component);
-
+    InventoryViewModel createdInventoryviewModel = inventoryFactory.createViewModel(component);
+    
     // Verify
-    Assert.assertEquals("correct expiry status", "4 days to expire", viewModel.getExpiryStatus());
-
+    assertThat(createdInventoryviewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
   }
   
   @Test
   public void testExpiryStatusWithPastExpiryDate_shouldReturnAlreadyExpiredMsg() {
-
     // Setup
-    DateTime expiresOn = (new DateTime()).minusDays(20);
-    Component component = aComponent()
-        .withDonation(DonationBuilder.aDonation().build())
-        .withExpiresOn(expiresOn.toDate()).build();
+    Date expiresOn = new DateTime().minusDays(20).toDate();
+    Component component = aComponent().withExpiresOn(expiresOn).build();
+
 
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
@@ -138,13 +147,21 @@ public class InventoryFactoryTests {
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
+    
+    InventoryViewModel expectedInventoryViewModel =
+        anInventoryViewModel()
+          .withInventoryStatus(component.getInventoryStatus())
+          .withExpiresOn(expiresOn)
+          .withExpiryStatus("Already expired")
+          .withComponentType(componentTypeViewModel)
+          .withLocation(locationFullViewModel)
+          .build();
 
     // Run test
-    InventoryViewModel viewModel = inventoryFactory.createViewModel(component);
+    InventoryViewModel createdInventoryviewModel = inventoryFactory.createViewModel(component);
 
     // Verify
-    Assert.assertEquals("correct expiry status", "Already expired", viewModel.getExpiryStatus());
-
+    assertThat(createdInventoryviewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
   }
 
 }

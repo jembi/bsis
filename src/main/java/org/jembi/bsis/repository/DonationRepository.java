@@ -21,13 +21,13 @@ import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.dto.CollectedDonationDTO;
+import org.jembi.bsis.dto.DonationExportDTO;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
-import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -43,9 +43,6 @@ public class DonationRepository {
 
   @Autowired
   private BloodTestingRepository bloodTypingRepository;
-
-  @Autowired
-  private GeneralConfigAccessorService generalConfigAccessorService;
 
   public void saveDonation(Donation donation) {
     em.persist(donation);
@@ -320,6 +317,12 @@ public class DonationRepository {
         .setParameter("venue", donorVenue)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
+        .setParameter("deleted", false)
+        .getResultList();
+  }
+  
+  public List<DonationExportDTO> findDonationsForExport() {
+    return em.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_DONATIONS_FOR_EXPORT, DonationExportDTO.class)
         .setParameter("deleted", false)
         .getResultList();
   }
