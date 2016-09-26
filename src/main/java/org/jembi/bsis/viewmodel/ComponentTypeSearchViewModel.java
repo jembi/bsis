@@ -6,9 +6,9 @@ public class ComponentTypeSearchViewModel extends ComponentTypeViewModel {
 
   private Integer expiresAfter;
   private boolean canBeIssued;
-  private boolean isDeleted;
+  private boolean isDeleted = false;
   private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
-  private boolean containsPlasma;;
+  private boolean containsPlasma = false;
 
   public Integer getExpiresAfter() {
     return expiresAfter;
@@ -18,7 +18,7 @@ public class ComponentTypeSearchViewModel extends ComponentTypeViewModel {
     this.expiresAfter = expiresAfter;
   }
 
-  public Boolean getCanBeIssued() {
+  public boolean getCanBeIssued() {
     return canBeIssued;
   }
 
@@ -26,11 +26,11 @@ public class ComponentTypeSearchViewModel extends ComponentTypeViewModel {
     this.canBeIssued = canBeIssued;
   }
 
-  public Boolean getIsDeleted() {
+  public boolean getIsDeleted() {
     return isDeleted;
   }
 
-  public void setIsDeleted(Boolean isDeleted) {
+  public void thatIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
 
@@ -46,7 +46,7 @@ public class ComponentTypeSearchViewModel extends ComponentTypeViewModel {
     return containsPlasma;
   }
 
-  public void setIsContainsPlasma(boolean containsPlasma) {
+  public void thatContainsPlasma(boolean containsPlasma) {
     this.containsPlasma = containsPlasma;
   }
 }

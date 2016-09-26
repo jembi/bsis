@@ -24,7 +24,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   private String storageInfo;
   private boolean canBeIssued = true;
   private List<ComponentTypeCombination> producedComponentTypeCombinations = new ArrayList<>();
-  private boolean containsPlasma;
+  private boolean containsPlasma = false;
 
   public ComponentTypeBuilder withId(Long id) {
     this.id = id;
@@ -106,8 +106,8 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     return this;
   }
   
-  public ComponentTypeBuilder withContainsPlasma(boolean containsPlasma) {
-    this.containsPlasma = containsPlasma;
+  public ComponentTypeBuilder thatContainsPlasma() {
+    this.containsPlasma = true;;
     return this;
   }
 

@@ -7,10 +7,10 @@ public class ComponentTypeSearchViewModelBuilder extends AbstractBuilder<Compone
 
   private Long id;
   private int expiresAfter;
-  private boolean canBeIssued;
-  private boolean isDeleted;
+  private boolean canBeIssued = false;
+  private boolean isDeleted = false;
   private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
-  private boolean containsPlasma;  
+  private boolean containsPlasma = false;  
   private String componentTypeName;
   private String componentTypeCode;
   private String description;
@@ -25,13 +25,13 @@ public class ComponentTypeSearchViewModelBuilder extends AbstractBuilder<Compone
     return this;
   }
 
-  public ComponentTypeSearchViewModelBuilder withCanBeIssued(boolean canBeIssued) {
-    this.canBeIssued = canBeIssued;
+  public ComponentTypeSearchViewModelBuilder thatCanBeIssued() {
+    this.canBeIssued = true;
     return this;
   }
 
-  public ComponentTypeSearchViewModelBuilder withIsDeleted(boolean isDeleted) {
-    this.isDeleted = isDeleted;
+  public ComponentTypeSearchViewModelBuilder thatIsDeleted() {
+    this.isDeleted = true;
     return this;
   }
   
@@ -40,8 +40,8 @@ public class ComponentTypeSearchViewModelBuilder extends AbstractBuilder<Compone
     return this;
   }
 
-  public ComponentTypeSearchViewModelBuilder withContainsPlasma(boolean containsPlasma) {
-    this.containsPlasma = containsPlasma;
+  public ComponentTypeSearchViewModelBuilder thatContainsPlasma() {
+    this.containsPlasma = true;
     return this;
   }
   
@@ -66,13 +66,13 @@ public class ComponentTypeSearchViewModelBuilder extends AbstractBuilder<Compone
     viewModel.setId(id);
     viewModel.setExpiresAfter(expiresAfter);
     viewModel.setCanBeIssued(canBeIssued);
-    viewModel.setIsDeleted(isDeleted);
+    viewModel.thatIsDeleted(isDeleted);
     viewModel.setExpiresAfterUnits(expiresAfterUnits);
-    viewModel.setIsContainsPlasma(containsPlasma);
+    viewModel.thatContainsPlasma(containsPlasma);
     viewModel.setComponentTypeName(componentTypeName);
     viewModel.setComponentTypeCode(componentTypeCode);
     viewModel.setDescription(description);
-    
+    viewModel.thatContainsPlasma(containsPlasma);
     return viewModel;
   }
   
