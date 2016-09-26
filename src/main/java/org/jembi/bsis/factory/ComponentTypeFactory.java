@@ -69,9 +69,9 @@ public class ComponentTypeFactory {
       ComponentType componentType, ComponentTypeSearchViewModel componentTypeSearchViewModel) {
     componentTypeSearchViewModel.setExpiresAfter(componentType.getExpiresAfter());
     componentTypeSearchViewModel.setCanBeIssued(componentType.getCanBeIssued());
-    componentTypeSearchViewModel.setIsDeleted(componentType.getIsDeleted());
+    componentTypeSearchViewModel.thatIsDeleted(componentType.getIsDeleted());
     componentTypeSearchViewModel.setExpiresAfterUnits(componentType.getExpiresAfterUnits());
-    componentTypeSearchViewModel.setIsContainsPlasma(componentType.getContainsPlasma());
+    componentTypeSearchViewModel.thatContainsPlasma(componentType.getContainsPlasma());
   }
 
   private void populateComponentTypeFullViewModelFields(

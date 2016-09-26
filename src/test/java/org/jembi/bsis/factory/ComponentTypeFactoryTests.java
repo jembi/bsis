@@ -136,13 +136,12 @@ public class ComponentTypeFactoryTests {
   
   @Test
   public void testComponentTypeSearchViewModelWithContainsPlasma_shouldReturnExpectedViewModel() {
-    boolean containsPlasma = true;
     ComponentType componentType = aComponentType()
         .withId(1L)
         .withComponentTypeCode("0000")
         .withComponentTypeName("name")
         .withDescription("description")
-        .withContainsPlasma(containsPlasma)
+        .thatContainsPlasma()
         .build();
     
     ComponentTypeSearchViewModel expectedViewModel = aComponentTypeSearchViewModel()
@@ -150,7 +149,7 @@ public class ComponentTypeFactoryTests {
         .withComponentTypeCode("0000")
         .withComponentTypeName("name")
         .withDescription("description")
-        .withContainsPlasma(containsPlasma)
+        .thatContainsPlasma()
         .build();
     
     // run test
