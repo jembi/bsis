@@ -43,8 +43,8 @@ public class MobileClinicController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
-  @RequestMapping(value = "/report", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
+  @RequestMapping(value = "/export", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_MOBILE_CLINIC_EXPORT + "')")
   public @ResponseBody ResponseEntity<Map<String, Object>> getMobileClinicDonorsByVenues(
       @RequestParam(value = "venueIds", required = false) Set<Long> venueIds,
       @RequestParam(value = "clinicDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date clinicDate) {
