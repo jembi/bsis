@@ -2,7 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<changeSet id="20160927-1428" author="tumijacob">
+	<changeSet id="20160927-1511" author="tumijacob">
 	<!-- Manage Adverse Events permission -->
 		<insert tableName="Permission">
 			<column name="name" value="Manage Adverse Events"></column>
@@ -10,6 +10,26 @@
 		<!-- Manage Divisions permission -->
 		<insert tableName="Permission">
 			<column name="name" value="Manage Divisions"></column>
+		</insert>
+		<!-- Assign permission Manage Adverse Events to superuser -->
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="117"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
+		<!-- Assign permission Manage Divisions to superuser -->
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="118"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
+		<!-- Assign permission Manage Adverse Events to admin user -->
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="117"></column>
+			<column name="roles_id" value="2"></column>
+		</insert>
+		<!-- Assign permission Manage Divisions to admin user -->
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="118"></column>
+			<column name="roles_id" value="2"></column>
 		</insert>
 	</changeSet>
 </databaseChangeLog>
