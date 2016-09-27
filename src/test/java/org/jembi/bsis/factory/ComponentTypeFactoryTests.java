@@ -1,5 +1,12 @@
 package org.jembi.bsis.factory;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.ComponentTypeSearchViewModelBuilder.aComponentTypeSearchViewModel;
+import static org.jembi.bsis.helpers.matchers.ComponentTypeSearchViewModelMatcher.hasSameStateAsComponentTypeSearchViewModel;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,7 +60,7 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", Integer.valueOf(0), viewModel.getLowStorageTemperature());
     Assert.assertEquals("View Model correct", "preparationInfo", viewModel.getPreparationInfo());
     Assert.assertNotNull("View Model correct", viewModel.getProducedComponentTypeCombinations());
-    Assert.assertEquals("View Model correct", 1, viewModel.getProducedComponentTypeCombinations().size());
+    Assert.assertEquals("View Model correct",  1, viewModel.getProducedComponentTypeCombinations().size());
     Assert.assertEquals("View Model correct", "transportInfo", viewModel.getTransportInfo());
     Assert.assertEquals("View Model correct", "storageInfo", viewModel.getStorageInfo());
     Assert.assertEquals("View Model correct", false, viewModel.getCanBeIssued());
@@ -126,4 +133,32 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", Long.valueOf(1), viewModels.get(0).getId());
     Assert.assertEquals("View Model correct", Long.valueOf(2), viewModels.get(1).getId());
   }
+  
+  @Test
+  public void testComponentTypeSearchViewModelWithContainsPlasma_shouldReturnExpectedViewModel() {
+    ComponentType componentType = aComponentType()
+        .withId(1L)
+        .withComponentTypeCode("0000")
+        .withComponentTypeName("name")
+        .withDescription("description")
+        .thatContainsPlasma()
+        .build();
+    
+    ComponentTypeSearchViewModel expectedViewModel = aComponentTypeSearchViewModel()
+        .withId(1L)
+        .withComponentTypeCode("0000")
+        .withComponentTypeName("name")
+        .withDescription("description")
+        .thatContainsPlasma()
+        .build();
+    
+    // run test
+    ComponentTypeSearchViewModel convertedViewModel = componentTypeFactory.createSearchViewModel(componentType);
+
+    // do asserts
+    assertThat(convertedViewModel, is(notNullValue()));
+    assertThat("Correct view model", convertedViewModel, hasSameStateAsComponentTypeSearchViewModel(expectedViewModel));
+    
+  }
+
 }

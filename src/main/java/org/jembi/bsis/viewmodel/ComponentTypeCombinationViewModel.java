@@ -1,49 +1,35 @@
 package org.jembi.bsis.viewmodel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class ComponentTypeCombinationViewModel {
-
-  public ComponentTypeCombinationViewModel(ComponentTypeCombination componentTypeCombination) {
-    this.componentTypeCombination = componentTypeCombination;
-  }
-
-  @JsonIgnore
-  private ComponentTypeCombination componentTypeCombination;
-
-  public ComponentTypeCombination getComponentTypeCombination() {
-    return componentTypeCombination;
-  }
-
-  public void setComponentTypeCombination(ComponentTypeCombination componentTypeCombination) {
-    this.componentTypeCombination = componentTypeCombination;
-  }
-
+  
+  private Long id;
+  private String combinationName;
+  List<ComponentTypeViewModel> componentTypes;
+  
   public Long getId() {
-    return componentTypeCombination.getId();
+    return this.id;
   }
 
   public String getCombinationName() {
-    return componentTypeCombination.getCombinationName();
+    return this.combinationName;
   }
 
   public List<ComponentTypeViewModel> getComponentTypes() {
-    // FIXME: use factory
-    return getComponentTypeViewModels(componentTypeCombination.getComponentTypes());
+    return componentTypes;
   }
 
-  private List<ComponentTypeViewModel> getComponentTypeViewModels(List<ComponentType> componentTypes) {
-    List<ComponentTypeViewModel> componentTypeViewModels = new ArrayList<ComponentTypeViewModel>();
-    for (ComponentType componentType : componentTypes) {
-      componentTypeViewModels.add(new ComponentTypeViewModel(componentType));
-    }
-    return componentTypeViewModels;
+  public void setId(Long id) {
+    this.id = id;
   }
 
+  public void setCombinationName(String combinationName) {
+    this.combinationName = combinationName;
+  }
+  
+  public void setComponentTypes(List<ComponentTypeViewModel> componentTypes) {
+    this.componentTypes = componentTypes;
+  }
+  
 }

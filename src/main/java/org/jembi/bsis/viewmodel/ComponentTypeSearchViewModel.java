@@ -1,27 +1,52 @@
 package org.jembi.bsis.viewmodel;
 
-import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 
 public class ComponentTypeSearchViewModel extends ComponentTypeViewModel {
 
-  public ComponentTypeSearchViewModel(ComponentType componentType) {
-    super(componentType);
-  }
+  private Integer expiresAfter;
+  private boolean canBeIssued;
+  private boolean isDeleted;
+  private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
+  private boolean containsPlasma;
 
   public Integer getExpiresAfter() {
-    return componentType.getExpiresAfter();
+    return expiresAfter;
   }
-  
-  public ComponentTypeTimeUnits getExpiresAfterUnits() {
-    return componentType.getExpiresAfterUnits();
+
+  public void setExpiresAfter(Integer expiresAfter) {
+    this.expiresAfter = expiresAfter;
   }
-  
+
   public boolean getCanBeIssued() {
-    return componentType.getCanBeIssued();
+    return canBeIssued;
   }
-  
+
+  public void setCanBeIssued(boolean canBeIssued) {
+    this.canBeIssued = canBeIssued;
+  }
+
   public boolean getIsDeleted() {
-    return componentType.getIsDeleted();
+    return isDeleted;
+  }
+
+  public void setIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+
+  public ComponentTypeTimeUnits getExpiresAfterUnits() {
+    return expiresAfterUnits;
+  }
+
+  public void setExpiresAfterUnits(ComponentTypeTimeUnits expiresAfterUnits) {
+    this.expiresAfterUnits = expiresAfterUnits;
+  }
+
+  public boolean getContainsPlasma() {
+    return containsPlasma;
+  }
+
+  public void setContainsPlasma(boolean containsPlasma) {
+    this.containsPlasma = containsPlasma;
   }
 }

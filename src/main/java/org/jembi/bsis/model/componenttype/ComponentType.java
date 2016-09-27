@@ -100,6 +100,8 @@ public class ComponentType extends BaseEntity {
 
   private boolean canBeIssued = true;
 
+  private boolean containsPlasma = true;
+
   public Boolean getIsDeleted() {
     return isDeleted;
   }
@@ -261,6 +263,14 @@ public class ComponentType extends BaseEntity {
     this.canBeIssued = canBeIssued;
   }
 
+  public boolean getContainsPlasma() {
+    return containsPlasma;
+  }
+
+  public void setContainsPlasma(boolean containsPlasma) {
+    this.containsPlasma = containsPlasma;
+  }
+
   public void copy(ComponentType componentType) {
     this.componentTypeName = componentType.getComponentTypeName();
     this.componentTypeCode = componentType.getComponentTypeCode();
@@ -279,6 +289,7 @@ public class ComponentType extends BaseEntity {
     this.storageInfo = componentType.getStorageInfo();
     this.canBeIssued = componentType.getCanBeIssued();
     this.isDeleted = componentType.getIsDeleted();
+    this.containsPlasma = componentType.getContainsPlasma();
   }
 
 

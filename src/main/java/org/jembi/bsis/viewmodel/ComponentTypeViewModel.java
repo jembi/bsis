@@ -1,40 +1,32 @@
 package org.jembi.bsis.viewmodel;
 
-import org.jembi.bsis.model.componenttype.ComponentType;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class ComponentTypeViewModel extends BaseViewModel {
 
-  public ComponentTypeViewModel(ComponentType componentType) {
-    this.componentType = componentType;
-  }
-
-  @JsonIgnore
-  ComponentType componentType;
-
-  public ComponentType getComponentType() {
-    return componentType;
-  }
-
-  public void setComponentType(ComponentType componentType) {
-    this.componentType = componentType;
-  }
-
-  @Override
-  public Long getId() {
-    return componentType.getId();
-  }
-
+  private String componentTypeName;
+  private String componentTypeCode;
+  private String description;
+  
   public String getComponentTypeName() {
-    return componentType.getComponentTypeName();
+    return componentTypeName;
   }
 
   public String getComponentTypeCode() {
-    return componentType.getComponentTypeCode();
+    return componentTypeCode;
   }
 
   public String getDescription() {
-    return componentType.getDescription();
+    return description;
+  }
+
+  public void setComponentTypeName(String componentTypeName) {
+    this.componentTypeName = componentTypeName;
+  }
+
+  public void setComponentTypeCode(String componentTypeCode) {
+    this.componentTypeCode = componentTypeCode;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 }

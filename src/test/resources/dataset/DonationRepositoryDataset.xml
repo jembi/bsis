@@ -67,15 +67,15 @@
     <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
-                   componentTypeCode="0011"/>
+                   componentTypeCode="0011" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="2" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Double Pack - CPDA"
-                   componentTypeCode="0012"/>
+                   componentTypeCode="0012" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="3" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Triple Pack - CPDA"
-                   componentTypeCode="0013"/>
+                   componentTypeCode="0013" containsPlasma="true"/>
 
     <PackType id="1" packType="Single" isDeleted="false" testSampleProduced="true"
               componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>
