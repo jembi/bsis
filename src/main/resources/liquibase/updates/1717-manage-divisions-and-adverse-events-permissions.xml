@@ -3,9 +3,11 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet id="20160927-1428" author="tumijacob">
+	<!-- Manage Adverse Events permission -->
 		<insert tableName="Permission">
 			<column name="name" value="Manage Adverse Events"></column>
 		</insert>
+		<!-- Manage Divisions permission -->
 		<insert tableName="Permission">
 			<column name="name" value="Manage Divisions"></column>
 		</insert>
