@@ -23,12 +23,10 @@ public class MobileClinicDonorExportFactory {
   private LocationFactory locationFactory;
 
 
-  public MobileClinicExportDonorViewModel createMobileClinicExportDonorViewModel(
-    MobileClinicDonorDTO mobileClinicDonorDTO, Date clinicDate) {
+  public MobileClinicExportDonorViewModel createMobileClinicExportDonorViewModel(MobileClinicDonorDTO mobileClinicDonorDTO, Date clinicDate) {
     MobileClinicExportDonorViewModel viewModel = new MobileClinicExportDonorViewModel();
     populateBasicFields(viewModel, mobileClinicDonorDTO);
-    viewModel
-        .setEligibility(donorConstraintChecker.isDonorEligibleToDonateOnDate(mobileClinicDonorDTO.getId(), clinicDate));
+    viewModel.setEligibility(donorConstraintChecker.isDonorEligibleToDonateOnDate(mobileClinicDonorDTO.getId(), clinicDate));
     return viewModel;
   }
 
