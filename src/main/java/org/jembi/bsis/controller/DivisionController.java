@@ -38,7 +38,7 @@ public class DivisionController {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  @PreAuthorize("hasRole('" + PermissionConstants.ADD_DIVISIONS + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DIVISIONS + "')") 
   public ResponseEntity<Map<String, Object>> addDivision(
       @RequestBody @Valid DivisionBackingForm form) {
     Map<String, Object> map = new HashMap<>();
@@ -47,7 +47,7 @@ public class DivisionController {
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/search")
-  @PreAuthorize("hasAnyRole('" + PermissionConstants.VIEW_DIVISIONS + "', '" + PermissionConstants.MANAGE_LOCATIONS + "')")
+  @PreAuthorize("hasAnyRole('" + PermissionConstants.MANAGE_DIVISIONS + "', '" + PermissionConstants.MANAGE_LOCATIONS + "')") 
   public ResponseEntity<Map<String, Object>> findDivisions(
       @RequestParam(required = false) String name,
       @RequestParam(required = true, defaultValue = "false") boolean includeSimilarResults,
@@ -59,7 +59,7 @@ public class DivisionController {
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DIVISIONS + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DIVISIONS + "')") 
   public ResponseEntity<Map<String, Object>> findDivisionById(@PathVariable("id") long id) {
     Map<String, Object> map = new HashMap<>();
     map.put("division", divisionControllerService.findDivisionById(id));
@@ -67,7 +67,7 @@ public class DivisionController {
   }
 
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DIVISIONS + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DIVISIONS + "')") 
   public ResponseEntity<Map<String, Object>> updateDivision(@PathVariable("id") long id,
       @Valid @RequestBody DivisionBackingForm backingForm) {
     
