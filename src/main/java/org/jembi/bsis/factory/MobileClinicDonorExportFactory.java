@@ -49,7 +49,7 @@ public class MobileClinicDonorExportFactory {
     viewModel.setId(donor.getId());
     viewModel.setIsDeleted(donor.getIsDeleted());
     viewModel.setLastName(donor.getLastName());
-    //viewModel.setVenue(locationFactory.createFullViewModel(donor.getVenue()));
+    viewModel.setVenue(locationFactory.createFullViewModel(donor.getVenue()));
     viewModel.setBloodType(getBloodType(donor));
   }
 
