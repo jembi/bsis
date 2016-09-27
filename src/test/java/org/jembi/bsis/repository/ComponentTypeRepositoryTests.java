@@ -19,6 +19,51 @@ public class ComponentTypeRepositoryTests extends ContextDependentTestSuite {
   private ComponentTypeRepository componentTypeRepository;
   
   @Test
+  public void testIsUniqueComponentTypeName_shouldReturnFalseIfComponentNameIsNotUnique() {
+    String componentTypeCode = "0011";
+    String componentTypeName = "Blood";
+    
+    // Test data: ComponentType with same name
+    aComponentType().withComponentTypeCode(componentTypeCode).withComponentTypeName(componentTypeName).buildAndPersist(entityManager);
+    
+    // Run test
+    boolean unique = componentTypeRepository.isUniqueComponentTypeName(2L, componentTypeName);
+    
+    // Verify result
+    assertThat(unique, is(false));
+  }
+  
+  @Test
+  public void testIsUniqueComponentTypeName_shouldReturnTrueIfComponentTypeAlreadyExists() {
+    String componentTypeCode = "0011";
+    String componentTypeName = "Blood";
+    
+    // Test data: ComponentType already exists
+    ComponentType componentType = aComponentType().withComponentTypeCode(componentTypeCode).withComponentTypeName(componentTypeName).buildAndPersist(entityManager);
+    
+    // Run test
+    boolean unique = componentTypeRepository.isUniqueComponentTypeName(componentType.getId(), componentTypeName);
+    
+    // Verify result
+    assertThat(unique, is(true));
+  }
+  
+  @Test
+  public void testIsUniqueComponentTypeName_shouldReturnTrueForNewComponentType() {
+    String componentTypeCode = "0011";
+    String componentTypeName = "Blood";
+    
+    // Test data: ComponentType with different name
+    aComponentType().withComponentTypeCode(componentTypeCode).withComponentTypeName(componentTypeName).buildAndPersist(entityManager);
+    
+    // Run test
+    boolean unique = componentTypeRepository.isUniqueComponentTypeName(null, "More Blood");
+    
+    // Verify result
+    assertThat(unique, is(true));
+  }
+  
+  @Test
   public void testFindComponentTypeByCodeWithMultipleComponentTypes_shouldReturnCorrectComponentType() {
     String componentTypeCode = "0011";
     
