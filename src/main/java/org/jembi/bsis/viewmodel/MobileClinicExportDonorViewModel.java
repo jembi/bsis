@@ -13,31 +13,10 @@ public class MobileClinicExportDonorViewModel {
   private String bloodType;
   private DonorStatus donorStatus;
   private String birthDate;
-  private LocationFullViewModel venue;
+  private LocationViewModel venue;
   private Boolean isDeleted;
   private Boolean eligibility;
   
-  public MobileClinicExportDonorViewModel() {
-    super();
-  }
-
-  public MobileClinicExportDonorViewModel(Long id, String donorNumber, String firstName, String lastName, String gender,
-      String bloodType, DonorStatus donorStatus, String birthDate, LocationFullViewModel venue, Boolean isDeleted,
-      Boolean eligibility) {
-    super();
-    this.id = id;
-    this.donorNumber = donorNumber;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.gender = gender;
-    this.bloodType = bloodType;
-    this.donorStatus = donorStatus;
-    this.birthDate = birthDate;
-    this.venue = venue;
-    this.isDeleted = isDeleted;
-    this.eligibility = eligibility;
-  }
-
   public Long getId() {
     return id;
   }
@@ -102,11 +81,11 @@ public class MobileClinicExportDonorViewModel {
     this.birthDate = birthDate;
   }
 
-  public LocationFullViewModel getVenue() {
+  public LocationViewModel getVenue() {
     return venue;
   }
 
-  public void setVenue(LocationFullViewModel venue) {
+  public void setVenue(LocationViewModel venue) {
     this.venue = venue;
   }
 

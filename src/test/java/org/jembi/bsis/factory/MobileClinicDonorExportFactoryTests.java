@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class MobileClinicDonorDTOFactoryTests extends UnitTestSuite {
+public class MobileClinicDonorExportFactoryTests extends UnitTestSuite {
   
   @InjectMocks
   private MobileClinicDonorExportFactory mobileClinicDonorExportFactory;
@@ -44,14 +44,17 @@ public class MobileClinicDonorDTOFactoryTests extends UnitTestSuite {
     MobileClinicDonorDTO firstDonor = aMobileClinicDonor().withId(1L).withFirstName("Moses").withLastName("Mariga").withVenue(venue).build();
     MobileClinicDonorDTO secondDonor = aMobileClinicDonor().withId(7L).withFirstName("Test").withLastName("Donor").withVenue(venue).build();
     List<MobileClinicDonorDTO> donors = Arrays.asList(firstDonor, secondDonor);
+    
     // Set up expectations
     when(locationFactory.createFullViewModel(venue)).thenReturn(new LocationFullViewModel(venue));
     when(donorConstraintChecker.isDonorEligibleToDonateOnDate(firstDonor.getId(), clinicDate)).thenReturn(true);
     when(donorConstraintChecker.isDonorEligibleToDonateOnDate(secondDonor.getId(), clinicDate)).thenReturn(true);
     MobileClinicExportDonorViewModel firstDonorViewModel = mobileClinicDonorExportFactory.createMobileClinicExportDonorViewModel(firstDonor, clinicDate);
     MobileClinicExportDonorViewModel secondDonorViewModel = mobileClinicDonorExportFactory.createMobileClinicExportDonorViewModel(secondDonor, clinicDate);
+    
     // Exercise SUT
     List<MobileClinicExportDonorViewModel> returnedViewModels = mobileClinicDonorExportFactory.createMobileClinicExportDonorViewModels(donors, clinicDate);
+    
     // Verify
     assertThat(returnedViewModels.get(0), hasSameStateAsMobileClinicExportDonorViewModel(firstDonorViewModel));
     assertThat(returnedViewModels.get(1), hasSameStateAsMobileClinicExportDonorViewModel(secondDonorViewModel));

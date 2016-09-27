@@ -1,23 +1,29 @@
 package org.jembi.bsis.controller;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jembi.bsis.controllerservice.MobileClinicControllerService;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.LocationViewModelBuilder;
 import org.jembi.bsis.helpers.builders.MobileClinicDonorBuilder;
+import org.jembi.bsis.helpers.builders.MobileClinicExportDonorViewModelBuilder;
 import org.jembi.bsis.model.donor.DonorStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.MobileClinicExportDonorViewModel;
 import org.jembi.bsis.viewmodel.MobileClinicLookUpDonorViewModel;
 import org.junit.Assert;
 import org.junit.Test;
@@ -89,5 +95,38 @@ public class MobileClinicControllerTests extends UnitTestSuite {
     Object donorsValue = map.get("donors");
     Assert.assertNotNull("map has donors", donorsValue);
     Assert.assertEquals("donors are correct", clinicDonorsViewModels, donorsValue);
+  }
+  
+  @Test
+  public void testGetMobileClinicDonorsByVenues() throws Exception {
+    Date clinicDate = new Date();
+    MobileClinicExportDonorViewModel mobileClinicDonorViewModelD1 =
+        MobileClinicExportDonorViewModelBuilder.aMobileClinicExportDonorViewModel()
+          .withDonorNumber("D1")
+          .withFirstName("D1")
+          .withLastName("Test")
+          .thatIsNotDeleted()
+          .build();
+      
+    MobileClinicExportDonorViewModel mobileClinicDonorViewModelD2 =
+        MobileClinicExportDonorViewModelBuilder.aMobileClinicExportDonorViewModel()
+          .withDonorNumber("D2")
+          .withFirstName("D1")
+          .withLastName("Test")
+          .thatIsNotDeleted()
+          .build();
+    List<MobileClinicExportDonorViewModel> clinicDonorsViewModels = new ArrayList<>();
+    clinicDonorsViewModels.add(mobileClinicDonorViewModelD1);
+    clinicDonorsViewModels.add(mobileClinicDonorViewModelD2);
+    Set<Long> venueIDs = new HashSet<>();
+    venueIDs.add(1L);
+    when(mobileClinicControllerService.getMobileClinicDonorsByVenues(venueIDs, clinicDate))
+        .thenReturn(clinicDonorsViewModels);
+    ResponseEntity<Map<String, Object>> response =
+        mobileClinicController.getMobileClinicDonorsByVenues(venueIDs, clinicDate);
+    Map<String, Object> map = response.getBody();
+
+    // Verify  
+    assertThat((List<MobileClinicExportDonorViewModel>) map.get("donors"), equalTo(clinicDonorsViewModels));
   }
 }

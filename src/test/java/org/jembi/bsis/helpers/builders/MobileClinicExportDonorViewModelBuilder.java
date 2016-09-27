@@ -1,10 +1,10 @@
 package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.model.donor.DonorStatus;
-import org.jembi.bsis.viewmodel.LocationFullViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.MobileClinicExportDonorViewModel;
 
-public class MobileClinicDonorExportBuilder extends AbstractBuilder<MobileClinicExportDonorViewModel> { 
+public class MobileClinicExportDonorViewModelBuilder extends AbstractBuilder<MobileClinicExportDonorViewModel> { 
   
   private Long id;
   private String donorNumber;
@@ -14,72 +14,72 @@ public class MobileClinicDonorExportBuilder extends AbstractBuilder<MobileClinic
   private String bloodType;
   private DonorStatus donorStatus;
   private String birthDate;
-  private LocationFullViewModel venue;
+  private LocationViewModel venue;
   private Boolean deleted;
   private Boolean eligibility;
   
-  public MobileClinicDonorExportBuilder withId(Long id){
+  public MobileClinicExportDonorViewModelBuilder withId(Long id){
     this.id = id;
     return  this;
   }
   
-  public MobileClinicDonorExportBuilder withDonorNumber(String donorNumber){
+  public MobileClinicExportDonorViewModelBuilder withDonorNumber(String donorNumber){
     this.donorNumber = donorNumber;
     return this;
   }
   
-  public MobileClinicDonorExportBuilder withFirstName(String firstName){
+  public MobileClinicExportDonorViewModelBuilder withFirstName(String firstName){
     this.firstName = firstName;
     return this;
   }
   
-  public MobileClinicDonorExportBuilder withLastName(String lastName){
+  public MobileClinicExportDonorViewModelBuilder withLastName(String lastName){
     this.lastName = lastName;
     return this;
   }
   
-  public MobileClinicDonorExportBuilder withGender(String gender){
+  public MobileClinicExportDonorViewModelBuilder withGender(String gender){
     this.gender = gender;
     return this;
   }
   
-  public MobileClinicDonorExportBuilder withBloodType(String bloodType){
+  public MobileClinicExportDonorViewModelBuilder withBloodType(String bloodType){
     this.bloodType = bloodType;
     return this;
   }
   
-  public MobileClinicDonorExportBuilder withDonorStatus(DonorStatus donorStatus){
+  public MobileClinicExportDonorViewModelBuilder withDonorStatus(DonorStatus donorStatus){
     this.donorStatus = donorStatus;
     return this;
   }
   
-  public MobileClinicDonorExportBuilder withBirthDate(String birthDate){
+  public MobileClinicExportDonorViewModelBuilder withBirthDate(String birthDate){
     this.birthDate = birthDate;
     return this;
   }
   
-  public MobileClinicDonorExportBuilder withVenue(LocationFullViewModel venue){
+  public MobileClinicExportDonorViewModelBuilder withVenue(LocationViewModel venue){
     this.venue = venue;
     return this;
   }
   
   
-  public MobileClinicDonorExportBuilder thatIsDeleted() {
+  public MobileClinicExportDonorViewModelBuilder thatIsDeleted() {
     deleted = true;
     return this;
   }
 
-  public MobileClinicDonorExportBuilder thatIsNotDeleted() {
+  public MobileClinicExportDonorViewModelBuilder thatIsNotDeleted() {
     deleted = false;
     return this;
   }
   
-  public MobileClinicDonorExportBuilder thatIsEligibility() {
+  public MobileClinicExportDonorViewModelBuilder thatIsEligible() {
     eligibility = true;
     return this;
   }
 
-  public MobileClinicDonorExportBuilder thatIsNotEligibility() {
+  public MobileClinicExportDonorViewModelBuilder thatIsNotEligble() {
     eligibility  = false;
     return this;
   }
@@ -102,7 +102,7 @@ public class MobileClinicDonorExportBuilder extends AbstractBuilder<MobileClinic
     
   }
 
-  public static MobileClinicDonorExportBuilder aMobileClinicDonorExport() {
-    return new MobileClinicDonorExportBuilder();
+  public static MobileClinicExportDonorViewModelBuilder aMobileClinicExportDonorViewModel() {
+    return new MobileClinicExportDonorViewModelBuilder();
   }
 }
