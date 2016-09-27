@@ -42,11 +42,11 @@ public class ComponentTypeSearchViewModel extends ComponentTypeViewModel {
     this.expiresAfterUnits = expiresAfterUnits;
   }
 
-  public boolean getIsContainsPlasma() {
+  public boolean getContainsPlasma() {
     return containsPlasma;
   }
 
-  public void setIsContainsPlasma(boolean containsPlasma) {
+  public void setContainsPlasma(boolean containsPlasma) {
     this.containsPlasma = containsPlasma;
   }
 }

@@ -131,7 +131,7 @@ public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<Component
     viewModel.setComponentTypeName(componentTypeName);
     viewModel.setComponentTypeCode(componentTypeCode);
     viewModel.setDescription(description);
-    viewModel.setIsContainsPlasma(containsPlasma);
+    viewModel.setContainsPlasma(containsPlasma);
     return viewModel;
   }
 

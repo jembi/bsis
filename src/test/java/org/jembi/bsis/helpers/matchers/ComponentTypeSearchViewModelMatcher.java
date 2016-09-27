@@ -20,7 +20,7 @@ public class ComponentTypeSearchViewModelMatcher extends TypeSafeMatcher<Compone
     .appendText("\nExpires after: ").appendValue(expected.getExpiresAfter())
     .appendText("\nIs deleted: ").appendValue(expected.getIsDeleted())
     .appendText("\nExpires after units: ").appendValue(expected.getExpiresAfterUnits())
-    .appendText("\nContains plasma: ").appendValue(expected.getIsContainsPlasma())
+    .appendText("\nContains plasma: ").appendValue(expected.getContainsPlasma())
     .appendText("\nComponent type name: ").appendValue(expected.getExpiresAfterUnits())
     .appendText("\nComponent type code: ").appendValue(expected.getComponentTypeCode())
     .appendText("\nDescription: ").appendValue(expected.getDescription());  
@@ -32,7 +32,7 @@ public class ComponentTypeSearchViewModelMatcher extends TypeSafeMatcher<Compone
         Objects.equals(actual.getExpiresAfter(), expected.getExpiresAfter()) &&
         Objects.equals(actual.getIsDeleted(), expected.getIsDeleted()) &&
         Objects.equals(actual.getExpiresAfterUnits(), expected.getExpiresAfterUnits()) &&
-        Objects.equals(actual.getIsContainsPlasma(), expected.getIsContainsPlasma()) &&
+        Objects.equals(actual.getContainsPlasma(), expected.getContainsPlasma()) &&
         Objects.equals(actual.getComponentTypeName(), expected.getComponentTypeName()) &&
         Objects.equals(actual.getComponentTypeCode(), expected.getComponentTypeCode()) &&
         Objects.equals(actual.getDescription(), expected.getDescription());
