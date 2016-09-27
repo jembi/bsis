@@ -54,4 +54,6 @@
   <include file="./src/main/resources/liquibase/updates/1446-data-export.xml" />
   <include file="./src/main/resources/liquibase/updates/1667-assign-division-permissions-to-required-roles.xml" />
   <include file="./src/main/resources/liquibase/updates/1597-add-contains-plasma.xml" />
+  <include file="./src/main/resources/liquibase/updates/1666-add-new-component-types.xml" /> 
+
 </databaseChangeLog>
