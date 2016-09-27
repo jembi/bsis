@@ -69,7 +69,7 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
   
   @Test
   public void testValidateFormWithLongName_shouldHaveNoError() {
-    String longName = "1010101010101010101010101010";
+    String longName = "10101010101010101010101010101010101010101010101010";
     ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
         .withId(1L)
         .withComponentTypeName(longName)
@@ -126,8 +126,8 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
   }
   
   @Test
-  public void testValidateFormWithLongCode_shouldHaveOneError() {
-    String longCode = "1010101010101010101010101010";
+  public void testValidateFormWithLongCode_shouldHaveNoErrors() {
+    String longCode = "101010101010101010101010101010";
     ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
         .withId(1L)
         .withComponentTypeName(COMPONENT_TYPE_NAME)
