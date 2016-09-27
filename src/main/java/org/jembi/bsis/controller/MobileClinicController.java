@@ -3,6 +3,7 @@ package org.jembi.bsis.controller;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.jembi.bsis.controllerservice.MobileClinicControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -38,7 +39,17 @@ public class MobileClinicController {
       @RequestParam(value = "venueId", required = true) Long venueId,
       @RequestParam(value = "clinicDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date clinicDate) {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("donors", mobileClinicControllerService.getMobileClinicDonors(venueId, clinicDate));
+    map.put("donors", mobileClinicControllerService.getMobileClinicDonorsByVenue(venueId, clinicDate));
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+  }
+  
+  @RequestMapping(value = "/export", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_MOBILE_CLINIC_EXPORT + "')")
+  public @ResponseBody ResponseEntity<Map<String, Object>> getMobileClinicDonorsByVenues(
+      @RequestParam(value = "venueIds", required = false) Set<Long> venueIds,
+      @RequestParam(value = "clinicDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date clinicDate) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("donors", mobileClinicControllerService.getMobileClinicDonorsByVenues(venueIds, clinicDate));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
