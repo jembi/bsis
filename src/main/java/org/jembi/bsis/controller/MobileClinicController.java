@@ -29,7 +29,7 @@ public class MobileClinicController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
   public @ResponseBody Map<String, Object> getMobileClinicFormFields() {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("venues", mobileClinicControllerService.getVenues());
+    map.put("venues", mobileClinicControllerService.getMobileVenues());
     return map;
   }
 
@@ -57,7 +57,7 @@ public class MobileClinicController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
   public @ResponseBody ResponseEntity<Map<String, Object>> getDonorOutcomesForm() {
     Map<String, Object> map = new HashMap<>();
-    map.put("venues", mobileClinicControllerService.getVenues());
+    map.put("venues", mobileClinicControllerService.getMobileVenues());
     map.put("bloodTestNames", mobileClinicControllerService.getBloodTestNames());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }

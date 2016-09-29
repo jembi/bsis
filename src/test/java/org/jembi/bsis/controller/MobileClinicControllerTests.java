@@ -45,7 +45,7 @@ public class MobileClinicControllerTests extends UnitTestSuite {
     LocationViewModel venue1 = LocationViewModelBuilder.aLocationViewModel().withId(1L).withName("test").build();
     venues.add(venue1);
 
-    when(mobileClinicControllerService.getVenues()).thenReturn(venues);
+    when(mobileClinicControllerService.getMobileVenues()).thenReturn(venues);
 
     Map<String, Object> map = mobileClinicController.getMobileClinicFormFields();
     Assert.assertNotNull("map is returned", map);

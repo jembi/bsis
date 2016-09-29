@@ -25,6 +25,14 @@ public class LocationRepository extends AbstractRepository<Location>{
     em.flush();
   }
   
+  public List<Location> getMobileVenues() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_MOBILE_VENUES, Location.class)
+        .setParameter("isVenue", true)
+        .setParameter("isMobileSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
+  
   public List<Location> getVenues() {
     return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_VENUES, Location.class)
         .setParameter("isVenue", true)

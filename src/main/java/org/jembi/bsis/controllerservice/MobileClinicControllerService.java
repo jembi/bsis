@@ -54,8 +54,8 @@ public class MobileClinicControllerService {
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
 
-  public List<LocationViewModel> getVenues() {
-    return locationFactory.createViewModels(locationRepository.getVenues());
+  public List<LocationViewModel> getMobileVenues() {
+    return locationFactory.createViewModels(locationRepository.getMobileVenues());
   }
 
   public List<MobileClinicLookUpDonorViewModel> getMobileClinicDonorsByVenue(Long venueId, Date clinicDate) {
