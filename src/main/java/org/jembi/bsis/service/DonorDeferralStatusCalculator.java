@@ -35,7 +35,7 @@ public class DonorDeferralStatusCalculator {
     for (BloodTestResult bloodTestResult : bloodTestResults) {
 
       BloodTest bloodTest = bloodTestResult.getBloodTest();
-      if (bloodTest.getBloodTestType() == BloodTestType.CONFIRMATORY_TTI) {
+      if (BloodTestType.isPendingTTI(bloodTest.getBloodTestType())) {
 
         List<String> positiveBloodTestResults = Arrays.asList(bloodTest.getPositiveResults().split(","));
         if (positiveBloodTestResults.contains(bloodTestResult.getResult())) {
