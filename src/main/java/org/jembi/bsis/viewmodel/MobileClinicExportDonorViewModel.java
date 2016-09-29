@@ -1,7 +1,6 @@
 package org.jembi.bsis.viewmodel;
 
 import org.jembi.bsis.model.donor.DonorStatus;
-import org.jembi.bsis.model.location.Location;
 
 public class MobileClinicExportDonorViewModel {
 
