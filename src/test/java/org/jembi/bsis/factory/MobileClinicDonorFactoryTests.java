@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
-import org.jembi.bsis.factory.MobileClinicDonorViewModelFactory;
+import org.jembi.bsis.factory.MobileClinicDonorFactory;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.MobileClinicDonorBuilder;
 import org.jembi.bsis.model.donor.DonorStatus;
@@ -26,10 +26,10 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MobileClinicDonorViewModelFactoryTests {
+public class MobileClinicDonorFactoryTests {
 
   @InjectMocks
-  private MobileClinicDonorViewModelFactory mobileClinicDonorModelFactory;
+  private MobileClinicDonorFactory mobileClinicDonorModelFactory;
   @Mock
   private DonorConstraintChecker donorConstraintChecker;
 

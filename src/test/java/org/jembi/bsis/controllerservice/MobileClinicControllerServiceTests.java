@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.factory.DonorOutcomesViewModelFactory;
-import org.jembi.bsis.factory.MobileClinicExportDonorViewModelFactory;
-import org.jembi.bsis.factory.MobileClinicDonorViewModelFactory;
+import org.jembi.bsis.factory.MobileClinicExportDonorFactory;
+import org.jembi.bsis.factory.MobileClinicDonorFactory;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.MobileClinicDonorBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
@@ -52,9 +52,9 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   @Mock
   private DonorRepository donorRepository;
   @Mock
-  private MobileClinicDonorViewModelFactory mobileClinicDonorViewModelFactory;
+  private MobileClinicDonorFactory mobileClinicDonorFactory;
   @Mock
-  private MobileClinicExportDonorViewModelFactory mobileClinicDonorDTOFactory;
+  private MobileClinicExportDonorFactory mobileClinicDonorDTOFactory;
 
   @Test
   public void testGetDonorOutcomes_shouldReturnCorrectViewModels() {
@@ -129,7 +129,7 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
     //Mock
     when(mobileClinicControllerService.getMobileClinicDonorsByVenue(venue.getId(), clinicDate)).thenReturn(expectedClinicDonorsViewModels);
     when(donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())))).thenReturn(clinicDonorDTOs);
-    when(mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(clinicDonorDTOs,clinicDate)).thenReturn(expectedClinicDonorsViewModels);
+    when(mobileClinicDonorFactory.createMobileClinicDonorViewModels(clinicDonorDTOs,clinicDate)).thenReturn(expectedClinicDonorsViewModels);
 
     // Exercise SUT
     List<MobileClinicLookUpDonorViewModel> returnedClinicDonorsViewModels = mobileClinicControllerService.getMobileClinicDonorsByVenue(venue.getId(), clinicDate);

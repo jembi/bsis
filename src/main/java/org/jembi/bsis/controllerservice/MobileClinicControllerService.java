@@ -10,8 +10,8 @@ import java.util.Set;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.factory.DonorOutcomesViewModelFactory;
 import org.jembi.bsis.factory.LocationFactory;
-import org.jembi.bsis.factory.MobileClinicExportDonorViewModelFactory;
-import org.jembi.bsis.factory.MobileClinicDonorViewModelFactory;
+import org.jembi.bsis.factory.MobileClinicExportDonorFactory;
+import org.jembi.bsis.factory.MobileClinicDonorFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.Donation;
@@ -40,13 +40,13 @@ public class MobileClinicControllerService {
   private LocationFactory locationFactory;
 
   @Autowired
-  private MobileClinicDonorViewModelFactory mobileClinicDonorViewModelFactory;
+  private MobileClinicDonorFactory mobileClinicDonorFactory;
 
   @Autowired
   private DonationRepository donationRepository;
 
   @Autowired
-  private MobileClinicExportDonorViewModelFactory mobileClinicExportDonorFactory;
+  private MobileClinicExportDonorFactory mobileClinicExportDonorFactory;
 
   @Autowired
   private DonorOutcomesViewModelFactory donorOutcomesViewModelFactory;
@@ -61,7 +61,7 @@ public class MobileClinicControllerService {
   public List<MobileClinicLookUpDonorViewModel> getMobileClinicDonorsByVenue(Long venueId, Date clinicDate) {
     List<MobileClinicDonorDTO> mobileClinicDonorDTOs =
         donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venueId)));
-    return mobileClinicDonorViewModelFactory.createMobileClinicDonorViewModels(mobileClinicDonorDTOs, clinicDate);
+    return mobileClinicDonorFactory.createMobileClinicDonorViewModels(mobileClinicDonorDTOs, clinicDate);
   }
 
   public List<MobileClinicExportDonorViewModel> getMobileClinicDonorsByVenues(Set<Long> venueIds, Date clinicDate) {
