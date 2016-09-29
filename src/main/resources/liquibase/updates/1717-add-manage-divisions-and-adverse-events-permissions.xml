@@ -1,6 +1,6 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet id="20160929-0958" author="tumijacob">
 		<!-- Add Manage Adverse Events permission -->
@@ -13,6 +13,20 @@
 		</insert>
 	</changeSet>
   <changeSet id="20160929-1107" author="lauravignoli">
+    <sql dbms="mysql">
+      INSERT INTO Permission_Role(permissions_id, roles_id)
+      SELECT DISTINCT 117, r.id
+      FROM Role r, Permission p, Permission_Role pr
+      WHERE pr.roles_id = r.id AND pr.permissions_id = p.id
+      AND p.id in (111,112,113,114);
+      
+      INSERT INTO Permission_Role(permissions_id, roles_id)
+      SELECT DISTINCT 116, r.id
+      FROM Role r, Permission p, Permission_Role pr
+      WHERE pr.roles_id = r.id AND pr.permissions_id = p.id
+      AND p.id in (96, 97, 98, 99);
+    </sql>
+    
     <!-- Delete previous Adverse Events and Division permissions and permission roles -->
     <delete tableName="Permission_Role">
       <where>permissions_id in (96, 97, 98, 99, 111, 112, 113, 114)</where>
@@ -20,23 +34,6 @@
     <delete tableName="Permission">
       <where>id in (96, 97, 98, 99, 111, 112, 113, 114)</where>
     </delete>
-    <!-- Map existing roles (1 and 2) to new "manage" permissions -->
-    <insert tableName="Permission_Role">
-      <column name="permissions_id" value="118"/>
-      <column name="roles_id" value="1"/>
-    </insert>
-    <insert tableName="Permission_Role">
-      <column name="permissions_id" value="118"/>
-      <column name="roles_id" value="2"/>
-    </insert>
-    <insert tableName="Permission_Role">
-      <column name="permissions_id" value="117"/>
-      <column name="roles_id" value="1"/>
-    </insert>
-    <insert tableName="Permission_Role">
-      <column name="permissions_id" value="117"/>
-      <column name="roles_id" value="2"/>
-    </insert>
   </changeSet>
 
 </databaseChangeLog>
