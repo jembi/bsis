@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.factory.DonorOutcomesViewModelFactory;
-import org.jembi.bsis.factory.MobileClinicDonorExportFactory;
+import org.jembi.bsis.factory.MobileClinicExportDonorViewModelFactory;
 import org.jembi.bsis.factory.MobileClinicDonorViewModelFactory;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.MobileClinicDonorBuilder;
@@ -54,7 +54,7 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   @Mock
   private MobileClinicDonorViewModelFactory mobileClinicDonorViewModelFactory;
   @Mock
-  private MobileClinicDonorExportFactory mobileClinicDonorDTOFactory;
+  private MobileClinicExportDonorViewModelFactory mobileClinicDonorDTOFactory;
 
   @Test
   public void testGetDonorOutcomes_shouldReturnCorrectViewModels() {

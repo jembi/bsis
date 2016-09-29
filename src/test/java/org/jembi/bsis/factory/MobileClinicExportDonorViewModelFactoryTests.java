@@ -22,10 +22,10 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class MobileClinicDonorExportFactoryTests extends UnitTestSuite {
+public class MobileClinicExportDonorViewModelFactoryTests extends UnitTestSuite {
   
   @InjectMocks
-  private MobileClinicDonorExportFactory mobileClinicDonorExportFactory;
+  private MobileClinicExportDonorViewModelFactory mobileClinicExportDonorViewModel;
   @Mock
   private LocationFactory locationFactory;
   @Mock
@@ -49,11 +49,11 @@ public class MobileClinicDonorExportFactoryTests extends UnitTestSuite {
     when(locationFactory.createFullViewModel(venue)).thenReturn(new LocationFullViewModel(venue));
     when(donorConstraintChecker.isDonorEligibleToDonateOnDate(firstDonor.getId(), clinicDate)).thenReturn(true);
     when(donorConstraintChecker.isDonorEligibleToDonateOnDate(secondDonor.getId(), clinicDate)).thenReturn(true);
-    MobileClinicExportDonorViewModel firstDonorViewModel = mobileClinicDonorExportFactory.createMobileClinicExportDonorViewModel(firstDonor, clinicDate);
-    MobileClinicExportDonorViewModel secondDonorViewModel = mobileClinicDonorExportFactory.createMobileClinicExportDonorViewModel(secondDonor, clinicDate);
+    MobileClinicExportDonorViewModel firstDonorViewModel = mobileClinicExportDonorViewModel.createMobileClinicExportDonorViewModel(firstDonor, clinicDate);
+    MobileClinicExportDonorViewModel secondDonorViewModel = mobileClinicExportDonorViewModel.createMobileClinicExportDonorViewModel(secondDonor, clinicDate);
     
     // Exercise SUT
-    List<MobileClinicExportDonorViewModel> returnedViewModels = mobileClinicDonorExportFactory.createMobileClinicExportDonorViewModels(donors, clinicDate);
+    List<MobileClinicExportDonorViewModel> returnedViewModels = mobileClinicExportDonorViewModel.createMobileClinicExportDonorViewModels(donors, clinicDate);
     
     // Verify
     assertThat(returnedViewModels.get(0), hasSameStateAsMobileClinicExportDonorViewModel(firstDonorViewModel));

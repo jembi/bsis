@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MobileClinicDonorExportFactory {
+public class MobileClinicExportDonorViewModelFactory {
 
   @Autowired
   private DonorConstraintChecker donorConstraintChecker;
