@@ -25,7 +25,6 @@ import org.jembi.bsis.dto.DonorExportDTO;
 import org.jembi.bsis.dto.DuplicateDonorDTO;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.model.address.AddressType;
-import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donor.DonorStatus;
 import org.jembi.bsis.model.donor.DuplicateDonorBackup;
@@ -339,10 +338,15 @@ public class DonorRepository {
     parameters.put("isDeleted", false);
     parameters.put("excludedStatuses", Arrays.asList(DonorStatus.MERGED));
 
+    
     if (venueIds != null && !venueIds.isEmpty()) {
       queryBuilder.append("AND d.venue.id IN :venueIds ");
       parameters.put("venueIds", venueIds);
     }
+    
+    queryBuilder.append("AND d.venue.isMobileSite = :isMobileSite AND d.venue.isVenue = :isVenue ");
+    parameters.put("isMobileSite", true);
+    parameters.put("isVenue", true);
 
     queryBuilder.append("ORDER BY d.lastName asc, d.firstName asc");
 
