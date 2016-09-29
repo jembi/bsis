@@ -98,6 +98,7 @@ public class MobileClinicControllerTests extends UnitTestSuite {
   }
   
   @Test
+  @SuppressWarnings("unchecked")
   public void testGetMobileClinicDonorsByVenues() throws Exception {
     Date clinicDate = new Date();
     MobileClinicExportDonorViewModel mobileClinicDonorViewModelD1 =
