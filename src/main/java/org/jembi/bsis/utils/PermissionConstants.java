@@ -153,12 +153,14 @@ public class PermissionConstants {
   public static final String EDIT_ADVERSE_EVENT_TYPES = "Edit Adverse Event Types";
   public static final String VIEW_ADVERSE_EVENT_TYPES = "View Adverse Event Types";
   public static final String VOID_ADVERSE_EVENT_TYPES = "Void Adverse Event Types";
+  public static final String MANAGE_ADVERSE_EVENTS = "Manage Adverse Events";
   
   // Location Divisions
   public static final String ADD_DIVISIONS = "Add Divisions";
   public static final String EDIT_DIVISIONS = "Edit Divisions";
   public static final String VIEW_DIVISIONS = "View Divisions";
   public static final String VOID_DIVISIONS = "Void Divisions";
+  public static final String MANAGE_DIVISIONS = "Manage Divisions";
   
   // Data Export
   public static final String DATA_EXPORT = "Data Export";
