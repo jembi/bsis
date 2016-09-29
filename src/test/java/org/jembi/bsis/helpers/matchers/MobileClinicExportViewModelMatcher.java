@@ -4,9 +4,6 @@ import java.util.Objects;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.jembi.bsis.model.donor.DonorStatus;
-import org.jembi.bsis.viewmodel.DivisionViewModel;
-import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.MobileClinicExportDonorViewModel;
 
 public class MobileClinicExportViewModelMatcher extends TypeSafeMatcher<MobileClinicExportDonorViewModel> {
@@ -16,17 +13,6 @@ public class MobileClinicExportViewModelMatcher extends TypeSafeMatcher<MobileCl
   public MobileClinicExportViewModelMatcher(MobileClinicExportDonorViewModel expected) {
     this.expected = expected;
   }
-  private Long id;
-  private String donorNumber;
-  private String firstName;
-  private String lastName;
-  private String gender;
-  private String bloodType;
-  private DonorStatus donorStatus;
-  private String birthDate;
-  private LocationFullViewModel venue;
-  private Boolean deleted;
-  private Boolean eligibility;
 
   @Override
   public void describeTo(Description description) {
