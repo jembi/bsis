@@ -12,4 +12,31 @@
 			<column name="name" value="Manage Divisions"></column>
 		</insert>
 	</changeSet>
+  <changeSet id="20160929-1107" author="lauravignoli">
+    <!-- Delete previous Adverse Events and Division permissions and permission roles -->
+    <delete tableName="Permission_Role">
+      <where>permissions_id in (96, 97, 98, 99, 111, 112, 113, 114)</where>
+    </delete>
+    <delete tableName="Permission">
+      <where>id in (96, 97, 98, 99, 111, 112, 113, 114)</where>
+    </delete>
+    <!-- Map existing roles (1 and 2) to new "manage" permissions -->
+    <insert tableName="Permission_Role">
+      <column name="permissions_id" value="118"/>
+      <column name="roles_id" value="1"/>
+    </insert>
+    <insert tableName="Permission_Role">
+      <column name="permissions_id" value="118"/>
+      <column name="roles_id" value="2"/>
+    </insert>
+    <insert tableName="Permission_Role">
+      <column name="permissions_id" value="117"/>
+      <column name="roles_id" value="1"/>
+    </insert>
+    <insert tableName="Permission_Role">
+      <column name="permissions_id" value="117"/>
+      <column name="roles_id" value="2"/>
+    </insert>
+  </changeSet>
+
 </databaseChangeLog>
