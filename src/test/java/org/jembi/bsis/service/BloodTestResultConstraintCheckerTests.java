@@ -18,7 +18,6 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
-import org.jembi.bsis.service.BloodTestResultConstraintChecker;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -257,7 +256,7 @@ public class BloodTestResultConstraintCheckerTests {
         generateTestBloodTestingRules());
     bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
     List<String> pendingTtiTestIds = new ArrayList<String>();
-    bloodTestingRuleResultSet.setPendingTtiTestsIds(pendingTtiTestIds);
+    bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
     rule1.setBloodTestsIds("1");
     rule1.setPendingTestsIds("2");
@@ -289,7 +288,7 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
     List<String> pendingTtiTestIds = new ArrayList<String>();
     pendingTtiTestIds.add("2");
-    bloodTestingRuleResultSet.setPendingTtiTestsIds(pendingTtiTestIds);
+    bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
     rule1.setBloodTestsIds("1");
     rule1.setPendingTestsIds("2");
@@ -321,7 +320,7 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
     List<String> pendingTtiTestIds = new ArrayList<String>();
     pendingTtiTestIds.add("3");
-    bloodTestingRuleResultSet.setPendingTtiTestsIds(pendingTtiTestIds);
+    bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
     rule1.setBloodTestsIds("1");
     rule1.setPendingTestsIds("2");
@@ -357,7 +356,7 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
     List<String> pendingTtiTestIds = new ArrayList<String>();
     pendingTtiTestIds.add("2");
-    bloodTestingRuleResultSet.setPendingTtiTestsIds(pendingTtiTestIds);
+    bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
     rule1.setBloodTestsIds("1");
     rule1.setPendingTestsIds("2");
