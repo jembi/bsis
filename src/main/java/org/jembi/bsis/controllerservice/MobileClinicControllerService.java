@@ -67,6 +67,10 @@ public class MobileClinicControllerService {
     for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
       bloodTestNames.add(bloodTest.getTestNameShort());
     }
+    // Add Repeat TTI test names
+    for(BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
+      bloodTestNames.add(bloodTest.getTestNameShort());
+    }
     // Add confirmatory TTI test names
     for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
       bloodTestNames.add(bloodTest.getTestNameShort());
