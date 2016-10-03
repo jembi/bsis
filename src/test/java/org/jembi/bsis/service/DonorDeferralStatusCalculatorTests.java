@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestResultBuilder.aBloodTestResult;
-import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -14,10 +13,7 @@ import java.util.List;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.repository.DonorDeferralRepository;
-import org.jembi.bsis.service.DonorDeferralStatusCalculator;
-import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -95,11 +91,11 @@ public class DonorDeferralStatusCalculatorTests {
   @Test
   public void testIsDonorCurrentlyDeferredWithCurrentDeferrals_shouldReturnTrue() {
 
-    Donor donor = aDonor().build();
+    Long donorId = 1L;
 
-    when(donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor)).thenReturn(1);
+    when(donorDeferralRepository.countCurrentDonorDeferralsForDonor(donorId)).thenReturn(1);
 
-    boolean returnedValue = donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
+    boolean returnedValue = donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donorId);
 
     assertThat(returnedValue, is(true));
   }
@@ -107,11 +103,11 @@ public class DonorDeferralStatusCalculatorTests {
   @Test
   public void testIsDonorCurrentlyDeferredWithNoCurrentDeferrals_shouldReturnFalse() {
 
-    Donor donor = aDonor().build();
+    Long donorId = 1L;
 
-    when(donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor)).thenReturn(0);
+    when(donorDeferralRepository.countCurrentDonorDeferralsForDonor(donorId)).thenReturn(0);
 
-    boolean returnedValue = donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
+    boolean returnedValue = donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donorId);
 
     assertThat(returnedValue, is(false));
   }
@@ -120,11 +116,11 @@ public class DonorDeferralStatusCalculatorTests {
   public void testIsDonorDeferredWithNoCurrentDeferralsOnDate_shouldReturnFalse() {
 
     Date futureMobileClinicDate = new DateTime().plusDays(7).toDate();
-    Donor donor = aDonor().build();
+    Long donorId = 1L;
 
-    when(donorDeferralRepository.countDonorDeferralsForDonorOnDate(donor, futureMobileClinicDate)).thenReturn(0);
+    when(donorDeferralRepository.countDonorDeferralsForDonorOnDate(donorId, futureMobileClinicDate)).thenReturn(0);
 
-    boolean returnedValue = donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, futureMobileClinicDate);
+    boolean returnedValue = donorDeferralStatusCalculator.isDonorDeferredOnDate(donorId, futureMobileClinicDate);
 
     assertThat(returnedValue, is(false));
   }

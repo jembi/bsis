@@ -97,7 +97,7 @@ public class DonorConstraintCheckerTests {
     Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
 
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())).thenReturn(false);
 
     boolean isEligible = donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID);
 
@@ -110,7 +110,7 @@ public class DonorConstraintCheckerTests {
     Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
 
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(true);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(IRRELEVANT_DONOR_ID)).thenReturn(true);
 
     boolean isEligible = donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID);
 
@@ -128,7 +128,7 @@ public class DonorConstraintCheckerTests {
         .build();
 
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())).thenReturn(false);
 
     boolean isEligible = donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID);
 
@@ -152,7 +152,7 @@ public class DonorConstraintCheckerTests {
         .build();
 
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())).thenReturn(false);
 
     boolean isEligible = donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID);
 
@@ -176,7 +176,7 @@ public class DonorConstraintCheckerTests {
         .build();
 
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())).thenReturn(false);
 
     boolean isEligible = donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID);
 
@@ -190,7 +190,7 @@ public class DonorConstraintCheckerTests {
         .build();
 
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(true);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())).thenReturn(true);
 
     boolean isDonorDeferred = donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID);
     assertThat(isDonorDeferred, is(true));
@@ -203,7 +203,7 @@ public class DonorConstraintCheckerTests {
         .build();
 
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())).thenReturn(false);
 
     boolean isDonorDeferred = donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID);
     assertThat(isDonorDeferred, is(false));
@@ -213,6 +213,8 @@ public class DonorConstraintCheckerTests {
   public void testIsDonorEligibleToDonateTodayWithNonDeferredDonorWithRecentDonation_shouldReturnFalse() {
 
     Date previousDonationDate = new DateTime().minusDays(3).toDate();
+    int periodBetweenDonations = 5;
+    Date nextDonationDate = new DateTime().plusDays(periodBetweenDonations).toDate();
     Date mobileClinicDate = new Date();
 
     Donor donor = aDonor()
@@ -221,13 +223,13 @@ public class DonorConstraintCheckerTests {
             .withDonationDate(previousDonationDate)
             .withPackType(aPackType()
                 .withCountAsDonation(true)
-                .withPeriodBetweenDonations(5)
+                .withPeriodBetweenDonations(periodBetweenDonations)
                 .build())
             .build())
         .build();
 
-    when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, mobileClinicDate)).thenReturn(false);
+    when(donationRepository.findLatestDueToDonateDateForDonor(IRRELEVANT_DONOR_ID)).thenReturn(nextDonationDate);
+    when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor.getId(), mobileClinicDate)).thenReturn(false);
 
     boolean isEligible = donorConstraintChecker.isDonorEligibleToDonateOnDate(IRRELEVANT_DONOR_ID, mobileClinicDate);
 
@@ -252,7 +254,7 @@ public class DonorConstraintCheckerTests {
         .build();
 
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, futureMobileClinicDate)).thenReturn(false);
+    when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor.getId(), futureMobileClinicDate)).thenReturn(false);
 
     boolean isEligible = donorConstraintChecker.isDonorEligibleToDonateOnDate(IRRELEVANT_DONOR_ID, futureMobileClinicDate);
 
@@ -277,7 +279,7 @@ public class DonorConstraintCheckerTests {
         .build();
 
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, futureMobileClinicDate)).thenReturn(true);
+    when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor.getId(), futureMobileClinicDate)).thenReturn(true);
 
     boolean isEligible = donorConstraintChecker.isDonorEligibleToDonateOnDate(IRRELEVANT_DONOR_ID, futureMobileClinicDate);
 
@@ -294,7 +296,7 @@ public class DonorConstraintCheckerTests {
         .build();
 
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, futureMobileClinicDate)).thenReturn(false);
+    when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor.getId(), futureMobileClinicDate)).thenReturn(false);
 
     boolean isEligible = donorConstraintChecker.isDonorEligibleToDonateOnDate(IRRELEVANT_DONOR_ID, futureMobileClinicDate);
 
@@ -314,7 +316,7 @@ public class DonorConstraintCheckerTests {
         .build();
 
     when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(donor);
-    when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, futureMobileClinicDate)).thenReturn(false);
+    when(donorDeferralStatusCalculator.isDonorDeferredOnDate(donor.getId(), futureMobileClinicDate)).thenReturn(false);
 
     boolean isEligible = donorConstraintChecker.isDonorEligibleToDonateOnDate(IRRELEVANT_DONOR_ID, futureMobileClinicDate);
 

@@ -47,12 +47,12 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         .intValue();
   }
 
-  public int countCurrentDonorDeferralsForDonor(Donor donor) {
+  public int countCurrentDonorDeferralsForDonor(long donorId) {
 
     return entityManager.createNamedQuery(
         DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
         Number.class)
-        .setParameter("donor", donor)
+        .setParameter("donorId", donorId)
         .setParameter("voided", false)
         .setParameter("permanentDuration", DurationType.PERMANENT)
         .setParameter("currentDate", new Date())
@@ -60,12 +60,12 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         .intValue();
   }
 
-  public int countDonorDeferralsForDonorOnDate(Donor donor, Date date) {
+  public int countDonorDeferralsForDonorOnDate(long donorId, Date date) {
 
     return entityManager.createNamedQuery(
         DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
         Number.class)
-        .setParameter("donor", donor)
+        .setParameter("donorId", donorId)
         .setParameter("voided", false)
         .setParameter("permanentDuration", DurationType.PERMANENT)
         .setParameter("currentDate", date)
