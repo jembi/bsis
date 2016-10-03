@@ -50,7 +50,7 @@ public class DataExportServiceTests extends UnitTestSuite {
    * ensure that it is correct. If changes are made to the test then the output should be validated
    * again and this value should be updated to be the MD5 sum of the updated zip.
    */
-  private static final String EXPECTED_DIGEST = "22e28ff102494e10c050dc93bdcb3f9b";
+  private static final String EXPECTED_DIGEST = "b557a8bfd0b64f83a99c02119ff3efe4";
   
   @InjectMocks
   private DataExportService dataExportService;
@@ -181,6 +181,7 @@ public class DataExportServiceTests extends UnitTestSuite {
     deferral.setLastUpdated(new Date(1472901294360L));
     deferral.setLastUpdatedBy("updated_by_user");
     deferral.setDeferralReasonText("Low weight");
+    deferral.setDeferralReason("Test Outcomes");
     deferral.setDeferralDate(new Date(1473506122982L));
     deferral.setDeferredUntil(new Date(1478085703109L));
     

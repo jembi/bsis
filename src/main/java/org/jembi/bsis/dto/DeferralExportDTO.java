@@ -6,6 +6,7 @@ public class DeferralExportDTO extends ModificationTrackerExportDTO {
 
   private String donorNumber;
   private String deferralReasonText;
+  private String deferralReason;
   private Date deferralDate;
   private Date deferredUntil;
   
@@ -14,13 +15,14 @@ public class DeferralExportDTO extends ModificationTrackerExportDTO {
   }
   
   public DeferralExportDTO(String donorNumber, Date createdDate, String createdBy, Date lastUpdated,
-      String lastUpdatedBy, String deferralReasonText, Date deferralDate, Date deferredUntil) {
+      String lastUpdatedBy, String deferralReasonText, String deferralReason, Date deferralDate, Date deferredUntil) {
     this.donorNumber = donorNumber;
     this.createdDate = createdDate;
     this.createdBy = createdBy;
     this.lastUpdated = lastUpdated;
     this.lastUpdatedBy = lastUpdatedBy;
     this.deferralReasonText = deferralReasonText;
+    this.deferralReason = deferralReason;
     this.deferralDate = deferralDate;
     this.deferredUntil = deferredUntil;
   }
@@ -39,6 +41,14 @@ public class DeferralExportDTO extends ModificationTrackerExportDTO {
 
   public void setDeferralReasonText(String deferralReasonText) {
     this.deferralReasonText = deferralReasonText;
+  }
+
+  public String getDeferralReason() {
+    return deferralReason;
+  }
+
+  public void setDeferralReason(String deferralReason) {
+    this.deferralReason = deferralReason;
   }
 
   public Date getDeferralDate() {
