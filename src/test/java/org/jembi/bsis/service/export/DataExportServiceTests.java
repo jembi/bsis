@@ -50,7 +50,7 @@ public class DataExportServiceTests extends UnitTestSuite {
    * ensure that it is correct. If changes are made to the test then the output should be validated
    * again and this value should be updated to be the MD5 sum of the updated zip.
    */
-  private static final String EXPECTED_DIGEST = "b557a8bfd0b64f83a99c02119ff3efe4";
+  private static final String EXPECTED_DIGEST = "54946e93dcb5a2b8beba696d8d6f55a1";
   
   @InjectMocks
   private DataExportService dataExportService;
