@@ -41,7 +41,7 @@ public class MobileClinicDonorFactory {
   public MobileClinicExportDonorViewModel createMobileClinicExportDonorViewModel(
       MobileClinicDonorDTO mobileClinicDonorDTO, Date clinicDate) {
     MobileClinicExportDonorViewModel viewModel = new MobileClinicExportDonorViewModel();
-    populateBasicFields(viewModel, mobileClinicDonorDTO);
+    populateBasicFieldsForExportDonorViewModel(viewModel, mobileClinicDonorDTO);
     viewModel
         .setEligibility(donorConstraintChecker.isDonorEligibleToDonateOnDate(mobileClinicDonorDTO.getId(), clinicDate));
     return viewModel;
@@ -56,7 +56,7 @@ public class MobileClinicDonorFactory {
     return viewModels;
   }
 
-  private void populateBasicFields(MobileClinicExportDonorViewModel viewModel, MobileClinicDonorDTO donor) {
+  private void populateBasicFieldsForExportDonorViewModel(MobileClinicExportDonorViewModel viewModel, MobileClinicDonorDTO donor) {
     viewModel.setBirthDate(getBirthDate(donor.getBirthDate()));
     viewModel.setDonorNumber(donor.getDonorNumber());
     viewModel.setDonorStatus(donor.getDonorStatus());
