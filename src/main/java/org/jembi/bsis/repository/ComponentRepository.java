@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.dto.ComponentExportDTO;
+import org.jembi.bsis.dto.DiscardedComponentDTO;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
@@ -164,5 +165,11 @@ public class ComponentRepository extends AbstractRepository<Component> {
      * The rows with discard reasons are sorted ahead of those without so that they added to the set first.
      */
     return new LinkedHashSet<>(componentExportDTOs);
+  }
+
+  public List<DiscardedComponentDTO> findDiscardedComponentsByVenue(Long venueId) {
+      return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_DISCARDED_COMPONENTS_BY_VENUE, DiscardedComponentDTO.class)
+          .setParameter("venueId", venueId)
+          .getResultList();
   }
 }
