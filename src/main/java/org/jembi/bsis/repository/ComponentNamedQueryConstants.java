@@ -78,14 +78,23 @@ public class ComponentNamedQueryConstants {
       // Sort by created date then status change reason with nulls last so that discards come first
       + "ORDER BY c.modificationTracker.createdDate ASC, r.statusChangeReason ASC NULLS LAST ";
 
-  public static final String NAME_FIND_DISCARDED_COMPONENTS_BY_VENUE =
+  public static final String NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_VENUE =
       "Component.findDiscardedComponentsByVenue";
-  public static final String QUERY_FIND_DISCARDED_COMPONENTS_BY_VENUE =
+  public static final String QUERY_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_VENUE =
       "select org.jembi.bsis.dto.DiscardedComponentDTO(c.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, c.location.name, count(c.id)) " +
       "from Component c " +
       "inner join ComponentStatusChange s on c.id = s.component.id" +
       "where c.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
       "and c.location.id = :venueId " +
-      "group by s.statusChangeReason_id " +
-      "order by c.location_id desc ";
+      "group by s.statusChangeReason.id " +
+      "order by c.location.name desc ";
+  public static final String NAME_FIND_SUMMARY_FOR_ALL_DISCARDED_COMPONENTS =
+      "Component.findAllDiscardedComponents";
+  public static final String QUERY_FIND_SUMMARY_FOR_ALL_DISCARDED_COMPONENTS =
+      "select org.jembi.bsis.dto.DiscardedComponentDTO(c.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, c.location.name, count(c.id)) " +
+      "from Component c " +
+      "inner join ComponentStatusChange s on c.id = s.component.id" +
+      "where c.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
+      "group by s.statusChangeReason.id " +
+      "order by c.location.name desc ";
 }

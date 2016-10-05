@@ -167,9 +167,14 @@ public class ComponentRepository extends AbstractRepository<Component> {
     return new LinkedHashSet<>(componentExportDTOs);
   }
 
-  public List<DiscardedComponentDTO> findDiscardedComponentsByVenue(Long venueId) {
-      return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_DISCARDED_COMPONENTS_BY_VENUE, DiscardedComponentDTO.class)
-          .setParameter("venueId", venueId)
+  public List<DiscardedComponentDTO> findSummaryOfDiscardedComponentsByVenue(Long venueId) {
+    if(venueId == null){
+      return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SUMMARY_FOR_ALL_DISCARDED_COMPONENTS, DiscardedComponentDTO.class)
           .getResultList();
+    }
+
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_VENUE, DiscardedComponentDTO.class)
+        .setParameter("venueId", venueId)
+        .getResultList();
   }
 }
