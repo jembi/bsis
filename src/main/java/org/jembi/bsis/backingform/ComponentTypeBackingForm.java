@@ -37,6 +37,10 @@ public class ComponentTypeBackingForm {
     return componentType.getComponentTypeName();
   }
   
+  public boolean getContainsPlasma() {
+    return componentType.getContainsPlasma();
+  }
+  
   public void setComponentTypeName(String componentTypeName) {
     componentType.setComponentTypeName(componentTypeName);
   }
@@ -112,4 +116,9 @@ public class ComponentTypeBackingForm {
   public void setIsDeleted(boolean isDeleted) {
     componentType.setIsDeleted(isDeleted);
   }
+  
+  public void setContainsPlasma(boolean containsPlasma) {
+    componentType.setContainsPlasma(containsPlasma);
+  }
+  
 }

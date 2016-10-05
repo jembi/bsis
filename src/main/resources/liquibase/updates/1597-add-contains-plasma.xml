@@ -1,0 +1,98 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20160915-1406" author="micnice">
+        <addColumn tableName="ComponentType">
+            <column name="containsPlasma" type="TINYINT(1)" defaultValue="1">
+                <constraints nullable="0" />
+            </column>
+        </addColumn>
+        <addColumn tableName="ComponentType_AUD">
+            <column name="containsPlasma" type="TINYINT(1)" defaultValue="1" />
+        </addColumn>
+
+        <comment>Updating default component types specifying those that contain plasma</comment>
+        <!-- Whole Blood Single Pack - CPDA -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 1</where>
+        </update>
+        <!-- Whole Blood Double Pack - CPDA -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 2</where>
+        </update>
+        <!-- Whole Blood Triple Pack - CPDA -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 3</where>
+        </update>
+        <!-- Whole Blood Quad Pack - CPDA -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 4</where>
+        </update>
+        <!-- Apheresis -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 5</where>
+        </update>
+        <!-- Whole Blood - CPDA -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 6</where>
+        </update>
+        <!-- Whole Blood Poor Platelets - CPDA -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 7</where>
+        </update>
+        <!-- Packed Red Cells - CPDA -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="0" type="TINYINT(1)"></column>
+            <where>id = 8</where>
+        </update>
+        <!-- Packed Red Cells - SAGM -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="0" type="TINYINT(1)"></column>
+            <where>id = 9</where>
+        </update>
+        <!-- Fresh Frozen Plasma - Whole Blood -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 10</where>
+        </update>
+        <!-- Frozen Plasma - Whole Blood  -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 11</where>
+        </update>
+        <!-- Platelets Concentrate - Whole Blood -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 12</where>
+        </update>
+        <!-- Platelets Concentrate - Whole Blood - 24H -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 13</where>
+        </update>
+        <!-- Packed Red Cells - Paediatric - CPDA -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 14</where>
+        </update>
+        <!-- Fresh Frozen Plasma - Apheresis -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 15</where>
+        </update>
+        <!-- Platelets Concentrate - Apheresis -->
+        <update tableName="ComponentType">
+            <column name="containsPlasma" value="1" type="TINYINT(1)"></column>
+            <where>id = 16</where>
+        </update>
+    </changeSet>
+</databaseChangeLog>

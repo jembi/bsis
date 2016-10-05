@@ -53,7 +53,7 @@ public class DonorDeferralNamedQueryConstants {
   public static final String QUERY_FIND_DEFERRALS_FOR_EXPORT =
       "SELECT NEW org.jembi.bsis.dto.DeferralExportDTO(d.deferredDonor.donorNumber, d.modificationTracker.createdDate, "
       + "d.modificationTracker.createdBy.username, d.modificationTracker.lastUpdated, "
-      + "d.modificationTracker.lastUpdatedBy.username, d.deferralReasonText, d.deferralDate, d.deferredUntil) "
+      + "d.modificationTracker.lastUpdatedBy.username, d.deferralReasonText, d.deferralReason.reason, d.deferralDate, d.deferredUntil) "
       + "FROM DonorDeferral d "
       + "WHERE d.isVoided = :voided "
       + "ORDER BY d.modificationTracker.createdDate ASC "; 

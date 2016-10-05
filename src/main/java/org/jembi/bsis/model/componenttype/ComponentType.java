@@ -31,7 +31,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
   @NamedQuery(name = ComponentTypeQueryConstants.NAME_FIND_COMPONENT_TYPE_BY_CODE,
       query = ComponentTypeQueryConstants.QUERY_FIND_COMPONENT_TYPE_BY_CODE),
   @NamedQuery(name = ComponentTypeQueryConstants.NAME_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED,
-      query = ComponentTypeQueryConstants.QUERY_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED)
+      query = ComponentTypeQueryConstants.QUERY_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED),
+  @NamedQuery(name = ComponentTypeQueryConstants.NAME_VERIFY_UNIQUE_COMPONENT_TYPE_NAME,
+      query = ComponentTypeQueryConstants.QUERY_VERIFY_UNIQUE_COMPONENT_TYPE_NAME),    
 })
 @Entity
 @Audited
@@ -40,10 +42,10 @@ public class ComponentType extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length = 50, nullable = false)
+  @Column(length = 50, nullable = false, unique = true)
   private String componentTypeName;
 
-  @Column(length = 30, nullable = false)
+  @Column(length = 30, nullable = false, unique = true)
   private String componentTypeCode;
 
   @Column(nullable = false)
@@ -97,6 +99,8 @@ public class ComponentType extends BaseEntity {
   private String storageInfo;
 
   private boolean canBeIssued = true;
+
+  private boolean containsPlasma = true;
 
   public Boolean getIsDeleted() {
     return isDeleted;
@@ -259,6 +263,14 @@ public class ComponentType extends BaseEntity {
     this.canBeIssued = canBeIssued;
   }
 
+  public boolean getContainsPlasma() {
+    return containsPlasma;
+  }
+
+  public void setContainsPlasma(boolean containsPlasma) {
+    this.containsPlasma = containsPlasma;
+  }
+
   public void copy(ComponentType componentType) {
     this.componentTypeName = componentType.getComponentTypeName();
     this.componentTypeCode = componentType.getComponentTypeCode();
@@ -277,6 +289,7 @@ public class ComponentType extends BaseEntity {
     this.storageInfo = componentType.getStorageInfo();
     this.canBeIssued = componentType.getCanBeIssued();
     this.isDeleted = componentType.getIsDeleted();
+    this.containsPlasma = componentType.getContainsPlasma();
   }
 
 

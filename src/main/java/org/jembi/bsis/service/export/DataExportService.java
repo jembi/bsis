@@ -266,7 +266,7 @@ public class DataExportService {
 
     // Write headers
     printer.printRecord(Arrays.asList("donorNumber", "createdDate", "createdBy", "lastUpdated", "lastUpdatedBy",
-        "deferralReasonText", "deferralDate", "deferredUntil"));
+        "deferralReason", "deferralReasonText", "deferralDate", "deferredUntil"));
     
     // Write rows
     for (DeferralExportDTO deferral : deferralRepository.findDeferralsForExport()) {
@@ -276,6 +276,7 @@ public class DataExportService {
       deferralRecord.add(deferral.getCreatedBy());
       deferralRecord.add(formatDate(deferral.getLastUpdated()));
       deferralRecord.add(deferral.getLastUpdatedBy());
+      deferralRecord.add(deferral.getDeferralReason());
       deferralRecord.add(deferral.getDeferralReasonText());
       deferralRecord.add(formatDate(deferral.getDeferralDate()));
       deferralRecord.add(formatDate(deferral.getDeferredUntil()));
