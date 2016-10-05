@@ -52,19 +52,6 @@ public class DiscardReasonRepository {
     return query.getSingleResult();
   }
 
-  public void saveAllDiscardReasons(List<ComponentStatusChangeReason> allDiscardReasons) {
-    for (ComponentStatusChangeReason dr : allDiscardReasons) {
-      ComponentStatusChangeReason existingDiscardReason = getDiscardReasonById(dr.getId());
-      if (existingDiscardReason != null) {
-        existingDiscardReason.setStatusChangeReason(dr.getStatusChangeReason());
-        em.merge(existingDiscardReason);
-      } else {
-        em.persist(dr);
-      }
-    }
-    em.flush();
-  }
-
   public ComponentStatusChangeReason saveDiscardReason(ComponentStatusChangeReason deferralReason) {
     em.persist(deferralReason);
     em.flush();
