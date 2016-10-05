@@ -40,14 +40,13 @@ The challenges listed above have influenced the design of BSIS and the following
 
 Many other design decisions in the future will be influenced by the same parameters.
 
-
 Development Environment
 -----------------------
 1. This repository contains some Eclipse specific configuration. If you are comfortable using Eclipse then setting up your development environment will be relatively easier.
    You may use another IDE if you wish to.
     * Download and unpack Eclipse Indigo 3.7 or Eclipse Juno 4.2 from http://www.eclipse.org/downloads/.
     * Install Apache Tomcat 7 and integrate with Eclipse (you may follow http://www.coreservlets.com/Apache-Tomcat-Tutorial/tomcat-7-with-eclipse.html).
-    * Clone the master branch into a local directory preferably housed in your eclipse workspace.
+    * Checkout the develop branch into a local directory preferably housed in your eclipse workspace.
     * The project dependencies are configured using [Maven] (http://maven.apache.org/). Install Eclipse plugin [m2eclipse] (http://maven.apache.org/eclipse-plugin.html) for easier integration of Maven with your development environment. In Eclipse, select Help>Install New Software and add the site http://download.eclipse.org/technology/m2e/releases to add the m2eclipse plugin.Setup m2eclipse so that it automatically downloads all the required dependencies, sources, javadocs.
     * Import the source code into Eclipse by using 'Import Existing project' option. The master branch contains the required eclipse project files (e.g. .project and .settings), so you should be able to start working right away. For other IDE's you will need to more work.
 2. You will also need to setup a MySQL database:
@@ -62,9 +61,7 @@ Important Coding Conventions
 
 Git Commit Messages
 -------------------
-Use the supplied Git commit message template to ensure that commit messages conform to the project standards. The first line of
-the commit message should contain a JIRA ticket reference and a short description of the commit (50 characters max). The following
-lines (72 characters max) should describe why the changes is being made, what the problem was and contain external references.
+Use the supplied Git commit message template to ensure that commit messages conform to the project standards. The first line of the commit message should contain a JIRA ticket reference and a short description of the commit (50 characters max).  The following lines (72 characters max) should describe why the change is being made, what the problem was, and may contain external references if necessary.
 
 In your BSIS Git repository folder, run the following command:
 
@@ -72,8 +69,7 @@ In your BSIS Git repository folder, run the following command:
 git config commit.template .git.template
 ```
 
-This will set the git commit template for the local git repository only. If you'd like to set the template for all your Git 
-repositories, then run the following command:
+This will set the git commit template for the local git repository only. If you'd like to set the template for all your Git repositories, then run the following command:
 
 ```
 git config --global commit.template .git.template
