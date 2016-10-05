@@ -42,6 +42,16 @@ public class ReportsController {
 
   @Autowired
   private ReportsControllerService reportsControllerService;
+  
+  @RequestMapping(value = "/discardedunits/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
+  public Map<String, Object> discardedUnitsFormFields() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("processingSites", reportsControllerService.getProcessingSites());
+    map.put("componentTypes", reportsControllerService.getAllComponentTypes());
+    map.put("discardReasons", reportsControllerService.getAllDiscardReasons());
+    return map;
+  }
 
   @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
