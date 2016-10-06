@@ -42,6 +42,10 @@ public class ReportsControllerService {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypesThatCanBeIssued());
   }
   
+  public List<LocationViewModel> getProcessingSites() {
+    return locationFactory.createViewModels(locationRepository.getProcessingSites());
+  }
+  
   public List<LocationViewModel> getDistributionSites() {
     return locationFactory.createViewModels(locationRepository.getDistributionSites());
   }
