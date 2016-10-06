@@ -136,6 +136,11 @@ public class BloodTestingRuleEngine {
     // Determine the TTI status
     setTTIStatus(resultSet);
 
+    // Split repeat and confirmatory pending TTI tests
+    List<BloodTest> repeatTTITests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI);
+    List<BloodTest> confirmatoryTTITests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI);
+    setSeparateRepeatAndConfirmatoryPendingTTITests(resultSet, repeatTTITests, confirmatoryTTITests);
+
     return bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(resultSet);
   }
 
@@ -212,7 +217,7 @@ public class BloodTestingRuleEngine {
               resultSet.addPendingRhTestsIds(extraTestId);
               break;
             case TTI:
-              resultSet.addPendingTtiTestsIds(extraTestId);
+              resultSet.addPendingRepeatAndConfirmatoryTtiTestsIds(extraTestId);
               break;
             default:
               LOGGER.warn("Unknown rule subcategory: " + rule.getSubCategory());
@@ -451,5 +456,28 @@ public class BloodTestingRuleEngine {
     }
 
     resultSet.setTtiStatus(ttiStatus);
+  }
+
+  /**
+   * Sets the separate repeat and confirmatory pending tti tests.
+   *
+   * @param resultSet the result set
+   * @param repeatTTITests the repeat tti tests
+   * @param confirmatoryTTITests the confirmatory tti tests
+   */
+  private void setSeparateRepeatAndConfirmatoryPendingTTITests(BloodTestingRuleResultSet resultSet,
+      List<BloodTest> repeatTTITests, List<BloodTest> confirmatoryTTITests) {
+    for (BloodTest repeatTTITest : repeatTTITests) {
+      if (resultSet.getPendingRepeatAndConfirmatoryTtiTestsIds().contains((repeatTTITest.getId().toString()))) {
+        resultSet.addPendingRepeatTtiTestsIds(repeatTTITest.getId().toString());
+      }
+    }
+
+    for (BloodTest confirmatoryTTITest : confirmatoryTTITests) {
+      if (resultSet.getPendingRepeatAndConfirmatoryTtiTestsIds().contains((confirmatoryTTITest.getId().toString()))) {
+        resultSet.addPendingConfirmatoryTtiTestsIds(confirmatoryTTITest.getId().toString());
+      }
+    }
+
   }
 }

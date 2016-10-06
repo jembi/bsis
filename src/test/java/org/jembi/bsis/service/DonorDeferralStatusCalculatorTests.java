@@ -124,4 +124,41 @@ public class DonorDeferralStatusCalculatorTests {
 
     assertThat(returnedValue, is(false));
   }
+  
+  @Test
+  public void testShouldDonorBeDeferredWithRepeatTTIOutcomesAndPositiveBloodTestResults_shouldReturnTrue() {
+    List<BloodTestResult> bloodTestResults = Arrays.asList(
+        aBloodTestResult()
+         .withResult("POS")
+         .withBloodTest(aBloodTest()
+             .withBloodTestType(BloodTestType.REPEAT_TTI)
+             .withPositiveResults("POS,+")
+             .build())
+         .build()
+    );
+   
+   boolean returnedValue = donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults);
+   
+   assertThat(returnedValue, is(true));
+  }
+  
+  @Test
+  public void testShouldDonorBeDeferredWithRepeatTTIOutcomesAndNegaitiveBloodTestResults_shouldReturnFalse() {
+    List<BloodTestResult> bloodTestResults = Arrays.asList(
+        aBloodTestResult()
+            .withResult("NEG")
+            .withBloodTest(aBloodTest()
+                .withBloodTestType(BloodTestType.REPEAT_TTI)
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
+    );
+
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_REPEAT_OUTCOMES))
+        .thenReturn(false);
+
+    boolean returnedValue = donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults);
+
+    assertThat(returnedValue, is(false));
+  }
 }

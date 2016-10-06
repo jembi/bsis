@@ -86,15 +86,19 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
     // Set up fixture
     BloodTest firstBasicTtiTest = aBloodTest().withId(1L).withTestNameShort("First").build();
     BloodTest secondBasicTtiTest = aBloodTest().withId(1L).withTestNameShort("Second").build();
-    BloodTest firstConfirmatoryTtiTest = aBloodTest().withId(1L).withTestNameShort("Third").build();
+    BloodTest firstRepestTtiTest = aBloodTest().withId(2L).withTestNameShort("Third").build();
+    BloodTest secondRepeatTtiTest = aBloodTest().withId(3L).withTestNameShort("Fourth").build();
+    BloodTest firstConfirmatoryTtiTest = aBloodTest().withId(1L).withTestNameShort("Fifth").build();
 
     // Set expectations
     when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(
         firstBasicTtiTest, secondBasicTtiTest));
+    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)).thenReturn(Arrays.asList(
+            firstRepestTtiTest, secondRepeatTtiTest));
     when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)).thenReturn(Arrays.asList(
         firstConfirmatoryTtiTest));
 
-    List<String> expectedBloodTestNames = Arrays.asList("First", "Second", "Third");
+    List<String> expectedBloodTestNames = Arrays.asList("First", "Second", "Third", "Fourth", "Fifth");
 
     // Exercise SUT
     List<String> returnedBloodTestNames = mobileClinicControllerService.getBloodTestNames();
