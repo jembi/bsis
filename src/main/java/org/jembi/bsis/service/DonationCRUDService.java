@@ -1,7 +1,9 @@
 package org.jembi.bsis.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.NoResultException;
@@ -104,8 +106,15 @@ public class DonationCRUDService {
       donation.setIneligibleDonor(true);
     }
 
+    Component component = componentCRUDService.createInitialComponent(donation);
+    if(donation.getComponents() == null) {
+      List<Component> components = new ArrayList<>();
+      components.add(component);
+      donation.setComponents(components);
+    } else {
+      donation.getComponents().add(component);
+    }
     donationRepository.saveDonation(donation);
-    componentCRUDService.createInitialComponent(donation);
 
     if (discardComponents) {
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);

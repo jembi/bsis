@@ -58,7 +58,6 @@ public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSu
     Date currentDate = new Date();
     Date futureDate = new DateTime().plusDays(3).toDate();
 
-    Donor donor = aDonor().build();
     DeferralReason temporaryDeferralReason = aDeferralReason()
         .withType(DeferralReasonType.NORMAL)
         .withDurationType(DurationType.TEMPORARY)
@@ -67,6 +66,8 @@ public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSu
         .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE)
         .withDurationType(DurationType.PERMANENT)
         .build();
+
+    Donor donor = aDonor().buildAndPersist(entityManager);
 
     // Expected
     aDonorDeferral()
@@ -111,7 +112,7 @@ public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSu
         .withDeferredDonor(aDonor().build())
         .buildAndPersist(entityManager);
 
-    int returnedCount = donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor);
+    int returnedCount = donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor.getId());
 
     assertThat(returnedCount, is(2));
   }
@@ -157,7 +158,8 @@ public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSu
   @Test
   public void testCountDonorDeferralsForDonorOnDate_shouldReturnCorrectResults() {
 
-    Donor donor = aDonor().build();
+    Donor donor = aDonor().buildAndPersist(entityManager);
+
     DeferralReason permanentDeferralReason = aDeferralReason()
         .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE)
         .withDurationType(DurationType.PERMANENT)
@@ -205,7 +207,7 @@ public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSu
         .buildAndPersist(entityManager);
 
 
-    int numberOfDeferrals = donorDeferralRepository.countDonorDeferralsForDonorOnDate(donor, new Date());
+    int numberOfDeferrals = donorDeferralRepository.countDonorDeferralsForDonorOnDate(donor.getId(), new Date());
     assertThat(numberOfDeferrals, is(2));
   }
   

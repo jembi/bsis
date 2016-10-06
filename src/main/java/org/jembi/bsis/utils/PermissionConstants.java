@@ -127,6 +127,7 @@ public class PermissionConstants {
   public static final String VIEW_DONOR_INFORMATION = "View Donor Information";
   public static final String VIEW_DONATION_INFORMATION = "View Donation Information";
   public static final String VIEW_MOBILE_CLINIC_INFORMATION = "View Mobile Clinic Information";
+  public static final String VIEW_MOBILE_CLINIC_EXPORT = "View Mobile Clinic Export";
   public static final String VIEW_COMPONENT_INFORMATION = "View Component Information";
   public static final String VIEW_TESTING_INFORMATION = "View Testing Information";
   public static final String VIEW_BLOOD_BANK_INFORMATION = "View Blood Bank Information";
@@ -149,16 +150,10 @@ public class PermissionConstants {
   public static final String VOID_POST_DONATION_COUNSELLING = "Void Post Donation Counselling";
 
   // Adverse Event Permissions
-  public static final String ADD_ADVERSE_EVENT_TYPES = "Add Adverse Event Types";
-  public static final String EDIT_ADVERSE_EVENT_TYPES = "Edit Adverse Event Types";
-  public static final String VIEW_ADVERSE_EVENT_TYPES = "View Adverse Event Types";
-  public static final String VOID_ADVERSE_EVENT_TYPES = "Void Adverse Event Types";
+  public static final String MANAGE_ADVERSE_EVENTS = "Manage Adverse Events";
   
   // Location Divisions
-  public static final String ADD_DIVISIONS = "Add Divisions";
-  public static final String EDIT_DIVISIONS = "Edit Divisions";
-  public static final String VIEW_DIVISIONS = "View Divisions";
-  public static final String VOID_DIVISIONS = "Void Divisions";
+  public static final String MANAGE_DIVISIONS = "Manage Divisions";
   
   // Data Export
   public static final String DATA_EXPORT = "Data Export";
