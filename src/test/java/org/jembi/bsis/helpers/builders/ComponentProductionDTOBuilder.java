@@ -1,27 +1,28 @@
 package org.jembi.bsis.helpers.builders;
 
-import org.jembi.bsis.dto.CollectedDonationDTO;
-import org.jembi.bsis.dto.ComponentProductionExportDTO;
-import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.dto.ComponentProductionDTO;
 import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.util.Gender;
 
-public class ComponentProductionDTOBuilder extends AbstractBuilder<ComponentProductionExportDTO> {
-
-  private ComponentType componentType;
+public class ComponentProductionDTOBuilder extends AbstractBuilder<ComponentProductionDTO>{
+  private String componentTypeName;
   private String bloodAbo;
+  private String bloodRh;
+  private String venue;
   private long count;
-  private Location venue;
-
-  public ComponentProductionDTOBuilder withComponentType(ComponentType componentType) {
-    this.componentType = componentType;
+  
+  public ComponentProductionDTOBuilder withComponentTypeName(String componentTypeName) {
+    this.componentTypeName = componentTypeName;
+    return this;
+  }
+  
+  public ComponentProductionDTOBuilder withBloodAbo(String bloodAbo) {
+    this.bloodAbo = bloodAbo;
     return this;
   }
 
-  public ComponentProductionDTOBuilder withBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
+  public ComponentProductionDTOBuilder withBloodRh(String bloodRh) {
+    this.bloodRh = bloodRh;
     return this;
   }
 
@@ -29,24 +30,25 @@ public class ComponentProductionDTOBuilder extends AbstractBuilder<ComponentProd
     this.count = count;
     return this;
   }
-
-  public ComponentProductionDTOBuilder withVenue(Location venue) {
-    this.venue = venue;
+  
+  public ComponentProductionDTOBuilder withVenue(String venue) {
+    this.venue =venue;
     return this;
   }
 
   @Override
-  public ComponentProductionExportDTO build() {
-    ComponentProductionExportDTO componentProductionExportDTO = new ComponentProductionExportDTO();
-    componentProductionExportDTO.setComponentType(componentType);
+  public ComponentProductionDTO build() {
+    ComponentProductionDTO componentProductionExportDTO = new ComponentProductionDTO();
+    componentProductionExportDTO.setComponentType(componentTypeName);
     componentProductionExportDTO.setBloodAbo(bloodAbo);
+    componentProductionExportDTO.setBloodRh(bloodRh);
+    componentProductionExportDTO.setVenue(venue);
     componentProductionExportDTO.setCount(count);
-    componentProductionExportDTO.setVenues(venue);
     return componentProductionExportDTO;
   }
-
-  public static ComponentProductionDTOBuilder aComponentTypeDTO() {
+  
+  public static ComponentProductionDTOBuilder aComponentProductionExportDTO() {
     return new ComponentProductionDTOBuilder();
   }
-
+  
 }
