@@ -16,7 +16,6 @@ import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -99,13 +98,11 @@ public class TestResultController {
       @RequestParam(value = "bloodTestType", required = false) BloodTestType bloodTestType) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    int numberOfDonations = 0;
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
     for(DonationBatch donationBatch : donationBatches){
       donationBatchIds.add(donationBatch.getId());
-      numberOfDonations += donationBatch.getDonations().size();
     }
 
     List<BloodTestingRuleResult> ruleResults;
@@ -118,7 +115,6 @@ public class TestResultController {
 
     map.put("testResults", ruleResults);
     map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatch.getCreatedDate()));
-    map.put("numberOfDonations", numberOfDonations);
 
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
@@ -154,8 +150,6 @@ public class TestResultController {
     Boolean pendingRepeatBloodTypingTests = false;
     Boolean pendingConfirmatoryTTITests = false;
     Boolean pendingRepeatTTITests = false;
-    Boolean basicBloodTypingComplete = true;
-    Boolean basicTTIComplete = true;
     Boolean pendingBloodTypingMatchTests = false;
     Boolean reEntryRequiredTTITests = false;
     boolean pendingBloodTypingConfirmations = false;
@@ -165,12 +159,6 @@ public class TestResultController {
     boolean reEntryRequiredRepeatTTITests = false;
 
     for(BloodTestingRuleResult result : ruleResults){
-      if(!result.getBloodTypingStatus().equals(BloodTypingStatus.COMPLETE)){
-        basicBloodTypingComplete = false;
-      }
-      if(result.getTTIStatus().equals(TTIStatus.NOT_DONE)){
-        basicTTIComplete = false;
-      }
       if(result.getPendingBloodTypingTestsIds().size() > 0){
         pendingRepeatBloodTypingTests = true;
       }
@@ -211,8 +199,6 @@ public class TestResultController {
     map.put("pendingRepeatBloodTypingTests", pendingRepeatBloodTypingTests);
     map.put("pendingConfirmatoryTTITests", pendingConfirmatoryTTITests);
     map.put("pendingRepeatTTITests", pendingRepeatTTITests);
-    map.put("basicBloodTypingComplete", basicBloodTypingComplete);
-    map.put("basicTTIComplete", basicTTIComplete);
     map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
     map.put("reEntryRequiredTTITests", reEntryRequiredTTITests);
     map.put("pendingBloodTypingConfirmations", pendingBloodTypingConfirmations);
