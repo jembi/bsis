@@ -94,7 +94,7 @@ public class ComponentController {
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRolepi('" + PermissionConstants.VIEW_COMPONENT_INFORMATION + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT_INFORMATION + "')")
   public Map<String, Object> getFindComponentForm() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", componentControllerService.getComponentTypes());
