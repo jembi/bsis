@@ -85,7 +85,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/unitsissued/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_ISSUED_REPORTING + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
   public Map<String, Object> getUnitsIssuedReportFormFields() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", reportsControllerService.getAllComponentTypesThatCanBeIssued());
@@ -93,7 +93,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/unitsissued/generate", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_ISSUED_REPORTING + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
   public Report generateUnitsIssuedReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
