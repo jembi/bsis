@@ -11,13 +11,13 @@ public class DiscardedComponentDTO {
   private String componentType;
   private String componentStatusChangeReason;
   private Long count;
-  private String venue;
+  private Location venue;
 
   public DiscardedComponentDTO() {
     // Default constructor
   }
 
-  public DiscardedComponentDTO(String componentType, String componentStatusChangeReason, String venue, Long count) {
+  public DiscardedComponentDTO(String componentType, String componentStatusChangeReason, Location venue, Long count) {
     this.componentType = componentType;
     this.componentStatusChangeReason = componentStatusChangeReason;
     this.venue = venue;
@@ -32,11 +32,11 @@ public class DiscardedComponentDTO {
     this.componentType = componentType;
   }
 
-  public String getVenue() {
+  public Location getVenue() {
     return venue;
   }
 
-  public void setVenue(String venue) {
+  public void setVenue(Location venue) {
     this.venue = venue;
   }
 

@@ -359,14 +359,14 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     List<DiscardedComponentDTO> expectedDtos = Arrays.asList(
         aDiscardedComponentDTO()
                 .withComponentType(componentType1.getComponentTypeName())
-                .withVenue(expectedVenue.getName())
+                .withVenue(expectedVenue)
                 .withComponentStatusChangeReason(componentStatusChange1.getStatusChangeReason().getStatusChangeReason())
                 .withCount(1L)
                 .build(),
         aDiscardedComponentDTO()
                 .withComponentType(componentType2.getComponentTypeName())
                 .withComponentStatusChangeReason(componentStatusChange2.getStatusChangeReason().getStatusChangeReason())
-                .withVenue(expectedVenue.getName())
+                .withVenue(expectedVenue)
                 .withCount(1L).build()
     ); 
 
@@ -452,14 +452,14 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
       List<DiscardedComponentDTO> expectedDtos = Arrays.asList(
             aDiscardedComponentDTO()
                     .withComponentType(componentType1.getComponentTypeName())
-                    .withVenue(expectedVenue.getName())
+                    .withVenue(expectedVenue)
                     .withComponentStatusChangeReason(discardReason1.getStatusChangeReason())
                     .withCount(1L)
                     .build(),
             aDiscardedComponentDTO()
                     .withComponentType(componentType2.getComponentTypeName())
                     .withComponentStatusChangeReason(componentStatusChange2.getStatusChangeReason().getStatusChangeReason())
-                    .withVenue(expectedVenue.getName())
+                    .withVenue(expectedVenue)
                     .withCount(2L).build()
     );
 

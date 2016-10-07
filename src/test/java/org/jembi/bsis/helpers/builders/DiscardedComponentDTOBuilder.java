@@ -11,7 +11,7 @@ public class DiscardedComponentDTOBuilder extends AbstractBuilder<DiscardedCompo
   private String componentType;
   private String componentStatusChangeReason;
   private long count;
-  private String venue;
+  private Location venue;
   
   public DiscardedComponentDTOBuilder withComponentType(String componentType) {
     this.componentType = componentType;
@@ -28,7 +28,7 @@ public class DiscardedComponentDTOBuilder extends AbstractBuilder<DiscardedCompo
     return this;
   }
 
-  public DiscardedComponentDTOBuilder withVenue(String venue) {
+  public DiscardedComponentDTOBuilder withVenue(Location venue) {
     this.venue = venue;
     return this;
   }
