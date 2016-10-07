@@ -81,21 +81,23 @@ public class ComponentNamedQueryConstants {
   public static final String NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_VENUE =
       "Component.findDiscardedComponentsByVenue";
   public static final String QUERY_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_VENUE =
-      "select new org.jembi.bsis.dto.DiscardedComponentDTO(s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, s.component.location.name, count(s.component)) " +
+      "select DISTINCT new org.jembi.bsis.dto.DiscardedComponentDTO(s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, s.component.componentBatch.location.name, count(s.component)) " +
       "from ComponentStatusChange AS s " +
       "where s.component.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
       "and s.component.componentBatch.location.id =:venueId " +
+      "and s.isDeleted = false " +
       "and s.statusChangedOn BETWEEN :startDate AND :endDate " +
-      "group by s.component.location.name, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
-      "order by s.component.location.name, s.component.componentType.componentTypeName desc ";
+      "group by s.component.componentBatch.location.name, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
+      "order by s.component.componentBatch.location.name, s.component.componentType.componentTypeName desc ";
 
   public static final String NAME_FIND_SUMMARY_FOR_ALL_DISCARDED_COMPONENTS =
       "Component.findAllDiscardedComponents";
   public static final String QUERY_FIND_SUMMARY_FOR_ALL_DISCARDED_COMPONENTS =
-      "select new org.jembi.bsis.dto.DiscardedComponentDTO(s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, s.component.location.name, count(s.component)) " +
+      "select DISTINCT new org.jembi.bsis.dto.DiscardedComponentDTO(s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, s.component.componentBatch.location.name, count(s.component)) " +
       "from ComponentStatusChange AS s " +
       "where s.component.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
       "and s.statusChangedOn BETWEEN :startDate AND :endDate " +
-      "group by s.component.location.name, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
-      "order by s.component.location.name, s.component.componentType.componentTypeName desc ";
+      "and s.isDeleted = false " +
+      "group by s.component.componentBatch.location.name, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
+      "order by s.component.componentBatch.location.name, s.component.componentType.componentTypeName desc ";
 }
