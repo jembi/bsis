@@ -49,12 +49,12 @@ public class DonorDeferralStatusCalculator {
     return generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_REPEAT_OUTCOMES);
   }
 
-  public boolean isDonorCurrentlyDeferred(Donor donor) {
-    return donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor) > 0;
+  public boolean isDonorCurrentlyDeferred(long donorId) {
+    return donorDeferralRepository.countCurrentDonorDeferralsForDonor(donorId) > 0;
   }
 
-  public boolean isDonorDeferredOnDate(Donor donor, Date date) {
-    return donorDeferralRepository.countDonorDeferralsForDonorOnDate(donor, date) > 0;
+  public boolean isDonorDeferredOnDate(long donorId, Date date) {
+    return donorDeferralRepository.countDonorDeferralsForDonorOnDate(donorId, date) > 0;
   }
 
 }

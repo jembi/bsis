@@ -135,7 +135,7 @@ public class DonorController {
 
     map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(donor));
 
-    Boolean isCurrentlyDeferred = donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
+    Boolean isCurrentlyDeferred = donorDeferralStatusCalculator.isDonorCurrentlyDeferred(id);
     map.put("isDonorCurrentlyDeferred", isCurrentlyDeferred);
     if (isCurrentlyDeferred) {
       map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
@@ -160,7 +160,7 @@ public class DonorController {
     boolean hasCounselling = postDonationCounsellingRepository
         .countNotFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
 
-    map.put("currentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
+    map.put("currentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(id));
     map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("hasCounselling", hasCounselling);
     map.put("deferredUntil", CustomDateFormatter.getDateTimeString(donorRepository.getLastDonorDeferralDate(id)));
@@ -311,7 +311,7 @@ public class DonorController {
 
     Map<String, Object> map = new HashMap<>();
     map.put("allDonorDeferrals", donorDeferralFactory.createDonorDeferralViewModels(donorDeferrals));
-    map.put("isDonorCurrentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
+    map.put("isDonorCurrentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donorId));
     return map;
   }
 

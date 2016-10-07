@@ -15,7 +15,7 @@ public class DonorDeferralNamedQueryConstants {
   public static final String QUERY_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR =
       "SELECT COUNT(dd) " +
           "FROM DonorDeferral dd " +
-          "WHERE dd.deferredDonor = :donor " +
+          "WHERE dd.deferredDonor.id = :donorId " +
           "AND dd.isVoided = :voided " +
           "AND (dd.deferralReason.durationType = :permanentDuration " +
           " OR dd.deferredUntil > :currentDate) ";
@@ -53,7 +53,7 @@ public class DonorDeferralNamedQueryConstants {
   public static final String QUERY_FIND_DEFERRALS_FOR_EXPORT =
       "SELECT NEW org.jembi.bsis.dto.DeferralExportDTO(d.deferredDonor.donorNumber, d.modificationTracker.createdDate, "
       + "d.modificationTracker.createdBy.username, d.modificationTracker.lastUpdated, "
-      + "d.modificationTracker.lastUpdatedBy.username, d.deferralReasonText, d.deferralDate, d.deferredUntil) "
+      + "d.modificationTracker.lastUpdatedBy.username, d.deferralReasonText, d.deferralReason.reason, d.deferralDate, d.deferredUntil) "
       + "FROM DonorDeferral d "
       + "WHERE d.isVoided = :voided "
       + "ORDER BY d.modificationTracker.createdDate ASC "; 
