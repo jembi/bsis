@@ -1,30 +1,25 @@
 package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.dto.BloodTestResultDTO;
+import org.jembi.bsis.dto.DiscardedComponentDTO;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.util.Gender;
 
-public class DiscardedComponentDTOBuilder extends AbstractBuilder<BloodTestResultDTO> {
+public class DiscardedComponentDTOBuilder extends AbstractBuilder<DiscardedComponentDTO> {
   
-  private BloodTest bloodTest;
-  private Gender gender;
+  private String componentType;
+  private String componentStatusChangeReason;
   private long count;
-  private Location venue;
-  private String result;
+  private String venue;
   
-  public DiscardedComponentDTOBuilder withBloodTest(BloodTest bloodTest) {
-    this.bloodTest = bloodTest;
-    return this;
-  }
-  
-  public DiscardedComponentDTOBuilder withResult(String result) {
-    this.result = result;
+  public DiscardedComponentDTOBuilder withComponentType(String componentType) {
+    this.componentType = componentType;
     return this;
   }
 
-  public DiscardedComponentDTOBuilder withGender(Gender gender) {
-    this.gender = gender;
+  public DiscardedComponentDTOBuilder withComponentStatusChangeReason(String componentStatusChangeReason) {
+    this.componentStatusChangeReason = componentStatusChangeReason;
     return this;
   }
 
@@ -33,24 +28,23 @@ public class DiscardedComponentDTOBuilder extends AbstractBuilder<BloodTestResul
     return this;
   }
 
-  public DiscardedComponentDTOBuilder withVenue(Location venue) {
+  public DiscardedComponentDTOBuilder withVenue(String venue) {
     this.venue = venue;
     return this;
   }
 
   @Override
-  public BloodTestResultDTO build() {
-    BloodTestResultDTO bloodTestResultDTO = new BloodTestResultDTO();
-    bloodTestResultDTO.setBloodTest(bloodTest);
-    bloodTestResultDTO.setResult(result);
-    bloodTestResultDTO.setGender(gender);
-    bloodTestResultDTO.setCount(count);
-    bloodTestResultDTO.setVenue(venue);
+  public DiscardedComponentDTO build() {
+    DiscardedComponentDTO discardedComponentDTO = new DiscardedComponentDTO();
+    discardedComponentDTO.setComponentType(componentType);
+    discardedComponentDTO.setComponentStatusChangeReason(componentStatusChangeReason);
+    discardedComponentDTO.setCount(count);
+    discardedComponentDTO.setVenue(venue);
     
-    return bloodTestResultDTO;
+    return discardedComponentDTO;
   }
 
-  public static DiscardedComponentDTOBuilder aBloodTestResultDTO() {
+  public static DiscardedComponentDTOBuilder aDiscardedComponentDTO() {
     return new DiscardedComponentDTOBuilder();
   }
 
