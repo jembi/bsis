@@ -81,20 +81,21 @@ public class ComponentNamedQueryConstants {
   public static final String NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_VENUE =
       "Component.findDiscardedComponentsByVenue";
   public static final String QUERY_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_VENUE =
-      "select org.jembi.bsis.dto.DiscardedComponentDTO(c.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, c.location.name, count(c.id)) " +
-      "from Component c " +
-      "inner join ComponentStatusChange s on c.id = s.component.id" +
-      "where c.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
-      "and c.location.id = :venueId " +
-      "group by s.statusChangeReason.id " +
-      "order by c.location.name desc ";
+      "select new org.jembi.bsis.dto.DiscardedComponentDTO(s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, s.component.location.name, count(s.component)) " +
+      "from ComponentStatusChange AS s " +
+      "where s.component.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
+      "and s.component.componentBatch.location.id =:venueId " +
+      "and s.statusChangedOn BETWEEN :startDate AND :endDate " +
+      "group by s.component.location.name, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
+      "order by s.component.location.name, s.component.componentType.componentTypeName desc ";
+
   public static final String NAME_FIND_SUMMARY_FOR_ALL_DISCARDED_COMPONENTS =
       "Component.findAllDiscardedComponents";
   public static final String QUERY_FIND_SUMMARY_FOR_ALL_DISCARDED_COMPONENTS =
-      "select org.jembi.bsis.dto.DiscardedComponentDTO(c.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, c.location.name, count(c.id)) " +
-      "from Component c " +
-      "inner join ComponentStatusChange s on c.id = s.component.id" +
-      "where c.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
-      "group by s.statusChangeReason.id " +
-      "order by c.location.name desc ";
+      "select new org.jembi.bsis.dto.DiscardedComponentDTO(s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, s.component.location.name, count(s.component)) " +
+      "from ComponentStatusChange AS s " +
+      "where s.component.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
+      "and s.statusChangedOn BETWEEN :startDate AND :endDate " +
+      "group by s.component.location.name, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
+      "order by s.component.location.name, s.component.componentType.componentTypeName desc ";
 }
