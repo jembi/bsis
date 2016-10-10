@@ -26,6 +26,7 @@ public class AdverseEventRepository extends AbstractRepository<AdverseEvent> {
     return entityManager.createNamedQuery(AdverseEventNamedQueryConstants.NAME_COUNT_ADVERSE_EVENTS, DonorsAdverseEventsDTO.class)
         .setParameter("donationDeleted", false)
         .setParameter("adverseEventTypeDeleted", false)
+        .setParameter("venueDeleted", false)
         .setParameter("venueId", venueId)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)

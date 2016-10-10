@@ -74,6 +74,7 @@ public class AdverseEventRepositoryTests extends ContextDependentTestSuite {
   public void testCountAdverseEventsForAllVenues_shouldReturnCorrectDTOs() {
     Location venueB = aVenue().withName("b venue").build();
     Location venueA = aVenue().withName("a venue").build();
+    Location venueC = aVenue().withName("c venue").thatIsDeleted().build();
     AdverseEventType adverseEventTypeSomething = anAdverseEventType().withName("something").build();
     AdverseEventType adverseEventTypeSomethingReallyBad = anAdverseEventType().withName("something really bad").build();
     AdverseEventType adverseEventTypeDeleted = anAdverseEventType().withName("deleted").thatIsDeleted().build();
@@ -135,6 +136,13 @@ public class AdverseEventRepositoryTests extends ContextDependentTestSuite {
       .withDonationDate(new DateTime().minusDays(4).toDate())
       .withVenue(venueB)
       .withAdverseEvent(anAdverseEvent().withType(adverseEventTypeDeleted).build())
+      .buildAndPersist(entityManager);
+    aDonation() // deleted venue
+      .thatIsNotDeleted()
+      .withDonor(aDonor().build())
+      .withDonationDate(new DateTime().minusDays(3).toDate())
+      .withVenue(venueC)
+      .withAdverseEvent(anAdverseEvent().withType(adverseEventTypeSomethingReallyBad).build())
       .buildAndPersist(entityManager);
 
     // Not in the date range
