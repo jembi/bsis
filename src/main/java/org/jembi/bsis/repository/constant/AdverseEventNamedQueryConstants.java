@@ -17,7 +17,8 @@ public class AdverseEventNamedQueryConstants {
       "SELECT NEW org.jembi.bsis.dto.DonorsAdverseEventsDTO(d.adverseEvent.type, d.venue, COUNT(d.id)) " +
       "FROM Donation d " +
       "WHERE d.adverseEvent IS NOT NULL " +
-      "AND d.isDeleted = :deleted " +
+      "AND d.isDeleted = :donationDeleted " +
+      "AND d.adverseEvent.type.isDeleted = :adverseEventTypeDeleted " +
       "AND d.donationDate BETWEEN :startDate AND :endDate " +
       "AND (d.venue.id = :venueId OR :venueId = NULL) " +
       "GROUP BY d.adverseEvent.type,  d.venue " +

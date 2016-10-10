@@ -76,6 +76,7 @@ public class AdverseEventRepositoryTests extends ContextDependentTestSuite {
     Location venueA = aVenue().withName("a venue").build();
     AdverseEventType adverseEventTypeSomething = anAdverseEventType().withName("something").build();
     AdverseEventType adverseEventTypeSomethingReallyBad = anAdverseEventType().withName("something really bad").build();
+    AdverseEventType adverseEventTypeDeleted = anAdverseEventType().withName("deleted").thatIsDeleted().build();
     Date startDate = new DateTime().minusDays(10).toDate();
     Date endDate = new DateTime().minusDays(1).toDate();
 
@@ -127,6 +128,13 @@ public class AdverseEventRepositoryTests extends ContextDependentTestSuite {
       .withDonor(aDonor().build())
       .withDonationDate(new DateTime().minusDays(2).toDate())
       .withVenue(venueB)
+      .buildAndPersist(entityManager);
+    aDonation() // deleted adverse event type
+      .thatIsNotDeleted()
+      .withDonor(aDonor().build())
+      .withDonationDate(new DateTime().minusDays(4).toDate())
+      .withVenue(venueB)
+      .withAdverseEvent(anAdverseEvent().withType(adverseEventTypeDeleted).build())
       .buildAndPersist(entityManager);
 
     // Not in the date range
