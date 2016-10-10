@@ -44,7 +44,7 @@ public class ReportsController {
   private ReportsControllerService reportsControllerService;
   
   @RequestMapping(value = "/discardedunits/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
   public Map<String, Object> discardedUnitsFormFields() {
     Map<String, Object> map = new HashMap<>();
     map.put("processingSites", reportsControllerService.getProcessingSites());
