@@ -105,4 +105,13 @@ public class ReportsController {
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return donorsDeferredSummaryReportGenerator.generateDonorDeferralSummaryReport(startDate, endDate);
   }
+
+  @RequestMapping(value = "/donorsadverseevents/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.DONORS_REPORTING + "')")
+  public Map<String, Object> generateDonorsAdverseEventsForm() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("venues", reportsControllerService.getVenues());
+    map.put("adverseEventTypes", reportsControllerService.getAdverseEventTypes());
+    return map;
+  }
 }
