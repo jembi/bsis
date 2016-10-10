@@ -14,7 +14,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
-import static org.jembi.bsis.helpers.builders.ComponentProductionDTOBuilder.aComponentProductionExportDTO;
+import static org.jembi.bsis.helpers.builders.ComponentProductionDTOBuilder.aComponentProductionDTO;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.matchers.ComponentProductionDTOMatcher.hasSameStateAsComponentProductionDTO;
 
@@ -312,7 +312,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   }
   
   @Test
-  public void testFindProducedComponentsByDate_shouldReturnCorrectField() {
+  public void testFindProducedComponentsByProcessingSite_shouldReturnCorrectField() {
     Date donationStartDate = new DateTime().minusDays(7).toDate();
     Date donationEndDate = new DateTime().minusDays(2).toDate();
     
@@ -328,51 +328,81 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     ComponentBatch componentBatch = aComponentBatch()
         .withLocation(expectedVenue)
         .buildAndPersist(entityManager);
-
+     
     Donation donation = aDonation()
         .withDonationDate(donationStartDate)
         .withBloodAbo(expectedBloodAbo)
         .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
     
+    
     aDonation()
-      .withDonationDate(donationEndDate)
+      .withDonationDate(new Date())
       .withBloodAbo(expectedBloodAbo)
       .withBloodRh(expectedBloodRh)
-      .withVenue(expectedVenue)
-      .thatIsNotDeleted()
+      .thatIsDeleted()
       .buildAndPersist(entityManager);
     
+    //Excluded donation with out of range date
+   Donation outOfDateRangeDonation = aDonation()
+    .withDonationDate(new Date())
+    .withBloodAbo(expectedBloodAbo)
+    .withBloodRh(expectedBloodRh)
+    .buildAndPersist(entityManager);
+    
+// Excluded by being deleted
+   Donation deletedDonation = aDonation()
+       .withDonationDate(new Date())
+       .withBloodAbo(expectedBloodAbo)
+       .withBloodRh(expectedBloodRh)
+       .thatIsDeleted()
+       .buildAndPersist(entityManager);
+   
     aComponent()
         .withComponentType(componentType)
         .withComponentBatch(componentBatch)
         .withDonation(donation)
         .buildAndPersist(entityManager);
     
-    ComponentProductionDTO expectedDTO = aComponentProductionExportDTO()
-         .withComponentTypeName(componentType.getComponentTypeName())
-         .withBloodAbo(expectedBloodAbo)
-         .withBloodRh(expectedBloodRh)
-         .withVenue(expectedVenue.getName())
-         .withCount(1)
-         .build();
+   // Excluded component by deleted donation
+   aComponent()
+       .withComponentType(componentType)
+       .withComponentBatch(componentBatch)
+       .withDonation(deletedDonation)
+       .buildAndPersist(entityManager);
+  
+   // Excluded component by out of range date 
+   aComponent()
+       .withComponentType(componentType)
+       .withComponentBatch(componentBatch)
+       .withDonation(outOfDateRangeDonation)
+       .buildAndPersist(entityManager);
+    
+    ComponentProductionDTO expectedDTO =
+        aComponentProductionDTO()
+          .withComponentTypeName(componentType.getComponentTypeName())
+          .withBloodAbo(expectedBloodAbo)
+          .withBloodRh(expectedBloodRh)
+          .withVenue(expectedVenue)
+          .withCount(1)
+          .build(); 
 
-    List<ComponentProductionDTO> returnedDtos = componentRepository.findProducedComponentsByDate(
-        donationStartDate, donationEndDate);
+    List<ComponentProductionDTO> returnedDtos = componentRepository
+        .findProducedComponentsByProcessingSite(
+            expectedVenue.getId(), donationStartDate, donationEndDate);
      
     assertThat(returnedDtos.size(), is(1));
     assertThat(returnedDtos.get(0),hasSameStateAsComponentProductionDTO(expectedDTO));
   }
  
   @Test
-  public void testFindProducedComponentsByDate_shouldReturnCorrectFieldOrderedBySite() {
+  public void testFindProducedComponentsByProcessingSite_shouldReturnAllSites() {
     Date donationStartDate = new DateTime().minusDays(7).toDate();
     Date donationEndDate = new DateTime().minusDays(2).toDate();
     
-    Location secondProcessingSite = aProcessingSite().withName("Pretoria").buildAndPersist(entityManager);
-    Location firstProcessingSite = aProcessingSite().withName("Cape Town").buildAndPersist(entityManager);
+    Location firstProcessingSite = aProcessingSite().withName("Pretoria").buildAndPersist(entityManager);
+    Location secondProcessingSite = aProcessingSite().withName("Cape Town").buildAndPersist(entityManager);
     Location thirdProcessingSite = aProcessingSite().withName("Zulu land").buildAndPersist(entityManager);
     
     String expectedBloodAbo = "A";
@@ -399,7 +429,6 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withDonationDate(donationStartDate)
         .withBloodAbo(expectedBloodAbo)
         .withBloodRh(expectedBloodRh)
-        .withVenue(firstProcessingSite)
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
   
@@ -421,14 +450,15 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
       .withDonation(donation)
       .buildAndPersist(entityManager);
 
-    List<ComponentProductionDTO> returnedDtos = componentRepository.findProducedComponentsByDate(
-        donationStartDate, donationEndDate);
-     
+    List<ComponentProductionDTO> returnedDtos = componentRepository
+        .findProducedComponentsByProcessingSite(
+            null,donationStartDate, donationEndDate);
+        
     assertThat(returnedDtos.size(), is(3));
     Iterator<ComponentProductionDTO> iterator = returnedDtos.iterator();
-    assertThat(iterator.next().getVenue(), is(firstProcessingSite.getName()));
-    assertThat(iterator.next().getVenue(), is(secondProcessingSite.getName()));
-    assertThat(iterator.next().getVenue(), is(thirdProcessingSite.getName()));
+    assertThat(iterator.next().getVenue(), is(firstProcessingSite));
+    assertThat(iterator.next().getVenue(), is(secondProcessingSite));
+    assertThat(iterator.next().getVenue(), is(thirdProcessingSite));
     
   }
 }

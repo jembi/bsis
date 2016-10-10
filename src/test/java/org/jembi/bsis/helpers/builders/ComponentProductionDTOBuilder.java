@@ -8,7 +8,7 @@ public class ComponentProductionDTOBuilder extends AbstractBuilder<ComponentProd
   private String componentTypeName;
   private String bloodAbo;
   private String bloodRh;
-  private String venue;
+  private Location venue;
   private long count;
   
   public ComponentProductionDTOBuilder withComponentTypeName(String componentTypeName) {
@@ -31,7 +31,7 @@ public class ComponentProductionDTOBuilder extends AbstractBuilder<ComponentProd
     return this;
   }
   
-  public ComponentProductionDTOBuilder withVenue(String venue) {
+  public ComponentProductionDTOBuilder withVenue(Location venue) {
     this.venue =venue;
     return this;
   }
@@ -39,7 +39,7 @@ public class ComponentProductionDTOBuilder extends AbstractBuilder<ComponentProd
   @Override
   public ComponentProductionDTO build() {
     ComponentProductionDTO componentProductionExportDTO = new ComponentProductionDTO();
-    componentProductionExportDTO.setComponentType(componentTypeName);
+    componentProductionExportDTO.setComponentTypeName(componentTypeName);
     componentProductionExportDTO.setBloodAbo(bloodAbo);
     componentProductionExportDTO.setBloodRh(bloodRh);
     componentProductionExportDTO.setVenue(venue);
@@ -47,7 +47,7 @@ public class ComponentProductionDTOBuilder extends AbstractBuilder<ComponentProd
     return componentProductionExportDTO;
   }
   
-  public static ComponentProductionDTOBuilder aComponentProductionExportDTO() {
+  public static ComponentProductionDTOBuilder aComponentProductionDTO() {
     return new ComponentProductionDTOBuilder();
   }
   
