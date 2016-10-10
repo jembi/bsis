@@ -9,6 +9,7 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.service.report.BloodUnitsIssuedReportGenerator;
 import org.jembi.bsis.service.report.CollectedDonationsReportGenerator;
+import org.jembi.bsis.service.report.DiscardedComponentReportGenerator;
 import org.jembi.bsis.service.report.DonorsDeferredSummaryReportGenerator;
 import org.jembi.bsis.service.report.StockLevelsReportGenerator;
 import org.jembi.bsis.service.report.TtiPrevalenceReportGenerator;
@@ -43,6 +44,9 @@ public class ReportsController {
   @Autowired
   private ReportsControllerService reportsControllerService;
   
+  @Autowired
+  private DiscardedComponentReportGenerator discardedComponentReportGenerator;
+  
   @RequestMapping(value = "/discardedunits/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
   public Map<String, Object> discardedUnitsFormFields() {
@@ -51,6 +55,15 @@ public class ReportsController {
     map.put("componentTypes", reportsControllerService.getAllComponentTypes());
     map.put("discardReasons", reportsControllerService.getAllDiscardReasons());
     return map;
+  }
+  
+  @RequestMapping(value = "/discardedunits/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')") 
+  public Report generateDiscardedUnits (
+      @RequestParam(value = "processingSite", required = false) Long processingSiteId,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    return discardedComponentReportGenerator.generateDiscardedComponents(processingSiteId, startDate, endDate);
   }
 
   @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
