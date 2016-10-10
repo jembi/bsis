@@ -74,7 +74,7 @@ public class DonorConstraintChecker {
       }
     }
 
-    if (donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)) {
+    if (donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donorId)) {
       return false;
     }
 
@@ -82,38 +82,22 @@ public class DonorConstraintChecker {
   }
 
   public boolean isDonorDeferred(long donorId) {
-    Donor donor = donorRepository.findDonorById(donorId);
-    return donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
+    return donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donorId);
   }
 
   public boolean isDonorEligibleToDonateOnDate(long donorId, Date date) {
-
-    Donor donor = donorRepository.findDonorById(donorId);
-
-    if (donor.getDonations() != null) {
-
-      for (Donation donation : donor.getDonations()) {
-
-        PackType packType = donation.getPackType();
-
-        if (!packType.getCountAsDonation()) {
-          // Don't check period between donations if it doesn't count as a donation
-          continue;
-        }
-
-        // Work out the next allowed donation date
-        DateTime nextDonationDate = new DateTime(donation.getDonationDate())
-            .plusDays(packType.getPeriodBetweenDonations())
-            .withTimeAtStartOfDay();
-
-        // Check if the next allowed donation date is after the specified date
-        if (nextDonationDate.isAfter(new DateTime(date).withTimeAtStartOfDay())) {
-          return false;
-        }
+    // check when the Donor last made a Donation and when they are due to donate again
+    Date latestDueToDonateDate = donationRepository.findLatestDueToDonateDateForDonor(donorId);
+    if (latestDueToDonateDate != null) {
+      DateTime nextDonationDate = new DateTime(latestDueToDonateDate).withTimeAtStartOfDay();
+      // Check if the next allowed donation date is after the specified date
+      if (nextDonationDate.isAfter(new DateTime(date).withTimeAtStartOfDay())) {
+        return false;
       }
     }
 
-    if (donorDeferralStatusCalculator.isDonorDeferredOnDate(donor, date)) {
+    // check if the Donor has any outstanding temporary or permanent deferrals
+    if (donorDeferralStatusCalculator.isDonorDeferredOnDate(donorId, date)) {
       return false;
     }
 

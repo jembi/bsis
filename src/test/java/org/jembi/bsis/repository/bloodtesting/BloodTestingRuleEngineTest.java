@@ -93,7 +93,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.TTI_SAFE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is O", "O", result.getBloodAbo());
     Assert.assertEquals("bloodRh is +", "+", result.getBloodRh());
-    Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+    Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Map<String, String> tests = result.getAvailableTestResults();
     Iterator<String> testIts = tests.values().iterator();
@@ -118,7 +118,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.TTI_SAFE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is A", "A", result.getBloodAbo());
     Assert.assertEquals("bloodRh is -", "-", result.getBloodRh());
-    Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+    Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("Available Test results", 7, result.getAvailableTestResults().size());
     Map<String, String> tests = result.getAvailableTestResults();
@@ -146,7 +146,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is empty", 0, result.getBloodAbo().length());
     Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
-    Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+    Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("No availale test results", 0, result.getAvailableTestResults().size());
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
@@ -166,7 +166,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is empty", 0, result.getBloodAbo().length());
     Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
-    Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+    Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("1 test result(s)", 1, result.getAvailableTestResults().size());
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
@@ -186,7 +186,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodAb has a result", 1, result.getBloodAbo().length());
     Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
-    Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+    Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 1, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("1 available test result(s)", 1, result.getAvailableTestResults().size());
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
@@ -204,7 +204,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is B", "B", result.getBloodAbo());
     Assert.assertEquals("bloodRh is +", "+", result.getBloodRh());
-    Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+    Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("Available Test results", 4, result.getAvailableTestResults().size());
     Map<String, String> tests = result.getAvailableTestResults();
@@ -229,7 +229,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("ttiStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is A", "A", result.getBloodAbo());
     Assert.assertEquals("bloodRh is -", "-", result.getBloodRh());
-    Assert.assertEquals("2 pending TTI tests", 2, result.getPendingTTITestsIds().size());
+    Assert.assertEquals("2 pending TTI tests", 2, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("Available Test results", 7, result.getAvailableTestResults().size());
     Map<String, String> tests = result.getAvailableTestResults();
@@ -257,7 +257,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("ttiStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is unknown", "", result.getBloodAbo());
     Assert.assertEquals("bloodRh is unknown", "", result.getBloodRh());
-    Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+    Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("Available Test results", 3, result.getAvailableTestResults().size());
     Map<String, String> tests = result.getAvailableTestResults();
@@ -356,7 +356,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Donation donation = donationRepository.findDonationById(12l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("TTIStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
-    Assert.assertEquals("No pending TTI tests", 0, result.getPendingTTITestsIds().size());
+    Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
   }
   
   @Test
@@ -366,7 +366,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     newTtiTestResults.put(17L, "POS");
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, newTtiTestResults);
     Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
-    Assert.assertEquals("No pending TTI tests", 2, result.getPendingTTITestsIds().size());
+    Assert.assertEquals("No pending TTI tests", 2, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
   }
   
   @Test
@@ -374,7 +374,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Donation donation = donationRepository.findDonationById(13l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
-    Assert.assertEquals("Pending TTI tests", 2, result.getPendingTTITestsIds().size());
+    Assert.assertEquals("Pending TTI tests", 2, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
   }
   
   @Test

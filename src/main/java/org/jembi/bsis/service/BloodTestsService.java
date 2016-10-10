@@ -125,6 +125,7 @@ public class BloodTestsService {
   public Map<String, Object> getBloodTestShortNames() {
     List<String> basicTtiTestNames = new ArrayList<String>();
     List<String> repeatTtiTestNames = new ArrayList<String>();
+    List<String> confirmatoryTtiTestNames = new ArrayList<String>();
     List<String> basicBloodTypingTestNames = new ArrayList<String>();
     List<String> repeatBloodTypingTestNames = new ArrayList<String>();
 
@@ -134,10 +135,14 @@ public class BloodTestsService {
       basicTtiTestNames.add(rawBloodTest.getTestNameShort());
     }
     map.put("basicTtiTestNames", basicTtiTestNames);
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
       repeatTtiTestNames.add(rawBloodTest.getTestNameShort());
     }
     map.put("repeatTtiTestNames", repeatTtiTestNames);
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
+      confirmatoryTtiTestNames.add(rawBloodTest.getTestNameShort());
+    }
+    map.put("confirmatoryTtiTestNames", confirmatoryTtiTestNames);
     for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
       basicBloodTypingTestNames.add(rawBloodTest.getTestNameShort());
     }

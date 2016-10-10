@@ -185,7 +185,8 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
         .withPackType(aPackType().build())
         .build();
 
-    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
+    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult()
+        .withPendingRepeatAndConfirmatoryTtiTestsIds("12").build();
 
     when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
 
@@ -365,7 +366,8 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
         .withStatus(TestBatchStatus.RELEASED)
         .build();
 
-    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
+    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult()
+        .withPendingRepeatAndConfirmatoryTtiTestsIds("12").build();
 
     boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation, bloodTestingRuleResult);
 
@@ -385,7 +387,8 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
         .withStatus(TestBatchStatus.OPEN)
         .build();
 
-    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().withPendingTTITestId("12").build();
+    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult()
+        .withPendingRepeatAndConfirmatoryTtiTestsIds("12").build();
 
     boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation, bloodTestingRuleResult);
 

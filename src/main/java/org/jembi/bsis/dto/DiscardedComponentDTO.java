@@ -1,4 +1,4 @@
-package org.jembi.bsis.dto;
+  package org.jembi.bsis.dto;
 
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componenttype.ComponentType;
