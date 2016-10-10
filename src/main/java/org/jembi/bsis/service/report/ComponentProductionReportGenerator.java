@@ -26,17 +26,17 @@ public class ComponentProductionReportGenerator {
 
   /**
    * Report summary of components produced within a selected date range by collection site,
-   * categorised by donation donor type, donor gender, and blood groups.
+   * categorized by component Type type, processing site, and blood groups.
    *
    * @return The report.
    */
-  public Report generateCollectedDonationsReport(Date startDate, Date endDate) {
+  public Report generateComponentProductionReport(Long processingSiteId, Date startDate, Date endDate) {
     Report report = new Report();
     report.setStartDate(startDate);
     report.setEndDate(endDate);
 
-    List<ComponentProductionDTO> dtos = componentRepository.findProducedComponentsByDate(
-        startDate, endDate);
+    List<ComponentProductionDTO> dtos = componentRepository.findProducedComponentsByProcessingSite(
+            processingSiteId, startDate, endDate);
 
     List<DataValue> dataValues = new ArrayList<>(dtos.size());
 
@@ -48,11 +48,11 @@ public class ComponentProductionReportGenerator {
       dataValue.setVenue(dto.getVenue());
       dataValue.setValue(dto.getCount());
 
-      Cohort genderCohort = new Cohort();
-      genderCohort.setCategory(CohortConstants.COMPONENT_TYPE_CATEGORY);
-      genderCohort.setComparator(Comparator.EQUALS);
-      genderCohort.setOption(dto.getComponentTypeName());
-      dataValue.addCohort(genderCohort);
+      Cohort componentTypeCohort = new Cohort();
+      componentTypeCohort.setCategory(CohortConstants.COMPONENT_TYPE_CATEGORY);
+      componentTypeCohort.setComparator(Comparator.EQUALS);
+      componentTypeCohort.setOption(dto.getComponentTypeName());
+      dataValue.addCohort(componentTypeCohort);
 
       Cohort bloodTypeCohort = new Cohort();
       bloodTypeCohort.setCategory(CohortConstants.BLOOD_TYPE_CATEGORY);
