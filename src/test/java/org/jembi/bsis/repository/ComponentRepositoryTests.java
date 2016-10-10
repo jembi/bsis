@@ -555,5 +555,6 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
             null, startDate, endDate);
 
     assertThat(returnedDtos, is(expectedDtos));
+    assertThat(returnedDtos.get(1), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(1)));
     }
 }
