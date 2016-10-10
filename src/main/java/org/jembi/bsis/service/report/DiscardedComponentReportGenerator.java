@@ -30,7 +30,7 @@ public class DiscardedComponentReportGenerator {
     report.setStartDate(startDate);
     report.setEndDate(endDate);
 
-    List<DiscardedComponentDTO> dtos = componentRepository.findSummaryOfDiscardedComponentsByVenue(venueId, startDate, endDate);
+    List<DiscardedComponentDTO> dtos = componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(venueId, startDate, endDate);
 
     List<DataValue> dataValues = new ArrayList<>(dtos.size());
 
