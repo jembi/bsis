@@ -1,19 +1,21 @@
 package org.jembi.bsis.dto;
 
+import org.jembi.bsis.model.location.Location;
+
 public class ComponentProductionDTO {
-  private String componentType;
+  private String componentTypeName;
   private String bloodAbo;
   private String bloodRh;
-  private String venue;
+  private Location venue;
   private long count;
 
   public ComponentProductionDTO() {
     super();
   }
   
-  public ComponentProductionDTO(String componentTypeName, String bloodAbo, String bloodRh, String venue, long count) {
+  public ComponentProductionDTO(String componentTypeName, String bloodAbo, String bloodRh, Location venue, long count) {
     super();
-    this.componentType = componentTypeName;
+    this.componentTypeName = componentTypeName;
     this.bloodAbo = bloodAbo;
     this.bloodRh = bloodRh;
     this.venue = venue;
@@ -21,14 +23,14 @@ public class ComponentProductionDTO {
   }
 
   public String getComponentTypeName() {
-    return componentType;
+    return componentTypeName;
   }
 
   public String getBloodAbo() {
     return bloodAbo;
   }
 
-  public String getVenue() {
+  public Location getVenue() {
     return venue;
   }
 
@@ -36,8 +38,8 @@ public class ComponentProductionDTO {
     return count;
   }
 
-  public void setComponentType(String componentTypeName) {
-    this.componentType = componentTypeName;
+  public void setComponentTypeName(String componentTypeName) {
+    this.componentTypeName = componentTypeName;
   }
 
   public void setBloodAbo(String bloodAbo) {
@@ -52,7 +54,7 @@ public class ComponentProductionDTO {
     this.bloodRh = bloodRh;
   }
 
-  public void setVenue(String venue) {
+  public void setVenue(Location venue) {
     this.venue = venue;
   }
 
