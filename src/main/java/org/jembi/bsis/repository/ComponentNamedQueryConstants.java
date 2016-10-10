@@ -89,15 +89,4 @@ public class ComponentNamedQueryConstants {
       + "AND cb.location.id = :venueId OR :venueId = NULL "
       + "GROUP BY  cb.location,c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
       + "ORDER BY  cb.location, c.componentType.componentTypeName ASC";
-  
-  public static final String NAME_FIND_PRODUCED_COMPONENTS = 
-      "Component.findProducedComponents";
-  public static final String QUERY_FIND_PRODUCED_COMPONENTS =
-      "SELECT DISTINCT NEW org.jembi.bsis.dto.ComponentProductionDTO(c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh, cb.location, COUNT(c.id)) " 
-          + "FROM Component AS c "
-          + "LEFT JOIN c.componentBatch AS cb "
-          + "WHERE c.componentType.canBeIssued = TRUE AND c.donation.donationDate BETWEEN :startDate AND :endDate "
-          + "AND c.isDeleted = :deleted "
-          + "GROUP BY  cb.location.name, c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
-          + "ORDER BY  cb.location.name ";
 }
