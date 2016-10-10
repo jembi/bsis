@@ -167,8 +167,10 @@ public class ComponentRepository extends AbstractRepository<Component> {
     return new LinkedHashSet<>(componentExportDTOs);
   }
   
-  public List<ComponentProductionDTO> findProducedComponentsByDate (Date startDate, Date endDate) {
-    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_PRODUCED_COMPONENTS_BY_LOCATION, ComponentProductionDTO.class)
+  public List<ComponentProductionDTO> findProducedComponentsByProcessingSite(Long venueId, Date startDate, Date endDate) {
+    return em.createNamedQuery(
+        ComponentNamedQueryConstants.NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE, ComponentProductionDTO.class)
+        .setParameter("venueId", venueId)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("deleted",false)
