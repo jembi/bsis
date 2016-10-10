@@ -122,7 +122,7 @@ public class ReportsController {
   @RequestMapping(value = "/componentsprocessed/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
   public Report generateComponentProductionReport(
-      @RequestParam(value = "processingSites", required = false) Long processingSiteId, 
+      @RequestParam(value = "processingSite", required = false) Long processingSiteId, 
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return componentProductionReportGenerator.generateComponentProductionReport(processingSiteId, startDate, endDate);
