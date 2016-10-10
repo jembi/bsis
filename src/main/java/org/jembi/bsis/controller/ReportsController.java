@@ -56,6 +56,15 @@ public class ReportsController {
     map.put("discardReasons", reportsControllerService.getAllDiscardReasons());
     return map;
   }
+  
+  @RequestMapping(value = "/discardedunits/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')") 
+  public Report generateDiscardedUnits (
+      @RequestParam(value = "processingSite", required = false) Long processingSiteId,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    return discardedComponentReportGenerator.generateDiscardedComponents(processingSiteId, startDate, endDate);
+  }
 
   @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
@@ -118,14 +127,5 @@ public class ReportsController {
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return donorsDeferredSummaryReportGenerator.generateDonorDeferralSummaryReport(startDate, endDate);
-  }
-  
-  @RequestMapping(value = "/discardedcomponents/generate", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')") 
-  public Report generateDiscardedComponents (
-      @RequestParam(value = "processingSite", required = false) Long processingSiteId,
-      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
-      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
-    return discardedComponentReportGenerator.generateDiscardedComponents(processingSiteId, startDate, endDate);
   }
 }
