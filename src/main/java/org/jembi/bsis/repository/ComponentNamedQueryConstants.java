@@ -72,7 +72,6 @@ public class ComponentNamedQueryConstants {
       + "LEFT JOIN c.statusChanges AS sc "
       + "WITH sc.isDeleted = :statusChangeDeleted "
       // Join to status change reason to find discarded
-      // I should lock my computer
       + "LEFT JOIN sc.statusChangeReason AS r "
       + "WITH r.category = :discarded "
       + "WHERE c.isDeleted = :componentDeleted "
