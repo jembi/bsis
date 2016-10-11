@@ -35,9 +35,13 @@ public class DiscardReasonRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testGetAll() throws Exception {
-    List<ComponentStatusChangeReason> all = discardReasonRepository.getAllDiscardReasons();
+    List<ComponentStatusChangeReason> allNotDeleted = discardReasonRepository.getAllDiscardReasons(false);
+    Assert.assertNotNull("There are discard reasons defined", allNotDeleted);
+    Assert.assertEquals("There are 6 discard reasons defined", 6, allNotDeleted.size());
+    
+    List<ComponentStatusChangeReason> all = discardReasonRepository.getAllDiscardReasons(true);
     Assert.assertNotNull("There are discard reasons defined", all);
-    Assert.assertEquals("There are 6 discard reasons defined", 6, all.size());
+    Assert.assertEquals("There are 8 discard reasons defined", 8, all.size());
   }
 
   @Test
@@ -79,9 +83,9 @@ public class DiscardReasonRepositoryTest extends DBUnitContextDependentTestSuite
     reason.setCategory(ComponentStatusChangeReasonCategory.DISCARDED);
     discardReasonRepository.saveDiscardReason(reason);
 
-    List<ComponentStatusChangeReason> all = discardReasonRepository.getAllDiscardReasons();
+    List<ComponentStatusChangeReason> all = discardReasonRepository.getAllDiscardReasons(true);
     Assert.assertNotNull("There are Discard reasons defined", all);
-    Assert.assertEquals("There are 7 Discard reasons defined", 7, all.size());
+    Assert.assertEquals("There are 9 Discard reasons defined", 9, all.size());
   }
 
   @Test

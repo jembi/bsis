@@ -53,7 +53,7 @@ public class ReportsController {
     Map<String, Object> map = new HashMap<>();
     map.put("processingSites", reportsControllerService.getProcessingSites());
     map.put("componentTypes", reportsControllerService.getAllComponentTypes());
-    map.put("discardReasons", reportsControllerService.getAllDiscardReasons());
+    map.put("discardReasons", reportsControllerService.getAllDiscardReasons(false));
     return map;
   }
   
