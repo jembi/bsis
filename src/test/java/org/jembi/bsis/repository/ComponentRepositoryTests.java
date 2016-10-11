@@ -10,6 +10,7 @@ import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DiscardedComponentDTOBuilder.aDiscardedComponentDTO;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.jembi.bsis.helpers.matchers.DiscardedComponentDTOMatcher.hasSameStateAsDiscardedComponentDTO;
@@ -310,7 +311,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().plusDays(8).toDate();
 
-    Location expectedProcessingSite = aVenue()
+    Location expectedProcessingSite = aProcessingSite()
         .buildAndPersist(entityManager);
     ComponentStatus expectedComponentStatus = ComponentStatus.DISCARDED;
     ComponentType componentType1 = aComponentType()
@@ -343,7 +344,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withComponentBatch(componentBatch)
         .withStatus(expectedComponentStatus)
         .buildAndPersist(entityManager);
-    ComponentStatusChange componentStatusChange1 = aComponentStatusChange()
+      ComponentStatusChange componentStatusChange1 = aComponentStatusChange()
         .withStatusChangeReason(discardReason1)
         .withNewStatus(expectedComponentStatus)
         .withStatusChangedOn(new Date())
@@ -354,6 +355,26 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withNewStatus(expectedComponentStatus)
         .withComponent(component2)
         .withStatusChangedOn(new Date())
+        .buildAndPersist(entityManager);
+
+    // Excluded issued status change reason
+    aComponentStatusChange()
+        .withComponent(component1)
+        .withStatusChangeReason(aComponentStatusChangeReason()
+                .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.SPLIT)
+                .withStatusChangeReason("Split")
+                .build())
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+
+    // Excluded returned status change reason
+    aComponentStatusChange()
+        .withComponent(component2)
+        .withStatusChangeReason(aComponentStatusChangeReason()
+                .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.RETURNED)
+                .withStatusChangeReason("Returned component")
+                .build())
+        .thatIsDeleted()
         .buildAndPersist(entityManager);
 
     List<DiscardedComponentDTO> expectedDtos = Arrays.asList(
@@ -383,7 +404,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().plusDays(8).toDate();
 
-    Location expectedProcessingSite = aVenue()
+    Location expectedProcessingSite = aProcessingSite()
         .buildAndPersist(entityManager);
     ComponentStatus expectedComponentStatus = ComponentStatus.DISCARDED;
     ComponentType componentType1 = aComponentType()
@@ -477,9 +498,9 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().plusDays(8).toDate();
 
-    Location expectedVenue1 = aVenue()
+    Location expectedVenue1 = aProcessingSite()
         .buildAndPersist(entityManager);
-    Location expectedVenue2 = aVenue()
+    Location expectedVenue2 = aProcessingSite()
         .buildAndPersist(entityManager);
     ComponentStatus expectedComponentStatus = ComponentStatus.DISCARDED;
     ComponentType componentType1 = aComponentType()
