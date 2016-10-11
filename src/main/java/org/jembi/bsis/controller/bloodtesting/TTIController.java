@@ -30,13 +30,24 @@ public class TTIController {
   public Map<String, Object> getTTIForm(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
 
-    List<BloodTestViewModel> basicTTITests = getBasicTTITests();
-    map.put("basicTTITests", basicTTITests);
+    List<BloodTestViewModel> basicTTITestNames = getBasicTTITests();
+    map.put("basicTTITestNames", basicTTITestNames);
 
-    List<BloodTestViewModel> pendingTTITests = getConfirmatoryTTITests();
-    map.put("pendingTTITests", pendingTTITests);
+    List<BloodTestViewModel> repeatTTITestNames = getRepeatTTITests();
+    map.put("repeatTTITestNames", repeatTTITestNames);
+
+    List<BloodTestViewModel> confirmatoryTTITestNames = getConfirmatoryTTITests();
+    map.put("confirmatoryTTITestNames", confirmatoryTTITestNames);
 
     return map;
+  }
+
+  private List<BloodTestViewModel> getRepeatTTITests() {
+    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
+      tests.add(new BloodTestViewModel(rawBloodTest));
+    }
+    return tests;
   }
 
   private List<BloodTestViewModel> getBasicTTITests() {

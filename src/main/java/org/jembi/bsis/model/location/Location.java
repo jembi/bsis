@@ -21,6 +21,8 @@ import org.jembi.bsis.repository.LocationNamedQueryConstants;
       query = LocationNamedQueryConstants.QUERY_COUNT_LOCATION_WITH_ID),
   @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_VENUES,
       query = LocationNamedQueryConstants.QUERY_FIND_VENUES),
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_MOBILE_VENUES,
+      query = LocationNamedQueryConstants.QUERY_FIND_MOBILE_VENUES),
   @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_PROCESSING_SITES,
       query = LocationNamedQueryConstants.QUERY_FIND_PROCESSING_SITES),
   @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_USAGE_SITES,

@@ -95,8 +95,8 @@ public class DonationConstraintChecker {
    *         tests, false otherwise
    */
   public boolean donationHasDiscrepancies(Donation donation, BloodTestingRuleResult bloodTestingRuleResult) {
-    if (bloodTestingRuleResult.getPendingTTITestsIds() != null
-        && bloodTestingRuleResult.getPendingTTITestsIds().size() > 0) {
+    if (bloodTestingRuleResult.getPendingRepeatAndConfirmatoryTtiTestsIds() != null
+        && bloodTestingRuleResult.getPendingRepeatAndConfirmatoryTtiTestsIds().size() > 0) {
 
       // Donation has pending TTI tests
       return true;

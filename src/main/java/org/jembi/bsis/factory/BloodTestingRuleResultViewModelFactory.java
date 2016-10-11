@@ -40,7 +40,9 @@ public class BloodTestingRuleResultViewModelFactory {
     pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingAboTestsIds());
     pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingRhTestsIds());
     ruleResult.setPendingBloodTypingTestsIds(pendingBloodTypingTestsIds);
-    ruleResult.setPendingTTITestsIds(bloodTestingRuleResultSet.getPendingTtiTestsIds());
+    ruleResult.setPendingConfirmatoryTTITestsIds(bloodTestingRuleResultSet.getPendingConfirmatoryTtiTestsIds());
+    ruleResult.setPendingRepeatTTITestsIds(bloodTestingRuleResultSet.getPendingRepeatTtiTestsIds());
+    ruleResult.setPendingRepeatAndConfirmatoryTtiTestsIds(bloodTestingRuleResultSet.getPendingRepeatAndConfirmatoryTtiTestsIds());
 
     // blood typing results
     ruleResult.setBloodTypingMatchStatus(bloodTestingRuleResultSet.getBloodTypingMatchStatus());
