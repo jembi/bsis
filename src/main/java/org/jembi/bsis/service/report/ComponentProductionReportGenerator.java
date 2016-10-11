@@ -1,16 +1,12 @@
 package org.jembi.bsis.service.report;
 
 import org.jembi.bsis.constant.CohortConstants;
-import org.jembi.bsis.dto.CollectedDonationDTO;
 import org.jembi.bsis.dto.ComponentProductionDTO;
-import org.jembi.bsis.model.component.Component;
-import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.reporting.Cohort;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
 import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.repository.ComponentRepository;
-import org.jembi.bsis.repository.DonationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +25,27 @@ public class ComponentProductionReportGenerator {
    * categorized by component Type type, processing site, and blood groups.
    *
    * @return The report.
+   *
+   * @param processingSiteId
+   * The processing site related to the component batch.
+   *
+   * @param startDate
+   * The period start date for date range.
+   * Date range is the range of dates you want the report to be generated for.
+   *
+   * @param endDate
+   * The period end date for date range
    */
   public Report generateComponentProductionReport(Long processingSiteId, Date startDate, Date endDate) {
     Report report = new Report();
     report.setStartDate(startDate);
     report.setEndDate(endDate);
+    report.setDataValues(generateReportDataValues(processingSiteId, startDate, endDate));
 
+    return report;
+  }
+
+  private List<DataValue> generateReportDataValues(Long processingSiteId, Date startDate, Date endDate) {
     List<ComponentProductionDTO> dtos = componentRepository.findProducedComponentsByProcessingSite(
             processingSiteId, startDate, endDate);
 
@@ -63,8 +74,6 @@ public class ComponentProductionReportGenerator {
       dataValues.add(dataValue);
     }
 
-    report.setDataValues(dataValues);
-
-    return report;
+    return dataValues;
   }
 }

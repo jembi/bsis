@@ -39,7 +39,7 @@ public class ComponentProductionReportGeneratorTests extends UnitTestSuite {
 
     Date irrelevantStartDate = new Date();
     Date irrelevantEndDate = new Date();
-    Location processingSite = aProcessingSite().build();
+    Location processingSite = aProcessingSite().withId(1L).build();
 
     List<ComponentProductionDTO> dtos = Arrays.asList(
             aComponentProductionDTO()
@@ -48,7 +48,14 @@ public class ComponentProductionReportGeneratorTests extends UnitTestSuite {
                     .withBloodRh("+")
                     .withVenue(processingSite)
                     .withCount(2)
-                    .build()
+                    .build(),
+            aComponentProductionDTO()
+            .withComponentTypeName("Whole Blood - CPDA")
+            .withBloodAbo("B")
+            .withBloodRh("+")
+            .withVenue(processingSite)
+            .withCount(2)
+            .build()
     );
 
     List<DataValue> expectedDataValues = Arrays.asList(
@@ -66,6 +73,22 @@ public class ComponentProductionReportGeneratorTests extends UnitTestSuite {
                 .withCategory(CohortConstants.BLOOD_TYPE_CATEGORY)
                 .withComparator(Comparator.EQUALS)
                 .withOption("A+")
+                .build())
+            .build(),
+        aDataValue()
+            .withStartDate(irrelevantEndDate)
+            .withEndDate(irrelevantEndDate)
+            .withVenue(processingSite)
+            .withValue(2L)
+            .withCohort(aCohort()
+                .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
+                .withComparator(Comparator.EQUALS)
+                .withOption("Whole Blood - CPDA")
+                .build())
+            .withCohort(aCohort()
+                .withCategory(CohortConstants.BLOOD_TYPE_CATEGORY)
+                .withComparator(Comparator.EQUALS)
+                .withOption("B+")
                 .build())
             .build()
     );
