@@ -2,12 +2,20 @@ package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentProductionDTOBuilder.aComponentProductionDTO;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aComponentStatusChangeReason;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aDiscardReason;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.DiscardedComponentDTOBuilder.aDiscardedComponentDTO;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
+import static org.jembi.bsis.helpers.matchers.ComponentProductionDTOMatcher.hasSameStateAsComponentProductionDTO;
+import static org.jembi.bsis.helpers.matchers.DiscardedComponentDTOMatcher.hasSameStateAsDiscardedComponentDTO;
 import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
 
 import java.util.Arrays;
@@ -19,12 +27,19 @@ import java.util.Set;
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.dto.ComponentExportDTO;
+import org.jembi.bsis.dto.ComponentProductionDTO;
+import org.jembi.bsis.dto.DiscardedComponentDTO;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentbatch.ComponentBatch;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
+import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -172,9 +187,9 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withCreatedBy(aUser().withUsername(createdByUsername).build())
         .withCreatedDate(createdDate)
         .withParentComponent(aComponent()
-            .withCreatedDate(new DateTime(createdDate).minusDays(1).toDate()) // Create parent before child
-            .withComponentCode(parentComponentCode)
-            .build())
+                .withCreatedDate(new DateTime(createdDate).minusDays(1).toDate()) // Create parent before child
+                .withComponentCode(parentComponentCode)
+                .build())
         .withCreatedOn(createdOn)
         .withStatus(status)
         .withLocation(aVenue().withName(locationName).build())
@@ -189,27 +204,27 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     aComponentStatusChange()
         .withComponent(component)
         .withStatusChangeReason(aComponentStatusChangeReason()
-            .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.ISSUED)
-            .withStatusChangeReason("Issued component")
-            .build())
+                .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.ISSUED)
+                .withStatusChangeReason("Issued component")
+                .build())
         .buildAndPersist(entityManager);
 
     // Excluded returned status change reason
     aComponentStatusChange()
         .withComponent(component)
         .withStatusChangeReason(aComponentStatusChangeReason()
-            .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.RETURNED)
-            .withStatusChangeReason("Returned component")
-            .build())
+                .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.RETURNED)
+                .withStatusChangeReason("Returned component")
+                .build())
         .buildAndPersist(entityManager);
     
     // Expected discard status change reason
     aComponentStatusChange()
         .withComponent(component)
         .withStatusChangeReason(aComponentStatusChangeReason()
-            .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED)
-            .withStatusChangeReason(discardReason)
-            .build())
+                .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED)
+                .withStatusChangeReason(discardReason)
+                .build())
         .buildAndPersist(entityManager);
     
     // Deleted discard status change reason
@@ -217,9 +232,9 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .thatIsDeleted()
         .withComponent(component)
         .withStatusChangeReason(aComponentStatusChangeReason()
-            .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED)
-            .withStatusChangeReason("Deleted undiscard")
-            .build())
+                .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED)
+                .withStatusChangeReason("Deleted undiscard")
+                .build())
         .buildAndPersist(entityManager);
     
     // Excluded by deleted
@@ -279,8 +294,8 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     aComponentStatusChange()
         .withComponent(componentWithStatusChanges)
         .withStatusChangeReason(aComponentStatusChangeReason()
-            .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED)
-            .build())
+                .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED)
+                .build())
         .buildAndPersist(entityManager);
     
     // Exercise SUT
@@ -293,5 +308,532 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     assertThat(iterator.next().getDonationIdentificationNumber(), is(secondDonationIdentificationNumber));
     assertThat(iterator.next().getDonationIdentificationNumber(), is(thirdDonationIdentificationNumber));
   }
+  
+  @Test
+  public void testFindProducedComponentsByProcessingSite_shouldReturnCorrectResult() {
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().minusDays(2).toDate();
+    Date outOfRangeDate = new DateTime().plus(2).toDate();
 
+    Location processingSite1 = aProcessingSite().withName("processingSite1").buildAndPersist(entityManager);
+    Location processingSite2 = aProcessingSite().withName("processingSite2").buildAndPersist(entityManager);
+    String expectedBloodAbo = "A";
+    String expectedBloodRh = "+";
+   
+    ComponentType componentType = aComponentType()
+        .withComponentTypeName("type1")
+        .withCanBeIssued(true)
+        .buildAndPersist(entityManager);
+    
+    ComponentBatch componentBatch = aComponentBatch()
+        .withLocation(processingSite1)
+        .buildAndPersist(entityManager);
+    
+    Donation donation = aDonation()
+        .withDonationDate(startDate)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .buildAndPersist(entityManager);
+    
+    // Expected components
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withDonation(donation)
+        .withCreatedOn(startDate)
+        .withLocation(processingSite1)
+        .buildAndPersist(entityManager);
+    
+    // Excluded component by deletion
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withDonation(donation)
+        .withLocation(processingSite1)
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+  
+    // Excluded components by date range
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withDonation(donation)
+        .withCreatedOn(outOfRangeDate)
+        .buildAndPersist(entityManager);
+    
+    // Excluded component by processing Site
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withCreatedOn(endDate)
+        .withDonation(donation)
+        .withLocation(processingSite2)
+        .buildAndPersist(entityManager);
+    
+    // Excluded component by component Type that cannot be issued. 
+    ComponentType componentTypeThatCannotBeIssued = aComponentType()
+        .withComponentTypeName("typeThatCannotBeIssued")
+        .withCanBeIssued(false)
+        .buildAndPersist(entityManager);
+    aComponent()
+        .withComponentType(componentTypeThatCannotBeIssued)
+        .withComponentBatch(componentBatch)
+        .withDonation(donation)
+        .withCreatedOn(startDate)
+        .buildAndPersist(entityManager);
+    
+    ComponentProductionDTO expectedDTO =  aComponentProductionDTO() 
+        .withComponentTypeName("type1")
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .withVenue(processingSite1)
+        .withCount(2L)
+        .build();
+
+    List<ComponentProductionDTO> returnedDtos = componentRepository
+        .findProducedComponentsByProcessingSite(
+            processingSite1.getId(), startDate, endDate);
+     
+    assertThat(returnedDtos.size(), is(1));
+    assertThat(returnedDtos.get(0), hasSameStateAsComponentProductionDTO(expectedDTO));
+  }
+
+  @Test
+  public void testFindSummaryOfDiscardedComponentsByProcessingSite_shouldIncludeCorrectData() {
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().plusDays(8).toDate();
+
+    Location expectedProcessingSite = aProcessingSite()
+        .buildAndPersist(entityManager);
+    ComponentStatus expectedComponentStatus = ComponentStatus.DISCARDED;
+    ComponentType componentType1 = aComponentType()
+        .thatContainsPlasma()
+        .withComponentTypeName("Whole Blood Quad Pack - CPDA")
+        .withComponentTypeCode("100111")
+        .withCanBeIssued(Boolean.FALSE)
+        .buildAndPersist(entityManager);
+    ComponentType componentType2 = aComponentType()
+        .withCanBeIssued(Boolean.TRUE)
+        .withComponentTypeCode("100011")
+        .withComponentTypeName("Packed Red Cells - CPDA")
+        .buildAndPersist(entityManager);
+    ComponentBatch componentBatch = aComponentBatch()
+        .withLocation(expectedProcessingSite)
+        .buildAndPersist(entityManager);
+    ComponentStatusChangeReason discardReason1 = aDiscardReason()
+        .withStatusChangeReason("Passed Expiry Dates")
+        .buildAndPersist(entityManager);
+    ComponentStatusChangeReason discardReason2 = aDiscardReason()
+        .withStatusChangeReason("Processing Problems")
+        .buildAndPersist(entityManager);
+    Component component1 = aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatch)
+        .withStatus(expectedComponentStatus)
+        .buildAndPersist(entityManager);
+    Component componentWithStatusAvailable = aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatch)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .buildAndPersist(entityManager);
+    Component componentWithNoComponentBatch = aComponent()
+        .withComponentType(componentType2)
+        .withStatus(expectedComponentStatus)
+        .buildAndPersist(entityManager);
+    Component component2 = aComponent()
+        .withComponentType(componentType2)
+        .withComponentBatch(componentBatch)
+        .withStatus(expectedComponentStatus)
+        .buildAndPersist(entityManager);
+    ComponentStatusChange componentStatusChange1 = aComponentStatusChange()
+        .withStatusChangeReason(discardReason1)
+        .withNewStatus(expectedComponentStatus)
+        .withStatusChangedOn(new Date())
+        .withComponent(component1)
+        .buildAndPersist(entityManager);
+    ComponentStatusChange componentStatusChange2 = aComponentStatusChange()
+        .withStatusChangeReason(discardReason2)
+        .withNewStatus(expectedComponentStatus)
+        .withComponent(component2)
+        .withStatusChangedOn(new Date())
+        .buildAndPersist(entityManager);
+
+    // Excluded by date out of range
+    aComponentStatusChange()
+        .withComponent(component1)
+        .withStatusChangeReason(discardReason1)
+        .withStatusChangedOn(new DateTime().minusDays(9).toDate())
+        .buildAndPersist(entityManager);
+
+    // Excluded by ComponentStatus AVAILABLE
+    aComponentStatusChange()
+        .withComponent(componentWithStatusAvailable)
+        .withStatusChangeReason(discardReason2)
+        .buildAndPersist(entityManager);
+
+    // Excluded for it is deleted
+    aComponentStatusChange()
+        .withStatusChangeReason(discardReason1)
+        .withNewStatus(expectedComponentStatus)
+        .withStatusChangedOn(new Date())
+        .withComponent(component1)
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+
+    // Excluded by newStatus AVAILABLE
+    aComponentStatusChange()
+        .withComponent(component1)
+        .withStatusChangeReason(discardReason1)
+        .withNewStatus(ComponentStatus.AVAILABLE)
+        .withStatusChangedOn(new Date())
+        .buildAndPersist(entityManager);
+
+      // Excluded by NULL component batch
+    aComponentStatusChange()
+        .withComponent(componentWithNoComponentBatch)
+        .withStatusChangeReason(discardReason1)
+        .withStatusChangedOn(new Date())
+        .buildAndPersist(entityManager);
+
+    List<DiscardedComponentDTO> expectedDtos = Arrays.asList(
+    aDiscardedComponentDTO()
+        .withComponentType(componentType1.getComponentTypeName())
+        .withVenue(expectedProcessingSite)
+        .withComponentStatusChangeReason(componentStatusChange1.getStatusChangeReason().getStatusChangeReason())
+        .withCount(1L)
+        .build(),
+    aDiscardedComponentDTO()
+        .withComponentType(componentType2.getComponentTypeName())
+        .withComponentStatusChangeReason(componentStatusChange2.getStatusChangeReason().getStatusChangeReason())
+        .withVenue(expectedProcessingSite)
+        .withCount(1L)
+        .build()
+    ); 
+
+    List<DiscardedComponentDTO> returnedDtos = componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(
+            expectedProcessingSite.getId(), startDate, endDate);
+
+    assertThat(returnedDtos, is(expectedDtos));
+    assertThat(returnedDtos.get(0), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(0)));
+    assertThat(returnedDtos.get(1), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(1)));
+  }
+
+  @Test
+  public void testFindfindSummaryOfDiscardedComponentsByProcessingSite_shouldReturnCorrectCounts() {
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().plusDays(8).toDate();
+
+    Location expectedProcessingSite = aProcessingSite()
+        .buildAndPersist(entityManager);
+    ComponentStatus expectedComponentStatus = ComponentStatus.DISCARDED;
+    ComponentType componentType1 = aComponentType()
+        .thatContainsPlasma()
+        .withComponentTypeName("Whole Blood Quad Pack - CPDA")
+        .withComponentTypeCode("100111")
+        .withCanBeIssued(Boolean.FALSE)
+        .buildAndPersist(entityManager);
+    ComponentType componentType2 = aComponentType()
+        .withCanBeIssued(Boolean.TRUE)
+        .withComponentTypeCode("100011")
+        .withComponentTypeName("Packed Red Cells - CPDA")
+        .buildAndPersist(entityManager);
+    ComponentBatch componentBatch = aComponentBatch()
+        .withLocation(expectedProcessingSite)
+        .buildAndPersist(entityManager);
+    ComponentStatusChangeReason discardReason1 = aDiscardReason()
+        .withStatusChangeReason("Passed Expiry Dates")
+        .buildAndPersist(entityManager);
+    ComponentStatusChangeReason discardReason2 = aDiscardReason()
+        .withStatusChangeReason("Processing Problems")
+        .buildAndPersist(entityManager);
+    Component component1 = aComponent()
+        .withComponentType(componentType1)
+        .withStatus(expectedComponentStatus)
+        .withComponentBatch(componentBatch)
+        .buildAndPersist(entityManager);
+    Component component2 = aComponent()
+        .withComponentType(componentType2)
+        .withComponentBatch(componentBatch)
+        .withStatus(expectedComponentStatus)
+        .buildAndPersist(entityManager);
+    Component component3 = aComponent()
+        .withComponentType(componentType2)
+        .withComponentBatch(componentBatch)
+        .withStatus(expectedComponentStatus)
+        .buildAndPersist(entityManager);
+
+    // Expected
+    aComponentStatusChange()
+        .withStatusChangeReason(discardReason1)
+        .withNewStatus(expectedComponentStatus)
+        .withStatusChangedOn(new Date())
+        .withComponent(component1)
+        .buildAndPersist(entityManager);
+    ComponentStatusChange componentStatusChange2 = aComponentStatusChange()
+        .withStatusChangeReason(discardReason2)
+        .withNewStatus(expectedComponentStatus)
+        .withComponent(component2)
+        .withStatusChangedOn(new Date())
+        .buildAndPersist(entityManager);
+    aComponentStatusChange()
+        .withStatusChangeReason(discardReason2)
+        .withNewStatus(expectedComponentStatus)
+        .withStatusChangedOn(new Date())
+        .withComponent(component3)
+        .buildAndPersist(entityManager);
+
+    List<DiscardedComponentDTO> expectedDtos = Arrays.asList(
+    aDiscardedComponentDTO()
+        .withComponentType(componentType1.getComponentTypeName())
+        .withVenue(expectedProcessingSite)
+        .withComponentStatusChangeReason(discardReason1.getStatusChangeReason())
+        .withCount(1L)
+        .build(),
+    aDiscardedComponentDTO()
+        .withComponentType(componentType2.getComponentTypeName())
+        .withComponentStatusChangeReason(componentStatusChange2.getStatusChangeReason().getStatusChangeReason())
+        .withVenue(expectedProcessingSite)
+        .withCount(2L).build()
+    );
+
+    List<DiscardedComponentDTO> returnedDtos = componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(
+        expectedProcessingSite.getId(), startDate, endDate);
+
+    assertThat(returnedDtos, is(expectedDtos));
+    assertThat(returnedDtos.get(0), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(0)));
+    assertThat(returnedDtos.get(1), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(1)));
+  }
+
+  @Test
+  public void testFindfindSummaryOfDiscardedComponentsByProcessingSite_shouldReturnCorrectCountsWhenNoProcessingSiteIsProvided() {
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().plusDays(8).toDate();
+
+    Location expectedVenue1 = aProcessingSite()
+        .buildAndPersist(entityManager);
+    Location expectedVenue2 = aProcessingSite()
+        .buildAndPersist(entityManager);
+    ComponentStatus expectedComponentStatus = ComponentStatus.DISCARDED;
+    ComponentType componentType1 = aComponentType()
+        .thatContainsPlasma()
+        .withComponentTypeName("Whole Blood Quad Pack - CPDA")
+        .withComponentTypeCode("100111")
+        .withCanBeIssued(Boolean.FALSE)
+        .buildAndPersist(entityManager);
+    ComponentType componentType2 = aComponentType()
+        .withCanBeIssued(Boolean.TRUE)
+        .withComponentTypeCode("100011")
+        .withComponentTypeName("Packed Red Cells - CPDA")
+        .buildAndPersist(entityManager);
+    ComponentBatch componentBatch = aComponentBatch()
+        .withLocation(expectedVenue1)
+        .buildAndPersist(entityManager);
+    ComponentBatch componentBatch2 = aComponentBatch()
+        .withLocation(expectedVenue2)
+        .buildAndPersist(entityManager);
+    ComponentStatusChangeReason discardReason1 = aDiscardReason()
+        .withStatusChangeReason("Passed Expiry Dates")
+        .buildAndPersist(entityManager);
+    ComponentStatusChangeReason discardReason2 = aDiscardReason()
+        .withStatusChangeReason("Processing Problems")
+        .buildAndPersist(entityManager);
+    Component component1 = aComponent()
+        .withComponentType(componentType1)
+        .withStatus(expectedComponentStatus)
+        .withComponentBatch(componentBatch)
+        .buildAndPersist(entityManager);
+    Component component2 = aComponent()
+        .withComponentType(componentType2)
+        .withComponentBatch(componentBatch2)
+        .withStatus(expectedComponentStatus)
+        .buildAndPersist(entityManager);
+
+    // Expected
+    aComponentStatusChange()
+        .withStatusChangeReason(discardReason1)
+        .withNewStatus(expectedComponentStatus)
+        .withStatusChangedOn(new Date())
+        .withComponent(component1)
+        .buildAndPersist(entityManager);
+    ComponentStatusChange componentStatusChange2 = aComponentStatusChange()
+        .withStatusChangeReason(discardReason2)
+        .withNewStatus(expectedComponentStatus)
+        .withComponent(component2)
+        .withStatusChangedOn(new Date())
+        .buildAndPersist(entityManager);
+
+    List<DiscardedComponentDTO> expectedDtos = Arrays.asList(
+    aDiscardedComponentDTO()
+        .withComponentType(componentType1.getComponentTypeName())
+        .withVenue(expectedVenue1)
+        .withComponentStatusChangeReason(discardReason1.getStatusChangeReason())
+        .withCount(1L)
+        .build(),
+    aDiscardedComponentDTO()
+        .withComponentType(componentType2.getComponentTypeName())
+        .withComponentStatusChangeReason(componentStatusChange2.getStatusChangeReason().getStatusChangeReason())
+        .withVenue(expectedVenue2)
+        .withCount(1L).build()
+    );
+
+    List<DiscardedComponentDTO> returnedDtos = componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(
+        null, startDate, endDate);
+
+    assertThat(returnedDtos, is(expectedDtos));
+    assertThat(returnedDtos.get(0), hasSameStateAsDiscardedComponentDTO(returnedDtos.get(0)));
+    assertThat(returnedDtos.get(1), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(1)));
+  }
+ 
+  @Test
+  public void testFindProducedComponentsByProcessingSite_shouldReturnDataForAllSites() {
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().minusDays(2).toDate();
+    
+    Location pretoriaProcessingSite = aProcessingSite().withName("Pretoria").buildAndPersist(entityManager);
+    Location capeTownProcessingSite = aProcessingSite().withName("Cape Town").buildAndPersist(entityManager);
+    Location zuluLandProcessingSite = aProcessingSite().withName("Zulu land").buildAndPersist(entityManager);
+    
+    String bloodAboA = "A";
+    String bloodRhPos = "+";
+    String bloodAboB = "B";
+    String bloodRhNeg = "-";
+        
+    ComponentType componentType1 = aComponentType()
+        .withComponentTypeName("componentType1")
+        .withCanBeIssued(true)
+        .buildAndPersist(entityManager);
+    
+    ComponentType componentType2 = aComponentType()
+        .withComponentTypeName("componentType2")
+        .withCanBeIssued(true)
+        .buildAndPersist(entityManager);
+   
+    // Expected component batches
+    ComponentBatch componentBatchOneWithLocationPretoria = aComponentBatch()
+        .withLocation(pretoriaProcessingSite)
+        .buildAndPersist(entityManager);
+    
+    ComponentBatch componentBatchTwoWithLocationCapeTown = aComponentBatch()
+         .withLocation(capeTownProcessingSite)
+         .buildAndPersist(entityManager);
+    
+    ComponentBatch componentBatchThreewithLocationZululand = aComponentBatch()
+        .withLocation(zuluLandProcessingSite)
+        .buildAndPersist(entityManager);
+   
+    Donation donationAPos = aDonation()
+        .withDonationDate(startDate)
+        .withBloodAbo(bloodAboA)
+        .withBloodRh(bloodRhPos)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    
+    Donation donationBNeg = aDonation()
+        .withDonationDate(startDate)
+        .withBloodAbo(bloodAboB)
+        .withBloodRh(bloodRhNeg)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+  
+    //group 1 -> Pretoria, componentType1, A+, (count 2)
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchOneWithLocationPretoria)
+        .withDonation(donationAPos)
+        .withCreatedOn(startDate)
+        .buildAndPersist(entityManager);
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchOneWithLocationPretoria)
+        .withDonation(donationAPos)
+        .withCreatedOn(startDate)
+        .buildAndPersist(entityManager);
+    
+    //group 2 -> Pretoria, componentType1, B- (count 1)
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchOneWithLocationPretoria)
+        .withDonation(donationBNeg)
+        .withCreatedOn(startDate)
+        .buildAndPersist(entityManager);
+
+    //group 3 -> Pretoria, componentType2, B-  (count 1)
+    aComponent()
+        .withComponentType(componentType2)
+        .withComponentBatch(componentBatchOneWithLocationPretoria)
+        .withDonation(donationBNeg)
+        .withCreatedOn(startDate)
+        .buildAndPersist(entityManager);
+    
+    //group 4 -> CapeTown, componentType1, B- (count 2)
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchTwoWithLocationCapeTown)
+        .withDonation(donationBNeg)
+        .withCreatedOn(endDate)
+        .buildAndPersist(entityManager);
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchTwoWithLocationCapeTown)
+        .withDonation(donationBNeg)
+        .withCreatedOn(endDate)
+        .buildAndPersist(entityManager);
+    
+    //group 5 -> Zululand, componentType1, A+ (count 1)
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchThreewithLocationZululand)
+        .withDonation(donationAPos)
+        .withCreatedOn(endDate)
+        .buildAndPersist(entityManager);
+    
+    List<ComponentProductionDTO> expectedComponentProductionDTO = Arrays.asList(
+        aComponentProductionDTO() 
+              .withComponentTypeName(componentType1.getComponentTypeName())
+              .withBloodAbo(bloodAboA)
+              .withBloodRh(bloodRhPos)
+              .withVenue(pretoriaProcessingSite)
+              .withCount(2L)
+            .build(), 
+       aComponentProductionDTO() 
+              .withComponentTypeName(componentType1.getComponentTypeName())
+              .withBloodAbo(bloodAboB)
+              .withBloodRh(bloodRhNeg)
+              .withVenue(pretoriaProcessingSite)
+              .withCount(1L)
+              .build(),
+        aComponentProductionDTO() 
+              .withComponentTypeName(componentType2.getComponentTypeName())
+              .withBloodAbo(bloodAboB)
+              .withBloodRh(bloodRhNeg)
+              .withVenue(pretoriaProcessingSite)
+              .withCount(1L)
+              .build(),
+         aComponentProductionDTO() 
+              .withComponentTypeName(componentType1.getComponentTypeName())
+              .withBloodAbo(bloodAboB)
+              .withBloodRh(bloodRhNeg)
+              .withVenue(capeTownProcessingSite)
+              .withCount(2L)
+              .build(),
+         aComponentProductionDTO() 
+              .withComponentTypeName(componentType1.getComponentTypeName())
+              .withBloodAbo(bloodAboA)
+              .withBloodRh(bloodRhPos)
+              .withVenue(zuluLandProcessingSite)
+              .withCount(1L)
+              .build()
+      );
+    
+    List<ComponentProductionDTO> returnedDtos = componentRepository
+        .findProducedComponentsByProcessingSite(
+            null,startDate, endDate);
+        
+    assertThat(returnedDtos.size(), is(5));
+    assertThat(returnedDtos.get(0), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(0)));
+    assertThat(returnedDtos.get(1), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(1)));
+    assertThat(returnedDtos.get(2), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(2)));
+    assertThat(returnedDtos.get(3), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(3)));
+    assertThat(returnedDtos.get(4), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(4)));
+  }
 }

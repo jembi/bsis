@@ -12,6 +12,8 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.dto.ComponentExportDTO;
+import org.jembi.bsis.dto.DiscardedComponentDTO;
+import org.jembi.bsis.dto.ComponentProductionDTO;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
@@ -164,5 +166,23 @@ public class ComponentRepository extends AbstractRepository<Component> {
      * The rows with discard reasons are sorted ahead of those without so that they added to the set first.
      */
     return new LinkedHashSet<>(componentExportDTOs);
+  }
+
+  public List<DiscardedComponentDTO> findSummaryOfDiscardedComponentsByProcessingSite(Long processingSiteId, Date starDate, Date endDate) {
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE, DiscardedComponentDTO.class)
+        .setParameter("processingSiteId", processingSiteId)
+        .setParameter("startDate", starDate)
+        .setParameter("endDate", endDate)
+        .getResultList();
+  }
+  
+  public List<ComponentProductionDTO> findProducedComponentsByProcessingSite(Long processingSiteId, Date startDate, Date endDate) {
+    return em.createNamedQuery(
+        ComponentNamedQueryConstants.NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE, ComponentProductionDTO.class)
+        .setParameter("processingSiteId", processingSiteId)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("deleted",false)
+        .getResultList();
   }
 }

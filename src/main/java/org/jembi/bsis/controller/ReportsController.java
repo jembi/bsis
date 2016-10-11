@@ -10,6 +10,8 @@ import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.service.report.BloodUnitsIssuedReportGenerator;
 import org.jembi.bsis.service.report.CollectedDonationsReportGenerator;
 import org.jembi.bsis.service.report.DonorsAdverseEventsReportGenerator;
+import org.jembi.bsis.service.report.DiscardedComponentReportGenerator;
+import org.jembi.bsis.service.report.ComponentProductionReportGenerator;
 import org.jembi.bsis.service.report.DonorsDeferredSummaryReportGenerator;
 import org.jembi.bsis.service.report.StockLevelsReportGenerator;
 import org.jembi.bsis.service.report.TtiPrevalenceReportGenerator;
@@ -46,6 +48,31 @@ public class ReportsController {
 
   @Autowired
   private ReportsControllerService reportsControllerService;
+  
+  @Autowired
+  private DiscardedComponentReportGenerator discardedComponentReportGenerator;
+
+  @Autowired
+  private ComponentProductionReportGenerator componentProductionReportGenerator;
+  
+  @RequestMapping(value = "/discardedunits/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
+  public Map<String, Object> discardedUnitsFormFields() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("processingSites", reportsControllerService.getProcessingSites());
+    map.put("componentTypes", reportsControllerService.getAllComponentTypes());
+    map.put("discardReasons", reportsControllerService.getAllDiscardReasons(false));
+    return map;
+  }
+  
+  @RequestMapping(value = "/discardedunits/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')") 
+  public Report generateDiscardedUnits (
+      @RequestParam(value = "processingSite", required = false) Long processingSiteId,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    return discardedComponentReportGenerator.generateDiscardedComponents(processingSiteId, startDate, endDate);
+  }
 
   @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
@@ -79,7 +106,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/unitsissued/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_ISSUED_REPORTING + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
   public Map<String, Object> getUnitsIssuedReportFormFields() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", reportsControllerService.getAllComponentTypesThatCanBeIssued());
@@ -87,7 +114,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/unitsissued/generate", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_ISSUED_REPORTING + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
   public Report generateUnitsIssuedReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
@@ -126,5 +153,23 @@ public class ReportsController {
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return donorsAdverseEventsReportGenerator.generateDonorsAdverseEventsReport(venueId, startDate, endDate);
+  }
+
+  @RequestMapping(value = "/componentsprocessed/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
+  public Map<String, Object> getProcessingSitesAndComponentTypes() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("processingSites", reportsControllerService.getProcessingSites());
+    map.put("componentTypes", reportsControllerService.getAllComponentTypesThatCanBeIssued());
+    return map;
+  }
+  
+  @RequestMapping(value = "/componentsprocessed/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
+  public Report generateComponentProductionReport(
+      @RequestParam(value = "processingSite", required = false) Long processingSiteId, 
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    return componentProductionReportGenerator.generateComponentProductionReport(processingSiteId, startDate, endDate);
   }
 }
