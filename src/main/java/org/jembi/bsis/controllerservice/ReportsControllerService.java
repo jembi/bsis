@@ -50,7 +50,7 @@ public class ReportsControllerService {
   public List<ComponentTypeViewModel> getAllComponentTypesThatCanBeIssued() {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypesThatCanBeIssued());
   }
-  
+
   public List<ComponentTypeViewModel> getAllComponentTypes() {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
   }

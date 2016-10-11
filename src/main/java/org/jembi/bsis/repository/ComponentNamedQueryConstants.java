@@ -90,4 +90,18 @@ public class ComponentNamedQueryConstants {
       "and s.statusChangedOn BETWEEN :startDate AND :endDate " +
       "group by s.component.componentBatch.location, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
       "order by s.component.componentBatch.location, s.component.componentType.componentTypeName desc ";
+  
+  public static final String NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
+      "Component.findProducedComponentsByProcessingSite";
+  public static final String QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
+      "SELECT DISTINCT NEW org.jembi.bsis.dto.ComponentProductionDTO(c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh, cb.location, COUNT(c.id)) " 
+      + "FROM Component AS c "
+      // use processing site which is where the component was processed
+      + "LEFT JOIN c.componentBatch AS cb "
+      + "WHERE c.componentType.canBeIssued = TRUE AND c.createdOn BETWEEN :startDate AND :endDate "
+      + "AND c.isDeleted = :deleted "
+      //if processingSiteId is null, get all the sites otherwise fetch the provided processingSite
+      + "AND (cb.location.id = :processingSiteId OR :processingSiteId = NULL) "
+      + "GROUP BY cb.location, c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
+      + "ORDER BY cb.location, c.componentType.componentTypeName ASC";
 }

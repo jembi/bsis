@@ -46,11 +46,13 @@ import javax.persistence.NoResultException;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.factory.ComponentFactory;
+import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.matchers.ComponentMatcher;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
@@ -357,12 +359,14 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withDonationDate(donationDate)
         .build();
     Long parentComponentId = Long.valueOf(1);
+    ComponentBatch componentBatch = ComponentBatchBuilder.aComponentBatch().withLocation(location).build();
     Component parentComponent = aComponent().withId(parentComponentId)
         .withDonation(donation)
         .withCreatedOn(donationDate)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withStatus(ComponentStatus.AVAILABLE)
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
         .withCombinationName("Combination")
@@ -375,6 +379,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withCreatedOn(donation.getDonationDate())
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     Calendar expiryCal1 = Calendar.getInstance();
     expiryCal1.setTime(donationDate);
@@ -389,6 +394,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCreatedOn(donation.getDonationDate())
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     Component expectedComponent2 = aComponent()
         .withComponentType(componentType1)
@@ -400,6 +406,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCreatedOn(donation.getDonationDate())
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     Calendar expiryCal2 = Calendar.getInstance();
     expiryCal2.setTime(donationDate);
@@ -414,6 +421,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCreatedOn(donation.getDonationDate())
         .withExpiresOn(expiryCal2.getTime())
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     Calendar expiryCal3 = Calendar.getInstance();
     expiryCal3.setTime(donationDate);
@@ -428,6 +436,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCreatedOn(donation.getDonationDate())
         .withExpiresOn(expiryCal3.getTime())
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     
     // set up mocks

@@ -1,10 +1,10 @@
 package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentProductionDTOBuilder.aComponentProductionDTO;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aComponentStatusChangeReason;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aDiscardReason;
@@ -14,6 +14,7 @@ import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
+import static org.jembi.bsis.helpers.matchers.ComponentProductionDTOMatcher.hasSameStateAsComponentProductionDTO;
 import static org.jembi.bsis.helpers.matchers.DiscardedComponentDTOMatcher.hasSameStateAsDiscardedComponentDTO;
 import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
 
@@ -26,6 +27,7 @@ import java.util.Set;
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.dto.ComponentExportDTO;
+import org.jembi.bsis.dto.ComponentProductionDTO;
 import org.jembi.bsis.dto.DiscardedComponentDTO;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.model.component.Component;
@@ -305,6 +307,95 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     assertThat(iterator.next().getDonationIdentificationNumber(), is(firstDonationIdentificationNumber));
     assertThat(iterator.next().getDonationIdentificationNumber(), is(secondDonationIdentificationNumber));
     assertThat(iterator.next().getDonationIdentificationNumber(), is(thirdDonationIdentificationNumber));
+  }
+  
+  @Test
+  public void testFindProducedComponentsByProcessingSite_shouldReturnCorrectResult() {
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().minusDays(2).toDate();
+    Date outOfRangeDate = new DateTime().plus(2).toDate();
+
+    Location processingSite1 = aProcessingSite().withName("processingSite1").buildAndPersist(entityManager);
+    Location processingSite2 = aProcessingSite().withName("processingSite2").buildAndPersist(entityManager);
+    String expectedBloodAbo = "A";
+    String expectedBloodRh = "+";
+   
+    ComponentType componentType = aComponentType()
+        .withComponentTypeName("type1")
+        .withCanBeIssued(true)
+        .buildAndPersist(entityManager);
+    
+    ComponentBatch componentBatch = aComponentBatch()
+        .withLocation(processingSite1)
+        .buildAndPersist(entityManager);
+    
+    Donation donation = aDonation()
+        .withDonationDate(startDate)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .buildAndPersist(entityManager);
+    
+    // Expected components
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withDonation(donation)
+        .withCreatedOn(startDate)
+        .withLocation(processingSite1)
+        .buildAndPersist(entityManager);
+    
+    // Excluded component by deletion
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withDonation(donation)
+        .withLocation(processingSite1)
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+  
+    // Excluded components by date range
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withDonation(donation)
+        .withCreatedOn(outOfRangeDate)
+        .buildAndPersist(entityManager);
+    
+    // Excluded component by processing Site
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withCreatedOn(endDate)
+        .withDonation(donation)
+        .withLocation(processingSite2)
+        .buildAndPersist(entityManager);
+    
+    // Excluded component by component Type that cannot be issued. 
+    ComponentType componentTypeThatCannotBeIssued = aComponentType()
+        .withComponentTypeName("typeThatCannotBeIssued")
+        .withCanBeIssued(false)
+        .buildAndPersist(entityManager);
+    aComponent()
+        .withComponentType(componentTypeThatCannotBeIssued)
+        .withComponentBatch(componentBatch)
+        .withDonation(donation)
+        .withCreatedOn(startDate)
+        .buildAndPersist(entityManager);
+    
+    ComponentProductionDTO expectedDTO =  aComponentProductionDTO() 
+        .withComponentTypeName("type1")
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .withVenue(processingSite1)
+        .withCount(2L)
+        .build();
+
+    List<ComponentProductionDTO> returnedDtos = componentRepository
+        .findProducedComponentsByProcessingSite(
+            processingSite1.getId(), startDate, endDate);
+     
+    assertThat(returnedDtos.size(), is(1));
+    assertThat(returnedDtos.get(0), hasSameStateAsComponentProductionDTO(expectedDTO));
   }
 
   @Test
@@ -591,5 +682,158 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     assertThat(returnedDtos, is(expectedDtos));
     assertThat(returnedDtos.get(0), hasSameStateAsDiscardedComponentDTO(returnedDtos.get(0)));
     assertThat(returnedDtos.get(1), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(1)));
+  }
+ 
+  @Test
+  public void testFindProducedComponentsByProcessingSite_shouldReturnDataForAllSites() {
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().minusDays(2).toDate();
+    
+    Location pretoriaProcessingSite = aProcessingSite().withName("Pretoria").buildAndPersist(entityManager);
+    Location capeTownProcessingSite = aProcessingSite().withName("Cape Town").buildAndPersist(entityManager);
+    Location zuluLandProcessingSite = aProcessingSite().withName("Zulu land").buildAndPersist(entityManager);
+    
+    String bloodAboA = "A";
+    String bloodRhPos = "+";
+    String bloodAboB = "B";
+    String bloodRhNeg = "-";
+        
+    ComponentType componentType1 = aComponentType()
+        .withComponentTypeName("componentType1")
+        .withCanBeIssued(true)
+        .buildAndPersist(entityManager);
+    
+    ComponentType componentType2 = aComponentType()
+        .withComponentTypeName("componentType2")
+        .withCanBeIssued(true)
+        .buildAndPersist(entityManager);
+   
+    // Expected component batches
+    ComponentBatch componentBatchOneWithLocationPretoria = aComponentBatch()
+        .withLocation(pretoriaProcessingSite)
+        .buildAndPersist(entityManager);
+    
+    ComponentBatch componentBatchTwoWithLocationCapeTown = aComponentBatch()
+         .withLocation(capeTownProcessingSite)
+         .buildAndPersist(entityManager);
+    
+    ComponentBatch componentBatchThreewithLocationZululand = aComponentBatch()
+        .withLocation(zuluLandProcessingSite)
+        .buildAndPersist(entityManager);
+   
+    Donation donationAPos = aDonation()
+        .withDonationDate(startDate)
+        .withBloodAbo(bloodAboA)
+        .withBloodRh(bloodRhPos)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    
+    Donation donationBNeg = aDonation()
+        .withDonationDate(startDate)
+        .withBloodAbo(bloodAboB)
+        .withBloodRh(bloodRhNeg)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+  
+    //group 1 -> Pretoria, componentType1, A+, (count 2)
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchOneWithLocationPretoria)
+        .withDonation(donationAPos)
+        .withCreatedOn(startDate)
+        .buildAndPersist(entityManager);
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchOneWithLocationPretoria)
+        .withDonation(donationAPos)
+        .withCreatedOn(startDate)
+        .buildAndPersist(entityManager);
+    
+    //group 2 -> Pretoria, componentType1, B- (count 1)
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchOneWithLocationPretoria)
+        .withDonation(donationBNeg)
+        .withCreatedOn(startDate)
+        .buildAndPersist(entityManager);
+
+    //group 3 -> Pretoria, componentType2, B-  (count 1)
+    aComponent()
+        .withComponentType(componentType2)
+        .withComponentBatch(componentBatchOneWithLocationPretoria)
+        .withDonation(donationBNeg)
+        .withCreatedOn(startDate)
+        .buildAndPersist(entityManager);
+    
+    //group 4 -> CapeTown, componentType1, B- (count 2)
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchTwoWithLocationCapeTown)
+        .withDonation(donationBNeg)
+        .withCreatedOn(endDate)
+        .buildAndPersist(entityManager);
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchTwoWithLocationCapeTown)
+        .withDonation(donationBNeg)
+        .withCreatedOn(endDate)
+        .buildAndPersist(entityManager);
+    
+    //group 5 -> Zululand, componentType1, A+ (count 1)
+    aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatchThreewithLocationZululand)
+        .withDonation(donationAPos)
+        .withCreatedOn(endDate)
+        .buildAndPersist(entityManager);
+    
+    List<ComponentProductionDTO> expectedComponentProductionDTO = Arrays.asList(
+        aComponentProductionDTO() 
+              .withComponentTypeName(componentType1.getComponentTypeName())
+              .withBloodAbo(bloodAboA)
+              .withBloodRh(bloodRhPos)
+              .withVenue(pretoriaProcessingSite)
+              .withCount(2L)
+            .build(), 
+       aComponentProductionDTO() 
+              .withComponentTypeName(componentType1.getComponentTypeName())
+              .withBloodAbo(bloodAboB)
+              .withBloodRh(bloodRhNeg)
+              .withVenue(pretoriaProcessingSite)
+              .withCount(1L)
+              .build(),
+        aComponentProductionDTO() 
+              .withComponentTypeName(componentType2.getComponentTypeName())
+              .withBloodAbo(bloodAboB)
+              .withBloodRh(bloodRhNeg)
+              .withVenue(pretoriaProcessingSite)
+              .withCount(1L)
+              .build(),
+         aComponentProductionDTO() 
+              .withComponentTypeName(componentType1.getComponentTypeName())
+              .withBloodAbo(bloodAboB)
+              .withBloodRh(bloodRhNeg)
+              .withVenue(capeTownProcessingSite)
+              .withCount(2L)
+              .build(),
+         aComponentProductionDTO() 
+              .withComponentTypeName(componentType1.getComponentTypeName())
+              .withBloodAbo(bloodAboA)
+              .withBloodRh(bloodRhPos)
+              .withVenue(zuluLandProcessingSite)
+              .withCount(1L)
+              .build()
+      );
+    
+    List<ComponentProductionDTO> returnedDtos = componentRepository
+        .findProducedComponentsByProcessingSite(
+            null,startDate, endDate);
+        
+    assertThat(returnedDtos.size(), is(5));
+    assertThat(returnedDtos.get(0), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(0)));
+    assertThat(returnedDtos.get(1), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(1)));
+    assertThat(returnedDtos.get(2), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(2)));
+    assertThat(returnedDtos.get(3), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(3)));
+    assertThat(returnedDtos.get(4), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(4)));
   }
 }
