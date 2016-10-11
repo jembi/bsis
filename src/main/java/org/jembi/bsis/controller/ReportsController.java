@@ -111,7 +111,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/donorsadverseevents/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.DONORS_REPORTING + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
   public Map<String, Object> generateDonorsAdverseEventsForm() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("venues", reportsControllerService.getVenues());
@@ -120,7 +120,7 @@ public class ReportsController {
   }
 
   @RequestMapping(value = "/donorsadverseevents/generate", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.DONORS_REPORTING + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
   public Report generateDonorsAdverseEventsReport(
       @RequestParam(value = "venue", required = false) Long venueId,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
