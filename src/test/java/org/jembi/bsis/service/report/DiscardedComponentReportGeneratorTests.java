@@ -39,6 +39,7 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
     Date startDate = new Date();
     Date endDate = new Date();
     Location processingSite = aProcessingSite().withId(1L).build();
+
     List<DiscardedComponentDTO> discardedComponents = Arrays.asList(
         aDiscardedComponentDTO()
           .withComponentStatusChangeReason("Storage Problems")
@@ -47,31 +48,36 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
           .withVenue(processingSite)
           .build());
 
-    List<DataValue> expectedDataValues = Arrays.asList(aDataValue()
-        .withStartDate(startDate)
-        .withEndDate(endDate)
-        .withVenue(processingSite)
-        .withValue(2L)
-        .withCohort(aCohort()
-            .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
-            .withComparator(Comparator.EQUALS)
-            .withOption("Platelets Concentrate - Apheresis")
-            .build())
-        .withCohort(aCohort()
-            .withCategory(CohortConstants.DISCARD_REASON_CATEGORY)
-            .withComparator(Comparator.EQUALS)
-            .withOption("Storage Problems")
-            .build())
-        .build());
+    List<DataValue> expectedDataValues = Arrays.asList(
+        aDataValue()
+          .withStartDate(startDate)
+          .withEndDate(endDate)
+          .withVenue(processingSite)
+          .withValue(2L)
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("Platelets Concentrate - Apheresis")
+              .build())
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.DISCARD_REASON_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("Storage Problems")
+              .build())
+          .build());
+
     Report expectedReport = aReport()
-        .withStartDate(startDate)
-        .withEndDate(endDate)
-        .withDataValues(expectedDataValues)
-        .build();
+          .withStartDate(startDate)
+          .withEndDate(endDate)
+          .withDataValues(expectedDataValues)
+          .build();
+
     when(componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(processingSite.getId(), startDate, endDate))
         .thenReturn(discardedComponents);
+
     Report returnedReport =
         discardedComponentReportGenerator.generateDiscardedComponents(processingSite.getId(), startDate, endDate);
+
     assertThat(returnedReport, is(equalTo(expectedReport)));
   }
   
@@ -106,80 +112,71 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
           .withVenue(processingSite)
           .build());
 
-    List<DataValue> expectedDataValues = Arrays.asList(aDataValue()
-        .withStartDate(startDate)
-        .withEndDate(endDate)
-        .withVenue(processingSite)
-        .withValue(2L)
-        .withCohort(aCohort()
-            .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
-            .withComparator(Comparator.EQUALS)
-            .withOption("Whole Blood Double Pack - CPDA")
-            .build())
-        .withCohort(aCohort()
-            .withCategory(CohortConstants.DISCARD_REASON_CATEGORY)
-            .withComparator(Comparator.EQUALS)
-            .withOption("Storage Problems")
-            .build())
-        .build(),
+    List<DataValue> expectedDataValues = Arrays.asList(
         aDataValue()
-        .withStartDate(startDate)
-        .withEndDate(endDate)
-        .withVenue(processingSite)
-        .withValue(3L)
-        .withCohort(aCohort()
-            .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
-            .withComparator(Comparator.EQUALS)
-            .withOption("Whole Blood Triple Pack - CPDA")
-            .build())
-        .withCohort(aCohort()
-            .withCategory(CohortConstants.DISCARD_REASON_CATEGORY)
-            .withComparator(Comparator.EQUALS)
-            .withOption("Passed Expiry Dates")
-            .build())
-        .build(),
+          .withStartDate(startDate)
+          .withEndDate(endDate)
+          .withVenue(processingSite)
+          .withValue(2L)
+            .withCohort(aCohort()
+                .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
+                .withComparator(Comparator.EQUALS)
+                .withOption("Whole Blood Double Pack - CPDA").build())
+            .withCohort(aCohort()
+                .withCategory(CohortConstants.DISCARD_REASON_CATEGORY)
+                .withComparator(Comparator.EQUALS)
+                .withOption("Storage Problems")
+                .build())
+          .build(),
         aDataValue()
-        .withStartDate(startDate)
-        .withEndDate(endDate)
-        .withVenue(processingSite)
-        .withValue(4L)
-        .withCohort(aCohort()
-            .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
-            .withComparator(Comparator.EQUALS)
-            .withOption("Whole Blood Poor Platelets - CPDA")
-            .build())
-        .withCohort(aCohort()
-            .withCategory(CohortConstants.DISCARD_REASON_CATEGORY)
-            .withComparator(Comparator.EQUALS)
-            .withOption("Incomplete Donation")
-            .build())
-        .build(),
+          .withStartDate(startDate)
+          .withEndDate(endDate)
+          .withVenue(processingSite)
+          .withValue(3L)
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("Whole Blood Triple Pack - CPDA")
+              .build())
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.DISCARD_REASON_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("Passed Expiry Dates")
+              .build())
+          .build(),
         aDataValue()
-        .withStartDate(startDate)
-        .withEndDate(endDate)
-        .withVenue(processingSite)
-        .withValue(5L)
-        .withCohort(aCohort()
-            .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
-            .withComparator(Comparator.EQUALS)
-            .withOption("Packed Red Cells - CPDA")
-            .build())
-        .withCohort(aCohort()
-            .withCategory(CohortConstants.DISCARD_REASON_CATEGORY)
-            .withComparator(Comparator.EQUALS)
-            .withOption("Processing Problems")
-            .build())
-        .build());
+          .withStartDate(startDate)
+          .withEndDate(endDate)
+          .withVenue(processingSite)
+          .withValue(4L)
+            .withCohort(aCohort().withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
+                .withComparator(Comparator.EQUALS).withOption("Whole Blood Poor Platelets - CPDA").build())
+            .withCohort(aCohort().withCategory(CohortConstants.DISCARD_REASON_CATEGORY)
+                .withComparator(Comparator.EQUALS).withOption("Incomplete Donation").build())
+          .build(),
+        aDataValue()
+          .withStartDate(startDate)
+          .withEndDate(endDate)
+          .withVenue(processingSite)
+          .withValue(5L)
+            .withCohort(aCohort().withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
+                .withComparator(Comparator.EQUALS).withOption("Packed Red Cells - CPDA").build())
+            .withCohort(aCohort().withCategory(CohortConstants.DISCARD_REASON_CATEGORY)
+                .withComparator(Comparator.EQUALS).withOption("Processing Problems").build())
+          .build());
     
     Report expectedReport = aReport()
         .withStartDate(startDate)
         .withEndDate(endDate)
         .withDataValues(expectedDataValues)
         .build();
+
     when(componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(processingSite.getId(), startDate, endDate))
         .thenReturn(discardedComponents);
+
     Report returnedReport =
         discardedComponentReportGenerator.generateDiscardedComponents(processingSite.getId(), startDate, endDate);
+
     assertThat(returnedReport, is(equalTo(expectedReport)));
   }
 }

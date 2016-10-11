@@ -1,4 +1,4 @@
-  package org.jembi.bsis.dto;
+package org.jembi.bsis.dto;
 
 import java.util.Objects;
 

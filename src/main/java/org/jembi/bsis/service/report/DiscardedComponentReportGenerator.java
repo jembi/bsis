@@ -21,16 +21,28 @@ public class DiscardedComponentReportGenerator {
   public ComponentRepository componentRepository;
 
   /**
-   * Report summary of all discarded components by ,location , component type and status change reason.
-   *
-   * @return The report.
+   * Report summary of all discarded components by location, component type and status change reason
+   * (discard reason).
+   * 
+   * @param processingSiteId - The location ID of the processing site
+   * @param startDate - The report start date
+   * @param endDate - The report end date
+   * @return the report
    */
   public Report generateDiscardedComponents(Long processingSiteId, Date startDate, Date endDate) {
     Report report = new Report();
+
     report.setStartDate(startDate);
     report.setEndDate(endDate);
+    report.setDataValues(getDiscardedComponentsDataValues(processingSiteId, startDate, endDate));
 
-    List<DiscardedComponentDTO> dtos = componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(processingSiteId, startDate, endDate);
+    return report;
+  }
+
+  private List<DataValue> getDiscardedComponentsDataValues(Long processingSiteId, Date startDate, Date endDate) {
+    List<DiscardedComponentDTO> dtos =
+        componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(processingSiteId, startDate, endDate);
+
     List<DataValue> dataValues = new ArrayList<>(dtos.size());
 
     for (DiscardedComponentDTO dto : dtos) {
@@ -56,8 +68,6 @@ public class DiscardedComponentReportGenerator {
       dataValues.add(dataValue);
     }
 
-    report.setDataValues(dataValues);
-
-    return report;
+    return dataValues;
   }
 }
