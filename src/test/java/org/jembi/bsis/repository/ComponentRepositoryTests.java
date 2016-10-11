@@ -18,6 +18,7 @@ import static org.jembi.bsis.helpers.builders.ComponentProductionDTOBuilder.aCom
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.matchers.ComponentProductionDTOMatcher.hasSameStateAsComponentProductionDTO;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -312,11 +313,12 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   }
   
   @Test
-  public void testFindProducedComponentsByProcessingSite_shouldReturnCorrectResults() {
+  public void testFindProducedComponentsByProcessingSite_shouldReturnCorrectResult() {
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().minusDays(2).toDate();
     
-    Location expectedVenue = aProcessingSite().withName("venue").buildAndPersist(entityManager);
+    Location processingSite1 = aProcessingSite().withName("processingSite1").buildAndPersist(entityManager);
+    Location processingSite2 = aProcessingSite().withName("processingSite2").buildAndPersist(entityManager);
     String expectedBloodAbo = "A";
     String expectedBloodRh = "+";
    
@@ -326,7 +328,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .buildAndPersist(entityManager);
     
     ComponentBatch componentBatch = aComponentBatch()
-        .withLocation(expectedVenue)
+        .withLocation(processingSite1)
         .buildAndPersist(entityManager);
     
     Donation donation = aDonation()
@@ -341,15 +343,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withComponentBatch(componentBatch)
         .withDonation(donation)
         .withCreatedOn(startDate)
-        .withLocation(expectedVenue)
-        .buildAndPersist(entityManager);
-    
-    aComponent()
-        .withComponentType(componentType)
-        .withComponentBatch(componentBatch)
-        .withCreatedOn(endDate)
-        .withDonation(donation)
-        .withLocation(expectedVenue)
+        .withLocation(processingSite1)
         .buildAndPersist(entityManager);
     
     // Excluded component by deletion
@@ -357,7 +351,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withComponentType(componentType)
         .withComponentBatch(componentBatch)
         .withDonation(donation)
-        .withLocation(expectedVenue)
+        .withLocation(processingSite1)
         .thatIsDeleted()
         .buildAndPersist(entityManager);
   
@@ -367,20 +361,28 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withComponentBatch(componentBatch)
         .withCreatedOn(new Date())
         .withDonation(donation)
-        .withLocation(expectedVenue)
+        .withLocation(processingSite2)
+        .buildAndPersist(entityManager);
+    
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withCreatedOn(endDate)
+        .withDonation(donation)
+        .withLocation(processingSite2)
         .buildAndPersist(entityManager);
     
     ComponentProductionDTO expectedDTO =  aComponentProductionDTO() 
         .withComponentTypeName("type1")
         .withBloodAbo(expectedBloodAbo)
         .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
+        .withVenue(processingSite1)
         .withCount(2L)
         .build(); 
 
     List<ComponentProductionDTO> returnedDtos = componentRepository
         .findProducedComponentsByProcessingSite(
-            expectedVenue.getId(), startDate, endDate);
+            processingSite1.getId(), startDate, endDate);
      
     assertThat(returnedDtos.size(), is(1));
     assertThat(returnedDtos.get(0),hasSameStateAsComponentProductionDTO(expectedDTO));
@@ -459,11 +461,10 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   public void testFindProducedComponentsByProcessingSite_shouldReturnEmptyResults() {
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().minusDays(2).toDate();
-    
-    Location firstProcessingSite = aProcessingSite().withName("Pretoria").buildAndPersist(entityManager);
-    Location secondProcessingSite = aProcessingSite().withName("Cape Town").buildAndPersist(entityManager);
-    Location thirdProcessingSite = aProcessingSite().withName("Zulu land").buildAndPersist(entityManager);
-    
+    Date outOfRangeDate = new DateTime().plus(2).toDate();
+   
+    Location processingSite = aProcessingSite().withName("Pretoria").buildAndPersist(entityManager);
+  
     String expectedBloodAbo = "A";
     String expectedBloodRh = "+";
    
@@ -472,19 +473,11 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withCanBeIssued(true)
         .buildAndPersist(entityManager);
     
-    // Expected component batches
-    ComponentBatch componentBatchOne = aComponentBatch()
-        .withLocation(secondProcessingSite)
+    // Expected component batch
+    ComponentBatch componentBatch = aComponentBatch()
+        .withLocation(processingSite)
         .buildAndPersist(entityManager);
-    
-    ComponentBatch componentBatchTwo = aComponentBatch()
-        .withLocation(firstProcessingSite)
-        .buildAndPersist(entityManager);
-    
-    ComponentBatch componentBatchThree = aComponentBatch()
-        .withLocation(thirdProcessingSite)
-        .buildAndPersist(entityManager);
-   
+  
     Donation donation = aDonation()
         .withDonationDate(startDate)
         .withBloodAbo(expectedBloodAbo)
@@ -495,23 +488,23 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     // Excluded components by date range
     aComponent()
         .withComponentType(componentType)
-        .withComponentBatch(componentBatchOne)
+        .withComponentBatch(componentBatch)
         .withDonation(donation)
-        .withCreatedOn(new Date())
+        .withCreatedOn(outOfRangeDate)
         .buildAndPersist(entityManager);
     
     aComponent()
         .withComponentType(componentType)
-        .withComponentBatch(componentBatchTwo)
+        .withComponentBatch(componentBatch)
         .withDonation(donation)
-        .withCreatedOn(new Date())
+        .withCreatedOn(outOfRangeDate)
         .buildAndPersist(entityManager);
     
     aComponent()
         .withComponentType(componentType)
-        .withComponentBatch(componentBatchThree)
+        .withComponentBatch(componentBatch)
         .withDonation(donation)
-        .withCreatedOn(new Date())
+        .withCreatedOn(outOfRangeDate)
         .buildAndPersist(entityManager);
 
     List<ComponentProductionDTO> returnedDtos = componentRepository
@@ -519,5 +512,110 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
             null,startDate, endDate);
         
     assertThat(returnedDtos.size(), is(0));
+  }
+  
+  @Test
+  public void testFindProducedComponentsByProcessingSiteWithFalseCanBeIssued_shouldReturnEmptyResults() {
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().minusDays(2).toDate();
+
+    String expectedBloodAbo = "B";
+    String expectedBloodRh = "-";
+    
+    Location processingSite = aProcessingSite().withName("Pretoria").buildAndPersist(entityManager);
+    
+    ComponentBatch componentBatch = aComponentBatch()
+        .withLocation(processingSite)
+        .buildAndPersist(entityManager);
+    
+    ComponentType componentType = aComponentType()
+        .withComponentTypeName("type1")
+        .withCanBeIssued(false)
+        .buildAndPersist(entityManager);
+    
+    Donation donation = aDonation()
+        .withDonationDate(startDate)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withDonation(donation)
+        .withCreatedOn(startDate)
+        .buildAndPersist(entityManager);
+
+   aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withDonation(donation)
+        .withCreatedOn(endDate)
+        .buildAndPersist(entityManager);
+   
+   List<ComponentProductionDTO> returnedDtos = componentRepository
+       .findProducedComponentsByProcessingSite(
+           null,startDate, endDate);
+       
+   assertThat(returnedDtos.size(), is(0));
+  }
+  
+  @Test
+  public void testFindProducedComponentsByProcessingSiteWithDeletedComponents_shouldReturnEmptyResults() {
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().minusDays(2).toDate();
+
+    String expectedBloodAbo = "B";
+    String expectedBloodRh = "-";
+    
+    Location processingSite1 = aProcessingSite().withName("Pretoria").buildAndPersist(entityManager);
+    Location processingSite2 = aProcessingSite().withName("Cape Town").buildAndPersist(entityManager);
+    
+    ComponentBatch componentBatch1 = aComponentBatch()
+        .withLocation(processingSite1)
+        .buildAndPersist(entityManager);
+    
+    ComponentBatch componentBatch2 = aComponentBatch()
+        .withLocation(processingSite2)
+        .buildAndPersist(entityManager);
+    
+    ComponentType componentType = aComponentType()
+        .withComponentTypeName("type1")
+        .withCanBeIssued(true)
+        .buildAndPersist(entityManager);
+    
+    Donation donation = aDonation()
+        .withDonationDate(startDate)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    
+    // Components excluded by deletion
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch1)
+        .withDonation(donation)
+        .withCreatedOn(startDate)
+        .withLocation(processingSite1)
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+
+   aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch2)
+        .withDonation(donation)
+        .withCreatedOn(endDate)
+        .withLocation(processingSite2)
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+   
+   List<ComponentProductionDTO> returnedDtos = componentRepository
+       .findProducedComponentsByProcessingSite(
+           null,startDate, endDate);
+       
+   assertThat(returnedDtos.size(), is(0));
+    
   }
 }
