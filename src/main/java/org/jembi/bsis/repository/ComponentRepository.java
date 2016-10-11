@@ -168,13 +168,6 @@ public class ComponentRepository extends AbstractRepository<Component> {
   }
 
   public List<DiscardedComponentDTO> findSummaryOfDiscardedComponentsByProcessingSite(Long processingSiteId, Date starDate, Date endDate) {
-    if(processingSiteId == null){
-      return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SUMMARY_FOR_ALL_DISCARDED_COMPONENTS, DiscardedComponentDTO.class)
-          .setParameter("startDate", starDate)
-          .setParameter("endDate", endDate)
-          .getResultList();
-    }
-
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE, DiscardedComponentDTO.class)
         .setParameter("processingSiteId", processingSiteId)
         .setParameter("startDate", starDate)

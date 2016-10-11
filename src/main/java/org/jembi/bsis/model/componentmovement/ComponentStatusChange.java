@@ -21,8 +21,6 @@ import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.ComponentNamedQueryConstants;
 
 @NamedQueries({
-    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_SUMMARY_FOR_ALL_DISCARDED_COMPONENTS,
-        query = ComponentNamedQueryConstants.QUERY_FIND_SUMMARY_FOR_ALL_DISCARDED_COMPONENTS),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE,
         query = ComponentNamedQueryConstants.QUERY_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE)})
 @Entity
