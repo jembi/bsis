@@ -10,7 +10,7 @@ public class ComponentProductionDTO {
   private long count;
 
   public ComponentProductionDTO() {
-    super();
+   // default constructor
   }
   
   public ComponentProductionDTO(String componentTypeName, String bloodAbo, String bloodRh, Location venue, long count) {
@@ -37,6 +37,10 @@ public class ComponentProductionDTO {
   public long getCount() {
     return count;
   }
+  
+  public String getBloodRh() {
+    return bloodRh;
+  }
 
   public void setComponentTypeName(String componentTypeName) {
     this.componentTypeName = componentTypeName;
@@ -46,10 +50,6 @@ public class ComponentProductionDTO {
     this.bloodAbo = bloodAbo;
   }
  
-  public String getBloodRh() {
-    return bloodRh;
-  }
-
   public void setBloodRh(String bloodRh) {
     this.bloodRh = bloodRh;
   }

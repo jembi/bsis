@@ -72,6 +72,7 @@ public class ComponentNamedQueryConstants {
       + "LEFT JOIN c.statusChanges AS sc "
       + "WITH sc.isDeleted = :statusChangeDeleted "
       // Join to status change reason to find discarded
+      // I should lock my computer
       + "LEFT JOIN sc.statusChangeReason AS r "
       + "WITH r.category = :discarded "
       + "WHERE c.isDeleted = :componentDeleted "
@@ -83,10 +84,12 @@ public class ComponentNamedQueryConstants {
   public static final String QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
       "SELECT DISTINCT NEW org.jembi.bsis.dto.ComponentProductionDTO(c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh, cb.location, COUNT(c.id)) " 
       + "FROM Component AS c "
+      // use processing site which is where the component was processed
       + "LEFT JOIN c.componentBatch AS cb "
-      + "WHERE c.componentType.canBeIssued = TRUE AND c.donation.donationDate BETWEEN :startDate AND :endDate "
+      + "WHERE c.componentType.canBeIssued = TRUE AND c.createdOn BETWEEN :startDate AND :endDate "
       + "AND c.isDeleted = :deleted "
-      + "AND cb.location.id = :venueId OR :venueId = NULL "
+      //if processingSiteId is null, get all the sites otherwise fetch the provided processingSite
+      + "AND (cb.location.id = :venueId OR :venueId = NULL) "
       + "GROUP BY cb.location, c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
       + "ORDER BY cb.location, c.componentType.componentTypeName ASC";
 }
