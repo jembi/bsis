@@ -236,6 +236,7 @@ public class ComponentCRUDService {
           component.setStatus(ComponentStatus.QUARANTINED);
           component.setCreatedOn(donation.getDonationDate());
           component.setLocation(parentComponent.getLocation());
+          component.setComponentBatch(parentComponent.getComponentBatch());
 
           Calendar cal = Calendar.getInstance();
           Date createdOn = cal.getTime();
