@@ -88,7 +88,7 @@ public class ComponentNamedQueryConstants {
       + "WHERE c.componentType.canBeIssued = TRUE AND c.createdOn BETWEEN :startDate AND :endDate "
       + "AND c.isDeleted = :deleted "
       //if processingSiteId is null, get all the sites otherwise fetch the provided processingSite
-      + "AND (cb.location.id = :venueId OR :venueId = NULL) "
+      + "AND (cb.location.id = :processingSiteId OR :processingSiteId = NULL) "
       + "GROUP BY cb.location, c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
       + "ORDER BY cb.location, c.componentType.componentTypeName ASC";
 }
