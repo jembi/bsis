@@ -25,13 +25,12 @@ public class DiscardedComponentReportGenerator {
    *
    * @return The report.
    */
-  public Report generateDiscardedComponents(Long venueId, Date startDate, Date endDate) {
+  public Report generateDiscardedComponents(Long processingSiteId, Date startDate, Date endDate) {
     Report report = new Report();
     report.setStartDate(startDate);
     report.setEndDate(endDate);
 
-    List<DiscardedComponentDTO> dtos = componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(venueId, startDate, endDate);
-
+    List<DiscardedComponentDTO> dtos = componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(processingSiteId, startDate, endDate);
     List<DataValue> dataValues = new ArrayList<>(dtos.size());
 
     for (DiscardedComponentDTO dto : dtos) {
@@ -49,7 +48,7 @@ public class DiscardedComponentReportGenerator {
       dataValue.addCohort(componentTypeCohort);
 
       Cohort statusChangeReasonCohort = new Cohort();
-      statusChangeReasonCohort.setCategory(CohortConstants.STATUS_CHANGE_REASON_CATEGORY);
+      statusChangeReasonCohort.setCategory(CohortConstants.DISCARD_REASON_CATEGORY);
       statusChangeReasonCohort.setComparator(Comparator.EQUALS);
       statusChangeReasonCohort.setOption(dto.getComponentStatusChangeReason());
       dataValue.addCohort(statusChangeReasonCohort);
