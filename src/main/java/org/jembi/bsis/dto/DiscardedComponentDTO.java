@@ -1,10 +1,8 @@
-  package org.jembi.bsis.dto;
-
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
-import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.location.Location;
+package org.jembi.bsis.dto;
 
 import java.util.Objects;
+
+import org.jembi.bsis.model.location.Location;
 
 public class DiscardedComponentDTO {
 
