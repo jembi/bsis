@@ -77,6 +77,19 @@ public class ComponentNamedQueryConstants {
       + "WHERE c.isDeleted = :componentDeleted "
       // Sort by created date then status change reason with nulls last so that discards come first
       + "ORDER BY c.modificationTracker.createdDate ASC, r.statusChangeReason ASC NULLS LAST ";
+
+  public static final String NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE =
+      "Component.findDiscardedComponentsByVenue";
+  public static final String QUERY_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE =
+      "select DISTINCT new org.jembi.bsis.dto.DiscardedComponentDTO(s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, s.component.componentBatch.location, count(s.component)) " +
+      "from ComponentStatusChange AS s " +
+      "where s.component.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
+      "and (s.component.componentBatch.location.id = :processingSiteId OR :processingSiteId = NULL) " +
+      "and s.isDeleted = false " +
+      "and s.component.componentBatch IS NOT NULL " +
+      "and s.statusChangedOn BETWEEN :startDate AND :endDate " +
+      "group by s.component.componentBatch.location, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
+      "order by s.component.componentBatch.location, s.component.componentType.componentTypeName desc ";
   
   public static final String NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
       "Component.findProducedComponentsByProcessingSite";
