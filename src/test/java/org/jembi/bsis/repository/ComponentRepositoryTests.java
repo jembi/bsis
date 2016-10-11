@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
@@ -307,7 +308,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void testFindSummaryOfDiscardedComponentsByProcessingSite() {
+  public void testFindSummaryOfDiscardedComponentsByProcessingSite_shouldIncludeCorrectData() {
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().plusDays(8).toDate();
 
@@ -339,12 +340,21 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withComponentBatch(componentBatch)
         .withStatus(expectedComponentStatus)
         .buildAndPersist(entityManager);
+    Component componentWithStatusAvailable = aComponent()
+        .withComponentType(componentType1)
+        .withComponentBatch(componentBatch)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .buildAndPersist(entityManager);
+    Component componentWithNoComponentBatch = aComponent()
+        .withComponentType(componentType2)
+        .withStatus(expectedComponentStatus)
+        .buildAndPersist(entityManager);
     Component component2 = aComponent()
         .withComponentType(componentType2)
         .withComponentBatch(componentBatch)
         .withStatus(expectedComponentStatus)
         .buildAndPersist(entityManager);
-      ComponentStatusChange componentStatusChange1 = aComponentStatusChange()
+    ComponentStatusChange componentStatusChange1 = aComponentStatusChange()
         .withStatusChangeReason(discardReason1)
         .withNewStatus(expectedComponentStatus)
         .withStatusChangedOn(new Date())
@@ -357,24 +367,41 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withStatusChangedOn(new Date())
         .buildAndPersist(entityManager);
 
-    // Excluded issued status change reason
+    // Excluded by date out of range
     aComponentStatusChange()
         .withComponent(component1)
-        .withStatusChangeReason(aComponentStatusChangeReason()
-                .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.SPLIT)
-                .withStatusChangeReason("Split")
-                .build())
+        .withStatusChangeReason(discardReason1)
+        .withStatusChangedOn(new DateTime().minusDays(9).toDate())
+        .buildAndPersist(entityManager);
+
+    // Excluded by ComponentStatus AVAILABLE
+    aComponentStatusChange()
+        .withComponent(componentWithStatusAvailable)
+        .withStatusChangeReason(discardReason2)
+        .buildAndPersist(entityManager);
+
+    // Excluded for it is deleted
+    aComponentStatusChange()
+        .withStatusChangeReason(discardReason1)
+        .withNewStatus(expectedComponentStatus)
+        .withStatusChangedOn(new Date())
+        .withComponent(component1)
         .thatIsDeleted()
         .buildAndPersist(entityManager);
 
-    // Excluded returned status change reason
+    // Excluded by newStatus AVAILABLE
     aComponentStatusChange()
-        .withComponent(component2)
-        .withStatusChangeReason(aComponentStatusChangeReason()
-                .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.RETURNED)
-                .withStatusChangeReason("Returned component")
-                .build())
-        .thatIsDeleted()
+        .withComponent(component1)
+        .withStatusChangeReason(discardReason1)
+        .withNewStatus(ComponentStatus.AVAILABLE)
+        .withStatusChangedOn(new Date())
+        .buildAndPersist(entityManager);
+
+      // Excluded by NULL component batch
+    aComponentStatusChange()
+        .withComponent(componentWithNoComponentBatch)
+        .withStatusChangeReason(discardReason1)
+        .withStatusChangedOn(new Date())
         .buildAndPersist(entityManager);
 
     List<DiscardedComponentDTO> expectedDtos = Arrays.asList(
@@ -393,14 +420,15 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     ); 
 
     List<DiscardedComponentDTO> returnedDtos = componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(
-        expectedProcessingSite.getId(), startDate, endDate);
+            expectedProcessingSite.getId(), startDate, endDate);
 
     assertThat(returnedDtos, is(expectedDtos));
     assertThat(returnedDtos.get(0), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(0)));
+    assertThat(returnedDtos.get(1), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(1)));
   }
 
   @Test
-  public void testFindfindSummaryOfDiscardedComponentsByVenue_shouldReturnCorrectCounts() {
+  public void testFindfindSummaryOfDiscardedComponentsByProcessingSite_shouldReturnCorrectCounts() {
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().plusDays(8).toDate();
 
@@ -443,16 +471,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withStatus(expectedComponentStatus)
         .buildAndPersist(entityManager);
 
-    // Excluded for it is deleted
-    aComponentStatusChange()
-        .withStatusChangeReason(discardReason1)
-        .withNewStatus(expectedComponentStatus)
-        .withStatusChangedOn(new Date())
-        .withComponent(component1)
-        .thatIsDeleted()
-        .buildAndPersist(entityManager);
-
-    // Expect
+    // Expected
     aComponentStatusChange()
         .withStatusChangeReason(discardReason1)
         .withNewStatus(expectedComponentStatus)
@@ -490,6 +509,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         expectedProcessingSite.getId(), startDate, endDate);
 
     assertThat(returnedDtos, is(expectedDtos));
+    assertThat(returnedDtos.get(0), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(0)));
     assertThat(returnedDtos.get(1), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(1)));
   }
 
@@ -537,16 +557,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withStatus(expectedComponentStatus)
         .buildAndPersist(entityManager);
 
-    // Excluded for it is deleted
-    aComponentStatusChange()
-        .withStatusChangeReason(discardReason1)
-        .withNewStatus(expectedComponentStatus)
-        .withStatusChangedOn(new Date())
-        .withComponent(component1)
-        .thatIsDeleted()
-        .buildAndPersist(entityManager);
-
-    // Expect
+    // Expected
     aComponentStatusChange()
         .withStatusChangeReason(discardReason1)
         .withNewStatus(expectedComponentStatus)
@@ -578,6 +589,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         null, startDate, endDate);
 
     assertThat(returnedDtos, is(expectedDtos));
+    assertThat(returnedDtos.get(0), hasSameStateAsDiscardedComponentDTO(returnedDtos.get(0)));
     assertThat(returnedDtos.get(1), hasSameStateAsDiscardedComponentDTO(expectedDtos.get(1)));
-    }
+  }
 }
