@@ -51,7 +51,7 @@ public class DiscardReasonController {
   public Map<String, Object> getDiscardReasons() {
     Map<String, Object> map = new HashMap<String, Object>();
     List<DiscardReasonViewModel> discardReasons = componentStatusChangeReasonFactory
-        .createDiscardReasonViewModels(discardReasonRepository.getAllDiscardReasons());
+        .createDiscardReasonViewModels(discardReasonRepository.getAllDiscardReasons(true));
     map.put("allDiscardReasons", discardReasons);
     return map;
   }

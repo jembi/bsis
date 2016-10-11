@@ -21,13 +21,14 @@ public class DiscardReasonRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public List<ComponentStatusChangeReason> getAllDiscardReasons() {
+  public List<ComponentStatusChangeReason> getAllDiscardReasons(Boolean includeDeleted) {
     TypedQuery<ComponentStatusChangeReason> query;
-    query = em.createQuery("SELECT p from ComponentStatusChangeReason p WHERE p.category = :category", ComponentStatusChangeReason.class);
+    query = em.createQuery("SELECT p from ComponentStatusChangeReason p WHERE (:includeDeleted = TRUE OR p.isDeleted = FALSE) AND p.category = :category", ComponentStatusChangeReason.class);
     query.setParameter("category", ComponentStatusChangeReasonCategory.DISCARDED);
+    query.setParameter("includeDeleted", includeDeleted);
     return query.getResultList();
   }
-
+  
   public ComponentStatusChangeReason findDiscardReason(String reason) {
     String queryString = "SELECT p FROM ComponentStatusChangeReason p WHERE p.statusChangeReason = :reason AND p.category = :category";
     TypedQuery<ComponentStatusChangeReason> query = em.createQuery(queryString, ComponentStatusChangeReason.class);

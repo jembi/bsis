@@ -55,8 +55,8 @@ public class ReportsControllerService {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
   }
   
-  public List<DiscardReasonViewModel> getAllDiscardReasons() {
-    return componentStatusChangeReasonFactory.createDiscardReasonViewModels(discardReasonRepository.getAllDiscardReasons());
+  public List<DiscardReasonViewModel> getAllDiscardReasons(Boolean includeDeleted) {
+    return componentStatusChangeReasonFactory.createDiscardReasonViewModels(discardReasonRepository.getAllDiscardReasons(includeDeleted));
   }
   
   public List<LocationViewModel> getDistributionSites() {
