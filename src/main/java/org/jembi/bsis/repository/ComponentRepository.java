@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.dto.ComponentExportDTO;
+import org.jembi.bsis.dto.ComponentProductionDTO;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
@@ -165,4 +166,14 @@ public class ComponentRepository extends AbstractRepository<Component> {
      */
     return new LinkedHashSet<>(componentExportDTOs);
   }
+  
+  public List<ComponentProductionDTO> findProducedComponentsByProcessingSite(Long processingSiteId, Date startDate, Date endDate) {
+    return em.createNamedQuery(
+        ComponentNamedQueryConstants.NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE, ComponentProductionDTO.class)
+        .setParameter("processingSiteId", processingSiteId)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("deleted",false)
+        .getResultList();
+  } 
 }

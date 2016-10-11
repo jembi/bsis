@@ -55,7 +55,8 @@
   <include file="./src/main/resources/liquibase/updates/1667-assign-division-permissions-to-required-roles.xml" />
   <include file="./src/main/resources/liquibase/updates/1598-mobile-clinic-export-report-for-all-locations.xml" />
   <include file="./src/main/resources/liquibase/updates/1597-add-contains-plasma.xml" />
-  <include file="./src/main/resources/liquibase/updates/1666-add-new-component-types.xml" /> 
+  <include file="./src/main/resources/liquibase/updates/1666-add-new-component-types.xml" />
+  <include file="./src/main/resources/liquibase/updates/1723-component-produced-by-componentType-report.xml" />
   <include file="./src/main/resources/liquibase/updates/1669-pending-tests-improvements.xml" />
   <include file="./src/main/resources/liquibase/updates/1717-add-manage-divisions-and-adverse-events-permissions.xml" />
 </databaseChangeLog>
