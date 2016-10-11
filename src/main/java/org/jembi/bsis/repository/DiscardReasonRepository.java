@@ -23,7 +23,7 @@ public class DiscardReasonRepository {
 
   public List<ComponentStatusChangeReason> getAllDiscardReasons(Boolean includeDeleted) {
     TypedQuery<ComponentStatusChangeReason> query;
-    query = em.createQuery("SELECT p from ComponentStatusChangeReason p WHERE (:includeDeleted=true OR p.isDeleted = false) AND p.category = :category", ComponentStatusChangeReason.class);
+    query = em.createQuery("SELECT p from ComponentStatusChangeReason p WHERE (:includeDeleted = TRUE OR p.isDeleted = FALSE) AND p.category = :category", ComponentStatusChangeReason.class);
     query.setParameter("category", ComponentStatusChangeReasonCategory.DISCARDED);
     query.setParameter("includeDeleted", includeDeleted);
     return query.getResultList();
