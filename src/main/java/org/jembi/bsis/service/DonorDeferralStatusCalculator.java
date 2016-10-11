@@ -35,7 +35,7 @@ public class DonorDeferralStatusCalculator {
     for (BloodTestResult bloodTestResult : bloodTestResults) {
 
       BloodTest bloodTest = bloodTestResult.getBloodTest();
-      if (bloodTest.getBloodTestType() == BloodTestType.CONFIRMATORY_TTI) {
+      if (BloodTestType.isPendingTTI(bloodTest.getBloodTestType())) {
 
         List<String> positiveBloodTestResults = Arrays.asList(bloodTest.getPositiveResults().split(","));
         if (positiveBloodTestResults.contains(bloodTestResult.getResult())) {
@@ -49,12 +49,12 @@ public class DonorDeferralStatusCalculator {
     return generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_REPEAT_OUTCOMES);
   }
 
-  public boolean isDonorCurrentlyDeferred(Donor donor) {
-    return donorDeferralRepository.countCurrentDonorDeferralsForDonor(donor) > 0;
+  public boolean isDonorCurrentlyDeferred(long donorId) {
+    return donorDeferralRepository.countCurrentDonorDeferralsForDonor(donorId) > 0;
   }
 
-  public boolean isDonorDeferredOnDate(Donor donor, Date date) {
-    return donorDeferralRepository.countDonorDeferralsForDonorOnDate(donor, date) > 0;
+  public boolean isDonorDeferredOnDate(long donorId, Date date) {
+    return donorDeferralRepository.countDonorDeferralsForDonorOnDate(donorId, date) > 0;
   }
 
 }

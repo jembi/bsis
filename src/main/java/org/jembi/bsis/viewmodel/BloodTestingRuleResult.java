@@ -24,7 +24,11 @@ public class BloodTestingRuleResult {
 
   private List<String> pendingBloodTypingTestsIds;
 
-  private List<String> pendingTTITestsIds;
+  private List<String> pendingConfirmatoryTTITestsIds;
+
+  private List<String> pendingRepeatTTITestsIds;
+
+  private List<String> pendingRepeatAndConfirmatoryTtiTestsIds;
 
   private Map<String, String> availableTestResults;
 
@@ -156,12 +160,32 @@ public class BloodTestingRuleResult {
     this.ttiStatus = ttiStatus;
   }
 
-  public List<String> getPendingTTITestsIds() {
-    return pendingTTITestsIds;
+  public List<String> getPendingConfirmatoryTTITestsIds() {
+    return pendingConfirmatoryTTITestsIds;
   }
 
-  public void setPendingTTITestsIds(List<String> pendingTTITestsIds) {
-    this.pendingTTITestsIds = pendingTTITestsIds;
+  public void setPendingConfirmatoryTTITestsIds(List<String> pendingConfirmatoryTTITestsIds) {
+    this.pendingConfirmatoryTTITestsIds = pendingConfirmatoryTTITestsIds;
+  }
+
+  public List<String> getPendingRepeatTTITestsIds() {
+    return pendingRepeatTTITestsIds;
+  }
+
+  public void setPendingRepeatTTITestsIds(List<String> pendingRepeatTTITestsIds) {
+    this.pendingRepeatTTITestsIds = pendingRepeatTTITestsIds;
+  }
+
+  public List<String> getPendingRepeatAndConfirmatoryTtiTestsIds() {
+    return pendingRepeatAndConfirmatoryTtiTestsIds;
+  }
+
+  public void addPendingRepeatAndConfirmatoryTtiTestsIds(String pendingRepeatAndConfirmatoryTtiTestsIds) {
+    this.pendingRepeatAndConfirmatoryTtiTestsIds.add(pendingRepeatAndConfirmatoryTtiTestsIds);
+  }
+
+  public void setPendingRepeatAndConfirmatoryTtiTestsIds(List<String> pendingRepeatAndConfirmatoryTtiTestsIds) {
+    this.pendingRepeatAndConfirmatoryTtiTestsIds = pendingRepeatAndConfirmatoryTtiTestsIds;
   }
 
   public boolean getAboUninterpretable() {

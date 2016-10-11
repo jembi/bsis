@@ -78,8 +78,14 @@ public class BloodTestingRuleResultSet {
   /* collection of the Rh tests that are still outstanding */
   private List<String> pendingRhTestsIds = new ArrayList<String>();
 
-  /* collection of the TTI tests that are still outstanding */
-  private List<String> pendingTtiTestsIds = new ArrayList<String>();
+  /* collection of the TTI Confirmatory tests that are still outstanding */
+  private List<String> pendingConfirmatoryTtiTestsIds = new ArrayList<String>();
+
+  /* collection of the TTI Repeat tests that are still outstanding */
+  private List<String> pendingRepeatTtiTestsIds = new ArrayList<String>();
+
+  /* collection of the TTI Repeat and Confimatory tests that are still outstanding */
+  private List<String> pendingRepeatAndConfirmatoryTtiTestsIds = new ArrayList<String>();
 
   /* collection of the TTI and Serology tests that have been done */
   private List<BloodTestingRule> bloodTestingRules = new ArrayList<BloodTestingRule>();
@@ -228,12 +234,28 @@ public class BloodTestingRuleResultSet {
     this.pendingRhTestsIds.add(pendingRhTestsId);
   }
 
-  public List<String> getPendingTtiTestsIds() {
-    return pendingTtiTestsIds;
+  public List<String> getPendingConfirmatoryTtiTestsIds() {
+    return pendingConfirmatoryTtiTestsIds;
   }
 
-  public void addPendingTtiTestsIds(String pendingTtiTestsId) {
-    this.pendingTtiTestsIds.add(pendingTtiTestsId);
+  public void addPendingConfirmatoryTtiTestsIds(String pendingConfirmatoryTtiTestsIds) {
+    this.pendingConfirmatoryTtiTestsIds.add(pendingConfirmatoryTtiTestsIds);
+  }
+
+  public List<String> getPendingRepeatTtiTestsIds() {
+    return pendingRepeatTtiTestsIds;
+  }
+
+  public void addPendingRepeatTtiTestsIds(String pendingRepeatTtiTestsId) {
+    this.pendingRepeatTtiTestsIds.add(pendingRepeatTtiTestsId);
+  }
+
+  public List<String> getPendingRepeatAndConfirmatoryTtiTestsIds() {
+    return pendingRepeatAndConfirmatoryTtiTestsIds;
+  }
+
+  public void addPendingRepeatAndConfirmatoryTtiTestsIds(String pendingRepeatAndConfirmatoryTtiTestsIds) {
+    this.pendingRepeatAndConfirmatoryTtiTestsIds.add(pendingRepeatAndConfirmatoryTtiTestsIds);
   }
 
   public Map<String, String> getStoredTestResults() {
@@ -291,8 +313,16 @@ public class BloodTestingRuleResultSet {
   }
 
 
-  public void setPendingTtiTestsIds(List<String> pendingTtiTestsIds) {
-    this.pendingTtiTestsIds = pendingTtiTestsIds;
+  public void setPendingConfirmatoryTtiTestsIds(List<String> pendingConfirmatoryTtiTestsIds) {
+    this.pendingConfirmatoryTtiTestsIds = pendingConfirmatoryTtiTestsIds;
+  }
+
+  public void setPendingRepeatTtiTestsIds(List<String> pendingRepeatTtiTestsIds) {
+    this.pendingRepeatTtiTestsIds = pendingRepeatTtiTestsIds;
+  }
+
+  public void setPendingRepeatAndConfirmatoryTtiTestsIds(List<String> pendingRepeatAndConfirmatoryTtiTestsIds) {
+    this.pendingRepeatAndConfirmatoryTtiTestsIds = pendingRepeatAndConfirmatoryTtiTestsIds;
   }
 
   public List<BloodTestingRule> getBloodTestingRules() {
