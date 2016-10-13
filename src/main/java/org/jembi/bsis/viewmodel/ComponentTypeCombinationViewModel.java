@@ -2,30 +2,12 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.List;
 
-public class ComponentTypeCombinationViewModel {
-  
-  private Long id;
-  private String combinationName;
-  List<ComponentTypeViewModel> componentTypes;
-  
-  public Long getId() {
-    return this.id;
-  }
+public class ComponentTypeCombinationViewModel extends ComponentTypeCombinationSearchViewModel {
 
-  public String getCombinationName() {
-    return this.combinationName;
-  }
+  List<ComponentTypeViewModel> componentTypes;
 
   public List<ComponentTypeViewModel> getComponentTypes() {
     return componentTypes;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public void setCombinationName(String combinationName) {
-    this.combinationName = combinationName;
   }
   
   public void setComponentTypes(List<ComponentTypeViewModel> componentTypes) {
