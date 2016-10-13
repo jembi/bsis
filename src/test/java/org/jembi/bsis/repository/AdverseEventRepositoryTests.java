@@ -8,6 +8,7 @@ import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.DonorsAdverseEventsDTOBuilder.aDonorsAdverseEventsDTO;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+import static org.jembi.bsis.helpers.matchers.DonorsAdverseEventsDTOMatcher.hasSameStateAsDonorsAdverseEventsDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -194,10 +195,10 @@ public class AdverseEventRepositoryTests extends ContextDependentTestSuite {
 
     // verify results
     assertThat("Correct number of DTOs are returned", dtos.size(), is(4));
-    assertThat("Correct DTO returned", dtos.contains(dtoAVenueSomething));
-    assertThat("Correct DTO returned", dtos.contains(dtoAVenueSomethingReallyBad));
-    assertThat("Correct DTO returned", dtos.contains(dtoBVenueSomething));
-    assertThat("Correct DTO returned", dtos.contains(dtoBVenueSomethingReallyBad));
+    assertThat("Correct DTO returned", dtos.get(0), hasSameStateAsDonorsAdverseEventsDTO(dtoBVenueSomething));
+    assertThat("Correct DTO returned", dtos.get(1), hasSameStateAsDonorsAdverseEventsDTO(dtoBVenueSomethingReallyBad));
+    assertThat("Correct DTO returned", dtos.get(2), hasSameStateAsDonorsAdverseEventsDTO(dtoAVenueSomethingReallyBad));
+    assertThat("Correct DTO returned", dtos.get(3), hasSameStateAsDonorsAdverseEventsDTO(dtoAVenueSomething));
   }
 
   @Test
@@ -291,7 +292,7 @@ public class AdverseEventRepositoryTests extends ContextDependentTestSuite {
 
     // verify results
     assertThat("Correct number of DTOs are returned", dtos.size(), is(2));
-    assertThat("Correct DTO returned", dtos.contains(dtoBVenueSomething));
-    assertThat("Correct DTO returned", dtos.contains(dtoBVenueSomethingReallyBad));
+    assertThat("Correct DTO returned", dtos.get(0), hasSameStateAsDonorsAdverseEventsDTO(dtoBVenueSomething));
+    assertThat("Correct DTO returned", dtos.get(1), hasSameStateAsDonorsAdverseEventsDTO(dtoBVenueSomethingReallyBad));
   }
 }
