@@ -4,16 +4,18 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
   logicalFilePath="./liquibase/updates/1452-add-componentsContainingPlasmaForDiscard-to-bloodTest.xml">
 
-	<changeSet id="20161010-1429" author="tmvumbi2">
+	<changeSet id="20161010-1417" author="tmvumbi2">
+		<comment>Add flagComponentsContainingPlasmaForDiscard column to table BloodTest with default value = 0</comment>
 		<addColumn tableName="BloodTest">
-			<column name="flagComponentsContainingPlasmaForDiscard" type="TINYINT(1)" defaultValue="1">
+			<column name="flagComponentsContainingPlasmaForDiscard" type="TINYINT(1)" defaultValue="0">
 				<constraints nullable="0" />
 			</column>
 		</addColumn>
+		<comment>Set flagComponentsContainingPlasmaForDiscard = 1 for AbScr tests (id=33)</comment>
 		<sql>
-			UPDATE BloodTest bt 
+			UPDATE BloodTest bt
 			SET bt.flagComponentsContainingPlasmaForDiscard = 1 
-			WHERE bt.flagComponentsContainingPlasmaForDiscard IS NULL;
+			WHERE bt.id = 33;
 		</sql>
 	</changeSet>
 
