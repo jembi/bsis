@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.CohortBuilder.aCohort;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DataValueBuilder.aDataValue;
-import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.ReportBuilder.aReport;
 import static org.jembi.bsis.helpers.builders.StockLevelDTOBuilder.aStockLevelDTO;
 import static org.mockito.Mockito.when;
@@ -24,6 +24,7 @@ import org.jembi.bsis.model.reporting.DataValue;
 import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.repository.InventoryRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -61,9 +62,9 @@ public class StockLevelsReportGeneratorTests extends UnitTestSuite {
   
   @Test
   public void testReportSortDataValuesByVenue_shouldSortCorrectly() {
-    Location venue1 = aVenue().withName("venue1").build();
-    Location venue2 = aVenue().withName("venue2").build();
-    Location venue3 = aVenue().withName("venue3").build();
+    LocationViewModel venue1 = aLocationViewModel().withName("venue1").build();
+    LocationViewModel venue2 = aLocationViewModel().withName("venue2").build();
+    LocationViewModel venue3 = aLocationViewModel().withName("venue3").build();
     
     List<DataValue> dataValues = Arrays.asList(
         aDataValue().withVenue(venue1).build(),

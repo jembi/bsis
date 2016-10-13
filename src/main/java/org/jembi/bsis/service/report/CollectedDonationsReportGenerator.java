@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.CollectedDonationDTO;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.reporting.Cohort;
 import org.jembi.bsis.model.reporting.Comparator;
@@ -19,7 +20,10 @@ import org.springframework.stereotype.Service;
 public class CollectedDonationsReportGenerator {
 
   @Autowired
-  public DonationRepository donationRepository;
+  private DonationRepository donationRepository;
+
+  @Autowired
+  private LocationFactory locationFactory;
 
   /**
    * Report listing all donations collected within a selected date range by collection site,
@@ -42,7 +46,7 @@ public class CollectedDonationsReportGenerator {
       DataValue dataValue = new DataValue();
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setLocation(dto.getVenue());
+      dataValue.setLocation(locationFactory.createViewModel(dto.getVenue()));
       dataValue.setValue(dto.getCount());
 
       Cohort donationTypeCohort = new Cohort();

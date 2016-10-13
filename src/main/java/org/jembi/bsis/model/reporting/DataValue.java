@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.utils.DateTimeSerialiser;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -16,7 +16,7 @@ public class DataValue {
   private Date startDate;
   private Date endDate;
   private Object value;
-  private Location location;
+  private LocationViewModel location;
   private List<Cohort> cohorts;
 
   public String getId() {
@@ -53,11 +53,11 @@ public class DataValue {
     this.value = value;
   }
 
-  public Location getLocation() {
+  public LocationViewModel getLocation() {
     return location;
   }
 
-  public void setLocation(Location location) {
+  public void setLocation(LocationViewModel location) {
     this.location = location;
   }
 

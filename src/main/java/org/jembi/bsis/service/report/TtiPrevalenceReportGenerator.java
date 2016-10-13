@@ -7,6 +7,7 @@ import java.util.List;
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.BloodTestResultDTO;
 import org.jembi.bsis.dto.BloodTestTotalDTO;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.reporting.Cohort;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
@@ -20,7 +21,10 @@ public class TtiPrevalenceReportGenerator {
   
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
-  
+
+  @Autowired
+  private LocationFactory locationFactory;
+
   /**
    * Report listing TTI prevalence within a selected date range by collection site,
    * categorised by donor gender and blood test types.
@@ -52,7 +56,7 @@ public class TtiPrevalenceReportGenerator {
       DataValue dataValue = new DataValue();
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setLocation(dto.getVenue());
+      dataValue.setLocation(locationFactory.createViewModel(dto.getVenue()));
       dataValue.setValue(dto.getCount());
 
       Cohort bloodTestCohort = new Cohort();
@@ -88,7 +92,7 @@ public class TtiPrevalenceReportGenerator {
       dataValue.setId("totalUnitsTested");
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setLocation(dto.getVenue());
+      dataValue.setLocation(locationFactory.createViewModel(dto.getVenue()));
       dataValue.setValue(dto.getTotal());
 
       Cohort genderCohort = new Cohort();
@@ -111,7 +115,7 @@ public class TtiPrevalenceReportGenerator {
       dataValue.setId("totalUnsafeUnitsTested");
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setLocation(dto.getVenue());
+      dataValue.setLocation(locationFactory.createViewModel(dto.getVenue()));
       dataValue.setValue(dto.getTotal());
 
       Cohort genderCohort = new Cohort();

@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.builders.CohortBuilder.aCohort;
 import static org.jembi.bsis.helpers.builders.DataValueBuilder.aDataValue;
 import static org.jembi.bsis.helpers.builders.DiscardedComponentDTOBuilder.aDiscardedComponentDTO;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
+import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.ReportBuilder.aReport;
 import static org.mockito.Mockito.when;
 
@@ -16,12 +17,14 @@ import java.util.List;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.DiscardedComponentDTO;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
 import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -34,11 +37,15 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
   @Mock
   private ComponentRepository componentRepository;
 
+  @Mock
+  private LocationFactory locationFactory;
+
   @Test
   public void testgenerateDiscardedComponents() {
     Date startDate = new Date();
     Date endDate = new Date();
     Location processingSite = aProcessingSite().withId(1L).build();
+    LocationViewModel processingSiteViewModel = aLocationViewModel().withId(1L).build();
 
     List<DiscardedComponentDTO> discardedComponents = Arrays.asList(
         aDiscardedComponentDTO()
@@ -52,7 +59,7 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
         aDataValue()
           .withStartDate(startDate)
           .withEndDate(endDate)
-          .withVenue(processingSite)
+          .withVenue(processingSiteViewModel)
           .withValue(2L)
           .withCohort(aCohort()
               .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
@@ -74,6 +81,7 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
 
     when(componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(processingSite.getId(), startDate, endDate))
         .thenReturn(discardedComponents);
+    when(locationFactory.createViewModel(processingSite)).thenReturn(processingSiteViewModel);
 
     Report returnedReport =
         discardedComponentReportGenerator.generateDiscardedComponents(processingSite.getId(), startDate, endDate);
@@ -86,6 +94,8 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
     Date startDate = new Date();
     Date endDate = new Date();
     Location processingSite = aProcessingSite().withId(1L).build();
+    LocationViewModel processingSiteViewModel = aLocationViewModel().withId(1L).build();
+
     List<DiscardedComponentDTO> discardedComponents = Arrays.asList(
         aDiscardedComponentDTO()
           .withComponentStatusChangeReason("Storage Problems")
@@ -116,7 +126,7 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
         aDataValue()
           .withStartDate(startDate)
           .withEndDate(endDate)
-          .withVenue(processingSite)
+          .withVenue(processingSiteViewModel)
           .withValue(2L)
             .withCohort(aCohort()
                 .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
@@ -131,7 +141,7 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
         aDataValue()
           .withStartDate(startDate)
           .withEndDate(endDate)
-          .withVenue(processingSite)
+          .withVenue(processingSiteViewModel)
           .withValue(3L)
           .withCohort(aCohort()
               .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
@@ -147,7 +157,7 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
         aDataValue()
           .withStartDate(startDate)
           .withEndDate(endDate)
-          .withVenue(processingSite)
+          .withVenue(processingSiteViewModel)
           .withValue(4L)
             .withCohort(aCohort().withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
                 .withComparator(Comparator.EQUALS).withOption("Whole Blood Poor Platelets - CPDA").build())
@@ -157,7 +167,7 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
         aDataValue()
           .withStartDate(startDate)
           .withEndDate(endDate)
-          .withVenue(processingSite)
+          .withVenue(processingSiteViewModel)
           .withValue(5L)
             .withCohort(aCohort().withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
                 .withComparator(Comparator.EQUALS).withOption("Packed Red Cells - CPDA").build())
@@ -173,6 +183,7 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
 
     when(componentRepository.findSummaryOfDiscardedComponentsByProcessingSite(processingSite.getId(), startDate, endDate))
         .thenReturn(discardedComponents);
+    when(locationFactory.createViewModel(processingSite)).thenReturn(processingSiteViewModel);
 
     Report returnedReport =
         discardedComponentReportGenerator.generateDiscardedComponents(processingSite.getId(), startDate, endDate);

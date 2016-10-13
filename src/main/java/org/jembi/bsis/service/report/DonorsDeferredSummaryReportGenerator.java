@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.DeferredDonorsDTO;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.reporting.Cohort;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
@@ -19,6 +20,9 @@ public class DonorsDeferredSummaryReportGenerator {
   
   @Autowired
   private DonorDeferralRepository donorDeferralRepository;
+
+  @Autowired
+  private LocationFactory locationFactory;
   
   public Report generateDonorDeferralSummaryReport(Date startDate, Date endDate) {
     Report report = new Report();
@@ -40,7 +44,7 @@ public class DonorsDeferredSummaryReportGenerator {
       DataValue dataValue = new DataValue();
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setLocation(dto.getVenue());
+      dataValue.setLocation(locationFactory.createViewModel(dto.getVenue()));
       dataValue.setValue(dto.getCount());
 
       Cohort genderCohort = new Cohort();

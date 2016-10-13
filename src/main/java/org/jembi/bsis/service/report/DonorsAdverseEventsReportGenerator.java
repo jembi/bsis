@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.DonorsAdverseEventsDTO;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.reporting.Cohort;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
@@ -19,7 +20,10 @@ public class DonorsAdverseEventsReportGenerator {
   
   @Autowired
   private AdverseEventRepository adverseEventRepository;
-  
+
+  @Autowired
+  private LocationFactory locationFactory;
+
   public Report generateDonorsAdverseEventsReport(Long venueId, Date startDate, Date endDate) {
     Report report = new Report();
 
@@ -41,7 +45,7 @@ public class DonorsAdverseEventsReportGenerator {
       DataValue dataValue = new DataValue();
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setLocation(dto.getVenue());
+      dataValue.setLocation(locationFactory.createViewModel(dto.getVenue()));
       dataValue.setValue(dto.getCount());
 
       Cohort adverseEventCohort = new Cohort();

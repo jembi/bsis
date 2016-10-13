@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.reporting.Cohort;
 import org.jembi.bsis.model.reporting.DataValue;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 
 public class DataValueBuilder extends AbstractBuilder<DataValue> {
 
@@ -14,7 +14,7 @@ public class DataValueBuilder extends AbstractBuilder<DataValue> {
   private Date startDate;
   private Date endDate;
   private Object value;
-  private Location venue;
+  private LocationViewModel location;
   private List<Cohort> cohorts;
 
   public DataValueBuilder withId(String id) {
@@ -37,8 +37,8 @@ public class DataValueBuilder extends AbstractBuilder<DataValue> {
     return this;
   }
 
-  public DataValueBuilder withVenue(Location venue) {
-    this.venue = venue;
+  public DataValueBuilder withVenue(LocationViewModel location) {
+    this.location = location;
     return this;
   }
 
@@ -57,7 +57,7 @@ public class DataValueBuilder extends AbstractBuilder<DataValue> {
     dataValue.setStartDate(startDate);
     dataValue.setEndDate(endDate);
     dataValue.setValue(value);
-    dataValue.setLocation(venue);
+    dataValue.setLocation(location);
     dataValue.setCohorts(cohorts);
     return dataValue;
   }

@@ -1,7 +1,12 @@
 package org.jembi.bsis.service.report;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.ComponentProductionDTO;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.reporting.Cohort;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
@@ -10,15 +15,14 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 @Service
 public class ComponentProductionReportGenerator {
 
   @Autowired
-  public ComponentRepository componentRepository;
+  private ComponentRepository componentRepository;
+
+  @Autowired
+  private LocationFactory locationFactory;
 
   /**
    * Report summary of components produced within a selected date range by collection site,
@@ -56,7 +60,7 @@ public class ComponentProductionReportGenerator {
       DataValue dataValue = new DataValue();
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setLocation(dto.getVenue());
+      dataValue.setLocation(locationFactory.createViewModel(dto.getVenue()));
       dataValue.setValue(dto.getCount());
 
       Cohort componentTypeCohort = new Cohort();
