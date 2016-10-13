@@ -40,7 +40,7 @@ public class DonorsAdverseEventsReportGenerator {
       DataValue dataValue = new DataValue();
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setVenue(dto.getVenue());
+      dataValue.setLocation(dto.getVenue());
       dataValue.setValue(dto.getCount());
 
       Cohort adverseEventCohort = new Cohort();

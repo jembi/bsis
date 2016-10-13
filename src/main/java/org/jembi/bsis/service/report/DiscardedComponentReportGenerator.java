@@ -50,7 +50,7 @@ public class DiscardedComponentReportGenerator {
       DataValue dataValue = new DataValue();
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setVenue(dto.getVenue());
+      dataValue.setLocation(dto.getVenue());
       dataValue.setValue(dto.getCount());
 
       Cohort componentTypeCohort = new Cohort();

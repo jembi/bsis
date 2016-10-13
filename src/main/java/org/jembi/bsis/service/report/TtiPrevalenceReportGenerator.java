@@ -52,7 +52,7 @@ public class TtiPrevalenceReportGenerator {
       DataValue dataValue = new DataValue();
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setVenue(dto.getVenue());
+      dataValue.setLocation(dto.getVenue());
       dataValue.setValue(dto.getCount());
 
       Cohort bloodTestCohort = new Cohort();
@@ -88,7 +88,7 @@ public class TtiPrevalenceReportGenerator {
       dataValue.setId("totalUnitsTested");
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setVenue(dto.getVenue());
+      dataValue.setLocation(dto.getVenue());
       dataValue.setValue(dto.getTotal());
 
       Cohort genderCohort = new Cohort();
@@ -111,7 +111,7 @@ public class TtiPrevalenceReportGenerator {
       dataValue.setId("totalUnsafeUnitsTested");
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setVenue(dto.getVenue());
+      dataValue.setLocation(dto.getVenue());
       dataValue.setValue(dto.getTotal());
 
       Cohort genderCohort = new Cohort();

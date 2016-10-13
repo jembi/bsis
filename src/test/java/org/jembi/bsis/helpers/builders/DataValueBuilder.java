@@ -57,7 +57,7 @@ public class DataValueBuilder extends AbstractBuilder<DataValue> {
     dataValue.setStartDate(startDate);
     dataValue.setEndDate(endDate);
     dataValue.setValue(value);
-    dataValue.setVenue(venue);
+    dataValue.setLocation(venue);
     dataValue.setCohorts(cohorts);
     return dataValue;
   }
