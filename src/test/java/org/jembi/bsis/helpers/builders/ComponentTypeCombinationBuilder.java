@@ -32,6 +32,11 @@ public class ComponentTypeCombinationBuilder  extends AbstractEntityBuilder<Comp
     return this;
   }
   
+  public ComponentTypeCombinationBuilder thatIsNotDeleted() {
+    this.isDeleted = true;
+    return this;
+  }
+  
   @Override
   public ComponentTypeCombination build() {
     ComponentTypeCombination componentTypeCombination = new ComponentTypeCombination();
