@@ -73,11 +73,11 @@ public class DonorsAdverseEventsReportGeneratorTests extends UnitTestSuite {
         aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(4L).withVenue(venueA)
             .withCohort(somethingCohort)
             .build(),
+            aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(14L).withVenue(venueA)
+            .withCohort(somethingReallyBadCohort)
+            .build(),
         aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(1L).withVenue(venueB)
             .withCohort(somethingCohort)
-            .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(14L).withVenue(venueA)
-            .withCohort(somethingReallyBadCohort)
             .build(),
         aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(3L).withVenue(venueB)
             .withCohort(somethingReallyBadCohort)

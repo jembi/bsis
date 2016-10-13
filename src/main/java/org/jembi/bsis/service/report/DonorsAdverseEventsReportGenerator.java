@@ -26,6 +26,7 @@ public class DonorsAdverseEventsReportGenerator {
     report.setStartDate(startDate);
     report.setEndDate(endDate);
     report.setDataValues(getAdverseEventsDataValues(venueId, startDate, endDate));
+    report.sortDataValuesByVenue();
 
     return report;
   }
