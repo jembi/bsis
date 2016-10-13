@@ -29,4 +29,8 @@ public class ComponentTypeCombinationRepository {
     query = em.createQuery("select c from ComponentTypeCombination c left join fetch c.componentTypes left join fetch c.sourceComponentTypes", ComponentTypeCombination.class);
     return query.getResultList();
   }  
+
+  public ComponentTypeCombination findComponentTypeCombinationById(long id) {
+    return em.find(ComponentTypeCombination.class, id);
+  }
 }

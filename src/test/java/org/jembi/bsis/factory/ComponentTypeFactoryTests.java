@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.ComponentTypeSearchViewModelBuilder.aComponentTypeSearchViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentTypeSearchViewModelMatcher.hasSameStateAsComponentTypeSearchViewModel;
 
@@ -31,7 +32,7 @@ public class ComponentTypeFactoryTests {
 
   @Test
   public void testSingleFullComponentType_shouldReturnExpectedViewModel() {
-    ComponentTypeCombination producedComponentTypeCombination = new ComponentTypeCombination();
+    ComponentTypeCombination producedComponentTypeCombination = aComponentTypeCombination().withId(1L).build();
     ComponentType entity = ComponentTypeBuilder.aComponentType()
         .withId(1L)
         .withComponentTypeName("name")

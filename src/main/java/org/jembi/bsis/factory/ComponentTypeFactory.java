@@ -53,7 +53,7 @@ public class ComponentTypeFactory {
     ComponentTypeCombinationViewModel viewModel = new ComponentTypeCombinationViewModel();
     viewModel.setId(componentTypeCombination.getId());
     viewModel.setCombinationName(componentTypeCombination.getCombinationName());
-    viewModel.setComponentTypes(createViewModels(componentTypeCombination.getComponentTypes()));
+    viewModel.setIsDeleted(componentTypeCombination.getIsDeleted());
     return viewModel;
 
   }
