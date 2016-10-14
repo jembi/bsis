@@ -18,18 +18,31 @@ public class ComponentTypeCombinationRepositoryTests extends ContextDependentTes
   private ComponentTypeCombinationRepository componentTypeCombinationRepository;
     
   @Test
-  public void testGetAllComponentTypeCombinations_shouldAllNotDeletedEntities() {
-    // Excluded by deleted flag
-    
+  public void testGetAllComponentTypeCombinationsIncludingDeleted_shouldReturnAllEntities() { 
+    ComponentTypeCombination deletedComponentTypeCombination = aComponentTypeCombination()
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+
+    ComponentTypeCombination expectedComponentTypeCombinations = aComponentTypeCombination()
+        .withId(deletedComponentTypeCombination.getId())
+        .build();
+
+    List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(deletedComponentTypeCombination.getIsDeleted());
+
+    assertThat(returnedComponentTypeCombinations.size(), is(1));
+    assertThat(returnedComponentTypeCombinations.get(0), is(expectedComponentTypeCombinations));
+  }
+  
+  @Test
+  public void testGetAllComponentTypeCombinationsNotIncludingDeleted_shouldReturnNotDeletedEntities() {
     ComponentTypeCombination notDeletedComponentTypeCombination = aComponentTypeCombination()
-        .thatIsNotDeleted()
         .buildAndPersist(entityManager);
 
     ComponentTypeCombination expectedComponentTypeCombinations = aComponentTypeCombination()
         .withId(notDeletedComponentTypeCombination.getId())
         .build();
 
-    List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations();
+    List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(notDeletedComponentTypeCombination.getIsDeleted());
 
     assertThat(returnedComponentTypeCombinations.size(), is(1));
     assertThat(returnedComponentTypeCombinations.get(0), is(expectedComponentTypeCombinations));

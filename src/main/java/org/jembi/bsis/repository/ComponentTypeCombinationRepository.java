@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
+import org.jembi.bsis.repository.constant.ComponentTypeCombinationsQueryConstants;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,16 +18,10 @@ public class ComponentTypeCombinationRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public List<ComponentTypeCombination> getComponentTypeCombinations(Boolean isDeleted) {
+  public List<ComponentTypeCombination> getAllComponentTypeCombinations(Boolean includeDeleted) {
     TypedQuery<ComponentTypeCombination> query;
-    query = em.createQuery("select c from ComponentTypeCombination c left join fetch c.componentTypes left join fetch c.sourceComponentTypes  where c.isDeleted=:isDeleted", ComponentTypeCombination.class);
-    query.setParameter("isDeleted", isDeleted);
+    query = em.createNamedQuery(ComponentTypeCombinationsQueryConstants.NAME_FIND_COMPONENT_TYPE_COMBINATION, ComponentTypeCombination.class);
+    query.setParameter("includeDeleted", includeDeleted);
     return query.getResultList();
-  } 
-  
-  public List<ComponentTypeCombination> getAllComponentTypeCombinations() {
-    TypedQuery<ComponentTypeCombination> query;
-    query = em.createQuery("select c from ComponentTypeCombination c left join fetch c.componentTypes left join fetch c.sourceComponentTypes", ComponentTypeCombination.class);
-    return query.getResultList();
-  }  
+  }   
 }
