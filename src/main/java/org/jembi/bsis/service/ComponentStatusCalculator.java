@@ -46,6 +46,24 @@ public class ComponentStatusCalculator {
     return false;
   }
   
+  public boolean shouldComponentsBeDiscardedForTestResultsIfContainsPlasma(List<BloodTestResult> bloodTestResults) {
+    for (BloodTestResult bloodTestResult : bloodTestResults) {
+      BloodTest bloodTest = bloodTestResult.getBloodTest();
+      if (!bloodTest.getFlagComponentsContainingPlasmaForDiscard()) {
+        // The blood test does not flag components with plasma for discard
+        continue;
+      }
+      
+      List<String> positiveBloodTestResults = Arrays.asList(bloodTest.getPositiveResults().split(","));
+      if (positiveBloodTestResults.contains(bloodTestResult.getResult())) {
+        // The blood test result is positive and it flags components for discard
+        return true;
+      }
+    }
+    // There are no positive blood tests which flag components for discard if they contain plasma
+    return false;
+  }
+  
   /**
    * Determines if the Component should be flagged for discard.
    * 

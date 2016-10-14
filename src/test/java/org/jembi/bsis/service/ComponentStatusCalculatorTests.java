@@ -46,7 +46,64 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   private ComponentStatusCalculator componentStatusCalculator;
   @Mock
   private DonationRepository donationRepository;
+  
+  @Test
+  public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithPositiveResult_shouldReturnTrue(){
+    List<BloodTestResult> bloodTestResults = Arrays.asList(
+        aBloodTestResult()
+            .withId(9L)
+            .withResult("POS")
+            .withBloodTest(aBloodTest()
+                .withFlagComponentsForDiscard(false)
+                .withFlagComponentsContainingPlasmaForDiscard(true)
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
+    );
+    
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResultsIfContainsPlasma(bloodTestResults);
+    
+    assertThat(result, is(true));
+  }
+  
+  @Test
+  public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithNegativeResult_shouldReturnFalse(){
+    List<BloodTestResult> bloodTestResults = Arrays.asList(
+        aBloodTestResult()
+            .withId(9L)
+            .withResult("NEG")
+            .withBloodTest(aBloodTest()
+                .withFlagComponentsForDiscard(false)
+                .withFlagComponentsContainingPlasmaForDiscard(true)
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
+    );
+    
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResultsIfContainsPlasma(bloodTestResults);
+    
+    assertThat(result, is(false));
+  }  
 
+  @Test
+  public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithAllBloodTestResultsNotContainingPlasma_shouldReturnFalse(){
+    List<BloodTestResult> bloodTestResults = Arrays.asList(
+        aBloodTestResult()
+            .withId(9L)
+            .withResult("POS")
+            .withBloodTest(aBloodTest()
+                .withFlagComponentsForDiscard(false)
+                .withFlagComponentsContainingPlasmaForDiscard(false)
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
+    );
+    
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResultsIfContainsPlasma(bloodTestResults);
+    
+    assertThat(result, is(false));
+  }
+  
   @Test
   public void testShouldComponentsBeDiscardedForTestResultsWithBloodTestNotFlaggedForDiscard_shouldReturnFalse() {
 
