@@ -5,8 +5,10 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationViewModelBuilder.aComponentTypeCombinationViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeSearchViewModelBuilder.aComponentTypeSearchViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentTypeSearchViewModelMatcher.hasSameStateAsComponentTypeSearchViewModel;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
+import org.jembi.bsis.viewmodel.ComponentTypeCombinationViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeSearchViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
@@ -22,6 +25,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,6 +33,8 @@ public class ComponentTypeFactoryTests {
 
   @InjectMocks
   private ComponentTypeFactory componentTypeFactory;
+  @Mock
+  private ComponentTypeCombinationFactory componentTypeCombinationFactory;
 
   @Test
   public void testSingleFullComponentType_shouldReturnExpectedViewModel() {
@@ -47,6 +53,11 @@ public class ComponentTypeFactoryTests {
         .withStorageInfo("storageInfo")
         .withCanBeIssued(false)
         .build();
+
+    ComponentTypeCombinationViewModel combinationViewModel = aComponentTypeCombinationViewModel().withId(1L).build();
+
+    when(componentTypeCombinationFactory.createViewModels(Arrays.asList(producedComponentTypeCombination)))
+        .thenReturn(Arrays.asList(combinationViewModel));
 
     ComponentTypeFullViewModel viewModel = componentTypeFactory.createFullViewModel(entity);
     
