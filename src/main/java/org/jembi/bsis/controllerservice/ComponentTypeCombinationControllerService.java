@@ -21,7 +21,7 @@ public class ComponentTypeCombinationControllerService {
   private ComponentTypeCombinationFactory componentTypeCombinationFactory;
 
   public List<ComponentTypeCombinationViewModel> getComponentTypeCombinations(boolean includeDeleted) {
-    return componentTypeCombinationFactory.createViewModels(componentTypeCombinationRepository.getComponentTypeCombinations(includeDeleted));
+    return componentTypeCombinationFactory.createViewModels(componentTypeCombinationRepository.getAllComponentTypeCombinations(includeDeleted));
   }
 
   public ComponentTypeCombinationViewModel findComponentTypeCombinationById(long id){
