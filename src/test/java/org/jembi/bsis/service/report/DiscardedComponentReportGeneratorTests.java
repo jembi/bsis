@@ -94,7 +94,7 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
     Date startDate = new Date();
     Date endDate = new Date();
     Location processingSite = aProcessingSite().withId(1L).build();
-    LocationViewModel processingSiteViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel processingSiteViewModel = aLocationViewModel().withId(1L).withName("aProcessingSite").build();
 
     List<DiscardedComponentDTO> discardedComponents = Arrays.asList(
         aDiscardedComponentDTO()

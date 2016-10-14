@@ -39,6 +39,7 @@ public class DiscardedComponentReportGenerator {
     report.setStartDate(startDate);
     report.setEndDate(endDate);
     report.setDataValues(getDiscardedComponentsDataValues(processingSiteId, startDate, endDate));
+    report.sortDataValuesByVenue();
 
     return report;
   }
