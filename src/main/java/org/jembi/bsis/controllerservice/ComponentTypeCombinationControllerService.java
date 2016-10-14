@@ -5,7 +5,6 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.jembi.bsis.factory.ComponentTypeCombinationFactory;
-import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.viewmodel.ComponentTypeCombinationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +21,7 @@ public class ComponentTypeCombinationControllerService {
   private ComponentTypeCombinationFactory componentTypeCombinationFactory;
 
   public List<ComponentTypeCombinationViewModel> getComponentTypeCombinations(boolean includeDeleted) {
-    List<ComponentTypeCombination> componentTypeCombinations;
-
-    if (includeDeleted) {
-      componentTypeCombinations = componentTypeCombinationRepository.getComponentTypeCombinations(includeDeleted);
-    } else {
-      componentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations();
-    }
-
-    return componentTypeCombinationFactory.createViewModels(componentTypeCombinations);
+    return componentTypeCombinationFactory.createViewModels(componentTypeCombinationRepository.getComponentTypeCombinations(includeDeleted));
   }
 
   public ComponentTypeCombinationViewModel findComponentTypeCombinationById(long id){
