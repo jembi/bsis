@@ -20,8 +20,7 @@ public class ComponentTypeCombinationFactory {
     return combinationViewModels;
   }
 
-  public ComponentTypeCombinationViewModel createViewModel(
-      ComponentTypeCombination componentTypeCombination) {
+  public ComponentTypeCombinationViewModel createViewModel(ComponentTypeCombination componentTypeCombination) {
     ComponentTypeCombinationViewModel viewModel = new ComponentTypeCombinationViewModel();
     viewModel.setId(componentTypeCombination.getId());
     viewModel.setCombinationName(componentTypeCombination.getCombinationName());
