@@ -67,21 +67,21 @@ public class StockLevelsReportGeneratorTests extends UnitTestSuite {
     LocationViewModel venue3 = aLocationViewModel().withName("venue3").build();
     
     List<DataValue> dataValues = Arrays.asList(
-        aDataValue().withVenue(venue1).build(),
-        aDataValue().withVenue(venue2).build(),
-        aDataValue().withVenue(venue3).build(),
-        aDataValue().withVenue(venue3).build(),
-        aDataValue().withVenue(venue2).build(),
-        aDataValue().withVenue(venue1).build()
+        aDataValue().withLocation(venue1).build(),
+        aDataValue().withLocation(venue2).build(),
+        aDataValue().withLocation(venue3).build(),
+        aDataValue().withLocation(venue3).build(),
+        aDataValue().withLocation(venue2).build(),
+        aDataValue().withLocation(venue1).build()
     );
     
     List<DataValue> expectedDataValues = Arrays.asList(
-        aDataValue().withVenue(venue1).build(),
-        aDataValue().withVenue(venue1).build(),
-        aDataValue().withVenue(venue2).build(),
-        aDataValue().withVenue(venue2).build(),
-        aDataValue().withVenue(venue3).build(),
-        aDataValue().withVenue(venue3).build()
+        aDataValue().withLocation(venue1).build(),
+        aDataValue().withLocation(venue1).build(),
+        aDataValue().withLocation(venue2).build(),
+        aDataValue().withLocation(venue2).build(),
+        aDataValue().withLocation(venue3).build(),
+        aDataValue().withLocation(venue3).build()
     );
     
     Report sortedReport = new Report();

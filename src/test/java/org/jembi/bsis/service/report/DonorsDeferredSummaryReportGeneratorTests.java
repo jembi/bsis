@@ -68,19 +68,19 @@ public class DonorsDeferredSummaryReportGeneratorTests extends UnitTestSuite {
 
 
     List<DataValue> expectedDataValues = Arrays.asList(
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(4L).withVenue(location1ViewModel)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(4L).withLocation(location1ViewModel)
             .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.female).build())
             .withCohort(aCohort().withCategory(CohortConstants.DEFERRAL_REASON_CATEGORY).withComparator(Comparator.EQUALS).withOption("first reason").build())
             .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(3L).withVenue(location2ViewModel)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(3L).withLocation(location2ViewModel)
             .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.female).build())
             .withCohort(aCohort().withCategory(CohortConstants.DEFERRAL_REASON_CATEGORY).withComparator(Comparator.EQUALS).withOption("second reason").build())
             .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(1L).withVenue(location1ViewModel)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(1L).withLocation(location1ViewModel)
             .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.male).build())
             .withCohort(aCohort().withCategory(CohortConstants.DEFERRAL_REASON_CATEGORY).withComparator(Comparator.EQUALS).withOption("second reason").build())
             .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(5L).withVenue(location2ViewModel)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(5L).withLocation(location2ViewModel)
             .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.male).build())
             .withCohort(aCohort().withCategory(CohortConstants.DEFERRAL_REASON_CATEGORY).withComparator(Comparator.EQUALS).withOption("first reason").build())
             .build()

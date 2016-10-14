@@ -37,7 +37,7 @@ public class DataValueBuilder extends AbstractBuilder<DataValue> {
     return this;
   }
 
-  public DataValueBuilder withVenue(LocationViewModel location) {
+  public DataValueBuilder withLocation(LocationViewModel location) {
     this.location = location;
     return this;
   }

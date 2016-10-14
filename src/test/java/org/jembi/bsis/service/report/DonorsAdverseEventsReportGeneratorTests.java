@@ -78,16 +78,16 @@ public class DonorsAdverseEventsReportGeneratorTests extends UnitTestSuite {
         .build();
 
     List<DataValue> expectedDataValues = Arrays.asList(
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(4L).withVenue(venueAViewModel)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(4L).withLocation(venueAViewModel)
             .withCohort(somethingCohort)
             .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(14L).withVenue(venueAViewModel)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(14L).withLocation(venueAViewModel)
           .withCohort(somethingReallyBadCohort)
           .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(1L).withVenue(venueBViewModel)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(1L).withLocation(venueBViewModel)
             .withCohort(somethingCohort)
             .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(3L).withVenue(venueBViewModel)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(3L).withLocation(venueBViewModel)
             .withCohort(somethingReallyBadCohort)
             .build()
     );
@@ -136,10 +136,10 @@ public class DonorsAdverseEventsReportGeneratorTests extends UnitTestSuite {
         .build();
 
     List<DataValue> expectedDataValues = Arrays.asList(
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(4L).withVenue(venueAViewModel)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(4L).withLocation(venueAViewModel)
             .withCohort(somethingCohort)
             .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(14L).withVenue(venueAViewModel)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(14L).withLocation(venueAViewModel)
             .withCohort(somethingReallyBadCohort)
             .build()
     );
