@@ -1,6 +1,8 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationViewModelBuilder.aComponentTypeCombinationViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentTypeCombinationViewModelMatcher.hasSameStateAsComponentTypeCombinationViewModel;
@@ -72,4 +74,16 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
     
   }
   
+  @Test
+  public void testCreateComponentTypeCombinationViewModelWithNullArgument_shouldReturnEmptyViewModel() {
+    ComponentTypeCombinationViewModel viewModel = componentTypeCombinationFactory.createViewModel(null);
+    assertThat("Empty view model", viewModel, is(new ComponentTypeCombinationViewModel()));
+  }
+
+  @Test
+  public void testCreateComponentTypeCombinationViewModelsWithNullArgument_shouldReturnEmptyViewModels() {
+    List<ComponentTypeCombinationViewModel> viewModels = componentTypeCombinationFactory.createViewModels(null);
+    assertThat(viewModels.size(), is(equalTo(0)));
+  }
+
 }
