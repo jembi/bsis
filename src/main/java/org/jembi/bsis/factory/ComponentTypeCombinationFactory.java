@@ -22,9 +22,11 @@ public class ComponentTypeCombinationFactory {
 
   public ComponentTypeCombinationViewModel createViewModel(ComponentTypeCombination componentTypeCombination) {
     ComponentTypeCombinationViewModel viewModel = new ComponentTypeCombinationViewModel();
-    viewModel.setId(componentTypeCombination.getId());
-    viewModel.setCombinationName(componentTypeCombination.getCombinationName());
-    viewModel.setIsDeleted(componentTypeCombination.getIsDeleted());
+    if (componentTypeCombination != null) {
+      viewModel.setId(componentTypeCombination.getId());
+      viewModel.setCombinationName(componentTypeCombination.getCombinationName());
+      viewModel.setIsDeleted(componentTypeCombination.getIsDeleted());
+    }
     return viewModel;
   }
 
