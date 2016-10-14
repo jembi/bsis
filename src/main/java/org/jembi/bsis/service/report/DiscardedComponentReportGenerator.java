@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.DiscardedComponentDTO;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.reporting.Cohort;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
@@ -18,7 +19,10 @@ import org.springframework.stereotype.Service;
 public class DiscardedComponentReportGenerator {
 
   @Autowired
-  public ComponentRepository componentRepository;
+  private ComponentRepository componentRepository;
+
+  @Autowired
+  private LocationFactory locationFactory;
 
   /**
    * Report summary of all discarded components by location, component type and status change reason
@@ -51,7 +55,7 @@ public class DiscardedComponentReportGenerator {
       DataValue dataValue = new DataValue();
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setVenue(dto.getVenue());
+      dataValue.setLocation(locationFactory.createViewModel(dto.getVenue()));
       dataValue.setValue(dto.getCount());
 
       Cohort componentTypeCohort = new Cohort();
