@@ -51,14 +51,14 @@ public class ComponentProductionReportGeneratorTests extends UnitTestSuite {
                     .withComponentTypeName("Apheresis")
                     .withBloodAbo("A")
                     .withBloodRh("+")
-                    .withVenue(processingSite)
+                    .withProcessingSite(processingSite)
                     .withCount(2)
                     .build(),
             aComponentProductionDTO()
             .withComponentTypeName("Whole Blood - CPDA")
             .withBloodAbo("B")
             .withBloodRh("+")
-            .withVenue(processingSite)
+            .withProcessingSite(processingSite)
             .withCount(2)
             .build()
     );

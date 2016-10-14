@@ -60,7 +60,7 @@ public class ComponentProductionReportGenerator {
       DataValue dataValue = new DataValue();
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
-      dataValue.setLocation(locationFactory.createViewModel(dto.getVenue()));
+      dataValue.setLocation(locationFactory.createViewModel(dto.getProcessingSite()));
       dataValue.setValue(dto.getCount());
 
       Cohort componentTypeCohort = new Cohort();

@@ -1,14 +1,13 @@
 package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.dto.ComponentProductionDTO;
-import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
 
 public class ComponentProductionDTOBuilder extends AbstractBuilder<ComponentProductionDTO>{
   private String componentTypeName;
   private String bloodAbo;
   private String bloodRh;
-  private Location venue;
+  private Location processingSite;
   private long count;
   
   public ComponentProductionDTOBuilder withComponentTypeName(String componentTypeName) {
@@ -31,20 +30,20 @@ public class ComponentProductionDTOBuilder extends AbstractBuilder<ComponentProd
     return this;
   }
   
-  public ComponentProductionDTOBuilder withVenue(Location venue) {
-    this.venue =venue;
+  public ComponentProductionDTOBuilder withProcessingSite(Location processingSite) {
+    this.processingSite = processingSite;
     return this;
   }
 
   @Override
   public ComponentProductionDTO build() {
-    ComponentProductionDTO componentProductionExportDTO = new ComponentProductionDTO();
-    componentProductionExportDTO.setComponentTypeName(componentTypeName);
-    componentProductionExportDTO.setBloodAbo(bloodAbo);
-    componentProductionExportDTO.setBloodRh(bloodRh);
-    componentProductionExportDTO.setVenue(venue);
-    componentProductionExportDTO.setCount(count);
-    return componentProductionExportDTO;
+    ComponentProductionDTO componentProductionDTO = new ComponentProductionDTO();
+    componentProductionDTO.setComponentTypeName(componentTypeName);
+    componentProductionDTO.setBloodAbo(bloodAbo);
+    componentProductionDTO.setBloodRh(bloodRh);
+    componentProductionDTO.setProcessingSite(processingSite);
+    componentProductionDTO.setCount(count);
+    return componentProductionDTO;
   }
   
   public static ComponentProductionDTOBuilder aComponentProductionDTO() {
