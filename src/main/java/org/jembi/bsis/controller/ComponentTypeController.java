@@ -38,11 +38,9 @@ public class ComponentTypeController {
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_TYPES + "')")
-  public ResponseEntity<Map<String, Object>> getComponentTypes(
-      @RequestParam(required = false, defaultValue = "true") boolean includeDeleted) {
-
+  public ResponseEntity<Map<String, Object>> getComponentTypes() {
     Map<String, Object> map = new HashMap<>();
-    map.put("componentTypes", componentTypeControllerService.getComponentTypes(includeDeleted));
+    map.put("componentTypes", componentTypeControllerService.getComponentTypes());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
