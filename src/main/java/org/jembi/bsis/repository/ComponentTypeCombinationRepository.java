@@ -24,4 +24,8 @@ public class ComponentTypeCombinationRepository {
     query.setParameter("includeDeleted", includeDeleted);
     return query.getResultList();
   }   
+
+  public ComponentTypeCombination findComponentTypeCombinationById(long id) {
+    return em.find(ComponentTypeCombination.class, id);
+  }
 }

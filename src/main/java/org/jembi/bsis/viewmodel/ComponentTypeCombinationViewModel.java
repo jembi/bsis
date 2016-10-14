@@ -1,17 +1,24 @@
 package org.jembi.bsis.viewmodel;
 
-import java.util.List;
-
-public class ComponentTypeCombinationViewModel extends ComponentTypeCombinationSearchViewModel {
-
-  List<ComponentTypeViewModel> componentTypes;
-
-  public List<ComponentTypeViewModel> getComponentTypes() {
-    return componentTypes;
-  }
+public class ComponentTypeCombinationViewModel extends BaseViewModel {
   
-  public void setComponentTypes(List<ComponentTypeViewModel> componentTypes) {
-    this.componentTypes = componentTypes;
+  private String combinationName;
+  private boolean isDeleted;
+
+  public String getCombinationName() {
+    return this.combinationName;
+  }
+
+  public void setCombinationName(String combinationName) {
+    this.combinationName = combinationName;
+  }
+
+  public boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
   
 }
