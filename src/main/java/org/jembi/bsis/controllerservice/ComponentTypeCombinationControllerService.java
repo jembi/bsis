@@ -25,9 +25,9 @@ public class ComponentTypeCombinationControllerService {
     List<ComponentTypeCombination> componentTypeCombinations;
 
     if (includeDeleted) {
-      componentTypeCombinations = componentTypeCombinationRepository.getComponentTypeCombinations(includeDeleted);
+      componentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(includeDeleted);
     } else {
-      componentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations();
+      componentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(includeDeleted);
     }
 
     return componentTypeCombinationFactory.createViewModels(componentTypeCombinations);
