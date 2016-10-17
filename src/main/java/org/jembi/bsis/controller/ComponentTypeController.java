@@ -36,7 +36,7 @@ public class ComponentTypeController {
     binder.setValidator(componentTypeBackingFormValidator);
   }
 
-  @RequestMapping(method = RequestMethod.GET)
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_TYPES + "')")
   public ResponseEntity<Map<String, Object>> getComponentTypes() {
     Map<String, Object> map = new HashMap<>();
