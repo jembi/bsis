@@ -459,7 +459,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .thatShouldFlagComponentsContainingPlasmaForDiscard()
-                .withPositiveResults("NEG,-")
+                .withPositiveResults("POS,+")
                 .build())
             .build()
     );
