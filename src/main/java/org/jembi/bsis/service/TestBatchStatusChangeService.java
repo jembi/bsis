@@ -86,7 +86,7 @@ public class TestBatchStatusChangeService {
     bloodTestsService.updateDonationWithTestResults(donation, bloodTestingRuleResult);
     donation = donationRepository.updateDonation(donation);
 
-    //Please note that the order of the statements is critical to the safety of BSIS
+    // Note that the order of the statements is critical to the safety of BSIS
     if (donation.getTTIStatus() == TTIStatus.TTI_UNSAFE) {
       LOGGER.info("Handling donation with unsafe TTI status: " + donation);
       componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donation.getDonor());
