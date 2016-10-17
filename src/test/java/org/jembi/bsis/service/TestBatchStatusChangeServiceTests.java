@@ -1,9 +1,10 @@
 package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestResultBuilder.aBloodTestResult;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
@@ -34,14 +35,6 @@ import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
-import org.jembi.bsis.service.BloodTestsService;
-import org.jembi.bsis.service.ComponentCRUDService;
-import org.jembi.bsis.service.ComponentStatusCalculator;
-import org.jembi.bsis.service.DonationConstraintChecker;
-import org.jembi.bsis.service.DonorDeferralCRUDService;
-import org.jembi.bsis.service.DonorDeferralStatusCalculator;
-import org.jembi.bsis.service.PostDonationCounsellingCRUDService;
-import org.jembi.bsis.service.TestBatchStatusChangeService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Test;
@@ -456,6 +449,48 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
 
     verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(noTypeDeterminedBloodTypingOutcomeDonation);
     assertThat(noTypeDeterminedBloodTypingOutcomeDonation.isReleased(), is(true));
+  }
+  
+  @Test
+  public void testHandleReleaseWithContainsPlasma_shouldMarkComponentsAsUnsafe() {
+    List<BloodTestResult> bloodTestResults = Arrays.asList(
+        aBloodTestResult()
+            .withId(111L)
+            .withResult("POS")
+            .withBloodTest(aBloodTest()
+                .thatShouldFlagComponentsContainingPlasmaForDiscard()
+                .withPositiveResults("NEG,-")
+                .build())
+            .build()
+    );
+    
+    Donation donationThatContainsPlasma = aDonation()
+        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodAbo("A") 
+        .withBloodRh("+")
+        .withBloodTestResults(bloodTestResults)
+        .build();
+   
+    TestBatch testBatch = aTestBatch()
+        .withDonationBatch(aDonationBatch().withDonation(donationThatContainsPlasma).build())
+        .build();
+    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
+    
+    when(componentStatusCalculator.shouldComponentsBeDiscardedForTestResultsIfContainsPlasma(
+        donationThatContainsPlasma.getBloodTestResults())).thenReturn(true);
+    when(donationConstraintChecker.donationHasDiscrepancies(donationThatContainsPlasma)).thenReturn(false);
+    when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
+    when(bloodTestsService.executeTests(donationThatContainsPlasma)).thenReturn(bloodTestingRuleResult);
+    when(donationRepository.updateDonation(donationThatContainsPlasma)).thenReturn(donationThatContainsPlasma);
+    
+    // Test
+    testBatchStatusChangeService.handleRelease(testBatch);
+    
+    // Verify
+    verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(donationThatContainsPlasma);
+    assertThat(donationThatContainsPlasma.isReleased(), is(true));
   }
   
 }

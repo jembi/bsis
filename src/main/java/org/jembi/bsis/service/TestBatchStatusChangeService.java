@@ -86,6 +86,7 @@ public class TestBatchStatusChangeService {
     bloodTestsService.updateDonationWithTestResults(donation, bloodTestingRuleResult);
     donation = donationRepository.updateDonation(donation);
 
+    //Please note that the order of the statements is critical to the safety of BSIS
     if (donation.getTTIStatus() == TTIStatus.TTI_UNSAFE) {
       LOGGER.info("Handling donation with unsafe TTI status: " + donation);
       componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donation.getDonor());
@@ -109,6 +110,11 @@ public class TestBatchStatusChangeService {
       LOGGER.info("Handling donation with NO_TYPE_DETERMINED bloodTypingMatchStatus: " + donation);
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
 
+    } else if (componentStatusCalculator.shouldComponentsBeDiscardedForTestResultsIfContainsPlasma(
+        donation.getBloodTestResults())) {
+      LOGGER.info("Handling donation with components that contains plasma: " + donation);
+      componentCRUDService.markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(donation);
+      
     } else {
       componentCRUDService.updateComponentStatusesForDonation(donation);
     }
