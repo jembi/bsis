@@ -18,6 +18,7 @@ public class ComponentTypeCombinationRepositoryTests extends ContextDependentTes
   @Test
   public void testGetAllComponentTypeCombinationsIncludingDeleted_shouldReturnAllEntities() { 
     ComponentTypeCombination deletedComponentTypeCombination = aComponentTypeCombination()
+        .withCombinationName("123")
         .thatIsDeleted()
         .buildAndPersist(entityManager); 
     
@@ -29,6 +30,7 @@ public class ComponentTypeCombinationRepositoryTests extends ContextDependentTes
   @Test
   public void testGetAllComponentTypeCombinationsNotIncludingDeleted_shouldReturnNotDeletedEntities() {
     ComponentTypeCombination nonDeletedComponentTypeCombination = aComponentTypeCombination()
+        .withCombinationName("123")
         .buildAndPersist(entityManager);
 
     List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(false);
