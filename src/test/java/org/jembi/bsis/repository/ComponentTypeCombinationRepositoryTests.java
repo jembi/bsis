@@ -4,6 +4,8 @@ import java.util.List;
 
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
@@ -26,6 +28,7 @@ public class ComponentTypeCombinationRepositoryTests extends ContextDependentTes
     
     List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(true);
 
+    assertThat(returnedComponentTypeCombinations.size(), is(2));
     assertTrue(returnedComponentTypeCombinations.contains(deletedComponentTypeCombination));
     assertTrue(returnedComponentTypeCombinations.contains(nonDeletedComponentTypeCombination));
   }
@@ -37,6 +40,7 @@ public class ComponentTypeCombinationRepositoryTests extends ContextDependentTes
     
     List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(false);
 
+    assertThat(returnedComponentTypeCombinations.size(), is(1));
     assertTrue(returnedComponentTypeCombinations.contains(nonDeletedComponentTypeCombination));
   }
 }
