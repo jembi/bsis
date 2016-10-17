@@ -7,5 +7,5 @@ public class ComponentTypeCombinationsQueryConstants {
   public static final String QUERY_FIND_COMPONENT_TYPE_COMBINATION =
       "select c "
       +"from ComponentTypeCombination c "
-      +"where (:includeDeleted = TRUE OR c.isDeleted = FALSE) ";  
+      +"where c.isDeleted = :includeDeleted) ";  
 }

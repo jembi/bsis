@@ -1,11 +1,9 @@
 package org.jembi.bsis.repository;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 import java.util.List;
 
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.junit.Assert.assertTrue;
 
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
@@ -21,30 +19,20 @@ public class ComponentTypeCombinationRepositoryTests extends ContextDependentTes
   public void testGetAllComponentTypeCombinationsIncludingDeleted_shouldReturnAllEntities() { 
     ComponentTypeCombination deletedComponentTypeCombination = aComponentTypeCombination()
         .thatIsDeleted()
-        .buildAndPersist(entityManager);
+        .buildAndPersist(entityManager); 
+    
+    List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(true);
 
-    ComponentTypeCombination expectedComponentTypeCombinations = aComponentTypeCombination()
-        .withId(deletedComponentTypeCombination.getId())
-        .build();
-
-    List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(deletedComponentTypeCombination.getIsDeleted());
-
-    assertThat(returnedComponentTypeCombinations.size(), is(1));
-    assertThat(returnedComponentTypeCombinations.get(0), is(expectedComponentTypeCombinations));
+    assertTrue(returnedComponentTypeCombinations.contains(deletedComponentTypeCombination));
   }
   
   @Test
   public void testGetAllComponentTypeCombinationsNotIncludingDeleted_shouldReturnNotDeletedEntities() {
-    ComponentTypeCombination notDeletedComponentTypeCombination = aComponentTypeCombination()
+    ComponentTypeCombination nonDeletedComponentTypeCombination = aComponentTypeCombination()
         .buildAndPersist(entityManager);
 
-    ComponentTypeCombination expectedComponentTypeCombinations = aComponentTypeCombination()
-        .withId(notDeletedComponentTypeCombination.getId())
-        .build();
+    List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(false);
 
-    List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(notDeletedComponentTypeCombination.getIsDeleted());
-
-    assertThat(returnedComponentTypeCombinations.size(), is(1));
-    assertThat(returnedComponentTypeCombinations.get(0), is(expectedComponentTypeCombinations));
+    assertTrue(returnedComponentTypeCombinations.contains(nonDeletedComponentTypeCombination));
   }
 }

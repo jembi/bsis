@@ -18,7 +18,7 @@ public class ComponentTypeCombinationRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public List<ComponentTypeCombination> getAllComponentTypeCombinations(Boolean includeDeleted) {
+  public List<ComponentTypeCombination> getAllComponentTypeCombinations(boolean includeDeleted) {
     TypedQuery<ComponentTypeCombination> query;
     query = em.createNamedQuery(ComponentTypeCombinationsQueryConstants.NAME_FIND_COMPONENT_TYPE_COMBINATION, ComponentTypeCombination.class);
     query.setParameter("includeDeleted", includeDeleted);
