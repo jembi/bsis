@@ -1467,7 +1467,12 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
             .thatContainsPlasma()
             .build())
         .build();
-    Component deletedComponent = aComponent().withId(3L).withIsDeleted(true).build();
+    Component deletedComponent = aComponent().withId(3L)
+        .withComponentType(aComponentType()
+            .thatContainsPlasma()
+            .build())
+        .withIsDeleted(true)
+        .build();
 
     Donation donation = aDonation()
         .withId(1L)
@@ -1484,9 +1489,11 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Verify
     verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(firstComponent)),
         eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
+    verify(componentCRUDService, never()).markComponentAsUnsafe(argThat(hasSameStateAsComponent(secondComponent)),
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
     verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(thirdComponent)),
         eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
     verify(componentCRUDService, never()).markComponentAsUnsafe(argThat(hasSameStateAsComponent(deletedComponent)),
-        eq(ComponentStatusChangeReasonType.TEST_RESULTS));
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
   }
 }
