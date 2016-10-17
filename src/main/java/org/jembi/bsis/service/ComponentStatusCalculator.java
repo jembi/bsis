@@ -56,7 +56,7 @@ public class ComponentStatusCalculator {
       
       List<String> positiveBloodTestResults = Arrays.asList(bloodTest.getPositiveResults().split(","));
       if (positiveBloodTestResults.contains(bloodTestResult.getResult())) {
-        // The blood test result is positive and it flags components for discard
+        // The blood test result is positive and it should therefore flag components that contain plasma for discard
         return true;
       }
     }
