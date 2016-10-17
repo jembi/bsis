@@ -25,6 +25,7 @@ import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsCom
 import static org.jembi.bsis.helpers.matchers.ComponentStatusChangeMatcher.hasSameStateAsComponentStatusChange;
 import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.AdditionalAnswers.returnsSecondArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
@@ -1449,4 +1450,43 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     assertThat(unsafe.getStatusChangeReason().getCategory(), is(ComponentStatusChangeReasonCategory.UNSAFE));
   }
 
+  @Test
+  public void testMarkComponentsBelongingToDonationAsUnsafeIfContainsPlasma_shouldMarkComponentsAsUnsafe() {
+    // Set up fixture
+    Component firstComponent = aComponent().withId(1L)
+        .withComponentType(aComponentType()
+            .thatContainsPlasma()
+            .build())
+        .build();
+    Component secondComponent = aComponent().withId(2L)
+        .withComponentType(aComponentType()
+            .build())
+        .build();
+    Component thirdComponent = aComponent().withId(2L)
+        .withComponentType(aComponentType()
+            .thatContainsPlasma()
+            .build())
+        .build();
+    Component deletedComponent = aComponent().withId(3L).withIsDeleted(true).build();
+
+    Donation donation = aDonation()
+        .withId(1L)
+        .withComponents(Arrays.asList(firstComponent, secondComponent, thirdComponent, deletedComponent))
+        .build();
+
+    // Set up expectations
+    doAnswer(returnsFirstArg()).when(componentCRUDService).markComponentAsUnsafe(
+        argThat(hasSameStateAsComponent(firstComponent)), eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
+
+    // Exercise SUT
+    componentCRUDService.markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(donation);
+
+    // Verify
+    verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(firstComponent)),
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
+    verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(thirdComponent)),
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
+    verify(componentCRUDService, never()).markComponentAsUnsafe(argThat(hasSameStateAsComponent(deletedComponent)),
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS));
+  }
 }

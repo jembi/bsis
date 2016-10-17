@@ -471,7 +471,7 @@ public class ComponentCRUDService {
    * - when un-processing: Doesn't exist yet
    *
    * @param component the component
-   * @param rollbackCategory the rollback category
+   * @param rollBackCategory the rollback category
    * @return the component
    */
   private Component rollBackComponentStatus(Component component, ComponentStatusChangeReasonCategory rollBackCategory) {
@@ -513,6 +513,24 @@ public class ComponentCRUDService {
   private Component updateComponent(Component component) {
     componentStatusCalculator.updateComponentStatus(component);
     return componentRepository.update(component);
+  }
+
+  /**
+   * Change the status of components linked to the donation from AVAILABLE to UNSAFE only If they contains Plasma.
+   */
+  public void markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(Donation donation) {
+
+    LOGGER.info("Marking components containing plasma as unsafe for donation: " + donation);
+
+    for (Component component : donation.getComponents()) {
+
+      if (component.getIsDeleted() || !component.getComponentType().getContainsPlasma()) {
+        // Skip deleted components and components not containing plasma
+        continue;
+      }
+
+      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA);
+    }
   }
 
 }
