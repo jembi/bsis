@@ -7,7 +7,7 @@
     <addUniqueConstraint tableName="ComponentTypeCombination" columnNames="combinationName"
       constraintName="ComponentTypeCombination_combinationName" />
     <addNotNullConstraint tableName="ComponentTypeCombination" columnName="combinationName"
-      columnDataType="varchar(300)" />
+      columnDataType="varchar(255)" />
   </changeSet>
   
 </databaseChangeLog>

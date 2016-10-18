@@ -34,7 +34,7 @@ public class ComponentTypeCombination extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length = 300, unique = true, nullable = false)
+  @Column(length = 255, unique = true, nullable = false)
   private String combinationName;
 
   @NotAudited
