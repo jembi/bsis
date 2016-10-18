@@ -8,13 +8,11 @@ import java.util.Set;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
-import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.viewmodel.ComponentTypeCombinationFullViewModel;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.viewmodel.ComponentTypeCombinationViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,14 +75,14 @@ public class ComponentTypeCombinationFactory {
   }
 
   private void populateComponentTypeCombination(ComponentTypeCombinationViewModel viewModel,
-      ComponentTypeCombination componentTypeCombination) {
+    ComponentTypeCombination componentTypeCombination) {
     viewModel.setId(componentTypeCombination.getId());
     viewModel.setCombinationName(componentTypeCombination.getCombinationName());
     viewModel.setIsDeleted(componentTypeCombination.getIsDeleted());
   }
 
   private void populateComponentTypeCombinationFull(ComponentTypeCombinationFullViewModel viewModel,
-      ComponentTypeCombination componentTypeCombination) {
+    ComponentTypeCombination componentTypeCombination) {
     // set produced component types (a list)
     viewModel.setComponentTypes(componentTypeFactory.createViewModels(componentTypeCombination.getComponentTypes()));
     // set source component types (a set)

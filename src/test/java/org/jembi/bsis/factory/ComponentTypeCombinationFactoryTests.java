@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBackingFormBuilder.aComponentTypeCombinationBackingForm;
-import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBackingFormBuilder.aComponentTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationFullViewModelBuilder.aComponentTypeCombinationFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationViewModelBuilder.aComponentTypeCombinationViewModel;
@@ -15,14 +14,12 @@ import static org.jembi.bsis.helpers.matchers.ComponentTypeCombinationFullViewMo
 import static org.jembi.bsis.helpers.matchers.ComponentTypeCombinationViewModelMatcher.hasSameStateAsComponentTypeCombinationViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentTypeCombinationMatcher.hasSameStateAsComponentTypeCombination;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
 import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
-import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.repository.ComponentTypeRepository;
