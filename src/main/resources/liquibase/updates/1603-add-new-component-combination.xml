@@ -4,7 +4,8 @@
 
   <changeSet id="20161017-1028" author="timler">
     <comment>Ensure that component type combination name is unique and not nullable </comment>
-    <addUniqueConstraint tableName="ComponentTypeCombination" columnNames="combinationName" />
+    <addUniqueConstraint tableName="ComponentTypeCombination" columnNames="combinationName"
+      constraintName="ComponentTypeCombination_combinationName" />
     <addNotNullConstraint tableName="ComponentTypeCombination" columnName="combinationName"
       columnDataType="varchar(300)" />
   </changeSet>

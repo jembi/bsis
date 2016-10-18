@@ -1,5 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +30,27 @@ public class ComponentTypeCombinationBuilder  extends AbstractEntityBuilder<Comp
     this.componentTypes = componentTypes;
     return this;
   }
+
+  public ComponentTypeCombinationBuilder withComponentType(ComponentType componentType) {
+    if (this.componentTypes == null) {
+      this.componentTypes = new ArrayList<>();
+    }
+    this.componentTypes.add(componentType);
+    return this;
+  }
+
+  public ComponentTypeCombinationBuilder withSourceComponentTypes(Set<ComponentType> sourceComponentTypes) {
+    this.sourceComponentTypes = sourceComponentTypes;
+    return this;
+  }
+
+  public ComponentTypeCombinationBuilder withSourceComponentType(ComponentType sourceComponentType) {
+    if (this.sourceComponentTypes == null) {
+      this.sourceComponentTypes = new HashSet<>();
+    }
+    this.sourceComponentTypes.add(sourceComponentType);
+    return this;
+  }
   
   public ComponentTypeCombinationBuilder withSourceComponents(Set<ComponentType> sourceComponentTypes) {
     this.sourceComponentTypes = sourceComponentTypes;
@@ -47,6 +70,8 @@ public class ComponentTypeCombinationBuilder  extends AbstractEntityBuilder<Comp
     componentTypeCombination.setComponentTypes(componentTypes);
     componentTypeCombination.setSourceComponentTypes(sourceComponentTypes);
     componentTypeCombination.setIsDeleted(isDeleted);
+    componentTypeCombination.setComponentTypes(componentTypes);
+    componentTypeCombination.setSourceComponentTypes(sourceComponentTypes);
     return componentTypeCombination;
   }
   
