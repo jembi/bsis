@@ -289,9 +289,9 @@ public class ComponentCRUDService {
    */
   private void markChildComponentsAsUnsafeWhereApplicable(Component component) {
     Component initialComponent = component.getParentComponent();
-    // If the component was processed twice, get the initial component as the parent of the parent
-    if (component.getParentComponent().getParentComponent() != null) {
-      initialComponent = component.getParentComponent().getParentComponent();
+    // If the component was processed more than once, get the initial component as the parent of the parent
+    while (initialComponent.getParentComponent() != null) {
+      initialComponent = initialComponent.getParentComponent();
     }
     // There should always be a list of status changes for this component if it was marked as unsafe
     for (ComponentStatusChange statusChange : initialComponent.getStatusChanges()) {

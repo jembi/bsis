@@ -729,6 +729,90 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
 
   }
   
+  /**
+   * Test chain process unsafe component into component that doesn't contain plasma, should not mark
+   * component as unsafe.
+   * 
+   * The initial component is the one with the status change with type TEST_RESULTS_CONTAINS_PLASMA,
+   * and this will be checked instead of the parent, so the component produced shouldn't be marked
+   * as UNSAFE.
+   */
+  @Test
+  public void testChainProcessUnsafeComponentIntoComponentThatDoesntContainPlasma_shouldNotMarkComponentAsUnsafe() {
+    // set up data
+    Location location = LocationBuilder.aLocation().build();
+    Date donationDate = new Date(); 
+    Donation donation = aDonation().withId(1L)
+        .withDonationIdentificationNumber("1234567")
+        .withDonationDate(donationDate)
+        .build();
+    ComponentStatusChangeReason statusChangeReasonUP = anUnsafeReason()
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.UNSAFE_PARENT).build();
+    ComponentStatusChangeReason statusChangeReasonTRCP = anUnsafeReason()
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA).build();
+    ComponentStatusChange statusChangeUP = aComponentStatusChange()
+        .withId(1L)
+        .withStatusChangedOn(new Date())
+        .withStatusChangeReason(statusChangeReasonUP)
+        .build();
+    ComponentStatusChange statusChangeTRCP = aComponentStatusChange()
+        .withId(2L)
+        .withStatusChangedOn(new Date())
+        .withStatusChangeReason(statusChangeReasonTRCP)
+        .build();
+    ComponentType componentType = aComponentType()
+        .withId(1L)
+        .withExpiresAfter(90)
+        .withComponentTypeCode("0001")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .build();
+    ComponentType componentTypeThatDoesntContainsPlasma = aComponentType()
+        .withId(2L)
+        .withExpiresAfter(90)
+        .withComponentTypeCode("0002")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .build();
+    ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
+        .withCombinationName("Combination")
+        .withComponentTypes(Arrays.asList(componentTypeThatDoesntContainsPlasma))
+        .build();
+    Component initialComponent = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withLocation(location)
+        .withComponentStatusChange(statusChangeTRCP)
+        .withComponentType(componentType)
+        .withComponentCode("0001")
+        .build();
+    Component parentComponent = aComponent()
+        .withId(2L)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withLocation(location)
+        .withComponentStatusChange(statusChangeUP)
+        .withComponentType(componentType)
+        .withComponentCode("0001")
+        .withParentComponent(initialComponent)
+        .build();
+    
+    // set up mocks
+    when(componentRepository.findComponentById(2L)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentTypeThatDoesntContainsPlasma);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
+    
+    // SUT
+    parentComponent = componentCRUDService.processComponent(parentComponent.getId().toString(), componentTypeCombination.getId());
+
+    // verify that the component is not marked as unsafe, as the initial component change status is checked and is TRCP
+    verify(componentCRUDService, times(0)).markComponentAsUnsafe(any(Component.class), any(ComponentStatusChangeReasonType.class));
+  }
+  
   @Test
   public void testProcessProcessedComponent_shouldNotCreateChildComponents() throws Exception {
     // set up data
