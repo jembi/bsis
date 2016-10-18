@@ -14,7 +14,8 @@
 		<comment>Set flagComponentsContainingPlasmaForDiscard = 1 for AbScr tests (id=33)</comment>
 		<sql>
 			UPDATE BloodTest bt
-			SET bt.flagComponentsContainingPlasmaForDiscard = 1 
+			SET bt.flagComponentsContainingPlasmaForDiscard = 1,
+				bt.flagComponentsForDiscard = 0
 			WHERE bt.id = 33;
 		</sql>
 	</changeSet>
