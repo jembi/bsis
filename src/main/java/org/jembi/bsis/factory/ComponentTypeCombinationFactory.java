@@ -75,14 +75,14 @@ public class ComponentTypeCombinationFactory {
   }
 
   private void populateComponentTypeCombination(ComponentTypeCombinationViewModel viewModel,
-    ComponentTypeCombination componentTypeCombination) {
+      ComponentTypeCombination componentTypeCombination) {
     viewModel.setId(componentTypeCombination.getId());
     viewModel.setCombinationName(componentTypeCombination.getCombinationName());
     viewModel.setIsDeleted(componentTypeCombination.getIsDeleted());
   }
 
   private void populateComponentTypeCombinationFull(ComponentTypeCombinationFullViewModel viewModel,
-    ComponentTypeCombination componentTypeCombination) {
+      ComponentTypeCombination componentTypeCombination) {
     // set produced component types (a list)
     viewModel.setComponentTypes(componentTypeFactory.createViewModels(componentTypeCombination.getComponentTypes()));
     // set source component types (a set)
