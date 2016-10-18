@@ -263,7 +263,7 @@ public class ComponentCRUDService {
           addComponent(component);
           
           if (parentStatus == ComponentStatus.UNSAFE) {
-            markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+            markChildComponentsAsUnsafeWhereApplicable(component);
           }
         }
       }
@@ -273,6 +273,37 @@ public class ComponentCRUDService {
     parentComponent.setStatus(ComponentStatus.PROCESSED);
 
     return updateComponent(parentComponent);
+  }
+
+  /**
+   * Mark child components as unsafe where applicable.
+   * 
+   * Loop through the initial component status changes, and only avoid marking the component as
+   * unsafe for the status change where the status change reason type is
+   * TEST_RESULTS_CONTAINS_PLASMA and the component doesn't contain plasma.
+   * 
+   * For all other status change reason types, mark the component as unsafe with reason type
+   * UNSAFE_PARENT.
+   *
+   * @param component the component
+   */
+  private void markChildComponentsAsUnsafeWhereApplicable(Component component) {
+    Component initialComponent = component.getParentComponent();
+    // If the component was processed twice, get the initial component as the parent of the parent
+    if (component.getParentComponent().getParentComponent() != null) {
+      initialComponent = component.getParentComponent().getParentComponent();
+    }
+    // There should always be a list of status changes for this component if it was marked as unsafe
+    for (ComponentStatusChange statusChange : initialComponent.getStatusChanges()) {
+      boolean dontMarkComponentAsUnsafeForThisStatusChange = statusChange.getStatusChangeReason().getType()
+          .equals(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA)
+          && !component.getComponentType().getContainsPlasma();
+
+      if (!dontMarkComponentAsUnsafeForThisStatusChange) {
+        markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+        return;
+      }
+    }
   }
 
   public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
