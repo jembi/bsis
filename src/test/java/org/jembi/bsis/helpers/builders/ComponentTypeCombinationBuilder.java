@@ -70,8 +70,6 @@ public class ComponentTypeCombinationBuilder  extends AbstractEntityBuilder<Comp
     componentTypeCombination.setComponentTypes(componentTypes);
     componentTypeCombination.setSourceComponentTypes(sourceComponentTypes);
     componentTypeCombination.setIsDeleted(isDeleted);
-    componentTypeCombination.setComponentTypes(componentTypes);
-    componentTypeCombination.setSourceComponentTypes(sourceComponentTypes);
     return componentTypeCombination;
   }
   
