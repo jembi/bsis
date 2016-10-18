@@ -293,15 +293,18 @@ public class ComponentCRUDService {
     while (initialComponent.getParentComponent() != null) {
       initialComponent = initialComponent.getParentComponent();
     }
-    // There should always be a list of status changes for this component if it was marked as unsafe
-    for (ComponentStatusChange statusChange : initialComponent.getStatusChanges()) {
-      boolean dontMarkComponentAsUnsafeForThisStatusChange = statusChange.getStatusChangeReason().getType()
-          .equals(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA)
-          && !component.getComponentType().getContainsPlasma();
+    
+    if (initialComponent.getStatusChanges() != null) {
+      for (ComponentStatusChange statusChange : initialComponent.getStatusChanges()) {
+        boolean dontMarkComponentAsUnsafeForThisStatusChange = !component.getComponentType().getContainsPlasma() &&
+            statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA &&
+            statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE &&
+            !statusChange.getIsDeleted();
 
-      if (!dontMarkComponentAsUnsafeForThisStatusChange) {
-        markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
-        return;
+        if (!dontMarkComponentAsUnsafeForThisStatusChange) {
+          markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+          return;
+        }
       }
     }
   }
