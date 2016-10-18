@@ -4,22 +4,35 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBackingFormBuilder.aComponentTypeCombinationBackingForm;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBackingFormBuilder.aComponentTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationViewModelBuilder.aComponentTypeCombinationViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentTypeCombinationViewModelMatcher.hasSameStateAsComponentTypeCombinationViewModel;
+import static org.jembi.bsis.helpers.matchers.ComponentTypeCombinationMatcher.hasSameStateAsComponentTypeCombination;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
+import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
+import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
+import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.ComponentTypeCombinationViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
 
   @InjectMocks
   private ComponentTypeCombinationFactory componentTypeCombinationFactory;
+  
+  @Mock
+  ComponentTypeRepository componentTypeRepository;
 
   @Test
   public void testCreateComponentTypeCombinationViewModel_shouldReturnCorrectViewModel() {
@@ -85,5 +98,36 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
     List<ComponentTypeCombinationViewModel> viewModels = componentTypeCombinationFactory.createViewModels(null);
     assertThat(viewModels.size(), is(equalTo(0)));
   }
+  
+  @Test
+  public void testConvertComponentTypeCombinationBackingFormToComponentTypeCombinationEntity_shouldReturnExpectedEntity() {
+    ComponentType producedComponentType = aComponentType()
+        .withId(1L)
+        .build();
+    ComponentType sourceComponentType = aComponentType()
+        .withId(2L)
+        .build();
+    ComponentTypeCombination expectedEntity = aComponentTypeCombination()
+        .withCombinationName("Whole Blood")
+        .withComponentTypes(Arrays.asList(producedComponentType))
+        .withSourceComponents(new HashSet<>(Arrays.asList(sourceComponentType)))
+        .withId(1L)
+        .build();
+    ComponentTypeCombinationBackingForm backingForm = aComponentTypeCombinationBackingForm()
+        .withCombinationName("Whole Blood")
+        .withComponentTypes(Arrays.asList(aComponentTypeBackingForm()
+            .withId(producedComponentType.getId()).build()))
+        .withSourceComponentTypes(new HashSet<>(Arrays.asList(aComponentTypeBackingForm()
+            .withId(sourceComponentType.getId()).build())))
+        .withId(1L)
+        .build();
 
+    // Setup mock
+    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(producedComponentType);
+    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(sourceComponentType);
+
+    ComponentTypeCombination convertedEntity = componentTypeCombinationFactory.createEntity(backingForm);
+   
+    assertThat(convertedEntity, hasSameStateAsComponentTypeCombination(expectedEntity));
+  }
 }

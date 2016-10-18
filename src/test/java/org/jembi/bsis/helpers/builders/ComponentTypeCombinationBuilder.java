@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.List;
+import java.util.Set;
 
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
@@ -11,6 +12,7 @@ public class ComponentTypeCombinationBuilder  extends AbstractEntityBuilder<Comp
   private boolean isDeleted = false;
   private String combinationName;
   private List<ComponentType> componentTypes;
+  private Set<ComponentType> sourceComponentTypes;
 
   public ComponentTypeCombinationBuilder withId(Long id) {
     this.id = id;
@@ -27,6 +29,11 @@ public class ComponentTypeCombinationBuilder  extends AbstractEntityBuilder<Comp
     return this;
   }
   
+  public ComponentTypeCombinationBuilder withSourceComponents(Set<ComponentType> sourceComponentTypes) {
+    this.sourceComponentTypes = sourceComponentTypes;
+    return this;
+  }
+  
   public ComponentTypeCombinationBuilder thatIsDeleted() {
     this.isDeleted = true;
     return this;
@@ -38,6 +45,7 @@ public class ComponentTypeCombinationBuilder  extends AbstractEntityBuilder<Comp
     componentTypeCombination.setId(id);
     componentTypeCombination.setCombinationName(combinationName);
     componentTypeCombination.setComponentTypes(componentTypes);
+    componentTypeCombination.setSourceComponentTypes(sourceComponentTypes);
     componentTypeCombination.setIsDeleted(isDeleted);
     return componentTypeCombination;
   }

@@ -1,66 +1,67 @@
 package org.jembi.bsis.backingform;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ComponentTypeCombinationBackingForm {
-  @JsonIgnore
-  private ComponentTypeCombination componentTypeCombination;
 
-  public ComponentTypeCombinationBackingForm() {
-    componentTypeCombination = new ComponentTypeCombination();
-  }
+  private Long id;
 
-  public ComponentTypeCombination getComponentTypeCombination() {
-    return componentTypeCombination;
-  }
+  private String combinationName;
 
-  public void setComponentTypeCombination(ComponentTypeCombination componentTypeCombination) {
-    this.componentTypeCombination = componentTypeCombination;
-  }
+  private List<ComponentTypeBackingForm> componentTypes;
+
+  private Set<ComponentTypeBackingForm> sourceComponentTypes;
+
+  private Boolean isDeleted;
 
   public Long getId() {
-    return componentTypeCombination.getId();
+    return id;
   }
 
   public void setId(Long id) {
-    componentTypeCombination.setId(id);
+    this.id = id;
   }
 
-  public List<ComponentType> getComponentTypes() {
-    return componentTypeCombination.getComponentTypes();
+  public List<ComponentTypeBackingForm> getComponentTypes() {
+    return componentTypes;
   }
 
-  public void setComponentTypes(List<Long> componentTypeIds) {
+  public void setComponentTypes(List<ComponentTypeBackingForm> componentTypes) {
+    this.componentTypes = componentTypes;
+  }
 
-    List<ComponentType> componentTypes = new ArrayList<ComponentType>();
-    ComponentType componentType = new ComponentType();
-    for (Long componentTypeId : componentTypeIds) {
-      componentType.setId(componentTypeId);
-      componentTypes.add(componentType);
-    }
-    componentTypeCombination.setComponentTypes(componentTypes);
+  public Set<ComponentTypeBackingForm> getSourceComponentTypes() {
+    return sourceComponentTypes;
+  }
+
+  public void setSourceComponentTypes(Set<ComponentTypeBackingForm> sourceComponentTypes) {
+    this.sourceComponentTypes = sourceComponentTypes;
   }
 
   public String getCombinationName() {
-    return componentTypeCombination.getCombinationName();
+    return combinationName;
   }
 
   public void setCombinationName(String combinationName) {
-    componentTypeCombination.setCombinationName(combinationName);
+    this.combinationName = combinationName;
   }
 
   public Boolean getIsDeleted() {
-    return componentTypeCombination.getIsDeleted();
+    return isDeleted;
   }
 
   public void setIsDeleted(Boolean isDeleted) {
-    componentTypeCombination.setIsDeleted(isDeleted);
+    this.isDeleted = isDeleted;
+  }
+
+  @JsonIgnore
+  public void setPermissions(Map<String, Boolean> permissions) {
+    // Ignore field from view model
   }
 
 }
