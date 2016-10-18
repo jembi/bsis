@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jembi.bsis.model.componenttype.ComponentType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ComponentTypeCombinationBackingForm {
@@ -63,5 +62,4 @@ public class ComponentTypeCombinationBackingForm {
   public void setPermissions(Map<String, Boolean> permissions) {
     // Ignore field from view model
   }
-
 }
