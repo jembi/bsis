@@ -713,6 +713,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeThatContainsPlasma);
     when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentTypeThatDoesntContainsPlasma);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
@@ -829,12 +830,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeThatContainsPlasma);
     when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentTypeThatDoesntContainsPlasma);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(expectedComponentThatDoesntContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
-    // SUT
+    // SUTcomponentTypeCombinationRepository
     parentComponent = componentCRUDService.processComponent("1", componentTypeCombination.getId());
 
     // verify that both components are created
