@@ -19,5 +19,15 @@
 			WHERE bt.id = 33;
 		</sql>
 	</changeSet>
+  
+  <changeSet id="20161018-1117" author="lauravignoli">
+    <comment>Add ComponentStatusChangeReason for type: TEST_RESULTS_CONTAINS_PLASMA</comment>
+    <insert tableName="ComponentStatusChangeReason">
+      <column name="id" value="16"/>
+      <column name="category" value="UNSAFE"/>
+      <column name="isDeleted" value="0"/>
+      <column name="type" value="TEST_RESULTS_CONTAINS_PLASMA"/>
+    </insert>
+  </changeSet>
 
 </databaseChangeLog>
