@@ -68,6 +68,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
+import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
@@ -98,6 +99,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
   @Mock
   private GeneralConfigAccessorService generalConfigAccessorService;
+  @Mock
+  private ComponentTypeCombinationRepository componentTypeCombinationRepository;
   
   @Test
   public void testCreateInitialComponentWithFalseConfig_shouldReturnNull() {
@@ -446,9 +449,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeRepository.getComponentTypeById(componentTypeId2)).thenReturn(componentType2);
     when(componentTypeRepository.getComponentTypeById(componentTypeId3)).thenReturn(componentType3);
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
@@ -514,9 +518,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
@@ -594,11 +599,12 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
@@ -637,9 +643,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository, times(0)).save(Mockito.any(Component.class));
@@ -676,9 +683,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository, times(0)).save(Mockito.any(Component.class));
@@ -699,7 +707,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(false);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
   }
   
   @Test

@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -14,9 +16,16 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.repository.constant.ComponentStatusChangeReasonNamedQueryConstants;
+import org.jembi.bsis.repository.constant.ComponentTypeCombinationsQueryConstants;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+@NamedQueries({
+  @NamedQuery(name = ComponentTypeCombinationsQueryConstants.NAME_FIND_COMPONENT_TYPE_COMBINATION,
+      query = ComponentTypeCombinationsQueryConstants.QUERY_FIND_COMPONENT_TYPE_COMBINATION),
+})
 
 @Audited
 @Entity

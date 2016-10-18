@@ -10,10 +10,14 @@ import org.jembi.bsis.viewmodel.ComponentTypeCombinationViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeSearchViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ComponentTypeFactory {
+
+  @Autowired
+  private ComponentTypeCombinationFactory componentTypeCombinationFactory;
 
   public ComponentType createEntity(ComponentTypeBackingForm backingForm) {
     return backingForm.getComponentType();
@@ -47,16 +51,6 @@ public class ComponentTypeFactory {
     
     return viewModel;
   }
-
-  public ComponentTypeCombinationViewModel createComponentTypeCombinationViewModel(
-      ComponentTypeCombination componentTypeCombination) {
-    ComponentTypeCombinationViewModel viewModel = new ComponentTypeCombinationViewModel();
-    viewModel.setId(componentTypeCombination.getId());
-    viewModel.setCombinationName(componentTypeCombination.getCombinationName());
-    viewModel.setComponentTypes(createViewModels(componentTypeCombination.getComponentTypes()));
-    return viewModel;
-
-  }
   
   private void populateComponentTypeViewModelFields(ComponentType componentType, ComponentTypeViewModel componentTypeViewModel) {
     componentTypeViewModel.setId(componentType.getId());
@@ -86,13 +80,8 @@ public class ComponentTypeFactory {
 
   private void populateProducedComponentTypeCombinationViewModels(ComponentTypeFullViewModel viewModel, ComponentType componentType) {
     List<ComponentTypeCombination> producedComponentTypeCombinations = componentType.getProducedComponentTypeCombinations();
-    List<ComponentTypeCombinationViewModel> producedComponentTypeCombinationViewModels = new ArrayList<>();
-    if (producedComponentTypeCombinations != null) {
-      for (ComponentTypeCombination producedComponentTypeCombination : producedComponentTypeCombinations) {
-        producedComponentTypeCombinationViewModels
-            .add(createComponentTypeCombinationViewModel(producedComponentTypeCombination));
-      }
-    }
+    List<ComponentTypeCombinationViewModel> producedComponentTypeCombinationViewModels =
+        componentTypeCombinationFactory.createViewModels(producedComponentTypeCombinations);
     viewModel.setProducedComponentTypeCombinations(producedComponentTypeCombinationViewModels);
   }
   
