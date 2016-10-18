@@ -29,4 +29,12 @@
     </insert>
   </changeSet>
 
+  <changeSet id="20161018-1352" author="timler">
+    <comment>Updating 'Packed Red Cells - Paediatric - CPDA' to not contain plasma</comment>
+    <update tableName="ComponentType">
+      <column name="containsPlasma" value="0" type="TINYINT(1)"></column>
+      <where>id = 14</where>
+    </update>
+  </changeSet>
+
 </databaseChangeLog>
