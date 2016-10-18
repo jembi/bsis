@@ -8,6 +8,7 @@ import static org.jembi.bsis.helpers.builders.DataValueBuilder.aDataValue;
 import static org.jembi.bsis.helpers.builders.DeferralReasonBuilder.aDeferralReason;
 import static org.jembi.bsis.helpers.builders.DeferredDonorsDTOBuilder.aDeferredDonorsDTO;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.ReportBuilder.aReport;
 import static org.mockito.Mockito.when;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.DeferredDonorsDTO;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.reporting.Comparator;
@@ -25,6 +27,7 @@ import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.DonorDeferralRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -37,7 +40,10 @@ public class DonorsDeferredSummaryReportGeneratorTests extends UnitTestSuite {
 
   @Mock
   private DonorDeferralRepository donorDeferralRepository;
-  
+
+  @Mock
+  private LocationFactory locationFactory;
+
   @Test
   public void testGenerateUnitsIssuedReport() {
 
@@ -46,7 +52,9 @@ public class DonorsDeferredSummaryReportGeneratorTests extends UnitTestSuite {
     Date endDate = new DateTime().minusDays(0).toDate();
 
     Location location1 = aVenue().build();
+    LocationViewModel location1ViewModel = aLocationViewModel().build();
     Location location2 = aVenue().build();
+    LocationViewModel location2ViewModel = aLocationViewModel().build();
 
     DeferralReason deferralReason1 = aDeferralReason().withReason("first reason").build();
     DeferralReason deferralReason2 = aDeferralReason().withReason("second reason").build();
@@ -60,19 +68,19 @@ public class DonorsDeferredSummaryReportGeneratorTests extends UnitTestSuite {
 
 
     List<DataValue> expectedDataValues = Arrays.asList(
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(4L).withVenue(location1)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(4L).withLocation(location1ViewModel)
             .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.female).build())
             .withCohort(aCohort().withCategory(CohortConstants.DEFERRAL_REASON_CATEGORY).withComparator(Comparator.EQUALS).withOption("first reason").build())
             .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(3L).withVenue(location2)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(3L).withLocation(location2ViewModel)
             .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.female).build())
             .withCohort(aCohort().withCategory(CohortConstants.DEFERRAL_REASON_CATEGORY).withComparator(Comparator.EQUALS).withOption("second reason").build())
             .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(1L).withVenue(location1)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(1L).withLocation(location1ViewModel)
             .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.male).build())
             .withCohort(aCohort().withCategory(CohortConstants.DEFERRAL_REASON_CATEGORY).withComparator(Comparator.EQUALS).withOption("second reason").build())
             .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(5L).withVenue(location2)
+        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(5L).withLocation(location2ViewModel)
             .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.male).build())
             .withCohort(aCohort().withCategory(CohortConstants.DEFERRAL_REASON_CATEGORY).withComparator(Comparator.EQUALS).withOption("first reason").build())
             .build()
@@ -82,6 +90,8 @@ public class DonorsDeferredSummaryReportGeneratorTests extends UnitTestSuite {
 
     // Set up mocks
     when(donorDeferralRepository.countDeferredDonors(startDate, endDate)).thenReturn(deferredDonors);
+    when(locationFactory.createViewModel(location1)).thenReturn(location1ViewModel);
+    when(locationFactory.createViewModel(location2)).thenReturn(location2ViewModel);
 
     // Run test
     Report returnedReport = donorsDeferredSummaryReportGenerator.generateDonorDeferralSummaryReport(startDate, endDate);

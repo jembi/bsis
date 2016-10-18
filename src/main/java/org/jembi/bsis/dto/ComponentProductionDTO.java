@@ -1,59 +1,61 @@
 package org.jembi.bsis.dto;
 
+import org.jembi.bsis.model.location.Location;
+
 public class ComponentProductionDTO {
-  private String componentType;
+  private String componentTypeName;
   private String bloodAbo;
   private String bloodRh;
-  private String venue;
+  private Location processingSite;
   private long count;
 
   public ComponentProductionDTO() {
-    super();
+   // default constructor
   }
   
-  public ComponentProductionDTO(String componentTypeName, String bloodAbo, String bloodRh, String venue, long count) {
-    super();
-    this.componentType = componentTypeName;
+  public ComponentProductionDTO(String componentTypeName, String bloodAbo, String bloodRh, Location processingSite,
+      long count) {
+    this.componentTypeName = componentTypeName;
     this.bloodAbo = bloodAbo;
     this.bloodRh = bloodRh;
-    this.venue = venue;
+    this.processingSite = processingSite;
     this.count = count;
   }
 
   public String getComponentTypeName() {
-    return componentType;
+    return componentTypeName;
   }
 
   public String getBloodAbo() {
     return bloodAbo;
   }
 
-  public String getVenue() {
-    return venue;
+  public Location getProcessingSite() {
+    return processingSite;
   }
 
   public long getCount() {
     return count;
   }
+  
+  public String getBloodRh() {
+    return bloodRh;
+  }
 
-  public void setComponentType(String componentTypeName) {
-    this.componentType = componentTypeName;
+  public void setComponentTypeName(String componentTypeName) {
+    this.componentTypeName = componentTypeName;
   }
 
   public void setBloodAbo(String bloodAbo) {
     this.bloodAbo = bloodAbo;
   }
  
-  public String getBloodRh() {
-    return bloodRh;
-  }
-
   public void setBloodRh(String bloodRh) {
     this.bloodRh = bloodRh;
   }
 
-  public void setVenue(String venue) {
-    this.venue = venue;
+  public void setProcessingSite(Location processingSite) {
+    this.processingSite = processingSite;
   }
 
   public void setCount(long count) {

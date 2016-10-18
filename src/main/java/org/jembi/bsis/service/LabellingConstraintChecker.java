@@ -56,7 +56,7 @@ public class LabellingConstraintChecker {
     }
     
     // Check that the donor is not deferred
-    if (donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)) {
+    if (donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())) {
       throw new IllegalStateException("Can't label component " + component.getId() + ": Donor " + donor.getId()
           + " is currently deferred");
     }

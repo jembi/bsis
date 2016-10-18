@@ -61,8 +61,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
         query = ComponentNamedQueryConstants.QUERY_FIND_CHILD_COMPONENTS),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_FOR_EXPORT,
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_FOR_EXPORT),
-    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_PRODUCED_COMPONENTS_BY_LOCATION,
-        query = ComponentNamedQueryConstants.QUERY_FIND_PRODUCED_COMPONENTS_BY_LOCATION)
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE,
+        query = ComponentNamedQueryConstants.QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE)
 })
 @Entity
 @Audited
@@ -111,7 +111,7 @@ public class Component extends BaseModificationTrackerEntity {
 
   @OneToOne(mappedBy = "component")
   private ComponentUsage usage;
-  
+
   @ManyToOne
   private ComponentBatch componentBatch;
 
@@ -122,14 +122,14 @@ public class Component extends BaseModificationTrackerEntity {
 
   @Column(length = 20)
   private String componentCode;
-  
+
   @Column(length = 30, nullable = false)
   @Enumerated(EnumType.STRING)
   private InventoryStatus inventoryStatus = InventoryStatus.NOT_IN_STOCK;
-  
+
   @ManyToOne(optional = false, fetch = FetchType.EAGER)
   private Location location;
-  
+
   private Integer weight;
 
   public Component() {

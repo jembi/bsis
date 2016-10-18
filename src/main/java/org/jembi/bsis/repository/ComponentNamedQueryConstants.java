@@ -77,16 +77,31 @@ public class ComponentNamedQueryConstants {
       + "WHERE c.isDeleted = :componentDeleted "
       // Sort by created date then status change reason with nulls last so that discards come first
       + "ORDER BY c.modificationTracker.createdDate ASC, r.statusChangeReason ASC NULLS LAST ";
-  
-  public static final String NAME_FIND_PRODUCED_COMPONENTS_BY_LOCATION =
-      "Component.findProducedComponentsByLocation";
-  public static final String QUERY_FIND_PRODUCED_COMPONENTS_BY_LOCATION =
-      "SELECT DISTINCT NEW org.jembi.bsis.dto.ComponentProductionDTO(c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh, cb.location.name, COUNT(c.id)) " 
-      + "FROM Component AS c "
-      + "LEFT JOIN c.componentBatch AS cb "
-      + "WHERE c.componentType.canBeIssued = TRUE AND c.donation.donationDate BETWEEN :startDate AND :endDate "
-      + "AND c.isDeleted = :deleted "
-      + "GROUP BY  cb.location.name, c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
-      + "ORDER BY  cb.location.name ";
 
+  public static final String NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE =
+      "Component.findDiscardedComponentsByVenue";
+  public static final String QUERY_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE =
+      "select DISTINCT new org.jembi.bsis.dto.DiscardedComponentDTO(s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, s.component.componentBatch.location, count(s.component)) " +
+      "from ComponentStatusChange AS s " +
+      "where s.component.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
+      "and (s.component.componentBatch.location.id = :processingSiteId OR :processingSiteId = NULL) " +
+      "and s.isDeleted = false " +
+      "and s.component.componentBatch IS NOT NULL " +
+      "and s.statusChangedOn BETWEEN :startDate AND :endDate " +
+      "group by s.component.componentBatch.location, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
+      "order by s.component.componentBatch.location, s.component.componentType.componentTypeName desc ";
+  
+  public static final String NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
+      "Component.findProducedComponentsByProcessingSite";
+  public static final String QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
+      "SELECT DISTINCT NEW org.jembi.bsis.dto.ComponentProductionDTO(c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh, cb.location, COUNT(c.id)) " 
+      + "FROM Component AS c "
+      // use processing site which is where the component was processed
+      + "LEFT JOIN c.componentBatch AS cb "
+      + "WHERE c.componentType.canBeIssued = TRUE AND c.createdOn BETWEEN :startDate AND :endDate "
+      + "AND c.isDeleted = :deleted "
+      //if processingSiteId is null, get all the sites otherwise fetch the provided processingSite
+      + "AND (cb.location.id = :processingSiteId OR :processingSiteId = NULL) "
+      + "GROUP BY cb.location, c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
+      + "ORDER BY cb.location, c.componentType.componentTypeName ASC";
 }

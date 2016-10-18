@@ -47,7 +47,7 @@ public class Report {
       Collections.sort(dataValues, new Comparator<DataValue>() {
         @Override
         public int compare(DataValue o1, DataValue o2) {
-          return o1.getVenue().getName().compareTo(o2.getVenue().getName());
+          return o1.getLocation().getName().compareTo(o2.getLocation().getName());
         }
       });
     }

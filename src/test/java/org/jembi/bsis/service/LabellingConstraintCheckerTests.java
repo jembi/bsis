@@ -124,7 +124,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     Component component = aComponent().withId(1L).withDonation(donation).build();
     
     // Mocks
-    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(deferredDonor)).thenReturn(true);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(deferredDonor.getId())).thenReturn(true);
     
     // Exercise SUT
     labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component);
@@ -146,7 +146,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withComponentType(aComponentType().withCanBeIssued(true).build()).build();
     
     // Mocks
-    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())).thenReturn(false);
     
     // Exercise SUT
     boolean canPrintPackLabel = labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component);
@@ -171,7 +171,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withComponentType(aComponentType().withCanBeIssued(true).build()).build();
     
     // Mocks
-    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)).thenReturn(false);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())).thenReturn(false);
     
     // Exercise SUT
     boolean canPrintPackLabel = labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component);

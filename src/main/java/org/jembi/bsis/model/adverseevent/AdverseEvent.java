@@ -19,7 +19,9 @@ import org.jembi.bsis.repository.constant.AdverseEventNamedQueryConstants;
  */
 @NamedQueries({
     @NamedQuery(name = AdverseEventNamedQueryConstants.NAME_COUNT_ADVERSE_EVENTS_FOR_DONOR,
-        query = AdverseEventNamedQueryConstants.QUERY_COUNT_ADVERSE_EVENTS_FOR_DONOR)
+        query = AdverseEventNamedQueryConstants.QUERY_COUNT_ADVERSE_EVENTS_FOR_DONOR),
+    @NamedQuery(name = AdverseEventNamedQueryConstants.NAME_COUNT_ADVERSE_EVENTS,
+        query = AdverseEventNamedQueryConstants.QUERY_COUNT_ADVERSE_EVENTS)
 })
 @Entity
 @Audited

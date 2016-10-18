@@ -26,6 +26,7 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
+import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,9 @@ public class ComponentCRUDService {
 
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
+
+  @Autowired
+  private ComponentTypeCombinationRepository componentTypeCombinationRepository;
 
   public Component createInitialComponent(Donation donation) {
 
@@ -175,9 +179,11 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component processComponent(String parentComponentId, ComponentTypeCombination componentTypeCombination) {
+  public Component processComponent(String parentComponentId, long componentTypeCombinationId) {
 
     Component parentComponent = componentRepository.findComponentById(Long.valueOf(parentComponentId));
+    ComponentTypeCombination componentTypeCombination =
+        componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId);
     
     if (!componentConstraintChecker.canProcess(parentComponent)) {
       throw new IllegalStateException("Component " + parentComponentId + " cannot be processed.");
@@ -236,6 +242,7 @@ public class ComponentCRUDService {
           component.setStatus(ComponentStatus.QUARANTINED);
           component.setCreatedOn(donation.getDonationDate());
           component.setLocation(parentComponent.getLocation());
+          component.setComponentBatch(parentComponent.getComponentBatch());
 
           Calendar cal = Calendar.getInstance();
           Date createdOn = cal.getTime();

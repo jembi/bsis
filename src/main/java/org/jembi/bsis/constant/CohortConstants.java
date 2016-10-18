@@ -9,5 +9,7 @@ public class CohortConstants {
   public static final String BLOOD_TEST_CATEGORY = "Blood Test";
   public static final String BLOOD_TEST_RESULT_CATEGORY = "Blood Test Result";
   public static final String DEFERRAL_REASON_CATEGORY = "Deferral Reason";
+  public static final String ADVERSE_EVENT_TYPE_CATEGORY = "Adverse Event Type";
+  public static final String DISCARD_REASON_CATEGORY = "Discard Reason";
 
 }
