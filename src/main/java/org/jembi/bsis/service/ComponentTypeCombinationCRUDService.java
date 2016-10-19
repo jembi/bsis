@@ -29,7 +29,5 @@ public class ComponentTypeCombinationCRUDService {
     existingCombination.setSourceComponentTypes(componentTypeCombination.getSourceComponentTypes());
 
     return componentTypeCombinationRepository.update(componentTypeCombination);
-
   }
-
 }
