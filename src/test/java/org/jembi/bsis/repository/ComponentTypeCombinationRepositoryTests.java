@@ -23,12 +23,11 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
   @Test
   public void testGetAllComponentTypeCombinationsIncludingDeleted_shouldReturnAllEntities() { 
     ComponentTypeCombination deletedComponentTypeCombination = aComponentTypeCombination()
-        .withCombinationName("deletedComponentTypeCombination")
         .thatIsDeleted()
         .buildAndPersist(entityManager);
     
     ComponentTypeCombination nonDeletedComponentTypeCombination = aComponentTypeCombination()
-        .withCombinationName("nonDeletedComponentTypeCombination")
+        .withCombinationName("otherCombination")
         .buildAndPersist(entityManager);
     
     List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(true);
@@ -41,11 +40,10 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
   @Test
   public void testGetAllComponentTypeCombinationsNotIncludingDeleted_shouldReturnNotDeletedEntities() {
     ComponentTypeCombination nonDeletedComponentTypeCombination = aComponentTypeCombination()
-        .withCombinationName("nonDeletedComponentTypeCombination")
         .buildAndPersist(entityManager);
     
     ComponentTypeCombination deletedComponentTypeCombination = aComponentTypeCombination()
-        .withCombinationName("deletedComponentTypeCombination")
+        .withCombinationName("otherCombination")
         .thatIsDeleted()
         .buildAndPersist(entityManager);
     
@@ -60,7 +58,6 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
   public void testSaveComponentTypeCombination_shouldPersistTrackingFieldsCorrectly() {
     // Set up data
     ComponentTypeCombination componentTypeCombination = aComponentTypeCombination()
-        .withCombinationName("combination")
         .withComponentType(ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager))
         .withSourceComponentType(ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager))
         .build();
@@ -79,7 +76,6 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
   public void testUpdateComponentTypeCombination_shouldPersistTrackingFieldsCorrectly() {
     // Set up data
     ComponentTypeCombination componentTypeCombination = aComponentTypeCombination()
-        .withCombinationName("combination")
         .withComponentType(ComponentTypeBuilder.aComponentType().build())
         .withSourceComponentType(ComponentTypeBuilder.aComponentType().build())
         .buildAndPersist(entityManager);

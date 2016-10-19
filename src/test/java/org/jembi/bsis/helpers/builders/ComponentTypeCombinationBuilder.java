@@ -12,7 +12,7 @@ public class ComponentTypeCombinationBuilder  extends AbstractEntityBuilder<Comp
   
   private Long id;
   private boolean isDeleted = false;
-  private String combinationName;
+  private String combinationName = "combination";
   private List<ComponentType> componentTypes;
   private Set<ComponentType> sourceComponentTypes;
 
