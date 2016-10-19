@@ -16,7 +16,7 @@ public class ComponentProductionDTOMatcher extends TypeSafeMatcher<ComponentProd
   @Override
   public void describeTo(Description description) {
     description.appendText("A Component with the following state:")
-    .appendText("\nProcessing site: ").appendValue(expected.getVenue())
+    .appendText("\nProcessing site: ").appendValue(expected.getProcessingSite())
     .appendText("\nComponent name: ").appendValue(expected.getComponentTypeName())
     .appendText("\nBlood RBO: ").appendValue(expected.getBloodAbo())
     .appendText("\nBlood RH: ").appendValue(expected.getBloodRh())
@@ -25,7 +25,7 @@ public class ComponentProductionDTOMatcher extends TypeSafeMatcher<ComponentProd
 
   @Override
   protected boolean matchesSafely(ComponentProductionDTO actual) {
-    return Objects.equals(actual.getVenue(), expected.getVenue()) &&
+    return Objects.equals(actual.getProcessingSite(), expected.getProcessingSite()) &&
         Objects.equals(actual.getComponentTypeName(), expected.getComponentTypeName()) &&
         Objects.equals(actual.getBloodAbo(), expected.getBloodAbo()) &&
         Objects.equals(actual.getBloodRh(), expected.getBloodRh()) &&

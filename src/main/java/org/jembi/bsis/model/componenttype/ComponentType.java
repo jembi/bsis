@@ -18,7 +18,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.repository.ComponentTypeQueryConstants;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -38,7 +38,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class ComponentType extends BaseEntity {
+public class ComponentType extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

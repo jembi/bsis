@@ -3,6 +3,7 @@ package org.jembi.bsis.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
 import org.jembi.bsis.controllerservice.ComponentTypeCombinationControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,16 @@ public class ComponentTypeCombinationController {
 
     Map<String, Object> map = new HashMap<>();
     map.put("componentTypeCombinations", componentTypeCombinationControllerService.getComponentTypeCombinations(true));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
+  @RequestMapping(method = RequestMethod.GET, value = "/form")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
+  public ResponseEntity<Map<String, Object>> getForm() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("componentTypeCombination", new ComponentTypeCombinationBackingForm());
+    map.put("sourceComponentTypes", componentTypeCombinationControllerService.getAllComponentTypes());
+    map.put("producedComponentTypes", componentTypeCombinationControllerService.getAllComponentTypes());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 }

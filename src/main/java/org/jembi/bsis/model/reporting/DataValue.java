@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.utils.DateTimeSerialiser;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -16,7 +16,7 @@ public class DataValue {
   private Date startDate;
   private Date endDate;
   private Object value;
-  private Location venue;
+  private LocationViewModel location;
   private List<Cohort> cohorts;
 
   public String getId() {
@@ -53,12 +53,12 @@ public class DataValue {
     this.value = value;
   }
 
-  public Location getVenue() {
-    return venue;
+  public LocationViewModel getLocation() {
+    return location;
   }
 
-  public void setVenue(Location venue) {
-    this.venue = venue;
+  public void setLocation(LocationViewModel location) {
+    this.location = location;
   }
 
   public List<Cohort> getCohorts() {
@@ -91,14 +91,14 @@ public class DataValue {
     return Objects.equals(getStartDate(), other.getStartDate()) &&
         Objects.equals(getEndDate(), other.getEndDate()) &&
         Objects.equals(getValue(), other.getValue()) &&
-        Objects.equals(getVenue(), other.getVenue()) &&
+        Objects.equals(getLocation(), other.getLocation()) &&
         Objects.equals(getCohorts(), other.getCohorts()) &&
         Objects.equals(getId(), other.getId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getId(), getStartDate(), getEndDate(), getValue(), getVenue(), getCohorts());
+    return Objects.hash(getId(), getStartDate(), getEndDate(), getValue(), getLocation(), getCohorts());
   }
 
 }

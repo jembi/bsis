@@ -15,12 +15,8 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.model.BaseEntity;
-import org.jembi.bsis.repository.constant.ComponentStatusChangeReasonNamedQueryConstants;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.repository.constant.ComponentTypeCombinationsQueryConstants;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @NamedQueries({
   @NamedQuery(name = ComponentTypeCombinationsQueryConstants.NAME_FIND_COMPONENT_TYPE_COMBINATION,
@@ -29,8 +25,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Audited
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class ComponentTypeCombination extends BaseEntity {
+public class ComponentTypeCombination extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

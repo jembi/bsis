@@ -16,5 +16,73 @@
     <addNotNullConstraint tableName="ComponentTypeCombination" columnName="combinationName"
       columnDataType="varchar(255)" />
   </changeSet>
+
+  <changeSet id="20161018-1530" author="lauravignoli">
+    <comment>Add modification tracker fields to ComponentTypeCombination tables and initialize them</comment>
+    <addColumn tableName="ComponentTypeCombination">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)" >
+        <constraints foreignKeyName="fk_ComponentTypeCombination_createdBy" references="User(id)" />
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_ComponentTypeCombination_lastUpdatedBy" references="User(id)" />
+      </column>
+    </addColumn>
+    <addColumn tableName="ComponentTypeCombination_AUD">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)" />
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)" />
+    </addColumn>
+    <update tableName="ComponentTypeCombination">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+    <update tableName="ComponentTypeCombination_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+  </changeSet>
+
+  <changeSet id="20161018-1428" author="timler">
+    <comment>Adding modification tracker fields to ComponentType and ComponentType_AUD tables</comment>
+    <addColumn tableName="ComponentType">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_ComponentType_createdBy" references="User(id)" />
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_ComponentType_lastUpdatedBy" references="User(id)" />
+      </column>
+    </addColumn>
+    <addColumn tableName="ComponentType_AUD">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)" />
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)" />
+    </addColumn>
+  </changeSet>
   
+  <changeSet id="20161018-1532" author="timler">
+    <comment>Initialise modification tracker fields for ComponentType</comment>
+    <update tableName="ComponentType">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+    <update tableName="ComponentType_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+  </changeSet>
+
 </databaseChangeLog>
