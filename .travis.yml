@@ -13,7 +13,7 @@ before_install:
   - mysql -e 'create database bsis;'
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -t 60bc59b1-74af-468a-b386-7cc209586d00
+  - bash <(curl -s https://codecov.io/bash) -t 60bc59b1-74af-468a-b386-7cc209586d00 || echo "Codecov did not collect coverage reports"
 
 script: mvn -Dsurefire.useFile=false clean install
 
