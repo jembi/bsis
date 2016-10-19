@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/jembi/bsis.svg?token=FCDs4JFMycqVrLvQpU5A&branch=develop)](https://travis-ci.com/jembi/bsis) [![codecov.io](https://codecov.io/github/jembi/bsis/coverage.svg?branch=develop)](https://codecov.io/github/jembi/bsis?branch=develop)
+[![Build Status](https://travis-ci.com/jembi/bsis.svg?token=FCDs4JFMycqVrLvQpU5A&branch=develop)](https://travis-ci.com/jembi/bsis) [![codecov.io](https://codecov.io/github/jembi/bsis/coverage.svg?branch=develop&token=hU3P8AQ1o0)](https://codecov.io/github/jembi/bsis/coverage.svg?branch=develop&token=hU3P8AQ1o0)
 
 BSIS
 ====
