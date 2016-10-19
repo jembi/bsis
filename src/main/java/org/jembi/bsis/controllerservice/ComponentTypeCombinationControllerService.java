@@ -4,10 +4,14 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
 import org.jembi.bsis.factory.ComponentTypeCombinationFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
+import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.service.ComponentTypeCombinationCRUDService;
+import org.jembi.bsis.viewmodel.ComponentTypeCombinationFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeCombinationViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,9 @@ public class ComponentTypeCombinationControllerService {
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
 
+  @Autowired
+  private ComponentTypeCombinationCRUDService componentTypeCombinationCRUDService;
+
   public List<ComponentTypeCombinationViewModel> getComponentTypeCombinations(boolean includeDeleted) {
     return componentTypeCombinationFactory.createViewModels(componentTypeCombinationRepository.getAllComponentTypeCombinations(includeDeleted));
   }
@@ -39,5 +46,17 @@ public class ComponentTypeCombinationControllerService {
 
   public List<ComponentTypeViewModel> getAllComponentTypes() {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypesThatCanBeIssued());
+  }
+
+  public ComponentTypeCombinationFullViewModel createComponentTypeCombination(ComponentTypeCombinationBackingForm backingForm) {
+    ComponentTypeCombination entity = componentTypeCombinationFactory.createEntity(backingForm);
+    componentTypeCombinationCRUDService.createComponentTypeCombination(entity);
+    return componentTypeCombinationFactory.createFullViewModel(entity);
+  }
+
+  public ComponentTypeCombinationFullViewModel updateComponentTypeCombination(ComponentTypeCombinationBackingForm backingForm) {
+    ComponentTypeCombination componentTypeCombination = componentTypeCombinationFactory.createEntity(backingForm);
+    ComponentTypeCombination updatedComponentTypeCombination = componentTypeCombinationCRUDService.updateComponentTypeCombinations(componentTypeCombination);
+    return componentTypeCombinationFactory.createFullViewModel(updatedComponentTypeCombination);
   }
 }
