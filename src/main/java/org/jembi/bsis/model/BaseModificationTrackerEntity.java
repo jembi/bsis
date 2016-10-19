@@ -28,7 +28,6 @@ public abstract class BaseModificationTrackerEntity extends BaseEntity implement
 
   public BaseModificationTrackerEntity() {
     modificationTracker = new RowModificationTracker();
-    System.out.println("Creating BaseModificationTrackerEntity = " + modificationTracker);
   }
 
   @Override
