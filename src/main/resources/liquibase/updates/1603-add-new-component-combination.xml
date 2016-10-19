@@ -3,10 +3,9 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   <changeSet id="20161018-1440" author="micnice">
-    <comment>Change component type combination name size limit to VARCHAR (250)</comment>
-    <sql>
-      ALTER TABLE ComponentTypeCombination MODIFY combinationName VARCHAR(255) NOT NULL;
-    </sql>
+    <comment>Change component type combination name size limit to VARCHAR(255)</comment>
+    <modifyDataType tableName="ComponentTypeCombination" columnName="combinationName"
+                    newDataType="VARCHAR(255)"/>
   </changeSet>
 
   <changeSet id="20161017-1028" author="timler">
