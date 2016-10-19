@@ -1,10 +1,10 @@
 package org.jembi.bsis.repository;
 
-import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -23,11 +23,12 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
   @Test
   public void testGetAllComponentTypeCombinationsIncludingDeleted_shouldReturnAllEntities() { 
     ComponentTypeCombination deletedComponentTypeCombination = aComponentTypeCombination()
-        .withCombinationName("123")
+        .withCombinationName("deletedComponentTypeCombination")
         .thatIsDeleted()
         .buildAndPersist(entityManager);
     
     ComponentTypeCombination nonDeletedComponentTypeCombination = aComponentTypeCombination()
+        .withCombinationName("nonDeletedComponentTypeCombination")
         .buildAndPersist(entityManager);
     
     List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(true);
@@ -40,10 +41,11 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
   @Test
   public void testGetAllComponentTypeCombinationsNotIncludingDeleted_shouldReturnNotDeletedEntities() {
     ComponentTypeCombination nonDeletedComponentTypeCombination = aComponentTypeCombination()
-        .withCombinationName("123")
+        .withCombinationName("nonDeletedComponentTypeCombination")
         .buildAndPersist(entityManager);
     
     ComponentTypeCombination deletedComponentTypeCombination = aComponentTypeCombination()
+        .withCombinationName("deletedComponentTypeCombination")
         .thatIsDeleted()
         .buildAndPersist(entityManager);
     
