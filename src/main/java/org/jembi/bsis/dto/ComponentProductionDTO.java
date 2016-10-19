@@ -6,19 +6,19 @@ public class ComponentProductionDTO {
   private String componentTypeName;
   private String bloodAbo;
   private String bloodRh;
-  private Location venue;
+  private Location processingSite;
   private long count;
 
   public ComponentProductionDTO() {
    // default constructor
   }
   
-  public ComponentProductionDTO(String componentTypeName, String bloodAbo, String bloodRh, Location venue, long count) {
-    super();
+  public ComponentProductionDTO(String componentTypeName, String bloodAbo, String bloodRh, Location processingSite,
+      long count) {
     this.componentTypeName = componentTypeName;
     this.bloodAbo = bloodAbo;
     this.bloodRh = bloodRh;
-    this.venue = venue;
+    this.processingSite = processingSite;
     this.count = count;
   }
 
@@ -30,8 +30,8 @@ public class ComponentProductionDTO {
     return bloodAbo;
   }
 
-  public Location getVenue() {
-    return venue;
+  public Location getProcessingSite() {
+    return processingSite;
   }
 
   public long getCount() {
@@ -54,8 +54,8 @@ public class ComponentProductionDTO {
     this.bloodRh = bloodRh;
   }
 
-  public void setVenue(Location venue) {
-    this.venue = venue;
+  public void setProcessingSite(Location processingSite) {
+    this.processingSite = processingSite;
   }
 
   public void setCount(long count) {

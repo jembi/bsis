@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.CollectedDonationDTO;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
 import org.jembi.bsis.model.reporting.Report;
@@ -32,6 +33,8 @@ public class CollectedDonationsGeneratorTests extends UnitTestSuite {
   private CollectedDonationsReportGenerator collectedDonationsReportGenerator;
   @Mock
   private DonationRepository donationRepository;
+  @Mock
+  private LocationFactory locationFactory;
 
   @Test
   public void testGenerateCollectedDonationsReport() {

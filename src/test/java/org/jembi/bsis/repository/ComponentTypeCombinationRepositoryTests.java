@@ -2,6 +2,9 @@ package org.jembi.bsis.repository;
 
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 
@@ -22,11 +25,16 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
     ComponentTypeCombination deletedComponentTypeCombination = aComponentTypeCombination()
         .withCombinationName("123")
         .thatIsDeleted()
-        .buildAndPersist(entityManager); 
+        .buildAndPersist(entityManager);
+    
+    ComponentTypeCombination nonDeletedComponentTypeCombination = aComponentTypeCombination()
+        .buildAndPersist(entityManager);
     
     List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(true);
 
+    assertThat(returnedComponentTypeCombinations.size(), is(2));
     assertTrue(returnedComponentTypeCombinations.contains(deletedComponentTypeCombination));
+    assertTrue(returnedComponentTypeCombinations.contains(nonDeletedComponentTypeCombination));
   }
   
   @Test
@@ -34,10 +42,16 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
     ComponentTypeCombination nonDeletedComponentTypeCombination = aComponentTypeCombination()
         .withCombinationName("123")
         .buildAndPersist(entityManager);
-
+    
+    ComponentTypeCombination deletedComponentTypeCombination = aComponentTypeCombination()
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+    
     List<ComponentTypeCombination> returnedComponentTypeCombinations = componentTypeCombinationRepository.getAllComponentTypeCombinations(false);
 
+    assertThat(returnedComponentTypeCombinations.size(), is(1));
     assertTrue(returnedComponentTypeCombinations.contains(nonDeletedComponentTypeCombination));
+    assertFalse(returnedComponentTypeCombinations.contains(deletedComponentTypeCombination));
   }
   
   @Test
