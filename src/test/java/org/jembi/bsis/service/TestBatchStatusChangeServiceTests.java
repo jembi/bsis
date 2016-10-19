@@ -452,7 +452,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testHandleReleaseWithContainsPlasma_shouldMarkComponentsAsUnsafe() {
+  public void testHandleReleaseWithContainsPlasma_shouldMarkComponentsAsUnsafeAndUpdateComponentsStatuses() {
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
             .withId(111L)
@@ -490,6 +490,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     
     // Verify
     verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(donationThatContainsPlasma);
+    verify(componentCRUDService).updateComponentStatusesForDonation(donationThatContainsPlasma);
     assertThat(donationThatContainsPlasma.isReleased(), is(true));
   }
   

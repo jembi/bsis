@@ -114,10 +114,10 @@ public class TestBatchStatusChangeService {
         donation.getBloodTestResults())) {
       LOGGER.info("Handling donation with components that contains plasma: " + donation);
       componentCRUDService.markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(donation);
-      
-    } else {
-      componentCRUDService.updateComponentStatusesForDonation(donation);
     }
+
+    // Re-evaluate all donation's components statuses
+    componentCRUDService.updateComponentStatusesForDonation(donation);
 
   }
 
