@@ -93,4 +93,53 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
     Assert.assertNotNull("lastUpdated has been populated", componentTypeCombination.getLastUpdated());
     Assert.assertNotNull("lastUpdatedBy has been populated", componentTypeCombination.getLastUpdatedBy());
   }
+
+  @Test
+  public void testIsUniqueCombinationNameForExistingCombination_shouldReturnFalseIfCombinationNameExistsForAnotherCombination() {
+    // Test data
+    aComponentTypeCombination().withCombinationName("combination1").buildAndPersist(entityManager);
+    ComponentTypeCombination combination2 = aComponentTypeCombination()
+        .withCombinationName("combination2").buildAndPersist(entityManager);
+
+    // Run test
+    boolean unique = componentTypeCombinationRepository.isUniqueCombinationName(combination2.getId(), "combination1");
+
+    // Verify result
+    assertThat(unique, is(false));
+  }
+
+  @Test
+  public void testIsUniqueCombinationNameForExistingCombination_shouldReturnTrueIfCombinationNameExistsForSameCombination() {
+    // Test data
+    ComponentTypeCombination combination = aComponentTypeCombination()
+        .withCombinationName("combination").buildAndPersist(entityManager);
+
+    // Run test
+    boolean unique = componentTypeCombinationRepository.isUniqueCombinationName(combination.getId(), "combination");
+
+    // Verify result
+    assertThat(unique, is(true));
+  }
+
+  @Test
+  public void testIsUniqueCombinationNameForNewCombination_shouldReturnFalseIfCombinationNameExists() {
+    // Test data
+    aComponentTypeCombination()
+        .withCombinationName("combination").buildAndPersist(entityManager);
+    
+    // Run test
+    boolean unique = componentTypeCombinationRepository.isUniqueCombinationName(null, "combination");
+
+    // Verify result
+    assertThat(unique, is(false));
+  }
+
+  @Test
+  public void testIsUniqueCombinationNameForNewCombination_shouldReturnTrueIfCombinationNameDoesntExist() {
+    // Run test
+    boolean unique = componentTypeCombinationRepository.isUniqueCombinationName(null, "combination");
+
+    // Verify result
+    assertThat(unique, is(true));
+  }
 }

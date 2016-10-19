@@ -21,6 +21,8 @@ import org.jembi.bsis.repository.constant.ComponentTypeCombinationsQueryConstant
 @NamedQueries({
   @NamedQuery(name = ComponentTypeCombinationsQueryConstants.NAME_FIND_COMPONENT_TYPE_COMBINATION,
       query = ComponentTypeCombinationsQueryConstants.QUERY_FIND_COMPONENT_TYPE_COMBINATION),
+  @NamedQuery(name = ComponentTypeCombinationsQueryConstants.NAME_VERIFY_UNIQUE_COMPONENT_TYPE_COMBINATION_NAME,
+      query = ComponentTypeCombinationsQueryConstants.QUERY_VERIFY_UNIQUE_COMPONENT_TYPE_COMBINATION_NAME)
 })
 
 @Audited
