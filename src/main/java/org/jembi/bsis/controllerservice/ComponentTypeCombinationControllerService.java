@@ -45,7 +45,7 @@ public class ComponentTypeCombinationControllerService {
   }
 
   public List<ComponentTypeViewModel> getAllComponentTypes() {
-    return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypesThatCanBeIssued());
+    return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
   }
 
   public ComponentTypeCombinationFullViewModel createComponentTypeCombination(ComponentTypeCombinationBackingForm backingForm) {
