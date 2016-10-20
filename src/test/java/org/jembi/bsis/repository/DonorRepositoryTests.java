@@ -264,45 +264,6 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat("Donor status is correct", returnedDonor3.getDonorStatus(), is(DonorStatus.NORMAL));
     assertThat("Donor venue is correct", returnedDonor3.getVenue(), is(venue));
   }
-  
-  @Test
-  public void testFindMobileClinicDonorsByVenues_onlyReturnsMobileVenues() throws Exception {
-
-    Location permVenue = LocationBuilder.aVenue().withName("perm venue").buildAndPersist(entityManager);
-    Location mobileVenue1 = LocationBuilder.aVenue().withName("mobile venue #1").thatIsMobileSite().buildAndPersist(entityManager);
-    Location mobileVenue2 = LocationBuilder.aVenue().withName("mobile venue #2").thatIsMobileSite().buildAndPersist(entityManager);
-    Location location = LocationBuilder.aLocation().withName("a location").buildAndPersist(entityManager);
-    
-    // should not match
-    DonorBuilder.aDonor()
-        .withDonorNumber("D1")
-        .withVenue(permVenue)
-        .thatIsNotDeleted()
-        .buildAndPersist(entityManager);
-    DonorBuilder.aDonor()
-        .withDonorNumber("D2")
-        .withVenue(location)
-        .thatIsNotDeleted()
-        .buildAndPersist(entityManager);
-    
-    // should match
-    Donor donor1 = DonorBuilder.aDonor()
-        .withDonorNumber("D3")
-        .withVenue(mobileVenue1)
-        .thatIsNotDeleted()
-        .buildAndPersist(entityManager);
-    Donor donor2 = DonorBuilder.aDonor()
-        .withDonorNumber("D4")
-        .withVenue(mobileVenue2)
-        .thatIsNotDeleted()
-        .buildAndPersist(entityManager);
-
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(null);
-
-    assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(2));
-    assertThat("Only donors in mobile venues are returned", mobileClinicDonorDTOs.get(0).getDonorNumber(), is(donor1.getDonorNumber()));
-    assertThat("Only donors in mobile venues are returned", mobileClinicDonorDTOs.get(1).getDonorNumber(), is(donor2.getDonorNumber()));
-  }
 
   @Test
   public void testDeletedMobileClinicDonorsAreNotReturned() throws Exception {

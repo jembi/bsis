@@ -82,6 +82,5 @@ public class DonorNamedQueryConstants {
       "d.lastName, d.gender, d.bloodAbo, d.bloodRh, d.donorStatus, d.birthDate, d.venue, d.isDeleted) " +
       "FROM Donor d WHERE d.isDeleted = :isDeleted AND d.donorStatus NOT IN :excludedStatuses " +
       "AND (d.venue.id IN (:venueIds) OR :includeAllVenues = TRUE) " +
-      "AND d.venue.isMobileSite = :isMobileSite AND d.venue.isVenue = :isVenue " +
       "ORDER BY d.lastName asc, d.firstName asc";
 }

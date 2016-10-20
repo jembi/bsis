@@ -3,9 +3,7 @@ package org.jembi.bsis.repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -335,8 +333,6 @@ public class DonorRepository {
         .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
         .setParameter("venueIds", venueIds)
         .setParameter("includeAllVenues", includeAllVenues)
-        .setParameter("isMobileSite", true)
-        .setParameter("isVenue", true)
         .getResultList();
 }
   
