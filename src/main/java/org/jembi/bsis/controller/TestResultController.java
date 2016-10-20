@@ -143,100 +143,64 @@ public class TestResultController {
     for(DonationBatch donationBatch : donationBatches){
       donationBatchIds.add(donationBatch.getId());
     }
-
-    List<BloodTestingRuleResult> ruleResults =
-        bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
-
-    Boolean pendingRepeatBloodTypingTests = false;
-    Boolean pendingConfirmatoryTTITests = false;
-    Boolean pendingRepeatTTITests = false;
-    Boolean pendingBloodTypingMatchTests = false;
-    Boolean reEntryRequiredTTITests = false;
-    boolean pendingBloodTypingConfirmations = false;
-    Boolean reEntryRequiredBloodTypingTests = false;
-    Boolean reEntryRequiredRepeatBloodTypingTests = false;
-    Boolean reEntryRequiredConfirmatoryTTITests = false;
-    boolean reEntryRequiredRepeatTTITests = false;
-
-    for(BloodTestingRuleResult result : ruleResults){
-      if(result.getPendingBloodTypingTestsIds().size() > 0){
-        pendingRepeatBloodTypingTests = true;
-      }
-      if (result.getPendingConfirmatoryTTITestsIds().size() > 0) {
-        pendingConfirmatoryTTITests = true;
-      }
-      if (result.getPendingRepeatTTITestsIds().size() > 0) {
-        pendingRepeatTTITests = true;
-      }
-      if (!result.getBloodTypingStatus().equals(BloodTypingStatus.NOT_DONE)
-          && (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_MATCH)
-          || result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS))) {
-        pendingBloodTypingMatchTests = true;
-      }
-      if (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)) {
-        // A confirmation is required to resolve the ambiguous result.
-        pendingBloodTypingConfirmations = true;
-      }
-      Map<BloodTestType, Boolean> reEntryRequiredTestsMap = calculateReEntryRequiredTestsForDonation(result);
-      if (reEntryRequiredTestsMap.get(BloodTestType.BASIC_TTI)) {
-        reEntryRequiredTTITests = true;
-      }
-      if (reEntryRequiredTestsMap.get(BloodTestType.BASIC_BLOODTYPING)) {
-        reEntryRequiredBloodTypingTests = true;
-      }
-      if (reEntryRequiredTestsMap.get(BloodTestType.REPEAT_BLOODTYPING)) {
-        reEntryRequiredRepeatBloodTypingTests = true;
-      }
-      if (reEntryRequiredTestsMap.get(BloodTestType.CONFIRMATORY_TTI)) {
-        reEntryRequiredConfirmatoryTTITests = true;
-      }
-      if (reEntryRequiredTestsMap.get(BloodTestType.REPEAT_TTI)) {
-        reEntryRequiredRepeatTTITests = true;
-      }
-    }
-
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("pendingRepeatBloodTypingTests", pendingRepeatBloodTypingTests);
-    map.put("pendingConfirmatoryTTITests", pendingConfirmatoryTTITests);
-    map.put("pendingRepeatTTITests", pendingRepeatTTITests);
-    map.put("pendingBloodTypingMatchTests", pendingBloodTypingMatchTests);
-    map.put("reEntryRequiredTTITests", reEntryRequiredTTITests);
-    map.put("pendingBloodTypingConfirmations", pendingBloodTypingConfirmations);
-    map.put("reEntryRequiredBloodTypingTests", reEntryRequiredBloodTypingTests);
-    map.put("reEntryRequiredRepeatBloodTypingTests", reEntryRequiredRepeatBloodTypingTests);
-    map.put("reEntryRequiredConfirmatoryTTITests", reEntryRequiredConfirmatoryTTITests);
-    map.put("reEntryRequiredRepeatTTITests", reEntryRequiredRepeatTTITests);
-
+    Map<String, Object> map = calculateOverviewFlags(bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
-  private Map<BloodTestType, Boolean> calculateReEntryRequiredTestsForDonation(BloodTestingRuleResult ruleResult) {
+  private Map<String, Object> calculateOverviewFlags(List<BloodTestingRuleResult> ruleResults) {
 
-    Map<BloodTestType, Boolean> reEntryRequiredTestsMap = new HashMap<BloodTestType, Boolean>();
-    reEntryRequiredTestsMap.put(BloodTestType.BASIC_TTI, false);
-    reEntryRequiredTestsMap.put(BloodTestType.BASIC_BLOODTYPING, false);
-    reEntryRequiredTestsMap.put(BloodTestType.REPEAT_BLOODTYPING, false);
-    reEntryRequiredTestsMap.put(BloodTestType.CONFIRMATORY_TTI, false);
-    reEntryRequiredTestsMap.put(BloodTestType.REPEAT_TTI, false);
-    Map<String, BloodTestResultViewModel> resultViewModelMap = ruleResult.getRecentTestResults();
-    for (String key : resultViewModelMap.keySet()) {
-      BloodTestResultViewModel model = resultViewModelMap.get(key);
-      BloodTestResult testResult = model.getTestResult();
-      if (testResult.getReEntryRequired().equals(true)) {
-        if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
-          reEntryRequiredTestsMap.put(BloodTestType.BASIC_TTI, true);
-        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
-          reEntryRequiredTestsMap.put(BloodTestType.BASIC_BLOODTYPING, true);
-        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
-          reEntryRequiredTestsMap.put(BloodTestType.REPEAT_BLOODTYPING, true);
-        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
-          reEntryRequiredTestsMap.put(BloodTestType.CONFIRMATORY_TTI, true);
-        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
-          reEntryRequiredTestsMap.put(BloodTestType.REPEAT_TTI, true);
+    Map<String, Object> overviewFlags = new HashMap<String, Object>();
+    overviewFlags.put("reEntryRequiredTTITests", false);
+    overviewFlags.put("reEntryRequiredBloodTypingTests", false);
+    overviewFlags.put("reEntryRequiredRepeatBloodTypingTests", false);
+    overviewFlags.put("reEntryRequiredConfirmatoryTTITests", false);
+    overviewFlags.put("reEntryRequiredRepeatTTITests", false);
+    overviewFlags.put("pendingRepeatTTITests", false);
+    overviewFlags.put("pendingConfirmatoryTTITests", false);
+    overviewFlags.put("pendingRepeatBloodTypingTests", false);
+
+    for(BloodTestingRuleResult result : ruleResults){
+
+      Map<String, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
+      for (String key : resultViewModelMap.keySet()) {
+        BloodTestResultViewModel model = resultViewModelMap.get(key);
+        BloodTestResult testResult = model.getTestResult();
+        if (testResult.getReEntryRequired().equals(true)) {
+          if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
+            overviewFlags.put("reEntryRequiredTTITests", true);
+          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
+            overviewFlags.put("reEntryRequiredBloodTypingTests", true);
+          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
+            overviewFlags.put("reEntryRequiredRepeatBloodTypingTests", true);
+          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
+            overviewFlags.put("reEntryRequiredConfirmatoryTTITests", true);
+          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
+            overviewFlags.put("reEntryRequiredRepeatTTITests", true);
+          }
         }
+        if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
+          overviewFlags.put("pendingRepeatTTITests", true);
+        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
+          overviewFlags.put("pendingConfirmatoryTTITests", true);
+        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
+          overviewFlags.put("pendingRepeatBloodTypingTests", true);
+        }      
+      }
+      if(result.getPendingBloodTypingTestsIds().size() > 0){
+        overviewFlags.put("pendingRepeatBloodTypingTests", true);
+      }
+      if (result.getPendingConfirmatoryTTITestsIds().size() > 0) {
+        overviewFlags.put("pendingConfirmatoryTTITests", true);
+      }
+      if (result.getPendingRepeatTTITestsIds().size() > 0) {
+        overviewFlags.put("pendingRepeatTTITests", true);
+      }
+      if (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)) {
+        // A confirmation is required to resolve the ambiguous result.
+        overviewFlags.put("pendingBloodTypingConfirmations", true);
       }
     }
-    return reEntryRequiredTestsMap;
+    return overviewFlags;
   }
 
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")

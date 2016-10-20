@@ -1,7 +1,7 @@
 package org.jembi.bsis.model.componentmovement;
 
 public enum ComponentStatusChangeReasonType {
-  UNSAFE_PARENT, TEST_RESULTS, INVALID_WEIGHT;
+  UNSAFE_PARENT, TEST_RESULTS, INVALID_WEIGHT, TEST_RESULTS_CONTAINS_PLASMA;
   
   /**
    * Check if the specified ComponentStatusChangeReasonType may be deleted and rolled back.
