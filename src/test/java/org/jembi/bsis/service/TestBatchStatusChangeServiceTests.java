@@ -493,5 +493,57 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     verify(componentCRUDService).updateComponentStatusesForDonation(donationThatContainsPlasma);
     assertThat(donationThatContainsPlasma.isReleased(), is(true));
   }
+
+  @Test
+  public void testHandleReleaseWithContainsPlasmaAndTTIPos_shouldMarkComponentsAsUnsafeAndUpdateComponentsStatuses() {
+    List<BloodTestResult> bloodTestResults = Arrays.asList(
+        aBloodTestResult()
+            .withId(111L)
+            .withResult("POS")
+            .withBloodTest(aBloodTest()
+                .thatShouldFlagComponentsContainingPlasmaForDiscard()
+                .withPositiveResults("POS,+")
+                .build())
+            .build(),
+        aBloodTestResult()
+            .withId(222L)
+            .withResult("POS")
+            .withBloodTest(aBloodTest()
+                .withFlagComponentsForDiscard(true)
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
+    );
+    
+    Donation donationThatContainsPlasma = aDonation()
+        .withTTIStatus(TTIStatus.TTI_UNSAFE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodAbo("A") 
+        .withBloodRh("+")
+        .withBloodTestResults(bloodTestResults)
+        .build();
+   
+    TestBatch testBatch = aTestBatch()
+        .withDonationBatch(aDonationBatch().withDonation(donationThatContainsPlasma).build())
+        .build();
+    BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
+    
+    when(componentStatusCalculator.shouldComponentsBeDiscardedForTestResultsIfContainsPlasma(
+        donationThatContainsPlasma.getBloodTestResults())).thenReturn(true);
+    when(donationConstraintChecker.donationHasDiscrepancies(donationThatContainsPlasma)).thenReturn(false);
+    when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
+    when(bloodTestsService.executeTests(donationThatContainsPlasma)).thenReturn(bloodTestingRuleResult);
+    when(donationRepository.updateDonation(donationThatContainsPlasma)).thenReturn(donationThatContainsPlasma);
+    
+    // Test
+    testBatchStatusChangeService.handleRelease(testBatch);
+    
+    // Verify
+    verify(componentCRUDService).markComponentsBelongingToDonorAsUnsafe(donationThatContainsPlasma.getDonor());
+    verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(donationThatContainsPlasma);
+    verify(componentCRUDService).updateComponentStatusesForDonation(donationThatContainsPlasma);
+    assertThat(donationThatContainsPlasma.isReleased(), is(true));
+  }
   
 }
