@@ -47,11 +47,11 @@ public class ComponentTypeCombinationControllerService {
   public List<ComponentTypeViewModel> getAllComponentTypes() {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
   }
-
+  
   public ComponentTypeCombinationFullViewModel createComponentTypeCombination(ComponentTypeCombinationBackingForm backingForm) {
-    ComponentTypeCombination entity = componentTypeCombinationFactory.createEntity(backingForm);
-    componentTypeCombinationCRUDService.createComponentTypeCombination(entity);
-    return componentTypeCombinationFactory.createFullViewModel(entity);
+    ComponentTypeCombination componentTypeCombination = componentTypeCombinationFactory.createEntity(backingForm);
+    componentTypeCombination = componentTypeCombinationCRUDService.createComponentTypeCombination(componentTypeCombination);
+    return componentTypeCombinationFactory.createFullViewModel(componentTypeCombination);
   }
 
   public ComponentTypeCombinationFullViewModel updateComponentTypeCombination(ComponentTypeCombinationBackingForm backingForm) {

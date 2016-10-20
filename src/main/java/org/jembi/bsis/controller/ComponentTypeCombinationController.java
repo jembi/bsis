@@ -66,7 +66,7 @@ public class ComponentTypeCombinationController {
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
   public ResponseEntity<Map<String, Object>> updateComponentTypeCombination(@PathVariable("id") Long componentTypeCombinationBackingId,
-                                                             @Valid @RequestBody ComponentTypeCombinationBackingForm backingForm) {
+      @Valid @RequestBody ComponentTypeCombinationBackingForm backingForm) {
 
     // Use the id parameter from the path
     backingForm.setId(componentTypeCombinationBackingId);
