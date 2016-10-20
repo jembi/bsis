@@ -294,18 +294,31 @@ public class ComponentCRUDService {
       initialComponent = initialComponent.getParentComponent();
     }
     
+    boolean markComponentAsUnsafe = false;
     if (initialComponent.getStatusChanges() != null) {
       for (ComponentStatusChange statusChange : initialComponent.getStatusChanges()) {
-        boolean dontMarkComponentAsUnsafeForThisStatusChange = !component.getComponentType().getContainsPlasma() &&
-            statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA &&
-            statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE &&
-            !statusChange.getIsDeleted();
-
-        if (!dontMarkComponentAsUnsafeForThisStatusChange) {
-          markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
-          return;
+        
+        if (statusChange.getIsDeleted()) {
+          // skip deleted status change reasons
+          continue;
+        }
+        
+        if (!component.getComponentType().getContainsPlasma()
+            && statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE
+            && statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA) {
+          // skip because the component doesn't contain plasma and the unsafe reason only applies to
+          // components that do contain plasma
+          continue;
+        }
+        
+        if (statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE) {
+          markComponentAsUnsafe = true;
+          break;
         }
       }
+    }
+    if (markComponentAsUnsafe) {
+      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
     }
   }
 
@@ -565,12 +578,14 @@ public class ComponentCRUDService {
 
     for (Component component : donation.getComponents()) {
 
-      if (component.getIsDeleted() || !component.getComponentType().getContainsPlasma()) {
-        // Skip deleted components and components not containing plasma
+      if (component.getIsDeleted()) {
+        // Skip deleted components
         continue;
       }
 
-      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA);
+      if (component.getComponentType().getContainsPlasma()) {
+        markComponentAsUnsafe(component, ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA);
+      }
     }
   }
 
