@@ -39,17 +39,9 @@ public class ComponentTypeCombinationCRUDServiceTests extends UnitTestSuite {
     List<ComponentType> producedComponentTypes = Arrays.asList(
         aComponentType()
             .withId(2L)
-            .withComponentTypeName("Whole Blood Single Pack - CPDA")
-            .withComponentTypeCode("1133")
-            .withExpiresAfter(34)
-            .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
             .build(),
         aComponentType()
             .withId(3L)
-            .withComponentTypeName("Whole Blood - CPDA")
-            .withComponentTypeCode("1144")
-            .withExpiresAfter(35)
-            .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
             .build()
     );
     
