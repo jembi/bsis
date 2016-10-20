@@ -28,6 +28,6 @@ public class ComponentTypeCombinationCRUDService {
     existingCombination.setIsDeleted(componentTypeCombination.getIsDeleted());
     existingCombination.setSourceComponentTypes(componentTypeCombination.getSourceComponentTypes());
 
-    return componentTypeCombinationRepository.update(componentTypeCombination);
+    return componentTypeCombinationRepository.update(existingCombination);
   }
 }
