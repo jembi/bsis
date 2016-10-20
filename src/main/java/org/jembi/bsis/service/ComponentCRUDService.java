@@ -263,7 +263,7 @@ public class ComponentCRUDService {
           addComponent(component);
           
           if (parentStatus == ComponentStatus.UNSAFE) {
-            markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+            markChildComponentsAsUnsafeWhereApplicable(component);
           }
         }
       }
@@ -273,6 +273,53 @@ public class ComponentCRUDService {
     parentComponent.setStatus(ComponentStatus.PROCESSED);
 
     return updateComponent(parentComponent);
+  }
+
+  /**
+   * Mark child components as unsafe where applicable.
+   * 
+   * Loop through the initial component status changes, and only avoid marking the component as
+   * unsafe for the status change where the status change reason type is
+   * TEST_RESULTS_CONTAINS_PLASMA and the component doesn't contain plasma.
+   * 
+   * For all other status change reason types, mark the component as unsafe with reason type
+   * UNSAFE_PARENT.
+   *
+   * @param component the component
+   */
+  private void markChildComponentsAsUnsafeWhereApplicable(Component component) {
+    Component initialComponent = component.getParentComponent();
+    // If the component was processed more than once, get the initial component as the parent of the parent
+    while (initialComponent.getParentComponent() != null) {
+      initialComponent = initialComponent.getParentComponent();
+    }
+    
+    boolean markComponentAsUnsafe = false;
+    if (initialComponent.getStatusChanges() != null) {
+      for (ComponentStatusChange statusChange : initialComponent.getStatusChanges()) {
+        
+        if (statusChange.getIsDeleted()) {
+          // skip deleted status change reasons
+          continue;
+        }
+        
+        if (!component.getComponentType().getContainsPlasma()
+            && statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE
+            && statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA) {
+          // skip because the component doesn't contain plasma and the unsafe reason only applies to
+          // components that do contain plasma
+          continue;
+        }
+        
+        if (statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE) {
+          markComponentAsUnsafe = true;
+          break;
+        }
+      }
+    }
+    if (markComponentAsUnsafe) {
+      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+    }
   }
 
   public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
@@ -478,7 +525,7 @@ public class ComponentCRUDService {
    * - when un-processing: Doesn't exist yet
    *
    * @param component the component
-   * @param rollbackCategory the rollback category
+   * @param rollBackCategory the rollback category
    * @return the component
    */
   private Component rollBackComponentStatus(Component component, ComponentStatusChangeReasonCategory rollBackCategory) {
@@ -520,6 +567,26 @@ public class ComponentCRUDService {
   private Component updateComponent(Component component) {
     componentStatusCalculator.updateComponentStatus(component);
     return componentRepository.update(component);
+  }
+
+  /**
+   * Change the status of components linked to the donation from AVAILABLE to UNSAFE only If they contains Plasma.
+   */
+  public void markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(Donation donation) {
+
+    LOGGER.info("Marking components containing plasma as unsafe for donation: " + donation);
+
+    for (Component component : donation.getComponents()) {
+
+      if (component.getIsDeleted()) {
+        // Skip deleted components
+        continue;
+      }
+
+      if (component.getComponentType().getContainsPlasma()) {
+        markComponentAsUnsafe(component, ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA);
+      }
+    }
   }
 
 }

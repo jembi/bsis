@@ -70,6 +70,9 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
   private Boolean isActive;
 
   private Boolean isDeleted;
+  
+  @Column(nullable = false)
+  private boolean flagComponentsContainingPlasmaForDiscard = false;
 
   /**
    * Whether or not to flag associated components for discard when a test has a positive outcome.
@@ -108,6 +111,14 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
 
   public Boolean getIsActive() {
     return isActive;
+  }
+
+  public boolean getFlagComponentsContainingPlasmaForDiscard() {
+    return flagComponentsContainingPlasmaForDiscard;
+  }
+
+  public void setFlagComponentsContainingPlasmaForDiscard(boolean flagComponentsContainingPlasmaForDiscard) {
+    this.flagComponentsContainingPlasmaForDiscard = flagComponentsContainingPlasmaForDiscard;
   }
 
   public void setTestNameShort(String testNameShort) {
