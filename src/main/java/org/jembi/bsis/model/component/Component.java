@@ -29,7 +29,6 @@ import org.jembi.bsis.constraintvalidator.ComponentStatusIsConsistent;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -229,24 +228,6 @@ public class Component extends BaseModificationTrackerEntity {
 
   public SortedSet<ComponentStatusChange> getStatusChanges() {
     return statusChanges;
-  }
-
-  /**
-   * Determines if the Component has a ComponentStatusChange with a StatusChangeReason that has
-   * category of ComponentStatusChangeReasonCategory.UNSAFE.
-   *
-   * @return true if the Component has been marked as unsafe previously, false otherwise
-   */
-  public boolean hasStatusChangeWithCategoryUnsafe() {
-    if (statusChanges != null) {
-      for (ComponentStatusChange statusChange : statusChanges) {
-        if (!statusChange.getIsDeleted()
-            && statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   public void setStatusChanges(SortedSet<ComponentStatusChange> statusChanges) {

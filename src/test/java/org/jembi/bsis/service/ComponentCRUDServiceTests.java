@@ -47,7 +47,6 @@ import javax.persistence.NoResultException;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
-import org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.matchers.ComponentMatcher;
@@ -1712,31 +1711,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(thirdComponent)),
         eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
     verify(componentCRUDService, never()).markComponentAsUnsafe(argThat(hasSameStateAsComponent(deletedComponent)),
-        eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
-  }
-
-  @Test
-  public void testMarkComponentsBelongingToDonationAsUnsafeIfContainsPlasma_shouldSkipComponentThatIsAlreadyUnsafe() {
-    // Set up fixture
-    Component firstComponent = aComponent().withId(1L)
-        .withComponentType(aComponentType()
-            .thatContainsPlasma()
-            .build())
-        .withComponentStatusChange(aComponentStatusChange()
-            .withStatusChangeReason(anUnsafeReason().build())
-            .build())
-        .build();
-
-    Donation donation = aDonation()
-        .withId(1L)
-        .withComponents(Arrays.asList(firstComponent))
-        .build();
-
-    // Exercise SUT
-    componentCRUDService.markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(donation);
-
-    // Verify
-    verify(componentCRUDService, never()).markComponentAsUnsafe(argThat(hasSameStateAsComponent(firstComponent)),
         eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
   }
 }

@@ -557,10 +557,7 @@ public class ComponentCRUDService {
   }
 
   /**
-   * Change the status of components linked to the donation from AVAILABLE to UNSAFE only If they
-   * contains Plasma.
-   *
-   * @param Donation donation that contains the components that will be affected
+   * Change the status of components linked to the donation from AVAILABLE to UNSAFE only If they contains Plasma.
    */
   public void markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(Donation donation) {
 
@@ -568,19 +565,12 @@ public class ComponentCRUDService {
 
     for (Component component : donation.getComponents()) {
 
-      if (component.getIsDeleted()) {
-        // Skip deleted components
+      if (component.getIsDeleted() || !component.getComponentType().getContainsPlasma()) {
+        // Skip deleted components and components not containing plasma
         continue;
       }
 
-      if (component.hasStatusChangeWithCategoryUnsafe()) {
-        // skip components that are already unsafe
-        continue;
-      }
-
-      if (component.getComponentType().getContainsPlasma()) {
-        markComponentAsUnsafe(component, ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA);
-      }
+      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA);
     }
   }
 
