@@ -329,33 +329,16 @@ public class DonorRepository {
   }
 
   public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenues(Set<Long> venueIds) throws NoResultException {
-    StringBuilder queryBuilder = new StringBuilder()
-    .append("SELECT NEW org.jembi.bsis.dto.MobileClinicDonorDTO(d.id, d.donorNumber, d.firstName, ")
-    .append("d.lastName, d.gender, d.bloodAbo, d.bloodRh, d.donorStatus, d.birthDate, d.venue, d.isDeleted) ")
-    .append("FROM Donor d WHERE d.isDeleted = :isDeleted AND d.donorStatus NOT IN :excludedStatuses ");
-
-    Map<String,Object> parameters = new HashMap<>();
-    parameters.put("isDeleted", false);
-    parameters.put("excludedStatuses", Arrays.asList(DonorStatus.MERGED));
-
-    
-    if (venueIds != null && !venueIds.isEmpty()) {
-      queryBuilder.append("AND d.venue.id IN :venueIds ");
-      parameters.put("venueIds", venueIds);
-    }
-    
-    queryBuilder.append("AND d.venue.isMobileSite = :isMobileSite AND d.venue.isVenue = :isVenue ");
-    parameters.put("isMobileSite", true);
-    parameters.put("isVenue", true);
-
-    queryBuilder.append("ORDER BY d.lastName asc, d.firstName asc");
-
-    TypedQuery<MobileClinicDonorDTO> query = em.createQuery(queryBuilder.toString(), MobileClinicDonorDTO.class);
-    for (Map.Entry<String, Object> param : parameters.entrySet()) {
-      query.setParameter(param.getKey(), param.getValue());
-    }
-    return query.getResultList();
-  }
+    boolean includeAllVenues = venueIds == null || venueIds.isEmpty();
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_MOBILE_CLINIC_DONORS_BY_VENUES, MobileClinicDonorDTO.class)
+        .setParameter("isDeleted", false)
+        .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
+        .setParameter("venueIds", venueIds)
+        .setParameter("includeAllVenues", includeAllVenues)
+        .setParameter("isMobileSite", true)
+        .setParameter("isVenue", true)
+        .getResultList();
+}
   
   public boolean verifyDonorExists(Long id) {
     Long count = em.createNamedQuery(DonorNamedQueryConstants.NAME_COUNT_DONOR_WITH_ID, Long.class)

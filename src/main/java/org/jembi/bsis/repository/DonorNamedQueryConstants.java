@@ -74,4 +74,14 @@ public class DonorNamedQueryConstants {
       + "LEFT JOIN d.preferredLanguage "
       + "WHERE d.isDeleted = :deleted "
       + "ORDER BY d.modificationTracker.createdDate ASC";
+
+    public static final String NAME_FIND_MOBILE_CLINIC_DONORS_BY_VENUES =
+      "Donor.findMobileClinicDonorsByVenues";
+    public static final String QUERY_FIND_MOBILE_CLINIC_DONORS_BY_VENUES =
+      "SELECT NEW org.jembi.bsis.dto.MobileClinicDonorDTO(d.id, d.donorNumber, d.firstName, " +
+      "d.lastName, d.gender, d.bloodAbo, d.bloodRh, d.donorStatus, d.birthDate, d.venue, d.isDeleted) " +
+      "FROM Donor d WHERE d.isDeleted = :isDeleted AND d.donorStatus NOT IN :excludedStatuses " +
+      "AND (d.venue.id IN (:venueIds) OR :includeAllVenues = TRUE) " +
+      "AND d.venue.isMobileSite = :isMobileSite AND d.venue.isVenue = :isVenue " +
+      "ORDER BY d.lastName asc, d.firstName asc";
 }
