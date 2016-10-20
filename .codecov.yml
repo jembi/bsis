@@ -1,0 +1,24 @@
+codecov:
+  branch: develop
+
+coverage:
+  status:
+    project:
+      default:
+        target: 70%
+        branches:
+          - master
+          - dev/*
+          - develop/*
+          - release/*
+          - support/*
+
+    patch:
+      default:
+        target: 70%
+        branches:
+          - master
+          - dev/*
+          - develop/*
+          - release/*
+          - support/*
