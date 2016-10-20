@@ -62,51 +62,45 @@ public class ComponentTypeCombinationCRUDServiceTests extends UnitTestSuite {
   }
  
   @Test
-  public void testupdateComponentTypeCombinations_shouldSetCorrectFieldsAndUpdate() {
-    long componentCobinationId = 789L;
+  public void testUpdateComponentTypeCombinations_shouldSetCorrectFieldsAndUpdate() {
+    long componentCombinationId = 789L;
     ComponentType sourceComponent = aComponentType()
         .withId(1L)
         .build();
     List<ComponentType> producedComponentTypes = Arrays.asList(
         aComponentType()
             .withId(2L)
-            .withComponentTypeName("Whole Blood Single Pack - CPDA")
-            .withComponentTypeCode("1133")
-            .withExpiresAfter(34)
-            .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
             .build(),
         aComponentType()
             .withId(3L)
-            .withComponentTypeName("Whole Blood - CPDA")
-            .withComponentTypeCode("1144")
-            .withExpiresAfter(35)
-            .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
             .build()
     );
     
     ComponentTypeCombination existingCombination = aComponentTypeCombination()
-        .withId(componentCobinationId)
+        .withId(componentCombinationId)
         .withCombinationName("combinationName")
         .withComponentTypes(producedComponentTypes)
         .withSourceComponentTypes(new HashSet<>(Arrays.asList(sourceComponent)))
         .build();
     
     ComponentTypeCombination updatedCombination = aComponentTypeCombination()
-        .withId(componentCobinationId)
+        .withId(componentCombinationId)
         .withCombinationName("UpdatedCombinationName")
         .withComponentTypes(producedComponentTypes)
         .withSourceComponentTypes(new HashSet<>(Arrays.asList(sourceComponent)))
         .build();
     
-        when(componentTypeCombinationRepository.findComponentTypeCombinationById(componentCobinationId))
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(componentCombinationId))
         .thenReturn(existingCombination);
-        when(componentTypeCombinationRepository.update(existingCombination)).thenReturn(existingCombination);
         
-        ComponentTypeCombination returnedCombination = componentTypeCombinationCRUDService
-            .updateComponentTypeCombinations(updatedCombination);
+    when(componentTypeCombinationRepository.update(existingCombination)).thenReturn(existingCombination);
         
-        verify(componentTypeCombinationRepository).update(argThat(hasSameStateAsComponentTypeCombination(updatedCombination)));
+    ComponentTypeCombination returnedCombination = componentTypeCombinationCRUDService
+       .updateComponentTypeCombinations(updatedCombination);
+             
+    verify(componentTypeCombinationRepository).update(
+        argThat(hasSameStateAsComponentTypeCombination(updatedCombination)));
         
-        assertThat(returnedCombination, hasSameStateAsComponentTypeCombination(updatedCombination));
+    assertThat(returnedCombination, hasSameStateAsComponentTypeCombination(updatedCombination));
   }
 }
