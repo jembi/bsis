@@ -712,7 +712,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
   }
 
   @Test
-  public void testFindMobileClinicDonorsByVenues_shouldReturnCorrectNumberOfDonorsWilthEmptysetOfvenueIds() throws Exception {
+  public void testFindMobileClinicDonorsByVenuesWithEmptySetOfVenueIds_shouldReturnCorrectNumberOfDonors() throws Exception {
     Location permVenue = LocationBuilder.aVenue().withName("perm venue").buildAndPersist(entityManager);
     Location mobileVenue1 = LocationBuilder.aVenue().withName("mobile venue #1").thatIsMobileSite().buildAndPersist(entityManager);
     Location mobileVenue2 = LocationBuilder.aVenue().withName("mobile venue #2").thatIsMobileSite().buildAndPersist(entityManager);
