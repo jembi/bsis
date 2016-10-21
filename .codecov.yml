@@ -22,3 +22,7 @@ coverage:
           - dev/*
           - release/*
           - support/*
+
+ignore:
+  - "src/main/java/org/jembi/bsis/controllerservice"
+  - "src/main/java/org/jembi/bsis/controller"
