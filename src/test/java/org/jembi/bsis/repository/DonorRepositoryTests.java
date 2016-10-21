@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.NoResultException;
 
@@ -702,6 +703,44 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
     List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(null);
+
+    assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(4));
+    assertThat("Donors from all venues should be returned", mobileClinicDonorDTOs.get(0).getDonorNumber(), is(permDonor.getDonorNumber()));
+    assertThat("Donors from all venues should be returned", mobileClinicDonorDTOs.get(1).getDonorNumber(), is(locationDonor.getDonorNumber()));
+    assertThat("Donors from all venues should be returned", mobileClinicDonorDTOs.get(2).getDonorNumber(), is(mobileClinicDonor1.getDonorNumber()));
+    assertThat("Donors from all venues should be returned", mobileClinicDonorDTOs.get(3).getDonorNumber(), is(mobileClinicDonor2.getDonorNumber()));
+  }
+
+  @Test
+  public void testFindMobileClinicDonorsByVenues_shouldReturnCorrectNumberOfDonorsWilthEmptysetOfvenueIds() throws Exception {
+    Location permVenue = LocationBuilder.aVenue().withName("perm venue").buildAndPersist(entityManager);
+    Location mobileVenue1 = LocationBuilder.aVenue().withName("mobile venue #1").thatIsMobileSite().buildAndPersist(entityManager);
+    Location mobileVenue2 = LocationBuilder.aVenue().withName("mobile venue #2").thatIsMobileSite().buildAndPersist(entityManager);
+    Location location = LocationBuilder.aLocation().withName("a location").buildAndPersist(entityManager);
+
+    // All donors should match
+    Donor permDonor = DonorBuilder.aDonor()
+                .withDonorNumber("D1")
+                .withVenue(permVenue)
+                .thatIsNotDeleted()
+                .buildAndPersist(entityManager);
+    Donor locationDonor = DonorBuilder.aDonor()
+        .withDonorNumber("D2")
+        .withVenue(location)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    Donor mobileClinicDonor1 = DonorBuilder.aDonor()
+        .withDonorNumber("D3")
+        .withVenue(mobileVenue1)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    Donor mobileClinicDonor2 = DonorBuilder.aDonor()
+        .withDonorNumber("D4")
+        .withVenue(mobileVenue2)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+    Set<Long> venueIds = new HashSet<>();
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(venueIds);
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(4));
     assertThat("Donors from all venues should be returned", mobileClinicDonorDTOs.get(0).getDonorNumber(), is(permDonor.getDonorNumber()));

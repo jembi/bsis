@@ -328,6 +328,12 @@ public class DonorRepository {
 
   public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenues(Set<Long> venueIds) throws NoResultException {
     boolean includeAllVenues = venueIds == null || venueIds.isEmpty();
+
+    // using empty list as a parameter causes a bad SQL Grammar exception. If the list is empty we have to
+    // override the parameter to null.
+    if (venueIds != null && venueIds.isEmpty()) {
+      venueIds = null;
+    }
     return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_MOBILE_CLINIC_DONORS_BY_VENUES, MobileClinicDonorDTO.class)
         .setParameter("isDeleted", false)
         .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
