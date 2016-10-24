@@ -151,11 +151,11 @@ public class TestResultController {
   private Map<String, Object> calculateOverviewFlags(List<BloodTestingRuleResult> ruleResults) {
 
     Map<String, Object> overviewFlags = new HashMap<String, Object>();
-    overviewFlags.put("reEntryRequiredTTITests", false);
-    overviewFlags.put("reEntryRequiredBloodTypingTests", false);
-    overviewFlags.put("reEntryRequiredRepeatBloodTypingTests", false);
-    overviewFlags.put("reEntryRequiredConfirmatoryTTITests", false);
-    overviewFlags.put("reEntryRequiredRepeatTTITests", false);
+    overviewFlags.put("hasReEntryRequiredTTITests", false);
+    overviewFlags.put("hasReEntryRequiredBloodTypingTests", false);
+    overviewFlags.put("hasReEntryRequiredRepeatBloodTypingTests", false);
+    overviewFlags.put("hasReEntryRequiredConfirmatoryTTITests", false);
+    overviewFlags.put("hasReEntryRequiredRepeatTTITests", false);
     overviewFlags.put("pendingRepeatTTITests", false);
     overviewFlags.put("pendingConfirmatoryTTITests", false);
     overviewFlags.put("pendingRepeatBloodTypingTests", false);
@@ -168,15 +168,15 @@ public class TestResultController {
         BloodTestResult testResult = model.getTestResult();
         if (testResult.getReEntryRequired().equals(true)) {
           if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
-            overviewFlags.put("reEntryRequiredTTITests", true);
+            overviewFlags.put("hasReEntryRequiredTTITests", true);
           } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
-            overviewFlags.put("reEntryRequiredBloodTypingTests", true);
+            overviewFlags.put("hasReEntryRequiredBloodTypingTests", true);
           } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
-            overviewFlags.put("reEntryRequiredRepeatBloodTypingTests", true);
+            overviewFlags.put("hasReEntryRequiredRepeatBloodTypingTests", true);
           } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
-            overviewFlags.put("reEntryRequiredConfirmatoryTTITests", true);
+            overviewFlags.put("hasReEntryRequiredConfirmatoryTTITests", true);
           } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
-            overviewFlags.put("reEntryRequiredRepeatTTITests", true);
+            overviewFlags.put("hasReEntryRequiredRepeatTTITests", true);
           }
         }
         if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
