@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
+import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
-import org.jembi.bsis.viewmodel.ComponentTypeCombinationFullViewModel;
 import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.viewmodel.ComponentTypeCombinationFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeCombinationViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,28 +43,6 @@ public class ComponentTypeCombinationFactory {
     return viewModel;
   }
 
-  public ComponentTypeCombination createEntity(ComponentTypeCombinationBackingForm backingForm) {
-    ComponentTypeCombination entity = new ComponentTypeCombination();
-    entity.setId(backingForm.getId());
-    entity.setCombinationName(backingForm.getCombinationName());
-    entity.setIsDeleted(backingForm.getIsDeleted());
-    List<ComponentType> producedComponents = new ArrayList<>();
-    if (backingForm.getComponentTypes() != null) {
-      for (ComponentTypeBackingForm producedComponentType : backingForm.getComponentTypes()) {
-        producedComponents.add(componentTypeRepository.getComponentTypeById(producedComponentType.getId()));
-      }
-    }
-    Set<ComponentType> sourceComponentTypes = new HashSet<>();
-    if (backingForm.getSourceComponentTypes() != null) {
-      for (ComponentTypeBackingForm sourceComponentType : backingForm.getSourceComponentTypes()) {
-        sourceComponentTypes.add(componentTypeRepository.getComponentTypeById(sourceComponentType.getId()));
-      }
-    }
-    entity.setComponentTypes(producedComponents);
-    entity.setSourceComponentTypes(sourceComponentTypes);
-    return entity;
-  }
-
   public ComponentTypeCombinationFullViewModel createFullViewModel(ComponentTypeCombination componentTypeCombination) {
     ComponentTypeCombinationFullViewModel viewModel = new ComponentTypeCombinationFullViewModel();
     if (componentTypeCombination != null) {
@@ -72,6 +50,59 @@ public class ComponentTypeCombinationFactory {
       populateComponentTypeCombinationFull(viewModel, componentTypeCombination);
     }
     return viewModel;
+  }
+
+  public ComponentTypeCombination createEntity(ComponentTypeCombinationBackingForm backingForm) {
+    ComponentTypeCombination entity = new ComponentTypeCombination();
+    entity.setId(backingForm.getId());
+    entity.setCombinationName(backingForm.getCombinationName());
+    entity.setIsDeleted(backingForm.getIsDeleted());
+
+    List<ComponentType> producedComponents = retrieveProducedComponents(backingForm);
+
+    Set<ComponentType> sourceComponentTypes = retrieveAndUpdateSourceComponents(backingForm, entity);
+
+    entity.setComponentTypes(producedComponents);
+    entity.setSourceComponentTypes(sourceComponentTypes);
+    return entity;
+  }
+
+  /**
+   * This method retrieves all the source components contained in the backing form based on its
+   * component type ID. It updates the source components by adding new componentTypeCombination to
+   * the Component Type.
+   *
+   * @param backingForm - Backing Form
+   * @param componentTypeCombination - The Component Type Combination that must be added/updated.
+   * @return - Set<ComponentType>
+   */
+  private Set<ComponentType> retrieveAndUpdateSourceComponents(ComponentTypeCombinationBackingForm backingForm,
+      ComponentTypeCombination componentTypeCombination) {
+    Set<ComponentType> sourceComponentTypes = new HashSet<>();
+    if (backingForm.getSourceComponentTypes() != null) {
+      for (ComponentTypeBackingForm sourceComponentType : backingForm.getSourceComponentTypes()) {
+        ComponentType ct = componentTypeRepository.getComponentTypeById(sourceComponentType.getId());
+        List<ComponentTypeCombination> componentTypeCombinations = ct.getProducedComponentTypeCombinations();
+        if (componentTypeCombinations == null) {
+          componentTypeCombinations = new ArrayList<ComponentTypeCombination>();
+          ct.setComponentTypeCombinations(componentTypeCombinations);
+        }
+        componentTypeCombinations.add(componentTypeCombination);
+        sourceComponentTypes.add(ct);
+      }
+    }
+    return sourceComponentTypes;
+  }
+
+  private List<ComponentType> retrieveProducedComponents(
+      ComponentTypeCombinationBackingForm backingForm) {
+    List<ComponentType> producedComponents = new ArrayList<>();
+    if (backingForm.getComponentTypes() != null) {
+      for (ComponentTypeBackingForm producedComponentType : backingForm.getComponentTypes()) {
+        producedComponents.add(componentTypeRepository.getComponentTypeById(producedComponentType.getId()));
+      }
+    }
+    return producedComponents;
   }
 
   private void populateComponentTypeCombination(ComponentTypeCombinationViewModel viewModel,
