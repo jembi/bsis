@@ -156,6 +156,9 @@ public class TestResultController {
     overviewFlags.put("hasReEntryRequiredRepeatBloodTypingTests", false);
     overviewFlags.put("hasReEntryRequiredConfirmatoryTTITests", false);
     overviewFlags.put("hasReEntryRequiredRepeatTTITests", false);
+    overviewFlags.put("hasRepeatBloodTypingTests", false);
+    overviewFlags.put("hasConfirmatoryTTITests", false);
+    overviewFlags.put("hasRepeatTTITests", false);
     overviewFlags.put("hasPendingRepeatTTITests", false);
     overviewFlags.put("hasPendingConfirmatoryTTITests", false);
     overviewFlags.put("hasPendingRepeatBloodTypingTests", false);
@@ -180,21 +183,24 @@ public class TestResultController {
           }
         }
         if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
-          overviewFlags.put("hasPendingRepeatTTITests", true);
+          overviewFlags.put("hasRepeatTTITests", true);
         } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
-          overviewFlags.put("hasPendingConfirmatoryTTITests", true);
+          overviewFlags.put("hasConfirmatoryTTITests", true);
         } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
-          overviewFlags.put("hasPendingRepeatBloodTypingTests", true);
+          overviewFlags.put("hasRepeatBloodTypingTests", true);
         }
       }
       if (result.getPendingBloodTypingTestsIds().size() > 0) {
         overviewFlags.put("hasPendingRepeatBloodTypingTests", true);
+        overviewFlags.put("hasRepeatBloodTypingTests", true);
       }
       if (result.getPendingConfirmatoryTTITestsIds().size() > 0) {
         overviewFlags.put("hasPendingConfirmatoryTTITests", true);
+        overviewFlags.put("hasConfirmatoryTTITests", true);
       }
       if (result.getPendingRepeatTTITestsIds().size() > 0) {
         overviewFlags.put("hasPendingRepeatTTITests", true);
+        overviewFlags.put("hasRepeatTTITests", true);
       }
       if (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)) {
         // A confirmation is required to resolve the ambiguous result.
