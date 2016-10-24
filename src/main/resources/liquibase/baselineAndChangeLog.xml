@@ -59,4 +59,5 @@
   <include file="./src/main/resources/liquibase/updates/1723-component-produced-by-componentType-report.xml" />
   <include file="./src/main/resources/liquibase/updates/1669-pending-tests-improvements.xml" />
   <include file="./src/main/resources/liquibase/updates/1717-add-manage-divisions-and-adverse-events-permissions.xml" />
+  <include file="./src/main/resources/liquibase/updates/1841-update-child-components.xml" />
 </databaseChangeLog>
