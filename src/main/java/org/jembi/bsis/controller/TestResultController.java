@@ -23,7 +23,6 @@ import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.service.BloodTestsService;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -75,8 +74,8 @@ public class TestResultController {
   }
 
   @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public ResponseEntity<Map<String, Object>> findTestResult(@PathVariable String donationIdentificationNumber ) {
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
+  public ResponseEntity<Map<String, Object>> findTestResult(@PathVariable String donationIdentificationNumber) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
@@ -93,15 +92,15 @@ public class TestResultController {
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request,
-      @RequestParam(value = "testBatch", required = true) Long testBatchId,
+  public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request, @RequestParam(
+      value = "testBatch", required = true) Long testBatchId,
       @RequestParam(value = "bloodTestType", required = false) BloodTestType bloodTestType) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
-    for(DonationBatch donationBatch : donationBatches){
+    for (DonationBatch donationBatch : donationBatches) {
       donationBatchIds.add(donationBatch.getId());
     }
 
@@ -121,7 +120,8 @@ public class TestResultController {
 
   @RequestMapping(value = "/report", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity<Map<String, Object>> getTestBatchOutcomesReport(@RequestParam(value = "testBatch", required = true) Long testBatchId) {
+  public ResponseEntity<Map<String, Object>> getTestBatchOutcomesReport(@RequestParam(value = "testBatch",
+      required = true) Long testBatchId) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     List<DonationTestOutcomesReportViewModel> donationTestOutcomesReports =
@@ -140,26 +140,30 @@ public class TestResultController {
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
-    for(DonationBatch donationBatch : donationBatches){
+    for (DonationBatch donationBatch : donationBatches) {
       donationBatchIds.add(donationBatch.getId());
     }
-    Map<String, Object> map = calculateOverviewFlags(bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds));
+    Map<String, Object> map =
+        calculateOverviewFlags(bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   private Map<String, Object> calculateOverviewFlags(List<BloodTestingRuleResult> ruleResults) {
 
     Map<String, Object> overviewFlags = new HashMap<String, Object>();
-    overviewFlags.put("reEntryRequiredTTITests", false);
-    overviewFlags.put("reEntryRequiredBloodTypingTests", false);
-    overviewFlags.put("reEntryRequiredRepeatBloodTypingTests", false);
-    overviewFlags.put("reEntryRequiredConfirmatoryTTITests", false);
-    overviewFlags.put("reEntryRequiredRepeatTTITests", false);
-    overviewFlags.put("pendingRepeatTTITests", false);
-    overviewFlags.put("pendingConfirmatoryTTITests", false);
-    overviewFlags.put("pendingRepeatBloodTypingTests", false);
+    overviewFlags.put("hasReEntryRequiredTTITests", false);
+    overviewFlags.put("hasReEntryRequiredBloodTypingTests", false);
+    overviewFlags.put("hasReEntryRequiredRepeatBloodTypingTests", false);
+    overviewFlags.put("hasReEntryRequiredConfirmatoryTTITests", false);
+    overviewFlags.put("hasReEntryRequiredRepeatTTITests", false);
+    overviewFlags.put("hasRepeatBloodTypingTests", false);
+    overviewFlags.put("hasConfirmatoryTTITests", false);
+    overviewFlags.put("hasRepeatTTITests", false);
+    overviewFlags.put("hasPendingRepeatTTITests", false);
+    overviewFlags.put("hasPendingConfirmatoryTTITests", false);
+    overviewFlags.put("hasPendingRepeatBloodTypingTests", false);
 
-    for(BloodTestingRuleResult result : ruleResults){
+    for (BloodTestingRuleResult result : ruleResults) {
 
       Map<String, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
       for (String key : resultViewModelMap.keySet()) {
@@ -167,37 +171,40 @@ public class TestResultController {
         BloodTestResult testResult = model.getTestResult();
         if (testResult.getReEntryRequired().equals(true)) {
           if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
-            overviewFlags.put("reEntryRequiredTTITests", true);
+            overviewFlags.put("hasReEntryRequiredTTITests", true);
           } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
-            overviewFlags.put("reEntryRequiredBloodTypingTests", true);
+            overviewFlags.put("hasReEntryRequiredBloodTypingTests", true);
           } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
-            overviewFlags.put("reEntryRequiredRepeatBloodTypingTests", true);
+            overviewFlags.put("hasReEntryRequiredRepeatBloodTypingTests", true);
           } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
-            overviewFlags.put("reEntryRequiredConfirmatoryTTITests", true);
+            overviewFlags.put("hasReEntryRequiredConfirmatoryTTITests", true);
           } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
-            overviewFlags.put("reEntryRequiredRepeatTTITests", true);
+            overviewFlags.put("hasReEntryRequiredRepeatTTITests", true);
           }
         }
         if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
-          overviewFlags.put("pendingRepeatTTITests", true);
+          overviewFlags.put("hasRepeatTTITests", true);
         } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
-          overviewFlags.put("pendingConfirmatoryTTITests", true);
+          overviewFlags.put("hasConfirmatoryTTITests", true);
         } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
-          overviewFlags.put("pendingRepeatBloodTypingTests", true);
-        }      
+          overviewFlags.put("hasRepeatBloodTypingTests", true);
+        }
       }
-      if(result.getPendingBloodTypingTestsIds().size() > 0){
-        overviewFlags.put("pendingRepeatBloodTypingTests", true);
+      if (result.getPendingBloodTypingTestsIds().size() > 0) {
+        overviewFlags.put("hasPendingRepeatBloodTypingTests", true);
+        overviewFlags.put("hasRepeatBloodTypingTests", true);
       }
       if (result.getPendingConfirmatoryTTITestsIds().size() > 0) {
-        overviewFlags.put("pendingConfirmatoryTTITests", true);
+        overviewFlags.put("hasPendingConfirmatoryTTITests", true);
+        overviewFlags.put("hasConfirmatoryTTITests", true);
       }
       if (result.getPendingRepeatTTITestsIds().size() > 0) {
-        overviewFlags.put("pendingRepeatTTITests", true);
+        overviewFlags.put("hasPendingRepeatTTITests", true);
+        overviewFlags.put("hasRepeatTTITests", true);
       }
       if (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)) {
         // A confirmation is required to resolve the ambiguous result.
-        overviewFlags.put("pendingBloodTypingConfirmations", true);
+        overviewFlags.put("hasPendingBloodTypingConfirmations", true);
       }
     }
     return overviewFlags;
@@ -206,8 +213,8 @@ public class TestResultController {
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(method = RequestMethod.POST)
   public ResponseEntity<Map<String, Object>> saveTestResults(
-      @RequestBody @Valid TestResultsBackingForms testResultsBackingForms,
-      @RequestParam(value = "reEntry", required = false, defaultValue = "false") boolean reEntry) {
+      @RequestBody @Valid TestResultsBackingForms testResultsBackingForms, @RequestParam(value = "reEntry",
+          required = false, defaultValue = "false") boolean reEntry) {
 
     HttpStatus responseStatus = HttpStatus.CREATED;
     Map<String, Object> responseMap = new HashMap<>();
