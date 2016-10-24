@@ -156,9 +156,9 @@ public class TestResultController {
     overviewFlags.put("hasReEntryRequiredRepeatBloodTypingTests", false);
     overviewFlags.put("hasReEntryRequiredConfirmatoryTTITests", false);
     overviewFlags.put("hasReEntryRequiredRepeatTTITests", false);
-    overviewFlags.put("pendingRepeatTTITests", false);
-    overviewFlags.put("pendingConfirmatoryTTITests", false);
-    overviewFlags.put("pendingRepeatBloodTypingTests", false);
+    overviewFlags.put("hasPendingRepeatTTITests", false);
+    overviewFlags.put("hasPendingConfirmatoryTTITests", false);
+    overviewFlags.put("hasPendingRepeatBloodTypingTests", false);
 
     for (BloodTestingRuleResult result : ruleResults) {
 
@@ -180,25 +180,25 @@ public class TestResultController {
           }
         }
         if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
-          overviewFlags.put("pendingRepeatTTITests", true);
+          overviewFlags.put("hasPendingRepeatTTITests", true);
         } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
-          overviewFlags.put("pendingConfirmatoryTTITests", true);
+          overviewFlags.put("hasPendingConfirmatoryTTITests", true);
         } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
-          overviewFlags.put("pendingRepeatBloodTypingTests", true);
+          overviewFlags.put("hasPendingRepeatBloodTypingTests", true);
         }
       }
       if (result.getPendingBloodTypingTestsIds().size() > 0) {
-        overviewFlags.put("pendingRepeatBloodTypingTests", true);
+        overviewFlags.put("hasPendingRepeatBloodTypingTests", true);
       }
       if (result.getPendingConfirmatoryTTITestsIds().size() > 0) {
-        overviewFlags.put("pendingConfirmatoryTTITests", true);
+        overviewFlags.put("hasPendingConfirmatoryTTITests", true);
       }
       if (result.getPendingRepeatTTITestsIds().size() > 0) {
-        overviewFlags.put("pendingRepeatTTITests", true);
+        overviewFlags.put("hasPendingRepeatTTITests", true);
       }
       if (result.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.AMBIGUOUS)) {
         // A confirmation is required to resolve the ambiguous result.
-        overviewFlags.put("pendingBloodTypingConfirmations", true);
+        overviewFlags.put("hasPendingBloodTypingConfirmations", true);
       }
     }
     return overviewFlags;
