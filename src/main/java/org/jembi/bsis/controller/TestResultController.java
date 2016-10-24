@@ -23,7 +23,6 @@ import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.service.BloodTestsService;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -75,8 +74,8 @@ public class TestResultController {
   }
 
   @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_OUTCOME+"')")
-  public ResponseEntity<Map<String, Object>> findTestResult(@PathVariable String donationIdentificationNumber ) {
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
+  public ResponseEntity<Map<String, Object>> findTestResult(@PathVariable String donationIdentificationNumber) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
@@ -93,15 +92,15 @@ public class TestResultController {
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request,
-      @RequestParam(value = "testBatch", required = true) Long testBatchId,
+  public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request, @RequestParam(
+      value = "testBatch", required = true) Long testBatchId,
       @RequestParam(value = "bloodTestType", required = false) BloodTestType bloodTestType) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
-    for(DonationBatch donationBatch : donationBatches){
+    for (DonationBatch donationBatch : donationBatches) {
       donationBatchIds.add(donationBatch.getId());
     }
 
@@ -121,7 +120,8 @@ public class TestResultController {
 
   @RequestMapping(value = "/report", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity<Map<String, Object>> getTestBatchOutcomesReport(@RequestParam(value = "testBatch", required = true) Long testBatchId) {
+  public ResponseEntity<Map<String, Object>> getTestBatchOutcomesReport(@RequestParam(value = "testBatch",
+      required = true) Long testBatchId) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     List<DonationTestOutcomesReportViewModel> donationTestOutcomesReports =
@@ -140,10 +140,11 @@ public class TestResultController {
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
-    for(DonationBatch donationBatch : donationBatches){
+    for (DonationBatch donationBatch : donationBatches) {
       donationBatchIds.add(donationBatch.getId());
     }
-    Map<String, Object> map = calculateOverviewFlags(bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds));
+    Map<String, Object> map =
+        calculateOverviewFlags(bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
@@ -159,7 +160,7 @@ public class TestResultController {
     overviewFlags.put("pendingConfirmatoryTTITests", false);
     overviewFlags.put("pendingRepeatBloodTypingTests", false);
 
-    for(BloodTestingRuleResult result : ruleResults){
+    for (BloodTestingRuleResult result : ruleResults) {
 
       Map<String, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
       for (String key : resultViewModelMap.keySet()) {
@@ -184,9 +185,9 @@ public class TestResultController {
           overviewFlags.put("pendingConfirmatoryTTITests", true);
         } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
           overviewFlags.put("pendingRepeatBloodTypingTests", true);
-        }      
+        }
       }
-      if(result.getPendingBloodTypingTestsIds().size() > 0){
+      if (result.getPendingBloodTypingTestsIds().size() > 0) {
         overviewFlags.put("pendingRepeatBloodTypingTests", true);
       }
       if (result.getPendingConfirmatoryTTITestsIds().size() > 0) {
@@ -206,8 +207,8 @@ public class TestResultController {
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(method = RequestMethod.POST)
   public ResponseEntity<Map<String, Object>> saveTestResults(
-      @RequestBody @Valid TestResultsBackingForms testResultsBackingForms,
-      @RequestParam(value = "reEntry", required = false, defaultValue = "false") boolean reEntry) {
+      @RequestBody @Valid TestResultsBackingForms testResultsBackingForms, @RequestParam(value = "reEntry",
+          required = false, defaultValue = "false") boolean reEntry) {
 
     HttpStatus responseStatus = HttpStatus.CREATED;
     Map<String, Object> responseMap = new HashMap<>();
