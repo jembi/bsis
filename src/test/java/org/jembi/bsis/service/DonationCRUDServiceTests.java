@@ -759,9 +759,9 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
 
     // Set up expectations
-    when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber))
-        .thenReturn(donation.getDonationBatch());
+    when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donation.getDonationBatch());
     when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(true);
+    when(componentCRUDService.createInitialComponent(donation)).thenReturn(ComponentBuilder.aComponent().build());
 
     
     // Exercise SUT
@@ -769,6 +769,31 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     // Verify
     verify(componentCRUDService).createInitialComponent(donation);
+    assertThat("initial components were created", !donation.getComponents().isEmpty());
   }
 
+  @Test
+  public void testCreateDonationWithPackTypeThatDoesntProduceComponents_shouldNotAddComponent() {
+    // Set up fixture 
+    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    PackType packType = aPackType().withCountAsDonation(false).build();
+    String donationBatchNumber = "000001";
+    Donation donation = aDonation()
+        .withDonationDate(new Date())
+        .withDonor(donor)
+        .withPackType(packType)
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withBatchNumber(donationBatchNumber).build())
+        .build();
+
+    // Set up expectations
+    when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(true);
+    when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donation.getDonationBatch());
+    when(componentCRUDService.createInitialComponent(donation)).thenReturn(null);
+    
+    // Exercise SUT
+    donationCRUDService.createDonation(donation);
+
+    // Verify
+    assertThat("No initial components were created", donation.getComponents().isEmpty());
+  }
 }

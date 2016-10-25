@@ -310,6 +310,16 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   public void setComponents(List<Component> components) {
     this.components = components;
   }
+  
+  public void addComponent(Component component) {
+    if (component == null) {
+      return;
+    }
+    if (components == null) {
+      components = new ArrayList<>();
+    }
+    components.add(component);
+  }
 
   public Set<Worksheet> getWorksheets() {
     return worksheets;

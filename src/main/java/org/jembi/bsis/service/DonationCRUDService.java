@@ -107,13 +107,7 @@ public class DonationCRUDService {
     }
 
     Component component = componentCRUDService.createInitialComponent(donation);
-    if(donation.getComponents() == null) {
-      List<Component> components = new ArrayList<>();
-      components.add(component);
-      donation.setComponents(components);
-    } else {
-      donation.getComponents().add(component);
-    }
+    donation.addComponent(component);
     donationRepository.saveDonation(donation);
 
     if (discardComponents) {
