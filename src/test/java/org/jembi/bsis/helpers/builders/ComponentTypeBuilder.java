@@ -26,7 +26,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   private String transportInfo;
   private String storageInfo;
   private boolean canBeIssued = true;
-  private Set<ComponentTypeCombination> producedComponentTypeCombinations = new HashSet<>();
+  private Set<ComponentTypeCombination> producedComponentTypeCombinations;
   private boolean containsPlasma = false;
 
   public ComponentTypeBuilder withId(Long id) {
@@ -105,6 +105,9 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   }
 
   public ComponentTypeBuilder withProducedComponentTypeCombination(ComponentTypeCombination producedComponentTypeCombination) {
+    if (this.producedComponentTypeCombinations == null) {
+      this.producedComponentTypeCombinations = new HashSet<>();
+    }
     this.producedComponentTypeCombinations.add(producedComponentTypeCombination);
     return this;
   }

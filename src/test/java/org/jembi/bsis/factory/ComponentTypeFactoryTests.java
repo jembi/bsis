@@ -77,6 +77,20 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", "storageInfo", viewModel.getStorageInfo());
     Assert.assertEquals("View Model correct", false, viewModel.getCanBeIssued());
   }
+
+  @Test
+  public void testCreateFullViewModelWithNewComponentType_shouldReturnExpected() {
+    ComponentType entity = ComponentTypeBuilder.aComponentType()
+        .withId(1L)
+        .withComponentTypeName("name")
+        .withComponentTypeCode("0001")
+        .build();
+
+    ComponentTypeFullViewModel viewModel = componentTypeFactory.createFullViewModel(entity);
+    
+    Assert.assertNotNull("View Model was created", viewModel);
+    Assert.assertNull("No produced components",  viewModel.getProducedComponentTypeCombinations());
+  }
   
   @Test
   public void testSingleSearchComponentType_shouldReturnExpectedViewModel() {

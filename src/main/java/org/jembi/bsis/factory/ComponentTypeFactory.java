@@ -81,9 +81,11 @@ public class ComponentTypeFactory {
 
   private void populateProducedComponentTypeCombinationViewModels(ComponentTypeFullViewModel viewModel, ComponentType componentType) {
     Set<ComponentTypeCombination> producedComponentTypeCombinations = componentType.getProducedComponentTypeCombinations();
-    List<ComponentTypeCombinationViewModel> producedComponentTypeCombinationViewModels =
-        componentTypeCombinationFactory.createViewModels(new ArrayList<ComponentTypeCombination>(producedComponentTypeCombinations));
-    viewModel.setProducedComponentTypeCombinations(producedComponentTypeCombinationViewModels);
+    if (producedComponentTypeCombinations != null) {
+      List<ComponentTypeCombinationViewModel> producedComponentTypeCombinationViewModels =
+          componentTypeCombinationFactory.createViewModels(new ArrayList<ComponentTypeCombination>(producedComponentTypeCombinations));
+      viewModel.setProducedComponentTypeCombinations(producedComponentTypeCombinationViewModels);
+    }
   }
   
   /**
