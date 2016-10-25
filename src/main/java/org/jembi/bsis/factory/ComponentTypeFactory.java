@@ -2,6 +2,7 @@ package org.jembi.bsis.factory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -79,10 +80,12 @@ public class ComponentTypeFactory {
   }
 
   private void populateProducedComponentTypeCombinationViewModels(ComponentTypeFullViewModel viewModel, ComponentType componentType) {
-    List<ComponentTypeCombination> producedComponentTypeCombinations = componentType.getProducedComponentTypeCombinations();
-    List<ComponentTypeCombinationViewModel> producedComponentTypeCombinationViewModels =
-        componentTypeCombinationFactory.createViewModels(producedComponentTypeCombinations);
-    viewModel.setProducedComponentTypeCombinations(producedComponentTypeCombinationViewModels);
+    Set<ComponentTypeCombination> producedComponentTypeCombinations = componentType.getProducedComponentTypeCombinations();
+    if (producedComponentTypeCombinations != null) {
+      List<ComponentTypeCombinationViewModel> producedComponentTypeCombinationViewModels =
+          componentTypeCombinationFactory.createViewModels(new ArrayList<ComponentTypeCombination>(producedComponentTypeCombinations));
+      viewModel.setProducedComponentTypeCombinations(producedComponentTypeCombinationViewModels);
+    }
   }
   
   /**

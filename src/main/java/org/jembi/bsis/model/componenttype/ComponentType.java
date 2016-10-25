@@ -1,6 +1,7 @@
 package org.jembi.bsis.model.componenttype;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +19,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.repository.ComponentTypeQueryConstants;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -38,7 +39,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class ComponentType extends BaseEntity {
+public class ComponentType extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -64,7 +65,7 @@ public class ComponentType extends BaseEntity {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
-  private List<ComponentTypeCombination> producedComponentTypeCombinations;
+  private Set<ComponentTypeCombination> producedComponentTypeCombinations;
 
   /**
    * TODO: Not used for now. Some component types like Cryoprecipitate may not require blood group
@@ -183,11 +184,11 @@ public class ComponentType extends BaseEntity {
     this.componentTypeCombinations = componentTypeCombinations;
   }
 
-  public List<ComponentTypeCombination> getProducedComponentTypeCombinations() {
+  public Set<ComponentTypeCombination> getProducedComponentTypeCombinations() {
     return producedComponentTypeCombinations;
   }
 
-  public void setProducedComponentTypeCombinations(List<ComponentTypeCombination> producedComponentTypeCombinations) {
+  public void setProducedComponentTypeCombinations(Set<ComponentTypeCombination> producedComponentTypeCombinations) {
     this.producedComponentTypeCombinations = producedComponentTypeCombinations;
   }
 

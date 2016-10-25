@@ -15,26 +15,23 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.model.BaseEntity;
-import org.jembi.bsis.repository.constant.ComponentStatusChangeReasonNamedQueryConstants;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.repository.constant.ComponentTypeCombinationsQueryConstants;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @NamedQueries({
   @NamedQuery(name = ComponentTypeCombinationsQueryConstants.NAME_FIND_COMPONENT_TYPE_COMBINATION,
       query = ComponentTypeCombinationsQueryConstants.QUERY_FIND_COMPONENT_TYPE_COMBINATION),
+  @NamedQuery(name = ComponentTypeCombinationsQueryConstants.NAME_VERIFY_UNIQUE_COMPONENT_TYPE_COMBINATION_NAME,
+      query = ComponentTypeCombinationsQueryConstants.QUERY_VERIFY_UNIQUE_COMPONENT_TYPE_COMBINATION_NAME)
 })
 
 @Audited
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class ComponentTypeCombination extends BaseEntity {
+public class ComponentTypeCombination extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length = 300)
+  @Column(length = 255, unique = true, nullable = false)
   private String combinationName;
 
   @NotAudited

@@ -1,7 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
@@ -26,7 +26,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   private String transportInfo;
   private String storageInfo;
   private boolean canBeIssued = true;
-  private List<ComponentTypeCombination> producedComponentTypeCombinations = new ArrayList<>();
+  private Set<ComponentTypeCombination> producedComponentTypeCombinations;
   private boolean containsPlasma = false;
 
   public ComponentTypeBuilder withId(Long id) {
@@ -105,6 +105,9 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   }
 
   public ComponentTypeBuilder withProducedComponentTypeCombination(ComponentTypeCombination producedComponentTypeCombination) {
+    if (this.producedComponentTypeCombinations == null) {
+      this.producedComponentTypeCombinations = new HashSet<>();
+    }
     this.producedComponentTypeCombinations.add(producedComponentTypeCombination);
     return this;
   }
