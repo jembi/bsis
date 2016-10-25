@@ -1,6 +1,7 @@
 package org.jembi.bsis.model.componenttype;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -64,7 +65,7 @@ public class ComponentType extends BaseModificationTrackerEntity {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
-  private List<ComponentTypeCombination> producedComponentTypeCombinations;
+  private Set<ComponentTypeCombination> producedComponentTypeCombinations;
 
   /**
    * TODO: Not used for now. Some component types like Cryoprecipitate may not require blood group
@@ -183,11 +184,11 @@ public class ComponentType extends BaseModificationTrackerEntity {
     this.componentTypeCombinations = componentTypeCombinations;
   }
 
-  public List<ComponentTypeCombination> getProducedComponentTypeCombinations() {
+  public Set<ComponentTypeCombination> getProducedComponentTypeCombinations() {
     return producedComponentTypeCombinations;
   }
 
-  public void setProducedComponentTypeCombinations(List<ComponentTypeCombination> producedComponentTypeCombinations) {
+  public void setProducedComponentTypeCombinations(Set<ComponentTypeCombination> producedComponentTypeCombinations) {
     this.producedComponentTypeCombinations = producedComponentTypeCombinations;
   }
 

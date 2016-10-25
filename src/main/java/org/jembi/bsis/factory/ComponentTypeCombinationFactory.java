@@ -82,12 +82,12 @@ public class ComponentTypeCombinationFactory {
     if (backingForm.getSourceComponentTypes() != null) {
       for (ComponentTypeBackingForm sourceComponentType : backingForm.getSourceComponentTypes()) {
         ComponentType ct = componentTypeRepository.getComponentTypeById(sourceComponentType.getId());
-        List<ComponentTypeCombination> componentTypeCombinations = ct.getProducedComponentTypeCombinations();
-        if (componentTypeCombinations == null) {
-          componentTypeCombinations = new ArrayList<ComponentTypeCombination>();
-          ct.setComponentTypeCombinations(componentTypeCombinations);
+        Set<ComponentTypeCombination> producedComponentTypeCombinations = ct.getProducedComponentTypeCombinations();
+        if (producedComponentTypeCombinations == null) {
+          producedComponentTypeCombinations = new HashSet<ComponentTypeCombination>();
+          ct.setProducedComponentTypeCombinations(producedComponentTypeCombinations);
         }
-        componentTypeCombinations.add(componentTypeCombination);
+        producedComponentTypeCombinations.add(componentTypeCombination);
         sourceComponentTypes.add(ct);
       }
     }

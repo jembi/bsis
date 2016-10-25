@@ -155,7 +155,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
     Set<ComponentType> componentTypes = convertedComponentTypeCombinationEntity.getSourceComponentTypes();
     
     ComponentTypeCombination actualComponentTypeCombination =
-        componentTypes.iterator().next().getProducedComponentTypeCombinations().get(0);
+        componentTypes.iterator().next().getProducedComponentTypeCombinations().iterator().next();
     assertThat(actualComponentTypeCombination,
         hasSameStateAsComponentTypeCombination(expectedComponentTypeCombination));
   }
@@ -220,12 +220,12 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
     // note ordering does not matter since we expect both to have the same componentTypeCombination.
     Iterator<ComponentType> iterator = componentTypes.iterator();
     ComponentTypeCombination actualComponentTypeCombination =
-        iterator.next().getProducedComponentTypeCombinations().get(0);
+        iterator.next().getProducedComponentTypeCombinations().iterator().next();
     assertThat(actualComponentTypeCombination,
         hasSameStateAsComponentTypeCombination(expectedComponentTypeCombination));
 
     ComponentTypeCombination actualComponentTypeCombination2 =
-        iterator.next().getProducedComponentTypeCombinations().get(0);
+        iterator.next().getProducedComponentTypeCombinations().iterator().next();
     assertThat(actualComponentTypeCombination2,
         hasSameStateAsComponentTypeCombination(expectedComponentTypeCombination));
   }
@@ -285,7 +285,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
     // note ordering does not matter since we expect both to have the same componentTypeCombination.
     Iterator<ComponentType> iterator = componentTypes.iterator();
     ComponentTypeCombination actualComponentTypeCombination =
-        iterator.next().getProducedComponentTypeCombinations().get(0);
+        iterator.next().getProducedComponentTypeCombinations().iterator().next();
     assertThat(actualComponentTypeCombination,
         hasSameStateAsComponentTypeCombination(expectedComponentTypeCombination));
   }

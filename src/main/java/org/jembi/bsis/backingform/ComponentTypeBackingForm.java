@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform;
 
 import java.util.List;
+import java.util.Set;
 
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
@@ -77,7 +78,7 @@ public class ComponentTypeBackingForm {
     componentType.setComponentTypeCombinations(componentTypeCombinations);
   }
 
-  public void setProducedComponentTypeCombinations(List<ComponentTypeCombination> producedComponentTypeCombinations) {
+  public void setProducedComponentTypeCombinations(Set<ComponentTypeCombination> producedComponentTypeCombinations) {
     componentType.setProducedComponentTypeCombinations(producedComponentTypeCombinations);
   }
 
