@@ -67,14 +67,13 @@ public class ComponentConstraintChecker {
       return false;
     }
 
-    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(parentComponent.getDonationIdentificationNumber());
+    // Get child components
+    List<Component> components = componentRepository.findChildComponents(parentComponent);
     for (Component component : components) {
-      // check that status is correct and it hasn't been labelled (not in stock) for all child components
-      if (component.getId() != parentComponent.getId()) {
-        if (!(CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus())
-            && component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK))) {
-          return false;
-        }
+      // Check that status is correct and it hasn't been labelled (not in stock)
+      if (!(CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus())
+          && component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK))) {
+        return false;
       }
     }
 
