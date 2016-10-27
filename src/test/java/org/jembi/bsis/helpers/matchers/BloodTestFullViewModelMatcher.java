@@ -6,17 +6,17 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 
-public class BloodTestViewModelMatcher extends TypeSafeMatcher<BloodTestFullViewModel> {
+public class BloodTestFullViewModelMatcher extends TypeSafeMatcher<BloodTestFullViewModel> {
 
   private BloodTestFullViewModel expected;
 
-  public BloodTestViewModelMatcher(BloodTestFullViewModel expected) {
+  public BloodTestFullViewModelMatcher(BloodTestFullViewModel expected) {
     this.expected = expected;
   }
 
   @Override
   public void describeTo(Description description) {
-    description.appendText("A BloodTestViewModel with the following state:")
+    description.appendText("A BloodTestFullViewModel with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nTest name: ").appendValue(expected.getTestName())
         .appendText("\nTest name short: ").appendValue(expected.getTestNameShort())
@@ -45,8 +45,8 @@ public class BloodTestViewModelMatcher extends TypeSafeMatcher<BloodTestFullView
         && Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
   }
   
-  public static BloodTestViewModelMatcher hasSameStateAsBloodTestViewModel(BloodTestFullViewModel expected) {
-    return new BloodTestViewModelMatcher(expected);
+  public static BloodTestFullViewModelMatcher hasSameStateAsBloodTestFullViewModel(BloodTestFullViewModel expected) {
+    return new BloodTestFullViewModelMatcher(expected);
   }
 
 }

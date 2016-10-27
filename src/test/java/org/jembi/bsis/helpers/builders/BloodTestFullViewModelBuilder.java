@@ -7,7 +7,7 @@ import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 
-public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestFullViewModel> {
+public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFullViewModel> {
   
   private Long id;
   private String testNameShort;
@@ -21,72 +21,72 @@ public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestFullView
   private Boolean isActive = Boolean.TRUE;
   private Boolean isDeleted = Boolean.FALSE;
   
-  public BloodTestViewModelBuilder withId(Long id) {
+  public BloodTestFullViewModelBuilder withId(Long id) {
     this.id = id;
     return this;
   }
 
-  public BloodTestViewModelBuilder withTestName(String testName) {
+  public BloodTestFullViewModelBuilder withTestName(String testName) {
     this.testName = testName;
     return this;
   }
 
-  public BloodTestViewModelBuilder withTestNameShort(String testNameShort) {
+  public BloodTestFullViewModelBuilder withTestNameShort(String testNameShort) {
     this.testNameShort = testNameShort;
     return this;
   }
   
-  public BloodTestViewModelBuilder withValidResult(String validResult) {
+  public BloodTestFullViewModelBuilder withValidResult(String validResult) {
     this.validResults.add(validResult);
     return this;
   }
 
-  public BloodTestViewModelBuilder withValidResults(List<String> validResults) {
+  public BloodTestFullViewModelBuilder withValidResults(List<String> validResults) {
     this.validResults = validResults;
     return this;
   }
 
-  public BloodTestViewModelBuilder withNegativeResult(String negativeResult) {
+  public BloodTestFullViewModelBuilder withNegativeResult(String negativeResult) {
     this.negativeResults.add(negativeResult);
     return this;
   }
 
-  public BloodTestViewModelBuilder withNegativeResults(List<String> negativeResults) {
+  public BloodTestFullViewModelBuilder withNegativeResults(List<String> negativeResults) {
     this.negativeResults = negativeResults;
     return this;
   }
 
-  public BloodTestViewModelBuilder withPositiveResult(String positiveResult) {
+  public BloodTestFullViewModelBuilder withPositiveResult(String positiveResult) {
     this.positiveResults.add(positiveResult);
     return this;
   }
 
-  public BloodTestViewModelBuilder withPositiveResults(List<String> positiveResults) {
+  public BloodTestFullViewModelBuilder withPositiveResults(List<String> positiveResults) {
     this.positiveResults = positiveResults;
     return this;
   }
 
-  public BloodTestViewModelBuilder withBloodTestCategory(BloodTestCategory bloodTestCategory) {
+  public BloodTestFullViewModelBuilder withBloodTestCategory(BloodTestCategory bloodTestCategory) {
     this.bloodTestCategory = bloodTestCategory;
     return this;
   }
 
-  public BloodTestViewModelBuilder withBloodTestType(BloodTestType bloodTestType) {
+  public BloodTestFullViewModelBuilder withBloodTestType(BloodTestType bloodTestType) {
     this.bloodTestType = bloodTestType;
     return this;
   }
 
-  public BloodTestViewModelBuilder withRankInCategory(Integer rankInCategory) {
+  public BloodTestFullViewModelBuilder withRankInCategory(Integer rankInCategory) {
     this.rankInCategory = rankInCategory;
     return this;
   }
 
-  public BloodTestViewModelBuilder thatIsDeleted() {
+  public BloodTestFullViewModelBuilder thatIsDeleted() {
     this.isDeleted = Boolean.TRUE;
     return this;
   }
 
-  public BloodTestViewModelBuilder thatIsInActive() {
+  public BloodTestFullViewModelBuilder thatIsInActive() {
     this.isActive = Boolean.FALSE;
     return this;
   }
@@ -108,30 +108,30 @@ public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestFullView
     return viewModel;
   }
   
-  public static BloodTestViewModelBuilder aBloodTestViewModel() {
-    return new BloodTestViewModelBuilder();
+  public static BloodTestFullViewModelBuilder aBloodTestFullViewModel() {
+    return new BloodTestFullViewModelBuilder();
   }
 
-  public static BloodTestViewModelBuilder aBasicTTIBloodTestViewModel() {
-    return new BloodTestViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.BASIC_TTI);
+  public static BloodTestFullViewModelBuilder aBasicTTIBloodTestFullViewModel() {
+    return new BloodTestFullViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.BASIC_TTI);
   }
 
-  public static BloodTestViewModelBuilder aRepeatTTIBloodTestViewModel() {
-    return new BloodTestViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.REPEAT_TTI);
+  public static BloodTestFullViewModelBuilder aRepeatTTIBloodTestFullViewModel() {
+    return new BloodTestFullViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.REPEAT_TTI);
   }
 
-  public static BloodTestViewModelBuilder aConfirmatoryTTIBloodTestViewModel() {
-    return new BloodTestViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.CONFIRMATORY_TTI);
+  public static BloodTestFullViewModelBuilder aConfirmatoryTTIBloodTestFullViewModel() {
+    return new BloodTestFullViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.CONFIRMATORY_TTI);
   }
 
-  public static BloodTestViewModelBuilder aBasicBloodTypingBloodTestViewModel() {
-    return new BloodTestViewModelBuilder()
+  public static BloodTestFullViewModelBuilder aBasicBloodTypingBloodTestFullViewModel() {
+    return new BloodTestFullViewModelBuilder()
       .withBloodTestCategory(BloodTestCategory.BLOODTYPING)
       .withBloodTestType(BloodTestType.BASIC_BLOODTYPING);
   }
 
-  public static BloodTestViewModelBuilder aRepeatBloodTypingBloodTestViewModel() {
-    return new BloodTestViewModelBuilder()
+  public static BloodTestFullViewModelBuilder aRepeatBloodTypingBloodTestFullViewModel() {
+    return new BloodTestFullViewModelBuilder()
       .withBloodTestCategory(BloodTestCategory.BLOODTYPING)
       .withBloodTestType(BloodTestType.REPEAT_BLOODTYPING);
   }

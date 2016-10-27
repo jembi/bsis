@@ -49,7 +49,7 @@ public class TTIController {
   private List<BloodTestFullViewModel> getRepeatTTITests() {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
     for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
-      tests.add(bloodTestFactory.createViewModel(bloodTest));
+      tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;
   }
@@ -58,7 +58,7 @@ public class TTIController {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
     for (BloodTest bloodTest : bloodTestingRepository
         .getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
-      tests.add(bloodTestFactory.createViewModel(bloodTest));
+      tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;
   }
@@ -67,7 +67,7 @@ public class TTIController {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
     for (BloodTest bloodTest : bloodTestingRepository
         .getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
-      tests.add(bloodTestFactory.createViewModel(bloodTest));
+      tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;
   }

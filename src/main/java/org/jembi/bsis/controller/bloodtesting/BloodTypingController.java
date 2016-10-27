@@ -49,7 +49,7 @@ public class BloodTypingController {
   private List<BloodTestFullViewModel> getBasicBloodTypingTests() {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
     for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
-      tests.add(bloodTestFactory.createViewModel(bloodTest));
+      tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;
   }
@@ -57,7 +57,7 @@ public class BloodTypingController {
   private List<BloodTestFullViewModel> getAdvancedBloodTypingTests() {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
     for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING)) {
-      tests.add(bloodTestFactory.createViewModel(bloodTest));
+      tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;
   }
@@ -65,7 +65,7 @@ public class BloodTypingController {
   public List<BloodTestFullViewModel> getRepeatBloodTypingTests() {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
     for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
-      tests.add(bloodTestFactory.createViewModel(bloodTest));
+      tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;
   }

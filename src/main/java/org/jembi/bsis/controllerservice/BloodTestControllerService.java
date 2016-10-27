@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 import org.jembi.bsis.factory.BloodTestFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
-import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
+import org.jembi.bsis.viewmodel.BloodTestViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class BloodTestControllerService {
   @Autowired
   private BloodTestFactory bloodTestFactory;
 
-  public List<BloodTestFullViewModel> getAllBloodTests() {
+  public List<BloodTestViewModel> getAllBloodTests() {
     List<BloodTest> bloodTests = bloodTestingRepository.getAllBloodTestsIncludeInactive();
     return bloodTestFactory.createViewModels(bloodTests);
   }

@@ -17,7 +17,7 @@ public class BloodTestResultFactory {
   public BloodTestResultViewModel createBloodTestResultViewModel(BloodTestResult bloodTestResult) {
     BloodTestResultViewModel viewModel = new BloodTestResultViewModel();
     viewModel.setId(bloodTestResult.getId());
-    viewModel.setBloodTest(bloodTestFactory.createViewModel(bloodTestResult.getBloodTest()));
+    viewModel.setBloodTest(bloodTestFactory.createFullViewModel(bloodTestResult.getBloodTest()));
     viewModel.setReEntryRequired(bloodTestResult.getReEntryRequired());
     viewModel.setResult(bloodTestResult.getResult());
     viewModel.setTestedOn(bloodTestResult.getTestedOn());
