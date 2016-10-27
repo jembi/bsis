@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.viewmodel.BloodTestViewModel;
+import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 
-public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestViewModel> {
+public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestFullViewModel> {
   
   private Long id;
   private String testNameShort;
@@ -92,8 +92,8 @@ public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestViewMode
   }
 
   @Override
-  public BloodTestViewModel build() {
-    BloodTestViewModel viewModel = new BloodTestViewModel();
+  public BloodTestFullViewModel build() {
+    BloodTestFullViewModel viewModel = new BloodTestFullViewModel();
     viewModel.setId(id);
     viewModel.setTestName(testName);
     viewModel.setTestNameShort(testNameShort);

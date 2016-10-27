@@ -26,7 +26,7 @@ import org.jembi.bsis.service.BloodTestsService;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
-import org.jembi.bsis.viewmodel.BloodTestViewModel;
+import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,7 +168,7 @@ public class TestResultController {
       Map<String, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
       for (String key : resultViewModelMap.keySet()) {
         BloodTestResultViewModel model = resultViewModelMap.get(key);
-        BloodTestViewModel bloodTest = model.getBloodTest();
+        BloodTestFullViewModel bloodTest = model.getBloodTest();
         if (model.getReEntryRequired().equals(true)) {
           if (bloodTest.getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
             overviewFlags.put("hasReEntryRequiredTTITests", true);

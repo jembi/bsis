@@ -4,13 +4,13 @@ import java.util.Objects;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.jembi.bsis.viewmodel.BloodTestViewModel;
+import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 
-public class BloodTestViewModelMatcher extends TypeSafeMatcher<BloodTestViewModel> {
+public class BloodTestViewModelMatcher extends TypeSafeMatcher<BloodTestFullViewModel> {
 
-  private BloodTestViewModel expected;
+  private BloodTestFullViewModel expected;
 
-  public BloodTestViewModelMatcher(BloodTestViewModel expected) {
+  public BloodTestViewModelMatcher(BloodTestFullViewModel expected) {
     this.expected = expected;
   }
 
@@ -31,7 +31,7 @@ public class BloodTestViewModelMatcher extends TypeSafeMatcher<BloodTestViewMode
   }
 
   @Override
-  protected boolean matchesSafely(BloodTestViewModel actual) {
+  protected boolean matchesSafely(BloodTestFullViewModel actual) {
     return Objects.equals(actual.getId(), expected.getId())
         && Objects.equals(actual.getTestName(), expected.getTestName())
         && Objects.equals(actual.getTestNameShort(), expected.getTestNameShort())
@@ -45,7 +45,7 @@ public class BloodTestViewModelMatcher extends TypeSafeMatcher<BloodTestViewMode
         && Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
   }
   
-  public static BloodTestViewModelMatcher hasSameStateAsBloodTestViewModel(BloodTestViewModel expected) {
+  public static BloodTestViewModelMatcher hasSameStateAsBloodTestViewModel(BloodTestFullViewModel expected) {
     return new BloodTestViewModelMatcher(expected);
   }
 

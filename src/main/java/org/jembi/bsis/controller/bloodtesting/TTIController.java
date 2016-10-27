@@ -12,7 +12,7 @@ import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.BloodTestViewModel;
+import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,28 +34,28 @@ public class TTIController {
   public Map<String, Object> getTTIForm(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
 
-    List<BloodTestViewModel> basicTTITestNames = getBasicTTITests();
+    List<BloodTestFullViewModel> basicTTITestNames = getBasicTTITests();
     map.put("basicTTITestNames", basicTTITestNames);
 
-    List<BloodTestViewModel> repeatTTITestNames = getRepeatTTITests();
+    List<BloodTestFullViewModel> repeatTTITestNames = getRepeatTTITests();
     map.put("repeatTTITestNames", repeatTTITestNames);
 
-    List<BloodTestViewModel> confirmatoryTTITestNames = getConfirmatoryTTITests();
+    List<BloodTestFullViewModel> confirmatoryTTITestNames = getConfirmatoryTTITests();
     map.put("confirmatoryTTITestNames", confirmatoryTTITestNames);
 
     return map;
   }
 
-  private List<BloodTestViewModel> getRepeatTTITests() {
-    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+  private List<BloodTestFullViewModel> getRepeatTTITests() {
+    List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
     for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
       tests.add(bloodTestFactory.createViewModel(bloodTest));
     }
     return tests;
   }
 
-  private List<BloodTestViewModel> getBasicTTITests() {
-    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+  private List<BloodTestFullViewModel> getBasicTTITests() {
+    List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
     for (BloodTest bloodTest : bloodTestingRepository
         .getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
       tests.add(bloodTestFactory.createViewModel(bloodTest));
@@ -63,8 +63,8 @@ public class TTIController {
     return tests;
   }
 
-  private List<BloodTestViewModel> getConfirmatoryTTITests() {
-    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
+  private List<BloodTestFullViewModel> getConfirmatoryTTITests() {
+    List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
     for (BloodTest bloodTest : bloodTestingRepository
         .getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
       tests.add(bloodTestFactory.createViewModel(bloodTest));

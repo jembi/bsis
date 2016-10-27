@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class BloodTestResultViewModel extends BaseViewModel {
 
-  private BloodTestViewModel bloodTest;
+  private BloodTestFullViewModel bloodTest;
   private Boolean reEntryRequired;
   private String result;
   private Date testedOn;
@@ -19,7 +19,7 @@ public class BloodTestResultViewModel extends BaseViewModel {
   public BloodTestResultViewModel() {
   }
 
-  public BloodTestViewModel getBloodTest() {
+  public BloodTestFullViewModel getBloodTest() {
     return bloodTest;
   }
 
@@ -40,7 +40,7 @@ public class BloodTestResultViewModel extends BaseViewModel {
     return permissions;
   }
 
-  public void setBloodTest(BloodTestViewModel bloodTest) {
+  public void setBloodTest(BloodTestFullViewModel bloodTest) {
     this.bloodTest = bloodTest;
   }
 

@@ -11,7 +11,7 @@ import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.helpers.builders.BloodTestViewModelBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.suites.UnitTestSuite;
-import org.jembi.bsis.viewmodel.BloodTestViewModel;
+import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
@@ -36,7 +36,7 @@ public class BloodTestFactoryTests extends UnitTestSuite {
         .build();
     
     // Set up expectations
-    BloodTestViewModel expectedViewModel = BloodTestViewModelBuilder.aBasicBloodTypingBloodTestViewModel()
+    BloodTestFullViewModel expectedViewModel = BloodTestViewModelBuilder.aBasicBloodTypingBloodTestViewModel()
         .withId(1L)
         .withTestName("ABC test")
         .withTestNameShort("ABC")
@@ -52,7 +52,7 @@ public class BloodTestFactoryTests extends UnitTestSuite {
         .build();
     
     // Exercise SUT
-    BloodTestViewModel returnedViewModel = bloodTestFactory.createViewModel(bloodTest);
+    BloodTestFullViewModel returnedViewModel = bloodTestFactory.createViewModel(bloodTest);
     
     // Verify
     assertThat(returnedViewModel, hasSameStateAsBloodTestViewModel(expectedViewModel));
@@ -66,13 +66,13 @@ public class BloodTestFactoryTests extends UnitTestSuite {
         BloodTestBuilder.aBasicBloodTypingBloodTest().withId(2L).build());
 
     // Set up expectations
-    List<BloodTestViewModel> expectedViewModels = Arrays.asList(
+    List<BloodTestFullViewModel> expectedViewModels = Arrays.asList(
         BloodTestViewModelBuilder.aBasicBloodTypingBloodTestViewModel().withId(1L).build(),
         BloodTestViewModelBuilder.aBasicBloodTypingBloodTestViewModel().withId(2L).build());
           
     
     // Exercise SUT
-    List<BloodTestViewModel> returnedViewModels = bloodTestFactory.createViewModels(bloodTests);
+    List<BloodTestFullViewModel> returnedViewModels = bloodTestFactory.createViewModels(bloodTests);
     
     // Verify
     assertThat("Correct number of view models returned", returnedViewModels.size(), is(2));
