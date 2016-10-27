@@ -190,7 +190,7 @@ public class BloodTestingRepository {
       Map<String, BloodTestResultViewModel> filteredModelMap = new HashMap<String, BloodTestResultViewModel>();
       for (String key : modelMap.keySet()) {
         BloodTestResultViewModel model = modelMap.get(key);
-        if (model.getTestResult().getBloodTest().getBloodTestType().equals(bloodTestType)) {
+        if (model.getBloodTest().getBloodTestType().equals(bloodTestType)) {
           filteredModelMap.put(key, model);
         }
       }

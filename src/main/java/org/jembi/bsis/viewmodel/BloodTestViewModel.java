@@ -1,99 +1,103 @@
 package org.jembi.bsis.viewmodel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.List;
-import java.util.Set;
 
-import org.jembi.bsis.model.bloodtesting.BloodTest;
-import org.jembi.bsis.model.worksheet.WorksheetType;
+import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
+import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
-public class BloodTestViewModel {
+public class BloodTestViewModel extends BaseViewModel {
 
-  @JsonIgnore
-  private BloodTest rawBloodTest;
+  private String testNameShort;
+  private String testName;
+  private List<String> validResults;
+  private String negativeResults;
+  private String positiveResults;
+  private BloodTestCategory bloodTestCategory;
+  private BloodTestType bloodTestType;
+  private Integer rankInCategory;
+  private Boolean isActive;
+  private Boolean isDeleted;
 
-  public BloodTestViewModel(BloodTest rawBloodTest) {
-    this.rawBloodTest = rawBloodTest;
-  }
-
-  public BloodTest getRawBloodTest() {
-    return rawBloodTest;
-  }
-
-  public void setRawBloodTest(BloodTest rawBloodTest) {
-    this.rawBloodTest = rawBloodTest;
-  }
-
-  public Long getId() {
-    return rawBloodTest.getId();
+  public BloodTestViewModel() {
   }
 
   public String getTestNameShort() {
-    return rawBloodTest.getTestNameShort();
+    return testNameShort;
   }
 
   public String getTestName() {
-    return rawBloodTest.getTestName();
+    return testName;
   }
-
-  /*
-  public ArrayList<String> getValidResults() {
-      String validResults = rawBloodTest.getValidResults();
-      ArrayList<String> formatValidResults = new ArrayList<String>();
-      String validResultStr = "";
-      for(int i=0; i< validResults.length() ; i++){
-          char c = validResults.charAt(i);
-          if(c != ','){
-        	  validResultStr += c;
-          }
-          else {
-        	  formatValidResults.add(validResultStr);
-        	  validResultStr = "";
-          }
-      }
-      formatValidResults.add(validResultStr);
-      return  formatValidResults;
-  }
-  */
 
   public List<String> getValidResults() {
-    return rawBloodTest.getValidResultsList();
+    return validResults;
   }
 
-  public String getBloodTestCategory() {
-    String category = "";
-    if (rawBloodTest.getCategory() == null)
-      return "";
-    switch (rawBloodTest.getCategory()) {
-      case BLOODTYPING:
-        category = "BLOODTYPING";
-        break;
-      case TTI:
-        category = "TTI";
-        break;
-    }
-    return category;
+  public BloodTestCategory getBloodTestCategory() {
+    return bloodTestCategory;
+  }
+
+  public BloodTestType getBloodTestType() {
+    return bloodTestType;
   }
 
   public String getNegativeResults() {
-    return rawBloodTest.getNegativeResults();
+    return negativeResults;
   }
 
   public String getPositiveResults() {
-    return rawBloodTest.getPositiveResults();
+    return positiveResults;
   }
 
   public Boolean getIsActive() {
-    return rawBloodTest.getIsActive();
+    return isActive;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
   }
 
   public Integer getRankInCategory() {
-    return rawBloodTest.getRankInCategory();
+    return rankInCategory;
   }
 
-  @JsonIgnore
-  public Set<WorksheetType> getWorksheetTypes() {
-    return rawBloodTest.getWorksheetTypes();
+  public void setTestNameShort(String testNameShort) {
+    this.testNameShort = testNameShort;
+  }
+
+  public void setTestName(String testName) {
+    this.testName = testName;
+  }
+
+  public void setValidResults(List<String> validResults) {
+    this.validResults = validResults;
+  }
+
+  public void setNegativeResults(String negativeResults) {
+    this.negativeResults = negativeResults;
+  }
+
+  public void setPositiveResults(String positiveResults) {
+    this.positiveResults = positiveResults;
+  }
+
+  public void setBloodTestCategory(BloodTestCategory bloodTestCategory) {
+    this.bloodTestCategory = bloodTestCategory;
+  }
+
+  public void setBloodTestType(BloodTestType bloodTestType) {
+    this.bloodTestType = bloodTestType;
+  }
+
+  public void setRankInCategory(Integer rankInCategory) {
+    this.rankInCategory = rankInCategory;
+  }
+
+  public void setIsActive(Boolean isActive) {
+    this.isActive = isActive;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

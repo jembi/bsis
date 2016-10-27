@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.jembi.bsis.factory.BloodTestFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
@@ -24,6 +25,9 @@ public class TTIController {
 
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
+
+  @Autowired
+  private BloodTestFactory bloodTestFactory;
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TTI_OUTCOME + "')")
@@ -44,26 +48,26 @@ public class TTIController {
 
   private List<BloodTestViewModel> getRepeatTTITests() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
-      tests.add(new BloodTestViewModel(rawBloodTest));
+    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
+      tests.add(bloodTestFactory.createViewModel(bloodTest));
     }
     return tests;
   }
 
   private List<BloodTestViewModel> getBasicTTITests() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest rawBloodTest : bloodTestingRepository
+    for (BloodTest bloodTest : bloodTestingRepository
         .getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
-      tests.add(new BloodTestViewModel(rawBloodTest));
+      tests.add(bloodTestFactory.createViewModel(bloodTest));
     }
     return tests;
   }
 
   private List<BloodTestViewModel> getConfirmatoryTTITests() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest rawBloodTest : bloodTestingRepository
+    for (BloodTest bloodTest : bloodTestingRepository
         .getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
-      tests.add(new BloodTestViewModel(rawBloodTest));
+      tests.add(bloodTestFactory.createViewModel(bloodTest));
     }
     return tests;
   }

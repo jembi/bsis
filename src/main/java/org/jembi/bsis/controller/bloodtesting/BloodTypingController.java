@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.jembi.bsis.factory.BloodTestFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
@@ -24,6 +25,9 @@ public class BloodTypingController {
 
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
+
+  @Autowired
+  private BloodTestFactory bloodTestFactory;
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_BLOOD_TYPING_OUTCOME + "')")
@@ -44,24 +48,24 @@ public class BloodTypingController {
 
   private List<BloodTestViewModel> getBasicBloodTypingTests() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
-      tests.add(new BloodTestViewModel(rawBloodTest));
+    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
+      tests.add(bloodTestFactory.createViewModel(bloodTest));
     }
     return tests;
   }
 
   private List<BloodTestViewModel> getAdvancedBloodTypingTests() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING)) {
-      tests.add(new BloodTestViewModel(rawBloodTest));
+    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING)) {
+      tests.add(bloodTestFactory.createViewModel(bloodTest));
     }
     return tests;
   }
 
   public List<BloodTestViewModel> getRepeatBloodTypingTests() {
     List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
-      tests.add(new BloodTestViewModel(rawBloodTest));
+    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
+      tests.add(bloodTestFactory.createViewModel(bloodTest));
     }
     return tests;
   }

@@ -14,7 +14,6 @@ import org.jembi.bsis.backingform.TestResultsBackingForms;
 import org.jembi.bsis.backingform.validator.TestResultsBackingFormsValidator;
 import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
-import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -27,6 +26,7 @@ import org.jembi.bsis.service.BloodTestsService;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.jembi.bsis.viewmodel.BloodTestViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,25 +168,25 @@ public class TestResultController {
       Map<String, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
       for (String key : resultViewModelMap.keySet()) {
         BloodTestResultViewModel model = resultViewModelMap.get(key);
-        BloodTestResult testResult = model.getTestResult();
-        if (testResult.getReEntryRequired().equals(true)) {
-          if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
+        BloodTestViewModel bloodTest = model.getBloodTest();
+        if (model.getReEntryRequired().equals(true)) {
+          if (bloodTest.getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
             overviewFlags.put("hasReEntryRequiredTTITests", true);
-          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
+          } else if (bloodTest.getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
             overviewFlags.put("hasReEntryRequiredBloodTypingTests", true);
-          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
+          } else if (bloodTest.getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
             overviewFlags.put("hasReEntryRequiredRepeatBloodTypingTests", true);
-          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
+          } else if (bloodTest.getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
             overviewFlags.put("hasReEntryRequiredConfirmatoryTTITests", true);
-          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
+          } else if (bloodTest.getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
             overviewFlags.put("hasReEntryRequiredRepeatTTITests", true);
           }
         }
-        if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
+        if (bloodTest.getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
           overviewFlags.put("hasRepeatTTITests", true);
-        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
+        } else if (bloodTest.getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
           overviewFlags.put("hasConfirmatoryTTITests", true);
-        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
+        } else if (bloodTest.getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
           overviewFlags.put("hasRepeatBloodTypingTests", true);
         }
       }

@@ -5,13 +5,23 @@ import java.util.List;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BloodTestResultFactory {
+
+  @Autowired
+  private BloodTestFactory bloodTestFactory;
   
   public BloodTestResultViewModel createBloodTestResultViewModel(BloodTestResult bloodTestResult) {
-    return new BloodTestResultViewModel(bloodTestResult);
+    BloodTestResultViewModel viewModel = new BloodTestResultViewModel();
+    viewModel.setId(bloodTestResult.getId());
+    viewModel.setBloodTest(bloodTestFactory.createViewModel(bloodTestResult.getBloodTest()));
+    viewModel.setReEntryRequired(bloodTestResult.getReEntryRequired());
+    viewModel.setResult(bloodTestResult.getResult());
+    viewModel.setTestedOn(bloodTestResult.getTestedOn());
+    return viewModel;
   }
   
   public List<BloodTestResultViewModel> createBloodTestResultViewModels(List<BloodTestResult> bloodTestResults) {
