@@ -218,4 +218,24 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
   public void setFlagComponentsForDiscard(boolean flagComponentsForDiscard) {
     this.flagComponentsForDiscard = flagComponentsForDiscard;
   }
+
+  /**
+   * @return An immutable list of negative results from the comma separated list.
+   */
+  public List<String> getNegativeResultsList(){
+    if (negativeResults == null || negativeResults.isEmpty()) {
+      return Collections.emptyList();
+    }
+    return Collections.unmodifiableList(Arrays.asList(negativeResults.split(",")));
+  }
+
+  /**
+   * @return An immutable list of positive results from the comma separated list.
+   */
+  public List<String> getPositiveResultsList(){
+    if (positiveResults == null || positiveResults.isEmpty()) {
+      return Collections.emptyList();
+    }
+    return Collections.unmodifiableList(Arrays.asList(positiveResults.split(",")));
+  }
 }
