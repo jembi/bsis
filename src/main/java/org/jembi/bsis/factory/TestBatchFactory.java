@@ -190,6 +190,7 @@ public class TestBatchFactory {
         donationTestOutcomesReportViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
         donationTestOutcomesReportViewModel.setBloodTestOutcomes(donation.getBloodTestResults());
         donationTestOutcomesReportViewModel.setPreviousDonationAboRhOutcome(getPreviousDonationAboRhOutcome(donation));
+        donationTestOutcomesReportViewModel.setReleased(donation.isReleased());
         donationTestOutcomesReportViewModels.add(donationTestOutcomesReportViewModel);
       }
     }

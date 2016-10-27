@@ -39,6 +39,7 @@ public class DonationViewModel extends BaseViewModel {
   private boolean released;
   private Map<String, Boolean> permissions;
   private AdverseEventViewModel adverseEvent;
+  private String releaseStatus;
 
   public DonationViewModel() {
   }
@@ -273,4 +274,9 @@ public class DonationViewModel extends BaseViewModel {
   public void setAdverseEvent(AdverseEventViewModel adverseEvent) {
     this.adverseEvent = adverseEvent;
   }
+
+  public String getReleaseStatus() {
+    return isReleased() ? "Y" : "N";
+  } 
+    
 }
