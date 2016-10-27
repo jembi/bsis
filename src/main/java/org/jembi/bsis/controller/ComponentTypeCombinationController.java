@@ -45,6 +45,15 @@ public class ComponentTypeCombinationController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
+  public ResponseEntity<Map<String, Object>> getComponentTypeCombinationById(@PathVariable Long id) {
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("componentTypeCombination", componentTypeCombinationControllerService.findComponentTypeCombinationById(id));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+  
   @RequestMapping(method = RequestMethod.GET, value = "/form")
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
   public ResponseEntity<Map<String, Object>> getForm() {
