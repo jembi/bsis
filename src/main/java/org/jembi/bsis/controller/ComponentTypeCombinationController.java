@@ -47,7 +47,7 @@ public class ComponentTypeCombinationController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
-  public ResponseEntity<Map<String, Object>> getComponentTypeCombinationById(@PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> getComponentTypeCombinationById(@PathVariable long id) {
 
     Map<String, Object> map = new HashMap<>();
     map.put("componentTypeCombination", componentTypeCombinationControllerService.findComponentTypeCombinationById(id));
