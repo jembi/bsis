@@ -167,9 +167,9 @@ public class TestResultController {
 
       Map<String, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
       for (String key : resultViewModelMap.keySet()) {
-        BloodTestResultViewModel model = resultViewModelMap.get(key);
-        BloodTestFullViewModel bloodTest = model.getBloodTest();
-        if (model.getReEntryRequired().equals(true)) {
+        BloodTestResultViewModel bloodTestResultViewModel = resultViewModelMap.get(key);
+        BloodTestFullViewModel bloodTest = bloodTestResultViewModel.getBloodTest();
+        if (bloodTestResultViewModel.getReEntryRequired().equals(true)) {
           if (bloodTest.getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
             overviewFlags.put("hasReEntryRequiredTTITests", true);
           } else if (bloodTest.getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
