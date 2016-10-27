@@ -67,9 +67,11 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
    */
   private Boolean isEmptyAllowed;
 
-  private Boolean isActive;
+  @Column(nullable = false)
+  private Boolean isActive = Boolean.TRUE;
 
-  private Boolean isDeleted;
+  @Column(nullable = false)
+  private Boolean isDeleted = Boolean.FALSE;
   
   @Column(nullable = false)
   private boolean flagComponentsContainingPlasmaForDiscard = false;
@@ -222,7 +224,7 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
   /**
    * @return An immutable list of negative results from the comma separated list.
    */
-  public List<String> getNegativeResultsList(){
+  public List<String> getNegativeResultsList() {
     if (negativeResults == null || negativeResults.isEmpty()) {
       return Collections.emptyList();
     }
@@ -232,7 +234,7 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
   /**
    * @return An immutable list of positive results from the comma separated list.
    */
-  public List<String> getPositiveResultsList(){
+  public List<String> getPositiveResultsList() {
     if (positiveResults == null || positiveResults.isEmpty()) {
       return Collections.emptyList();
     }
