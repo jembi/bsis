@@ -63,4 +63,5 @@
   <include file="./src/main/resources/liquibase/updates/1603-add-new-component-combination.xml" />
   <include file="./src/main/resources/liquibase/updates/1841-update-child-components.xml" />
   <include file="./src/main/resources/liquibase/updates/1452-flag-components-with-plasma-unsafe.xml" />
+  <include file="./src/main/resources/liquibase/updates/330-view-bloodTests-overview.xml" />
 </databaseChangeLog>

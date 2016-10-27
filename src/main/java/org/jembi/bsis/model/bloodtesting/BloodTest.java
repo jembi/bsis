@@ -67,9 +67,11 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
    */
   private Boolean isEmptyAllowed;
 
-  private Boolean isActive;
+  @Column(nullable = false)
+  private Boolean isActive = Boolean.TRUE;
 
-  private Boolean isDeleted;
+  @Column(nullable = false)
+  private Boolean isDeleted = Boolean.FALSE;
   
   @Column(nullable = false)
   private boolean flagComponentsContainingPlasmaForDiscard = false;
