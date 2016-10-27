@@ -24,8 +24,8 @@ public class BloodTestFactory {
     viewModel.setTestName(bloodTest.getTestName());
     viewModel.setTestNameShort(bloodTest.getTestNameShort());
     viewModel.setValidResults(bloodTest.getValidResultsList());
-    viewModel.setPositiveResults(bloodTest.getPositiveResults());
-    viewModel.setNegativeResults(bloodTest.getNegativeResults());
+    viewModel.setPositiveResults(bloodTest.getPositiveResultsList());
+    viewModel.setNegativeResults(bloodTest.getNegativeResultsList());
     viewModel.setBloodTestCategory(bloodTest.getCategory());
     viewModel.setBloodTestType(bloodTest.getBloodTestType());
     viewModel.setRankInCategory(bloodTest.getRankInCategory());

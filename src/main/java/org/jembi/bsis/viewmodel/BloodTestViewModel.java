@@ -10,8 +10,8 @@ public class BloodTestViewModel extends BaseViewModel {
   private String testNameShort;
   private String testName;
   private List<String> validResults;
-  private String negativeResults;
-  private String positiveResults;
+  private List<String> negativeResults;
+  private List<String> positiveResults;
   private BloodTestCategory bloodTestCategory;
   private BloodTestType bloodTestType;
   private Integer rankInCategory;
@@ -41,11 +41,11 @@ public class BloodTestViewModel extends BaseViewModel {
     return bloodTestType;
   }
 
-  public String getNegativeResults() {
+  public List<String> getNegativeResults() {
     return negativeResults;
   }
 
-  public String getPositiveResults() {
+  public List<String> getPositiveResults() {
     return positiveResults;
   }
 
@@ -73,11 +73,11 @@ public class BloodTestViewModel extends BaseViewModel {
     this.validResults = validResults;
   }
 
-  public void setNegativeResults(String negativeResults) {
+  public void setNegativeResults(List<String> negativeResults) {
     this.negativeResults = negativeResults;
   }
 
-  public void setPositiveResults(String positiveResults) {
+  public void setPositiveResults(List<String> positiveResults) {
     this.positiveResults = positiveResults;
   }
 
