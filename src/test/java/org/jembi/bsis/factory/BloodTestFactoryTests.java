@@ -56,7 +56,6 @@ public class BloodTestFactoryTests extends UnitTestSuite {
         Arrays.asList(BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel().withId(1L).build(),
             BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel().withId(2L).build());
 
-
     // Exercise SUT
     List<BloodTestFullViewModel> returnedViewModels = bloodTestFactory.createFullViewModels(bloodTests);
 
