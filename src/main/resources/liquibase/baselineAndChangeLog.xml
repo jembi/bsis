@@ -65,4 +65,5 @@
   <include file="./src/main/resources/liquibase/updates/1452-flag-components-with-plasma-unsafe.xml" />
   <include file="./src/main/resources/liquibase/updates/330-view-bloodTests-overview.xml" />
   <include file="./src/main/resources/liquibase/updates/332-add-new-blood-tests.xml" />
+  <include file="./src/main/resources/liquibase/updates/334-view-list-blood-testing-rules.xml" />
 </databaseChangeLog>
