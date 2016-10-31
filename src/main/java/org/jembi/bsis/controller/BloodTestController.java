@@ -27,4 +27,13 @@ public class BloodTestController {
     map.put("bloodTests", bloodTestControllerService.getAllBloodTests());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
+
+  @RequestMapping(method = RequestMethod.GET, value = "/form")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
+  public ResponseEntity<Map<String, Object>> getBloodTestForm() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("categories", bloodTestControllerService.getCategories());
+    map.put("types", bloodTestControllerService.getTypes());
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
 }
