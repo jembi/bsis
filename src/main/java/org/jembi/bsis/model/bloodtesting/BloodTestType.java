@@ -27,7 +27,7 @@ public enum BloodTestType {
       case BLOODTYPING:
         return Arrays.asList(BASIC_BLOODTYPING, REPEAT_BLOODTYPING);
       case TTI:
-        return Arrays.asList(BASIC_TTI, REPEAT_TTI);
+        return Arrays.asList(BASIC_TTI, REPEAT_TTI, CONFIRMATORY_TTI);
       default:
         throw new IllegalArgumentException("Invalid BloodTestCategory " + category);
     }
