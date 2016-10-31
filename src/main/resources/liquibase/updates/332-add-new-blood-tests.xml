@@ -10,4 +10,46 @@
     <addUniqueConstraint tableName="BloodTest" columnNames="testName" />
   </changeSet>
 
+  <changeSet id="20161031-1100" author="lauravignoli">
+    <comment>Remove duplicate permission "Manage Blood Tests"</comment>
+    <delete tableName="Permission_Role">
+      <where>permissions_id = 57</where>
+    </delete>
+    <delete tableName="Permission">
+      <where>id = 57</where>
+    </delete>
+  </changeSet>
+
+  <changeSet id="20161031-0937" author="timler">
+    <comment>Add modification tracker fields to BloodTest tables and initialize them</comment>
+    <addColumn tableName="BloodTest">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)" >
+        <constraints foreignKeyName="fk_BloodTest_createdBy" references="User(id)" />
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_BloodTest_lastUpdatedBy" references="User(id)" />
+      </column>
+    </addColumn>
+    <addColumn tableName="BloodTest_AUD">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)" />
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)" />
+    </addColumn>
+    <update tableName="BloodTest">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+    <update tableName="ComponentTypeCombination_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+  </changeSet>
+
 </databaseChangeLog>

@@ -12,12 +12,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.worksheet.WorksheetType;
 
 @Entity
 @Audited
-public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
+public class BloodTest extends BaseModificationTrackerEntity implements Comparable<BloodTest> {
 
   private static final long serialVersionUID = 1L;
 
