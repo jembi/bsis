@@ -21,7 +21,7 @@ public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResul
   private String result;
   private BloodTest bloodTest = aBloodTest()
       .withTestName("test " + ++UNIQUE_INCREMENT)
-      .withTestNameShort("t" + UNIQUE_INCREMENT)
+      .withTestNameShort("t")
       .build();
   private Donation donation = aDonation().build();
   private boolean reEntryRequired;
