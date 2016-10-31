@@ -1,27 +1,15 @@
 package org.jembi.bsis.repository;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
-import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
-import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +39,6 @@ public class BloodTestRepositoryTest extends DBUnitContextDependentTestSuite {
     for (BloodTest bt : bloodTests) {
       Assert.assertEquals("Only blood typing tests are returned", BloodTestCategory.BLOODTYPING, bt.getCategory());
     }
-  }
-
-  @Test
-  public void testGetTestsOfTypeAdvancedBloodTyping() throws Exception {
-    List<BloodTest> bloodTests = bloodTestRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING);
-    Assert.assertNotNull("Blood tests exist", bloodTests);
-    Assert.assertTrue("Blood tests exist", bloodTests.isEmpty());
   }
 
   @Test
