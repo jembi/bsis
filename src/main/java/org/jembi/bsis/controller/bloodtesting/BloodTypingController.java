@@ -37,9 +37,6 @@ public class BloodTypingController {
     List<BloodTestFullViewModel> basicBloodTypingTests = getBasicBloodTypingTests();
     map.put("basicBloodTypingTests", basicBloodTypingTests);
 
-    List<BloodTestFullViewModel> advancedBloodTypingTests = getAdvancedBloodTypingTests();
-    map.put("advancedBloodTypingTests", advancedBloodTypingTests);
-
     List<BloodTestFullViewModel> repeatBloodTypingTests = getRepeatBloodTypingTests();
     map.put("repeatBloodTypingTests", repeatBloodTypingTests);
 
@@ -49,14 +46,6 @@ public class BloodTypingController {
   private List<BloodTestFullViewModel> getBasicBloodTypingTests() {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
     for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
-      tests.add(bloodTestFactory.createFullViewModel(bloodTest));
-    }
-    return tests;
-  }
-
-  private List<BloodTestFullViewModel> getAdvancedBloodTypingTests() {
-    List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
-    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING)) {
       tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;

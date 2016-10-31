@@ -16,7 +16,6 @@ import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
@@ -61,13 +60,6 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     for (BloodTest bt : bloodTests) {
       Assert.assertEquals("Only TTI tests are returned", BloodTestCategory.TTI, bt.getCategory());
     }
-  }
-
-  @Test
-  public void testGetTestsOfTypeAdvancedBloodTyping() throws Exception {
-    List<BloodTest> bloodTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING);
-    Assert.assertNotNull("Blood tests exist", bloodTests);
-    Assert.assertTrue("Blood tests exist", bloodTests.isEmpty());
   }
 
   @Test
