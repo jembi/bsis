@@ -19,6 +19,7 @@ import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.repository.BloodTestingRuleRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
@@ -36,6 +37,9 @@ public class BloodTestingRuleEngine {
 
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
+
+  @Autowired
+  private BloodTestingRuleRepository bloodTestingRuleRepository;
 
   @Autowired
   private BloodTestingRuleResultViewModelFactory bloodTestingRuleResultViewModelFactory;
@@ -67,7 +71,7 @@ public class BloodTestingRuleEngine {
           "samples");
     }
 
-    List<BloodTestingRule> rules = bloodTestingRepository.getActiveBloodTestingRules();
+    List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false);
 
     // Get the latest test results
     Map<String, String> storedTestResults = new TreeMap<String, String>();

@@ -54,6 +54,7 @@ import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
+import org.jembi.bsis.repository.BloodTestingRuleRepository;
 import org.jembi.bsis.repository.ContactMethodTypeRepository;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DivisionRepository;
@@ -118,6 +119,8 @@ public class DataImportService {
   private TestBatchRepository testBatchRepository;
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
+  @Autowired
+  private BloodTestingRuleRepository bloodTestingRuleRepository;
   @Autowired
   private DonorDeferralRepository donorDeferralRepository;
   @Autowired
@@ -364,7 +367,7 @@ public class DataImportService {
     Map<String, IdType> idTypeCache = buildIdTypeCache();
     Map<String, ContactMethodType> contactMethodTypeCache = buildContactMethodTypeCache();
     Map<String, AddressType> addressTypeCache = buildAddressTypeCache();
-    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRepository.getActiveBloodTestingRules();
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRuleRepository.getBloodTestingRules(false);
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -678,7 +681,7 @@ public class DataImportService {
     Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
     Map<String, DonationBatch> donationBatches = new HashMap<>();
     Map<String, TestBatch> testBatches = new HashMap<>();
-    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRepository.getActiveBloodTestingRules();
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRuleRepository.getBloodTestingRules(false);
 
     // Keep a reference to the row containing the headers
     Row headers = null;

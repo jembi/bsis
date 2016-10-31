@@ -5,7 +5,7 @@ import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
-public class BloodTestingRuleBuilder extends AbstractBuilder<BloodTestingRule> {
+public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingRule> {
 
   private Long id;
   private String bloodTestsIds;
@@ -15,6 +15,7 @@ public class BloodTestingRuleBuilder extends AbstractBuilder<BloodTestingRule> {
   private String pendingTestsIds;
   private BloodTestSubCategory subCategory;
   private BloodTestCategory category;
+  private Boolean isActive = Boolean.TRUE;
 
   public BloodTestingRuleBuilder withId(Long id) {
     this.id = id;
@@ -56,6 +57,11 @@ public class BloodTestingRuleBuilder extends AbstractBuilder<BloodTestingRule> {
     return this;
   }
 
+  public BloodTestingRuleBuilder thatIsInactive() {
+    this.isActive = Boolean.FALSE;
+    return this;
+  }
+
   @Override
   public BloodTestingRule build() {
     BloodTestingRule bloodTestingRule = new BloodTestingRule();
@@ -67,6 +73,7 @@ public class BloodTestingRuleBuilder extends AbstractBuilder<BloodTestingRule> {
     bloodTestingRule.setPendingTestsIds(pendingTestsIds);
     bloodTestingRule.setCategory(category);
     bloodTestingRule.setSubCategory(subCategory);
+    bloodTestingRule.setIsActive(isActive);
     return bloodTestingRule;
   }
 

@@ -12,7 +12,6 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,11 +20,9 @@ import org.jembi.bsis.dto.BloodTestResultDTO;
 import org.jembi.bsis.dto.BloodTestTotalDTO;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.BloodTestResultNamedQueryConstants;
 import org.jembi.bsis.repository.DonationBatchRepository;
@@ -251,32 +248,6 @@ public class BloodTestingRepository {
     query.setParameter("bloodTestId", bloodTestId);
     return query.getSingleResult();
   }
-
-  public void activateTests(BloodTestContext context) {
-    String queryStr = "UPDATE BloodTest set isActive=:isActive WHERE context=:context";
-    Query query = em.createQuery(queryStr);
-    query.setParameter("isActive", true);
-    query.setParameter("context", context);
-    query.executeUpdate();
-    queryStr = "UPDATE BloodTestingRule set isActive=:isActive WHERE context=:context";
-    query = em.createQuery(queryStr);
-    query.setParameter("isActive", true);
-    query.setParameter("context", context);
-    query.executeUpdate();
-  }
-
-  public void deactivateTests(BloodTestContext context) {
-    String queryStr = "UPDATE BloodTest set isActive=:isActive WHERE context=:context";
-    Query query = em.createQuery(queryStr);
-    query.setParameter("isActive", false);
-    query.setParameter("context", context);
-    query.executeUpdate();
-    queryStr = "UPDATE BloodTestingRule set isActive=:isActive WHERE context=:context";
-    query = em.createQuery(queryStr);
-    query.setParameter("isActive", false);
-    query.setParameter("context", context);
-    query.executeUpdate();
-  }
   
   public List<BloodTestResultDTO> findTTIPrevalenceReportIndicators(Date startDate, Date endDate) {
     return em.createNamedQuery(
@@ -316,18 +287,6 @@ public class BloodTestingRepository {
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
         .setParameter("ttiStatus", TTIStatus.TTI_UNSAFE)
         .getResultList();
-  }
-
-  /**
-   * Retrieve a full list of the active Blood Testing Rules.
-   *
-   * @return List<BloodTestingRule> list of rules, should not be null although this is not guaranteed
-   */
-  public List<BloodTestingRule> getActiveBloodTestingRules() {
-    String queryStr = "SELECT r FROM BloodTestingRule r WHERE isActive=:isActive";
-    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
-    query.setParameter("isActive", true);
-    return query.getResultList();
   }
 
   /**

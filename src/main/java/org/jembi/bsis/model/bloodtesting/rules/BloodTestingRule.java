@@ -8,14 +8,22 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseEntity;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestContext;
+import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
 
 @Entity
 @Audited
+@NamedQueries({
+  @NamedQuery(
+      name = BloodTestingRuleNamedQueryConstants.NAME_GET_ACTIVE_BLOOD_TESTING_RULES,
+      query = BloodTestingRuleNamedQueryConstants.QUERY_GET_ACTIVE_BLOOD_TESTING_RULES)
+})
 public class BloodTestingRule extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
