@@ -17,7 +17,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 public class BloodTestsService {
 
   @Autowired
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestRepository bloodTestRepository;
 
   @Autowired
   private BloodTestResultRepository bloodTestResultRepository;
@@ -54,7 +54,7 @@ public class BloodTestsService {
    * @return BloodTestingRuleResult with the results from the tests
    */
   public BloodTestingRuleResult executeTests(Donation donation) {
-    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForDonation(donation.getId());
+    BloodTestingRuleResult ruleResult = bloodTestResultRepository.getAllTestsStatusForDonation(donation.getId());
     return ruleResult;
   }
 
@@ -89,13 +89,13 @@ public class BloodTestsService {
         reEnteredBloodTestResults = new HashMap<>();
       }
       BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
-      bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
+      bloodTestRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
 
       // Run rule engine for the 2nd time and save testResults
       // Note: Rules engine will only provide the correct BloodTyping statuses on the 2nd execution
       // because the Donation Abo/Rh is only updated after the 1st execution
       ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
-      bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
+      bloodTestRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
 
       // Update donation
       if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
@@ -115,11 +115,11 @@ public class BloodTestsService {
    */
   public boolean updateDonationWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
     // FIXME: this method should be in this service but it has too many references in BloodTestingRepository
-    return bloodTestingRepository.updateDonationWithTestResults(donation, ruleResult);
+    return bloodTestRepository.updateDonationWithTestResults(donation, ruleResult);
   }
 
-  protected void setBloodTestingRepository(BloodTestingRepository bloodTestingRepository) {
-    this.bloodTestingRepository = bloodTestingRepository;
+  protected void setBloodTestRepository(BloodTestRepository bloodTestRepository) {
+    this.bloodTestRepository = bloodTestRepository;
   }
 
   public Map<String, Object> getBloodTestShortNames() {
@@ -131,23 +131,23 @@ public class BloodTestsService {
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
+    for (BloodTest rawBloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
       basicTtiTestNames.add(rawBloodTest.getTestNameShort());
     }
     map.put("basicTtiTestNames", basicTtiTestNames);
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
+    for (BloodTest rawBloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
       repeatTtiTestNames.add(rawBloodTest.getTestNameShort());
     }
     map.put("repeatTtiTestNames", repeatTtiTestNames);
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
+    for (BloodTest rawBloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
       confirmatoryTtiTestNames.add(rawBloodTest.getTestNameShort());
     }
     map.put("confirmatoryTtiTestNames", confirmatoryTtiTestNames);
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
+    for (BloodTest rawBloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
       basicBloodTypingTestNames.add(rawBloodTest.getTestNameShort());
     }
     map.put("basicBloodTypingTestNames", basicBloodTypingTestNames);
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
+    for (BloodTest rawBloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
       repeatBloodTypingTestNames.add(rawBloodTest.getTestNameShort());
     }
     map.put("repeatBloodTypingTestNames", repeatBloodTypingTestNames);

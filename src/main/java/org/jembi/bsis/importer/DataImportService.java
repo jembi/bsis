@@ -53,20 +53,8 @@ import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.model.util.Gender;
-import org.jembi.bsis.repository.AdverseEventTypeRepository;
-import org.jembi.bsis.repository.ContactMethodTypeRepository;
-import org.jembi.bsis.repository.DeferralReasonRepository;
-import org.jembi.bsis.repository.DivisionRepository;
-import org.jembi.bsis.repository.DonationBatchRepository;
-import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.repository.DonationTypeRepository;
-import org.jembi.bsis.repository.DonorDeferralRepository;
-import org.jembi.bsis.repository.DonorRepository;
-import org.jembi.bsis.repository.LocationRepository;
-import org.jembi.bsis.repository.PackTypeRepository;
-import org.jembi.bsis.repository.SequenceNumberRepository;
-import org.jembi.bsis.repository.TestBatchRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.*;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.service.DonationCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +105,7 @@ public class DataImportService {
   @Autowired
   private TestBatchRepository testBatchRepository;
   @Autowired
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestRepository bloodTestRepository;
   @Autowired
   private DonorDeferralRepository donorDeferralRepository;
   @Autowired
@@ -364,7 +352,7 @@ public class DataImportService {
     Map<String, IdType> idTypeCache = buildIdTypeCache();
     Map<String, ContactMethodType> contactMethodTypeCache = buildContactMethodTypeCache();
     Map<String, AddressType> addressTypeCache = buildAddressTypeCache();
-    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRepository.getActiveBloodTestingRules();
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestRepository.getActiveBloodTestingRules();
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -678,7 +666,7 @@ public class DataImportService {
     Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
     Map<String, DonationBatch> donationBatches = new HashMap<>();
     Map<String, TestBatch> testBatches = new HashMap<>();
-    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRepository.getActiveBloodTestingRules();
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestRepository.getActiveBloodTestingRules();
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -1154,7 +1142,7 @@ public class DataImportService {
 
       Donation donation = new Donation();
       donation.setId(donationId);
-      bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, testedOn, null, true);
+      bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, testedOn, null, true);
 
       // Periodically flush data
       if (testResultsCount % 1000 == 0) {
@@ -1234,7 +1222,7 @@ public class DataImportService {
 
   private Map<String, BloodTest> buildBloodTestCache() {
     Map <String, BloodTest> bloodTestCache = new HashMap<>();
-    List<BloodTest> bloodTests = bloodTestingRepository.getAllBloodTestsIncludeInactive();
+    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTestsIncludeInactive();
     for (BloodTest bloodTest : bloodTests) {
       bloodTestCache.put(bloodTest.getTestName(), bloodTest);
     }

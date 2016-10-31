@@ -35,7 +35,7 @@ import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.suites.UnitTestSuite;
@@ -56,7 +56,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   BloodTestsService service;
 
   @InjectMocks
-  BloodTestingRepository bloodTestingRepository;
+  BloodTestRepository bloodTestRepository;
 
   @Mock
   BloodTestingRuleEngine ruleEngine;
@@ -81,7 +81,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
 
   @Before
   public void setup() {
-    service.setBloodTestingRepository(bloodTestingRepository);
+    service.setBloodTestRepository(bloodTestRepository);
   }
 
   @Test

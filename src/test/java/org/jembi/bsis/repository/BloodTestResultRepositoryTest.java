@@ -16,7 +16,7 @@ import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
@@ -28,10 +28,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Test using DBUnit to test the BloodTestingRepository
  */
-public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite {
+public class BloodTestResultRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Autowired
-  BloodTestingRepository bloodTestingRepository;
+  BloodTestRepository bloodTestRepository;
+
+  @Autowired
+  BloodTestResultRepository bloodTestResultRepository;
 
   @Autowired
   DonationRepository donationRepository;
@@ -44,7 +47,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
   @Test
   public void testGetBloodTypingTests() throws Exception {
-    List<BloodTest> bloodTests = bloodTestingRepository.getBloodTypingTests();
+    List<BloodTest> bloodTests = bloodTestRepository.getBloodTypingTests();
     Assert.assertNotNull("Blood tests exist", bloodTests);
     Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
     for (BloodTest bt : bloodTests) {
@@ -54,7 +57,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
   @Test
   public void testGetTtiTests() throws Exception {
-    List<BloodTest> bloodTests = bloodTestingRepository.getTTITests();
+    List<BloodTest> bloodTests = bloodTestRepository.getTTITests();
     Assert.assertNotNull("Blood tests exist", bloodTests);
     Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
     for (BloodTest bt : bloodTests) {
@@ -64,7 +67,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
   @Test
   public void testGetTestsOfTypeBasicBloodTyping() throws Exception {
-    List<BloodTest> bloodTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
+    List<BloodTest> bloodTests = bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
     Assert.assertNotNull("Blood tests exist", bloodTests);
     Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
     for (BloodTest bt : bloodTests) {
@@ -91,9 +94,9 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
     ruleResult.setExtraInformation(new HashSet<String>());
-    bloodTestingRepository.saveBloodTestResultsToDatabase(stringResults, donation, new Date(), ruleResult, false);
+    bloodTestRepository.saveBloodTestResultsToDatabase(stringResults, donation, new Date(), ruleResult, false);
 
-    Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Map<Long, BloodTestResult> newResults = bloodTestRepository.getRecentTestResultsForDonation(donation.getId());
     for (Long key : newResults.keySet()) {
       BloodTestResult result = (BloodTestResult) newResults.get(key);
       if (result.getBloodTest().getCategory().equals(BloodTestCategory.TTI)) {
@@ -105,7 +108,6 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
       }
     }
   }
-  
   
   @Test
   public void testReEntrySequences() throws Exception {
@@ -121,44 +123,44 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     
     // #1: re-entry should be required
     testResults.put(17L, "POS");
-    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
-    Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    Map<Long, BloodTestResult> newResults = bloodTestRepository.getRecentTestResultsForDonation(donation.getId());
     Assert.assertTrue("Re-entry required", newResults.get(17L).getReEntryRequired());
     
     // #2: edited initial result, re-entry still required
     testResults.put(17L, "NEG");
-    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
-    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    newResults = bloodTestRepository.getRecentTestResultsForDonation(donation.getId());
     Assert.assertTrue("Re-entry still required", newResults.get(17L).getReEntryRequired());
-    
+
     // #3:  re-entry of last result
     testResults.put(17L, "NEG");
-    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
-    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
+    newResults = bloodTestRepository.getRecentTestResultsForDonation(donation.getId());
     Assert.assertFalse("Re-entry no longer required", newResults.get(17L).getReEntryRequired());
-    
+
     // #4:  edited initial result, but no change in outcome
     testResults.put(17L, "NEG");
-    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
-    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    newResults = bloodTestRepository.getRecentTestResultsForDonation(donation.getId());
     Assert.assertFalse("Re-entry not required", newResults.get(17L).getReEntryRequired());
-    
+
     // #4:  edited initial result, but there is now a change
     testResults.put(17L, "POS");
-    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
-    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    newResults = bloodTestRepository.getRecentTestResultsForDonation(donation.getId());
     Assert.assertTrue("Re-entry now required", newResults.get(17L).getReEntryRequired());
-    
+
     // #5:  edited initial result, but there is no change in outcome
     testResults.put(17L, "POS");
-    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
-    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    newResults = bloodTestRepository.getRecentTestResultsForDonation(donation.getId());
     Assert.assertTrue("Re-entry still required", newResults.get(17L).getReEntryRequired());
-    
+
     // #6:  re-entry done with a different result
     testResults.put(17L, "NEG");
-    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
-    newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
+    newResults = bloodTestRepository.getRecentTestResultsForDonation(donation.getId());
     Assert.assertFalse("Re-entry no longer required", newResults.get(17L).getReEntryRequired());
   }
 
@@ -175,13 +177,13 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     ruleResult.setExtraInformation(new HashSet<String>());
 
     testResults.put(17L, "POS");
-    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
     donation = donationRepository.findDonationById(8l);
     Assert.assertTrue("Re-entry is false, so tti status remains as NOT_DONE",
         donation.getTTIStatus().equals(TTIStatus.NOT_DONE));
 
     testResults.put(17L, "POS");
-    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
+    bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
     donation = donationRepository.findDonationById(8l);
     Assert.assertTrue("Re-entry is true, so tti status is updated to TTI_UNSAFE",
         donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE));
@@ -202,8 +204,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
     // reEntry is implemented so, on creation, send reEntry as false:
     testResults.put(17L, "POS");
-    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
-    Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
+    Map<Long, BloodTestResult> newResults = bloodTestRepository.getRecentTestResultsForDonation(donation.getId());
     Assert.assertTrue("Re-entry is required", newResults.get(17L).getReEntryRequired());
   }
 
@@ -221,8 +223,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
     // reEntry is not implemented so, on creation send reEntry as true:
     testResults.put(17L, "POS");
-    bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
-    Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
+    Map<Long, BloodTestResult> newResults = bloodTestRepository.getRecentTestResultsForDonation(donation.getId());
     Assert.assertFalse("Re-entry is not required", newResults.get(17L).getReEntryRequired());
   }
 
@@ -230,7 +232,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   public void testGetTestResultsForDonationBatchesByBloodTestType() {
     ArrayList<Long> donationBatchIds = new ArrayList<Long>();
     donationBatchIds.add(2l);
-    List<BloodTestingRuleResult> results = bloodTestingRepository
+    List<BloodTestingRuleResult> results = bloodTestResultRepository
         .getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds,
         BloodTestType.BASIC_TTI);
 

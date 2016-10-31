@@ -18,9 +18,9 @@ import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
+import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.service.BloodTestsService;
 import org.jembi.bsis.utils.CustomDateFormatter;
@@ -54,7 +54,7 @@ public class TestResultController {
   private TestBatchRepository testBatchRepository;
 
   @Autowired
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestResultRepository bloodTestResultRepository;
 
   @Autowired
   private BloodTestsService bloodTestsService;
@@ -82,7 +82,7 @@ public class TestResultController {
     map.put("donation", donationFactory.createDonationViewModelWithoutPermissions(c));
 
     if (c.getPackType().getTestSampleProduced()) {
-      BloodTestingRuleResult results = bloodTestingRepository.getAllTestsStatusForDonation(c.getId());
+      BloodTestingRuleResult results = bloodTestResultRepository.getAllTestsStatusForDonation(c.getId());
       map.put("testResults", results);
     } else {
       map.put("testResults", null);
@@ -106,10 +106,10 @@ public class TestResultController {
 
     List<BloodTestingRuleResult> ruleResults;
     if (bloodTestType == null) {
-      ruleResults = bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
+      ruleResults = bloodTestResultRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
     } else {
       ruleResults =
-          bloodTestingRepository.getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, bloodTestType);
+          bloodTestResultRepository.getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, bloodTestType);
     }
 
     map.put("testResults", ruleResults);
@@ -144,7 +144,7 @@ public class TestResultController {
       donationBatchIds.add(donationBatch.getId());
     }
     Map<String, Object> map =
-        calculateOverviewFlags(bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds));
+        calculateOverviewFlags(bloodTestResultRepository.getAllTestsStatusForDonationBatches(donationBatchIds));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 

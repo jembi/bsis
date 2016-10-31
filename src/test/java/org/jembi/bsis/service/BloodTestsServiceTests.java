@@ -29,7 +29,7 @@ import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Test;
@@ -49,7 +49,7 @@ public class BloodTestsServiceTests extends UnitTestSuite {
   @Mock
   private BloodTestingRuleEngine bloodTestingRuleEngine;
   @Mock
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestRepository bloodTestRepository;
   
   @Test
   public void testSaveBloodTestsWithReEntryRequired_shouldApplyAndSaveBloodTestsAsReEntry() {
@@ -77,7 +77,7 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Verify
     verify(bloodTestingRuleEngine, times(2)).applyBloodTests(donation, bloodTestResults);
-    verify(bloodTestingRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
+    verify(bloodTestRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
         any(Date.class), eq(bloodTestingRuleResult), eq(true));
   }
   
@@ -107,7 +107,7 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Verify
     verify(bloodTestingRuleEngine, times(2)).applyBloodTests(donation, bloodTestResults);
-    verify(bloodTestingRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
+    verify(bloodTestRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
         any(Date.class), eq(bloodTestingRuleResult), eq(false));
   }
   
@@ -138,7 +138,7 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Verify
     verify(bloodTestingRuleEngine, times(2)).applyBloodTests(donation, bloodTestResults);
-    verify(bloodTestingRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
+    verify(bloodTestRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
         any(Date.class), eq(bloodTestingRuleResult), eq(true));
   }
 
@@ -157,11 +157,11 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     BloodTest aboRepeat = BloodTestBuilder.aBloodTest()
         .withBloodTestType(BloodTestType.REPEAT_BLOODTYPING).withTestNameShort("ABO_REPEAT").build();
     
-    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(hiv));
-    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)).thenReturn(Arrays.asList(hivRepeat));
-    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)).thenReturn(Arrays.asList(hivConf));
-    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(abo));
-    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)).thenReturn(Arrays.asList(aboRepeat));
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(hiv));
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)).thenReturn(Arrays.asList(hivRepeat));
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)).thenReturn(Arrays.asList(hivConf));
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(abo));
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)).thenReturn(Arrays.asList(aboRepeat));
     
     Map<String, Object> map = bloodTestsService.getBloodTestShortNames();
     

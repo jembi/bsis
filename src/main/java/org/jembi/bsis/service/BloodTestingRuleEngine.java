@@ -19,10 +19,7 @@ import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
+import org.jembi.bsis.repository.bloodtesting.*;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,8 +32,7 @@ public class BloodTestingRuleEngine {
   private static final Logger LOGGER = Logger.getLogger(BloodTestingRuleEngine.class);
 
   @Autowired
-  private BloodTestingRepository bloodTestingRepository;
-
+  private BloodTestRepository bloodTestRepository;
   @Autowired
   private BloodTestingRuleResultViewModelFactory bloodTestingRuleResultViewModelFactory;
 
@@ -67,12 +63,12 @@ public class BloodTestingRuleEngine {
           "samples");
     }
 
-    List<BloodTestingRule> rules = bloodTestingRepository.getActiveBloodTestingRules();
+    List<BloodTestingRule> rules = bloodTestRepository.getActiveBloodTestingRules();
 
     // Get the latest test results
     Map<String, String> storedTestResults = new TreeMap<String, String>();
     Map<String, String> availableTestResults = new TreeMap<String, String>();
-    Map<Long, BloodTestResult> recentTestResults = bloodTestingRepository
+    Map<Long, BloodTestResult> recentTestResults = bloodTestRepository
         .getRecentTestResultsForDonation(donation.getId());
     for (Long testId : recentTestResults.keySet()) {
       BloodTestResult testResult = recentTestResults.get(testId);
@@ -112,7 +108,7 @@ public class BloodTestingRuleEngine {
     }
 
     // Determine how many blood typing tests were done
-    List<BloodTest> bloodTypingTests = bloodTestingRepository.getBloodTypingTests();
+    List<BloodTest> bloodTypingTests = bloodTestRepository.getBloodTypingTests();
     setBloodTypingTestsDone(resultSet, bloodTypingTests, availableTestResults);
 
     // Check ABO/Rh results against donor's ABO/Rh
@@ -130,15 +126,15 @@ public class BloodTestingRuleEngine {
     }
 
     // Determine if there are missing required basic blood TTI tests
-    List<BloodTest> basicTTITests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI);
+    List<BloodTest> basicTTITests = bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI);
     setBasicTtiTestsNotDone(resultSet, basicTTITests, availableTestResults);
 
     // Determine the TTI status
     setTTIStatus(resultSet);
 
     // Split repeat and confirmatory pending TTI tests
-    List<BloodTest> repeatTTITests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI);
-    List<BloodTest> confirmatoryTTITests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI);
+    List<BloodTest> repeatTTITests = bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI);
+    List<BloodTest> confirmatoryTTITests = bloodTestRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI);
     setSeparateRepeatAndConfirmatoryPendingTTITests(resultSet, repeatTTITests, confirmatoryTTITests);
 
     return bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(resultSet);
@@ -308,7 +304,7 @@ public class BloodTestingRuleEngine {
   private void setBloodTypingStatus(BloodTestingRuleResultSet resultSet, Map<String, String> availableTestResults, Donation donation) {
 
     // Determine if there are missing required basic blood typing tests
-    List<BloodTest> basicBloodTypingTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
+    List<BloodTest> basicBloodTypingTests = bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
     for (BloodTest bt : basicBloodTypingTests) {
       if (availableTestResults.get(bt.getId().toString()) == null) {
         resultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
@@ -328,7 +324,7 @@ public class BloodTestingRuleEngine {
   private BloodTypingMatchStatus getBloodTypingMatchStatusForFirstTimeDonor(BloodTestingRuleResultSet resultSet) {
 
     Map<String, String> availableTestResults = resultSet.getAvailableTestResults();
-    List<BloodTest> repeatBloodtypingTests = bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING);
+    List<BloodTest> repeatBloodtypingTests = bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING);
 
     for (BloodTest repeatBloodTypingTest : repeatBloodtypingTests) {
 
