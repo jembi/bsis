@@ -3,73 +3,57 @@ package org.jembi.bsis.viewmodel;
 import java.util.Date;
 import java.util.Map;
 
-import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.utils.CustomDateFormatter;
+import org.jembi.bsis.utils.DateTimeSerialiser;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class BloodTestResultViewModel {
+public class BloodTestResultViewModel extends BaseViewModel {
 
-  @JsonIgnore
-  private BloodTestResult testResult;
+  private BloodTestFullViewModel bloodTest;
+  private Boolean reEntryRequired;
+  private String result;
+  private Date testedOn;
 
   private Map<String, Boolean> permissions;
 
   public BloodTestResultViewModel() {
-    testResult = new BloodTestResult();
   }
 
-  public BloodTestResultViewModel(BloodTestResult testResult) {
-    this.testResult = testResult;
+  public BloodTestFullViewModel getBloodTest() {
+    return bloodTest;
   }
 
-  public BloodTestResult getTestResult() {
-    return testResult;
-  }
-
-  public void setTestResult(BloodTestResult testResult) {
-    this.testResult = testResult;
-  }
-
-  public Long getId() {
-    return testResult.getId();
-  }
-  
-  public void setId(long id) {
-    testResult.setId(id);
-  }
-
-  public BloodTestViewModel getBloodTest() {
-    return new BloodTestViewModel(testResult.getBloodTest());
-  }
-
-  public Boolean getReEntryRequired () {
-    return testResult.getReEntryRequired();
-  }
-
-  public String getNotes() {
-    return testResult.getNotes();
+  public Boolean getReEntryRequired() {
+    return reEntryRequired;
   }
 
   public String getResult() {
-    return testResult.getResult();
+    return result;
   }
 
-  public String getTestedOn() {
-    Date testedOn = testResult.getTestedOn();
-    if (testedOn != null) {
-      return CustomDateFormatter.getDateTimeString(testedOn);
-    } else {
-      return "";
-    }
-  }
-
-  public String getReagentLotNumber() {
-    return testResult.getReagentLotNumber();
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getTestedOn() {
+    return testedOn;
   }
 
   public Map<String, Boolean> getPermissions() {
     return permissions;
+  }
+
+  public void setBloodTest(BloodTestFullViewModel bloodTest) {
+    this.bloodTest = bloodTest;
+  }
+
+  public void setReEntryRequired(Boolean reEntryRequired) {
+    this.reEntryRequired = reEntryRequired;
+  }
+
+  public void setResult(String result) {
+    this.result = result;
+  }
+
+  public void setTestedOn(Date testedOn) {
+    this.testedOn = testedOn;
   }
 
   public void setPermissions(Map<String, Boolean> permissions) {
