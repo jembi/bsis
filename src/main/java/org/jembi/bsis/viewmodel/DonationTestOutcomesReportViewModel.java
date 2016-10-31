@@ -14,6 +14,7 @@ public class DonationTestOutcomesReportViewModel {
   private BloodTypingStatus bloodTypingStatus;
   private TTIStatus ttiStatus;
   private String previousDonationAboRhOutcome;
+  private boolean released;
 
   private Map<String, String> bloodTestOutcomes;
 
@@ -69,6 +70,14 @@ public class DonationTestOutcomesReportViewModel {
 
   public void setBloodTestOutcomes(Map<String, String> bloodTestOutcomes) {
     this.bloodTestOutcomes = bloodTestOutcomes;
+  }
+  
+  public boolean isReleased() {
+    return released;
+  }
+
+  public void setReleased(boolean released) {
+    this.released = released;
   }
 
   @Override
