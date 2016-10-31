@@ -10,4 +10,14 @@
     <addUniqueConstraint tableName="BloodTest" columnNames="testName" />
   </changeSet>
 
+  <changeSet id="20161031-1100" author="lauravignoli">
+    <comment>Remove duplicate permission "Manage Blood Tests"</comment>
+    <delete tableName="Permission_Role">
+      <where>permissions_id = 57</where>
+    </delete>
+    <delete tableName="Permission">
+      <where>id = 57</where>
+    </delete>
+  </changeSet>
+
 </databaseChangeLog>
