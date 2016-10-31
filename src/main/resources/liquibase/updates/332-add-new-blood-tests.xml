@@ -1,0 +1,13 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20161031-0800" author="timler">
+    <comment>Make BloodTest testName and testNameShort not nullable and testName unique</comment>
+    <addNotNullConstraint tableName="BloodTest" columnName="testNameShort" columnDataType="VARCHAR(25)" />
+    <addNotNullConstraint tableName="BloodTest" columnName="testName" columnDataType="VARCHAR(40)" />
+    <addUniqueConstraint tableName="BloodTest" columnNames="testName" />
+  </changeSet>
+
+</databaseChangeLog>

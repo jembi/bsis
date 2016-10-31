@@ -21,10 +21,10 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length = 25)
+  @Column(length = 25, nullable = false)
   private String testNameShort;
 
-  @Column(length = 40)
+  @Column(length = 40, unique = true, nullable = false)
   private String testName;
 
   /**

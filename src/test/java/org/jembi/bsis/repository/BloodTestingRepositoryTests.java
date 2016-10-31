@@ -51,8 +51,10 @@ public class BloodTestingRepositoryTests extends ContextDependentTestSuite{
         .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
     Donation notReleasedDonation = aDonation().withVenue(expectedVenue).thatIsDeleted().withDonationDate(irrelevantStartDate)
         .thatIsNotReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
-    BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI).buildAndPersist(entityManager);
-    BloodTest unexpectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING).buildAndPersist(entityManager);
+    BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI)
+        .withTestName("test1").withTestNameShort("t1").buildAndPersist(entityManager);
+    BloodTest unexpectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
+        .withTestName("test2").withTestNameShort("t2").buildAndPersist(entityManager);
     
     // Expected
     aBloodTestResult()
@@ -128,8 +130,10 @@ public class BloodTestingRepositoryTests extends ContextDependentTestSuite{
     Donation notReleasedDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
         .thatIsNotReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
     
-    BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI).buildAndPersist(entityManager);
-    BloodTest unexpectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING).buildAndPersist(entityManager);
+    BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI)
+        .withTestName("test1").withTestNameShort("t1").buildAndPersist(entityManager);
+    BloodTest unexpectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
+        .withTestName("test2").withTestNameShort("t2").buildAndPersist(entityManager);
     
     // Expected in count
     aBloodTestResult()
@@ -221,8 +225,10 @@ public class BloodTestingRepositoryTests extends ContextDependentTestSuite{
     Donation notReleasedDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
         .thatIsNotReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
     
-    BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI).buildAndPersist(entityManager);
-    BloodTest unexpectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING).buildAndPersist(entityManager);
+    BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI)
+        .withTestName("test1").withTestNameShort("t1").buildAndPersist(entityManager);
+    BloodTest unexpectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
+        .withTestName("test2").withTestNameShort("t2").buildAndPersist(entityManager);
     
     // Expected in count
     aBloodTestResult()

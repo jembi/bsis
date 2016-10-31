@@ -5,6 +5,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
@@ -24,7 +25,6 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder;
-import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.helpers.builders.DonationTypeBuilder;
 import org.jembi.bsis.helpers.builders.FormFieldBuilder;
 import org.jembi.bsis.helpers.builders.PackTypeBuilder;
@@ -194,8 +194,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     entityManager.persist(deferralReason);
 
     // set up test data (Outcomes)
-    BloodTestBuilder.aBloodTest().withValidResults("POS,NEG").withTestName("HIV")
-        .buildAndPersist(entityManager);
+    aBloodTest().withValidResults("POS,NEG").withTestName("HIV").withTestNameShort("HIV").buildAndPersist(entityManager);
     BloodTestingRule aboBloodTestingRule1 = new BloodTestingRule();
     aboBloodTestingRule1.setDonationFieldChanged(DonationField.BLOODABO);
     aboBloodTestingRule1.setNewInformation("A");

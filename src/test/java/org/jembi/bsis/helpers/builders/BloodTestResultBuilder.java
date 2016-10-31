@@ -14,9 +14,15 @@ import org.jembi.bsis.model.user.User;
 
 public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResult> {
 
+  // static counter that is used to create a unique default test name
+  private static int UNIQUE_INCREMENT = 0;
+
   private Long id;
   private String result;
-  private BloodTest bloodTest = aBloodTest().build();
+  private BloodTest bloodTest = aBloodTest()
+      .withTestName("test " + ++UNIQUE_INCREMENT)
+      .withTestNameShort("t" + UNIQUE_INCREMENT)
+      .build();
   private Donation donation = aDonation().build();
   private boolean reEntryRequired;
   private boolean isDeleted = false;

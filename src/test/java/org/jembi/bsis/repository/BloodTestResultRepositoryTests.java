@@ -63,7 +63,7 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
         .withCreatedBy(aUser().withUsername(createdByUsername).build())
         .withCreatedDate(createdDate)
         .withResult(result)
-        .withBloodTest(aBloodTest().withTestNameShort(testNameShort).build())
+        .withBloodTest(aBloodTest().withTestNameShort(testNameShort).withTestName(testNameShort).build())
         .buildAndPersist(entityManager);
     
     // Excluded because deleted
@@ -93,11 +93,11 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
     String secondTestName = "Number two";
     
     aBloodTestResult()
-        .withBloodTest(aBloodTest().withTestNameShort(secondTestName).build())
+        .withBloodTest(aBloodTest().withTestNameShort(secondTestName).withTestName(secondTestName).build())
         .withCreatedDate(new DateTime().minusDays(3).toDate())
         .buildAndPersist(entityManager);
     aBloodTestResult()
-        .withBloodTest(aBloodTest().withTestNameShort(firstTestName).build())
+        .withBloodTest(aBloodTest().withTestNameShort(firstTestName).withTestName(firstTestName).build())
         .withCreatedDate(new DateTime().minusDays(7).toDate())
         .buildAndPersist(entityManager);
     
