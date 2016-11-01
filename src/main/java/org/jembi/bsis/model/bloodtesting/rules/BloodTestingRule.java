@@ -67,7 +67,7 @@ public class BloodTestingRule extends BaseEntity {
    */
   private Boolean markSampleAsUnsafe;
 
-  private Boolean isActive;
+  private Boolean isDeleted;
 
   public List<String> getBloodTestsIds() {
 	if (bloodTestsIds == null || bloodTestsIds.equals("")) {
@@ -88,8 +88,8 @@ public class BloodTestingRule extends BaseEntity {
     return markSampleAsUnsafe;
   }
 
-  public Boolean getIsActive() {
-    return isActive;
+  public Boolean getIsDeleted() {
+    return isDeleted;
   }
 
   public void setBloodTestsIds(String bloodTestsIds) {
@@ -108,8 +108,8 @@ public class BloodTestingRule extends BaseEntity {
     this.markSampleAsUnsafe = markSampleAsUnsafe;
   }
 
-  public void setIsActive(Boolean isActive) {
-    this.isActive = isActive;
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 
   public String getNewInformation() {

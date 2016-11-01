@@ -60,8 +60,8 @@ public class BloodTestingRuleBackingForm {
     typingRule.setSubCategory(BloodTestSubCategory.valueOf(subCategory.replaceAll("\\s", "").toUpperCase()));
   }
 
-  public void setIsActive(Boolean isActive) {
-    typingRule.setIsActive(isActive);
+  public void setIsDeleted(Boolean isDeleted) {
+    typingRule.setIsDeleted(isDeleted);
   }
 
   public void setMarkSampleAsUnsafe(Boolean MarkSampleAsUnsafe) {

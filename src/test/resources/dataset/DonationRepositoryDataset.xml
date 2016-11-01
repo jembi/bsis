@@ -172,19 +172,19 @@
 
 	<BloodTestingRule id="1" bloodTestsIds="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isActive="1" markSampleAsUnsafe="0"
+		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
 		newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO" />
 	<BloodTestingRule id="2" bloodTestsIds="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isActive="1" markSampleAsUnsafe="0"
+		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
 		newInformation="A" pattern="A" pendingTestsIds="" subCategory="BLOODABO" />
 	<BloodTestingRule id="3" bloodTestsIds="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isActive="1" markSampleAsUnsafe="0"
+		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
 		newInformation="B" pattern="B" pendingTestsIds="" subCategory="BLOODABO" />
 	<BloodTestingRule id="4" bloodTestsIds="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isActive="1" markSampleAsUnsafe="0"
+		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
 		newInformation="AB" pattern="AB" pendingTestsIds="" subCategory="BLOODABO" />
 	<BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
 		context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"

@@ -15,7 +15,7 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
   private String pendingTestsIds;
   private BloodTestSubCategory subCategory;
   private BloodTestCategory category;
-  private Boolean isActive = Boolean.TRUE;
+  private Boolean isDeleted = Boolean.FALSE;
 
   public BloodTestingRuleBuilder withId(Long id) {
     this.id = id;
@@ -57,8 +57,8 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
     return this;
   }
 
-  public BloodTestingRuleBuilder thatIsInactive() {
-    this.isActive = Boolean.FALSE;
+  public BloodTestingRuleBuilder thatIsDeleted() {
+    this.isDeleted = Boolean.TRUE;
     return this;
   }
 
@@ -73,7 +73,7 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
     bloodTestingRule.setPendingTestsIds(pendingTestsIds);
     bloodTestingRule.setCategory(category);
     bloodTestingRule.setSubCategory(subCategory);
-    bloodTestingRule.setIsActive(isActive);
+    bloodTestingRule.setIsDeleted(isDeleted);
     return bloodTestingRule;
   }
 

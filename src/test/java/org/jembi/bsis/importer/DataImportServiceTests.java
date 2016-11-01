@@ -198,32 +198,32 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     BloodTestingRule aboBloodTestingRule1 = new BloodTestingRule();
     aboBloodTestingRule1.setDonationFieldChanged(DonationField.BLOODABO);
     aboBloodTestingRule1.setNewInformation("A");
-    aboBloodTestingRule1.setIsActive(true);
+    aboBloodTestingRule1.setIsDeleted(false);
     entityManager.persist(aboBloodTestingRule1);
     BloodTestingRule aboBloodTestingRule2 = new BloodTestingRule();
     aboBloodTestingRule2.setDonationFieldChanged(DonationField.BLOODABO);
     aboBloodTestingRule2.setNewInformation("B");
-    aboBloodTestingRule2.setIsActive(true);
+    aboBloodTestingRule2.setIsDeleted(false);
     entityManager.persist(aboBloodTestingRule2);
     BloodTestingRule aboBloodTestingRule3 = new BloodTestingRule();
     aboBloodTestingRule3.setDonationFieldChanged(DonationField.BLOODABO);
     aboBloodTestingRule3.setNewInformation("O");
-    aboBloodTestingRule3.setIsActive(true);
+    aboBloodTestingRule3.setIsDeleted(false);
     entityManager.persist(aboBloodTestingRule3);
     BloodTestingRule aboBloodTestingRule4 = new BloodTestingRule();
     aboBloodTestingRule4.setDonationFieldChanged(DonationField.BLOODABO);
     aboBloodTestingRule4.setNewInformation("AB");
-    aboBloodTestingRule4.setIsActive(true);
+    aboBloodTestingRule4.setIsDeleted(false);
     entityManager.persist(aboBloodTestingRule4);
     BloodTestingRule rhBloodTestingRule1 = new BloodTestingRule();
     rhBloodTestingRule1.setDonationFieldChanged(DonationField.BLOODRH);
     rhBloodTestingRule1.setNewInformation("+");
-    rhBloodTestingRule1.setIsActive(true);
+    rhBloodTestingRule1.setIsDeleted(false);
     entityManager.persist(rhBloodTestingRule1);
     BloodTestingRule rhBloodTestingRule2 = new BloodTestingRule();
     rhBloodTestingRule2.setDonationFieldChanged(DonationField.BLOODRH);
     rhBloodTestingRule2.setNewInformation("-");
-    rhBloodTestingRule2.setIsActive(true);
+    rhBloodTestingRule2.setIsDeleted(false);
     entityManager.persist(rhBloodTestingRule2);
 
     FormFieldBuilder.aFormField()

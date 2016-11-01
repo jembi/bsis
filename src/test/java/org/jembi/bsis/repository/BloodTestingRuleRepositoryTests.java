@@ -34,7 +34,7 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
         .buildAndPersist(entityManager);
 
     // inactive rule excluded
-    aBloodTestingRule().thatIsInactive().buildAndPersist(entityManager);
+    aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager);
 
     List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false);
 
@@ -55,7 +55,7 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
         .withPendingTestsIds("2,3")
         .buildAndPersist(entityManager);
 
-    aBloodTestingRule().thatIsInactive().buildAndPersist(entityManager);
+    aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager);
 
     List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(true);
 

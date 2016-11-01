@@ -7,5 +7,5 @@ public class BloodTestingRuleNamedQueryConstants {
   public static final String QUERY_GET_ACTIVE_BLOOD_TESTING_RULES = 
       "SELECT btr " 
       + "FROM BloodTestingRule btr "
-      + "WHERE (:includeInactive = TRUE OR btr.isActive = TRUE)";
+      + "WHERE (:includeInactive = TRUE OR btr.isDeleted = FALSE)";
 }
