@@ -13,6 +13,8 @@ import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
+import org.jembi.bsis.service.BloodTestCRUDService;
+import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class BloodTestControllerService {
 
   @Autowired
   private BloodTestFactory bloodTestFactory;
+
+  @Autowired
+  private BloodTestCRUDService bloodTestCRUDService;
 
   public List<BloodTestViewModel> getAllBloodTests() {
     List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTestsIncludeInactive();
@@ -44,9 +49,9 @@ public class BloodTestControllerService {
     return types;
   }
 
-  public BloodTest createBloodTest(BloodTestBackingForm bloodTestBackingForm) {
+  public BloodTestFullViewModel createBloodTest(BloodTestBackingForm bloodTestBackingForm) {
     BloodTest bloodTest = bloodTestFactory.createEntity(bloodTestBackingForm);
-    bloodTestRepository.save(bloodTest);
-    return bloodTest;
+    bloodTest = bloodTestCRUDService.createBloodTest(bloodTestFactory.createEntity(bloodTestBackingForm));
+    return bloodTestFactory.createFullViewModel(bloodTest);
   }
 }
