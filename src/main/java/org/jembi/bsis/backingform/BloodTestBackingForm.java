@@ -27,13 +27,9 @@ public class BloodTestBackingForm {
   
   private Boolean isDeleted;
   
-  private boolean flagComponentsContainingPlasmaForDiscard;
+  private Boolean flagComponentsContainingPlasmaForDiscard;
   
-  private boolean flagComponentsForDiscard;
-  
-  public BloodTestBackingForm() {
-    
-  }
+  private Boolean flagComponentsForDiscard;
 
   public Long getId() {
     return id;
@@ -115,19 +111,19 @@ public class BloodTestBackingForm {
     this.isDeleted = isDeleted;
   }
 
-  public boolean isFlagComponentsContainingPlasmaForDiscard() {
+  public Boolean isFlagComponentsContainingPlasmaForDiscard() {
     return flagComponentsContainingPlasmaForDiscard;
   }
 
-  public void setFlagComponentsContainingPlasmaForDiscard(boolean flagComponentsContainingPlasmaForDiscard) {
+  public void setFlagComponentsContainingPlasmaForDiscard(Boolean flagComponentsContainingPlasmaForDiscard) {
     this.flagComponentsContainingPlasmaForDiscard = flagComponentsContainingPlasmaForDiscard;
   }
 
-  public boolean isFlagComponentsForDiscard() {
+  public Boolean isFlagComponentsForDiscard() {
     return flagComponentsForDiscard;
   }
 
-  public void setFlagComponentsForDiscard(boolean flagComponentsForDiscard) {
+  public void setFlagComponentsForDiscard(Boolean flagComponentsForDiscard) {
     this.flagComponentsForDiscard = flagComponentsForDiscard;
   }
   
