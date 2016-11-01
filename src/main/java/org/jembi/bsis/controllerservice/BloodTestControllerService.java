@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.factory.BloodTestFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
@@ -41,5 +42,11 @@ public class BloodTestControllerService {
       types.put(category, BloodTestType.getBloodTestTypeForCategory(category));
     }
     return types;
+  }
+
+  public BloodTest createBloodTest(BloodTestBackingForm bloodTestBackingForm) {
+    BloodTest bloodTest = bloodTestFactory.createEntity(bloodTestBackingForm);
+    bloodTestRepository.save(bloodTest);
+    return bloodTest;
   }
 }
