@@ -62,20 +62,18 @@ public class BloodTestFactory {
   public BloodTest createEntity(BloodTestBackingForm bloodTestBackingForm){
     BloodTest bloodTest = new BloodTest();
     
-    if (bloodTestBackingForm != null) {
-      bloodTest.setId(bloodTestBackingForm.getId());
-      bloodTest.setTestName(bloodTestBackingForm.getTestName());
-      bloodTest.setTestNameShort(bloodTestBackingForm.getTestNameShort());
-      bloodTest.setCategory(bloodTestBackingForm.getCategory());
-      bloodTest.setBloodTestType(bloodTestBackingForm.getBloodTestType());
-      bloodTest.setValidResults(StringUtils.join(bloodTestBackingForm.getValidResults(), ','));
-      bloodTest.setNegativeResults(StringUtils.join(bloodTestBackingForm.getNegativeResults(), ','));
-      bloodTest.setPositiveResults(StringUtils.join(bloodTestBackingForm.getPositiveResults(), ','));
-      bloodTest.setIsActive(bloodTestBackingForm.getIsActive());
-      bloodTest.setIsDeleted(bloodTestBackingForm.getIsDeleted());
-      bloodTest.setFlagComponentsContainingPlasmaForDiscard(bloodTestBackingForm.isFlagComponentsContainingPlasmaForDiscard());
-      bloodTest.setFlagComponentsForDiscard(bloodTestBackingForm.isFlagComponentsForDiscard());
-    }
+    bloodTest.setId(bloodTestBackingForm.getId());
+    bloodTest.setTestName(bloodTestBackingForm.getTestName());
+    bloodTest.setTestNameShort(bloodTestBackingForm.getTestNameShort());
+    bloodTest.setCategory(bloodTestBackingForm.getCategory());
+    bloodTest.setBloodTestType(bloodTestBackingForm.getBloodTestType());
+    bloodTest.setValidResults(StringUtils.join(bloodTestBackingForm.getValidResults(), ','));
+    bloodTest.setNegativeResults(StringUtils.join(bloodTestBackingForm.getNegativeResults(), ','));
+    bloodTest.setPositiveResults(StringUtils.join(bloodTestBackingForm.getPositiveResults(), ','));
+    bloodTest.setIsActive(bloodTestBackingForm.getIsActive());
+    bloodTest.setIsDeleted(bloodTestBackingForm.getIsDeleted());
+    bloodTest.setFlagComponentsContainingPlasmaForDiscard(bloodTestBackingForm.isFlagComponentsContainingPlasmaForDiscard());
+    bloodTest.setFlagComponentsForDiscard(bloodTestBackingForm.isFlagComponentsForDiscard());
     
     return bloodTest;
   }
