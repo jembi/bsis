@@ -67,7 +67,8 @@ public class BloodTestingRule extends BaseEntity {
    */
   private Boolean markSampleAsUnsafe;
 
-  private Boolean isDeleted;
+  @Column(nullable = false)
+  private Boolean isDeleted = Boolean.FALSE;
 
   public List<String> getBloodTestsIds() {
 	if (bloodTestsIds == null || bloodTestsIds.equals("")) {
