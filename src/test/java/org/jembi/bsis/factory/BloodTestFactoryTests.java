@@ -118,7 +118,7 @@ public class BloodTestFactoryTests extends UnitTestSuite {
   }
   
   @Test 
-  public void testCreateEntity_shouldReturnExpectedEntity() { 
+  public void testConvertBloodTestBackingFormToBloodTestEntity_shouldReturnExpectedEntity() { 
     // Set up fixture 
     BloodTestBackingForm bloodTestBackingForm = BloodTestBackingFormBuilder.aBloodTestBackingForm() 
         .withId(1L) 
@@ -147,7 +147,7 @@ public class BloodTestFactoryTests extends UnitTestSuite {
         .thatIsInActive() 
         .thatIsDeleted() 
         .thatShouldNotFlagComponentsContainingPlasmaForDiscard() 
-        .withFlagComponentsForDiscard(true) 
+        .thatShouldFlagComponentsForDiscard() 
         .build(); 
      
     // Exercise SUT 
