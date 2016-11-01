@@ -20,6 +20,7 @@ import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
@@ -36,6 +37,10 @@ public class BloodTestingRuleEngine {
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
+
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
+
   @Autowired
   private BloodTestingRuleResultViewModelFactory bloodTestingRuleResultViewModelFactory;
 
@@ -66,12 +71,12 @@ public class BloodTestingRuleEngine {
           "samples");
     }
 
-    List<BloodTestingRule> rules = bloodTestRepository.getActiveBloodTestingRules();
+    List<BloodTestingRule> rules = bloodTestingRepository.getActiveBloodTestingRules();
 
     // Get the latest test results
     Map<String, String> storedTestResults = new TreeMap<String, String>();
     Map<String, String> availableTestResults = new TreeMap<String, String>();
-    Map<Long, BloodTestResult> recentTestResults = bloodTestRepository
+    Map<Long, BloodTestResult> recentTestResults = bloodTestingRepository
         .getRecentTestResultsForDonation(donation.getId());
     for (Long testId : recentTestResults.keySet()) {
       BloodTestResult testResult = recentTestResults.get(testId);

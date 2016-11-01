@@ -55,6 +55,7 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.*;
 import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.service.DonationCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +108,8 @@ public class DataImportService {
   @Autowired
   private BloodTestRepository bloodTestRepository;
   @Autowired
+  private BloodTestingRepository bloodTestingRepository;
+  @Autowired
   private DonorDeferralRepository donorDeferralRepository;
   @Autowired
   private DivisionRepository divisionRepository;
@@ -121,7 +124,6 @@ public class DataImportService {
   private boolean validationOnly;
   private String action;
   private Location testingSite = null;
-
 
   public void importData(Workbook workbook, boolean validationOnly) {
     this.validationOnly = validationOnly;
@@ -352,7 +354,7 @@ public class DataImportService {
     Map<String, IdType> idTypeCache = buildIdTypeCache();
     Map<String, ContactMethodType> contactMethodTypeCache = buildContactMethodTypeCache();
     Map<String, AddressType> addressTypeCache = buildAddressTypeCache();
-    List<BloodTestingRule> bloodTestingRuleCache = bloodTestRepository.getActiveBloodTestingRules();
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRepository.getActiveBloodTestingRules();
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -666,7 +668,7 @@ public class DataImportService {
     Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
     Map<String, DonationBatch> donationBatches = new HashMap<>();
     Map<String, TestBatch> testBatches = new HashMap<>();
-    List<BloodTestingRule> bloodTestingRuleCache = bloodTestRepository.getActiveBloodTestingRules();
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRepository.getActiveBloodTestingRules();
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -1142,7 +1144,7 @@ public class DataImportService {
 
       Donation donation = new Donation();
       donation.setId(donationId);
-      bloodTestRepository.saveBloodTestResultsToDatabase(testResults, donation, testedOn, null, true);
+      bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, testedOn, null, true);
 
       // Periodically flush data
       if (testResultsCount % 1000 == 0) {

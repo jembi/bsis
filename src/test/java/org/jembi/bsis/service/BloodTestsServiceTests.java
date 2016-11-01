@@ -30,6 +30,7 @@ import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Test;
@@ -50,6 +51,8 @@ public class BloodTestsServiceTests extends UnitTestSuite {
   private BloodTestingRuleEngine bloodTestingRuleEngine;
   @Mock
   private BloodTestRepository bloodTestRepository;
+  @Mock
+  private BloodTestingRepository bloodTestingRepository;
   
   @Test
   public void testSaveBloodTestsWithReEntryRequired_shouldApplyAndSaveBloodTestsAsReEntry() {
@@ -77,7 +80,7 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Verify
     verify(bloodTestingRuleEngine, times(2)).applyBloodTests(donation, bloodTestResults);
-    verify(bloodTestRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
+    verify(bloodTestingRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
         any(Date.class), eq(bloodTestingRuleResult), eq(true));
   }
   
@@ -107,7 +110,7 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Verify
     verify(bloodTestingRuleEngine, times(2)).applyBloodTests(donation, bloodTestResults);
-    verify(bloodTestRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
+    verify(bloodTestingRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
         any(Date.class), eq(bloodTestingRuleResult), eq(false));
   }
   
@@ -138,7 +141,7 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Verify
     verify(bloodTestingRuleEngine, times(2)).applyBloodTests(donation, bloodTestResults);
-    verify(bloodTestRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
+    verify(bloodTestingRepository, times(2)).saveBloodTestResultsToDatabase(eq(bloodTestResults), eq(donation),
         any(Date.class), eq(bloodTestingRuleResult), eq(true));
   }
 

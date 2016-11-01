@@ -95,13 +95,13 @@ public class BloodTestsService {
         reEnteredBloodTestResults = new HashMap<>();
       }
       BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
-      bloodTestRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
+      bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
 
       // Run rule engine for the 2nd time and save testResults
       // Note: Rules engine will only provide the correct BloodTyping statuses on the 2nd execution
       // because the Donation Abo/Rh is only updated after the 1st execution
       ruleResult = ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults);
-      bloodTestRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
+      bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
 
       // Update donation
       if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
@@ -122,11 +122,11 @@ public class BloodTestsService {
   public boolean updateDonationWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
     // FIXME: this method should be in this service but it has too many references in
     // BloodTestingRepository
-    return bloodTestRepository.updateDonationWithTestResults(donation, ruleResult);
+    return bloodTestingRepository.updateDonationWithTestResults(donation, ruleResult);
   }
 
-  protected void setBloodTestRepository(BloodTestRepository bloodTestRepository) {
-    this.bloodTestRepository = bloodTestRepository;
+  protected void setBloodTestingRepository(BloodTestingRepository bloodTestingRepository) {
+    this.bloodTestingRepository = bloodTestingRepository;
   }
 
   public Map<String, Object> getBloodTestShortNames() {

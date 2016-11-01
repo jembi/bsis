@@ -44,6 +44,9 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
   private BloodTestRepository bloodTestRepository;
 
   @Mock
+  private BloodTestingRepository bloodTestingRepository;
+
+  @Mock
   private BloodTestingRuleResultViewModelFactory bloodTestingRuleResultViewModelFactory;
   
   private List<BloodTestingRule> rules;
@@ -158,8 +161,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     // assume hiv and hbv are the only basic tty tests
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI))
         .thenReturn(Arrays.asList(hivBloodTest, hbvBloodTest));
@@ -198,8 +201,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     // assume hiv and hbv are the only basic tty tests
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(hivBloodTest, hbvBloodTest));
 
@@ -237,8 +240,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     // assume hiv and hbv are the only basic tty tests
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(hivBloodTest, hbvBloodTest));
 
@@ -276,8 +279,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     // assume hiv and hbv are the only basic tty tests
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(hivBloodTest, hbvBloodTest));
 
@@ -315,8 +318,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     // assume hiv and hbv are the only basic tty tests
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(hivBloodTest, hbvBloodTest));
 
@@ -356,8 +359,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     // assume hiv and hbv are the only basic tty tests
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI))
         .thenReturn(Arrays.asList(hivBloodTest, hbvBloodTest));
@@ -394,8 +397,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.addBloodAboChanges("A");
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
 
     // Apply test
@@ -432,8 +435,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.addBloodRhChanges("+");
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
 
     // Apply test
@@ -470,8 +473,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.addBloodRhChanges("");
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
 
     // Apply test
@@ -506,8 +509,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.addBloodAboChanges("");
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
 
     // Apply test
@@ -544,8 +547,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.addBloodRhChanges("");
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
 
     // Apply test
@@ -583,8 +586,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.addBloodRhChanges("+");
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
 
     // Apply test
@@ -622,8 +625,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.addBloodRhChanges("+");
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
 
     // Apply test
@@ -661,8 +664,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.addBloodRhChanges("+");
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)).thenReturn(Arrays.asList(aboRepeatBloodTest, rhRepeatBloodTest));
 
@@ -703,8 +706,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.addBloodRhChanges("+");
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)).thenReturn(Arrays.asList(aboRepeatBloodTest, rhRepeatBloodTest));
 
@@ -745,8 +748,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.addBloodRhChanges("+");
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)).thenReturn(Arrays.asList(aboRepeatBloodTest, rhRepeatBloodTest));
 
@@ -786,8 +789,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
     // Setup mocks
-    when(bloodTestRepository.getActiveBloodTestingRules()).thenReturn(rules);
-    when(bloodTestRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestingRepository.getActiveBloodTestingRules()).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
 
     // Apply test
