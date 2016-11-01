@@ -1,10 +1,13 @@
 package org.jembi.bsis.repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.apache.log4j.Logger;
 import org.jembi.bsis.dto.BloodTestResultDTO;
 import org.jembi.bsis.dto.BloodTestResultExportDTO;
 import org.jembi.bsis.dto.BloodTestTotalDTO;
@@ -21,137 +24,132 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BloodTestResultRepository extends AbstractRepository<BloodTestResult> {
 
-    private static final Logger LOGGER = Logger.getLogger(BloodTestResultRepository.class);
+  @PersistenceContext
+  private EntityManager entityManager;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+  @Autowired
+  private DonationRepository donationRepository;
 
-    @Autowired
-    private DonationRepository donationRepository;
+  @Autowired
+  private DonationBatchRepository donationBatchRepository;
 
-    @Autowired
-    private DonationBatchRepository donationBatchRepository;
+  @Autowired
+  private BloodTestingRuleEngine ruleEngine;
 
-    @Autowired
-    private BloodTestingRuleEngine ruleEngine;
+  // TODO: Test
+  public int countBloodTestResultsForDonation(long donationId) {
+    return entityManager.createNamedQuery(
+        BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION, 
+        Number.class)
+        .setParameter("donationId", donationId)
+        .setParameter("testOutcomeDeleted", false)
+        .getSingleResult()
+        .intValue();
+  }
 
-    // TODO: Test
-    public int countBloodTestResultsForDonation(long donationId) {
-        return entityManager.createNamedQuery(
-                BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION,
-                Number.class)
-                .setParameter("donationId", donationId)
-                .setParameter("testOutcomeDeleted", false)
-                .getSingleResult()
-                .intValue();
-    }
+  public List<BloodTestResult> getTestOutcomes(Donation donation) {
+    return entityManager.createNamedQuery(
+        BloodTestResultNamedQueryConstants.NAME_GET_TEST_OUTCOMES_FOR_DONATION, 
+        BloodTestResult.class)
+        .setParameter("donation", donation)
+        .setParameter("testOutcomeDeleted", false)
+        .getResultList();
+  }
 
-    public List<BloodTestResult> getTestOutcomes(Donation donation) {
-        return entityManager.createNamedQuery(
-                BloodTestResultNamedQueryConstants.NAME_GET_TEST_OUTCOMES_FOR_DONATION, BloodTestResult.class)
-                .setParameter("donation", donation)
-                .setParameter("testOutcomeDeleted", false)
-                .getResultList();
-    }
+  public List<BloodTestResultExportDTO> findBloodTestResultsForExport() {
+    return entityManager.createNamedQuery(
+        BloodTestResultNamedQueryConstants.NAME_FIND_BLOOD_TEST_RESULTS_FOR_EXPORT,
+        BloodTestResultExportDTO.class)
+        .setParameter("deleted", false)
+        .getResultList();
+  }
 
-    public List<BloodTestResultExportDTO> findBloodTestResultsForExport() {
-        return entityManager.createNamedQuery(BloodTestResultNamedQueryConstants.NAME_FIND_BLOOD_TEST_RESULTS_FOR_EXPORT,
-                BloodTestResultExportDTO.class)
-                .setParameter("deleted", false)
-                .getResultList();
-    }
+  public List<BloodTestResultDTO> findTTIPrevalenceReportIndicators(Date startDate, Date endDate) {
+    return entityManager.createNamedQuery(
+        BloodTestResultNamedQueryConstants.NAME_FIND_BLOOD_TEST_RESULT_VALUE_OBJECTS_FOR_DATE_RANGE,
+        BloodTestResultDTO.class)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("donationDeleted", false)
+        .setParameter("testOutcomeDeleted", false)
+        .setParameter("released", true)
+        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
+        .getResultList();
+  }
 
-    public List<BloodTestResultDTO> findTTIPrevalenceReportIndicators(Date startDate, Date endDate) {
-        return entityManager.createNamedQuery(
-                BloodTestResultNamedQueryConstants.NAME_FIND_BLOOD_TEST_RESULT_VALUE_OBJECTS_FOR_DATE_RANGE,
-                BloodTestResultDTO.class)
-                .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate)
-                .setParameter("donationDeleted", false)
-                .setParameter("testOutcomeDeleted", false)
-                .setParameter("released", true)
-                .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
-                .getResultList();
-    }
+  public List<BloodTestTotalDTO> findTTIPrevalenceReportTotalUnitsTested(Date startDate, Date endDate) {
+    return entityManager.createNamedQuery(
+        BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_UNITS_TESTED_FOR_DATE_RANGE,
+        BloodTestTotalDTO.class)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("donationDeleted", false)
+        .setParameter("testOutcomeDeleted", false)
+        .setParameter("released", true)
+        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
+        .getResultList();
+  }
 
-    public List<BloodTestTotalDTO> findTTIPrevalenceReportTotalUnitsTested(Date startDate, Date endDate) {
-        return entityManager.createNamedQuery(
-                BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_UNITS_TESTED_FOR_DATE_RANGE,
-                BloodTestTotalDTO.class)
-                .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate)
-                .setParameter("donationDeleted", false)
-                .setParameter("testOutcomeDeleted", false)
-                .setParameter("released", true)
-                .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
-                .getResultList();
-    }
+  public List<BloodTestTotalDTO> findTTIPrevalenceReportTotalUnsafeUnitsTested(Date startDate, Date endDate) {
+    return entityManager.createNamedQuery(
+        BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE,
+        BloodTestTotalDTO.class)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("donationDeleted", false)
+        .setParameter("testOutcomeDeleted", false)
+        .setParameter("released", true)
+        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
+        .setParameter("ttiStatus", TTIStatus.TTI_UNSAFE)
+        .getResultList();
+  }
 
-    public List<BloodTestTotalDTO> findTTIPrevalenceReportTotalUnsafeUnitsTested(Date startDate, Date endDate) {
-        return entityManager.createNamedQuery(
-                BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE,
-                BloodTestTotalDTO.class)
-                .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate)
-                .setParameter("donationDeleted", false)
-                .setParameter("testOutcomeDeleted", false)
-                .setParameter("released", true)
-                .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
-                .setParameter("ttiStatus", TTIStatus.TTI_UNSAFE)
-                .getResultList();
-    }
+  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(List<Long> donationBatchIds) {
 
-    public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(
-            List<Long> donationBatchIds) {
+    List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<BloodTestingRuleResult>();
 
-        List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<BloodTestingRuleResult>();
+    for (Long donationBatchId : donationBatchIds) {
+      List<Donation> donations = donationBatchRepository.findDonationsInBatch(donationBatchId);
 
-        for (Long donationBatchId : donationBatchIds) {
-            List<Donation> donations = donationBatchRepository.findDonationsInBatch(donationBatchId);
+      for (Donation donation : donations) {
 
-            for (Donation donation : donations) {
-
-                if (!donation.getPackType().getTestSampleProduced()) {
-                    // This donation did not produce a test sample so skip it
-                    continue;
-                }
-
-                BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-                        donation, new HashMap<Long, String>());
-                bloodTestingRuleResults.add(ruleResult);
-            }
+        if (!donation.getPackType().getTestSampleProduced()) {
+          // This donation did not produce a test sample so skip it
+          continue;
         }
 
-        return bloodTestingRuleResults;
+        BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+        bloodTestingRuleResults.add(ruleResult);
+      }
     }
 
-    public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatchesByBloodTestType(List<Long> donationBatchIds,
-                                                                                           BloodTestType bloodTestType) {
+    return bloodTestingRuleResults;
+  }
 
-        List<BloodTestingRuleResult> bloodTestingRuleResults = getAllTestsStatusForDonationBatches(donationBatchIds);
-        List<BloodTestingRuleResult> filteredRuleResults = new ArrayList<BloodTestingRuleResult>();
-        for (BloodTestingRuleResult result : bloodTestingRuleResults) {
-            Map<String, BloodTestResultViewModel> modelMap = result.getRecentTestResults();
-            Map<String, BloodTestResultViewModel> filteredModelMap = new HashMap<String, BloodTestResultViewModel>();
-            for (String key : modelMap.keySet()) {
-                BloodTestResultViewModel model = modelMap.get(key);
-                if (model.getBloodTest().getBloodTestType().equals(bloodTestType)) {
-                    filteredModelMap.put(key, model);
-                }
-            }
-            result.setRecentTestResults(filteredModelMap);
-            filteredRuleResults.add(result);
+  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatchesByBloodTestType(List<Long> donationBatchIds,
+      BloodTestType bloodTestType) {
+
+    List<BloodTestingRuleResult> bloodTestingRuleResults = getAllTestsStatusForDonationBatches(donationBatchIds);
+    List<BloodTestingRuleResult> filteredRuleResults = new ArrayList<BloodTestingRuleResult>();
+    for (BloodTestingRuleResult result : bloodTestingRuleResults) {
+      Map<String, BloodTestResultViewModel> modelMap = result.getRecentTestResults();
+      Map<String, BloodTestResultViewModel> filteredModelMap = new HashMap<String, BloodTestResultViewModel>();
+      for (String key : modelMap.keySet()) {
+        BloodTestResultViewModel model = modelMap.get(key);
+        if (model.getBloodTest().getBloodTestType().equals(bloodTestType)) {
+          filteredModelMap.put(key, model);
         }
-        bloodTestingRuleResults = filteredRuleResults;
-
-        return bloodTestingRuleResults;
+      }
+      result.setRecentTestResults(filteredModelMap);
+      filteredRuleResults.add(result);
     }
+    bloodTestingRuleResults = filteredRuleResults;
 
-    public BloodTestingRuleResult getAllTestsStatusForDonation(
-            Long donationId) {
-        Donation donation = donationRepository
-                .findDonationById(donationId);
-        return ruleEngine.applyBloodTests(donation,
-                new HashMap<Long, String>());
-    }
+    return bloodTestingRuleResults;
+  }
+
+  public BloodTestingRuleResult getAllTestsStatusForDonation(Long donationId) {
+    Donation donation = donationRepository.findDonationById(donationId);
+    return ruleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+  }
 }

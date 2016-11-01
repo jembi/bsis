@@ -56,16 +56,6 @@ public class BloodTestResultRepositoryTest extends DBUnitContextDependentTestSui
   }
 
   @Test
-  public void testGetTtiTests() throws Exception {
-    List<BloodTest> bloodTests = bloodTestRepository.getTTITests();
-    Assert.assertNotNull("Blood tests exist", bloodTests);
-    Assert.assertFalse("Blood tests exist", bloodTests.isEmpty());
-    for (BloodTest bt : bloodTests) {
-      Assert.assertEquals("Only TTI tests are returned", BloodTestCategory.TTI, bt.getCategory());
-    }
-  }
-
-  @Test
   public void testGetTestsOfTypeBasicBloodTyping() throws Exception {
     List<BloodTest> bloodTests = bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
     Assert.assertNotNull("Blood tests exist", bloodTests);
