@@ -18,6 +18,7 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,9 @@ public class BloodTestsService {
 
   @Autowired
   private BloodTestResultRepository bloodTestResultRepository;
+
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
 
   @Autowired
   private DonationRepository donationRepository;
@@ -54,7 +58,7 @@ public class BloodTestsService {
    * @return BloodTestingRuleResult with the results from the tests
    */
   public BloodTestingRuleResult executeTests(Donation donation) {
-    BloodTestingRuleResult ruleResult = bloodTestResultRepository.getAllTestsStatusForDonation(donation.getId());
+    BloodTestingRuleResult ruleResult = bloodTestingRepository.getAllTestsStatusForDonation(donation.getId());
     return ruleResult;
   }
 

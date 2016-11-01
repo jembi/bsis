@@ -17,6 +17,7 @@ import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
@@ -34,7 +35,7 @@ public class BloodTestResultRepositoryTest extends DBUnitContextDependentTestSui
   BloodTestRepository bloodTestRepository;
 
   @Autowired
-  BloodTestResultRepository bloodTestResultRepository;
+  BloodTestingRepository bloodTestingRepository;
 
   @Autowired
   DonationRepository donationRepository;
@@ -222,7 +223,7 @@ public class BloodTestResultRepositoryTest extends DBUnitContextDependentTestSui
   public void testGetTestResultsForDonationBatchesByBloodTestType() {
     ArrayList<Long> donationBatchIds = new ArrayList<Long>();
     donationBatchIds.add(2l);
-    List<BloodTestingRuleResult> results = bloodTestResultRepository
+    List<BloodTestingRuleResult> results = bloodTestingRepository
         .getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds,
         BloodTestType.BASIC_TTI);
 
@@ -231,5 +232,4 @@ public class BloodTestResultRepositoryTest extends DBUnitContextDependentTestSui
     Assert.assertTrue("Number of tests of type BASIC_TTI for donation batch 2 is 4",
         result.getRecentTestResults().size() == 4);
   }
-
 }
