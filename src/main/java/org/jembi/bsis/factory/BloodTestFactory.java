@@ -42,6 +42,7 @@ public class BloodTestFactory {
 
   private void populateViewModelFields(BloodTest bloodTest, BloodTestViewModel viewModel) {
     viewModel.setId(bloodTest.getId());
+    viewModel.setTestName(bloodTest.getTestName());
     viewModel.setTestNameShort(bloodTest.getTestNameShort());
     viewModel.setBloodTestCategory(bloodTest.getCategory());
     viewModel.setBloodTestType(bloodTest.getBloodTestType());
