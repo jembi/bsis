@@ -7,23 +7,24 @@ import org.jembi.bsis.viewmodel.BloodTestingRuleViewModel;
 public class BloodTestingRuleViewModelBuilder extends AbstractBuilder<BloodTestingRuleViewModel> {
   
   private Long id;
-  private String bloodTestNameShort;
-  private DonationField donationField;
+  private String testNameShort;
+  private DonationField donationFieldChanged;
   private BloodTestCategory category;
-  private String donationFieldValue;
-  private Boolean isDeleted = Boolean.FALSE;
+  private String newInformation;
+  private String pattern;
+  private Boolean isDeleted;
   
   public BloodTestingRuleViewModelBuilder withId(Long id) {
     this.id = id;
     return this;
   }
   public BloodTestingRuleViewModelBuilder withBloodTestNameShort(String bloodTestingNameShort) {
-    this.bloodTestNameShort = bloodTestingNameShort;
+    this.testNameShort = bloodTestingNameShort;
     return this;
   }
   
-  public BloodTestingRuleViewModelBuilder withDonationField(DonationField donationField) {
-    this.donationField = donationField;
+  public BloodTestingRuleViewModelBuilder withDonationFieldChanged(DonationField donationFieldChanged) {
+    this.donationFieldChanged = donationFieldChanged;
     return this;
   }
   
@@ -32,8 +33,13 @@ public class BloodTestingRuleViewModelBuilder extends AbstractBuilder<BloodTesti
     return this;
   }
   
-  public BloodTestingRuleViewModelBuilder withDinationFieldValue(String donationFieldValue) {
-    this.donationFieldValue = donationFieldValue;
+  public BloodTestingRuleViewModelBuilder withNewInformation(String newInformation) {
+    this.newInformation = newInformation;
+    return this;
+  }
+  
+  public BloodTestingRuleViewModelBuilder withPattern(String pattern) {
+    this.pattern = pattern;
     return this;
   }
   
@@ -42,14 +48,20 @@ public class BloodTestingRuleViewModelBuilder extends AbstractBuilder<BloodTesti
     return this;
   }
   
+  public BloodTestingRuleViewModelBuilder thatIsNotDeleted() {
+    this.isDeleted = false;
+    return this;
+  }
+  
   @Override
   public BloodTestingRuleViewModel build() {
     BloodTestingRuleViewModel bloodTestingRuleViewModel = new BloodTestingRuleViewModel();
     bloodTestingRuleViewModel.setId(id);
-    bloodTestingRuleViewModel.setBloodTestNameShort(bloodTestNameShort);
-    bloodTestingRuleViewModel.setDonationField(donationField);
+    bloodTestingRuleViewModel.setTestNameShort(testNameShort);
+    bloodTestingRuleViewModel.setDonationFieldChanged(donationFieldChanged);
     bloodTestingRuleViewModel.setCategory(category);
-    bloodTestingRuleViewModel.setDonationFieldValue(donationFieldValue);
+    bloodTestingRuleViewModel.setNewInformation(newInformation);
+    bloodTestingRuleViewModel.setPattern(pattern);
     bloodTestingRuleViewModel.setIsDeleted(isDeleted);
     return bloodTestingRuleViewModel;
   }
