@@ -4,49 +4,58 @@ import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
 public class BloodTestingRuleViewModel extends BaseViewModel {
-  
-  private String bloodTestNameShort;
-  private DonationField donationField;
+
+  private String testNameShort;
+  private DonationField donationFieldChanged;
   private BloodTestCategory category;
-  private String donationFieldValue;
-  private Boolean isDeleted = Boolean.FALSE;
-  
-  public String getBloodTestNameShort() {
-    return bloodTestNameShort;
+  private String newInformation;
+  private String pattern;
+  private Boolean isDeleted;
+
+  public String getTestNameShort() {
+    return testNameShort;
   }
-  
-  public DonationField getDonationField() {
-    return donationField;
+
+  public DonationField getDonationFieldChanged() {
+    return donationFieldChanged;
   }
-  
+
   public BloodTestCategory getCategory() {
     return category;
   }
-  
-  public String getDonationFieldValue() {
-    return donationFieldValue;
+
+  public String getNewInformation() {
+    return newInformation;
+  }
+
+  public String getPattern() {
+    return pattern;
   }
 
   public Boolean getIsDeleted() {
     return isDeleted;
   }
-  
-  public void setBloodTestNameShort(String bloodTestNameShort) {
-    this.bloodTestNameShort = bloodTestNameShort;
+
+  public void setTestNameShort(String testNameShort) {
+    this.testNameShort = testNameShort;
   }
-  
-  public void setDonationField(DonationField donationField) {
-    this.donationField = donationField;
+
+  public void setDonationFieldChanged(DonationField donationFieldChanged) {
+    this.donationFieldChanged = donationFieldChanged;
   }
-  
+
   public void setCategory(BloodTestCategory category) {
     this.category = category;
   }
-  
-  public void setDonationFieldValue(String donationFieldValue) {
-    this.donationFieldValue = donationFieldValue;
+
+  public void setNewInformation(String newInformation) {
+    this.newInformation = newInformation;
   }
-  
+
+  public void setPattern(String pattern) {
+    this.pattern = pattern;
+  }
+
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
