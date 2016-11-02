@@ -46,12 +46,15 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
   public List<BloodTest> findActiveBloodTests() {
     return em.createQuery("SELECT b " 
         + "FROM BloodTest b " 
-        + "WHERE b.isActive = :isActive ", 
+        + "WHERE b.isActive = :isActive "
+        + "AND b.isDeleted = :isDeleted ",
         BloodTest.class)
         .setParameter("isActive", true)
+        .setParameter("isDeleted", false)
         .getResultList();
   }
 
+  // FIXME: this method should be renamed/refactored because it returns all inactive and deleted blood tests
   public List<BloodTest> getAllBloodTestsIncludeInactive() {
     String queryStr = "SELECT b FROM BloodTest b";
     TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
