@@ -18,7 +18,7 @@ public class BloodTestingRuleMatcher extends TypeSafeMatcher<BloodTestingRule> {
   public void describeTo(Description description) {
     description.appendText("A BloodTestingRule with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nBlood test ids: ").appendValue(expected.getBloodTestsIds())
+        .appendText("\nBlood test id: ").appendValue(expected.getBloodTest().getId())
         .appendText("\nCategory: ").appendValue(expected.getCategory())
         .appendText("\nSub category: ").appendValue(expected.getSubCategory())
         .appendText("\nDonation field changed: ").appendValue(expected.getDonationFieldChanged())
@@ -31,7 +31,7 @@ public class BloodTestingRuleMatcher extends TypeSafeMatcher<BloodTestingRule> {
   @Override
   protected boolean matchesSafely(BloodTestingRule actual) {
     return Objects.equals(actual.getId(), expected.getId())
-        && Objects.equals(actual.getBloodTestsIds(), expected.getBloodTestsIds())
+        && Objects.equals(actual.getBloodTest(), expected.getBloodTest())
         && Objects.equals(actual.getCategory(), expected.getCategory())
         && Objects.equals(actual.getSubCategory(), expected.getSubCategory())
         && Objects.equals(actual.getDonationFieldChanged(), expected.getDonationFieldChanged())

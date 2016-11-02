@@ -72,8 +72,11 @@ public class BloodTestingRuleBackingForm {
     typingRule.setNewInformation(newInformation);
   }
 
-  public void setBloodTestsIds(String bloodTestIds) {
-    typingRule.setBloodTestsIds(bloodTestIds);
+  /*
+   * FIXME: this setter should set the BloodTestBackingForm, but at the time
+   * of writing this code, the BloodTestBackingForm still needs to be merged
+   */
+  public void setBloodTest(String bloodTest) {
   }
 
 }

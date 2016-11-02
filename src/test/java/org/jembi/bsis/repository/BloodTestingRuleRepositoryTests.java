@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.matchers.BloodTestingRuleMatcher.hasSameSta
 
 import java.util.List;
 
+import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
@@ -24,7 +25,7 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
   public void tesGetBloodTestingRules_shouldReturnActive() {
     
     BloodTestingRule activeRule = aBloodTestingRule()
-        .withBloodTestsIds("1")
+        .withBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withTestName("test1").withTestNameShort("t1").build())
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withSubCategory(BloodTestSubCategory.BLOODABO)
         .withDonationFieldChange(DonationField.BLOODABO)
@@ -34,7 +35,10 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
         .buildAndPersist(entityManager);
 
     // inactive rule excluded
-    aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager);
+    aBloodTestingRule()
+        .thatIsDeleted()
+        .withBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withTestName("test2").withTestNameShort("t2").build())
+        .buildAndPersist(entityManager);
 
     List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false);
 
@@ -46,7 +50,7 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
   public void tesGetBloodTestingRules_shouldReturnAll() {
     
     aBloodTestingRule()
-        .withBloodTestsIds("1")
+        .withBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withTestName("test1").withTestNameShort("t1").build())
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withSubCategory(BloodTestSubCategory.BLOODABO)
         .withDonationFieldChange(DonationField.BLOODABO)
@@ -55,7 +59,10 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
         .withPendingTestsIds("2,3")
         .buildAndPersist(entityManager);
 
-    aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager);
+    aBloodTestingRule()
+        .withBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withTestName("test2").withTestNameShort("t2").build())
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
 
     List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(true);
 

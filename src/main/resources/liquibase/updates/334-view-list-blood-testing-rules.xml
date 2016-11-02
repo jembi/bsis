@@ -28,5 +28,18 @@
     <comment>Set a default value '0' on 'isDeleted'</comment>
 	<addDefaultValue tableName="BloodTestingRule" columnName="isDeleted" columnDataType="TINYINT(1)" defaultValue="0" />
   </changeSet>
-  
+
+  <changeSet id="20161102-0903" author="timler">
+    <comment>Rename column 'bloodTestsIds' to 'bloodTest_id' in BloodTestingRule and change type</comment>
+	<renameColumn tableName="BloodTestingRule" oldColumnName="bloodTestsIds" newColumnName="bloodTest_id" columnDataType="BIGINT(20)" />
+    <renameColumn tableName="BloodTestingRule_AUD" oldColumnName="bloodTestsIds" newColumnName="bloodTest_id" columnDataType="BIGINT(20)" />
+  </changeSet>
+
+  <changeSet id="20161102-0906" author="timler">
+    <comment>Add foreign key reference to new column bloodTest_id in BloodTestingRule</comment>
+    <addNotNullConstraint tableName="BloodTestingRule" columnName="bloodTest_id" columnDataType="BIGINT(20)" />
+    <addForeignKeyConstraint constraintName="fk_BloodTestingRule_BloodTest"
+      baseColumnNames="bloodTest_id" baseTableName="BloodTestingRule" referencedColumnNames="id" referencedTableName="BloodTest" />
+  </changeSet>
+
 </databaseChangeLog>

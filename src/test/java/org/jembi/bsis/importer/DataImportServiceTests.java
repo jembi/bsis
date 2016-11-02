@@ -33,6 +33,7 @@ import org.jembi.bsis.model.address.AddressType;
 import org.jembi.bsis.model.address.ContactMethodType;
 import org.jembi.bsis.model.admin.DataType;
 import org.jembi.bsis.model.admin.GeneralConfig;
+import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
@@ -194,37 +195,47 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     entityManager.persist(deferralReason);
 
     // set up test data (Outcomes)
-    aBloodTest().withValidResults("POS,NEG").withTestName("HIV").withTestNameShort("HIV").buildAndPersist(entityManager);
+    BloodTest aboBloodTest = aBloodTest().withValidResults("A,B,AB,O").withTestName("ABO").withTestNameShort("ABO").buildAndPersist(entityManager);
     BloodTestingRule aboBloodTestingRule1 = new BloodTestingRule();
+    aboBloodTestingRule1.setBloodTest(aboBloodTest);
     aboBloodTestingRule1.setDonationFieldChanged(DonationField.BLOODABO);
     aboBloodTestingRule1.setNewInformation("A");
     aboBloodTestingRule1.setIsDeleted(false);
     entityManager.persist(aboBloodTestingRule1);
     BloodTestingRule aboBloodTestingRule2 = new BloodTestingRule();
+    aboBloodTestingRule2.setBloodTest(aboBloodTest);
     aboBloodTestingRule2.setDonationFieldChanged(DonationField.BLOODABO);
     aboBloodTestingRule2.setNewInformation("B");
     aboBloodTestingRule2.setIsDeleted(false);
     entityManager.persist(aboBloodTestingRule2);
     BloodTestingRule aboBloodTestingRule3 = new BloodTestingRule();
+    aboBloodTestingRule3.setBloodTest(aboBloodTest);
     aboBloodTestingRule3.setDonationFieldChanged(DonationField.BLOODABO);
     aboBloodTestingRule3.setNewInformation("O");
     aboBloodTestingRule3.setIsDeleted(false);
     entityManager.persist(aboBloodTestingRule3);
     BloodTestingRule aboBloodTestingRule4 = new BloodTestingRule();
+    aboBloodTestingRule4.setBloodTest(aboBloodTest);
     aboBloodTestingRule4.setDonationFieldChanged(DonationField.BLOODABO);
     aboBloodTestingRule4.setNewInformation("AB");
     aboBloodTestingRule4.setIsDeleted(false);
     entityManager.persist(aboBloodTestingRule4);
+
+    BloodTest rhBloodTest = aBloodTest().withValidResults("POS,NEG").withTestName("Rh").withTestNameShort("Rh").buildAndPersist(entityManager);
     BloodTestingRule rhBloodTestingRule1 = new BloodTestingRule();
+    rhBloodTestingRule1.setBloodTest(rhBloodTest);
     rhBloodTestingRule1.setDonationFieldChanged(DonationField.BLOODRH);
     rhBloodTestingRule1.setNewInformation("+");
     rhBloodTestingRule1.setIsDeleted(false);
     entityManager.persist(rhBloodTestingRule1);
     BloodTestingRule rhBloodTestingRule2 = new BloodTestingRule();
+    rhBloodTestingRule2.setBloodTest(rhBloodTest);
     rhBloodTestingRule2.setDonationFieldChanged(DonationField.BLOODRH);
     rhBloodTestingRule2.setNewInformation("-");
     rhBloodTestingRule2.setIsDeleted(false);
     entityManager.persist(rhBloodTestingRule2);
+
+    aBloodTest().withValidResults("POS,NEG").withTestName("HIV").withTestNameShort("HIV").buildAndPersist(entityManager);
 
     FormFieldBuilder.aFormField()
         .withForm("division")

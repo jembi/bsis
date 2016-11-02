@@ -170,36 +170,36 @@
               bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
 
-	<BloodTestingRule id="1" bloodTestsIds="1" category="BLOODTYPING"
+  <BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
+    context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
+    negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
+    testName="ABO" testNameShort="ABO" validResults="A,B,AB,O" flagComponentsForDiscard="0"
+    flagComponentsContainingPlasmaForDiscard="0" isDeleted="0" />
+  <BloodTestResult isDeleted="false" id="1" createdDate="2015-02-06 02:09:23.0"
+    lastUpdated="2015-02-06 02:09:23.0" notes="" result="O"
+    testedOn="2015-02-06 02:09:23.0" bloodTest_id="1" donation_id="1"
+    createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
+  <BloodTestResult isDeleted="false" id="2" createdDate="2015-04-24 04:43:06.0"
+    lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
+    testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="2"
+    createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
+	<BloodTestingRule id="1" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
 		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
 		newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO" />
-	<BloodTestingRule id="2" bloodTestsIds="1" category="BLOODTYPING"
+	<BloodTestingRule id="2" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
 		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
 		newInformation="A" pattern="A" pendingTestsIds="" subCategory="BLOODABO" />
-	<BloodTestingRule id="3" bloodTestsIds="1" category="BLOODTYPING"
+	<BloodTestingRule id="3" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
 		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
 		newInformation="B" pattern="B" pendingTestsIds="" subCategory="BLOODABO" />
-	<BloodTestingRule id="4" bloodTestsIds="1" category="BLOODTYPING"
+	<BloodTestingRule id="4" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
 		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
 		newInformation="AB" pattern="AB" pendingTestsIds="" subCategory="BLOODABO" />
-	<BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
-		context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
-		negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
-		testName="ABO" testNameShort="ABO" validResults="A,B,AB,O" flagComponentsForDiscard="0"
-		flagComponentsContainingPlasmaForDiscard="0" isDeleted="0" />
-	<BloodTestResult isDeleted="false" id="1" createdDate="2015-02-06 02:09:23.0"
-		lastUpdated="2015-02-06 02:09:23.0" notes="" result="O"
-		testedOn="2015-02-06 02:09:23.0" bloodTest_id="1" donation_id="1"
-		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult isDeleted="false" id="2" createdDate="2015-04-24 04:43:06.0"
-		lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="2"
-		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-		
+
 	<DataType id="1" dataType="text"/>
 	<DataType id="2" dataType="integer"/>
 	<DataType id="3" dataType="decimal"/>

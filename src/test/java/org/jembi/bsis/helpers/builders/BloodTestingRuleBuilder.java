@@ -1,5 +1,10 @@
 package org.jembi.bsis.helpers.builders;
 
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
+
+import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
+import org.jembi.bsis.helpers.persisters.BloodTestingRulePersister;
+import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
@@ -7,8 +12,14 @@ import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
 public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingRule> {
 
+  // static counter that is used to create a unique default test name
+  private static int UNIQUE_INCREMENT = 0;
+  
   private Long id;
-  private String bloodTestsIds;
+  private BloodTest bloodTest = aBloodTest()
+      .withTestName("test " + ++UNIQUE_INCREMENT)
+      .withTestNameShort("t")
+      .build();
   private String pattern;
   private String newInformation;
   private DonationField donationFieldChanged;
@@ -22,8 +33,8 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
     return this;
   }
 
-  public BloodTestingRuleBuilder withBloodTestsIds(String bloodTestsIds) {
-    this.bloodTestsIds = bloodTestsIds;
+  public BloodTestingRuleBuilder withBloodTest(BloodTest bloodTest) {
+    this.bloodTest = bloodTest;
     return this;
   }
 
@@ -66,7 +77,7 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
   public BloodTestingRule build() {
     BloodTestingRule bloodTestingRule = new BloodTestingRule();
     bloodTestingRule.setId(id);
-    bloodTestingRule.setBloodTestsIds(bloodTestsIds);
+    bloodTestingRule.setBloodTest(bloodTest);
     bloodTestingRule.setPattern(pattern);
     bloodTestingRule.setNewInformation(newInformation);
     bloodTestingRule.setDonationFieldChanged(donationFieldChanged);
@@ -81,4 +92,8 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
     return new BloodTestingRuleBuilder();
   }
 
+  @Override
+  public AbstractEntityPersister<BloodTestingRule> getPersister() {
+    return new BloodTestingRulePersister();
+  }
 }

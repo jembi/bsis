@@ -2,110 +2,7 @@
 <dataset>
     <user id="1" emailId="admin" firstName="admin" isactive="1"
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
-    <BloodTestingRule id="1" bloodTestsIds="1" category="BLOODTYPING"
-                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO"/>
-    <BloodTestingRule id="2" bloodTestsIds="1" category="BLOODTYPING"
-                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0" newInformation="A"
-                      pattern="A" pendingTestsIds="" subCategory="BLOODABO"/>
-    <BloodTestingRule id="3" bloodTestsIds="1" category="BLOODTYPING"
-                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="B" pattern="B" pendingTestsIds="" subCategory="BLOODABO"/>
-    <BloodTestingRule id="4" bloodTestsIds="1" category="BLOODTYPING"
-                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="AB" pattern="AB" pendingTestsIds="" subCategory="BLOODABO"/>
-    <BloodTestingRule id="5" bloodTestsIds="2" category="BLOODTYPING"
-                      donationFieldChanged="BLOODRH" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="+" pattern="POS" pendingTestsIds="" subCategory="BLOODRH"/>
-    <BloodTestingRule id="6" bloodTestsIds="2" category="BLOODTYPING"
-                      donationFieldChanged="BLOODRH" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="-" pattern="NEG" pendingTestsIds="" subCategory="BLOODRH"/>
-    <BloodTestingRule id="7" bloodTestsIds="17" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="8" bloodTestsIds="17" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="18,19"
-                      subCategory="TTI"/>
-    <BloodTestingRule id="9" bloodTestsIds="18" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="10" bloodTestsIds="19" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="11" bloodTestsIds="20" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="12" bloodTestsIds="20" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="21,22"
-                      subCategory="TTI"/>
-    <BloodTestingRule id="13" bloodTestsIds="21" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="14" bloodTestsIds="22" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="15" bloodTestsIds="23" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="16" bloodTestsIds="23" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="24,25"
-                      subCategory="TTI"/>
-    <BloodTestingRule id="17" bloodTestsIds="24" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="18" bloodTestsIds="25" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="19" bloodTestsIds="26" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="20" bloodTestsIds="26" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="27,28"
-                      subCategory="TTI"/>
-    <BloodTestingRule id="21" bloodTestsIds="27" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="22" bloodTestsIds="28" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
+
     <BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
                context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
                negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
@@ -188,6 +85,110 @@
                testName="Syphilis Confirmatory 2" testNameShort="Syphilis Conf 2"
                validResults="POS,NEG" flagComponentsForDiscard="0"
                flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
+    <BloodTestingRule id="1" bloodTest_id="1" category="BLOODTYPING"
+                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO"/>
+    <BloodTestingRule id="2" bloodTest_id="1" category="BLOODTYPING"
+                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0" newInformation="A"
+                      pattern="A" pendingTestsIds="" subCategory="BLOODABO"/>
+    <BloodTestingRule id="3" bloodTest_id="1" category="BLOODTYPING"
+                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="B" pattern="B" pendingTestsIds="" subCategory="BLOODABO"/>
+    <BloodTestingRule id="4" bloodTest_id="1" category="BLOODTYPING"
+                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="AB" pattern="AB" pendingTestsIds="" subCategory="BLOODABO"/>
+    <BloodTestingRule id="5" bloodTest_id="2" category="BLOODTYPING"
+                      donationFieldChanged="BLOODRH" context="RECORD_BLOOD_TYPING_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="+" pattern="POS" pendingTestsIds="" subCategory="BLOODRH"/>
+    <BloodTestingRule id="6" bloodTest_id="2" category="BLOODTYPING"
+                      donationFieldChanged="BLOODRH" context="RECORD_BLOOD_TYPING_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="-" pattern="NEG" pendingTestsIds="" subCategory="BLOODRH"/>
+    <BloodTestingRule id="7" bloodTest_id="17" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
+                      subCategory="TTI"/>
+    <BloodTestingRule id="8" bloodTest_id="17" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="18,19"
+                      subCategory="TTI"/>
+    <BloodTestingRule id="9" bloodTest_id="18" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
+                      subCategory="TTI"/>
+    <BloodTestingRule id="10" bloodTest_id="19" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
+                      subCategory="TTI"/>
+    <BloodTestingRule id="11" bloodTest_id="20" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
+                      subCategory="TTI"/>
+    <BloodTestingRule id="12" bloodTest_id="20" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="21,22"
+                      subCategory="TTI"/>
+    <BloodTestingRule id="13" bloodTest_id="21" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
+                      subCategory="TTI"/>
+    <BloodTestingRule id="14" bloodTest_id="22" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
+                      subCategory="TTI"/>
+    <BloodTestingRule id="15" bloodTest_id="23" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
+                      subCategory="TTI"/>
+    <BloodTestingRule id="16" bloodTest_id="23" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="24,25"
+                      subCategory="TTI"/>
+    <BloodTestingRule id="17" bloodTest_id="24" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
+                      subCategory="TTI"/>
+    <BloodTestingRule id="18" bloodTest_id="25" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
+                      subCategory="TTI"/>
+    <BloodTestingRule id="19" bloodTest_id="26" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
+                      subCategory="TTI"/>
+    <BloodTestingRule id="20" bloodTest_id="26" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="27,28"
+                      subCategory="TTI"/>
+    <BloodTestingRule id="21" bloodTest_id="27" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
+                      subCategory="TTI"/>
+    <BloodTestingRule id="22" bloodTest_id="28" category="TTI"
+                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
+                      extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
+                      subCategory="TTI"/>
 
     <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
     <DonationType id="2" donationType="Family" isDeleted="false"/>

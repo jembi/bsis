@@ -1,6 +1,5 @@
 package org.jembi.bsis.service;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -158,36 +157,32 @@ public class BloodTestingRuleEngine {
    */
   private void processRule(BloodTestingRule rule, BloodTestingRuleResultSet resultSet,
       Map<String, String> availableTestResults) {
-    boolean patternMatch = true;
-    boolean atLeastOneResultFoundForPattern = false;
-    List<String> pattern = Arrays.asList(rule.getPattern().split(","));
-    List<String> testIds = rule.getBloodTestsIds();
-    for (int i = 0, n = testIds.size(); i < n; i++) {
-      String testId = testIds.get(i);
-      String expectedResult = pattern.get(i);
-      String actualResult = availableTestResults.get(testId);
-      if (actualResult == null) {
-        patternMatch = false;
-        continue;
-      }
-      if (expectedResult != null) {
-        atLeastOneResultFoundForPattern = true;
-        if (!expectedResult.equals(actualResult)) {
-          patternMatch = false;
-        }
-      }
+
+    boolean patternMatch = false;
+    boolean atLeastOneResultFound = false;
+
+    String expectedResult = rule.getPattern();
+    String actualResult = availableTestResults.get(String.valueOf(rule.getBloodTest().getId()));
+
+    if (actualResult != null) {
+      atLeastOneResultFound = true;
+    }
+
+    if (actualResult != null && expectedResult != null && expectedResult.equals(actualResult)) {
+      patternMatch = true;
     }
 
     if (patternMatch) {
       if (LOGGER.isTraceEnabled()) {
-        LOGGER.trace("Pattern matched for rule with id '" + rule.getId() + "' and subcategory '"
-            + rule.getSubCategory() + "'.");
-        LOGGER.trace("Test ids: " + rule.getBloodTestsIds());
+        LOGGER.trace("Pattern matched for rule with id '" + rule.getId() + "' and subcategory '" + rule.getSubCategory() + "'.");
+        LOGGER.trace("Test id: " + rule.getBloodTest().getId());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
         LOGGER.trace("Pending test ids: " + rule.getPendingTestsIds());
         LOGGER.trace("Changes to result: " + rule.getNewInformation() + ", " + rule.getExtraInformation());
       }
+      
+      // determine which changes are necessary, depending on the DonationField
       DonationField donationFieldChanged = rule.getDonationFieldChanged();
       switch (donationFieldChanged) {
         case BLOODABO:
@@ -210,7 +205,7 @@ public class BloodTestingRuleEngine {
       if (StringUtils.isNotBlank(rule.getExtraInformation()))
         resultSet.addExtraInformation(rule.getExtraInformation());
 
-      // find extra tests for ABO
+      // determine which tests are pending
       for (String extraTestId : rule.getPendingTestsIds()) {
         if (!availableTestResults.containsKey(extraTestId)) {
           switch (rule.getSubCategory()) {
@@ -232,8 +227,8 @@ public class BloodTestingRuleEngine {
     } else {
       if (LOGGER.isTraceEnabled()) {
         LOGGER.trace("Pattern NOT matched for rule with id '" + rule.getId()
-            + "' and at least one result was found for pattern: " + atLeastOneResultFoundForPattern);
-        LOGGER.trace("Test ids: " + rule.getBloodTestsIds());
+            + "' and at least one result was found: " + atLeastOneResultFound);
+        LOGGER.trace("Test id: " + rule.getBloodTest().getId());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
         LOGGER.trace("Changes to result: " + rule.getNewInformation() + ", " + rule.getExtraInformation());
@@ -241,15 +236,15 @@ public class BloodTestingRuleEngine {
       DonationField donationFieldChanged = rule.getDonationFieldChanged();
       switch (donationFieldChanged) {
         case BLOODABO:
-          if (atLeastOneResultFoundForPattern)
+          if (atLeastOneResultFound)
             resultSet.setAboUninterpretable(true);
           break;
         case BLOODRH:
-          if (atLeastOneResultFoundForPattern)
+          if (atLeastOneResultFound)
             resultSet.setRhUninterpretable(true);
           break;
         case TTISTATUS:
-          if (atLeastOneResultFoundForPattern)
+          if (atLeastOneResultFound)
             resultSet.setTtiUninterpretable(true);
           break;
         default:
@@ -350,14 +345,11 @@ public class BloodTestingRuleEngine {
         List<String> pendingTestIds = bloodTestingRule.getPendingTestsIds();
         if (pendingTestIds.contains(repeatBloodTypingTestId)) {
 
-          // Compare the result of the repeat test to each of the previous tests
-          for (String bloodTestId : bloodTestingRule.getBloodTestsIds()) {
-
-            String initialResult = availableTestResults.get(bloodTestId);
-            if (!repeatResult.equals(initialResult)) {
-              // There is a repeat result which does not match the initial result
-              return BloodTypingMatchStatus.AMBIGUOUS;
-            }
+          // Compare the result of the repeat test to previous test
+          String initialResult = availableTestResults.get(Long.toString(bloodTestingRule.getBloodTest().getId()));
+          if (!repeatResult.equals(initialResult)) {
+            // There is a repeat result which does not match the initial result
+            return BloodTypingMatchStatus.AMBIGUOUS;
           }
         }
       }
