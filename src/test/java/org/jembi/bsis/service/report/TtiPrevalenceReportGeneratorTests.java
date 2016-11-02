@@ -26,7 +26,7 @@ import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
 import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.model.util.Gender;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public class TtiPrevalenceReportGeneratorTests extends UnitTestSuite {
   private TtiPrevalenceReportGenerator ttiPrevalenceReportGenerator;
 
   @Mock
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestResultRepository bloodTestResultRepository;
 
   @Mock
   private LocationFactory locationFactory;
@@ -99,11 +99,11 @@ public class TtiPrevalenceReportGeneratorTests extends UnitTestSuite {
         .withDataValues(expectedDataValues)
         .build();
 
-    when(bloodTestingRepository.findTTIPrevalenceReportIndicators(irrelevantStartDate, irrelevantEndDate))
+    when(bloodTestResultRepository.findTTIPrevalenceReportIndicators(irrelevantStartDate, irrelevantEndDate))
         .thenReturn(bloodResultDtos);
-    when(bloodTestingRepository.findTTIPrevalenceReportTotalUnitsTested(irrelevantStartDate, irrelevantEndDate))
+    when(bloodTestResultRepository.findTTIPrevalenceReportTotalUnitsTested(irrelevantStartDate, irrelevantEndDate))
         .thenReturn(totalUnitsDtos);
-    when(bloodTestingRepository.findTTIPrevalenceReportTotalUnsafeUnitsTested(irrelevantStartDate, irrelevantEndDate))
+    when(bloodTestResultRepository.findTTIPrevalenceReportTotalUnsafeUnitsTested(irrelevantStartDate, irrelevantEndDate))
         .thenReturn(totalUnsafeUnitsDtos);
     when(locationFactory.createViewModel(venue)).thenReturn(venueViewModel);
 

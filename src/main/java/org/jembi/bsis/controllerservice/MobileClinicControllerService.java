@@ -18,7 +18,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.LocationRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.viewmodel.DonorOutcomesViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.MobileClinicExportDonorViewModel;
@@ -52,7 +52,7 @@ public class MobileClinicControllerService {
   private DonorOutcomesViewModelFactory donorOutcomesViewModelFactory;
 
   @Autowired
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestRepository bloodTestRepository;
 
   public List<LocationViewModel> getMobileVenues() {
     return locationFactory.createViewModels(locationRepository.getMobileVenues());
@@ -79,15 +79,15 @@ public class MobileClinicControllerService {
   public List<String> getBloodTestNames() {
     List<String> bloodTestNames = new ArrayList<>();
     // Add basic TTI test names
-    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
+    for (BloodTest bloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
       bloodTestNames.add(bloodTest.getTestNameShort());
     }
     // Add Repeat TTI test names
-    for(BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
+    for(BloodTest bloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
       bloodTestNames.add(bloodTest.getTestNameShort());
     }
     // Add confirmatory TTI test names
-    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
+    for (BloodTest bloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
       bloodTestNames.add(bloodTest.getTestNameShort());
     }
     return bloodTestNames;

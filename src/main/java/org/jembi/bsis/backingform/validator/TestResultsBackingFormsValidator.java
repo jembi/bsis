@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.backingform.TestResultsBackingForm;
 import org.jembi.bsis.backingform.TestResultsBackingForms;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -18,7 +18,7 @@ import org.springframework.validation.Errors;
 public class TestResultsBackingFormsValidator extends BaseValidator<TestResultsBackingForms> {
 
   @Autowired
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestRepository bloodTestRepository;
 
   @Override
   public void validateForm(TestResultsBackingForms forms, Errors errors) {
@@ -37,7 +37,7 @@ public class TestResultsBackingFormsValidator extends BaseValidator<TestResultsB
      * Build a map of active blood test ids to the active blood tests.
      */
     Map<String, BloodTest> activeBloodTestsMap = new HashMap<>();
-    for (BloodTest bloodTypingTest : bloodTestingRepository.findActiveBloodTests()) {
+    for (BloodTest bloodTypingTest : bloodTestRepository.findActiveBloodTests()) {
       activeBloodTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
     }
 

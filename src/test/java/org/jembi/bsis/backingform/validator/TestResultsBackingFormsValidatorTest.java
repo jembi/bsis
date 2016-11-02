@@ -12,11 +12,10 @@ import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.backingform.TestResultsBackingForm;
 import org.jembi.bsis.backingform.TestResultsBackingForms;
-import org.jembi.bsis.backingform.validator.TestResultsBackingFormsValidator;
 import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.helpers.builders.TestResultsBackingFormBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +38,7 @@ public class TestResultsBackingFormsValidatorTest {
   TypedQuery typedQuery;
 
   @Mock
-  BloodTestingRepository bloodTestingRepository;
+  BloodTestRepository bloodTestRepository;
 
   @Test
   public void testValidateTestResultValuesValidResult() throws Exception {
@@ -62,7 +61,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);
@@ -95,7 +94,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);
@@ -129,7 +128,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);
@@ -161,7 +160,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);
@@ -194,7 +193,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);
@@ -224,7 +223,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestingRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);

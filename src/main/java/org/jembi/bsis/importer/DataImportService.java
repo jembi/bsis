@@ -67,6 +67,7 @@ import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.repository.SequenceNumberRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.service.DonationCRUDService;
@@ -118,6 +119,8 @@ public class DataImportService {
   @Autowired
   private TestBatchRepository testBatchRepository;
   @Autowired
+  private BloodTestRepository bloodTestRepository;
+  @Autowired
   private BloodTestingRepository bloodTestingRepository;
   @Autowired
   private BloodTestingRuleRepository bloodTestingRuleRepository;
@@ -136,7 +139,6 @@ public class DataImportService {
   private boolean validationOnly;
   private String action;
   private Location testingSite = null;
-
 
   public void importData(Workbook workbook, boolean validationOnly) {
     this.validationOnly = validationOnly;
@@ -1237,7 +1239,7 @@ public class DataImportService {
 
   private Map<String, BloodTest> buildBloodTestCache() {
     Map <String, BloodTest> bloodTestCache = new HashMap<>();
-    List<BloodTest> bloodTests = bloodTestingRepository.getAllBloodTestsIncludeInactive();
+    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTestsIncludeInactive();
     for (BloodTest bloodTest : bloodTests) {
       bloodTestCache.put(bloodTest.getTestName(), bloodTest);
     }

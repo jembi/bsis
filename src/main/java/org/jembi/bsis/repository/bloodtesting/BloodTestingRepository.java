@@ -16,15 +16,12 @@ import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.jembi.bsis.dto.BloodTestResultDTO;
-import org.jembi.bsis.dto.BloodTestTotalDTO;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.repository.BloodTestResultNamedQueryConstants;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.service.BloodTestingRuleEngine;
@@ -48,6 +45,9 @@ public class BloodTestingRepository {
 
   @Autowired
   private DonationBatchRepository donationBatchRepository;
+
+  @Autowired
+  private BloodTestRepository bloodTestRepository;
 
   @Autowired
   private BloodTestingRuleEngine ruleEngine;
@@ -126,7 +126,7 @@ public class BloodTestingRepository {
         btResult.setReEntryRequired(!reEntry);
       } else {
         // only clear the re-entry required flag if the update is a re-entry
-        if (btResult.getReEntryRequired() && reEntry) { 
+        if (btResult.getReEntryRequired() && reEntry) {
           btResult.setReEntryRequired(false);
         }
       }
@@ -178,7 +178,7 @@ public class BloodTestingRepository {
   }
 
   public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatchesByBloodTestType(List<Long> donationBatchIds,
-      BloodTestType bloodTestType) {
+                                                                                         BloodTestType bloodTestType) {
 
     List<BloodTestingRuleResult> bloodTestingRuleResults = getAllTestsStatusForDonationBatches(donationBatchIds);
     List<BloodTestingRuleResult> filteredRuleResults = new ArrayList<BloodTestingRuleResult>();
@@ -207,15 +207,6 @@ public class BloodTestingRepository {
         new HashMap<Long, String>());
   }
 
-  public List<BloodTest> getTTITests() {
-    String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("isActive", true);
-    query.setParameter("category", BloodTestCategory.TTI);
-    List<BloodTest> bloodTests = query.getResultList();
-    return bloodTests;
-  }
-
   public Map<Long, BloodTestResult> getRecentTestResultsForDonation(
       Long donationId) {
     String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
@@ -241,57 +232,9 @@ public class BloodTestingRepository {
     return recentBloodTestResults;
   }
 
-  private BloodTest findBloodTestById(Long bloodTestId) {
-    String queryStr = "SELECT bt FROM BloodTest bt WHERE "
-        + "bt.id=:bloodTestId";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("bloodTestId", bloodTestId);
-    return query.getSingleResult();
-  }
-  
-  public List<BloodTestResultDTO> findTTIPrevalenceReportIndicators(Date startDate, Date endDate) {
-    return em.createNamedQuery(
-        BloodTestResultNamedQueryConstants.NAME_FIND_BLOOD_TEST_RESULT_VALUE_OBJECTS_FOR_DATE_RANGE,
-        BloodTestResultDTO.class)
-        .setParameter("startDate", startDate)
-        .setParameter("endDate", endDate)
-        .setParameter("donationDeleted", false)
-        .setParameter("testOutcomeDeleted", false)
-        .setParameter("released", true)
-        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
-        .getResultList();
-  }
-  
-  public List<BloodTestTotalDTO> findTTIPrevalenceReportTotalUnitsTested(Date startDate, Date endDate) {
-    return em.createNamedQuery(
-        BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_UNITS_TESTED_FOR_DATE_RANGE,
-        BloodTestTotalDTO.class)
-        .setParameter("startDate", startDate)
-        .setParameter("endDate", endDate)
-        .setParameter("donationDeleted", false)
-        .setParameter("testOutcomeDeleted", false)
-        .setParameter("released", true)
-        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
-        .getResultList();
-  }
-  
-  public List<BloodTestTotalDTO> findTTIPrevalenceReportTotalUnsafeUnitsTested(Date startDate, Date endDate) {
-    return em.createNamedQuery(
-        BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE,
-        BloodTestTotalDTO.class)
-        .setParameter("startDate", startDate)
-        .setParameter("endDate", endDate)
-        .setParameter("donationDeleted", false)
-        .setParameter("testOutcomeDeleted", false)
-        .setParameter("released", true)
-        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
-        .setParameter("ttiStatus", TTIStatus.TTI_UNSAFE)
-        .getResultList();
-  }
-
   /**
    * Compare two strings and check that they are either both empty, or they are equal.
-   * 
+   *
    * @param first First string
    * @param second First string
    * @return true if they are empty or equal, otherwise false.
@@ -368,5 +311,12 @@ public class BloodTestingRepository {
       newExtraInformation = StringUtils.join(extraInformationNewSet, ",");
     }
     return newExtraInformation;
+  }
+  
+  private BloodTest findBloodTestById(Long bloodTestId) {
+    String queryStr = "SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId";
+    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
+    query.setParameter("bloodTestId", bloodTestId);
+    return query.getSingleResult();
   }
 }
