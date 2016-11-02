@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.jembi.bsis.factory.BloodTestFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TTIController {
 
   @Autowired
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestRepository bloodTestRepository;
 
   @Autowired
   private BloodTestFactory bloodTestFactory;
@@ -48,7 +48,7 @@ public class TTIController {
 
   private List<BloodTestFullViewModel> getRepeatTTITests() {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
-    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
+    for (BloodTest bloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
       tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;
@@ -56,7 +56,7 @@ public class TTIController {
 
   private List<BloodTestFullViewModel> getBasicTTITests() {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
-    for (BloodTest bloodTest : bloodTestingRepository
+    for (BloodTest bloodTest : bloodTestRepository
         .getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
       tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
@@ -65,7 +65,7 @@ public class TTIController {
 
   private List<BloodTestFullViewModel> getConfirmatoryTTITests() {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
-    for (BloodTest bloodTest : bloodTestingRepository
+    for (BloodTest bloodTest : bloodTestRepository
         .getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
       tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }

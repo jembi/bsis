@@ -51,6 +51,16 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     return this;
   }
   
+  public BloodTestBuilder thatShouldFlagComponentsForDiscard(){
+    this.flagComponentsForDiscard = true;
+    return this;
+  }
+  
+  public BloodTestBuilder thatShouldNotFlagComponentsForDiscard(){
+    this.flagComponentsForDiscard = false;
+    return this;
+  }
+  
   public BloodTestBuilder thatShouldFlagComponentsContainingPlasmaForDiscard(){
     this.flagComponentsContainingPlasmaForDiscard = true;
     return this;

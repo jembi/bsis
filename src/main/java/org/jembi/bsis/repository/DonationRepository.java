@@ -42,7 +42,7 @@ public class DonationRepository {
   private EntityManager em;
 
   @Autowired
-  private BloodTestingRepository bloodTypingRepository;
+  private BloodTestingRepository bloodTestingRepository;
 
   public void saveDonation(Donation donation) {
     em.persist(donation);
@@ -185,8 +185,6 @@ public class DonationRepository {
     return resultMap;
   }
 
-
-
   public Donation findDonationByDonationIdentificationNumber(
       String donationIdentificationNumber) throws NoResultException, NonUniqueResultException {
     String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted";
@@ -305,7 +303,7 @@ public class DonationRepository {
       Donation c = iter.next();
       BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
       if (bloodTypingStatus != null && !bloodTypingStatus.equals(BloodTypingStatus.NOT_DONE)) {
-        statusMap.put(c.getId(), bloodTypingRepository.getAllTestsStatusForDonation(c.getId()));
+        statusMap.put(c.getId(), bloodTestingRepository.getAllTestsStatusForDonation(c.getId()));
       }
     }
     return statusMap;

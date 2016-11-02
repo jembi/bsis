@@ -2,16 +2,21 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.matchers.BloodTestMatcher.hasSameStateAsBloodTest;
 import static org.jembi.bsis.helpers.matchers.BloodTestFullViewModelMatcher.hasSameStateAsBloodTestFullViewModel;
 import static org.jembi.bsis.helpers.matchers.BloodTestViewModelMatcher.hasSameStateAsBloodTestViewModel;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.jembi.bsis.backingform.BloodTestBackingForm;
+import org.jembi.bsis.helpers.builders.BloodTestBackingFormBuilder;
 import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder;
 import org.jembi.bsis.helpers.builders.BloodTestViewModelBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
+import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
+import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestViewModel;
@@ -111,5 +116,45 @@ public class BloodTestFactoryTests extends UnitTestSuite {
     assertThat(returnedViewModels.get(0), hasSameStateAsBloodTestViewModel(expectedViewModels.get(0)));
     assertThat(returnedViewModels.get(1), hasSameStateAsBloodTestViewModel(expectedViewModels.get(1)));
   }
+  
+  @Test 
+  public void testConvertBloodTestBackingFormToBloodTestEntity_shouldReturnExpectedEntity() { 
+    // Set up fixture 
+    BloodTestBackingForm bloodTestBackingForm = BloodTestBackingFormBuilder.aBloodTestBackingForm() 
+        .withId(1L) 
+        .withTestName("Test Name") 
+        .withTestNameShort("Test Name Short") 
+        .withCategory(BloodTestCategory.BLOODTYPING) 
+        .withBloodTestType(BloodTestType.BASIC_BLOODTYPING) 
+        .withValidResults(Arrays.asList("POS","NEG","NT")) 
+        .withNegativeResults(Arrays.asList("NEG")) 
+        .withPositiveResults(Arrays.asList("POS")) 
+        .thatIsNotActive() 
+        .thatIsDeleted() 
+        .thatShouldNotFlagComponentsContainingPlasmaForDiscard() 
+        .thatShouldFlagComponentsForDiscard() 
+        .build(); 
+     
+    BloodTest expectedEntity = BloodTestBuilder.aBloodTest() 
+        .withId(1L) 
+        .withTestName("Test Name") 
+        .withTestNameShort("Test Name Short") 
+        .withCategory(BloodTestCategory.BLOODTYPING) 
+        .withBloodTestType(BloodTestType.BASIC_BLOODTYPING) 
+        .withValidResults("POS,NEG,NT") 
+        .withNegativeResults("NEG") 
+        .withPositiveResults("POS") 
+        .thatIsInActive() 
+        .thatIsDeleted() 
+        .thatShouldNotFlagComponentsContainingPlasmaForDiscard() 
+        .thatShouldFlagComponentsForDiscard() 
+        .build(); 
+     
+    // Exercise SUT 
+    BloodTest returnedEntity = bloodTestFactory.createEntity(bloodTestBackingForm); 
+     
+    // Verify 
+    assertThat(returnedEntity, hasSameStateAsBloodTest(expectedEntity)); 
+     
+  }  
 }
-

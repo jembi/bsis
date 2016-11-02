@@ -7,11 +7,14 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.factory.BloodTestFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
+import org.jembi.bsis.service.BloodTestCRUDService;
+import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,13 +24,16 @@ import org.springframework.stereotype.Service;
 public class BloodTestControllerService {
 
   @Autowired
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestRepository bloodTestRepository;
 
   @Autowired
   private BloodTestFactory bloodTestFactory;
 
+  @Autowired
+  private BloodTestCRUDService bloodTestCRUDService;
+
   public List<BloodTestViewModel> getAllBloodTests() {
-    List<BloodTest> bloodTests = bloodTestingRepository.getAllBloodTestsIncludeInactive();
+    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTestsIncludeInactive();
     return bloodTestFactory.createViewModels(bloodTests);
   }
 
@@ -41,5 +47,11 @@ public class BloodTestControllerService {
       types.put(category, BloodTestType.getBloodTestTypeForCategory(category));
     }
     return types;
+  }
+
+  public BloodTestFullViewModel createBloodTest(BloodTestBackingForm bloodTestBackingForm) {
+    BloodTest bloodTest = bloodTestFactory.createEntity(bloodTestBackingForm);
+    bloodTest = bloodTestCRUDService.createBloodTest(bloodTestFactory.createEntity(bloodTestBackingForm));
+    return bloodTestFactory.createFullViewModel(bloodTest);
   }
 }

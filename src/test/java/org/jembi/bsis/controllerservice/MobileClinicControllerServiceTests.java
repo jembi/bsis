@@ -26,7 +26,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.LocationRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DonorOutcomesViewModel;
 import org.jembi.bsis.viewmodel.MobileClinicExportDonorViewModel;
@@ -47,7 +47,7 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   @Mock
   private DonorOutcomesViewModelFactory donorOutcomesViewModelFactory;
   @Mock
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestRepository bloodTestRepository;
   @Mock
   private DonorRepository donorRepository;
   @Mock
@@ -91,12 +91,12 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
     BloodTest firstConfirmatoryTtiTest = aBloodTest().withId(1L).withTestNameShort("Fifth").build();
 
     // Set expectations
-    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(
-        firstBasicTtiTest, secondBasicTtiTest));
-    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)).thenReturn(Arrays.asList(
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(
+            firstBasicTtiTest, secondBasicTtiTest));
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)).thenReturn(Arrays.asList(
             firstRepestTtiTest, secondRepeatTtiTest));
-    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)).thenReturn(Arrays.asList(
-        firstConfirmatoryTtiTest));
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)).thenReturn(Arrays.asList(
+            firstConfirmatoryTtiTest));
 
     List<String> expectedBloodTestNames = Arrays.asList("First", "Second", "Third", "Fourth", "Fifth");
 
