@@ -23,12 +23,12 @@ public class BloodTestingRuleFactory {
   public BloodTestingRuleViewModel createViewModel(BloodTestingRule bloodTestingRule) {
     BloodTestingRuleViewModel viewModel = new BloodTestingRuleViewModel();
     if(bloodTestingRule != null) {
-      populetalateBloodTestingRuleViewModel(viewModel, bloodTestingRule);
+      populateBloodTestingRuleViewModel(viewModel, bloodTestingRule);
     }
     return viewModel;
   }
   
-  private void populetalateBloodTestingRuleViewModel(BloodTestingRuleViewModel viewModel,
+  private void populateBloodTestingRuleViewModel(BloodTestingRuleViewModel viewModel,
       BloodTestingRule bloodTestingRule) { 
     viewModel.setId(bloodTestingRule.getId());
     viewModel.setTestNameShort(bloodTestingRule.getBloodTest().getTestNameShort());

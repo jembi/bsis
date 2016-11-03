@@ -16,14 +16,14 @@ public class BloodTestingRuleViewModelMatcher extends TypeSafeMatcher<BloodTesti
 
   @Override
   public void describeTo(Description description) {
-    System.out.println(description.appendText("Blood testing rule entity with the following state:")
+    description.appendText("Blood testing rule entity with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nTest name short: ").appendValue(expected.getTestNameShort())
         .appendText("\nDonation field changed: ").appendValue(expected.getDonationFieldChanged())
         .appendText("\nCategory: ").appendValue(expected.getCategory())
         .appendText("\nNew information: ").appendValue(expected.getNewInformation())
         .appendText("\nPattern: ").appendValue(expected.getPattern())
-        .appendText("\nIs deleted: ").appendValue(expected.getIsDeleted()));
+        .appendText("\nIs deleted: ").appendValue(expected.getIsDeleted());
   }
 
   @Override

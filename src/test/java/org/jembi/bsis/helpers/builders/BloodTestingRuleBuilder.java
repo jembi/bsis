@@ -11,15 +11,9 @@ import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
 public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingRule> {
-
-  // static counter that is used to create a unique default test name
-  private static int UNIQUE_INCREMENT = 0;
   
   private Long id;
-  private BloodTest bloodTest = aBloodTest()
-      .withTestName("test " + ++UNIQUE_INCREMENT)
-      .withTestNameShort("t")
-      .build();
+  private BloodTest bloodTest = aBloodTest().build();
   private String pattern;
   private String newInformation;
   private DonationField donationFieldChanged;
