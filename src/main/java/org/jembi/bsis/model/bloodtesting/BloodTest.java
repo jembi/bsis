@@ -34,8 +34,8 @@ import org.jembi.bsis.repository.constant.BloodTestNamedQueryConstants;
       name = BloodTestNamedQueryConstants.NAME_FIND_BLOOD_TEST_BY_ID,
       query = BloodTestNamedQueryConstants.QUERY_FIND_BLOOD_TEST_BY_ID),
   @NamedQuery(
-      name = BloodTestNamedQueryConstants.NAME_FIND_COUNT_BY_TEST_NAME_AND_ID,
-      query = BloodTestNamedQueryConstants.QUERY_FIND_COUNT_BY_TEST_NAME_AND_ID)
+      name = BloodTestNamedQueryConstants.NAME_VERIFY_UNIQUE_BLOOD_TEST,
+      query = BloodTestNamedQueryConstants.QUERY_VERIFY_UNIQUE_BLOOD_TEST)
 })
 public class BloodTest extends BaseModificationTrackerEntity implements Comparable<BloodTest> {
 
