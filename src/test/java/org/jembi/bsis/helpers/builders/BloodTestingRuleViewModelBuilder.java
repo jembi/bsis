@@ -18,8 +18,9 @@ public class BloodTestingRuleViewModelBuilder extends AbstractBuilder<BloodTesti
     this.id = id;
     return this;
   }
-  public BloodTestingRuleViewModelBuilder withBloodTestNameShort(String bloodTestingNameShort) {
-    this.testNameShort = bloodTestingNameShort;
+
+  public BloodTestingRuleViewModelBuilder withTestNameShort(String testNameShort) {
+    this.testNameShort = testNameShort;
     return this;
   }
   
