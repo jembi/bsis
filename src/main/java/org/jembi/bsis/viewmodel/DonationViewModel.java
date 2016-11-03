@@ -272,5 +272,5 @@ public class DonationViewModel extends BaseViewModel {
 
   public void setAdverseEvent(AdverseEventViewModel adverseEvent) {
     this.adverseEvent = adverseEvent;
-  }
+  } 
 }
