@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

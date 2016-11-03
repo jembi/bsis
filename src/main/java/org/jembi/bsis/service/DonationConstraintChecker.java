@@ -2,10 +2,12 @@ package org.jembi.bsis.service;
 
 import javax.persistence.NoResultException;
 
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -13,8 +15,6 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

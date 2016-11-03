@@ -1,4 +1,4 @@
-package org.jembi.bsis.repository.bloodtesting;
+package org.jembi.bsis.model.bloodtesting.rules;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,9 +8,10 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 
 /**

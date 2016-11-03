@@ -32,7 +32,6 @@ import org.hibernate.validator.constraints.Range;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donationtype.DonationType;
@@ -42,8 +41,6 @@ import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.model.worksheet.Worksheet;
 import org.jembi.bsis.repository.DonationNamedQueryConstants;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

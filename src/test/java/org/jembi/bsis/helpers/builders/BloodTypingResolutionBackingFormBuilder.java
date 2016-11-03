@@ -1,7 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 
 public class BloodTypingResolutionBackingFormBuilder extends AbstractBuilder<BloodTypingResolutionBackingForm> {
   

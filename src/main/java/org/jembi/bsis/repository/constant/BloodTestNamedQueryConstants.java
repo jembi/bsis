@@ -1,4 +1,4 @@
-package org.jembi.bsis.repository.bloodtesting;
+package org.jembi.bsis.repository.constant;
 
 public class BloodTestNamedQueryConstants {
 
@@ -30,9 +30,9 @@ public class BloodTestNamedQueryConstants {
   public static final String QUERY_FIND_BLOOD_TEST_BY_ID =
       "SELECT bt FROM BloodTest bt WHERE bt.id=:bloodTestId";
 
-  public static final String NAME_FIND_COUNT_BY_TEST_NAME_AND_ID =
-      "BloodTest.findCountByTestNameAndId";
-  public static final String QUERY_FIND_COUNT_BY_TEST_NAME_AND_ID =
+  public static final String NAME_VERIFY_UNIQUE_BLOOD_TEST =
+      "BloodTest.verifyUniqueBloodTest";
+  public static final String QUERY_VERIFY_UNIQUE_BLOOD_TEST =
       "SELECT count(b) = 0 "
       + "FROM BloodTest b "
       + "WHERE b.testName = :testName "

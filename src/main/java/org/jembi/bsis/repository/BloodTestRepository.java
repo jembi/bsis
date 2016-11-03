@@ -1,4 +1,4 @@
-package org.jembi.bsis.repository.bloodtesting;
+package org.jembi.bsis.repository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.repository.AbstractRepository;
+import org.jembi.bsis.repository.constant.BloodTestNamedQueryConstants;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +35,7 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
   }
   
   public boolean isUniqueTestName(Long id, String testName) {
-    return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_FIND_COUNT_BY_TEST_NAME_AND_ID, Boolean.class)
+    return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_VERIFY_UNIQUE_BLOOD_TEST, Boolean.class)
         .setParameter("id", id)
         .setParameter("testName", testName)
         .getSingleResult();
