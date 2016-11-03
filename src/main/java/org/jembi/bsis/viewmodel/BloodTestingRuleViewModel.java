@@ -10,7 +10,7 @@ public class BloodTestingRuleViewModel extends BaseViewModel {
   private BloodTestCategory category;
   private String newInformation;
   private String pattern;
-  private Boolean isDeleted;
+  private boolean isDeleted;
 
   public String getTestNameShort() {
     return testNameShort;
@@ -32,7 +32,7 @@ public class BloodTestingRuleViewModel extends BaseViewModel {
     return pattern;
   }
 
-  public Boolean getIsDeleted() {
+  public boolean getIsDeleted() {
     return isDeleted;
   }
 
@@ -56,7 +56,7 @@ public class BloodTestingRuleViewModel extends BaseViewModel {
     this.pattern = pattern;
   }
 
-  public void setIsDeleted(Boolean isDeleted) {
+  public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
 }

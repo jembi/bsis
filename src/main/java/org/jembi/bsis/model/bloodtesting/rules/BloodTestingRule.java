@@ -68,7 +68,7 @@ public class BloodTestingRule extends BaseEntity {
   private Boolean markSampleAsUnsafe;
 
   @Column(nullable = false)
-  private Boolean isDeleted = Boolean.FALSE;
+  private boolean isDeleted = false;
 
   public BloodTest getBloodTest() {
     return bloodTest;
@@ -86,7 +86,7 @@ public class BloodTestingRule extends BaseEntity {
     return markSampleAsUnsafe;
   }
 
-  public Boolean getIsDeleted() {
+  public boolean getIsDeleted() {
     return isDeleted;
   }
 
@@ -106,7 +106,7 @@ public class BloodTestingRule extends BaseEntity {
     this.markSampleAsUnsafe = markSampleAsUnsafe;
   }
 
-  public void setIsDeleted(Boolean isDeleted) {
+  public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
 

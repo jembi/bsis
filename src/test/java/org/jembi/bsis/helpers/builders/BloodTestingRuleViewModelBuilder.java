@@ -12,7 +12,7 @@ public class BloodTestingRuleViewModelBuilder extends AbstractBuilder<BloodTesti
   private BloodTestCategory category;
   private String newInformation;
   private String pattern;
-  private Boolean isDeleted;
+  private boolean isDeleted = false;
   
   public BloodTestingRuleViewModelBuilder withId(Long id) {
     this.id = id;
