@@ -37,7 +37,7 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
     //  validate testNameShort
     if (StringUtils.isBlank(form.getTestNameShort())) {
       errors.rejectValue("testNameShort", "errors.required", "Test name short is required");
-    } else if (form.getTestName().length() > MAX_LENGTH_TEST_NAME_SHORT) {
+    } else if (form.getTestNameShort().length() > MAX_LENGTH_TEST_NAME_SHORT) {
       errors.rejectValue("testNameShort", "errors.fieldLength",
           "Maximum length for this field is " + MAX_LENGTH_TEST_NAME_SHORT);
     }
@@ -45,52 +45,64 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
     // Validate validOutcomes convert list to set for faster search
     Set<String> validOutcomes = new HashSet<>(form.getValidResults());
     if (validOutcomes.isEmpty()) {
-      errors.rejectValue("validResults", "errors.required", "Valid outcomes are required");
+      errors.rejectValue("validOutcomes", "errors.required", "Valid outcomes are required");
     } else {
       // validate that all positive outcomes are inside valid outcomes
-      String errorPositiveOutComes = "";
-      boolean postitiveOutcomesHasError = false;
+      String errorPositiveOutComes = null;
       for (String positiveOutcome : form.getPositiveResults()) {
         if (!validOutcomes.contains(positiveOutcome)) {
-          errorPositiveOutComes += positiveOutcome +","; 
-          postitiveOutcomesHasError = true;
+          if (errorPositiveOutComes == null) {
+            errorPositiveOutComes = positiveOutcome;
+          } else {
+            errorPositiveOutComes += ", " + positiveOutcome;
+          }
         }
       }
-      if (postitiveOutcomesHasError) {
-        errors.rejectValue("positiveResults", "positiveResults.notInValidOutcomes",  "positive results: [" + errorPositiveOutComes.substring(0, errorPositiveOutComes.length() -1) + "] is not listed as a validOutcome.");
+      if (errorPositiveOutComes != null) {
+        errors.rejectValue("positiveOutcomes", "errors.positiveOutcomesNotInValidOutcomes",
+            "Positive outcome(s): [" + errorPositiveOutComes + "] not present in list of valid outcomes.");
       }
       // validate that all negative outcomes are inside valid outcomes  
-      String errorNegativeOutComes = "";
-      boolean negativeOutcomesHasError = false;
-      for (String negativeOutcome : form.getPositiveResults()) {
+      String errorNegativeOutComes = null;
+      for (String negativeOutcome : form.getNegativeResults()) {
         if (!validOutcomes.contains(negativeOutcome)) {
-          errorPositiveOutComes += negativeOutcome +","; 
-          negativeOutcomesHasError = true;
+          if (errorNegativeOutComes == null) {
+            errorNegativeOutComes = negativeOutcome;
+          } else {
+            errorNegativeOutComes += ", " + negativeOutcome;
+          }
         }
       }
-      if (negativeOutcomesHasError) {
-        errors.rejectValue("negativeResults", "negativeResults.notInValidOutcomes",  "negative results: [" + errorNegativeOutComes.substring(0, errorNegativeOutComes.length() -1) + "] is not listed as a validOutcome.");
+      if (errorNegativeOutComes != null) {
+        errors.rejectValue("negativeOutcomes", "errors.negativeOutcomesNotInValidOutcomes",
+            "Negative outcome(s): [" + errorNegativeOutComes + "] not present in list of valid outcomes.");
       }
     }
     
     // validate that positive outcomes are not in negative outcomes
     Set<String> negativeOutcomes = new HashSet<>(form.getNegativeResults());
     Set<String> positiveOutcomes = new HashSet<>(form.getPositiveResults());
-    String errorPositiveOutcomesInNegativeOutComes = "";
-    boolean positiveOutComesInNegativeOutcomes = false;
+    String errorPositiveOutcomesInNegativeOutComes = null;
+
     for (String positiveOutcome : positiveOutcomes) {
       if (negativeOutcomes.contains(positiveOutcome)) {
-        errorPositiveOutcomesInNegativeOutComes += positiveOutcome +","; 
-        positiveOutComesInNegativeOutcomes = true;
+        if (errorPositiveOutcomesInNegativeOutComes == null) {
+          errorPositiveOutcomesInNegativeOutComes = positiveOutcome;
+        } else {
+          errorPositiveOutcomesInNegativeOutComes += ", " + positiveOutcome;
+        }
       }
     }
-    if (positiveOutComesInNegativeOutcomes) {
-      errors.rejectValue("positiveResults", "positiveResults.inNegativeResults",  "positive results: [" + errorPositiveOutcomesInNegativeOutComes.substring(0, errorPositiveOutcomesInNegativeOutComes.length() -1) + "] is also listed in negative results.");
+
+    if (errorPositiveOutcomesInNegativeOutComes != null) {
+      errors.rejectValue("positiveOutcomesInNegativeOutcomes", "errors.positiveOutcomesAlsoInNegativeOutcomes",
+          "The following outcome(s): [" + errorPositiveOutcomesInNegativeOutComes
+              + "] appear in both the Negative and Positive list of outcomes.");
     }
     
     // validate blood test and category are related
     if (form.getCategory() == null) {
-      errors.rejectValue("category", "errors.required", "Category is required");
+      errors.rejectValue("bloodTestCategory", "errors.required", "Blood Test Category is required");
     } else {
       if (form.getBloodTestType() == null) {
         errors.rejectValue("bloodTestType", "errors.required", "Blood test type is required");
@@ -98,7 +110,8 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
         // check that blood test category and blood test type are matched
         Set<BloodTestType> categoryBloodTestTypes = new HashSet<>(BloodTestType.getBloodTestTypeForCategory(form.getCategory()));
         if (!categoryBloodTestTypes.contains(form.getBloodTestType())) {
-          errors.rejectValue("bloodTestType", "bloodTestType.InconsistentWithCategory", "Blood test type is not applicable to current category");
+          errors.rejectValue("bloodTestType", "errors.bloodTestTypeInconsistentWithCategory",
+              "Blood test type is not applicable to current category");
         }
       }
     }
