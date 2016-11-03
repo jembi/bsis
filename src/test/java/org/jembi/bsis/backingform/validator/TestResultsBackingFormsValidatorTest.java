@@ -34,12 +34,14 @@ public class TestResultsBackingFormsValidatorTest {
   @Mock
   EntityManager entityManager;
 
+  @SuppressWarnings("rawtypes")
   @Mock
   TypedQuery typedQuery;
 
   @Mock
   BloodTestRepository bloodTestRepository;
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testValidateTestResultValuesValidResult() throws Exception {
     // set up data
@@ -48,8 +50,8 @@ public class TestResultsBackingFormsValidatorTest {
     bloodTypingTestResults.put(2l, "POS"); // invalid result
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").build());
 
     TestResultsBackingForm testResultsBackingForm = TestResultsBackingFormBuilder.aTestResultsBackingForm()
         .withDonationIdentificationNumber("1111111")
@@ -73,6 +75,7 @@ public class TestResultsBackingFormsValidatorTest {
     Assert.assertEquals("errors found", 0, errors.getErrorCount());
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testValidateTestResultValuesInvalidResult() throws Exception {
     // set up data
@@ -81,8 +84,8 @@ public class TestResultsBackingFormsValidatorTest {
     bloodTypingTestResults.put(2l, "FALSE"); // invalid result
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").build());
 
     TestResultsBackingForm testResultsBackingForm = TestResultsBackingFormBuilder.aTestResultsBackingForm()
         .withDonationIdentificationNumber("1111111")
@@ -108,14 +111,15 @@ public class TestResultsBackingFormsValidatorTest {
         errors.getAllErrors().get(0).getDefaultMessage());
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testValidateTestResultValuesNoTestResults() throws Exception {
     // set up data
     Map<Long, String> bloodTypingTestResults = new HashMap<>();
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(true).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(true).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").build());
 
     TestResultsBackingForm testResultsBackingForm =
         TestResultsBackingFormBuilder.aTestResultsBackingForm()
@@ -142,70 +146,7 @@ public class TestResultsBackingFormsValidatorTest {
 
   }
 
-  @Test
-  public void testValidateTestResultValuesNoValueSpecifiedEmptyNotAllowed() throws Exception {
-    // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(2l, "");
-
-    List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").withIsEmptyAllowed(false).build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").withIsEmptyAllowed(false).build());
-
-    TestResultsBackingForm testResultsBackingForm = TestResultsBackingFormBuilder.aTestResultsBackingForm()
-        .withDonationIdentificationNumber("1111111").withTestResults(bloodTypingTestResults).build();
-    TestResultsBackingForms testResultsBackingForms = new TestResultsBackingForms();
-    ArrayList<TestResultsBackingForm> testOutcomesForDonations = new ArrayList<>();
-    testOutcomesForDonations.add(testResultsBackingForm);
-    testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
-
-    // set up mocks
-    when(bloodTestRepository.getBloodTests(false, false)).thenReturn(tests);
-    when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(tests);
-
-    // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "testOutcomesForDonations");
-    testResultsBackingFormsValidator.validateForm(testResultsBackingForms, errors);
-
-    // do asserts
-    Assert.assertEquals("errors found", 1, errors.getErrorCount());
-    Assert.assertEquals("error message correct", "No value specified",
-        errors.getAllErrors().get(0).getDefaultMessage());
-  }
-
-  @Test
-  public void testValidateTestResultValuesNoValueSpecifiedEmptyAllowed() throws Exception {
-    // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(2l, "");
-
-    List<BloodTest> tests = new ArrayList<>();
-    // FIXME: had to force an empty string into the valid results
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,,NEG").withIsEmptyAllowed(true).build());
-
-    TestResultsBackingForm testResultsBackingForm = TestResultsBackingFormBuilder.aTestResultsBackingForm()
-        .withDonationIdentificationNumber("1111111").withTestResults(bloodTypingTestResults).build();
-    TestResultsBackingForms testResultsBackingForms = new TestResultsBackingForms();
-    ArrayList<TestResultsBackingForm> testOutcomesForDonations = new ArrayList<>();
-    testOutcomesForDonations.add(testResultsBackingForm);
-    testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
-
-    // set up mocks
-    when(bloodTestRepository.getBloodTests(false, false)).thenReturn(tests);
-    when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(tests);
-
-    // run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "testOutcomesForDonations");
-    testResultsBackingFormsValidator.validateForm(testResultsBackingForms, errors);
-
-    // do asserts
-    Assert.assertEquals("errors found", 0, errors.getErrorCount());
-  }
-
+  @SuppressWarnings("unchecked")
   @Test
   public void testValidateTestResultValuesInvalidTest() throws Exception {
     // set up data
@@ -213,7 +154,7 @@ public class TestResultsBackingFormsValidatorTest {
     bloodTypingTestResults.put(123l, "FALSE");
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withIsEmptyAllowed(false).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(1l).build());
 
     TestResultsBackingForm testResultsBackingForm = TestResultsBackingFormBuilder.aTestResultsBackingForm()
         .withDonationIdentificationNumber("1111111").withTestResults(bloodTypingTestResults).build();

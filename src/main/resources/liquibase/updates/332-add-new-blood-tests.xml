@@ -51,5 +51,10 @@
       <column name="lastUpdatedBy_id" valueNumeric="1" />
     </update>
   </changeSet>
+  
+  <changeSet id="20161103-1414" author="lauravignoli">
+    <comment>Remove isEmptyAllowed from BloodTest</comment>
+    <dropColumn tableName="BloodTest" columnName="isEmptyAllowed"/>
+  </changeSet>
 
 </databaseChangeLog>

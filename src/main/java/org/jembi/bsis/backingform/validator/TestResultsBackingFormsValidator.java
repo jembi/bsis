@@ -3,7 +3,6 @@ package org.jembi.bsis.backingform.validator;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.backingform.TestResultsBackingForm;
 import org.jembi.bsis.backingform.TestResultsBackingForms;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
@@ -52,12 +51,6 @@ public class TestResultsBackingFormsValidator extends BaseValidator<TestResultsB
       }
 
       String result = form.getTestResults().get(testId);
-
-      if (!activeBloodTest.getIsEmptyAllowed() && StringUtils.isBlank(result)) {
-        // Empty results are not allowed for this test and the provided result is empty
-        errors.rejectValue("testOutcomesForDonations[" + index + "].testResults", "required", "No value specified");
-        return;
-      }
 
       if (!activeBloodTest.getValidResultsList().contains(result)) {
         // The provided result is not in the list of valid results

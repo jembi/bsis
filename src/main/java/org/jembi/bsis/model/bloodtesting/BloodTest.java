@@ -76,11 +76,6 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
   @ManyToMany
   private Set<WorksheetType> worksheetTypes;
 
-  /**
-   * TODO: not sure if this is useful.
-   */
-  private Boolean isEmptyAllowed;
-
   @Column(nullable = false)
   private Boolean isActive = Boolean.TRUE;
 
@@ -179,14 +174,6 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
 
   public void setBloodTestType(BloodTestType bloodTypingTestType) {
     this.bloodTestType = bloodTypingTestType;
-  }
-
-  public Boolean getIsEmptyAllowed() {
-    return isEmptyAllowed;
-  }
-
-  public void setIsEmptyAllowed(Boolean isEmptyAllowed) {
-    this.isEmptyAllowed = isEmptyAllowed;
   }
 
   public BloodTestCategory getCategory() {

@@ -17,7 +17,6 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
   private boolean flagComponentsForDiscard = false;
   private boolean flagComponentsContainingPlasmaForDiscard = false;
   private String validResults;
-  private Boolean isEmptyAllowed;
   private String testName = "test " + ++UNIQUE_INCREMENT;
   private String testNameShort = "t";
   private Integer rankInCategory;
@@ -79,11 +78,6 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     return this;
   }
 
-  public BloodTestBuilder withIsEmptyAllowed(Boolean isEmptyAllowed) {
-    this.isEmptyAllowed = isEmptyAllowed;
-    return this;
-  }
-
   public BloodTestBuilder withTestName(String testName) {
     this.testName = testName;
     return this;
@@ -120,7 +114,6 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     bloodTest.setFlagComponentsForDiscard(flagComponentsForDiscard);
     bloodTest.setValidResults(validResults);
     bloodTest.setFlagComponentsContainingPlasmaForDiscard(flagComponentsContainingPlasmaForDiscard);
-    bloodTest.setIsEmptyAllowed(isEmptyAllowed);
     bloodTest.setTestName(testName);
     bloodTest.setTestNameShort(testNameShort);
     bloodTest.setRankInCategory(rankInCategory);
