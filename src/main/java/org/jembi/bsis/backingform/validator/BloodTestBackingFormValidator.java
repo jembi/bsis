@@ -42,8 +42,8 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
           "Maximum length for this field is " + MAX_LENGTH_TEST_NAME_SHORT);
     }
     
-    // Validate validOutcomes convert list to set for faster search
-    Set<String> validOutcomes = new HashSet<>(form.getValidResults());
+    // Validate validOutcomes
+    Set<String> validOutcomes = form.getValidResults();
     if (validOutcomes.isEmpty()) {
       errors.rejectValue("validOutcomes", "errors.required", "Valid outcomes are required");
     } else {
@@ -80,8 +80,8 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
     }
     
     // validate that positive outcomes are not in negative outcomes
-    Set<String> negativeOutcomes = new HashSet<>(form.getNegativeResults());
-    Set<String> positiveOutcomes = new HashSet<>(form.getPositiveResults());
+    Set<String> negativeOutcomes = form.getNegativeResults();
+    Set<String> positiveOutcomes = form.getPositiveResults();
     String errorPositiveOutcomesInNegativeOutComes = null;
 
     for (String positiveOutcome : positiveOutcomes) {
