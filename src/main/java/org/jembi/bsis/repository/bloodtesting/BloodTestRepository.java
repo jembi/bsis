@@ -54,7 +54,6 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
         .getSingleResult();
   }
 
-  // FIXME: this method should be renamed/refactored because it returns all inactive and deleted blood tests
   public List<BloodTest> getBloodTests(boolean includeInactive, boolean includeDeleted) {   
     return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS, BloodTest.class)
         .setParameter("includeInactive", includeInactive)
