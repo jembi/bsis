@@ -10,13 +10,30 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.worksheet.WorksheetType;
+import org.jembi.bsis.repository.bloodtesting.BloodTestNamedQueryConstants;
 
 @Entity
 @Audited
+@NamedQueries({
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_CATEGORY,
+      query = BloodTestNamedQueryConstants.QUERY_GET_BLOOD_TESTS_BY_CATEGORY),
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_TYPE,
+      query = BloodTestNamedQueryConstants.QUERY_GET_BLOOD_TESTS_BY_TYPE),
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_GET_ACTIVE_NOT_DELETED_BLOOD_TESTS,
+      query = BloodTestNamedQueryConstants.QUERY_GET_ACTIVE_NOT_DELETED_BLOOD_TESTS),
+    @NamedQuery(
+        name = BloodTestNamedQueryConstants.NAME_GET_ALL_BLOOD_TESTS,
+        query = BloodTestNamedQueryConstants.QUERY_GET_ALL_BLOOD_TESTS)
+})
 public class BloodTest extends BaseModificationTrackerEntity implements Comparable<BloodTest> {
 
   private static final long serialVersionUID = 1L;
