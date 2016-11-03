@@ -35,10 +35,7 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
   }
   
   public boolean isUniqueTestName(Long id, String testName) {
-    return entityManager.createQuery("SELECT count(b) = 0 " +
-        "FROM BloodTest b " +
-        "WHERE b.testName = :testName " +
-        " AND (:id is null OR b.id != :id) ", Boolean.class)
+    return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_FIND_COUNT_BY_TEST_NAME_AND_ID, Boolean.class)
         .setParameter("id", id)
         .setParameter("testName", testName)
         .getSingleResult();
