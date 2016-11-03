@@ -3,6 +3,7 @@ package org.jembi.bsis.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jembi.bsis.backingform.validator.BloodTestBackingFormValidator;
 import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +26,13 @@ public class BloodTestController {
 
   @Autowired
   private BloodTestControllerService bloodTestControllerService;
+  @Autowired
+  private BloodTestBackingFormValidator bloodTestBackingFormValidator;
+  
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(bloodTestBackingFormValidator);
+  }
 
   @RequestMapping(method = RequestMethod.GET, value = "/search")
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
