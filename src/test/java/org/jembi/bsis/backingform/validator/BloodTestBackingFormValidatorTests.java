@@ -3,16 +3,15 @@ package org.jembi.bsis.backingform.validator;
 import static org.jembi.bsis.helpers.builders.BloodTestBackingFormBuilder.aBloodTestBackingForm;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashSet;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,7 +23,7 @@ import org.springframework.validation.MapBindingResult;
 public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
   @InjectMocks
-  private BloodTestBackingFormValidator validator;
+  private BloodTestBackingFormValidator bloodTestBackingFormvalidator;
   
   @Mock
   private BloodTestRepository bloodTestRepository;
@@ -36,9 +35,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateValidForm_shouldHaveNoErrors() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS");
-    List<String> negativeResults = Arrays.asList("NEG");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG"));
     BloodTestBackingForm backingForm = aBloodTestBackingForm()
         .withTestName("aBasicBloodTypingTest")
         .withTestNameShort("basicBloodTypingShort")
@@ -54,7 +53,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
     
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("No error", 0, errors.getErrorCount());
@@ -64,9 +63,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithNoBloodTestName_shouldHaveOneError() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS");
-    List<String> negativeResults = Arrays.asList("NEG");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG"));
     BloodTestBackingForm backingForm = aBloodTestBackingForm()
         .withTestNameShort("basicBloodTypingShort")
         .withCategory(BloodTestCategory.BLOODTYPING)
@@ -78,7 +77,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
@@ -89,9 +88,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithTooLongBloodTestName_shouldHaveOneError() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS");
-    List<String> negativeResults = Arrays.asList("NEG");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG"));
     BloodTestBackingForm backingForm = aBloodTestBackingForm()
         .withTestName("aBasicBloodTypingTestWithANameThatIsMoreThan40Characters")
         .withTestNameShort("basicBloodTypingShort")
@@ -104,7 +103,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
@@ -115,9 +114,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithNoBloodTestShortName_shouldHaveOneError() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS");
-    List<String> negativeResults = Arrays.asList("NEG");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG"));
     BloodTestBackingForm backingForm = aBloodTestBackingForm()
         .withTestName("basicBloodTypingShort")
         .withCategory(BloodTestCategory.BLOODTYPING)
@@ -132,7 +131,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
     
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
@@ -143,9 +142,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithTooLongBloodTestNameShort_shouldHaveOneError() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS");
-    List<String> negativeResults = Arrays.asList("NEG");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG"));
     BloodTestBackingForm backingForm =
         aBloodTestBackingForm()
             .withTestName("aBasicBloodTestName")
@@ -162,7 +161,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
@@ -173,9 +172,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithBloodTestNameThatIsNotUnique_shouldHaveNoErrors() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS");
-    List<String> negativeResults = Arrays.asList("NEG");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG"));
     BloodTestBackingForm backingForm = aBloodTestBackingForm()
         .withTestName("aBasicBloodTypingTest")
         .withTestNameShort("basicBloodTypingShort")
@@ -191,7 +190,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
@@ -202,9 +201,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithNoValidOutcomes_shouldHaveOneError() {
 
     // Set up data
-    List<String> validResults = new ArrayList<String>();
-    List<String> positiveResults = new ArrayList<String>();
-    List<String> negativeResults = new ArrayList<String>();
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>();
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>();
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>();
     BloodTestBackingForm backingForm =
         aBloodTestBackingForm()
             .withTestName("aBasicBloodTestName")
@@ -221,7 +220,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
@@ -232,9 +231,10 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithInvalidPositiveOutcomes_shouldHaveOneError() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS", "INVALID OUTCOME", "INVALID OUTCOME 2");
-    List<String> negativeResults = Arrays.asList("NEG");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults =
+        new LinkedHashSet<String>(Arrays.asList("POS", "INVALID OUTCOME", "INVALID OUTCOME 2"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG"));
     BloodTestBackingForm backingForm =
         aBloodTestBackingForm()
             .withTestName("aBasicBloodTestName")
@@ -251,7 +251,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
@@ -263,9 +263,10 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithInvalidNegativeOutcomes_shouldHaveOneError() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS");
-    List<String> negativeResults = Arrays.asList("NEG", "INVALID OUTCOME", "INVALID OUTCOME 2");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS"));
+    LinkedHashSet<String> negativeResults =
+        new LinkedHashSet<String>(Arrays.asList("NEG", "INVALID OUTCOME", "INVALID OUTCOME 2"));
     BloodTestBackingForm backingForm =
         aBloodTestBackingForm()
             .withTestName("aBasicBloodTestName")
@@ -282,7 +283,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
@@ -294,9 +295,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithInvalidNegativeAndPositiveOutcomes_shouldHaveTwoErrors() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS", "INVALID OUTCOME");
-    List<String> negativeResults = Arrays.asList("NEG", "INVALID OUTCOME 2");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS", "INVALID OUTCOME"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG", "INVALID OUTCOME 2"));
     BloodTestBackingForm backingForm = aBloodTestBackingForm().withTestName("aBasicBloodTestName")
         .withTestNameShort("bloodTypingShort").withCategory(BloodTestCategory.BLOODTYPING)
         .withBloodTestType(BloodTestType.BASIC_BLOODTYPING).withValidResults(validResults)
@@ -307,7 +308,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("Two Errors", 2, errors.getErrorCount());
@@ -321,9 +322,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithOutcomeInPositiveAndNegativeOutcomeList_shouldHaveOneError() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "OUTCOMEINBOTHLISTS");
-    List<String> positiveResults = Arrays.asList("POS", "OUTCOMEINBOTHLISTS");
-    List<String> negativeResults = Arrays.asList("NEG", "OUTCOMEINBOTHLISTS");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "OUTCOMEINBOTHLISTS"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS", "OUTCOMEINBOTHLISTS"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG", "OUTCOMEINBOTHLISTS"));
     BloodTestBackingForm backingForm =
         aBloodTestBackingForm()
             .withTestName("aBasicBloodTestName")
@@ -340,7 +341,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
@@ -352,9 +353,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithNoBloodTestCategory_shouldHaveOneError() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS");
-    List<String> negativeResults = Arrays.asList("NEG");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG"));
     BloodTestBackingForm backingForm = aBloodTestBackingForm()
         .withTestName("aBasicBloodTestName")
         .withTestNameShort("basicBloodNameShort")
@@ -369,7 +370,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
@@ -380,9 +381,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithNoBloodTestType_shouldHaveOneError() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS");
-    List<String> negativeResults = Arrays.asList("NEG");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG"));
     BloodTestBackingForm backingForm = aBloodTestBackingForm()
         .withTestName("aBasicBloodTestName")
         .withTestNameShort("basicBloodNameShort")
@@ -397,7 +398,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
@@ -408,9 +409,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithBloodTestTypeWithInvalidBloodTestCategory_shouldHaveOneError() {
 
     // Set up data
-    List<String> validResults = Arrays.asList("POS", "NEG", "NT");
-    List<String> positiveResults = Arrays.asList("POS");
-    List<String> negativeResults = Arrays.asList("NEG");
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG"));
     BloodTestBackingForm backingForm = aBloodTestBackingForm()
         .withTestName("aBasicBloodTestName")
         .withTestNameShort("basicBloodNameShort")
@@ -426,7 +427,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    validator.validateForm(backingForm, errors);
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
