@@ -2,7 +2,7 @@ package org.jembi.bsis.model.bloodtesting;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -10,13 +10,33 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.worksheet.WorksheetType;
+import org.jembi.bsis.repository.constant.BloodTestNamedQueryConstants;
 
 @Entity
 @Audited
+@NamedQueries({
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_CATEGORY,
+      query = BloodTestNamedQueryConstants.QUERY_GET_BLOOD_TESTS_BY_CATEGORY),
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_TYPE,
+      query = BloodTestNamedQueryConstants.QUERY_GET_BLOOD_TESTS_BY_TYPE),
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS,
+      query = BloodTestNamedQueryConstants.QUERY_GET_BLOOD_TESTS),
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_FIND_BLOOD_TEST_BY_ID,
+      query = BloodTestNamedQueryConstants.QUERY_FIND_BLOOD_TEST_BY_ID),
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_FIND_COUNT_BY_TEST_NAME_AND_ID,
+      query = BloodTestNamedQueryConstants.QUERY_FIND_COUNT_BY_TEST_NAME_AND_ID)
+})
 public class BloodTest extends BaseModificationTrackerEntity implements Comparable<BloodTest> {
 
   private static final long serialVersionUID = 1L;
@@ -62,11 +82,6 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
   @ManyToMany
   private Set<WorksheetType> worksheetTypes;
 
-  /**
-   * TODO: not sure if this is useful.
-   */
-  private Boolean isEmptyAllowed;
-
   @Column(nullable = false)
   private Boolean isActive = Boolean.TRUE;
 
@@ -100,11 +115,11 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
    *
    * @return An immutable list of valid results.
    */
-  public List<String> getValidResultsList() {
+  public Set<String> getValidResultsList() {
     if (validResults == null || validResults.isEmpty()) {
-      return Collections.emptyList();
+      return Collections.emptySet();
     }
-    return Collections.unmodifiableList(Arrays.asList(validResults.split(",")));
+    return Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(validResults.split(","))));
   }
 
   public String getNegativeResults() {
@@ -167,14 +182,6 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
     this.bloodTestType = bloodTypingTestType;
   }
 
-  public Boolean getIsEmptyAllowed() {
-    return isEmptyAllowed;
-  }
-
-  public void setIsEmptyAllowed(Boolean isEmptyAllowed) {
-    this.isEmptyAllowed = isEmptyAllowed;
-  }
-
   public BloodTestCategory getCategory() {
     return category;
   }
@@ -224,20 +231,20 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
   /**
    * @return An immutable list of negative results from the comma separated list.
    */
-  public List<String> getNegativeResultsList() {
+  public Set<String> getNegativeResultsList() {
     if (negativeResults == null || negativeResults.isEmpty()) {
-      return Collections.emptyList();
+      return Collections.emptySet();
     }
-    return Collections.unmodifiableList(Arrays.asList(negativeResults.split(",")));
+    return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(negativeResults.split(","))));
   }
 
   /**
    * @return An immutable list of positive results from the comma separated list.
    */
-  public List<String> getPositiveResultsList() {
+  public Set<String> getPositiveResultsList() {
     if (positiveResults == null || positiveResults.isEmpty()) {
-      return Collections.emptyList();
+      return Collections.emptySet();
     }
-    return Collections.unmodifiableList(Arrays.asList(positiveResults.split(",")));
+    return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(positiveResults.split(","))));
   }
 }

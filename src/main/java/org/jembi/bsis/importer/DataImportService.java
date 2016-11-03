@@ -38,6 +38,7 @@ import org.jembi.bsis.model.adverseevent.AdverseEventType;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -55,6 +56,7 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
 import org.jembi.bsis.repository.BloodTestingRuleRepository;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.repository.ContactMethodTypeRepository;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DivisionRepository;
@@ -67,9 +69,7 @@ import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.repository.SequenceNumberRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.service.DonationCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -1239,7 +1239,7 @@ public class DataImportService {
 
   private Map<String, BloodTest> buildBloodTestCache() {
     Map <String, BloodTest> bloodTestCache = new HashMap<>();
-    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTestsIncludeInactive();
+    List<BloodTest> bloodTests = bloodTestRepository.getBloodTests(true, true);
     for (BloodTest bloodTest : bloodTests) {
       bloodTestCache.put(bloodTest.getTestName(), bloodTest);
     }

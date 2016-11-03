@@ -24,11 +24,10 @@ import org.jembi.bsis.helpers.builders.BloodTestTotalDTOBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.util.Gender;
-
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -38,6 +37,26 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
   
   @Autowired
   private BloodTestResultRepository bloodTestResultRepository;
+
+  @Test
+  public void testCountBloodTestResultsForDonation() {
+    // Set up data
+    Donation donation = aDonation().buildAndPersist(entityManager);
+    Donation excludedDonation = aDonation().buildAndPersist(entityManager);
+
+    aBloodTestResult().withDonation(donation).buildAndPersist(entityManager);
+    aBloodTestResult().withDonation(donation).buildAndPersist(entityManager);
+    // Test outcome excluded because it's deleted
+    aBloodTestResult().withDonation(donation).withIsDeleted(true).buildAndPersist(entityManager);
+    // Test outcome excluded because it belongs to excludedDonation
+    aBloodTestResult().withDonation(excludedDonation).buildAndPersist(entityManager);
+
+    // Test
+    int count = bloodTestResultRepository.countBloodTestResultsForDonation(donation.getId());
+
+    // Verify
+    assertThat(count, is(2));
+  }
 
   @Test
   public void testGetTestOutcomes_shouldReturnCorrectOutcomes() {

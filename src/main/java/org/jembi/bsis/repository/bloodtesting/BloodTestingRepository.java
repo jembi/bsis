@@ -17,11 +17,13 @@ import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
-import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.TTIStatus;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.service.BloodTestingRuleEngine;
@@ -51,29 +53,6 @@ public class BloodTestingRepository {
 
   @Autowired
   private BloodTestingRuleEngine ruleEngine;
-
-  public List<BloodTest> getBloodTypingTests() {
-    String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("isActive", true);
-    query.setParameter("category", BloodTestCategory.BLOODTYPING);
-    List<BloodTest> bloodTests = query.getResultList();
-    return bloodTests;
-  }
-
-  public List<BloodTest> getBloodTestsOfType(BloodTestType type) {
-    return getBloodTestsOfTypes(Arrays.asList(type));
-  }
-
-  private List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
-    String queryStr = "SELECT b FROM BloodTest b WHERE "
-        + "b.bloodTestType IN (:types) AND " + "b.isActive=:isActive";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("types", types);
-    query.setParameter("isActive", true);
-    List<BloodTest> bloodTests = query.getResultList();
-    return bloodTests;
-  }
 
   /**
    * Save the BloodTestingRuleResult and update the Donation blood ABO/Rh and blood typing statuses
@@ -107,7 +86,7 @@ public class BloodTestingRepository {
 
     if (btResult == null) {
       btResult = new BloodTestResult();
-      BloodTest bloodTest = findBloodTestById(testId);
+      BloodTest bloodTest = bloodTestRepository.findBloodTestById(testId);
       btResult.setBloodTest(bloodTest);
       // not updating the inverse relation which means the
       // donation.getBloodTypingResults() will not
@@ -133,24 +112,6 @@ public class BloodTestingRepository {
     }
     em.persist(btResult);
     return btResult;
-  }
-
-  public List<BloodTest> findActiveBloodTests() {
-
-    return em.createQuery(
-        "SELECT b " +
-            "FROM BloodTest b " +
-            "WHERE b.isActive = :isActive ",
-            BloodTest.class)
-        .setParameter("isActive", true)
-        .getResultList();
-  }
-
-  public List<BloodTest> getAllBloodTestsIncludeInactive() {
-    String queryStr = "SELECT b FROM BloodTest b";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    List<BloodTest> bloodTests = query.getResultList();
-    return bloodTests;
   }
 
   public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(
@@ -311,12 +272,5 @@ public class BloodTestingRepository {
       newExtraInformation = StringUtils.join(extraInformationNewSet, ",");
     }
     return newExtraInformation;
-  }
-  
-  private BloodTest findBloodTestById(Long bloodTestId) {
-    String queryStr = "SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("bloodTestId", bloodTestId);
-    return query.getSingleResult();
   }
 }

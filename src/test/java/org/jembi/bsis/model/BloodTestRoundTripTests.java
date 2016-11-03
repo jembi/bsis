@@ -10,18 +10,25 @@ import org.junit.Test;
 public class BloodTestRoundTripTests extends ContextDependentTestSuite {
 
   @Test
-  public void testPersistBloodTest() {
-    aBloodTest().withTestName("test").withTestNameShort("t1").buildAndPersist(entityManager);
+  public void testPersistWithDefaultsFromBuilder_shouldSave() {
+    aBloodTest().buildAndPersist(entityManager);
+  }
+
+  @Test
+  public void testPersistBloodTest_shouldSave() {
+    aBloodTest().withTestName("test").withTestNameShort("t1").thatIsDeleted().thatIsInActive()
+        .thatShouldFlagComponentsContainingPlasmaForDiscard().thatShouldFlagComponentsForDiscard()
+        .buildAndPersist(entityManager);
   }
 
   @Test(expected = PersistenceException.class)
   public void testPersistBloodTestWithNoTestName_shouldThrow() {
-    aBloodTest().withTestNameShort("t1").buildAndPersist(entityManager);
+    aBloodTest().withTestName(null).buildAndPersist(entityManager);
   }
 
   @Test(expected = PersistenceException.class)
   public void testPersistBloodTestWithNoTestNameShort_shouldThrow() {
-    aBloodTest().withTestName("test").buildAndPersist(entityManager);
+    aBloodTest().withTestNameShort(null).buildAndPersist(entityManager);
   }
 
   @Test(expected = PersistenceException.class)

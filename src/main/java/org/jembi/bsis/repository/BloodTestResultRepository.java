@@ -5,13 +5,14 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import org.jembi.bsis.dto.BloodTestResultDTO;
 import org.jembi.bsis.dto.BloodTestResultExportDTO;
 import org.jembi.bsis.dto.BloodTestTotalDTO;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -20,7 +21,6 @@ public class BloodTestResultRepository extends AbstractRepository<BloodTestResul
   @PersistenceContext
   private EntityManager entityManager;
 
-  // TODO: Test
   public int countBloodTestResultsForDonation(long donationId) {
     return entityManager.createNamedQuery(
         BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION, 

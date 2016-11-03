@@ -1,7 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
@@ -12,9 +12,9 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
   private Long id;
   private String testNameShort;
   private String testName;
-  private List<String> validResults = new ArrayList<>();
-  private List<String> negativeResults = new ArrayList<>();
-  private List<String> positiveResults = new ArrayList<>();
+  private Set<String> validResults = new HashSet<>();
+  private Set<String> negativeResults = new HashSet<>();
+  private Set<String> positiveResults = new HashSet<>();
   private BloodTestCategory bloodTestCategory;
   private BloodTestType bloodTestType;
   private Integer rankInCategory;
@@ -41,7 +41,7 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
     return this;
   }
 
-  public BloodTestFullViewModelBuilder withValidResults(List<String> validResults) {
+  public BloodTestFullViewModelBuilder withValidResults(Set<String> validResults) {
     this.validResults = validResults;
     return this;
   }
@@ -51,7 +51,7 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
     return this;
   }
 
-  public BloodTestFullViewModelBuilder withNegativeResults(List<String> negativeResults) {
+  public BloodTestFullViewModelBuilder withNegativeResults(Set<String> negativeResults) {
     this.negativeResults = negativeResults;
     return this;
   }
@@ -61,7 +61,7 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
     return this;
   }
 
-  public BloodTestFullViewModelBuilder withPositiveResults(List<String> positiveResults) {
+  public BloodTestFullViewModelBuilder withPositiveResults(Set<String> positiveResults) {
     this.positiveResults = positiveResults;
     return this;
   }

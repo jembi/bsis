@@ -171,7 +171,7 @@
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
 
   <BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
-    context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
+    context="RECORD_BLOOD_TYPING_TESTS" isActive="1"
     negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
     testName="ABO" testNameShort="ABO" validResults="A,B,AB,O" flagComponentsForDiscard="0"
     flagComponentsContainingPlasmaForDiscard="0" isDeleted="0" />

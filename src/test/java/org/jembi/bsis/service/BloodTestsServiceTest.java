@@ -27,17 +27,17 @@ import org.jembi.bsis.helpers.builders.TestResultsBackingFormBuilder;
 import org.jembi.bsis.helpers.matchers.BloodTestResultMatcher;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Assert;
@@ -78,6 +78,9 @@ public class BloodTestsServiceTest extends UnitTestSuite {
 
   @Mock
   private GeneralConfigAccessorService generalConfigAccessorService;
+  
+  @Mock
+  private BloodTestRepository bloodTestRepository;
 
   @Before
   public void setup() {
@@ -356,8 +359,6 @@ public class BloodTestsServiceTest extends UnitTestSuite {
         "test3test1,test2".equals(updatedExtraInformation) || "test3test2,test1".equals(updatedExtraInformation));
   }
 
-
-
   @Test
   public void testSaveBloodTestingResultsTestBatchNotReleased() throws Exception {
     // set up data
@@ -378,6 +379,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withExtraInformation(new HashSet<String>()).build();
 
     // set up mocks
+    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(bloodTest);
     when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
@@ -638,6 +640,5 @@ public class BloodTestsServiceTest extends UnitTestSuite {
         .save(Mockito.argThat(BloodTestResultMatcher.hasSameStateAsBloodTestResult(deleted3)));
     Mockito.verify(bloodTestResultRepository)
         .save(Mockito.argThat(BloodTestResultMatcher.hasSameStateAsBloodTestResult(deleted4)));
-
   }
 }
