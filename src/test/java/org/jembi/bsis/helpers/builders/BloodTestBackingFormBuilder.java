@@ -1,6 +1,6 @@
 package org.jembi.bsis.helpers.builders;
 
-import java.util.List;
+import java.util.LinkedHashSet;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
@@ -13,9 +13,9 @@ public class BloodTestBackingFormBuilder extends AbstractBuilder<BloodTestBackin
   private String testNameShort;
   private BloodTestCategory category;
   private BloodTestType bloodTestType;
-  private List<String> validResults;
-  private List<String> negativeResults;
-  private List<String> positiveResults;
+  private LinkedHashSet<String> validResults;
+  private LinkedHashSet<String> negativeResults;
+  private LinkedHashSet<String> positiveResults;
   private Boolean isActive;
   private Boolean isDeleted;
   private boolean flagComponentsContainingPlasmaForDiscard;
@@ -46,17 +46,17 @@ public class BloodTestBackingFormBuilder extends AbstractBuilder<BloodTestBackin
     return this;
   }
   
-  public BloodTestBackingFormBuilder withValidResults(List<String> validResults) {
+  public BloodTestBackingFormBuilder withValidResults(LinkedHashSet<String> validResults) {
     this.validResults = validResults;
     return this;
   }
 
-  public BloodTestBackingFormBuilder withNegativeResults(List<String> negativeResults) {
+  public BloodTestBackingFormBuilder withNegativeResults(LinkedHashSet<String> negativeResults) {
     this.negativeResults = negativeResults;
     return this;
   }
   
-  public BloodTestBackingFormBuilder withPositiveResults(List<String> positiveResults) {
+  public BloodTestBackingFormBuilder withPositiveResults(LinkedHashSet<String> positiveResults) {
     this.positiveResults = positiveResults;
     return this;
   }

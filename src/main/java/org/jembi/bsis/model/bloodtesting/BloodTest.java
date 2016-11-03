@@ -2,7 +2,7 @@ package org.jembi.bsis.model.bloodtesting;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -119,7 +119,7 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
     if (validResults == null || validResults.isEmpty()) {
       return Collections.emptySet();
     }
-    return Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(validResults.split(","))));
+    return Collections.unmodifiableSet(new LinkedHashSet<String>(Arrays.asList(validResults.split(","))));
   }
 
   public String getNegativeResults() {
@@ -235,7 +235,7 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
     if (negativeResults == null || negativeResults.isEmpty()) {
       return Collections.emptySet();
     }
-    return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(negativeResults.split(","))));
+    return Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(negativeResults.split(","))));
   }
 
   /**
@@ -245,6 +245,6 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
     if (positiveResults == null || positiveResults.isEmpty()) {
       return Collections.emptySet();
     }
-    return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(positiveResults.split(","))));
+    return Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(positiveResults.split(","))));
   }
 }
