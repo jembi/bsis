@@ -14,7 +14,6 @@ import org.jembi.bsis.backingform.TestResultsBackingForms;
 import org.jembi.bsis.backingform.validator.TestResultsBackingFormsValidator;
 import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
-import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -26,6 +25,7 @@ import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.service.BloodTestsService;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
+import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
@@ -96,22 +96,10 @@ public class TestResultController {
       value = "testBatch", required = true) Long testBatchId,
       @RequestParam(value = "bloodTestType", required = false) BloodTestType bloodTestType) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-    Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
-    List<Long> donationBatchIds = new ArrayList<Long>();
-    for (DonationBatch donationBatch : donationBatches) {
-      donationBatchIds.add(donationBatch.getId());
-    }
+    List<BloodTestingRuleResult> ruleResults = getBloodTestingRuleResults(bloodTestType, testBatch);
 
-    List<BloodTestingRuleResult> ruleResults;
-    if (bloodTestType == null) {
-      ruleResults = bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
-    } else {
-      ruleResults =
-          bloodTestingRepository.getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, bloodTestType);
-    }
-
+    Map<String, Object> map = new HashMap<String, Object>();
     map.put("testResults", ruleResults);
     map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatch.getCreatedDate()));
 
@@ -138,14 +126,30 @@ public class TestResultController {
       @RequestParam(value = "testBatch", required = true) Long testBatchId) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+    List<BloodTestingRuleResult> ruleResults = getBloodTestingRuleResults(testBatch);
+    Map<String, Object> map = calculateOverviewFlags(ruleResults);
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
+  protected List<BloodTestingRuleResult> getBloodTestingRuleResults(TestBatch testBatch) {
+    return getBloodTestingRuleResults(null, testBatch);
+  }
+
+  protected List<BloodTestingRuleResult> getBloodTestingRuleResults(BloodTestType bloodTestType, TestBatch testBatch) {
     Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
     for (DonationBatch donationBatch : donationBatches) {
       donationBatchIds.add(donationBatch.getId());
     }
-    Map<String, Object> map =
-        calculateOverviewFlags(bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds));
-    return new ResponseEntity<>(map, HttpStatus.OK);
+
+    List<BloodTestingRuleResult> ruleResults;
+    if (bloodTestType == null) {
+      ruleResults = bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
+    } else {
+      ruleResults =
+          bloodTestingRepository.getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, bloodTestType);
+    }
+    return ruleResults;
   }
 
   private Map<String, Object> calculateOverviewFlags(List<BloodTestingRuleResult> ruleResults) {
@@ -162,31 +166,32 @@ public class TestResultController {
     overviewFlags.put("hasPendingRepeatTTITests", false);
     overviewFlags.put("hasPendingConfirmatoryTTITests", false);
     overviewFlags.put("hasPendingRepeatBloodTypingTests", false);
+    overviewFlags.put("hasPendingBloodTypingConfirmations", false);
 
     for (BloodTestingRuleResult result : ruleResults) {
 
       Map<String, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
       for (String key : resultViewModelMap.keySet()) {
-        BloodTestResultViewModel model = resultViewModelMap.get(key);
-        BloodTestResult testResult = model.getTestResult();
-        if (testResult.getReEntryRequired().equals(true)) {
-          if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
+        BloodTestResultViewModel bloodTestResultViewModel = resultViewModelMap.get(key);
+        BloodTestFullViewModel bloodTest = bloodTestResultViewModel.getBloodTest();
+        if (bloodTestResultViewModel.getReEntryRequired().equals(true)) {
+          if (bloodTest.getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
             overviewFlags.put("hasReEntryRequiredTTITests", true);
-          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
+          } else if (bloodTest.getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
             overviewFlags.put("hasReEntryRequiredBloodTypingTests", true);
-          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
+          } else if (bloodTest.getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
             overviewFlags.put("hasReEntryRequiredRepeatBloodTypingTests", true);
-          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
+          } else if (bloodTest.getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
             overviewFlags.put("hasReEntryRequiredConfirmatoryTTITests", true);
-          } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
+          } else if (bloodTest.getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
             overviewFlags.put("hasReEntryRequiredRepeatTTITests", true);
           }
         }
-        if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
+        if (bloodTest.getBloodTestType().equals(BloodTestType.REPEAT_TTI)) {
           overviewFlags.put("hasRepeatTTITests", true);
-        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
+        } else if (bloodTest.getBloodTestType().equals(BloodTestType.CONFIRMATORY_TTI)) {
           overviewFlags.put("hasConfirmatoryTTITests", true);
-        } else if (testResult.getBloodTest().getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
+        } else if (bloodTest.getBloodTestType().equals(BloodTestType.REPEAT_BLOODTYPING)) {
           overviewFlags.put("hasRepeatBloodTypingTests", true);
         }
       }

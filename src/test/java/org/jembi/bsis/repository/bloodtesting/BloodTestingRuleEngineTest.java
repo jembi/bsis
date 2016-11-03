@@ -281,11 +281,10 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     ArrayList<Long> reEntryRequiredTTITestIds = new ArrayList<>();
     Map<String, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
     for (String key : resultViewModelMap.keySet()) {
-      BloodTestResultViewModel model = resultViewModelMap.get(key);
-      BloodTestResult testResult = model.getTestResult();
-      if (testResult.getReEntryRequired().equals(true)
-          && testResult.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
-        reEntryRequiredTTITestIds.add(testResult.getBloodTest().getId());
+      BloodTestResultViewModel bloodTestResultViewModel = resultViewModelMap.get(key);
+      if (bloodTestResultViewModel.getReEntryRequired().equals(true)
+          && bloodTestResultViewModel.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
+        reEntryRequiredTTITestIds.add(bloodTestResultViewModel.getBloodTest().getId());
       }
     }
     Assert.assertEquals("Re-entry required TTI tests", 1, reEntryRequiredTTITestIds.size());

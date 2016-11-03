@@ -28,6 +28,9 @@ public class BloodTestingRuleResultViewModelFactory {
   @Autowired
   private DonationFactory donationFactory;
 
+  @Autowired
+  private BloodTestResultFactory bloodTestResultFactory;
+
   public BloodTestingRuleResult createBloodTestResultViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet) {
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
 
@@ -95,7 +98,7 @@ public class BloodTestingRuleResultViewModelFactory {
   }
 
   public BloodTestResultViewModel createBloodTestResultViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet, BloodTestResult bloodTestResult, boolean isDonationReleased) {
-    BloodTestResultViewModel bloodTestResultViewModel = new BloodTestResultViewModel(bloodTestResult);
+    BloodTestResultViewModel bloodTestResultViewModel = bloodTestResultFactory.createBloodTestResultViewModel(bloodTestResult);
     Map<String, Boolean> permissions = new HashMap<String, Boolean>();
     permissions.put("canEdit", bloodTestResultConstraintChecker.canEdit(bloodTestingRuleResultSet, bloodTestResult, isDonationReleased));
     bloodTestResultViewModel.setPermissions(permissions);

@@ -7,11 +7,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.jembi.bsis.factory.BloodTestFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.BloodTestViewModel;
+import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,43 +26,46 @@ public class BloodTypingController {
   @Autowired
   private BloodTestingRepository bloodTestingRepository;
 
+  @Autowired
+  private BloodTestFactory bloodTestFactory;
+
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_BLOOD_TYPING_OUTCOME + "')")
   public Map<String, Object> getBloodTypingForm(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
 
-    List<BloodTestViewModel> basicBloodTypingTests = getBasicBloodTypingTests();
+    List<BloodTestFullViewModel> basicBloodTypingTests = getBasicBloodTypingTests();
     map.put("basicBloodTypingTests", basicBloodTypingTests);
 
-    List<BloodTestViewModel> advancedBloodTypingTests = getAdvancedBloodTypingTests();
+    List<BloodTestFullViewModel> advancedBloodTypingTests = getAdvancedBloodTypingTests();
     map.put("advancedBloodTypingTests", advancedBloodTypingTests);
 
-    List<BloodTestViewModel> repeatBloodTypingTests = getRepeatBloodTypingTests();
+    List<BloodTestFullViewModel> repeatBloodTypingTests = getRepeatBloodTypingTests();
     map.put("repeatBloodTypingTests", repeatBloodTypingTests);
 
     return map;
   }
 
-  private List<BloodTestViewModel> getBasicBloodTypingTests() {
-    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
-      tests.add(new BloodTestViewModel(rawBloodTest));
+  private List<BloodTestFullViewModel> getBasicBloodTypingTests() {
+    List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
+    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
+      tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;
   }
 
-  private List<BloodTestViewModel> getAdvancedBloodTypingTests() {
-    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING)) {
-      tests.add(new BloodTestViewModel(rawBloodTest));
+  private List<BloodTestFullViewModel> getAdvancedBloodTypingTests() {
+    List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
+    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING)) {
+      tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;
   }
 
-  public List<BloodTestViewModel> getRepeatBloodTypingTests() {
-    List<BloodTestViewModel> tests = new ArrayList<BloodTestViewModel>();
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
-      tests.add(new BloodTestViewModel(rawBloodTest));
+  public List<BloodTestFullViewModel> getRepeatBloodTypingTests() {
+    List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
+    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
+      tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;
   }
