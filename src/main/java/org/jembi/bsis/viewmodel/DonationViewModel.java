@@ -7,8 +7,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.utils.CustomDateFormatter;
 
 public class DonationViewModel extends BaseViewModel {

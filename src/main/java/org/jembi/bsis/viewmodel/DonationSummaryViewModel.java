@@ -3,8 +3,8 @@ package org.jembi.bsis.viewmodel;
 import java.util.Date;
 
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

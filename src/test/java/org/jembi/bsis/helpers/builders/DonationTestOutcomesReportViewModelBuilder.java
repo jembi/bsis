@@ -3,7 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import java.util.Map;
 
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
 
 public class DonationTestOutcomesReportViewModelBuilder extends AbstractBuilder<DonationTestOutcomesReportViewModel> {
