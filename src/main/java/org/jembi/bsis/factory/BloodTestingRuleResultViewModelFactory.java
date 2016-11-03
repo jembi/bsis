@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
+import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
 import org.jembi.bsis.service.BloodTestResultConstraintChecker;
 import org.jembi.bsis.service.DonationConstraintChecker;
 import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
