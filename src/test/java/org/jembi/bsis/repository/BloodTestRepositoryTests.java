@@ -21,13 +21,11 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
 
   @Test
   public void testFindActiveBloodTests_shouldReturnActiveBloodTests() {
-    // active tests
-    BloodTest ttiTest = aBasicTTIBloodTest().withTestName("TTI").withTestNameShort("tti").buildAndPersist(entityManager);
-    BloodTest aboTest = aBasicBloodTypingBloodTest().withTestName("ABO").withTestNameShort("abo").buildAndPersist(entityManager);
-    // inactive test
-    aBloodTest().thatIsInActive().withTestName("Inactive").withTestNameShort("inact").buildAndPersist(entityManager);
-    // deleted test
-    aBloodTest().thatIsDeleted().withTestName("Deleted").withTestNameShort("del").buildAndPersist(entityManager);
+    // Set up data
+    BloodTest ttiTest = aBasicTTIBloodTest().buildAndPersist(entityManager);
+    BloodTest aboTest = aBasicBloodTypingBloodTest().buildAndPersist(entityManager);
+    aBloodTest().thatIsInActive().buildAndPersist(entityManager);
+    aBloodTest().thatIsDeleted().buildAndPersist(entityManager);
     
     // Test
     List<BloodTest> activeBloodTests = bloodTestRepository.findActiveBloodTests();
@@ -40,13 +38,11 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
 
   @Test
   public void testGetAllBloodTestsIncludeInactive_shouldReturnAllBloodTests() {
-    // active tests
-    BloodTest ttiTest = aBasicTTIBloodTest().withTestName("TTI").withTestNameShort("tti").buildAndPersist(entityManager);
-    BloodTest aboTest = aBasicBloodTypingBloodTest().withTestName("ABO").withTestNameShort("abo").buildAndPersist(entityManager);
-    // inactive test
-    BloodTest inactiveTest = aBloodTest().thatIsInActive().withTestName("Inactive").withTestNameShort("inact").buildAndPersist(entityManager);
-    // deleted test
-    BloodTest deletedTest = aBloodTest().thatIsDeleted().withTestName("Deleted").withTestNameShort("del").buildAndPersist(entityManager);
+    // Set up data
+    BloodTest ttiTest = aBasicTTIBloodTest().buildAndPersist(entityManager);
+    BloodTest aboTest = aBasicBloodTypingBloodTest().buildAndPersist(entityManager);
+    BloodTest inactiveTest = aBloodTest().thatIsInActive().buildAndPersist(entityManager);
+    BloodTest deletedTest = aBloodTest().thatIsDeleted().buildAndPersist(entityManager);
     
     // Test
     List<BloodTest> activeBloodTests = bloodTestRepository.getAllBloodTestsIncludeInactive();

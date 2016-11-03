@@ -5,18 +5,21 @@ import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
 public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
+  
+  // static counter that is used to create a unique default test name
+  private static int UNIQUE_INCREMENT = 0;
 
   private Long id;
   private BloodTestCategory bloodTestCategory;
   private BloodTestType bloodTestType;
   private String positiveResults;
   private String negativeResults;
-  private boolean flagComponentsForDiscard;
-  private boolean flagComponentsContainingPlasmaForDiscard;
+  private boolean flagComponentsForDiscard = false;
+  private boolean flagComponentsContainingPlasmaForDiscard = false;
   private String validResults;
   private Boolean isEmptyAllowed;
-  private String testName;
-  private String testNameShort;
+  private String testName = "test " + ++UNIQUE_INCREMENT;
+  private String testNameShort = "t";
   private Integer rankInCategory;
   private Boolean isDeleted = Boolean.FALSE;
   private Boolean isActive = Boolean.TRUE;

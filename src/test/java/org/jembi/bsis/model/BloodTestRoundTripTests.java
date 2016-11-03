@@ -16,12 +16,12 @@ public class BloodTestRoundTripTests extends ContextDependentTestSuite {
 
   @Test(expected = PersistenceException.class)
   public void testPersistBloodTestWithNoTestName_shouldThrow() {
-    aBloodTest().withTestNameShort("t1").buildAndPersist(entityManager);
+    aBloodTest().withTestName(null).withTestNameShort("t1").buildAndPersist(entityManager);
   }
 
   @Test(expected = PersistenceException.class)
   public void testPersistBloodTestWithNoTestNameShort_shouldThrow() {
-    aBloodTest().withTestName("test").buildAndPersist(entityManager);
+    aBloodTest().withTestName("test").withTestNameShort(null).buildAndPersist(entityManager);
   }
 
   @Test(expected = PersistenceException.class)
