@@ -30,6 +30,7 @@ import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.repository.bloodtesting.*;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;

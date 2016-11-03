@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.jembi.bsis.factory.BloodTestFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;

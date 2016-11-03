@@ -15,7 +15,7 @@ import org.jembi.bsis.backingform.TestResultsBackingForms;
 import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.helpers.builders.TestResultsBackingFormBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
-import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
