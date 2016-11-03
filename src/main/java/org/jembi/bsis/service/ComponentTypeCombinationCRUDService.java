@@ -1,5 +1,8 @@
 package org.jembi.bsis.service;
 
+import java.util.Set;
+
+import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,14 @@ public class ComponentTypeCombinationCRUDService {
 
     ComponentTypeCombination existingCombination = componentTypeCombinationRepository
         .findComponentTypeCombinationById(componentTypeCombination.getId());
+
+    // Manually remove combination orphans from source component types
+    Set<ComponentType> sourceComponentTypes = existingCombination.getSourceComponentTypes();
+    for (ComponentType existingType : sourceComponentTypes) {
+      if (!componentTypeCombination.getSourceComponentTypes().contains(existingType)) {
+        existingType.getProducedComponentTypeCombinations().remove(existingCombination);
+      }
+    }
         
     existingCombination.setCombinationName(componentTypeCombination.getCombinationName());
     existingCombination.setComponentTypes(componentTypeCombination.getComponentTypes());

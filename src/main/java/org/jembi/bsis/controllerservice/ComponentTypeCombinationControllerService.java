@@ -40,8 +40,9 @@ public class ComponentTypeCombinationControllerService {
     return componentTypeCombinationFactory.createViewModels(componentTypeCombinationRepository.getAllComponentTypeCombinations(includeDeleted));
   }
 
-  public ComponentTypeCombinationViewModel findComponentTypeCombinationById(long id){
-    return  componentTypeCombinationFactory.createViewModel(componentTypeCombinationRepository.findComponentTypeCombinationById(id));
+  public ComponentTypeCombinationFullViewModel findComponentTypeCombinationById(long id){
+    return componentTypeCombinationFactory.createFullViewModel
+        (componentTypeCombinationRepository.findComponentTypeCombinationById(id));
   }
 
   public List<ComponentTypeViewModel> getAllComponentTypes() {
