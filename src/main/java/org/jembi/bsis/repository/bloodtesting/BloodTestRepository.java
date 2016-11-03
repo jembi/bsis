@@ -3,10 +3,6 @@ package org.jembi.bsis.repository.bloodtesting;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
@@ -17,9 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class BloodTestRepository extends AbstractRepository<BloodTest> {
-
-  @PersistenceContext
-  private EntityManager em;
 
   public List<BloodTest> getBloodTypingTests() {
     return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_CATEGORY, BloodTest.class)
@@ -42,7 +35,7 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
   }
   
   public boolean isUniqueTestName(Long id, String testName) {
-    return em.createQuery("SELECT count(b) = 0 " +
+    return entityManager.createQuery("SELECT count(b) = 0 " +
         "FROM BloodTest b " +
         "WHERE b.testName = :testName " +
         " AND (:id is null OR b.id != :id) ", Boolean.class)
@@ -59,9 +52,8 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
   }
 
   public BloodTest findBloodTestById(Long bloodTestId) {
-    String queryStr = "SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("bloodTestId", bloodTestId);
-    return query.getSingleResult();
+    return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_FIND_BLOOD_TEST_BY_ID, BloodTest.class)
+        .setParameter("bloodTestId", bloodTestId)
+        .getSingleResult();
   }
 }

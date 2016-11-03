@@ -24,5 +24,11 @@ public class BloodTestNamedQueryConstants {
       "SELECT b FROM BloodTest b "
       + "WHERE (:includeDeleted = TRUE OR b.isDeleted = FALSE) "
       + "AND (:includeInactive = TRUE OR b.isActive = TRUE)";
+
+  public static final String NAME_FIND_BLOOD_TEST_BY_ID =
+      "BloodTest.findBloodTestById";
+  public static final String QUERY_FIND_BLOOD_TEST_BY_ID =
+      "SELECT bt FROM BloodTest bt WHERE bt.id=:bloodTestId";
+
   
 }

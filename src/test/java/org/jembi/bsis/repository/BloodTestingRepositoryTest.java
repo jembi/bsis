@@ -15,7 +15,6 @@ import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
@@ -29,9 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Test using DBUnit to test the BloodTestingRepository
  */
 public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite {
-
-  @Autowired
-  BloodTestRepository bloodTestRepository;
 
   @Autowired
   BloodTestingRepository bloodTestingRepository;
