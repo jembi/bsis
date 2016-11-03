@@ -2,11 +2,12 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.matchers.BloodTestMatcher.hasSameStateAsBloodTest;
 import static org.jembi.bsis.helpers.matchers.BloodTestFullViewModelMatcher.hasSameStateAsBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.matchers.BloodTestMatcher.hasSameStateAsBloodTest;
 import static org.jembi.bsis.helpers.matchers.BloodTestViewModelMatcher.hasSameStateAsBloodTestViewModel;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
@@ -131,9 +132,9 @@ public class BloodTestFactoryTests extends UnitTestSuite {
         .withTestNameShort("Test Name Short") 
         .withCategory(BloodTestCategory.BLOODTYPING) 
         .withBloodTestType(BloodTestType.BASIC_BLOODTYPING) 
-        .withValidResults(Arrays.asList("POS","NEG","NT")) 
-        .withNegativeResults(Arrays.asList("NEG")) 
-        .withPositiveResults(Arrays.asList("POS")) 
+        .withValidResults(new LinkedHashSet<>(Arrays.asList("POS","NEG","NT"))) 
+        .withNegativeResults(new LinkedHashSet<>(Arrays.asList("NEG"))) 
+        .withPositiveResults(new LinkedHashSet<>(Arrays.asList("POS"))) 
         .thatIsNotActive() 
         .thatIsDeleted() 
         .thatShouldNotFlagComponentsContainingPlasmaForDiscard() 

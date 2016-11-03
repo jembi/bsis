@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform;
 
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
@@ -17,11 +18,11 @@ public class BloodTestBackingForm {
   
   private BloodTestType bloodTestType;
   
-  private List<String> validResults;
+  private LinkedHashSet<String> validResults;
   
-  private List<String> negativeResults;
+  private LinkedHashSet<String> negativeResults;
   
-  private List<String> positiveResults;
+  private LinkedHashSet<String> positiveResults;
   
   private Boolean isActive;
   
@@ -55,27 +56,27 @@ public class BloodTestBackingForm {
     this.testName = testName;
   }
 
-  public List<String> getValidResults() {
+  public LinkedHashSet<String> getValidResults() {
     return validResults;
   }
 
-  public void setValidResults(List<String> validResults) {
+  public void setValidResults(LinkedHashSet<String> validResults) {
     this.validResults = validResults;
   }
 
-  public List<String> getNegativeResults() {
+  public Set<String> getNegativeResults() {
     return negativeResults;
   }
 
-  public void setNegativeResults(List<String> negativeResults) {
+  public void setNegativeResults(LinkedHashSet<String> negativeResults) {
     this.negativeResults = negativeResults;
   }
 
-  public List<String> getPositiveResults() {
+  public LinkedHashSet<String> getPositiveResults() {
     return positiveResults;
   }
 
-  public void setPositiveResults(List<String> positiveResults) {
+  public void setPositiveResults(LinkedHashSet<String> positiveResults) {
     this.positiveResults = positiveResults;
   }
 

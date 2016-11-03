@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -26,7 +27,11 @@ public class ComponentTypeCombinationRepository extends AbstractRepository<Compo
   }   
 
   public ComponentTypeCombination findComponentTypeCombinationById(long id) {
-    return em.find(ComponentTypeCombination.class, id);
+    ComponentTypeCombination combination = em.find(ComponentTypeCombination.class, id);
+    if (combination == null) {
+      throw new NoResultException();
+    }
+    return combination;
   }
 
   public boolean isUniqueCombinationName(Long id, String combinationName) {
