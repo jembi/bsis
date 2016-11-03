@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
+import org.jembi.bsis.model.donation.TTIStatus;
 
 public class DonationExportDTO extends ModificationTrackerExportDTO {
 

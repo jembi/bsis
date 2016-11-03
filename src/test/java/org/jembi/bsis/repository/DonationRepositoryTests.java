@@ -20,11 +20,11 @@ import java.util.List;
 
 import org.jembi.bsis.dto.CollectedDonationDTO;
 import org.jembi.bsis.dto.DonationExportDTO;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;

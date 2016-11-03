@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
+import org.jembi.bsis.model.donation.TTIStatus;
 
 public class DonationTestOutcomesReportViewModel {
   

@@ -11,8 +11,8 @@ import org.jembi.bsis.dto.BloodTestResultExportDTO;
 import org.jembi.bsis.dto.BloodTestTotalDTO;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.springframework.stereotype.Repository;
 
 @Repository
