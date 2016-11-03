@@ -21,11 +21,11 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
   @PersistenceContext
   private EntityManager em;
 
-  // FIXME: This query doesn't take into account active but deleted tests
   public List<BloodTest> getBloodTypingTests() {
     return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_CATEGORY, BloodTest.class)
         .setParameter("category", BloodTestCategory.BLOODTYPING)
         .setParameter("isActive", true)
+        .setParameter("isDeleted", false)
         .getResultList();
   }
 
@@ -33,11 +33,11 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
     return getBloodTestsOfTypes(Arrays.asList(type));
   }
 
-  // FIXME: This query doesn't take into account deleted but active tests
   private List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
     return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_TYPE, BloodTest.class)
         .setParameter("types", types)
         .setParameter("isActive", true)
+        .setParameter("isDeleted", false)
         .getResultList();
   }
   

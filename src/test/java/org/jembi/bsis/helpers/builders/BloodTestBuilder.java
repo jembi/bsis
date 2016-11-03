@@ -151,7 +151,7 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
       .withBloodTestType(BloodTestType.BASIC_BLOODTYPING);
   }
 
-  public static BloodTestBuilder aRepeatBloodTypingBloodTestViewModel() {
+  public static BloodTestBuilder aRepeatBloodTypingBloodTest() {
     return new BloodTestBuilder()
       .withCategory(BloodTestCategory.BLOODTYPING)
       .withBloodTestType(BloodTestType.REPEAT_BLOODTYPING);

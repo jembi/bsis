@@ -3,12 +3,14 @@ package org.jembi.bsis.repository;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicBloodTypingBloodTest;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aRepeatBloodTypingBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicTTIBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 
 import java.util.List;
 
 import org.jembi.bsis.model.bloodtesting.BloodTest;
+import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.repository.bloodtesting.BloodTestRepository;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.junit.Test;
@@ -18,6 +20,43 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
   
   @Autowired
   private BloodTestRepository bloodTestRepository;
+
+  @Test
+  public void testGetBloodTypingTests_shouldReturnCorrectBloodTests() {
+    // Set up data
+    BloodTest aboTest = aBasicBloodTypingBloodTest().buildAndPersist(entityManager);
+    BloodTest repeatAboTest = aRepeatBloodTypingBloodTest().buildAndPersist(entityManager);
+    aBasicTTIBloodTest().buildAndPersist(entityManager); // excluded by type
+    aBasicBloodTypingBloodTest().thatIsInActive().buildAndPersist(entityManager); // excluded by inactive
+    aBasicBloodTypingBloodTest().thatIsDeleted().buildAndPersist(entityManager); // excluded by deleted
+
+    // Test
+    List<BloodTest> bloodTypingTests = bloodTestRepository.getBloodTypingTests();
+
+    // Verify
+    assertThat("2 tests returned", bloodTypingTests.size(), is(2));
+    assertThat("aboTest is returned", bloodTypingTests.contains(aboTest));
+    assertThat("repeatAboTest is returned", bloodTypingTests.contains(repeatAboTest));
+  }
+
+  @Test
+  public void testGetBloodTestsOfType_shouldReturnCorrectBloodTests() {
+    // Set up data
+    BloodTest aboTest = aBasicBloodTypingBloodTest().buildAndPersist(entityManager);
+    BloodTest rhTest = aBasicBloodTypingBloodTest().buildAndPersist(entityManager);
+    aRepeatBloodTypingBloodTest().buildAndPersist(entityManager); // excluded by type
+    aBasicTTIBloodTest().buildAndPersist(entityManager); // excluded by type
+    aBasicBloodTypingBloodTest().thatIsInActive().buildAndPersist(entityManager); // excluded by inactive
+    aBasicBloodTypingBloodTest().thatIsDeleted().buildAndPersist(entityManager); // excluded by deleted
+
+    // Test
+    List<BloodTest> basicBloodTypingTests = bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
+
+    // Verify
+    assertThat("2 tests returned", basicBloodTypingTests.size(), is(2));
+    assertThat("aboTest is returned", basicBloodTypingTests.contains(aboTest));
+    assertThat("rhTest is returned", basicBloodTypingTests.contains(rhTest));
+  }
 
   @Test
   public void testGetBloodTestsThatAreActiveAndNotDeleted_shouldReturnCorrectBloodTests() {
