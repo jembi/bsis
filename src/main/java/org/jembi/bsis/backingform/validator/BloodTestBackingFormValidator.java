@@ -15,7 +15,7 @@ import org.springframework.validation.Errors;
 public class BloodTestBackingFormValidator extends BaseValidator<BloodTest> {
 
   private static final Integer MAX_TEST_NAME_LENGTH_NAME = 40;
-  private static final Integer MAX_TEST__NAME_SHORT_LENGTH_NAME = 25;
+  private static final Integer MAX_TEST_NAME_SHORT_LENGTH_NAME = 25;
   
   @Autowired
   private BloodTestRepository bloodTestRepository;
@@ -37,9 +37,9 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTest> {
     //  validate testNameShort
     if (StringUtils.isBlank(form.getTestNameShort())) {
       errors.rejectValue("testNameShort", "errors.required", "Test name short is required");
-    } else if (form.getTestName().length() > MAX_TEST__NAME_SHORT_LENGTH_NAME) {
+    } else if (form.getTestName().length() > MAX_TEST_NAME_SHORT_LENGTH_NAME) {
       errors.rejectValue("testNameShort", "errors.fieldLength",
-          "Maximum length for this field is " + MAX_TEST__NAME_SHORT_LENGTH_NAME);
+          "Maximum length for this field is " + MAX_TEST_NAME_SHORT_LENGTH_NAME);
     }
     
     
