@@ -61,7 +61,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.getBloodTests(false, false)).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);
@@ -94,7 +94,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.getBloodTests(false, false)).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);
@@ -128,7 +128,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.getBloodTests(false, false)).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);
@@ -160,7 +160,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.getBloodTests(false, false)).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);
@@ -193,7 +193,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.getBloodTests(false, false)).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);
@@ -223,7 +223,7 @@ public class TestResultsBackingFormsValidatorTest {
     testResultsBackingForms.setTestOutcomesForDonations(testOutcomesForDonations);
 
     // set up mocks
-    when(bloodTestRepository.findActiveBloodTests()).thenReturn(tests);
+    when(bloodTestRepository.getBloodTests(false, false)).thenReturn(tests);
     when(entityManager.createQuery("SELECT b FROM BloodTest b WHERE b.isActive = :isActive ", BloodTest.class)).thenReturn(typedQuery);
     when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(tests);

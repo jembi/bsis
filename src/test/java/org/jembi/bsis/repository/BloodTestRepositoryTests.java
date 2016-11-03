@@ -20,7 +20,7 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
   private BloodTestRepository bloodTestRepository;
 
   @Test
-  public void testFindActiveBloodTests_shouldReturnActiveBloodTests() {
+  public void testGetBloodTestsThatAreActiveAndNotDeleted_shouldReturnCorrectBloodTests() {
     // Set up data
     BloodTest ttiTest = aBasicTTIBloodTest().buildAndPersist(entityManager);
     BloodTest aboTest = aBasicBloodTypingBloodTest().buildAndPersist(entityManager);
@@ -28,7 +28,7 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
     aBloodTest().thatIsDeleted().buildAndPersist(entityManager);
     
     // Test
-    List<BloodTest> activeBloodTests = bloodTestRepository.findActiveBloodTests();
+    List<BloodTest> activeBloodTests = bloodTestRepository.getBloodTests(false, false);
 
     // Verify
     assertThat("2 tests returned", activeBloodTests.size(), is(2));
@@ -37,7 +37,7 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void testGetAllBloodTestsIncludeInactive_shouldReturnAllBloodTests() {
+  public void testGetBloodTestsIncludeInactiveAndDeleted_shouldReturnAllBloodTests() {
     // Set up data
     BloodTest ttiTest = aBasicTTIBloodTest().buildAndPersist(entityManager);
     BloodTest aboTest = aBasicBloodTypingBloodTest().buildAndPersist(entityManager);
@@ -45,13 +45,49 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
     BloodTest deletedTest = aBloodTest().thatIsDeleted().buildAndPersist(entityManager);
     
     // Test
-    List<BloodTest> activeBloodTests = bloodTestRepository.getAllBloodTestsIncludeInactive();
+    List<BloodTest> activeBloodTests = bloodTestRepository.getBloodTests(true, true);
 
     // Verify
     assertThat("4 tests returned", activeBloodTests.size(), is(4));
     assertThat("ttiTest is returned", activeBloodTests.contains(ttiTest));
     assertThat("aboTest is returned", activeBloodTests.contains(aboTest));
     assertThat("inactiveTest is returned", activeBloodTests.contains(inactiveTest));
+    assertThat("deletedTest is returned", activeBloodTests.contains(deletedTest));
+  }
+
+  @Test
+  public void testGetBloodTestsIncludeInactiveButNotDeleted_shouldAllNotDeletedBloodTests() {
+    // Set up data
+    BloodTest ttiTest = aBasicTTIBloodTest().buildAndPersist(entityManager);
+    BloodTest aboTest = aBasicBloodTypingBloodTest().buildAndPersist(entityManager);
+    BloodTest inactiveTest = aBloodTest().thatIsInActive().buildAndPersist(entityManager);
+    aBloodTest().thatIsDeleted().buildAndPersist(entityManager);
+    
+    // Test
+    List<BloodTest> activeBloodTests = bloodTestRepository.getBloodTests(true, false);
+
+    // Verify
+    assertThat("3 tests returned", activeBloodTests.size(), is(3));
+    assertThat("ttiTest is returned", activeBloodTests.contains(ttiTest));
+    assertThat("aboTest is returned", activeBloodTests.contains(aboTest));
+    assertThat("inactiveTest is returned", activeBloodTests.contains(inactiveTest));
+  }
+
+  @Test
+  public void testGetBloodTestsIncludeDeletedButNotInactive_shouldAllNotDeletedBloodTests() {
+    // Set up data
+    BloodTest ttiTest = aBasicTTIBloodTest().buildAndPersist(entityManager);
+    BloodTest aboTest = aBasicBloodTypingBloodTest().buildAndPersist(entityManager);
+    aBloodTest().thatIsInActive().buildAndPersist(entityManager);
+    BloodTest deletedTest = aBloodTest().thatIsDeleted().buildAndPersist(entityManager);
+    
+    // Test
+    List<BloodTest> activeBloodTests = bloodTestRepository.getBloodTests(false, true);
+
+    // Verify
+    assertThat("3 tests returned", activeBloodTests.size(), is(3));
+    assertThat("ttiTest is returned", activeBloodTests.contains(ttiTest));
+    assertThat("aboTest is returned", activeBloodTests.contains(aboTest));
     assertThat("deletedTest is returned", activeBloodTests.contains(deletedTest));
   }
   

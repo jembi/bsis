@@ -1236,7 +1236,7 @@ public class DataImportService {
 
   private Map<String, BloodTest> buildBloodTestCache() {
     Map <String, BloodTest> bloodTestCache = new HashMap<>();
-    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTestsIncludeInactive();
+    List<BloodTest> bloodTests = bloodTestRepository.getBloodTests(true, true);
     for (BloodTest bloodTest : bloodTests) {
       bloodTestCache.put(bloodTest.getTestName(), bloodTest);
     }

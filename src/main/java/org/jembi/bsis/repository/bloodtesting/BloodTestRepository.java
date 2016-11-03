@@ -40,13 +40,6 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
         .setParameter("isActive", true)
         .getResultList();
   }
-
-  public List<BloodTest> findActiveBloodTests() {
-    return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_GET_ACTIVE_NOT_DELETED_BLOOD_TESTS, BloodTest.class)
-        .setParameter("isActive", true)
-        .setParameter("isDeleted", false)
-        .getResultList();
-  }
   
   public boolean isUniqueTestName(Long id, String testName) {
     // passing null as the ID parameter does not work because the IDs in mysql are never null. So if
@@ -62,8 +55,10 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
   }
 
   // FIXME: this method should be renamed/refactored because it returns all inactive and deleted blood tests
-  public List<BloodTest> getAllBloodTestsIncludeInactive() {   
-    return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_GET_ALL_BLOOD_TESTS, BloodTest.class)
+  public List<BloodTest> getBloodTests(boolean includeInactive, boolean includeDeleted) {   
+    return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS, BloodTest.class)
+        .setParameter("includeInactive", includeInactive)
+        .setParameter("includeDeleted", includeDeleted)
         .getResultList();
   }
 

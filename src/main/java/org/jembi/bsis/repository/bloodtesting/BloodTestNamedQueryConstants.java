@@ -16,16 +16,11 @@ public class BloodTestNamedQueryConstants {
       + "WHERE b.bloodTestType IN (:types) "
       + "AND b.isActive = :isActive";
 
-  public static final String NAME_GET_ACTIVE_NOT_DELETED_BLOOD_TESTS = 
-      "BloodTest.getActiveNotDeletedBloodTests";
-  public static final String QUERY_GET_ACTIVE_NOT_DELETED_BLOOD_TESTS =
+  public static final String NAME_GET_BLOOD_TESTS = 
+      "BloodTest.getBloodTests";
+  public static final String QUERY_GET_BLOOD_TESTS =
       "SELECT b FROM BloodTest b "
-      + "WHERE b.isActive = :isActive "
-      + "AND b.isDeleted = :isDeleted";
-
-  public static final String NAME_GET_ALL_BLOOD_TESTS = 
-      "BloodTest.getAllBloodTests";
-  public static final String QUERY_GET_ALL_BLOOD_TESTS =
-      "SELECT b FROM BloodTest b";   
+      + "WHERE (:includeDeleted = TRUE OR b.isDeleted = FALSE) "
+      + "AND (:includeInactive = TRUE OR b.isActive = TRUE)";
   
 }

@@ -33,7 +33,7 @@ public class BloodTestControllerService {
   private BloodTestCRUDService bloodTestCRUDService;
 
   public List<BloodTestViewModel> getAllBloodTests() {
-    List<BloodTest> bloodTests = bloodTestRepository.getAllBloodTestsIncludeInactive();
+    List<BloodTest> bloodTests = bloodTestRepository.getBloodTests(true, true);
     return bloodTestFactory.createViewModels(bloodTests);
   }
 

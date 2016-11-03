@@ -37,7 +37,7 @@ public class TestResultsBackingFormsValidator extends BaseValidator<TestResultsB
      * Build a map of active blood test ids to the active blood tests.
      */
     Map<String, BloodTest> activeBloodTestsMap = new HashMap<>();
-    for (BloodTest bloodTypingTest : bloodTestRepository.findActiveBloodTests()) {
+    for (BloodTest bloodTypingTest : bloodTestRepository.getBloodTests(false, false)) {
       activeBloodTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
     }
 

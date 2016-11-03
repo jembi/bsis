@@ -28,11 +28,8 @@ import org.jembi.bsis.repository.bloodtesting.BloodTestNamedQueryConstants;
       name = BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_TYPE,
       query = BloodTestNamedQueryConstants.QUERY_GET_BLOOD_TESTS_BY_TYPE),
   @NamedQuery(
-      name = BloodTestNamedQueryConstants.NAME_GET_ACTIVE_NOT_DELETED_BLOOD_TESTS,
-      query = BloodTestNamedQueryConstants.QUERY_GET_ACTIVE_NOT_DELETED_BLOOD_TESTS),
-    @NamedQuery(
-        name = BloodTestNamedQueryConstants.NAME_GET_ALL_BLOOD_TESTS,
-        query = BloodTestNamedQueryConstants.QUERY_GET_ALL_BLOOD_TESTS)
+        name = BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS,
+        query = BloodTestNamedQueryConstants.QUERY_GET_BLOOD_TESTS)
 })
 public class BloodTest extends BaseModificationTrackerEntity implements Comparable<BloodTest> {
 
