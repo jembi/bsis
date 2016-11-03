@@ -25,8 +25,8 @@ import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.service.BloodTestsService;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
+import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,22 +96,10 @@ public class TestResultController {
       value = "testBatch", required = true) Long testBatchId,
       @RequestParam(value = "bloodTestType", required = false) BloodTestType bloodTestType) {
 
-    Map<String, Object> map = new HashMap<String, Object>();
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-    Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
-    List<Long> donationBatchIds = new ArrayList<Long>();
-    for (DonationBatch donationBatch : donationBatches) {
-      donationBatchIds.add(donationBatch.getId());
-    }
+    List<BloodTestingRuleResult> ruleResults = getBloodTestingRuleResults(bloodTestType, testBatch);
 
-    List<BloodTestingRuleResult> ruleResults;
-    if (bloodTestType == null) {
-      ruleResults = bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
-    } else {
-      ruleResults =
-          bloodTestingRepository.getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, bloodTestType);
-    }
-
+    Map<String, Object> map = new HashMap<String, Object>();
     map.put("testResults", ruleResults);
     map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatch.getCreatedDate()));
 
@@ -138,14 +126,31 @@ public class TestResultController {
       @RequestParam(value = "testBatch", required = true) Long testBatchId) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+    List<BloodTestingRuleResult> ruleResults = getBloodTestingRuleResults(testBatch);
+    Map<String, Object> map =
+        calculateOverviewFlags(ruleResults);
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
+  protected List<BloodTestingRuleResult> getBloodTestingRuleResults(TestBatch testBatch) {
+    return getBloodTestingRuleResults(null, testBatch);
+  }
+
+  protected List<BloodTestingRuleResult> getBloodTestingRuleResults(BloodTestType bloodTestType, TestBatch testBatch) {
     Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     List<Long> donationBatchIds = new ArrayList<Long>();
     for (DonationBatch donationBatch : donationBatches) {
       donationBatchIds.add(donationBatch.getId());
     }
-    Map<String, Object> map =
-        calculateOverviewFlags(bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds));
-    return new ResponseEntity<>(map, HttpStatus.OK);
+
+    List<BloodTestingRuleResult> ruleResults;
+    if (bloodTestType == null) {
+      ruleResults = bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
+    } else {
+      ruleResults =
+          bloodTestingRepository.getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, bloodTestType);
+    }
+    return ruleResults;
   }
 
   private Map<String, Object> calculateOverviewFlags(List<BloodTestingRuleResult> ruleResults) {
@@ -162,6 +167,7 @@ public class TestResultController {
     overviewFlags.put("hasPendingRepeatTTITests", false);
     overviewFlags.put("hasPendingConfirmatoryTTITests", false);
     overviewFlags.put("hasPendingRepeatBloodTypingTests", false);
+    overviewFlags.put("hasPendingBloodTypingConfirmations", false);
 
     for (BloodTestingRuleResult result : ruleResults) {
 

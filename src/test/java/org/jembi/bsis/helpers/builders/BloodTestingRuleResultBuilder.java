@@ -2,11 +2,13 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
+import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 
 public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingRuleResult> {
@@ -18,7 +20,11 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
   private BloodTypingMatchStatus bloodTypingMatchStatus;
   private List<String> pendingRepeatAndConfirmatoryTtiTestsIds;
   private Set<String> extraInformation;
-
+  private Map<String, BloodTestResultViewModel> recentTestResults;
+  private List<String> pendingBloodTypingTestsIds;
+  private List<String> pendingConfirmatoryTTITestsIds;
+  private List<String> pendingRepeatTTITestsIds;
+ 
   public BloodTestingRuleResultBuilder withBloodAbo(String bloodAbo) {
     this.bloodAbo = bloodAbo;
     return this;
@@ -38,13 +44,19 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
     this.bloodTypingStatus = bloodTypingStatus;
     return this;
   }
-
+  
   public BloodTestingRuleResultBuilder withPendingRepeatAndConfirmatoryTtiTestsIds(
       String pendingRepeatAndConfirmatoryTtiTestsId) {
     if (pendingRepeatAndConfirmatoryTtiTestsIds == null) {
       pendingRepeatAndConfirmatoryTtiTestsIds = new ArrayList<String>();
     }
     pendingRepeatAndConfirmatoryTtiTestsIds.add(pendingRepeatAndConfirmatoryTtiTestsId);
+    return this;
+  }
+
+  public BloodTestingRuleResultBuilder withPendingRepeatAndConfirmatoryTtiTestsIds(
+      List<String> pendingRepeatAndConfirmatoryTtiTestsIds) {
+    this.pendingRepeatAndConfirmatoryTtiTestsIds = pendingRepeatAndConfirmatoryTtiTestsIds;
     return this;
   }
 
@@ -55,6 +67,26 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
 
   public BloodTestingRuleResultBuilder withExtraInformation(Set<String> extraInformation) {
     this.extraInformation = extraInformation;
+    return this;
+  }
+  
+  public BloodTestingRuleResultBuilder withRecentResults(Map<String, BloodTestResultViewModel> recentTestResults) {
+    this.recentTestResults = recentTestResults;
+    return this;
+  }
+  
+  public BloodTestingRuleResultBuilder withPendingBloodTypingTestsIds(List<String> pendingBloodTypingTestsIds) {
+    this.pendingBloodTypingTestsIds = pendingBloodTypingTestsIds;
+    return this;
+  }
+  
+  public BloodTestingRuleResultBuilder withPendingConfirmatoryTTITestsIds(List<String> pendingConfirmatoryTTITestsIds) {
+    this.pendingConfirmatoryTTITestsIds = pendingConfirmatoryTTITestsIds;
+    return this;
+  }
+  
+  public BloodTestingRuleResultBuilder withPendingRepeatTTITestsIds(List<String> pendingRepeatTTITestsIds) {
+    this.pendingRepeatTTITestsIds = pendingRepeatTTITestsIds;
     return this;
   }
 
@@ -68,6 +100,10 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
     bloodTestingRuleResult.setBloodTypingMatchStatus(bloodTypingMatchStatus);
     bloodTestingRuleResult.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingRepeatAndConfirmatoryTtiTestsIds);
     bloodTestingRuleResult.setExtraInformation(extraInformation);
+    bloodTestingRuleResult.setRecentTestResults(recentTestResults);
+    bloodTestingRuleResult.setPendingBloodTypingTestsIds(pendingBloodTypingTestsIds);
+    bloodTestingRuleResult.setPendingConfirmatoryTTITestsIds(pendingConfirmatoryTTITestsIds);
+    bloodTestingRuleResult.setPendingRepeatTTITestsIds(pendingRepeatTTITestsIds);
     return bloodTestingRuleResult;
   }
 
