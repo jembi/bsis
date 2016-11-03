@@ -16,7 +16,7 @@ import javax.persistence.NamedQuery;
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.worksheet.WorksheetType;
-import org.jembi.bsis.repository.bloodtesting.BloodTestNamedQueryConstants;
+import org.jembi.bsis.repository.constant.BloodTestNamedQueryConstants;
 
 @Entity
 @Audited

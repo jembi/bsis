@@ -1,4 +1,4 @@
-package org.jembi.bsis.repository.bloodtesting;
+package org.jembi.bsis.repository.constant;
 
 public class BloodTestNamedQueryConstants {
 
