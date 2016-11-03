@@ -11,7 +11,6 @@ import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.repository.BloodTestRepository;
-import org.jembi.bsis.repository.FormFieldRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,9 +26,6 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   
   @Mock
   private BloodTestRepository bloodTestRepository;
-
-  @Mock
-  private FormFieldRepository formFieldRepository;
 
   @Test
   public void testValidateValidForm_shouldHaveNoErrors() {
