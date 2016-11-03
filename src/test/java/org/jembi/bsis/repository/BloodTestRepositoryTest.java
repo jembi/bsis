@@ -25,11 +25,11 @@ public class BloodTestRepositoryTest extends DBUnitContextDependentTestSuite {
   @Autowired
   DonationRepository donationRepository;
     
-    @Override
-    protected IDataSet getDataSet() throws Exception {
-        File file = new File("src/test/resources/dataset/BloodTestingRepositoryDataset.xml");
-        return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
-    }
+  @Override
+  protected IDataSet getDataSet() throws Exception {
+      File file = new File("src/test/resources/dataset/BloodTestRepositoryDataset.xml");
+      return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
+  }
 
   @Test
   public void testGetBloodTypingTests() throws Exception {

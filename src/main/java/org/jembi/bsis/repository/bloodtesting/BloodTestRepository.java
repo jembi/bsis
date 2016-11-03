@@ -58,4 +58,11 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
     List<BloodTest> bloodTests = query.getResultList();
     return bloodTests;
   }
+
+  public BloodTest findBloodTestById(Long bloodTestId) {
+    String queryStr = "SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId";
+    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
+    query.setParameter("bloodTestId", bloodTestId);
+    return query.getSingleResult();
+  }
 }
