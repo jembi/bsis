@@ -7,11 +7,7 @@ import static org.jembi.bsis.helpers.matchers.BloodTestingRuleMatcher.hasSameSta
 
 import java.util.List;
 
-import org.jembi.bsis.helpers.builders.BloodTestBuilder;
-import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
-import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,50 +18,27 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
   private BloodTestingRuleRepository bloodTestingRuleRepository;
   
   @Test
-  public void tesGetBloodTestingRules_shouldReturnActive() {
+  public void tesGetBloodTestingRules_shouldReturnEnabled() {
     
-    BloodTestingRule activeRule = aBloodTestingRule()
-        .withBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withTestName("test1").withTestNameShort("t1").build())
-        .withCategory(BloodTestCategory.BLOODTYPING)
-        .withSubCategory(BloodTestSubCategory.BLOODABO)
-        .withDonationFieldChange(DonationField.BLOODABO)
-        .withNewInformation("A")
-        .withPattern("A")
-        .withPendingTestsIds("2,3")
-        .buildAndPersist(entityManager);
-
-    // inactive rule excluded
-    aBloodTestingRule()
-        .thatIsDeleted()
-        .withBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withTestName("test2").withTestNameShort("t2").build())
-        .buildAndPersist(entityManager);
+    BloodTestingRule enabledRule = aBloodTestingRule().buildAndPersist(entityManager);
+    aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager); // excluded due to being deleted
 
     List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false);
 
-    assertThat("Only active rules returned", rules.size(), is(1));
-    assertThat("Only active rule returned", rules.get(0), hasSameStateAsBloodTestingRule(activeRule));
+    assertThat("Only enabled rules returned", rules.size(), is(1));
+    assertThat("Only enabled rule returned", rules.get(0), hasSameStateAsBloodTestingRule(enabledRule));
   }
 
   @Test
   public void tesGetBloodTestingRules_shouldReturnAll() {
     
-    aBloodTestingRule()
-        .withBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withTestName("test1").withTestNameShort("t1").build())
-        .withCategory(BloodTestCategory.BLOODTYPING)
-        .withSubCategory(BloodTestSubCategory.BLOODABO)
-        .withDonationFieldChange(DonationField.BLOODABO)
-        .withNewInformation("A")
-        .withPattern("A")
-        .withPendingTestsIds("2,3")
-        .buildAndPersist(entityManager);
-
-    aBloodTestingRule()
-        .withBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withTestName("test2").withTestNameShort("t2").build())
-        .thatIsDeleted()
-        .buildAndPersist(entityManager);
+    BloodTestingRule enabledRule = aBloodTestingRule().buildAndPersist(entityManager);
+    BloodTestingRule deletedRule = aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager);
 
     List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(true);
 
-    assertThat("Only active rules returned", rules.size(), is(2));
+    assertThat("All rules returned", rules.size(), is(2));
+    assertThat("Enabled rule returned", rules.get(0), hasSameStateAsBloodTestingRule(enabledRule));
+    assertThat("Deleted rule returned", rules.get(1), hasSameStateAsBloodTestingRule(deletedRule));
   }
 }
