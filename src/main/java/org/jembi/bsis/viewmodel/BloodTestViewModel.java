@@ -5,11 +5,16 @@ import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
 public class BloodTestViewModel extends BaseViewModel {
 
+  private String testName;
   private String testNameShort;
   private BloodTestCategory bloodTestCategory;
   private BloodTestType bloodTestType;
   private Boolean isActive;
   private Boolean isDeleted;
+
+  public String getTestName() {
+    return testName;
+  }
 
   public String getTestNameShort() {
     return testNameShort;
@@ -29,6 +34,10 @@ public class BloodTestViewModel extends BaseViewModel {
 
   public Boolean getIsDeleted() {
     return isDeleted;
+  }
+
+  public void setTestName(String testName) {
+    this.testName = testName;
   }
 
   public void setTestNameShort(String testNameShort) {
