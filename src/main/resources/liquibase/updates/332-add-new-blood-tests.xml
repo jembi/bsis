@@ -55,6 +55,7 @@
   <changeSet id="20161103-1414" author="lauravignoli">
     <comment>Remove isEmptyAllowed from BloodTest</comment>
     <dropColumn tableName="BloodTest" columnName="isEmptyAllowed"/>
+    <dropColumn tableName="BloodTest_AUD" columnName="isEmptyAllowed"/>
   </changeSet>
 
 </databaseChangeLog>
