@@ -42,14 +42,11 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
   }
   
   public boolean isUniqueTestName(Long id, String testName) {
-    // passing null as the ID parameter does not work because the IDs in mysql are never null. So if
-    // id is null, the below rather uses -1 which achieves the same result in the case of this
-    // query.
     return em.createQuery("SELECT count(b) = 0 " +
         "FROM BloodTest b " +
         "WHERE b.testName = :testName " +
-        "AND b.id != :id ", Boolean.class)
-        .setParameter("id", id != null ? id : -1L)
+        " AND (:id is null OR b.id != :id) ", Boolean.class)
+        .setParameter("id", id)
         .setParameter("testName", testName)
         .getSingleResult();
   }
