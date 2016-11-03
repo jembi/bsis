@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 
 public class BloodTestingRuleResult {

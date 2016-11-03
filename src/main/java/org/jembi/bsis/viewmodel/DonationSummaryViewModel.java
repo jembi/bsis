@@ -2,8 +2,8 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
 
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 

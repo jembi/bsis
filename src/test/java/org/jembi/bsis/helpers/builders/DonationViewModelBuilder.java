@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jembi.bsis.model.bloodtesting.TTIStatus;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;

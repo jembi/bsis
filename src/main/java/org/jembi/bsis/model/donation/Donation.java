@@ -42,7 +42,6 @@ import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.model.worksheet.Worksheet;
 import org.jembi.bsis.repository.DonationNamedQueryConstants;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
