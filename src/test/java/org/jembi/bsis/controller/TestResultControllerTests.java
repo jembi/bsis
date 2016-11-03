@@ -41,7 +41,6 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.springframework.http.ResponseEntity;
 
-
 public class TestResultControllerTests extends UnitTestSuite {
   @Spy
   @InjectMocks
@@ -50,7 +49,10 @@ public class TestResultControllerTests extends UnitTestSuite {
   private BloodTestingRepository bloodTestingRepository;
   @Mock
   private TestBatchRepository testBatchRepository;
-    
+
+  // TODO these testcases can be improved to have better and more descriptive names, and for the
+  // tests not to test too many logical combinations at the same time.
+
   @Test
   public void testFindTestResultsOverviewForTestBatchWithReEntryRequiredForTTITestsOnly_shouldReturnCorrectResults() {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
@@ -125,7 +127,7 @@ public class TestResultControllerTests extends UnitTestSuite {
   }
   
   @Test
-  public void testFindTestResultsOverviewForTestBatchWithReEntryRequiredForBasicAndRepeatTTITests_shouldReturnCorrectResults() {
+  public void testFindTestResultsOverviewForTestBatchWithMultipleRuleResultsWithReEntryRequiredForBasicAndRepeatTTITests_shouldReturnCorrectResults() {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
     Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
@@ -142,13 +144,13 @@ public class TestResultControllerTests extends UnitTestSuite {
     
     BloodTestFullViewModel basicTTIBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
         .withId(1L)
-        .withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
+        .withBloodTestType(BloodTestType.BASIC_TTI)
         .build();
     
     BloodTestResultViewModel basicTTIBloodTestResultViewModel = aBloodTestResultViewModel()
         .withId(1L)
         .withBloodTest(basicTTIBloodFullTestViewModel)
-        .withReEntryNotRequired()
+        .withReEntryRequired()
         .build();
             
     Map<String, BloodTestResultViewModel> recentTestResults1 = new HashMap<>();
@@ -162,7 +164,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     BloodTestResultViewModel repeatTTIBloodTestResultViewModel = aBloodTestResultViewModel()
         .withId(1L)
         .withBloodTest(repeatTTIBloodFullTestViewModel)
-        .withReEntryNotRequired()
+        .withReEntryRequired()
         .build();
             
     Map<String, BloodTestResultViewModel> recentTestResults2 = new HashMap<>();
@@ -190,11 +192,11 @@ public class TestResultControllerTests extends UnitTestSuite {
     
     // Expected Data.
     Map<String, Object> expectedOverviewFlags = new HashMap<String, Object>();
-    expectedOverviewFlags.put("hasReEntryRequiredTTITests", false);
+    expectedOverviewFlags.put("hasReEntryRequiredTTITests", true);
     expectedOverviewFlags.put("hasReEntryRequiredBloodTypingTests", false);
     expectedOverviewFlags.put("hasReEntryRequiredRepeatBloodTypingTests", false);
     expectedOverviewFlags.put("hasReEntryRequiredConfirmatoryTTITests", false);
-    expectedOverviewFlags.put("hasReEntryRequiredRepeatTTITests", false);
+    expectedOverviewFlags.put("hasReEntryRequiredRepeatTTITests", true);
     expectedOverviewFlags.put("hasRepeatBloodTypingTests", false);
     expectedOverviewFlags.put("hasConfirmatoryTTITests", false);
     expectedOverviewFlags.put("hasRepeatTTITests", true);
@@ -215,7 +217,7 @@ public class TestResultControllerTests extends UnitTestSuite {
   }
   
   @Test
-  public void testFindTestResultsOverviewForTestBatchWithPendingBloodyTypingTests_shouldReturnCorrectResults() {
+  public void testFindTestResultsOverviewForTestBatchWithPendingBloodTypingTests_shouldReturnCorrectResults() {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
     Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
@@ -283,7 +285,7 @@ public class TestResultControllerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testFindTestResultsOverviewForTestBatchWithAllPendingTests_shouldReturnCorrectResults() {
+  public void testFindTestResultsOverviewForTestBatchWithAllPendingTestsAndNoRecentResults_shouldReturnCorrectResults() {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
     Set<DonationBatch> donationBatches = new HashSet<>(
@@ -292,19 +294,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
 
-    BloodTestFullViewModel basicTTIBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
-        .withId(1L)
-        .withBloodTestType(BloodTestType.BASIC_TTI)
-        .build();
-    
-    BloodTestResultViewModel basicTTIBloodTestResultViewModel = aBloodTestResultViewModel()
-        .withId(1L)
-        .withBloodTest(basicTTIBloodFullTestViewModel)
-        .withReEntryNotRequired()
-        .build();
-            
     Map<String, BloodTestResultViewModel> recentTestResults = new HashMap<>();
-    recentTestResults.put("1", basicTTIBloodTestResultViewModel);
 
     List<String> testsIds = Arrays.asList("1L", "2L", "3L");
     List<BloodTestingRuleResult> bloodTestingRuleResult = Arrays.asList(

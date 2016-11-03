@@ -127,8 +127,7 @@ public class TestResultController {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     List<BloodTestingRuleResult> ruleResults = getBloodTestingRuleResults(testBatch);
-    Map<String, Object> map =
-        calculateOverviewFlags(ruleResults);
+    Map<String, Object> map = calculateOverviewFlags(ruleResults);
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
