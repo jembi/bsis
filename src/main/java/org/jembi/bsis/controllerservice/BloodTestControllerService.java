@@ -55,6 +55,11 @@ public class BloodTestControllerService {
     return bloodTestFactory.createFullViewModel(bloodTest);
   }
 
+  public BloodTestFullViewModel updateBloodTest(BloodTestBackingForm bloodTestBackingForm) {
+    BloodTest bloodTest = bloodTestFactory.createEntity(bloodTestBackingForm);
+    return bloodTestFactory.createFullViewModel(bloodTestCRUDService.updateBloodTest(bloodTest));
+  }
+
   public BloodTestFullViewModel getBloodTestById(long id) {
     BloodTest bloodTest = bloodTestRepository.findBloodTestById(id);
     return bloodTestFactory.createFullViewModel(bloodTest);

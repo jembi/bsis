@@ -68,4 +68,17 @@ public class BloodTestController {
     map.put("bloodTest", bloodTestControllerService.createBloodTest(backingForm));
     return new ResponseEntity<>(map, HttpStatus.CREATED);
   }
+
+  @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
+  public ResponseEntity<Map<String, Object>> updateBloodTest(@PathVariable("id") long id,
+      @Valid @RequestBody BloodTestBackingForm backingForm) {
+
+    // Use the id parameter from the path
+    backingForm.setId(id);
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("bloodTest", bloodTestControllerService.updateBloodTest(backingForm));
+    return new ResponseEntity<>(map, HttpStatus.OK);
+  }
 }
