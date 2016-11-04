@@ -46,7 +46,7 @@ public class BloodTestFactory {
     viewModel.setId(bloodTest.getId());
     viewModel.setTestName(bloodTest.getTestName());
     viewModel.setTestNameShort(bloodTest.getTestNameShort());
-    viewModel.setBloodTestCategory(bloodTest.getCategory());
+    viewModel.setCategory(bloodTest.getCategory());
     viewModel.setBloodTestType(bloodTest.getBloodTestType());
     viewModel.setIsActive(bloodTest.getIsActive());
     viewModel.setIsDeleted(bloodTest.getIsDeleted());

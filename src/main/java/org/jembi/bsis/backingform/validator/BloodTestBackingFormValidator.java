@@ -102,7 +102,7 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
     
     // validate blood test and category are related
     if (form.getCategory() == null) {
-      errors.rejectValue("bloodTestCategory", "errors.required", "Blood Test Category is required");
+      errors.rejectValue("category", "errors.required", "Blood Test Category is required");
     } else {
       if (form.getBloodTestType() == null) {
         errors.rejectValue("bloodTestType", "errors.required", "Blood test type is required");

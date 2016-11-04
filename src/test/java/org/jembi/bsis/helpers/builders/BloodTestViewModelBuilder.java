@@ -2,14 +2,13 @@ package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestViewModel;
 
 public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestViewModel> {
   
   private Long id;
   private String testNameShort;
-  private BloodTestCategory bloodTestCategory;
+  private BloodTestCategory category;
   private BloodTestType bloodTestType;
   private Boolean isActive = Boolean.TRUE;
   private Boolean isDeleted = Boolean.FALSE;
@@ -24,8 +23,8 @@ public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestViewMode
     return this;
   }
   
-  public BloodTestViewModelBuilder withBloodTestCategory(BloodTestCategory bloodTestCategory) {
-    this.bloodTestCategory = bloodTestCategory;
+  public BloodTestViewModelBuilder withCategory(BloodTestCategory category) {
+    this.category = category;
     return this;
   }
 
@@ -49,7 +48,7 @@ public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestViewMode
     BloodTestViewModel viewModel = new BloodTestViewModel();
     viewModel.setId(id);
     viewModel.setTestNameShort(testNameShort);
-    viewModel.setBloodTestCategory(bloodTestCategory);
+    viewModel.setCategory(category);
     viewModel.setBloodTestType(bloodTestType);
     viewModel.setIsActive(isActive);
     viewModel.setIsDeleted(isDeleted);
@@ -61,26 +60,26 @@ public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestViewMode
   }
 
   public static BloodTestViewModelBuilder aBasicTTIBloodTestViewModel() {
-    return new BloodTestViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.BASIC_TTI);
+    return new BloodTestViewModelBuilder().withCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.BASIC_TTI);
   }
 
   public static BloodTestViewModelBuilder aRepeatTTIBloodTestViewModel() {
-    return new BloodTestViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.REPEAT_TTI);
+    return new BloodTestViewModelBuilder().withCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.REPEAT_TTI);
   }
 
   public static BloodTestViewModelBuilder aConfirmatoryTTIBloodTestViewModel() {
-    return new BloodTestViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.CONFIRMATORY_TTI);
+    return new BloodTestViewModelBuilder().withCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.CONFIRMATORY_TTI);
   }
 
   public static BloodTestViewModelBuilder aBasicBloodTypingBloodTestViewModel() {
     return new BloodTestViewModelBuilder()
-      .withBloodTestCategory(BloodTestCategory.BLOODTYPING)
+      .withCategory(BloodTestCategory.BLOODTYPING)
       .withBloodTestType(BloodTestType.BASIC_BLOODTYPING);
   }
 
   public static BloodTestViewModelBuilder aRepeatBloodTypingBloodTestViewModel() {
     return new BloodTestViewModelBuilder()
-      .withBloodTestCategory(BloodTestCategory.BLOODTYPING)
+      .withCategory(BloodTestCategory.BLOODTYPING)
       .withBloodTestType(BloodTestType.REPEAT_BLOODTYPING);
   }
 }

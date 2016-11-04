@@ -10,7 +10,7 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
   private static int UNIQUE_INCREMENT = 0;
 
   private Long id;
-  private BloodTestCategory bloodTestCategory;
+  private BloodTestCategory category;
   private BloodTestType bloodTestType;
   private String positiveResults;
   private String negativeResults;
@@ -33,8 +33,8 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     return this;
   }
 
-  public BloodTestBuilder withCategory(BloodTestCategory bloodTestCategory) {
-    this.bloodTestCategory = bloodTestCategory;
+  public BloodTestBuilder withCategory(BloodTestCategory category) {
+    this.category = category;
     return this;
   }
 
@@ -107,7 +107,7 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
   public BloodTest build() {
     BloodTest bloodTest = new BloodTest();
     bloodTest.setId(id);
-    bloodTest.setCategory(bloodTestCategory);
+    bloodTest.setCategory(category);
     bloodTest.setBloodTestType(bloodTestType);
     bloodTest.setPositiveResults(positiveResults);
     bloodTest.setNegativeResults(negativeResults);

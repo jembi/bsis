@@ -370,7 +370,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     Assert.assertEquals("One Error", 1, errors.getErrorCount());
-    Assert.assertEquals("errors.required", errors.getFieldError("bloodTestCategory").getCode());
+    Assert.assertEquals("errors.required", errors.getFieldError("category").getCode());
   }
   
   @Test
