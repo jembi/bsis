@@ -72,8 +72,8 @@ public class BloodTestFactory {
     bloodTest.setPositiveResults(StringUtils.join(bloodTestBackingForm.getPositiveResults(), ','));
     bloodTest.setIsActive(bloodTestBackingForm.getIsActive());
     bloodTest.setIsDeleted(bloodTestBackingForm.getIsDeleted());
-    bloodTest.setFlagComponentsContainingPlasmaForDiscard(bloodTestBackingForm.isFlagComponentsContainingPlasmaForDiscard());
-    bloodTest.setFlagComponentsForDiscard(bloodTestBackingForm.isFlagComponentsForDiscard());
+    bloodTest.setFlagComponentsContainingPlasmaForDiscard(bloodTestBackingForm.getFlagComponentsContainingPlasmaForDiscard());
+    bloodTest.setFlagComponentsForDiscard(bloodTestBackingForm.getFlagComponentsForDiscard());
     
     return bloodTest;
   }

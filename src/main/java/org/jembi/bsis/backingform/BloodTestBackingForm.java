@@ -112,7 +112,7 @@ public class BloodTestBackingForm {
     this.isDeleted = isDeleted;
   }
 
-  public Boolean isFlagComponentsContainingPlasmaForDiscard() {
+  public Boolean getFlagComponentsContainingPlasmaForDiscard() {
     return flagComponentsContainingPlasmaForDiscard;
   }
 
@@ -120,7 +120,7 @@ public class BloodTestBackingForm {
     this.flagComponentsContainingPlasmaForDiscard = flagComponentsContainingPlasmaForDiscard;
   }
 
-  public Boolean isFlagComponentsForDiscard() {
+  public Boolean getFlagComponentsForDiscard() {
     return flagComponentsForDiscard;
   }
 
