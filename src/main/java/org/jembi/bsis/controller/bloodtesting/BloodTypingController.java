@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.jembi.bsis.factory.BloodTestFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BloodTypingController {
 
   @Autowired
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestRepository bloodTestRepository;
 
   @Autowired
   private BloodTestFactory bloodTestFactory;
@@ -37,9 +37,6 @@ public class BloodTypingController {
     List<BloodTestFullViewModel> basicBloodTypingTests = getBasicBloodTypingTests();
     map.put("basicBloodTypingTests", basicBloodTypingTests);
 
-    List<BloodTestFullViewModel> advancedBloodTypingTests = getAdvancedBloodTypingTests();
-    map.put("advancedBloodTypingTests", advancedBloodTypingTests);
-
     List<BloodTestFullViewModel> repeatBloodTypingTests = getRepeatBloodTypingTests();
     map.put("repeatBloodTypingTests", repeatBloodTypingTests);
 
@@ -48,15 +45,7 @@ public class BloodTypingController {
 
   private List<BloodTestFullViewModel> getBasicBloodTypingTests() {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
-    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
-      tests.add(bloodTestFactory.createFullViewModel(bloodTest));
-    }
-    return tests;
-  }
-
-  private List<BloodTestFullViewModel> getAdvancedBloodTypingTests() {
-    List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
-    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.ADVANCED_BLOODTYPING)) {
+    for (BloodTest bloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
       tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;
@@ -64,7 +53,7 @@ public class BloodTypingController {
 
   public List<BloodTestFullViewModel> getRepeatBloodTypingTests() {
     List<BloodTestFullViewModel> tests = new ArrayList<BloodTestFullViewModel>();
-    for (BloodTest bloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
+    for (BloodTest bloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
       tests.add(bloodTestFactory.createFullViewModel(bloodTest));
     }
     return tests;

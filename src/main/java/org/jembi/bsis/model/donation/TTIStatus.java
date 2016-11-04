@@ -1,4 +1,4 @@
-package org.jembi.bsis.model.bloodtesting;
+package org.jembi.bsis.model.donation;
 
 public enum TTIStatus {
   NOT_DONE, TTI_SAFE, TTI_UNSAFE, INDETERMINATE;

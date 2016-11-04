@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
+import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
 
 public class BloodTestingRuleResultSetMatcher extends TypeSafeMatcher<BloodTestingRuleResultSet> {
 

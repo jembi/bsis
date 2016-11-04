@@ -1,28 +1,28 @@
 package org.jembi.bsis.viewmodel;
 
-import java.util.List;
+import java.util.Set;
 
 public class BloodTestFullViewModel extends BloodTestViewModel {
 
   private String testName;
-  private List<String> validResults;
-  private List<String> negativeResults;
-  private List<String> positiveResults;
+  private Set<String> validResults;
+  private Set<String> negativeResults;
+  private Set<String> positiveResults;
   private Integer rankInCategory;
 
   public String getTestName() {
     return testName;
   }
 
-  public List<String> getValidResults() {
+  public Set<String> getValidResults() {
     return validResults;
   }
 
-  public List<String> getNegativeResults() {
+  public Set<String> getNegativeResults() {
     return negativeResults;
   }
 
-  public List<String> getPositiveResults() {
+  public Set<String> getPositiveResults() {
     return positiveResults;
   }
 
@@ -34,15 +34,15 @@ public class BloodTestFullViewModel extends BloodTestViewModel {
     this.testName = testName;
   }
 
-  public void setValidResults(List<String> validResults) {
+  public void setValidResults(Set<String> validResults) {
     this.validResults = validResults;
   }
 
-  public void setNegativeResults(List<String> negativeResults) {
+  public void setNegativeResults(Set<String> negativeResults) {
     this.negativeResults = negativeResults;
   }
 
-  public void setPositiveResults(List<String> positiveResults) {
+  public void setPositiveResults(Set<String> positiveResults) {
     this.positiveResults = positiveResults;
   }
 

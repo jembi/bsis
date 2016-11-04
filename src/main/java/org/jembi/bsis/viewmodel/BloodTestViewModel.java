@@ -7,7 +7,7 @@ public class BloodTestViewModel extends BaseViewModel {
 
   private String testName;
   private String testNameShort;
-  private BloodTestCategory bloodTestCategory;
+  private BloodTestCategory category;
   private BloodTestType bloodTestType;
   private Boolean isActive;
   private Boolean isDeleted;
@@ -20,8 +20,8 @@ public class BloodTestViewModel extends BaseViewModel {
     return testNameShort;
   }
 
-  public BloodTestCategory getBloodTestCategory() {
-    return bloodTestCategory;
+  public BloodTestCategory getCategory() {
+    return category;
   }
 
   public BloodTestType getBloodTestType() {
@@ -44,8 +44,8 @@ public class BloodTestViewModel extends BaseViewModel {
     this.testNameShort = testNameShort;
   }
 
-  public void setBloodTestCategory(BloodTestCategory bloodTestCategory) {
-    this.bloodTestCategory = bloodTestCategory;
+  public void setCategory(BloodTestCategory category) {
+    this.category = category;
   }
 
   public void setBloodTestType(BloodTestType bloodTestType) {

@@ -12,7 +12,7 @@ import org.jembi.bsis.model.reporting.Cohort;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
 import org.jembi.bsis.model.reporting.Report;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
+import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class TtiPrevalenceReportGenerator {
   
   @Autowired
-  private BloodTestingRepository bloodTestingRepository;
+  private BloodTestResultRepository bloodTestResultRepository;
 
   @Autowired
   private LocationFactory locationFactory;
@@ -47,7 +47,7 @@ public class TtiPrevalenceReportGenerator {
   }
 
   private List<DataValue> geBloodResultsDataValues(Date startDate, Date endDate) {
-    List<BloodTestResultDTO> dtos = bloodTestingRepository.findTTIPrevalenceReportIndicators(startDate, endDate);
+    List<BloodTestResultDTO> dtos = bloodTestResultRepository.findTTIPrevalenceReportIndicators(startDate, endDate);
 
     List<DataValue> dataValues = new ArrayList<>(dtos.size());
 
@@ -84,7 +84,7 @@ public class TtiPrevalenceReportGenerator {
   }
 
   private List<DataValue> getTotalUnitsTestedDataValues(Date startDate, Date endDate) {
-    List<BloodTestTotalDTO> dtos = bloodTestingRepository.findTTIPrevalenceReportTotalUnitsTested(startDate, endDate);
+    List<BloodTestTotalDTO> dtos = bloodTestResultRepository.findTTIPrevalenceReportTotalUnitsTested(startDate, endDate);
     List<DataValue> dataValues = new ArrayList<>(dtos.size());
     for (BloodTestTotalDTO dto : dtos) {
 
@@ -107,7 +107,7 @@ public class TtiPrevalenceReportGenerator {
   }
   
   private List<DataValue> getTotalUnsafeUnitsTestedDataValues(Date startDate, Date endDate) {
-    List<BloodTestTotalDTO> dtos = bloodTestingRepository.findTTIPrevalenceReportTotalUnsafeUnitsTested(startDate, endDate);
+    List<BloodTestTotalDTO> dtos = bloodTestResultRepository.findTTIPrevalenceReportTotalUnsafeUnitsTested(startDate, endDate);
     List<DataValue> dataValues = new ArrayList<>(dtos.size());
     for (BloodTestTotalDTO dto : dtos) {
 

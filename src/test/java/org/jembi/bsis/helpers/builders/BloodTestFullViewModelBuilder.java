@@ -1,7 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
@@ -12,10 +12,10 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
   private Long id;
   private String testNameShort;
   private String testName;
-  private List<String> validResults = new ArrayList<>();
-  private List<String> negativeResults = new ArrayList<>();
-  private List<String> positiveResults = new ArrayList<>();
-  private BloodTestCategory bloodTestCategory;
+  private Set<String> validResults = new HashSet<>();
+  private Set<String> negativeResults = new HashSet<>();
+  private Set<String> positiveResults = new HashSet<>();
+  private BloodTestCategory category;
   private BloodTestType bloodTestType;
   private Integer rankInCategory;
   private Boolean isActive = Boolean.TRUE;
@@ -41,7 +41,7 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
     return this;
   }
 
-  public BloodTestFullViewModelBuilder withValidResults(List<String> validResults) {
+  public BloodTestFullViewModelBuilder withValidResults(Set<String> validResults) {
     this.validResults = validResults;
     return this;
   }
@@ -51,7 +51,7 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
     return this;
   }
 
-  public BloodTestFullViewModelBuilder withNegativeResults(List<String> negativeResults) {
+  public BloodTestFullViewModelBuilder withNegativeResults(Set<String> negativeResults) {
     this.negativeResults = negativeResults;
     return this;
   }
@@ -61,13 +61,13 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
     return this;
   }
 
-  public BloodTestFullViewModelBuilder withPositiveResults(List<String> positiveResults) {
+  public BloodTestFullViewModelBuilder withPositiveResults(Set<String> positiveResults) {
     this.positiveResults = positiveResults;
     return this;
   }
 
-  public BloodTestFullViewModelBuilder withBloodTestCategory(BloodTestCategory bloodTestCategory) {
-    this.bloodTestCategory = bloodTestCategory;
+  public BloodTestFullViewModelBuilder withCategory(BloodTestCategory category) {
+    this.category = category;
     return this;
   }
 
@@ -101,7 +101,7 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
     viewModel.setPositiveResults(positiveResults);
     viewModel.setNegativeResults(negativeResults);
     viewModel.setRankInCategory(rankInCategory);
-    viewModel.setBloodTestCategory(bloodTestCategory);
+    viewModel.setCategory(category);
     viewModel.setBloodTestType(bloodTestType);
     viewModel.setIsActive(isActive);
     viewModel.setIsDeleted(isDeleted);
@@ -113,26 +113,26 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
   }
 
   public static BloodTestFullViewModelBuilder aBasicTTIBloodTestFullViewModel() {
-    return new BloodTestFullViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.BASIC_TTI);
+    return new BloodTestFullViewModelBuilder().withCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.BASIC_TTI);
   }
 
   public static BloodTestFullViewModelBuilder aRepeatTTIBloodTestFullViewModel() {
-    return new BloodTestFullViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.REPEAT_TTI);
+    return new BloodTestFullViewModelBuilder().withCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.REPEAT_TTI);
   }
 
   public static BloodTestFullViewModelBuilder aConfirmatoryTTIBloodTestFullViewModel() {
-    return new BloodTestFullViewModelBuilder().withBloodTestCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.CONFIRMATORY_TTI);
+    return new BloodTestFullViewModelBuilder().withCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.CONFIRMATORY_TTI);
   }
 
   public static BloodTestFullViewModelBuilder aBasicBloodTypingBloodTestFullViewModel() {
     return new BloodTestFullViewModelBuilder()
-      .withBloodTestCategory(BloodTestCategory.BLOODTYPING)
+      .withCategory(BloodTestCategory.BLOODTYPING)
       .withBloodTestType(BloodTestType.BASIC_BLOODTYPING);
   }
 
   public static BloodTestFullViewModelBuilder aRepeatBloodTypingBloodTestFullViewModel() {
     return new BloodTestFullViewModelBuilder()
-      .withBloodTestCategory(BloodTestCategory.BLOODTYPING)
+      .withCategory(BloodTestCategory.BLOODTYPING)
       .withBloodTestType(BloodTestType.REPEAT_BLOODTYPING);
   }
 }

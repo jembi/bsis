@@ -19,7 +19,7 @@ public class BloodTestViewModelMatcher extends TypeSafeMatcher<BloodTestViewMode
     description.appendText("A BloodTestViewModel with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nTest name short: ").appendValue(expected.getTestNameShort())
-        .appendText("\nBlood test category: ").appendValue(expected.getBloodTestCategory())
+        .appendText("\nCategory: ").appendValue(expected.getCategory())
         .appendText("\nBlood test type: ").appendValue(expected.getBloodTestType())
         .appendText("\nActive: ").appendValue(expected.getIsActive())
         .appendText("\nDeleted: ").appendValue(expected.getIsDeleted());
@@ -29,7 +29,7 @@ public class BloodTestViewModelMatcher extends TypeSafeMatcher<BloodTestViewMode
   protected boolean matchesSafely(BloodTestViewModel actual) {
     return Objects.equals(actual.getId(), expected.getId())
         && Objects.equals(actual.getTestNameShort(), expected.getTestNameShort())
-        && Objects.equals(actual.getBloodTestCategory(), expected.getBloodTestCategory())
+        && Objects.equals(actual.getCategory(), expected.getCategory())
         && Objects.equals(actual.getBloodTestType(), expected.getBloodTestType())
         && Objects.equals(actual.getIsActive(), expected.getIsActive())
         && Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
