@@ -36,13 +36,15 @@ public class BloodTestFactoryTests extends UnitTestSuite {
     // Set up fixture
     BloodTest bloodTest = BloodTestBuilder.aBasicBloodTypingBloodTest().withId(1L).withTestName("ABC test")
         .withTestNameShort("ABC").withValidResults("A,B,C,D").withPositiveResults("A,B,C").withNegativeResults("D")
-        .withRankInCategory(1).build();
+        .withRankInCategory(1).thatShouldFlagComponentsContainingPlasmaForDiscard()
+        .thatShouldFlagComponentsForDiscard().build();
 
     // Set up expectations
     BloodTestFullViewModel expectedViewModel = BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel()
         .withId(1L).withTestName("ABC test").withTestNameShort("ABC").withValidResult("A").withValidResult("B")
         .withValidResult("C").withValidResult("D").withPositiveResult("A").withPositiveResult("B")
-        .withPositiveResult("C").withNegativeResult("D").withRankInCategory(1).build();
+        .withPositiveResult("C").withNegativeResult("D").withRankInCategory(1)
+        .thatShouldFlagComponentsContainingPlasmaForDiscard().thatShouldFlagComponentsForDiscard().build();
 
     // Exercise SUT
     BloodTestFullViewModel returnedViewModel = bloodTestFactory.createFullViewModel(bloodTest);

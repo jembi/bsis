@@ -9,6 +9,8 @@ public class BloodTestFullViewModel extends BloodTestViewModel {
   private Set<String> negativeResults;
   private Set<String> positiveResults;
   private Integer rankInCategory;
+  private boolean flagComponentsForDiscard = false;
+  private boolean flagComponentsContainingPlasmaForDiscard = false;
 
   public String getTestName() {
     return testName;
@@ -48,5 +50,21 @@ public class BloodTestFullViewModel extends BloodTestViewModel {
 
   public void setRankInCategory(Integer rankInCategory) {
     this.rankInCategory = rankInCategory;
+  }
+
+  public boolean isFlagComponentsForDiscard() {
+    return flagComponentsForDiscard;
+  }
+
+  public void setFlagComponentsForDiscard(boolean flagComponentsForDiscard) {
+    this.flagComponentsForDiscard = flagComponentsForDiscard;
+  }
+
+  public boolean isFlagComponentsContainingPlasmaForDiscard() {
+    return flagComponentsContainingPlasmaForDiscard;
+  }
+
+  public void setFlagComponentsContainingPlasmaForDiscard(boolean flagComponentsContainingPlasmaForDiscard) {
+    this.flagComponentsContainingPlasmaForDiscard = flagComponentsContainingPlasmaForDiscard;
   }
 }

@@ -20,6 +20,8 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
   private Integer rankInCategory;
   private Boolean isActive = Boolean.TRUE;
   private Boolean isDeleted = Boolean.FALSE;
+  private boolean flagComponentsForDiscard;
+  private boolean flagComponentsContainingPlasmaForDiscard;
   
   public BloodTestFullViewModelBuilder withId(Long id) {
     this.id = id;
@@ -90,6 +92,26 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
     this.isActive = Boolean.FALSE;
     return this;
   }
+  
+  public BloodTestFullViewModelBuilder thatShouldFlagComponentsForDiscard() {
+    this.flagComponentsForDiscard = true;
+    return this;
+  }
+
+  public BloodTestFullViewModelBuilder thatShouldNotFlagComponentsForDiscard() {
+    this.flagComponentsForDiscard = false;
+    return this;
+  }
+
+  public BloodTestFullViewModelBuilder thatShouldFlagComponentsContainingPlasmaForDiscard() {
+    this.flagComponentsContainingPlasmaForDiscard = true;
+    return this;
+  }
+
+  public BloodTestFullViewModelBuilder thatShouldNotFlagComponentsContainingPlasmaForDiscard() {
+    this.flagComponentsContainingPlasmaForDiscard = false;
+    return this;
+  }
 
   @Override
   public BloodTestFullViewModel build() {
@@ -105,6 +127,8 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
     viewModel.setBloodTestType(bloodTestType);
     viewModel.setIsActive(isActive);
     viewModel.setIsDeleted(isDeleted);
+    viewModel.setFlagComponentsContainingPlasmaForDiscard(flagComponentsContainingPlasmaForDiscard);
+    viewModel.setFlagComponentsForDiscard(flagComponentsForDiscard);
     return viewModel;
   }
   
