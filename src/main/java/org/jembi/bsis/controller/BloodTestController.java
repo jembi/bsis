@@ -45,7 +45,7 @@ public class BloodTestController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
-  public ResponseEntity<Map<String, Object>> getComponentTypeById(@PathVariable long id) {
+  public ResponseEntity<Map<String, Object>> getBloodTestById(@PathVariable long id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("bloodTest", bloodTestControllerService.getBloodTestById(id));
