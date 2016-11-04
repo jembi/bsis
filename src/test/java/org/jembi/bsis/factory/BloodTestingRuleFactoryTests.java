@@ -53,7 +53,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCreateFullViewModels_shouldReturnViewModelsWithTheCorrectState() {
+  public void testCreateViewModels_shouldReturnViewModelsWithTheCorrectState() {
     // Set up fixture
     List<BloodTestingRule> bloodTestingRules = Arrays.asList(
         BloodTestingRuleBuilder.aBloodTestingRule().withId(1L).build(),
