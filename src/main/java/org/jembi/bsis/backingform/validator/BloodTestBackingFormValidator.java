@@ -43,66 +43,67 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
           "Maximum length for this field is " + MAX_LENGTH_TEST_NAME_SHORT);
     }
     
-    // Validate validOutcomes
-    Set<String> validOutcomes = form.getValidResults();
-    if (validOutcomes == null || validOutcomes.isEmpty()) {
+    // Validate Results (also called Outcomes)
+    Set<String> validResults = form.getValidResults();
+    Set<String> negativeResults = form.getNegativeResults();
+    Set<String> positiveResults = form.getPositiveResults();
+    if (validResults == null || validResults.isEmpty()) {
       errors.rejectValue("validResults", "errors.required", "Valid outcomes are required");
     } else {
-      if (form.getPositiveResults() != null) {
-        // validate that all positive outcomes are inside valid outcomes
-        String errorPositiveOutComes = null;
-        for (String positiveOutcome : form.getPositiveResults()) {
-          if (!validOutcomes.contains(positiveOutcome)) {
-            if (errorPositiveOutComes == null) {
-              errorPositiveOutComes = positiveOutcome;
+      if (positiveResults != null) {
+        // validate that all positive results are inside valid results.
+        String errorPositiveResults = null;
+        for (String positiveResult : positiveResults) {
+          if (!validResults.contains(positiveResult)) {
+            if (errorPositiveResults == null) {
+              errorPositiveResults = positiveResult;
             } else {
-              errorPositiveOutComes += ", " + positiveOutcome;
+              errorPositiveResults += ", " + positiveResult;
             }
           }
         }
-        if (errorPositiveOutComes != null) {
+        if (errorPositiveResults != null) {
+          // Note that the results are called Outcomes in the front-end.
           errors.rejectValue("positiveResults", "errors.positiveOutcomesNotInValidOutcomes",
-              "Positive outcome(s): [" + errorPositiveOutComes + "] not present in list of valid outcomes.");
+              "Positive outcome(s): [" + errorPositiveResults + "] not present in list of valid outcomes.");
         }
       }
-      if (form.getNegativeResults() != null) {
+      if (negativeResults != null) {
         // validate that all negative outcomes are inside valid outcomes
-        String errorNegativeOutComes = null;
-        for (String negativeOutcome : form.getNegativeResults()) {
-          if (!validOutcomes.contains(negativeOutcome)) {
-            if (errorNegativeOutComes == null) {
-              errorNegativeOutComes = negativeOutcome;
+        String errorNegativeResults = null;
+        for (String negativeResult : negativeResults) {
+          if (!validResults.contains(negativeResult)) {
+            if (errorNegativeResults == null) {
+              errorNegativeResults = negativeResult;
             } else {
-              errorNegativeOutComes += ", " + negativeOutcome;
+              errorNegativeResults += ", " + negativeResult;
             }
           }
         }
-        if (errorNegativeOutComes != null) {
+        if (errorNegativeResults != null) {
           errors.rejectValue("negativeResults", "errors.negativeOutcomesNotInValidOutcomes",
-              "Negative outcome(s): [" + errorNegativeOutComes + "] not present in list of valid outcomes.");
+              "Negative outcome(s): [" + errorNegativeResults + "] not present in list of valid outcomes.");
         }
       }
     }
     
-    if (form.getNegativeResults() != null && form.getPositiveResults() != null) {
-      // validate that positive outcomes are not in negative outcomes
-      Set<String> negativeOutcomes = form.getNegativeResults();
-      Set<String> positiveOutcomes = form.getPositiveResults();
-      String errorPositiveOutcomesInNegativeOutComes = null;
-
-      for (String positiveOutcome : positiveOutcomes) {
-        if (negativeOutcomes.contains(positiveOutcome)) {
-          if (errorPositiveOutcomesInNegativeOutComes == null) {
-            errorPositiveOutcomesInNegativeOutComes = positiveOutcome;
+    // validate that positive results are not in negative results
+    if (positiveResults != null && negativeResults != null) {
+      String errorPositiveResultsInNegativeResults = null;
+      for (String positiveResult : positiveResults) {
+        if (negativeResults.contains(positiveResult)) {
+          if (errorPositiveResultsInNegativeResults == null) {
+            errorPositiveResultsInNegativeResults = positiveResult;
           } else {
-            errorPositiveOutcomesInNegativeOutComes += ", " + positiveOutcome;
+            errorPositiveResultsInNegativeResults += ", " + positiveResult;
           }
         }
       }
 
-      if (errorPositiveOutcomesInNegativeOutComes != null) {
+      if (errorPositiveResultsInNegativeResults != null) {
+        // Note that the results are called Outcomes in the front-end.
         errors.rejectValue("positiveResults", "errors.positiveOutcomesAlsoInNegativeOutcomes",
-            "The following outcome(s): [" + errorPositiveOutcomesInNegativeOutComes
+            "The following outcome(s): [" + errorPositiveResultsInNegativeResults
                 + "] appear in both the Negative and Positive list of outcomes.");
       }
     }
