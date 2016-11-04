@@ -25,7 +25,7 @@ public class BloodTestingRuleController {
   public ResponseEntity<Map<String, Object>> getBloodTestingRules() {
 
     Map<String, Object> map = new HashMap<>();
-    map.put("bloodtestingrules", bloodTestingRuleControllerService.getAllBloodTestingRules(true));
+    map.put("bloodTestingRules", bloodTestingRuleControllerService.getAllBloodTestingRules());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 }

@@ -20,8 +20,8 @@ public class BloodTestingRuleControllerService {
   @Autowired
   private BloodTestingRuleRepository bloodTestingRuleRepository;
   
-  public List<BloodTestingRuleViewModel> getAllBloodTestingRules(boolean includeDeleted) {
-    List<BloodTestingRule> bloodTestingRules = bloodTestingRuleRepository.getBloodTestingRules(includeDeleted);
+  public List<BloodTestingRuleViewModel> getAllBloodTestingRules() {
+    List<BloodTestingRule> bloodTestingRules = bloodTestingRuleRepository.getBloodTestingRules(true);
     return bloodTestingRuleFactory.createViewModels(bloodTestingRules);
   }  
 }
