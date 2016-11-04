@@ -108,7 +108,7 @@ public class PermissionConstants {
   public static final String MANAGE_COMPONENT_TYPES = "Manage Component Types";
   public static final String MANAGE_COMPONENT_COMBINATIONS = "Manage Component Combinations";
   public static final String MANAGE_CROSS_MATCH_TYPES = "Manage Cross Match Types";
-  public static final String MANAGE_BLOOD_TYPING_RULES = "Manage Blood Typing Rules";
+  public static final String MANAGE_BLOOD_TESTING_RULES = "Manage Blood Testing Rules";
   public static final String MANAGE_PACK_TYPES = "Manage Pack Types";
   public static final String MANAGE_DISCARD_REASONS = "Manage Discard Reasons";
   public static final String MANAGE_DEFERRAL_REASONS = "Manage Deferral Reasons";

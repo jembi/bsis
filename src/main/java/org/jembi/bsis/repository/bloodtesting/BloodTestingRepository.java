@@ -19,7 +19,6 @@ import org.apache.log4j.Logger;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
@@ -192,18 +191,6 @@ public class BloodTestingRepository {
       }
     }
     return recentBloodTestResults;
-  }
-
-  /**
-   * Retrieve a full list of the active Blood Testing Rules.
-   *
-   * @return List<BloodTestingRule> list of rules, should not be null although this is not guaranteed
-   */
-  public List<BloodTestingRule> getActiveBloodTestingRules() {
-    String queryStr = "SELECT r FROM BloodTestingRule r WHERE isActive=:isActive";
-    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
-    query.setParameter("isActive", true);
-    return query.getResultList();
   }
 
   /**

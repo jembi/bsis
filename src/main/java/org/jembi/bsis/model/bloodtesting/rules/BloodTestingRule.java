@@ -8,23 +8,31 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestContext;
+import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
 
 @Entity
 @Audited
+@NamedQueries({
+  @NamedQuery(
+      name = BloodTestingRuleNamedQueryConstants.NAME_GET_BLOOD_TESTING_RULES,
+      query = BloodTestingRuleNamedQueryConstants.QUERY_GET_BLOOD_TESTING_RULES)
+})
 public class BloodTestingRule extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 
-  /**
-   * Comma Separated list of ids of tests which correspond to the pattern.
-   */
-  @Column(length = 200)
-  private String bloodTestsIds;
+  @ManyToOne(optional = false, fetch = FetchType.EAGER)
+  private BloodTest bloodTest;
 
   @Column(length = 50)
   private String pattern;
@@ -59,13 +67,11 @@ public class BloodTestingRule extends BaseEntity {
    */
   private Boolean markSampleAsUnsafe;
 
-  private Boolean isActive;
+  @Column(nullable = false)
+  private boolean isDeleted = false;
 
-  public List<String> getBloodTestsIds() {
-	if (bloodTestsIds == null || bloodTestsIds.equals("")) {
-	  return new ArrayList<String>(0);
-	}
-    return Arrays.asList(bloodTestsIds.split(","));
+  public BloodTest getBloodTest() {
+    return bloodTest;
   }
 
   public String getPattern() {
@@ -80,12 +86,12 @@ public class BloodTestingRule extends BaseEntity {
     return markSampleAsUnsafe;
   }
 
-  public Boolean getIsActive() {
-    return isActive;
+  public boolean getIsDeleted() {
+    return isDeleted;
   }
 
-  public void setBloodTestsIds(String bloodTestsIds) {
-    this.bloodTestsIds = bloodTestsIds;
+  public void setBloodTest(BloodTest bloodTest) {
+    this.bloodTest = bloodTest;
   }
 
   public void setPattern(String pattern) {
@@ -100,8 +106,8 @@ public class BloodTestingRule extends BaseEntity {
     this.markSampleAsUnsafe = markSampleAsUnsafe;
   }
 
-  public void setIsActive(Boolean isActive) {
-    this.isActive = isActive;
+  public void setIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 
   public String getNewInformation() {
@@ -137,9 +143,9 @@ public class BloodTestingRule extends BaseEntity {
   }
 
   public List<String> getPendingTestsIds() {
-	if (pendingTestsIds == null || pendingTestsIds.equals("")) {
-	  return new ArrayList<String>(0);
-	}
+    if (pendingTestsIds == null || pendingTestsIds.equals("")) {
+      return new ArrayList<String>(0);
+    }
     return Arrays.asList(pendingTestsIds.split(","));
   }
 

@@ -1,12 +1,13 @@
 package org.jembi.bsis.backingform;
 
-import scala.actors.threadpool.Arrays;
-
+import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
+
+import scala.actors.threadpool.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -60,8 +61,8 @@ public class BloodTestingRuleBackingForm {
     typingRule.setSubCategory(BloodTestSubCategory.valueOf(subCategory.replaceAll("\\s", "").toUpperCase()));
   }
 
-  public void setIsActive(Boolean isActive) {
-    typingRule.setIsActive(isActive);
+  public void setIsDeleted(Boolean isDeleted) {
+    typingRule.setIsDeleted(isDeleted);
   }
 
   public void setMarkSampleAsUnsafe(Boolean MarkSampleAsUnsafe) {
@@ -72,8 +73,8 @@ public class BloodTestingRuleBackingForm {
     typingRule.setNewInformation(newInformation);
   }
 
-  public void setBloodTestsIds(String bloodTestIds) {
-    typingRule.setBloodTestsIds(bloodTestIds);
+  public void setBloodTest(BloodTest bloodTest) {
+    typingRule.setBloodTest(bloodTest);
   }
 
 }

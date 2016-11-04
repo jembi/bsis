@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -88,7 +89,7 @@ public class BloodTestResultConstraintCheckerTests {
     pendingTestIds.add("123");
     bloodTestingRuleResultSet.setPendingAboTestsIds(pendingTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("2");
+    rule1.setBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withId(2L).build());
     rule1.setPendingTestsIds("123");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -117,7 +118,7 @@ public class BloodTestResultConstraintCheckerTests {
     pendingTestIds.add("123");
     bloodTestingRuleResultSet.setPendingAboTestsIds(pendingTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(bloodTest);
     rule1.setPendingTestsIds("123");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -146,7 +147,7 @@ public class BloodTestResultConstraintCheckerTests {
     pendingTestIds.add("3");
     bloodTestingRuleResultSet.setPendingRhTestsIds(pendingTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("2");
+    rule1.setBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withId(2L).build());
     rule1.setPendingTestsIds("3");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -175,7 +176,7 @@ public class BloodTestResultConstraintCheckerTests {
     pendingTestIds.add("123");
     bloodTestingRuleResultSet.setPendingRhTestsIds(pendingTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(bloodTest);
     rule1.setPendingTestsIds("123");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -258,7 +259,7 @@ public class BloodTestResultConstraintCheckerTests {
     List<String> pendingTtiTestIds = new ArrayList<String>();
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(1L).build());
     rule1.setPendingTestsIds("2");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -290,7 +291,7 @@ public class BloodTestResultConstraintCheckerTests {
     pendingTtiTestIds.add("2");
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(bloodTest);
     rule1.setPendingTestsIds("2");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -322,10 +323,10 @@ public class BloodTestResultConstraintCheckerTests {
     pendingTtiTestIds.add("3");
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(bloodTest);
     rule1.setPendingTestsIds("2");
     BloodTestingRule rule2 = new BloodTestingRule();
-    rule2.setBloodTestsIds("2");
+    rule2.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(2L).build());
     rule2.setPendingTestsIds("3");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -358,10 +359,10 @@ public class BloodTestResultConstraintCheckerTests {
     pendingTtiTestIds.add("2");
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(bloodTest);
     rule1.setPendingTestsIds("2");
     BloodTestingRule rule2 = new BloodTestingRule();
-    rule2.setBloodTestsIds("2");
+    rule2.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(2L).build());
     rule2.setPendingTestsIds("3");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -412,16 +413,16 @@ public class BloodTestResultConstraintCheckerTests {
 
   private List<BloodTestingRule> generateTestBloodTestingRules() {
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(1L).build());
     rule1.setPendingTestsIds("");
     BloodTestingRule rule2 = new BloodTestingRule();
-    rule2.setBloodTestsIds("2");
+    rule2.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(2L).build());
     rule2.setPendingTestsIds("3");
     BloodTestingRule rule3 = new BloodTestingRule();
-    rule3.setBloodTestsIds("3");
+    rule3.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(3L).build());
     rule3.setPendingTestsIds("4");
     BloodTestingRule rule4 = new BloodTestingRule();
-    rule4.setBloodTestsIds("4");
+    rule4.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(4L).build());
     rule4.setPendingTestsIds("");
     List<BloodTestingRule> bloodTestingRules = new ArrayList<BloodTestingRule>();
     bloodTestingRules.add(rule1);
