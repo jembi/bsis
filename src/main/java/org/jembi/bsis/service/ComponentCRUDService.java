@@ -28,6 +28,7 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,9 @@ public class ComponentCRUDService {
 
   @Autowired
   private ComponentTypeCombinationRepository componentTypeCombinationRepository;
+  
+  @Autowired
+  private DonationBatchRepository donationBatchRepository; 
 
   public Component createInitialComponent(Donation donation) {
 
@@ -113,7 +117,8 @@ public class ComponentCRUDService {
     cal.add(Calendar.DATE, componentType.getExpiresAfter());
     Date expiresOn = cal.getTime();
 
-    ComponentBatch componentBatch = donation.getDonationBatch().getComponentBatch();
+    ComponentBatch componentBatch = donationBatchRepository.findComponentBatchByDonationbatchId(
+        donation.getDonationBatch().getId());
     if (componentBatch == null) {
       // Set the location to the venue of the donation batch
       component.setLocation(donation.getDonationBatch().getVenue());
