@@ -10,6 +10,8 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.hibernate.Query;
+import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.springframework.stereotype.Repository;
@@ -171,5 +173,17 @@ public class DonationBatchRepository {
   public List<DonationBatch> findUnassignedDonationBatchesForComponentBatch() {
     return em.createNamedQuery(DonationBatchQueryConstants.NAME_FIND_UNASSIGNED_DONATION_BATCHES_WITH_COMPONENTS, 
         DonationBatch.class).getResultList();
+  }
+  
+  public ComponentBatch findComponentBatchByDonationbatchId(Long donationBatchId) {
+    ComponentBatch query = null;
+    try{
+          query = em.createNamedQuery(       
+              DonationBatchQueryConstants.NAME_FIND_COMPONENTBATCH_BY_DONATIONBATCH_ID, ComponentBatch.class)
+             .setParameter("donationBatchId", donationBatchId)
+             .getSingleResult();
+     } catch(NoResultException e) { 
+    }  
+    return query;  
   }
 }
