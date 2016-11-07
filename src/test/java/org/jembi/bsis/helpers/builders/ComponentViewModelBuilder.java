@@ -11,6 +11,7 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
   private Long id;
   private ComponentTypeViewModel componentType;
   private Date createdOn;
+  private Date expiresOn;
   private String donationIdentificationNumber;
   private ComponentStatus status;
   private String expiryStatus;
@@ -41,6 +42,11 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
     return this;
   }
 
+  public ComponentViewModelBuilder withExpiresOn(Date expiresOn) {
+    this.expiresOn = expiresOn;
+    return this;
+  }
+  
   public ComponentViewModelBuilder withExpiryStatus(String expiryStatus) {
     this.expiryStatus = expiryStatus;
     return this;
@@ -58,6 +64,7 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
     viewModel.setStatus(status);
     viewModel.setComponentType(componentType);
     viewModel.setCreatedOn(createdOn);
+    viewModel.setExpiresOn(expiresOn);
     viewModel.setDonationIdentificationNumber(donationIdentificationNumber);
     viewModel.setComponentCode(componentCode);
     viewModel.setExpiryStatus(expiryStatus);

@@ -13,6 +13,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   private Long id;
   private ComponentTypeViewModel componentType;
   private Date createdOn;
+  private Date expiresOn;
   private ComponentStatus status;
   private String expiryStatus;
   private String componentCode;
@@ -34,6 +35,11 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     return this;
   }
 
+  public ComponentManagementViewModelBuilder withExpiresOn(Date expiresOn) {
+    this.expiresOn = expiresOn;
+    return this;
+  }
+  
   public ComponentManagementViewModelBuilder withStatus(ComponentStatus status) {
     this.status = status;
     return this;
@@ -64,6 +70,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     ComponentManagementViewModel viewModel = new ComponentManagementViewModel();
     viewModel.setId(id);
     viewModel.setCreatedOn(createdOn);
+    viewModel.setExpiresOn(expiresOn);
     viewModel.setExpiryStatus(expiryStatus);
     viewModel.setStatus(status);
     viewModel.setComponentCode(componentCode);
