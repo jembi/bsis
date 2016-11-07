@@ -381,6 +381,16 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withDonation(donation)
         .withCreatedOn(startDate)
         .buildAndPersist(entityManager);
+
+    // Excluded component by status PROCESSED
+    aComponent()
+        .withComponentType(componentType)
+        .withComponentBatch(componentBatch)
+        .withDonation(donation)
+        .withCreatedOn(startDate)
+        .withLocation(processingSite1)
+        .withStatus(ComponentStatus.PROCESSED)
+        .buildAndPersist(entityManager);
     
     ComponentProductionDTO expectedDTO =  aComponentProductionDTO() 
         .withComponentTypeName("type1")

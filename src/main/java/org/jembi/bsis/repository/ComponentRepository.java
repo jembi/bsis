@@ -1,5 +1,6 @@
 package org.jembi.bsis.repository;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -12,8 +13,8 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.dto.ComponentExportDTO;
-import org.jembi.bsis.dto.DiscardedComponentDTO;
 import org.jembi.bsis.dto.ComponentProductionDTO;
+import org.jembi.bsis.dto.DiscardedComponentDTO;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
@@ -182,6 +183,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .setParameter("processingSiteId", processingSiteId)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
+        .setParameter("excludedStatuses", Arrays.asList(ComponentStatus.PROCESSED))
         .setParameter("deleted",false)
         .getResultList();
   }
