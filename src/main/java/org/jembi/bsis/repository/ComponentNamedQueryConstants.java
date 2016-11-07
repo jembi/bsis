@@ -100,6 +100,7 @@ public class ComponentNamedQueryConstants {
       + "LEFT JOIN c.componentBatch AS cb "
       + "WHERE c.componentType.canBeIssued = TRUE AND c.createdOn BETWEEN :startDate AND :endDate "
       + "AND c.isDeleted = :deleted "
+      + "AND c.status NOT IN :excludedStatuses "
       //if processingSiteId is null, get all the sites otherwise fetch the provided processingSite
       + "AND (cb.location.id = :processingSiteId OR :processingSiteId = NULL) "
       + "GROUP BY cb.location, c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
