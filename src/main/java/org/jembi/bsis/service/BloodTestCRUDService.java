@@ -17,4 +17,21 @@ public class BloodTestCRUDService {
     bloodTestRepository.save(bloodTest);
     return bloodTest;
   }
+
+  public BloodTest updateBloodTest(BloodTest bloodTest) {
+    BloodTest existingBloodTest = bloodTestRepository.findBloodTestById(bloodTest.getId());
+    existingBloodTest.setTestName(bloodTest.getTestName());
+    existingBloodTest.setTestNameShort(bloodTest.getTestNameShort());
+    existingBloodTest.setCategory(bloodTest.getCategory());
+    existingBloodTest.setBloodTestType(bloodTest.getBloodTestType());
+    existingBloodTest.setIsActive(bloodTest.getIsActive());
+    existingBloodTest.setIsDeleted(bloodTest.getIsDeleted());
+    existingBloodTest.setValidResults(bloodTest.getValidResults());
+    existingBloodTest.setPositiveResults(bloodTest.getPositiveResults());
+    existingBloodTest.setNegativeResults(bloodTest.getNegativeResults());
+    existingBloodTest.setRankInCategory(bloodTest.getRankInCategory());
+    existingBloodTest.setFlagComponentsForDiscard(bloodTest.isFlagComponentsForDiscard());
+    existingBloodTest.setFlagComponentsContainingPlasmaForDiscard(bloodTest.getFlagComponentsContainingPlasmaForDiscard());
+    return bloodTestRepository.update(bloodTest);
+  }
 }
