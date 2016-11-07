@@ -119,6 +119,7 @@ public class ComponentCRUDService {
 
     ComponentBatch componentBatch = donationBatchRepository.findComponentBatchByDonationbatchId(
         donation.getDonationBatch().getId());
+        
     if (componentBatch == null) {
       // Set the location to the venue of the donation batch
       component.setLocation(donation.getDonationBatch().getVenue());
