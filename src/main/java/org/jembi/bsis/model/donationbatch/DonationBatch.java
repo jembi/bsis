@@ -34,7 +34,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = DonationBatchQueryConstants.NAME_VERIFY_DONATION_BATCH_WITH_ID_EXISTS,
         query = DonationBatchQueryConstants.QUERY_VERIFY_DONATION_BATCH_WITH_ID_EXISTS),
     @NamedQuery(name = DonationBatchQueryConstants.NAME_FIND_UNASSIGNED_DONATION_BATCHES_WITH_COMPONENTS,
-        query = DonationBatchQueryConstants.QUERY_FIND_UNASSIGNED_DONATION_BATCHES_WITH_COMPONENTS)
+        query = DonationBatchQueryConstants.QUERY_FIND_UNASSIGNED_DONATION_BATCHES_WITH_COMPONENTS),
+    @NamedQuery(name = DonationBatchQueryConstants.NAME_FIND_COMPONENTBATCH_BY_DONATIONBATCH_ID,
+        query = DonationBatchQueryConstants.QUERY_FIND_COMPONENTBATCH_BY_DONATIONBATCH_ID)
 })
 @Entity
 @Audited

@@ -70,6 +70,7 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -101,6 +102,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   private GeneralConfigAccessorService generalConfigAccessorService;
   @Mock
   private ComponentTypeCombinationRepository componentTypeCombinationRepository;
+  @Mock
+  private DonationBatchRepository donationBatchRepository;
   
   @Test
   public void testCreateInitialComponentWithFalseConfig_shouldReturnNull() {
@@ -158,9 +161,14 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Set up data
     PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
     Location componentBatchProcessingSite = aProcessingSite().build();
-    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
-        .withComponentBatch(aComponentBatch().withLocation(componentBatchProcessingSite).build())
+    ComponentBatch componentBatch = aComponentBatch()
+        .withLocation(componentBatchProcessingSite)
         .build();
+    
+    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
+        .withComponentBatch(componentBatch)
+        .build();
+    
     Donor existingDonor = aDonor().build();
     Location venue = aVenue().build();
     Donation donation = aDonation()
@@ -175,7 +183,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // Set up mocks
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
-
+    when(donationBatchRepository.findComponentBatchByDonationbatchId(donationBatchWithComponentBatch.getId()))
+        .thenReturn(componentBatch);
     // Run test
     Component component = componentCRUDService.createInitialComponent(donation);
     
@@ -206,6 +215,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // Set up mocks
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
+    when(donationBatchRepository.findComponentBatchByDonationbatchId(donationBatchWithComponentBatch.getId())).thenReturn(null);
 
     // Run test
     Component component = componentCRUDService.createInitialComponent(donation);
@@ -1712,5 +1722,38 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
     verify(componentCRUDService, never()).markComponentAsUnsafe(argThat(hasSameStateAsComponent(deletedComponent)),
         eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
+  }
+  
+  @Test
+  public void testCreateInitialComponentWithComponentBatch_shouldReturnComponentBatch() {
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
+    Location componentBatchProcessingSite = aProcessingSite().build();
+    ComponentBatch componentBatch = aComponentBatch().withLocation(componentBatchProcessingSite).build();
+    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
+        .withComponentBatch(componentBatch)
+        .build();
+    Donor existingDonor = aDonor().build();
+    Location venue = aVenue().build();
+    Donation donation = aDonation()
+        .withPackType(packTypeThatCountsAsDonation)
+        .withDonationBatch(donationBatchWithComponentBatch)
+        .withDonor(existingDonor)
+        .withDonationDate(new Date())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withVenue(venue)
+        .build();
+    
+    // Set up mocks
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
+    when(donationBatchRepository.findComponentBatchByDonationbatchId(donationBatchWithComponentBatch.getId()))
+        .thenReturn(componentBatch);
+    
+    // Run test
+    Component component = componentCRUDService.createInitialComponent(donation);
+    
+    // Verify
+    assertThat(component.getComponentBatch(), is(componentBatch));
+    
   }
 }
