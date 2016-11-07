@@ -9,8 +9,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import org.hibernate.Query;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -176,14 +174,15 @@ public class DonationBatchRepository {
   }
   
   public ComponentBatch findComponentBatchByDonationbatchId(Long donationBatchId) {
-    ComponentBatch query = null;
-    try{
-          query = em.createNamedQuery(       
-              DonationBatchQueryConstants.NAME_FIND_COMPONENTBATCH_BY_DONATIONBATCH_ID, ComponentBatch.class)
-             .setParameter("donationBatchId", donationBatchId)
-             .getSingleResult();
-     } catch(NoResultException e) { 
-    }  
-    return query;  
+    ComponentBatch componentBatch = null;
+    try {
+      componentBatch = em.createNamedQuery(       
+      DonationBatchQueryConstants.NAME_FIND_COMPONENTBATCH_BY_DONATIONBATCH_ID, ComponentBatch.class)
+      .setParameter("donationBatchId", donationBatchId)
+      .getSingleResult();
+    } catch(NoResultException e) {
+      
+    }
+    return componentBatch;  
   }
 }

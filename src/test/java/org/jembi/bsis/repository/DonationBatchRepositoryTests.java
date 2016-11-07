@@ -9,16 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
-import org.hamcrest.core.IsNull;
 import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.scalastuff.scalabeans.sig.Mirror.NullValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -61,24 +58,20 @@ public class DonationBatchRepositoryTests {
   
   @Test
   public void testFindComponentBatchByDonationBatchId_returnsComponentBatch() {
-    ComponentBatch newComponentBatch = ComponentBatchBuilder.aComponentBatch()
-        .build();
-  
+    ComponentBatch newComponentBatch = ComponentBatchBuilder.aComponentBatch().build();
+   
     List<DonationBatch> donationBatches = Arrays.asList(
+        // Donation batches with different Id's
+        aDonationBatch()
+        .withComponentBatch(newComponentBatch)
+        .buildAndPersist(entityManager),
+      
         aDonationBatch()
         .withComponentBatch(newComponentBatch)
         .buildAndPersist(entityManager),
         
-        // Excluded by deletion
         aDonationBatch()
         .withComponentBatch(newComponentBatch)
-        .thatIsDeleted()
-        .buildAndPersist(entityManager),
-        
-        // Excluded by closure
-        aDonationBatch()
-        .withComponentBatch(newComponentBatch)
-        .thatIsClosed()
         .buildAndPersist(entityManager) 
     );  
     newComponentBatch.setDonationBatch(donationBatches.get(0));
@@ -89,7 +82,7 @@ public class DonationBatchRepositoryTests {
     ComponentBatch returnedComponentBatch = donationBatchRepository.findComponentBatchByDonationbatchId(
         donationBatches.get(0).getId());
     
-    assertThat(newComponentBatch,is(returnedComponentBatch));
+    assertThat(newComponentBatch, is(returnedComponentBatch));
   }
   
   @Test
@@ -100,7 +93,7 @@ public class DonationBatchRepositoryTests {
     ComponentBatch returnedComponentBatch = donationBatchRepository.findComponentBatchByDonationbatchId(
         donationBatch.getId());
     
-    assertThat(returnedComponentBatch,is(nullValue()));
+    assertThat(returnedComponentBatch, is(nullValue()));
   }
 
 }

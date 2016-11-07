@@ -30,7 +30,7 @@ public class DonationBatchQueryConstants {
   public static final String NAME_FIND_COMPONENTBATCH_BY_DONATIONBATCH_ID =
       "DonationBatch.findComponentBatchByDonationbatchId";
   public static final String QUERY_FIND_COMPONENTBATCH_BY_DONATIONBATCH_ID =
-       "SELECT DISTINCT db.componentBatch " +
+       "SELECT db.componentBatch " +
            "FROM DonationBatch db " +
            "WHERE db.id = :donationBatchId ";
 }
