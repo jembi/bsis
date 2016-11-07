@@ -12,6 +12,7 @@ import javax.persistence.NamedQuery;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -38,11 +39,13 @@ public class ComponentTypeCombination extends BaseModificationTrackerEntity {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
+  @Where(clause = "isDeleted = 0")
   private List<ComponentType> componentTypes;
 
   @NotAudited
   @ManyToMany(mappedBy = "producedComponentTypeCombinations", fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
+  @Where(clause = "isDeleted = 0")
   private Set<ComponentType> sourceComponentTypes;
 
   private Boolean isDeleted;
