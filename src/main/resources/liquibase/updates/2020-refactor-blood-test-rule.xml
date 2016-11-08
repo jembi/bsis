@@ -39,7 +39,8 @@
     </delete>
   </changeSet>
 
- <changeSet id="20161108-1035" author="tumijacob">
-  <dropColumn columnName="markSampleAsUnsafe" tableName="BloodTestingRule" />
- </changeSet>
+   <changeSet id="20161108-1603" author="tumijacob">
+   <dropColumn columnName="markSampleAsUnsafe" tableName="BloodTestingRule" />
+   <dropColumn columnName="subCategory" tableName="BloodTestingRule" />
+  </changeSet>
 </databaseChangeLog>
