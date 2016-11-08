@@ -9,13 +9,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
-import org.jembi.bsis.model.worksheet.WorksheetType;
 import org.jembi.bsis.repository.constant.BloodTestNamedQueryConstants;
 
 @Entity
@@ -75,12 +73,6 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
   @Enumerated(EnumType.STRING)
   @Column(length = 30)
   private BloodTestContext context;
-
-  /**
-   * List cannot be used here.
-   */
-  @ManyToMany
-  private Set<WorksheetType> worksheetTypes;
 
   @Column(nullable = false)
   private Boolean isActive = Boolean.TRUE;
@@ -188,14 +180,6 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
 
   public void setCategory(BloodTestCategory category) {
     this.category = category;
-  }
-
-  public Set<WorksheetType> getWorksheetTypes() {
-    return worksheetTypes;
-  }
-
-  public void setWorksheetTypes(Set<WorksheetType> worksheetTypes) {
-    this.worksheetTypes = worksheetTypes;
   }
 
   public BloodTestContext getContext() {

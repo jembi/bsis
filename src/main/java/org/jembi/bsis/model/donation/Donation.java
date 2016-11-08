@@ -4,9 +4,7 @@ package org.jembi.bsis.model.donation;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -39,7 +36,6 @@ import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.model.worksheet.Worksheet;
 import org.jembi.bsis.repository.DonationNamedQueryConstants;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -50,6 +46,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  *
  * @author iamrohitbanga
  */
+@SuppressWarnings("deprecation")
 @NamedQueries({
     @NamedQuery(name = DonationNamedQueryConstants.NAME_COUNT_DONATIONS_FOR_DONOR,
         query = DonationNamedQueryConstants.QUERY_COUNT_DONATION_FOR_DONOR),
@@ -118,10 +115,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @OneToMany(mappedBy = "donation")
   @Where(clause = "isDeleted = 0")
   private List<Component> components = new ArrayList<>();
-
-  @NotAudited
-  @ManyToMany(mappedBy = "donations")
-  private Set<Worksheet> worksheets;
 
   @Range(min = 0, max = 30)
   private BigDecimal haemoglobinCount;
@@ -193,7 +186,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
 
   public Donation() {
     super();
-    worksheets = new HashSet<Worksheet>();
   }
 
   public Donation(Donation donation) {
@@ -209,7 +201,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.donationType = donation.getDonationType();
     this.packType = donation.getPackType();
     this.components = donation.getComponents();
-    this.worksheets = donation.getWorksheets();
     this.haemoglobinCount = donation.getHaemoglobinCount();
     this.haemoglobinLevel = donation.getHaemoglobinLevel();
     this.bloodPressureSystolic = donation.getBloodPressureSystolic();
@@ -316,14 +307,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
       components = new ArrayList<>();
     }
     components.add(component);
-  }
-
-  public Set<Worksheet> getWorksheets() {
-    return worksheets;
-  }
-
-  public void setWorksheets(Set<Worksheet> worksheets) {
-    this.worksheets = worksheets;
   }
 
   /**

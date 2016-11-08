@@ -118,7 +118,6 @@ public class SequenceNumberRepository {
 
     SequenceNumberStore seqNumStore = null;
     Long lastNumber = (long) 0;
-    String prefix;
     boolean valuePresentInTable = true;
     try {
       seqNumStore = query.getSingleResult();
@@ -277,10 +276,6 @@ public class SequenceNumberRepository {
 
     em.flush();
     return nextNumber;
-  }
-
-  synchronized public String getNextWorksheetBatchNumber() {
-    return getNextNumber("worksheet", "worksheetBatchNumber", "W");
   }
 
   synchronized public String getNextBatchNumber() {

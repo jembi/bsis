@@ -8,7 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.jembi.bsis.model.admin.ConfigPropertyConstants;
 import org.jembi.bsis.model.admin.GenericConfig;
 import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.springframework.stereotype.Repository;
@@ -43,10 +42,6 @@ public class GenericConfigRepository {
       em.merge(config);
     }
     em.flush();
-  }
-
-  public void updateWorksheetProperties(Map<String, String> params) {
-    updateConfigProperties(ConfigPropertyConstants.DONATIONS_WORKSHEET, params);
   }
 
   public Map<String, String> getConfigProperties(String propertyOwner) {
