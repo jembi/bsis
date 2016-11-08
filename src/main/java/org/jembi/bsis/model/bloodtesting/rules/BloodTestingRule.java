@@ -1,8 +1,9 @@
 package org.jembi.bsis.model.bloodtesting.rules;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -109,11 +110,11 @@ public class BloodTestingRule extends BaseEntity {
     this.category = category;
   }
 
-  public List<String> getPendingTestsIds() {
-    if (pendingTestsIds == null || pendingTestsIds.equals("")) {
-      return new ArrayList<String>(0);
+  public Set<String> getPendingTestsIds() {
+    if (pendingTestsIds == null || pendingTestsIds.isEmpty()) {
+      return Collections.emptySet();
     }
-    return Arrays.asList(pendingTestsIds.split(","));
+    return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(pendingTestsIds.split(","))));
   }
 
   public void setPendingTestsIds(String pendingTestsIds) {

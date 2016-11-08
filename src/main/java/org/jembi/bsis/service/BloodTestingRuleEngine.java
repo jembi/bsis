@@ -339,7 +339,7 @@ public class BloodTestingRuleEngine {
       for (BloodTestingRule bloodTestingRule : resultSet.getBloodTestingRules()) {
 
         // Find which tests resulted in the repeat test
-        List<String> pendingTestIds = bloodTestingRule.getPendingTestsIds();
+        Set<String> pendingTestIds = bloodTestingRule.getPendingTestsIds();
         if (pendingTestIds.contains(repeatBloodTypingTestId)) {
 
           // Compare the result of the repeat test to previous test
