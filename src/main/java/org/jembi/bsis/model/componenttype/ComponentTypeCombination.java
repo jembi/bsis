@@ -39,13 +39,11 @@ public class ComponentTypeCombination extends BaseModificationTrackerEntity {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
-  @Where(clause = "isDeleted = 0")
   private List<ComponentType> componentTypes;
 
   @NotAudited
   @ManyToMany(mappedBy = "producedComponentTypeCombinations", fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
-  @Where(clause = "isDeleted = 0")
   private Set<ComponentType> sourceComponentTypes;
 
   private Boolean isDeleted;
