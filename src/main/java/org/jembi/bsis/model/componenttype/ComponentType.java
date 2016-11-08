@@ -60,6 +60,7 @@ public class ComponentType extends BaseModificationTrackerEntity {
   @NotAudited
   @ManyToMany(mappedBy = "componentTypes", fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
+  @Where(clause = "isDeleted = 0")
   private List<ComponentTypeCombination> componentTypeCombinations;
 
   @NotAudited
