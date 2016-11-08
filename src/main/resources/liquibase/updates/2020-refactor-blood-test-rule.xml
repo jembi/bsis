@@ -27,4 +27,15 @@
     <dropColumn tableName="Donation" columnName="extraBloodTypeInformation"/>
     <dropColumn tableName="Donation_AUD" columnName="extraBloodTypeInformation"/>
   </changeSet>
+  
+  <changeSet id="20161108-1053" author="lauravignoli">
+  <comment>Remove references to blood test context</comment>
+    <dropColumn tableName="BloodTestingRule" columnName="context"/>
+    <dropColumn tableName="BloodTestingRule_AUD" columnName="context"/>
+    <dropColumn tableName="BloodTest" columnName="context"/>
+    <dropColumn tableName="BloodTest_AUD" columnName="context"/>
+    <delete tableName="GenericConfig">
+      <where>propertyName = 'bloodTypingContext'</where>
+    </delete>
+  </changeSet>
 </databaseChangeLog>

@@ -17,7 +17,6 @@ import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseEntity;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
 
 @Entity
@@ -54,10 +53,6 @@ public class BloodTestingRule extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(length = 30)
   private BloodTestSubCategory subCategory;
-
-  @Enumerated(EnumType.STRING)
-  @Column(length = 30)
-  private BloodTestContext context;
 
   /**
    * TODO: Not used right now.
@@ -113,14 +108,6 @@ public class BloodTestingRule extends BaseEntity {
 
   public void setNewInformation(String newInformation) {
     this.newInformation = newInformation;
-  }
-
-  public BloodTestContext getContext() {
-    return context;
-  }
-
-  public void setContext(BloodTestContext context) {
-    this.context = context;
   }
 
   public BloodTestCategory getCategory() {

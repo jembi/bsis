@@ -2,7 +2,6 @@ package org.jembi.bsis.backingform;
 
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
@@ -47,10 +46,6 @@ public class BloodTestingRuleBackingForm {
 
   public void setPattern(String pattern) {
     typingRule.setPattern(pattern);
-  }
-
-  public void setContext(String context) {
-    typingRule.setContext(BloodTestContext.valueOf(context.replaceAll("\\s", "").toUpperCase()));
   }
 
   public void setSubCategory(String subCategory) {

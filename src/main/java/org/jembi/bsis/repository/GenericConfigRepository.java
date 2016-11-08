@@ -9,7 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.model.admin.GenericConfig;
-import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,8 +54,4 @@ public class GenericConfigRepository {
     return configProperties;
   }
 
-  public BloodTestContext getCurrentBloodTypingContext() {
-    String contextStr = getConfigProperties("labsetup").get("bloodTypingContext");
-    return BloodTestContext.valueOf(contextStr);
-  }
 }

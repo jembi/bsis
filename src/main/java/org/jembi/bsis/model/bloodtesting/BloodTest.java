@@ -70,10 +70,6 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
   @Column(length = 30)
   private BloodTestCategory category;
 
-  @Enumerated(EnumType.STRING)
-  @Column(length = 30)
-  private BloodTestContext context;
-
   @Column(nullable = false)
   private Boolean isActive = Boolean.TRUE;
 
@@ -181,15 +177,6 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
   public void setCategory(BloodTestCategory category) {
     this.category = category;
   }
-
-  public BloodTestContext getContext() {
-    return context;
-  }
-
-  public void setContext(BloodTestContext context) {
-    this.context = context;
-  }
-
 
   public Boolean getIsDeleted() {
     return isDeleted;

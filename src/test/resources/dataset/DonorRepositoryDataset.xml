@@ -195,8 +195,6 @@
                    propertyOwner="labsetup" propertyValue="true"/>
     <genericconfig id="26" propertyName="crossmatchProcedure"
                    propertyOwner="labsetup" propertyValue="CROSSMATCH_DONE_CAN_SKIP"/>
-    <genericconfig id="27" propertyName="bloodTypingContext"
-                   propertyOwner="labsetup" propertyValue="RECORD_BLOOD_TYPING_TESTS"/>
     <genericconfig id="28" propertyName="bloodTypingElisa"
                    propertyOwner="labsetup" propertyValue="true"/>
     <genericconfig id="30" propertyName="ttiElisa"

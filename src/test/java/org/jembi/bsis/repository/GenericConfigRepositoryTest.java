@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
@@ -37,7 +36,7 @@ public class GenericConfigRepositoryTest extends DBUnitContextDependentTestSuite
   public void testGetConfigProperties() throws Exception {
     Map<String, String> all = genericConfigRepository.getConfigProperties("labsetup");
     Assert.assertNotNull("There are GenericConfigs", all);
-    Assert.assertEquals("There are 19 labsetup GenericConfig", 19, all.size());
+    Assert.assertEquals("There are 18 labsetup GenericConfig", 18, all.size());
     Assert.assertTrue("The labsetup GenericConfig contains crossmatchProcedure",
         all.keySet().contains("crossmatchProcedure"));
   }
@@ -60,13 +59,6 @@ public class GenericConfigRepositoryTest extends DBUnitContextDependentTestSuite
     Map<String, String> all = genericConfigRepository.getConfigProperties("junit");
     Assert.assertNotNull("Does not return a null list", all);
     Assert.assertTrue("It is an empty list", all.isEmpty());
-  }
-
-  @Test
-  public void testGetCurrentBloodTypingContext() throws Exception {
-    BloodTestContext context = genericConfigRepository.getCurrentBloodTypingContext();
-    Assert.assertNotNull("BloodTestContext was found", context);
-    Assert.assertEquals(BloodTestContext.RECORD_BLOOD_TYPING_TESTS, context);
   }
 
   @Test
