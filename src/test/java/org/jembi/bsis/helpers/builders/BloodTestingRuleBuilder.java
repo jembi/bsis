@@ -18,7 +18,6 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
   private String newInformation;
   private DonationField donationFieldChanged;
   private String pendingTestsIds;
-  private BloodTestSubCategory subCategory;
   private BloodTestCategory category;
   private boolean isDeleted = false;
 
@@ -56,11 +55,6 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
     this.category = category;
     return this;
   }
-  
-  public BloodTestingRuleBuilder withSubCategory(BloodTestSubCategory subCategory) {
-    this.subCategory = subCategory;
-    return this;
-  }
 
   public BloodTestingRuleBuilder thatIsDeleted() {
     this.isDeleted = true;
@@ -77,7 +71,6 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
     bloodTestingRule.setDonationFieldChanged(donationFieldChanged);
     bloodTestingRule.setPendingTestsIds(pendingTestsIds);
     bloodTestingRule.setCategory(category);
-    bloodTestingRule.setSubCategory(subCategory);
     bloodTestingRule.setIsDeleted(isDeleted);
     return bloodTestingRule;
   }
