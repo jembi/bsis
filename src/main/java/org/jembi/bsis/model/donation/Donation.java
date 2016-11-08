@@ -87,9 +87,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @Column(length = 50)
   private String bloodRh;
 
-  @Column(length = 150)
-  private String extraBloodTypeInformation;
-
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy = "donation")
@@ -195,7 +192,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.donor = donation.getDonor();
     this.bloodAbo = donation.getBloodAbo();
     this.bloodRh = donation.getBloodRh();
-    this.extraBloodTypeInformation = donation.getExtraBloodTypeInformation();
     this.bloodTestResults = donation.getBloodTestResults();
     this.donationDate = donation.getDonationDate();
     this.donationType = donation.getDonationType();
@@ -444,14 +440,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
 
   public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
     this.bloodPressureDiastolic = bloodPressureDiastolic;
-  }
-
-  public String getExtraBloodTypeInformation() {
-    return extraBloodTypeInformation;
-  }
-
-  public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
-    this.extraBloodTypeInformation = extraBloodTypeInformation;
   }
 
   public Integer getDonorPulse() {

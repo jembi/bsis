@@ -109,7 +109,7 @@
               bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
     <Donation id="4" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 00:00:00.0"
-              donationIdentificationNumber="4444444" extraBloodTypeInformation=""
+              donationIdentificationNumber="4444444"
               isDeleted="0" createdDate="2015-08-11 07:53:57.0" lastUpdated="2015-08-11 04:43:20.0"
               ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
               donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"

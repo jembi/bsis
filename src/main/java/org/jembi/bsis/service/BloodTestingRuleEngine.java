@@ -51,20 +51,19 @@ public class BloodTestingRuleEngine {
    * Apply blood typing rules to blood typing tests (combination of what is present in the database
    * and those passed as parameter.
    *
-   * @param donation         Blood Typing results for which collection
+   * @param donation Blood Typing results for which collection
    * @param bloodTestResults map of blood typing test id to result. Only character allowed in the
-   *                         result. multiple characters should be mapped to negative/positive
-   *                         (TODO) Assume validation of results already done.
-   * @return Result of applying the rules. The following values should be present in the map 
-   *  - bloodAbo (what changes should be made to blood abo after applying these rules)
-   *  - bloodRh (what changes should be made to blood rh), extra (extra information that should be added 
-   *    to the blood type like weak A), 
-   *  - pendingTests (comma separated list of blood typing tests that must be done to determine the blood
-   *    type), - testResults (map of blood typing test id to blood typing test either stored or those 
-   *    passed to this function or those already stored in the database), 
-   *  - bloodTypingStatus (enum BloodTypingStatus indicates if complete typing information is available), 
-   *  - storedTestResults (what blood typing results are actually stored in the database, a subset of 
-   *    testResults)
+   *        result. multiple characters should be mapped to negative/positive (TODO) Assume
+   *        validation of results already done.
+   * @return Result of applying the rules. The following values should be present in the map -
+   *         bloodAbo (what changes should be made to blood abo after applying these rules) -
+   *         bloodRh (what changes should be made to blood rh), - pendingTests (comma separated list
+   *         of blood typing tests that must be done to determine the blood type), - testResults
+   *         (map of blood typing test id to blood typing test either stored or those passed to this
+   *         function or those already stored in the database), - bloodTypingStatus (enum
+   *         BloodTypingStatus indicates if complete typing information is available), -
+   *         storedTestResults (what blood typing results are actually stored in the database, a
+   *         subset of testResults)
    */
   public BloodTestingRuleResult applyBloodTests(Donation donation, Map<Long, String> bloodTestResults)
       throws IllegalArgumentException {
@@ -183,7 +182,7 @@ public class BloodTestingRuleEngine {
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
         LOGGER.trace("Pending test ids: " + rule.getPendingTestsIds());
-        LOGGER.trace("Changes to result: " + rule.getNewInformation() + ", " + rule.getExtraInformation());
+        LOGGER.trace("Changes to result: " + rule.getNewInformation());
       }
       
       // determine which changes are necessary, depending on the DonationField
@@ -198,16 +197,10 @@ public class BloodTestingRuleEngine {
         case TTISTATUS:
           resultSet.addTtiStatusChanges(rule.getNewInformation());
           break;
-        case EXTRA:
-          resultSet.addExtraInformation(rule.getNewInformation());
-          break;
         default:
           LOGGER.warn("Unknown donation field: " + donationFieldChanged);
           break;
       }
-
-      if (StringUtils.isNotBlank(rule.getExtraInformation()))
-        resultSet.addExtraInformation(rule.getExtraInformation());
 
       // determine which tests are pending
       for (String extraTestId : rule.getPendingTestsIds()) {
@@ -235,7 +228,7 @@ public class BloodTestingRuleEngine {
         LOGGER.trace("Test id: " + rule.getBloodTest().getId());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
-        LOGGER.trace("Changes to result: " + rule.getNewInformation() + ", " + rule.getExtraInformation());
+        LOGGER.trace("Changes to result: " + rule.getNewInformation());
       }
       DonationField donationFieldChanged = rule.getDonationFieldChanged();
       switch (donationFieldChanged) {

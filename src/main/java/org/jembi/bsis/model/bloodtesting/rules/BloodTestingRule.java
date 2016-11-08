@@ -44,9 +44,6 @@ public class BloodTestingRule extends BaseEntity {
   @Column(length = 30)
   private String newInformation;
 
-  @Column(length = 30)
-  private String extraInformation;
-
   @Column(length = 60)
   private String pendingTestsIds;
 
@@ -116,14 +113,6 @@ public class BloodTestingRule extends BaseEntity {
 
   public void setNewInformation(String newInformation) {
     this.newInformation = newInformation;
-  }
-
-  public String getExtraInformation() {
-    return extraInformation;
-  }
-
-  public void setExtraInformation(String extraInformation) {
-    this.extraInformation = extraInformation;
   }
 
   public BloodTestContext getContext() {

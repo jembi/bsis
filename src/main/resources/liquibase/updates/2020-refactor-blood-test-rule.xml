@@ -4,6 +4,7 @@
       http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   <changeSet id="20161108-0921" author="lauravignoli">
+    <comment>Remove references to Worksheet</comment>
     <dropTable tableName="BloodTest_WorksheetType" />
     <dropTable tableName="BloodTest_WorksheetType_AUD" />
     <dropTable tableName="Worksheet_Donation" />
@@ -17,5 +18,13 @@
     <delete tableName="GenericConfig">
       <where>propertyName like '%Worksheets%'</where>
     </delete>
+  </changeSet>
+  
+  <changeSet id="20161108-1000" author="lauravignoli">
+  <comment>Remove references to extraInformation</comment>
+    <dropColumn tableName="BloodTestingRule" columnName="extraInformation"/>
+    <dropColumn tableName="BloodTestingRule_AUD" columnName="extraInformation"/>
+    <dropColumn tableName="Donation" columnName="extraBloodTypeInformation"/>
+    <dropColumn tableName="Donation_AUD" columnName="extraBloodTypeInformation"/>
   </changeSet>
 </databaseChangeLog>

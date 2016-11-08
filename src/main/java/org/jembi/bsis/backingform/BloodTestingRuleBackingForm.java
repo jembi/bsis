@@ -7,9 +7,9 @@ import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
-import scala.actors.threadpool.Arrays;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import scala.actors.threadpool.Arrays;
 
 public class BloodTestingRuleBackingForm {
 
@@ -51,10 +51,6 @@ public class BloodTestingRuleBackingForm {
 
   public void setContext(String context) {
     typingRule.setContext(BloodTestContext.valueOf(context.replaceAll("\\s", "").toUpperCase()));
-  }
-
-  public void setExtraInformation(String extraInformation) {
-    typingRule.setExtraInformation(extraInformation);
   }
 
   public void setSubCategory(String subCategory) {

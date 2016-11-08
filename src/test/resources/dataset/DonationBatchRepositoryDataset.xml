@@ -205,7 +205,7 @@
     <Donation id="1" bloodAbo="O" bloodPressureSystolic="110"
               bloodRh="+" bloodTypingStatus="COMPLETE" donationDate="2015-02-02 00:00:00.0"
               donationIdentificationNumber="1234567" donorWeight="80.00"
-              extraBloodTypeInformation="" haemoglobinCount="15.70" isDeleted="0"
+              haemoglobinCount="15.70" isDeleted="0"
               createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-06 02:09:30.0"
               ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
               donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
@@ -214,7 +214,7 @@
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
     <Donation id="2" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212129"
-              extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-18 07:53:57.0"
+              isDeleted="0" createdDate="2015-02-18 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
               packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
@@ -230,7 +230,7 @@
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
     <Donation id="4" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212130"
-              extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-18 07:53:57.0"
+              isDeleted="0" createdDate="2015-02-18 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
               packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
