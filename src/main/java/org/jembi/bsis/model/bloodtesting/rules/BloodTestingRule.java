@@ -50,10 +50,6 @@ public class BloodTestingRule extends BaseEntity {
   @Column(length = 30)
   private BloodTestCategory category;
 
-  @Enumerated(EnumType.STRING)
-  @Column(length = 30)
-  private BloodTestSubCategory subCategory;
-
   /**
    * TODO: Not used right now.
    */
@@ -119,15 +115,7 @@ public class BloodTestingRule extends BaseEntity {
   public void setPendingTestsIds(String pendingTestsIds) {
     this.pendingTestsIds = pendingTestsIds;
   }
-
-  public BloodTestSubCategory getSubCategory() {
-    return subCategory;
-  }
-
-  public void setSubCategory(BloodTestSubCategory subCategory) {
-    this.subCategory = subCategory;
-  }
-
+  
   public void setDonationFieldChanged(DonationField donationFieldChanged) {
     this.donationFieldChanged = donationFieldChanged;
   }

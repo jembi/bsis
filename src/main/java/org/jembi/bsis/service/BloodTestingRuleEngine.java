@@ -108,8 +108,8 @@ public class BloodTestingRuleEngine {
     for (BloodTestingRule rule : rules) {
 
       if (BloodTypingMatchStatus.isResolvedState(donation.getBloodTypingMatchStatus())
-          && (rule.getSubCategory() == BloodTestSubCategory.BLOODABO
-          || rule.getSubCategory() == BloodTestSubCategory.BLOODRH)) {
+          && (rule.getDonationFieldChanged() == DonationField.BLOODABO
+          || rule.getDonationFieldChanged() == DonationField.BLOODRH)) {
         // Don't process the rule if it is for blood typing and the blood typing is resolved
         continue;
       }
@@ -177,7 +177,7 @@ public class BloodTestingRuleEngine {
 
     if (patternMatch) {
       if (LOGGER.isTraceEnabled()) {
-        LOGGER.trace("Pattern matched for rule with id '" + rule.getId() + "' and subcategory '" + rule.getSubCategory() + "'.");
+        LOGGER.trace("Pattern matched for rule with id '" + rule.getId() + "' and subcategory '" + rule.getDonationFieldChanged() + "'.");
         LOGGER.trace("Test id: " + rule.getBloodTest().getId());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
@@ -205,18 +205,18 @@ public class BloodTestingRuleEngine {
       // determine which tests are pending
       for (String extraTestId : rule.getPendingTestsIds()) {
         if (!availableTestResults.containsKey(extraTestId)) {
-          switch (rule.getSubCategory()) {
+          switch (rule.getDonationFieldChanged()) {
             case BLOODABO:
               resultSet.addPendingAboTestsIds(extraTestId);
               break;
             case BLOODRH:
               resultSet.addPendingRhTestsIds(extraTestId);
               break;
-            case TTI:
+            case TTISTATUS:
               resultSet.addPendingRepeatAndConfirmatoryTtiTestsIds(extraTestId);
               break;
             default:
-              LOGGER.warn("Unknown rule subcategory: " + rule.getSubCategory());
+              LOGGER.warn("Unknown rule subcategory: " + rule.getDonationFieldChanged());
               break;
           }
         }
