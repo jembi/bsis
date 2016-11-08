@@ -12,8 +12,6 @@
                          lastNumber="2" prefix="B" targetTable="donationBatch"/>
     <SequenceNumberStore id="3" columnName="batchNumber"
                          lastNumber="4" prefix="TB" targetTable="testBatch"/>
-    <SequenceNumberStore id="4" columnName="worksheetBatchNumber"
-                         lastNumber="1" prefix="W" targetTable="worksheet"/>
     <SequenceNumberStore id="5"
                          columnName="donationIdentificationNumber" lastNumber="3" prefix="C"
                          targetTable="Donation"/>
