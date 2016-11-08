@@ -185,19 +185,19 @@
     createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestingRule id="1" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO"
-		isDeleted="0" markSampleAsUnsafe="0"
+		isDeleted="0"  
 		newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO" />
 	<BloodTestingRule id="2" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO"
-		isDeleted="0" markSampleAsUnsafe="0"
+		isDeleted="0"  
 		newInformation="A" pattern="A" pendingTestsIds="" subCategory="BLOODABO" />
 	<BloodTestingRule id="3" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO"
-		isDeleted="0" markSampleAsUnsafe="0"
+		isDeleted="0"  
 		newInformation="B" pattern="B" pendingTestsIds="" subCategory="BLOODABO" />
 	<BloodTestingRule id="4" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO"
-		isDeleted="0" markSampleAsUnsafe="0"
+		isDeleted="0"  
 		newInformation="AB" pattern="AB" pendingTestsIds="" subCategory="BLOODABO" />
 
 	<DataType id="1" dataType="text"/>
