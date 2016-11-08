@@ -15,6 +15,7 @@ import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameS
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -144,7 +145,11 @@ public class ComponentFactoryTests {
   public void createManagementViewModel_oneComponent() {
     // set up data
     Date createdOn = new Date();
-    Date expiresOn = new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(createdOn);
+    cal.add(Calendar.DAY_OF_YEAR, -1);
+    Date expiresOn = cal.getTime();
+    
     ComponentType componentType = aComponentType().build();
     Component component = aComponent()
         .withId(1L)
@@ -196,7 +201,11 @@ public class ComponentFactoryTests {
   public void createComponentViewModel_oneComponent() throws Exception {
     // set up data
     Date createdOn = new Date();
-    Date expiresOn = new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(createdOn);
+    cal.add(Calendar.DAY_OF_YEAR, -1);
+    Date expiresOn = cal.getTime();
+    
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber("1234567").build();
     ComponentType componentType = aComponentType().build();
     Component component = aComponent()
