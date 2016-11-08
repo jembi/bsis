@@ -186,19 +186,19 @@
 	<BloodTestingRule id="1" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO"
 		isDeleted="0"  
-		newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO" />
+		newInformation="O" pattern="O" pendingTestsIds=""   />
 	<BloodTestingRule id="2" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO"
 		isDeleted="0"  
-		newInformation="A" pattern="A" pendingTestsIds="" subCategory="BLOODABO" />
+		newInformation="A" pattern="A" pendingTestsIds=""   />
 	<BloodTestingRule id="3" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO"
 		isDeleted="0"  
-		newInformation="B" pattern="B" pendingTestsIds="" subCategory="BLOODABO" />
+		newInformation="B" pattern="B" pendingTestsIds=""   />
 	<BloodTestingRule id="4" bloodTest_id="1" category="BLOODTYPING"
 		donationFieldChanged="BLOODABO"
 		isDeleted="0"  
-		newInformation="AB" pattern="AB" pendingTestsIds="" subCategory="BLOODABO" />
+		newInformation="AB" pattern="AB" pendingTestsIds=""   />
 
 	<DataType id="1" dataType="text"/>
 	<DataType id="2" dataType="integer"/>

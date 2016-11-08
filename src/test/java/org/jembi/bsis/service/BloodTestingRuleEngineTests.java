@@ -19,10 +19,8 @@ import java.util.Map;
 
 import org.jembi.bsis.factory.BloodTestingRuleResultViewModelFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
-import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
@@ -117,30 +115,22 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     
     // ABO
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODABO)
         .withPattern("O").withNewInformation("O").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODABO)
         .withPattern("A").withNewInformation("A").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODABO)
         .withPattern("B").withNewInformation("B").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODABO)
         .withPattern("AB").withNewInformation("AB").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODABO)
         .withPattern("NT").withNewInformation("").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
     
     // RH
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODRH)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODRH)
         .withPattern("POS").withNewInformation("+").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODRH)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODRH)
         .withPattern("NEG").withNewInformation("-").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODRH)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODRH)
         .withPattern("NT").withNewInformation("").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
   }
 
