@@ -38,4 +38,8 @@
       <where>propertyName = 'bloodTypingContext'</where>
     </delete>
   </changeSet>
+
+ <changeSet id="20161108-1035" author="tumijacob">
+  <dropColumn columnName="markSampleAsUnsafe" tableName="BloodTestingRule" />
+ </changeSet>
 </databaseChangeLog>

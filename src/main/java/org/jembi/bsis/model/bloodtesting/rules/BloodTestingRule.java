@@ -57,7 +57,6 @@ public class BloodTestingRule extends BaseEntity {
   /**
    * TODO: Not used right now.
    */
-  private Boolean markSampleAsUnsafe;
 
   @Column(nullable = false)
   private boolean isDeleted = false;
@@ -73,11 +72,7 @@ public class BloodTestingRule extends BaseEntity {
   public DonationField getDonationFieldChanged() {
     return donationFieldChanged;
   }
-
-  public Boolean getMarkSampleAsUnsafe() {
-    return markSampleAsUnsafe;
-  }
-
+  
   public boolean getIsDeleted() {
     return isDeleted;
   }
@@ -93,11 +88,7 @@ public class BloodTestingRule extends BaseEntity {
   public void setPart(DonationField part) {
     this.setDonationFieldChanged(part);
   }
-
-  public void setMarkSampleAsUnsafe(Boolean markSampleAsUnsafe) {
-    this.markSampleAsUnsafe = markSampleAsUnsafe;
-  }
-
+  
   public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }

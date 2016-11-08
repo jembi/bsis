@@ -56,10 +56,6 @@ public class BloodTestingRuleBackingForm {
     typingRule.setIsDeleted(isDeleted);
   }
 
-  public void setMarkSampleAsUnsafe(Boolean MarkSampleAsUnsafe) {
-    typingRule.setMarkSampleAsUnsafe(MarkSampleAsUnsafe);
-  }
-
   public void setNewInformation(String newInformation) {
     typingRule.setNewInformation(newInformation);
   }
