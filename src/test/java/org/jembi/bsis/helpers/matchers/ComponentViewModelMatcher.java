@@ -23,6 +23,7 @@ public class ComponentViewModelMatcher extends TypeSafeMatcher<ComponentViewMode
         .appendText("\nComponentType: ").appendValue(expected.getComponentType())
         .appendText("\nStatus: ").appendValue(expected.getStatus())
         .appendText("\ncreatedOn: ").appendValue(expected.getCreatedOn())
+        .appendText("\nexpiresOn: ").appendValue(expected.getExpiresOn())
         .appendText("\ndonationIdentificationNumber: ").appendValue(expected.getDonationIdentificationNumber())
         .appendText("\nexpiryStatus: ").appendValue(expected.getExpiryStatus())
         ;
@@ -36,6 +37,7 @@ public class ComponentViewModelMatcher extends TypeSafeMatcher<ComponentViewMode
         Objects.equals(actual.getComponentType(), expected.getComponentType()) &&
         Objects.equals(actual.getStatus(), expected.getStatus()) &&
         (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn()) || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
+        (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn()) || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
         Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus());
   }

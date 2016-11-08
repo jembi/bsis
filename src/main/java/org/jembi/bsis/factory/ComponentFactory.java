@@ -47,6 +47,7 @@ public class ComponentFactory {
     viewModel.setComponentCode(component.getComponentCode());
     viewModel.setComponentType(componentTypeFactory.createFullViewModel(component.getComponentType()));
     viewModel.setCreatedOn(component.getCreatedOn());
+    viewModel.setExpiresOn(component.getExpiresOn());
     viewModel.setExpiryStatus(getExpiryStatus(component));
     viewModel.setId(component.getId());
     viewModel.setStatus(component.getStatus());
@@ -110,6 +111,7 @@ public class ComponentFactory {
     viewModel.setComponentCode(component.getComponentCode());
     viewModel.setComponentType(componentTypeFactory.createViewModel(component.getComponentType()));
     viewModel.setCreatedOn(component.getCreatedOn());
+    viewModel.setExpiresOn(component.getExpiresOn());
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
     viewModel.setExpiryStatus(getExpiryStatus(component));
     viewModel.setId(component.getId());

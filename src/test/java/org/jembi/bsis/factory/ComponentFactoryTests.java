@@ -15,6 +15,7 @@ import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameS
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -144,6 +145,11 @@ public class ComponentFactoryTests {
   public void createManagementViewModel_oneComponent() {
     // set up data
     Date createdOn = new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(createdOn);
+    cal.add(Calendar.DAY_OF_YEAR, -1);
+    Date expiresOn = cal.getTime();
+    
     ComponentType componentType = aComponentType().build();
     Component component = aComponent()
         .withId(1L)
@@ -151,6 +157,7 @@ public class ComponentFactoryTests {
         .withComponentCode("0011")
         .withComponentType(componentType)
         .withCreatedOn(createdOn)
+        .withExpiresOn(expiresOn)
         .withWeight(222)
         .build();
     
@@ -164,13 +171,14 @@ public class ComponentFactoryTests {
         .withComponentCode("0011")
         .withComponentType(componentTypeFullViewModel)
         .withCreatedOn(createdOn)
+        .withExpiresOn(expiresOn)
         .withWeigth(222)
         .withPermission("canDiscard", true)
         .withPermission("canProcess", true)
         .withPermission("canRecordWeight", true)
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
-        .withExpiryStatus("")
+        .withExpiryStatus("Already expired")
         .build();
 
     // setup mocks
@@ -192,14 +200,21 @@ public class ComponentFactoryTests {
   @Test
   public void createComponentViewModel_oneComponent() throws Exception {
     // set up data
-   Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber("1234567").build();
+    Date createdOn = new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(createdOn);
+    cal.add(Calendar.DAY_OF_YEAR, -1);
+    Date expiresOn = cal.getTime();
+    
+    Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber("1234567").build();
     ComponentType componentType = aComponentType().build();
     Component component = aComponent()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(componentType)
         .withComponentCode("componentCode")
-        .withCreatedOn(new Date())
+        .withCreatedOn(createdOn)
+        .withExpiresOn(expiresOn)
         .withDonation(donation)
         .build();
     
@@ -211,9 +226,10 @@ public class ComponentFactoryTests {
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(componentTypeViewModel)
         .withComponentCode("componentCode")
-        .withCreatedOn(new Date())
+        .withCreatedOn(createdOn)
+        .withExpiresOn(expiresOn)
         .withDonationIdentificationNumber("1234567")
-        .withExpiryStatus("")
+        .withExpiryStatus("Already expired")
         .build();
 
     // setup mocks

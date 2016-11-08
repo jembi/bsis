@@ -23,6 +23,7 @@ public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<Compone
         .appendText("\nComponentType: ").appendValue(expected.getComponentType())
         .appendText("\nStatus: ").appendValue(expected.getStatus())
         .appendText("\nCreated on: ").appendValue(expected.getCreatedOn())
+        .appendText("\nExpires on: ").appendValue(expected.getExpiresOn())
         .appendText("\nExpiry status: ").appendValue(expected.getExpiryStatus())
         .appendText("\nCreatedOn: ").appendValue(expected.getCreatedOn())
         .appendText("\nWeight: ").appendValue(expected.getWeight())
@@ -40,6 +41,7 @@ public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<Compone
         Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus()) &&
         Objects.equals(actual.getPermissions(), expected.getPermissions()) &&
         (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn()) || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
+        (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn()) || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getPackType(), expected.getPackType());
   }
 
