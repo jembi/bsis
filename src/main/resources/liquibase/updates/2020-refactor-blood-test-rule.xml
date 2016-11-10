@@ -44,4 +44,10 @@
     <dropColumn columnName="markSampleAsUnsafe" tableName="BloodTestingRule" />
     <dropColumn columnName="subCategory" tableName="BloodTestingRule" />
   </changeSet>
+  
+  <changeSet id="20161110-1306" author="tumijacob">
+  <comment>Remove references to markSampleAsUnsafe and subCategory from BloodTestingRule_AUD</comment>
+    <dropColumn columnName="markSampleAsUnsafe" tableName="BloodTestingRule_AUD" />
+    <dropColumn columnName="subCategory" tableName="BloodTestingRule_AUD" />
+  </changeSet>  
 </databaseChangeLog>
