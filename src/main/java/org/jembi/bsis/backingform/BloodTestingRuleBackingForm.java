@@ -1,80 +1,132 @@
 package org.jembi.bsis.backingform;
 
+import java.util.LinkedHashSet;
+
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
-
-import scala.actors.threadpool.Arrays;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BloodTestingRuleBackingForm {
 
-  @JsonIgnore
-  private BloodTestingRule typingRule;
+  private Long id;
 
-  public BloodTestingRuleBackingForm() {
-    typingRule = new BloodTestingRule();
+  private BloodTest bloodTest;
+
+  private String pattern;
+
+  private DonationField donationFieldChanged;
+
+  private String newInformation;
+
+  private String extraInformation;
+
+  private LinkedHashSet<String> pendingTestsIds;
+
+  private BloodTestCategory category;
+
+  private BloodTestSubCategory subCategory;
+
+  private BloodTestContext context;
+
+  private Boolean markSampleAsUnsafe;
+
+  private boolean isDeleted = false;
+
+  public Long getId () {
+    return id;
   }
 
-  public BloodTestingRule getTypingRule() {
-    return typingRule;
+  public void setId (Long id) {
+    this.id = id;
   }
 
-  public void setTypingRule(BloodTestingRule typingRule) {
-    this.typingRule = typingRule;
+  public BloodTest getBloodTest () {
+    return bloodTest;
   }
 
-  public void setId(Long id) {
-    typingRule.setId(id);
+  public void setBloodTest (BloodTest bloodTest) {
+    this.bloodTest = bloodTest;
   }
 
-  public void setPendingTestsIds(int[] pendingTestsIds) {
-    String testIds = Arrays.toString(pendingTestsIds).replaceAll("\\s", "");
-    typingRule.setPendingTestsIds(testIds.substring(1, testIds.length() - 1));
+  public String getPattern () {
+    return pattern;
   }
 
-  public void setCategory(String category) {
-    typingRule.setCategory(BloodTestCategory.valueOf(category.replaceAll("\\s", "").toUpperCase()));
+  public void setPattern (String pattern) {
+    this.pattern = pattern;
   }
 
-  public void setDonationFieldChanged(String donationField) {
-    typingRule.setDonationFieldChanged(DonationField.valueOf(donationField.replaceAll("\\s", "").toUpperCase()));
+  public DonationField getDonationFieldChanged () {
+    return donationFieldChanged;
   }
 
-  public void setPattern(String pattern) {
-    typingRule.setPattern(pattern);
+  public void setDonationFieldChanged (DonationField donationFieldChanged) {
+    this.donationFieldChanged = donationFieldChanged;
   }
 
-  public void setContext(String context) {
-    typingRule.setContext(BloodTestContext.valueOf(context.replaceAll("\\s", "").toUpperCase()));
+  public String getNewInformation () {
+    return newInformation;
   }
 
-  public void setExtraInformation(String extraInformation) {
-    typingRule.setExtraInformation(extraInformation);
+  public void setNewInformation (String newInformation) {
+    this.newInformation = newInformation;
   }
 
-  public void setSubCategory(String subCategory) {
-    typingRule.setSubCategory(BloodTestSubCategory.valueOf(subCategory.replaceAll("\\s", "").toUpperCase()));
+  public String getExtraInformation () {
+    return extraInformation;
   }
 
-  public void setIsDeleted(Boolean isDeleted) {
-    typingRule.setIsDeleted(isDeleted);
+  public void setExtraInformation (String extraInformation) {
+    this.extraInformation = extraInformation;
   }
 
-  public void setMarkSampleAsUnsafe(Boolean MarkSampleAsUnsafe) {
-    typingRule.setMarkSampleAsUnsafe(MarkSampleAsUnsafe);
+  public LinkedHashSet<String> getPendingTestsIds () {
+    return pendingTestsIds;
   }
 
-  public void setNewInformation(String newInformation) {
-    typingRule.setNewInformation(newInformation);
+  public void setPendingTestsIds (LinkedHashSet<String> pendingTestsIds) {
+    this.pendingTestsIds = pendingTestsIds;
   }
 
-  public void setBloodTest(BloodTest bloodTest) {
-    typingRule.setBloodTest(bloodTest);
+  public BloodTestCategory getCategory () {
+    return category;
   }
 
+  public void setCategory (BloodTestCategory category) {
+    this.category = category;
+  }
+
+  public BloodTestSubCategory getSubCategory () {
+    return subCategory;
+  }
+
+  public void setSubCategory (BloodTestSubCategory subCategory) {
+    this.subCategory = subCategory;
+  }
+
+  public BloodTestContext getContext () {
+    return context;
+  }
+
+  public void setContext (BloodTestContext context) {
+    this.context = context;
+  }
+
+  public Boolean getMarkSampleAsUnsafe () {
+    return markSampleAsUnsafe;
+  }
+
+  public void setMarkSampleAsUnsafe (Boolean markSampleAsUnsafe) {
+    this.markSampleAsUnsafe = markSampleAsUnsafe;
+  }
+
+  public boolean isDeleted () {
+    return isDeleted;
+  }
+
+  public void setDeleted (boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
 }
