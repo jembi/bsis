@@ -3,6 +3,8 @@ package org.jembi.bsis.controller.bloodtesting;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.jembi.bsis.controllerservice.BloodTestingRuleControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +29,15 @@ public class BloodTestingRuleController {
     Map<String, Object> map = new HashMap<>();
     map.put("bloodTestingRules", bloodTestingRuleControllerService.getAllBloodTestingRules());
     return new ResponseEntity<>(map, HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTING_RULES + "')")
+  public Map<String, Object> getBloodTestingRuleForm(HttpServletRequest request) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("bloodTests", bloodTestingRuleControllerService.getAllBloodTests());
+    map.put("donationFields", bloodTestingRuleControllerService.getDonationFieldsForBloodTestCategory());
+    map.put("newInformation", bloodTestingRuleControllerService.getNewInformationForDonationFields());
+    return map;
   }
 }
