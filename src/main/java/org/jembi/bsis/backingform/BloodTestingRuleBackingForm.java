@@ -4,7 +4,6 @@ import java.util.LinkedHashSet;
 
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
 public class BloodTestingRuleBackingForm {
@@ -63,10 +62,6 @@ public class BloodTestingRuleBackingForm {
 
   public void setNewInformation (String newInformation) {
     this.newInformation = newInformation;
-  }
-  
-  public void setIsDeleted(Boolean isDeleted) {
-    typingRule.setIsDeleted(isDeleted);
   }
 
   public LinkedHashSet<String> getPendingTestsIds () {
