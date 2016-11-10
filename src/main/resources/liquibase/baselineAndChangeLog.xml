@@ -67,5 +67,6 @@
   <include file="./src/main/resources/liquibase/updates/332-add-new-blood-tests.xml" />
   <include file="./src/main/resources/liquibase/updates/334-view-list-blood-testing-rules.xml" />
   <include file="./src/main/resources/liquibase/updates/2020-refactor-blood-test-rule.xml" />
+  <include file="./src/main/resources/liquibase/updates/1689-add-new-bloodTesting-rules.xml" />
   
 </databaseChangeLog>
