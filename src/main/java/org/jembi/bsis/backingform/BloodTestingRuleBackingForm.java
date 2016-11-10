@@ -4,8 +4,6 @@ import java.util.LinkedHashSet;
 
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.BloodTestContext;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
 public class BloodTestingRuleBackingForm {
@@ -20,17 +18,9 @@ public class BloodTestingRuleBackingForm {
 
   private String newInformation;
 
-  private String extraInformation;
-
   private LinkedHashSet<String> pendingTestsIds;
 
   private BloodTestCategory category;
-
-  private BloodTestSubCategory subCategory;
-
-  private BloodTestContext context;
-
-  private Boolean markSampleAsUnsafe;
 
   private boolean isDeleted = false;
 
@@ -74,14 +64,6 @@ public class BloodTestingRuleBackingForm {
     this.newInformation = newInformation;
   }
 
-  public String getExtraInformation () {
-    return extraInformation;
-  }
-
-  public void setExtraInformation (String extraInformation) {
-    this.extraInformation = extraInformation;
-  }
-
   public LinkedHashSet<String> getPendingTestsIds () {
     return pendingTestsIds;
   }
@@ -96,30 +78,6 @@ public class BloodTestingRuleBackingForm {
 
   public void setCategory (BloodTestCategory category) {
     this.category = category;
-  }
-
-  public BloodTestSubCategory getSubCategory () {
-    return subCategory;
-  }
-
-  public void setSubCategory (BloodTestSubCategory subCategory) {
-    this.subCategory = subCategory;
-  }
-
-  public BloodTestContext getContext () {
-    return context;
-  }
-
-  public void setContext (BloodTestContext context) {
-    this.context = context;
-  }
-
-  public Boolean getMarkSampleAsUnsafe () {
-    return markSampleAsUnsafe;
-  }
-
-  public void setMarkSampleAsUnsafe (Boolean markSampleAsUnsafe) {
-    this.markSampleAsUnsafe = markSampleAsUnsafe;
   }
 
   public boolean isDeleted () {

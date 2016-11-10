@@ -240,34 +240,6 @@
                form="DonationBatch" hidden="false" isAutoGeneratable="false"
                isHidable="false" isRequired="false" isTimeField="false" maxLength="0"
                useCurrentTime="false"/>
-    <FormField id="57" autoGenerate="true" canBeOptional="false"
-               defaultDisplayName="Worksheet Number" defaultValue="" field="worksheetNumber"
-               form="Worksheet" hidden="false" isAutoGeneratable="true" isHidable="false"
-               isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false"/>
-    <FormField id="58" autoGenerate="false" canBeOptional="false"
-               defaultDisplayName="Worksheet type" defaultValue="" field="worksheetType"
-               form="Worksheet" hidden="false" isAutoGeneratable="false" isHidable="false"
-               isRequired="true" isTimeField="false" maxLength="0" useCurrentTime="false"/>
-    <FormField id="59" autoGenerate="false" canBeOptional="true"
-               defaultDisplayName="Notes" defaultValue="" field="notes" form="Worksheet"
-               hidden="false" isAutoGeneratable="false" isHidable="true" isRequired="false"
-               isTimeField="false" maxLength="0" useCurrentTime="false"/>
-    <FormField id="60" autoGenerate="false" canBeOptional="false"
-               defaultDisplayName="Created on" defaultValue="" field="createdDate"
-               form="Worksheet" hidden="false" isAutoGeneratable="false" isHidable="false"
-               isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false"/>
-    <FormField id="61" autoGenerate="false" canBeOptional="false"
-               defaultDisplayName="Created by" defaultValue="" field="createdBy"
-               form="Worksheet" hidden="false" isAutoGeneratable="false" isHidable="false"
-               isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false"/>
-    <FormField id="62" autoGenerate="false" canBeOptional="false"
-               defaultDisplayName="Last modified on" defaultValue="" field="lastUpdatedTime"
-               form="Worksheet" hidden="false" isAutoGeneratable="false" isHidable="false"
-               isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false"/>
-    <FormField id="63" autoGenerate="false" canBeOptional="false"
-               defaultDisplayName="Last modified by" defaultValue="" field="lastUpdatedBy"
-               form="Worksheet" hidden="false" isAutoGeneratable="false" isHidable="false"
-               isRequired="false" isTimeField="false" maxLength="0" useCurrentTime="false"/>
     <FormField id="64" autoGenerate="false" canBeOptional="false"
                defaultDisplayName="Donation indentification number" defaultValue=""
                displayName="DIN" field="donationIdentificationNumber" form="Component"

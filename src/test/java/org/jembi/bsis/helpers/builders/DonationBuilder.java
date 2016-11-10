@@ -53,7 +53,6 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private BloodTypingMatchStatus bloodTypingMatchStatus;
   private BloodTypingStatus bloodTypingStatus;
   private DonationBatch donationBatch = aDonationBatch().build();
-  private String extraBloodTypeInformation;
   private Date createdDate = new Date();
   private boolean released;
   private boolean ineligibleDonor;
@@ -190,11 +189,6 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     return this;
   }
 
-  public DonationBuilder withExtraBloodTypeInformation(String extraBloodTypeInformation) {
-    this.extraBloodTypeInformation = extraBloodTypeInformation;
-    return this;
-  }
-
   public DonationBuilder thatIsReleased() {
     this.released = true;
     return this;
@@ -261,7 +255,6 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
     donation.setBloodTypingStatus(bloodTypingStatus);
     donation.setDonationBatch(donationBatch);
-    donation.setExtraBloodTypeInformation(extraBloodTypeInformation);
     donation.setCreatedBy(createdBy);
     donation.setCreatedDate(createdDate);
     donation.setReleased(released);

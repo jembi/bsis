@@ -113,7 +113,7 @@ public class BloodTestsService {
 
   /**
    * Updates the specified Donation given the results from the BloodTests. Updates include blood
-   * grouping, extra information, TTI status and blood typing statuses.
+   * grouping, TTI status and blood typing statuses.
    *
    * @param donation Donation on which the tests were run
    * @param ruleResult BloodTestingRuleResult containing the results from the tests

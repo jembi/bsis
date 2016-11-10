@@ -1,8 +1,9 @@
 package org.jembi.bsis.model.bloodtesting.rules;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +18,6 @@ import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseEntity;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
 
 @Entity
@@ -44,9 +44,6 @@ public class BloodTestingRule extends BaseEntity {
   @Column(length = 30)
   private String newInformation;
 
-  @Column(length = 30)
-  private String extraInformation;
-
   @Column(length = 60)
   private String pendingTestsIds;
 
@@ -58,14 +55,9 @@ public class BloodTestingRule extends BaseEntity {
   @Column(length = 30)
   private BloodTestSubCategory subCategory;
 
-  @Enumerated(EnumType.STRING)
-  @Column(length = 30)
-  private BloodTestContext context;
-
   /**
    * TODO: Not used right now.
    */
-  private Boolean markSampleAsUnsafe;
 
   @Column(nullable = false)
   private boolean isDeleted = false;
@@ -81,11 +73,7 @@ public class BloodTestingRule extends BaseEntity {
   public DonationField getDonationFieldChanged() {
     return donationFieldChanged;
   }
-
-  public Boolean getMarkSampleAsUnsafe() {
-    return markSampleAsUnsafe;
-  }
-
+  
   public boolean getIsDeleted() {
     return isDeleted;
   }
@@ -101,11 +89,7 @@ public class BloodTestingRule extends BaseEntity {
   public void setPart(DonationField part) {
     this.setDonationFieldChanged(part);
   }
-
-  public void setMarkSampleAsUnsafe(Boolean markSampleAsUnsafe) {
-    this.markSampleAsUnsafe = markSampleAsUnsafe;
-  }
-
+  
   public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
@@ -118,22 +102,6 @@ public class BloodTestingRule extends BaseEntity {
     this.newInformation = newInformation;
   }
 
-  public String getExtraInformation() {
-    return extraInformation;
-  }
-
-  public void setExtraInformation(String extraInformation) {
-    this.extraInformation = extraInformation;
-  }
-
-  public BloodTestContext getContext() {
-    return context;
-  }
-
-  public void setContext(BloodTestContext context) {
-    this.context = context;
-  }
-
   public BloodTestCategory getCategory() {
     return category;
   }
@@ -142,11 +110,11 @@ public class BloodTestingRule extends BaseEntity {
     this.category = category;
   }
 
-  public List<String> getPendingTestsIds() {
-    if (pendingTestsIds == null || pendingTestsIds.equals("")) {
-      return new ArrayList<String>(0);
+  public Set<String> getPendingTestsIds() {
+    if (pendingTestsIds == null || pendingTestsIds.isEmpty()) {
+      return Collections.emptySet();
     }
-    return Arrays.asList(pendingTestsIds.split(","));
+    return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(pendingTestsIds.split(","))));
   }
 
   public void setPendingTestsIds(String pendingTestsIds) {
