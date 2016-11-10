@@ -46,14 +46,10 @@ public class BloodTestingRuleFactory {
     
     bloodTestingRule.setId(bloodTestingRuleBackingForm.getId());
     bloodTestingRule.setCategory(bloodTestingRuleBackingForm.getCategory());
-    bloodTestingRule.setContext(bloodTestingRuleBackingForm.getContext());
     bloodTestingRule.setDonationFieldChanged(bloodTestingRuleBackingForm.getDonationFieldChanged());
-    bloodTestingRule.setExtraInformation(bloodTestingRuleBackingForm.getExtraInformation());
     bloodTestingRule.setIsDeleted(bloodTestingRuleBackingForm.isDeleted());
-    bloodTestingRule.setMarkSampleAsUnsafe(bloodTestingRuleBackingForm.getMarkSampleAsUnsafe());
     bloodTestingRule.setNewInformation(bloodTestingRuleBackingForm.getNewInformation());
     bloodTestingRule.setPattern(bloodTestingRuleBackingForm.getPattern());
-    bloodTestingRule.setSubCategory(bloodTestingRuleBackingForm.getSubCategory());
     bloodTestingRule.setBloodTest(bloodTestingRuleBackingForm.getBloodTest());
     bloodTestingRule.setPendingTestsIds(StringUtils.join(bloodTestingRuleBackingForm.getPendingTestsIds(), ','));
     return bloodTestingRule;
