@@ -12,7 +12,6 @@ import org.jembi.bsis.factory.BloodTestingRuleResultViewModelFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
@@ -177,7 +176,7 @@ public class BloodTestingRuleEngine {
 
     if (patternMatch) {
       if (LOGGER.isTraceEnabled()) {
-        LOGGER.trace("Pattern matched for rule with id '" + rule.getId() + "' and subcategory '" + rule.getDonationFieldChanged() + "'.");
+        LOGGER.trace("Pattern matched for rule with id '" + rule.getId() + "' and donationFieldChanged '" + rule.getDonationFieldChanged() + "'.");
         LOGGER.trace("Test id: " + rule.getBloodTest().getId());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
@@ -216,7 +215,7 @@ public class BloodTestingRuleEngine {
               resultSet.addPendingRepeatAndConfirmatoryTtiTestsIds(extraTestId);
               break;
             default:
-              LOGGER.warn("Unknown rule subcategory: " + rule.getDonationFieldChanged());
+              LOGGER.warn("Unknown rule donationFieldChanged: " + rule.getDonationFieldChanged());
               break;
           }
         }
