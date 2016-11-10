@@ -88,107 +88,91 @@
     <BloodTestingRule id="1" bloodTest_id="1" category="BLOODTYPING"
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"
-                      newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO"/>
+                      newInformation="O" pattern="O" pendingTestsIds="" />
     <BloodTestingRule id="2" bloodTest_id="1" category="BLOODTYPING"
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"   newInformation="A"
-                      pattern="A" pendingTestsIds="" subCategory="BLOODABO"/>
+                      pattern="A" pendingTestsIds=""  />
     <BloodTestingRule id="3" bloodTest_id="1" category="BLOODTYPING"
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"  
-                      newInformation="B" pattern="B" pendingTestsIds="" subCategory="BLOODABO"/>
+                      newInformation="B" pattern="B" pendingTestsIds=""  />
     <BloodTestingRule id="4" bloodTest_id="1" category="BLOODTYPING"
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"  
-                      newInformation="AB" pattern="AB" pendingTestsIds="" subCategory="BLOODABO"/>
+                      newInformation="AB" pattern="AB" pendingTestsIds=""  />
     <BloodTestingRule id="5" bloodTest_id="2" category="BLOODTYPING"
                       donationFieldChanged="BLOODRH"
                       isDeleted="0"  
-                      newInformation="+" pattern="POS" pendingTestsIds="" subCategory="BLOODRH"/>
+                      newInformation="+" pattern="POS" pendingTestsIds=""  />
     <BloodTestingRule id="6" bloodTest_id="2" category="BLOODTYPING"
                       donationFieldChanged="BLOODRH"
                       isDeleted="0"  
-                      newInformation="-" pattern="NEG" pendingTestsIds="" subCategory="BLOODRH"/>
+                      newInformation="-" pattern="NEG" pendingTestsIds=""  />
     <BloodTestingRule id="7" bloodTest_id="17" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
     <BloodTestingRule id="8" bloodTest_id="17" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="18,19"
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="18,19" />
     <BloodTestingRule id="9" bloodTest_id="18" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
     <BloodTestingRule id="10" bloodTest_id="19" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
     <BloodTestingRule id="11" bloodTest_id="20" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
     <BloodTestingRule id="12" bloodTest_id="20" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="21,22"
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="21,22" />
     <BloodTestingRule id="13" bloodTest_id="21" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
     <BloodTestingRule id="14" bloodTest_id="22" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
     <BloodTestingRule id="15" bloodTest_id="23" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
     <BloodTestingRule id="16" bloodTest_id="23" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="24,25"
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="24,25" />
     <BloodTestingRule id="17" bloodTest_id="24" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
     <BloodTestingRule id="18" bloodTest_id="25" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
     <BloodTestingRule id="19" bloodTest_id="26" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
     <BloodTestingRule id="20" bloodTest_id="26" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="27,28"
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="27,28" />
     <BloodTestingRule id="21" bloodTest_id="27" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
     <BloodTestingRule id="22" bloodTest_id="28" category="TTI"
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
 
     <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
     <DonationType id="2" donationType="Family" isDeleted="false"/>
