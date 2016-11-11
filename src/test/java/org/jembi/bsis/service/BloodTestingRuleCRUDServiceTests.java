@@ -6,7 +6,6 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 
 import org.jembi.bsis.helpers.builders.BloodTestBuilder;
-import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.repository.BloodTestingRuleRepository;
@@ -27,7 +26,6 @@ public class BloodTestingRuleCRUDServiceTests extends UnitTestSuite {
     // Set up data
     BloodTestingRule bloodTestingRule = aBloodTestingRule()
         .withBloodTest(BloodTestBuilder.aBloodTest().withTestNameShort("Rh").withId(1L).build())
-        .withCategory(BloodTestCategory.BLOODTYPING)
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withNewInformation("+")
         .withPattern("POS")
