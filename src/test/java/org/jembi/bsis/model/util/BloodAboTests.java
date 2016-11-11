@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 
-public class BloodAboTest extends UnitTestSuite {
+public class BloodAboTests extends UnitTestSuite {
 
   @Test
   public void testGetValue_shouldReturnCorrectValue() throws Exception {
