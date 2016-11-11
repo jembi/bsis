@@ -3,6 +3,13 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
+import static org.jembi.bsis.helpers.builders.BloodTestBackingFormBuilder.aBloodTestBackingForm;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestingRuleBackingFormBuilder.aBloodTestingRuleBackingForm;
+import static org.jembi.bsis.helpers.builders.BloodTestingRuleBuilder.aBloodTestingRule;
+import static org.jembi.bsis.helpers.builders.BloodTestingRuleFullViewModelBuilder.aBloodTestingRuleFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestingRuleViewModelBuilder.aBloodTestingRuleViewModel;
 import static org.jembi.bsis.helpers.matchers.BloodTestingRuleMatcher.hasSameStateAsBloodTestingRule;
 import static org.jembi.bsis.helpers.matchers.BloodTestingRuleViewModelMatcher.hasSameStateAsBloodTestingRuleViewModel;
 import static org.jembi.bsis.helpers.matchers.BloodTestingRuleFullViewModelMatcher.hasSameStateAsBloodTestingRuleFullViewModel;
@@ -13,17 +20,11 @@ import java.util.List;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
-import org.jembi.bsis.helpers.builders.BloodTestBackingFormBuilder;
-import org.jembi.bsis.helpers.builders.BloodTestBuilder;
-import org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder;
-import org.jembi.bsis.helpers.builders.BloodTestingRuleBackingFormBuilder;
-import org.jembi.bsis.helpers.builders.BloodTestingRuleBuilder;
-import org.jembi.bsis.helpers.builders.BloodTestingRuleFullViewModelBuilder;
-import org.jembi.bsis.helpers.builders.BloodTestingRuleViewModelBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleFullViewModel;
@@ -40,12 +41,15 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   @Mock
   private BloodTestFactory bloodTestFactory;
   
+  @Mock
+  private BloodTestRepository bloodTestRepository; 
+  
   @Test
   public void testCreateViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
-    BloodTestingRule bloodTestingRule = BloodTestingRuleBuilder.aBloodTestingRule()
+    BloodTestingRule bloodTestingRule = aBloodTestingRule()
         .withId(1L)
-        .withBloodTest(BloodTestBuilder.aBloodTest().withTestNameShort("Rh").build())
+        .withBloodTest(aBloodTest().withTestNameShort("Rh").build())
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withNewInformation("+")
@@ -53,7 +57,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .build();
 
     // Set up expectations
-    BloodTestingRuleViewModel expectedViewModel = BloodTestingRuleViewModelBuilder.aBloodTestingRuleViewModel() 
+    BloodTestingRuleViewModel expectedViewModel = aBloodTestingRuleViewModel()
         .withId(1L)
         .withTestNameShort("Rh")
         .withBloodTestCategory(BloodTestCategory.BLOODTYPING)
@@ -70,19 +74,19 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCreateViewModels_shouldReturnViewModelsWithTheCorrectState() {
+  public void testCreateViewModels_shouldReturnViewModelsWithTheCorrectState () {
     // Set up fixture
     List<BloodTestingRule> bloodTestingRules = Arrays.asList(
-        BloodTestingRuleBuilder.aBloodTestingRule().withId(1L).build(),
-        BloodTestingRuleBuilder.aBloodTestingRule().withId(2L).build());
+        aBloodTestingRule().withId(1L).build(),
+        aBloodTestingRule().withId(2L).build());
 
     // Set up expectations
     List<BloodTestingRuleViewModel> expectedViewModels = Arrays.asList(
-        BloodTestingRuleViewModelBuilder.aBloodTestingRuleViewModel()
+        aBloodTestingRuleViewModel()
             .withId(1L)
             .withTestNameShort(bloodTestingRules.get(0).getBloodTest().getTestNameShort())
             .build(),
-        BloodTestingRuleViewModelBuilder.aBloodTestingRuleViewModel()
+        aBloodTestingRuleViewModel()
             .withId(2L)
             .withTestNameShort(bloodTestingRules.get(1).getBloodTest().getTestNameShort())
             .build());
@@ -99,17 +103,17 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   @Test
   public void testConvertBloodTestingRuleBackingFormToBloodTestingRuleEntity_shouldReturnExpectedEntity() {
     // Set up fixture
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest()
+    BloodTest bloodTest = aBloodTest()
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withTestNameShort("Rh")
         .withId(1L)
         .build();
-    BloodTestBackingForm bloodTestBackingForm = BloodTestBackingFormBuilder.aBloodTestBackingForm()
+    BloodTestBackingForm bloodTestBackingForm = aBloodTestBackingForm()
         .withTestNameShort(bloodTest.getTestNameShort())
         .withCategory(bloodTest.getCategory())
         .withId(bloodTest.getId())
         .build();
-    BloodTestingRuleBackingForm bloodTestingRuleBackingForm = BloodTestingRuleBackingFormBuilder.aBloodTestingRuleBackingForm()
+    BloodTestingRuleBackingForm bloodTestingRuleBackingForm = aBloodTestingRuleBackingForm()
         .withId(1L)
         .withBloodTest(bloodTestBackingForm)
         .withCategory(BloodTestCategory.BLOODTYPING)
@@ -118,7 +122,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withPattern("POS")
         .build();
 
-    BloodTestingRule expectedEntity = BloodTestingRuleBuilder.aBloodTestingRule()
+    BloodTestingRule expectedEntity = aBloodTestingRule()
         .withId(1L)
         .withBloodTest(bloodTest)
         .withCategory(BloodTestCategory.BLOODTYPING)
@@ -127,7 +131,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withPattern("POS")
         .build();
 
-    when(bloodTestFactory.createEntity(bloodTestingRuleBackingForm.getBloodTest())).thenReturn(bloodTest);
+    when(bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId())).thenReturn(bloodTest);
 
     // Exercise SUT
     BloodTestingRule returnedEntity = bloodTestingRuleFactory.createEntity(bloodTestingRuleBackingForm);
@@ -139,8 +143,8 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateFullViewModel_shouldReturnFullViewModelWithTheCorrectState() {
     // Set up fixture
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(1L).withTestNameShort("Rh").withTestName("Rh").build();
-    BloodTestingRule bloodTestingRule = BloodTestingRuleBuilder.aBloodTestingRule()
+    BloodTest bloodTest = aBloodTest().withId(1L).withTestNameShort("Rh").withTestName("Rh").build();
+    BloodTestingRule bloodTestingRule = aBloodTestingRule()
         .withId(1L)
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withDonationFieldChanged(DonationField.BLOODRH)
@@ -151,8 +155,8 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .build();
 
     // Set up expectations
-    BloodTestFullViewModel bloodTestFullViewModel = BloodTestFullViewModelBuilder.aBloodTestFullViewModel().withId(1L).withTestNameShort("Rh").build();
-    BloodTestingRuleFullViewModel expectedFullViewModel = BloodTestingRuleFullViewModelBuilder.aBloodTestingRuleFullViewModel()
+    BloodTestFullViewModel bloodTestFullViewModel = aBloodTestFullViewModel().withId(1L).withTestNameShort("Rh").build();
+    BloodTestingRuleFullViewModel expectedFullViewModel = aBloodTestingRuleFullViewModel()
         .withId(1L)
         .withTestNameShort("Rh")
         .withBloodTestCategory(BloodTestCategory.BLOODTYPING)
@@ -176,23 +180,50 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateFullViewModels_shouldReturnFullViewModelsWithTheCorrectState() {
     // Set up fixture
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(1L).build();
+    BloodTest bloodTest = aBloodTest().withId(1L).withTestNameShort("Rh").withTestName("Rh").build();
+    BloodTestFullViewModel bloodTestFullViewModel = aBloodTestFullViewModel().withId(1L).withTestNameShort("Rh").build();
     List<BloodTestingRule> bloodTestingRules = Arrays.asList(
-        BloodTestingRuleBuilder.aBloodTestingRule().withId(1L).withBloodTest(bloodTest).build(),
-        BloodTestingRuleBuilder.aBloodTestingRule().withId(2L).withBloodTest(bloodTest).build());
+        aBloodTestingRule()
+            .withId(1L)
+            .withCategory(BloodTestCategory.BLOODTYPING)
+            .withDonationFieldChanged(DonationField.BLOODRH)
+            .withNewInformation("+")
+            .withPattern("POS")
+            .withPendingTestsIds("1L")
+            .withBloodTest(bloodTest)
+            .build(),
+        aBloodTestingRule()
+            .withId(2L)
+            .withCategory(BloodTestCategory.BLOODTYPING)
+            .withDonationFieldChanged(DonationField.BLOODRH)
+            .withNewInformation("+")
+            .withPattern("NEG")
+            .withPendingTestsIds("2L")
+            .withBloodTest(bloodTest)
+            .build());
 
     // Set up expectations
     List<BloodTestingRuleFullViewModel> expectedFullViewModels = Arrays.asList(
-        BloodTestingRuleFullViewModelBuilder.aBloodTestingRuleFullViewModel()
+        aBloodTestingRuleFullViewModel()
             .withId(1L)
-            .withTestNameShort(bloodTestingRules.get(0).getBloodTest().getTestNameShort())
+            .withTestNameShort("Rh")
+            .withBloodTestCategory(BloodTestCategory.BLOODTYPING)
+            .withDonationFieldChanged(DonationField.BLOODRH)
+            .withNewInformation("+")
+            .withPattern("POS")
+            .withPendingTestIds(new HashSet<String>(Arrays.asList("1L")))
+            .withBloodTest(bloodTestFullViewModel)
             .build(),
-        BloodTestingRuleFullViewModelBuilder.aBloodTestingRuleFullViewModel()
+        aBloodTestingRuleFullViewModel()
             .withId(2L)
-            .withTestNameShort(bloodTestingRules.get(1).getBloodTest().getTestNameShort())
+            .withTestNameShort("Rh")
+            .withBloodTestCategory(BloodTestCategory.BLOODTYPING)
+            .withDonationFieldChanged(DonationField.BLOODRH)
+            .withNewInformation("+")
+            .withPattern("NEG")
+            .withPendingTestIds(new HashSet<String>(Arrays.asList("2L")))
+            .withBloodTest(bloodTestFullViewModel)
             .build());
-
-    BloodTestFullViewModel bloodTestFullViewModel = BloodTestFullViewModelBuilder.aBloodTestFullViewModel().withId(1l).build();
 
     // Set up mocks
     when(bloodTestFactory.createFullViewModel(bloodTest)).thenReturn(bloodTestFullViewModel);

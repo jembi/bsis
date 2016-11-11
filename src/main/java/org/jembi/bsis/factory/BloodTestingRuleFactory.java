@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.viewmodel.BloodTestingRuleFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class BloodTestingRuleFactory {
 
+  @Autowired
+  private BloodTestRepository bloodTestRepository;
   @Autowired
   private BloodTestFactory bloodTestFactory;
   
@@ -72,7 +75,7 @@ public class BloodTestingRuleFactory {
     bloodTestingRule.setIsDeleted(bloodTestingRuleBackingForm.getIsDeleted());
     bloodTestingRule.setNewInformation(bloodTestingRuleBackingForm.getNewInformation());
     bloodTestingRule.setPattern(bloodTestingRuleBackingForm.getPattern());
-    bloodTestingRule.setBloodTest(bloodTestFactory.createEntity(bloodTestingRuleBackingForm.getBloodTest()));
+    bloodTestingRule.setBloodTest(bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId()));
     bloodTestingRule.setPendingTestsIds(StringUtils.join(bloodTestingRuleBackingForm.getPendingTestsIds(), ','));
     return bloodTestingRule;
   }

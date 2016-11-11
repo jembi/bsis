@@ -7,6 +7,7 @@ public class BloodTestingRuleFullViewModel extends BloodTestingRuleViewModel {
   private BloodTestFullViewModel bloodTest;
 
   private Set<String> pendingTestsIds;
+
   public BloodTestFullViewModel getBloodTest () {
     return bloodTest;
   }
