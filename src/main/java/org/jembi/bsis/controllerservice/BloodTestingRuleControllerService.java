@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
 import org.jembi.bsis.factory.BloodTestFactory;
 import org.jembi.bsis.factory.BloodTestingRuleFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
@@ -14,7 +15,9 @@ import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.repository.BloodTestingRuleRepository;
+import org.jembi.bsis.service.BloodTestingRuleCRUDService;
 import org.jembi.bsis.viewmodel.BloodTestViewModel;
+import org.jembi.bsis.viewmodel.BloodTestingRuleFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,9 @@ public class BloodTestingRuleControllerService {
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
+
+  @Autowired
+  private BloodTestingRuleCRUDService bloodTestingRuleCRUDService;
 
   
   public List<BloodTestingRuleViewModel> getAllBloodTestingRules() {
@@ -60,5 +66,10 @@ public class BloodTestingRuleControllerService {
       donationFields.put(category, DonationField.getDonationFieldsForCategory(category));
     }
     return donationFields;
+  }
+
+  public BloodTestingRuleFullViewModel createBloodTestingRule(BloodTestingRuleBackingForm backingForm) {
+    BloodTestingRule bloodTestingRule = bloodTestingRuleFactory.createEntity(backingForm);
+    return bloodTestingRuleFactory.createFullViewModel(bloodTestingRuleCRUDService.createBloodTestingRule(bloodTestingRule));
   }
 }
