@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
+import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.viewmodel.BloodTestingRuleFullViewModel;
@@ -68,13 +69,14 @@ public class BloodTestingRuleFactory {
   
   public BloodTestingRule createEntity(BloodTestingRuleBackingForm bloodTestingRuleBackingForm) {
     BloodTestingRule bloodTestingRule = new BloodTestingRule();
+    BloodTest bloodTest = bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId());
     
     bloodTestingRule.setId(bloodTestingRuleBackingForm.getId());
     bloodTestingRule.setDonationFieldChanged(bloodTestingRuleBackingForm.getDonationFieldChanged());
     bloodTestingRule.setIsDeleted(bloodTestingRuleBackingForm.getIsDeleted());
     bloodTestingRule.setNewInformation(bloodTestingRuleBackingForm.getNewInformation());
     bloodTestingRule.setPattern(bloodTestingRuleBackingForm.getPattern());
-    bloodTestingRule.setBloodTest(bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId()));
+    bloodTestingRule.setBloodTest(bloodTest);
     bloodTestingRule.setPendingTestsIds(StringUtils.join(bloodTestingRuleBackingForm.getPendingTestsIds(), ','));
     return bloodTestingRule;
   }

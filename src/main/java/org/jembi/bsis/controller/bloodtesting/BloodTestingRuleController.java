@@ -38,11 +38,10 @@ public class BloodTestingRuleController {
   
   @RequestMapping(method = RequestMethod.GET, value = "/search")
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTING_RULES + "')")
-  public ResponseEntity<Map<String, Object>> getBloodTestingRules() {
-
+  public Map<String, Object> getBloodTestingRules() {
     Map<String, Object> map = new HashMap<>();
     map.put("bloodTestingRules", bloodTestingRuleControllerService.getAllBloodTestingRules());
-    return new ResponseEntity<>(map, HttpStatus.OK);
+    return map;
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
@@ -57,9 +56,9 @@ public class BloodTestingRuleController {
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTING_RULES + "')")
-  public ResponseEntity<Map<String, Object>> createBloodTestingRule(@Valid @RequestBody BloodTestingRuleBackingForm bloodTestingRuleBackingForm) {
+  public Map<String, Object> createBloodTestingRule(@Valid @RequestBody BloodTestingRuleBackingForm bloodTestingRuleBackingForm) {
     Map<String, Object> map = new HashMap<>();
     map.put("bloodTestingRule", bloodTestingRuleControllerService.createBloodTestingRule(bloodTestingRuleBackingForm));
-    return new ResponseEntity<>(map, HttpStatus.CREATED);
+    return map;
   }
 }
