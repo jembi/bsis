@@ -1,6 +1,6 @@
 package org.jembi.bsis.helpers.builders;
 
-import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
@@ -14,7 +14,7 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
   private String pattern;
   private DonationField donationFieldChanged;
   private String newInformation;
-  private LinkedHashSet<String> pendingTestsIds;
+  private Set<String> pendingTestsIds;
   private BloodTestCategory category;
   private boolean isDeleted = false;
 
@@ -43,7 +43,7 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
     return this;
   }
   
-  public BloodTestingRuleBackingFormBuilder withPendingTestsIds(LinkedHashSet<String> pendingTestsIds) {
+  public BloodTestingRuleBackingFormBuilder withPendingTestsIds(Set<String> pendingTestsIds) {
     this.pendingTestsIds = pendingTestsIds;
     return this;
   }
