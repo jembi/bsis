@@ -67,12 +67,12 @@ public class BloodTestingRuleFactory {
     BloodTestingRule bloodTestingRule = new BloodTestingRule();
     
     bloodTestingRule.setId(bloodTestingRuleBackingForm.getId());
-    bloodTestingRule.setCategory(bloodTestingRuleBackingForm.getCategory());
+    bloodTestingRule.setCategory(bloodTestingRuleBackingForm.getBloodTest().getCategory());
     bloodTestingRule.setDonationFieldChanged(bloodTestingRuleBackingForm.getDonationFieldChanged());
-    bloodTestingRule.setIsDeleted(bloodTestingRuleBackingForm.isDeleted());
+    bloodTestingRule.setIsDeleted(bloodTestingRuleBackingForm.getIsDeleted());
     bloodTestingRule.setNewInformation(bloodTestingRuleBackingForm.getNewInformation());
     bloodTestingRule.setPattern(bloodTestingRuleBackingForm.getPattern());
-    bloodTestingRule.setBloodTest(bloodTestingRuleBackingForm.getBloodTest());
+    bloodTestingRule.setBloodTest(bloodTestFactory.createEntity(bloodTestingRuleBackingForm.getBloodTest()));
     bloodTestingRule.setPendingTestsIds(StringUtils.join(bloodTestingRuleBackingForm.getPendingTestsIds(), ','));
     return bloodTestingRule;
   }
