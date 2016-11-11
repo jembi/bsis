@@ -4,7 +4,6 @@ import java.util.Set;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
-import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
 public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTestingRuleBackingForm> {
@@ -15,7 +14,6 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
   private DonationField donationFieldChanged;
   private String newInformation;
   private Set<String> pendingTestsIds;
-  private BloodTestCategory category;
   private boolean isDeleted = false;
 
   public BloodTestingRuleBackingFormBuilder withId(Long id) {
@@ -46,13 +44,7 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
   public BloodTestingRuleBackingFormBuilder withPendingTestsIds(Set<String> pendingTestsIds) {
     this.pendingTestsIds = pendingTestsIds;
     return this;
-  }
-
-  public BloodTestingRuleBackingFormBuilder withCategory(BloodTestCategory category) {
-    this.category = category;
-    return this;
-  }
-  
+  }  
   public BloodTestingRuleBackingFormBuilder withDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
     return this;
@@ -62,7 +54,6 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
   public BloodTestingRuleBackingForm build() {
     BloodTestingRuleBackingForm bloodTestingRuleBackingForm = new BloodTestingRuleBackingForm();
     bloodTestingRuleBackingForm.setBloodTest(bloodTest);
-    bloodTestingRuleBackingForm.setCategory(category);
     bloodTestingRuleBackingForm.setIsDeleted(isDeleted);
     bloodTestingRuleBackingForm.setDonationFieldChanged(donationFieldChanged);
     bloodTestingRuleBackingForm.setId(id);
