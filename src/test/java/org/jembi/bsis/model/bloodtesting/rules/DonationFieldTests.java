@@ -12,7 +12,7 @@ import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 
 
-public class DonationFieldTest extends UnitTestSuite {
+public class DonationFieldTests extends UnitTestSuite {
 
   @Test
   public void testGetDonationFieldsForCategoryTTI_returnsCorrectEnums() throws Exception {
