@@ -60,7 +60,7 @@ public class BloodTestingRuleFactory {
     viewModel.setId(bloodTestingRule.getId());
     viewModel.setTestNameShort(bloodTestingRule.getBloodTest().getTestNameShort());
     viewModel.setDonationFieldChanged(bloodTestingRule.getDonationFieldChanged());
-    viewModel.setCategory(bloodTestingRule.getCategory());
+    viewModel.setCategory(bloodTestingRule.getBloodTest().getCategory());
     viewModel.setNewInformation(bloodTestingRule.getNewInformation());
     viewModel.setPattern(bloodTestingRule.getPattern());
     viewModel.setIsDeleted(bloodTestingRule.getIsDeleted());
@@ -70,7 +70,6 @@ public class BloodTestingRuleFactory {
     BloodTestingRule bloodTestingRule = new BloodTestingRule();
     
     bloodTestingRule.setId(bloodTestingRuleBackingForm.getId());
-    bloodTestingRule.setCategory(bloodTestingRuleBackingForm.getBloodTest().getCategory());
     bloodTestingRule.setDonationFieldChanged(bloodTestingRuleBackingForm.getDonationFieldChanged());
     bloodTestingRule.setIsDeleted(bloodTestingRuleBackingForm.getIsDeleted());
     bloodTestingRule.setNewInformation(bloodTestingRuleBackingForm.getNewInformation());
