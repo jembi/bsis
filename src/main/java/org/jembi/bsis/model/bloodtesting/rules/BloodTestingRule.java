@@ -17,7 +17,6 @@ import javax.persistence.NamedQuery;
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
-import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
 
 @Entity
@@ -46,10 +45,6 @@ public class BloodTestingRule extends BaseModificationTrackerEntity {
 
   @Column(length = 60)
   private String pendingTestsIds;
-
-  @Enumerated(EnumType.STRING)
-  @Column(length = 30)
-  private BloodTestCategory category;
 
   @Column(nullable = false)
   private boolean isDeleted = false;
@@ -92,14 +87,6 @@ public class BloodTestingRule extends BaseModificationTrackerEntity {
 
   public void setNewInformation(String newInformation) {
     this.newInformation = newInformation;
-  }
-
-  public BloodTestCategory getCategory() {
-    return category;
-  }
-
-  public void setCategory(BloodTestCategory category) {
-    this.category = category;
   }
 
   public Set<String> getPendingTestsIds() {
