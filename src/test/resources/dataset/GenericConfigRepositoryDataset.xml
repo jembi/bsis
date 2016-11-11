@@ -1,11 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-    <GenericConfig id="1" propertyName="rowHeight"
-                   propertyOwner="donationsWorksheet" propertyValue="30"/>
-    <GenericConfig id="2" propertyName="columnWidth"
-                   propertyOwner="donationsWorksheet" propertyValue="100"/>
-    <GenericConfig id="3" propertyName="donationIdentificationNumber"
-                   propertyOwner="donationsWorksheet" propertyValue="true"/>
     <GenericConfig id="4" propertyName="haemoglobinUnit"
                    propertyOwner="measurementUnit" propertyValue="g/dL"/>
     <GenericConfig id="5" propertyName="bloodPressureUnit"
@@ -54,20 +48,12 @@
                    propertyOwner="labsetup" propertyValue="true"/>
     <GenericConfig id="26" propertyName="crossmatchProcedure"
                    propertyOwner="labsetup" propertyValue="CROSSMATCH_DONE_CAN_SKIP"/>
-    <GenericConfig id="27" propertyName="bloodTypingContext"
-                   propertyOwner="labsetup" propertyValue="RECORD_BLOOD_TYPING_TESTS"/>
     <GenericConfig id="28" propertyName="bloodTypingElisa"
                    propertyOwner="labsetup" propertyValue="true"/>
-    <GenericConfig id="29" propertyName="bloodTypingWorksheets"
-                   propertyOwner="labsetup" propertyValue="false"/>
     <GenericConfig id="30" propertyName="ttiElisa"
                    propertyOwner="labsetup" propertyValue="true"/>
-    <GenericConfig id="31" propertyName="ttiWorksheets"
-                   propertyOwner="labsetup" propertyValue="false"/>
     <GenericConfig id="32" propertyName="recordMachineReadingsForTTI"
                    propertyOwner="labsetup" propertyValue="true"/>
-    <GenericConfig id="33" propertyName="useWorksheets"
-                   propertyOwner="labsetup" propertyValue="false"/>
     <GenericConfig id="34" propertyName="donorsTabEnabled"
                    propertyOwner="labsetup" propertyValue="true"/>
     <GenericConfig id="35" propertyName="donationsTabEnabled"

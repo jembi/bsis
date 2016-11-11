@@ -12,7 +12,6 @@ import org.jembi.bsis.factory.BloodTestingRuleResultViewModelFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
@@ -51,20 +50,19 @@ public class BloodTestingRuleEngine {
    * Apply blood typing rules to blood typing tests (combination of what is present in the database
    * and those passed as parameter.
    *
-   * @param donation         Blood Typing results for which collection
+   * @param donation Blood Typing results for which collection
    * @param bloodTestResults map of blood typing test id to result. Only character allowed in the
-   *                         result. multiple characters should be mapped to negative/positive
-   *                         (TODO) Assume validation of results already done.
-   * @return Result of applying the rules. The following values should be present in the map 
-   *  - bloodAbo (what changes should be made to blood abo after applying these rules)
-   *  - bloodRh (what changes should be made to blood rh), extra (extra information that should be added 
-   *    to the blood type like weak A), 
-   *  - pendingTests (comma separated list of blood typing tests that must be done to determine the blood
-   *    type), - testResults (map of blood typing test id to blood typing test either stored or those 
-   *    passed to this function or those already stored in the database), 
-   *  - bloodTypingStatus (enum BloodTypingStatus indicates if complete typing information is available), 
-   *  - storedTestResults (what blood typing results are actually stored in the database, a subset of 
-   *    testResults)
+   *        result. multiple characters should be mapped to negative/positive (TODO) Assume
+   *        validation of results already done.
+   * @return Result of applying the rules. The following values should be present in the map -
+   *         bloodAbo (what changes should be made to blood abo after applying these rules) -
+   *         bloodRh (what changes should be made to blood rh), - pendingTests (comma separated list
+   *         of blood typing tests that must be done to determine the blood type), - testResults
+   *         (map of blood typing test id to blood typing test either stored or those passed to this
+   *         function or those already stored in the database), - bloodTypingStatus (enum
+   *         BloodTypingStatus indicates if complete typing information is available), -
+   *         storedTestResults (what blood typing results are actually stored in the database, a
+   *         subset of testResults)
    */
   public BloodTestingRuleResult applyBloodTests(Donation donation, Map<Long, String> bloodTestResults)
       throws IllegalArgumentException {
@@ -109,8 +107,8 @@ public class BloodTestingRuleEngine {
     for (BloodTestingRule rule : rules) {
 
       if (BloodTypingMatchStatus.isResolvedState(donation.getBloodTypingMatchStatus())
-          && (rule.getSubCategory() == BloodTestSubCategory.BLOODABO
-          || rule.getSubCategory() == BloodTestSubCategory.BLOODRH)) {
+          && (rule.getDonationFieldChanged() == DonationField.BLOODABO
+          || rule.getDonationFieldChanged() == DonationField.BLOODRH)) {
         // Don't process the rule if it is for blood typing and the blood typing is resolved
         continue;
       }
@@ -178,12 +176,12 @@ public class BloodTestingRuleEngine {
 
     if (patternMatch) {
       if (LOGGER.isTraceEnabled()) {
-        LOGGER.trace("Pattern matched for rule with id '" + rule.getId() + "' and subcategory '" + rule.getSubCategory() + "'.");
+        LOGGER.trace("Pattern matched for rule with id '" + rule.getId() + "' and donationFieldChanged '" + rule.getDonationFieldChanged() + "'.");
         LOGGER.trace("Test id: " + rule.getBloodTest().getId());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
         LOGGER.trace("Pending test ids: " + rule.getPendingTestsIds());
-        LOGGER.trace("Changes to result: " + rule.getNewInformation() + ", " + rule.getExtraInformation());
+        LOGGER.trace("Changes to result: " + rule.getNewInformation());
       }
       
       // determine which changes are necessary, depending on the DonationField
@@ -198,32 +196,26 @@ public class BloodTestingRuleEngine {
         case TTISTATUS:
           resultSet.addTtiStatusChanges(rule.getNewInformation());
           break;
-        case EXTRA:
-          resultSet.addExtraInformation(rule.getNewInformation());
-          break;
         default:
           LOGGER.warn("Unknown donation field: " + donationFieldChanged);
           break;
       }
 
-      if (StringUtils.isNotBlank(rule.getExtraInformation()))
-        resultSet.addExtraInformation(rule.getExtraInformation());
-
       // determine which tests are pending
       for (String extraTestId : rule.getPendingTestsIds()) {
         if (!availableTestResults.containsKey(extraTestId)) {
-          switch (rule.getSubCategory()) {
+          switch (rule.getDonationFieldChanged()) {
             case BLOODABO:
               resultSet.addPendingAboTestsIds(extraTestId);
               break;
             case BLOODRH:
               resultSet.addPendingRhTestsIds(extraTestId);
               break;
-            case TTI:
+            case TTISTATUS:
               resultSet.addPendingRepeatAndConfirmatoryTtiTestsIds(extraTestId);
               break;
             default:
-              LOGGER.warn("Unknown rule subcategory: " + rule.getSubCategory());
+              LOGGER.warn("Unknown rule donationFieldChanged: " + rule.getDonationFieldChanged());
               break;
           }
         }
@@ -235,7 +227,7 @@ public class BloodTestingRuleEngine {
         LOGGER.trace("Test id: " + rule.getBloodTest().getId());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
-        LOGGER.trace("Changes to result: " + rule.getNewInformation() + ", " + rule.getExtraInformation());
+        LOGGER.trace("Changes to result: " + rule.getNewInformation());
       }
       DonationField donationFieldChanged = rule.getDonationFieldChanged();
       switch (donationFieldChanged) {
@@ -346,7 +338,7 @@ public class BloodTestingRuleEngine {
       for (BloodTestingRule bloodTestingRule : resultSet.getBloodTestingRules()) {
 
         // Find which tests resulted in the repeat test
-        List<String> pendingTestIds = bloodTestingRule.getPendingTestsIds();
+        Set<String> pendingTestIds = bloodTestingRule.getPendingTestsIds();
         if (pendingTestIds.contains(repeatBloodTypingTestId)) {
 
           // Compare the result of the repeat test to previous test

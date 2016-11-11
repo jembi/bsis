@@ -73,7 +73,6 @@ public class BloodTestingRuleResultViewModelFactory {
       bloodRh = bloodTestingRuleResultSet.getBloodRhChanges().iterator().next();
     }
     ruleResult.setBloodRh(bloodRh);
-    ruleResult.setExtraInformation(bloodTestingRuleResultSet.getExtraInformation());
 
     // TTI test information
     ruleResult.setTTIStatus(bloodTestingRuleResultSet.getTtiStatus());

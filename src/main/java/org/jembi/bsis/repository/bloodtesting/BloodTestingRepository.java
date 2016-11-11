@@ -1,14 +1,11 @@
 package org.jembi.bsis.repository.bloodtesting;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -216,9 +213,6 @@ public class BloodTestingRepository {
   public boolean updateDonationWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
     boolean donationUpdated = false;
 
-    String oldExtraInformation = donation.getExtraBloodTypeInformation();
-    String newExtraInformation = addNewExtraInformation(oldExtraInformation, ruleResult.getExtraInformation());
-
     String oldBloodAbo = donation.getBloodAbo();
     String newBloodAbo = ruleResult.getBloodAbo();
 
@@ -234,11 +228,10 @@ public class BloodTestingRepository {
     BloodTypingMatchStatus oldBloodTypingMatchStatus = donation.getBloodTypingMatchStatus();
     BloodTypingMatchStatus newBloodTypingMatchStatus = ruleResult.getBloodTypingMatchStatus();
 
-    if (!bothEmptyOrEquals(newExtraInformation, oldExtraInformation) || !bothEmptyOrEquals(newBloodAbo, oldBloodAbo)
+    if (!bothEmptyOrEquals(newBloodAbo, oldBloodAbo)
         || !bothEmptyOrEquals(newBloodRh, oldBloodRh) || !Objects.equals(newTtiStatus, oldTtiStatus)
         || !Objects.equals(newBloodTypingStatus, oldBloodTypingStatus)
         || !Objects.equals(oldBloodTypingMatchStatus, newBloodTypingMatchStatus)) {
-      donation.setExtraBloodTypeInformation(newExtraInformation);
       donation.setBloodAbo(newBloodAbo);
       donation.setBloodRh(newBloodRh);
       donation.setTTIStatus(ruleResult.getTTIStatus());
@@ -258,19 +251,4 @@ public class BloodTestingRepository {
     return donationUpdated;
   }
 
-  /**
-   * FIXME: this method also belongs in the BloodTestsService (see above updateDonationWithTestResults)
-   */
-  private String addNewExtraInformation(String donationExtraInformation, Set<String> extraInformationNewSet) {
-    String newExtraInformation;
-    Set<String> oldExtraInformationSet = new HashSet<String>();
-    if (StringUtils.isNotBlank(donationExtraInformation)) {
-      oldExtraInformationSet.addAll(Arrays.asList(donationExtraInformation.split(",")));
-      extraInformationNewSet.removeAll(oldExtraInformationSet); // remove duplicates
-      newExtraInformation = donationExtraInformation + StringUtils.join(extraInformationNewSet, ",");
-    } else {
-      newExtraInformation = StringUtils.join(extraInformationNewSet, ",");
-    }
-    return newExtraInformation;
-  }
 }

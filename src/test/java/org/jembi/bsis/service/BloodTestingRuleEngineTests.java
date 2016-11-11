@@ -22,7 +22,6 @@ import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
@@ -103,45 +102,37 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     
     // TTI
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
-        .withPattern("NT").withNewInformation("INDETERMINATE").withBloodTest(hivBloodTest).build());
+         .withCategory(BloodTestCategory.BLOODTYPING).withPattern("NT").withNewInformation("INDETERMINATE").withBloodTest(hivBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
-        .withPattern("POS").withNewInformation("TTI_UNSAFE").withBloodTest(hivBloodTest).build());
+         .withCategory(BloodTestCategory.BLOODTYPING).withPattern("POS").withNewInformation("TTI_UNSAFE").withBloodTest(hivBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
-        .withPattern("NEG").withNewInformation("TTI_SAFE").withBloodTest(hivBloodTest).build());
+         .withCategory(BloodTestCategory.BLOODTYPING).withPattern("NEG").withNewInformation("TTI_SAFE").withBloodTest(hivBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
-        .withPattern("NT").withNewInformation("INDETERMINATE").withBloodTest(hbvBloodTest).build());
+         .withCategory(BloodTestCategory.BLOODTYPING).withPattern("NT").withNewInformation("INDETERMINATE").withBloodTest(hbvBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
-        .withPattern("POS").withNewInformation("TTI_UNSAFE").withBloodTest(hbvBloodTest).build());
+         .withCategory(BloodTestCategory.BLOODTYPING).withPattern("POS").withNewInformation("TTI_UNSAFE").withBloodTest(hbvBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
-        .withPattern("NEG").withNewInformation("TTI_SAFE").withBloodTest(hbvBloodTest).build());
+        .withCategory(BloodTestCategory.BLOODTYPING).withPattern("NEG").withNewInformation("TTI_SAFE").withBloodTest(hbvBloodTest).build());
     
     // ABO
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODABO)
-        .withPattern("O").withNewInformation("O").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
+         .withCategory(BloodTestCategory.BLOODTYPING).withPattern("O").withNewInformation("O").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODABO)
-        .withPattern("A").withNewInformation("A").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
+         .withCategory(BloodTestCategory.BLOODTYPING).withPattern("A").withNewInformation("A").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODABO)
-        .withPattern("B").withNewInformation("B").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
+         .withCategory(BloodTestCategory.BLOODTYPING).withPattern("B").withNewInformation("B").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODABO)
-        .withPattern("AB").withNewInformation("AB").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
+         .withCategory(BloodTestCategory.BLOODTYPING).withPattern("AB").withNewInformation("AB").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODABO)
-        .withPattern("NT").withNewInformation("").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
+         .withCategory(BloodTestCategory.BLOODTYPING).withPattern("NT").withNewInformation("").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
     
     // RH
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODRH)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODRH)
-        .withPattern("POS").withNewInformation("+").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
+        .withCategory(BloodTestCategory.BLOODTYPING).withPattern("POS").withNewInformation("+").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODRH)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODRH)
-        .withPattern("NEG").withNewInformation("-").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
+        .withCategory(BloodTestCategory.BLOODTYPING).withPattern("NEG").withNewInformation("-").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODRH)
-        .withCategory(BloodTestCategory.BLOODTYPING).withSubCategory(BloodTestSubCategory.BLOODRH)
-        .withPattern("NT").withNewInformation("").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
+        .withCategory(BloodTestCategory.BLOODTYPING).withPattern("NT").withNewInformation("").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
   }
 
   @Test

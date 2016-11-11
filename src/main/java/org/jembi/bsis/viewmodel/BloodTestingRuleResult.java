@@ -20,8 +20,6 @@ public class BloodTestingRuleResult {
 
   private String bloodRh;
 
-  private Set<String> extraInformation;
-
   private List<String> pendingBloodTypingTestsIds;
 
   private List<String> pendingConfirmatoryTTITestsIds;
@@ -94,14 +92,6 @@ public class BloodTestingRuleResult {
 
   public void setBloodRh(String bloodRh) {
     this.bloodRh = bloodRh;
-  }
-
-  public Set<String> getExtraInformation() {
-    return extraInformation;
-  }
-
-  public void setExtraInformation(Set<String> extraInformation) {
-    this.extraInformation = extraInformation;
   }
 
   public List<String> getPendingBloodTypingTestsIds() {

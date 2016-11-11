@@ -122,7 +122,7 @@
     <Donation id="1" bloodAbo="O" bloodPressureSystolic="110"
               bloodRh="+" bloodTypingStatus="COMPLETE" donationDate="2015-02-02 00:00:00.0"
               donationIdentificationNumber="1234567" donorWeight="80.00"
-              extraBloodTypeInformation="" haemoglobinCount="15.70" isDeleted="0"
+              haemoglobinCount="15.70" isDeleted="0"
               createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-06 02:09:30.0"
               ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
               donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
@@ -131,7 +131,7 @@
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
     <Donation id="2" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212129"
-              extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-18 07:53:57.0"
+              isDeleted="0" createdDate="2015-02-18 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
               packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
@@ -147,7 +147,7 @@
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
     <Donation id="4" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1412129"
-              extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
+              isDeleted="0" createdDate="2015-02-02 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
               packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="4"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
@@ -155,7 +155,7 @@
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
     <Donation id="5" bloodAbo="O" bloodRh="-" bloodTypingStatus="COMPLETE"
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1512129"
-              extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
+              isDeleted="0" createdDate="2015-02-02 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
               packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="5"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
@@ -163,7 +163,7 @@
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
     <Donation id="6" bloodAbo="AB" bloodRh="+" bloodTypingStatus="COMPLETE"
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1612129"
-              extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-02 07:53:57.0"
+              isDeleted="0" createdDate="2015-02-02 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
               packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="6"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
@@ -171,7 +171,7 @@
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
 
   <BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
-    context="RECORD_BLOOD_TYPING_TESTS" isActive="1"
+    isActive="1"
     negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
     testName="ABO" testNameShort="ABO" validResults="A,B,AB,O" flagComponentsForDiscard="0"
     flagComponentsContainingPlasmaForDiscard="0" isDeleted="0" />
@@ -184,21 +184,21 @@
     testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="2"
     createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
 	<BloodTestingRule id="1" bloodTest_id="1" category="BLOODTYPING"
-		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO" />
+		donationFieldChanged="BLOODABO"
+		isDeleted="0"  
+		newInformation="O" pattern="O" pendingTestsIds=""   />
 	<BloodTestingRule id="2" bloodTest_id="1" category="BLOODTYPING"
-		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="A" pattern="A" pendingTestsIds="" subCategory="BLOODABO" />
+		donationFieldChanged="BLOODABO"
+		isDeleted="0"  
+		newInformation="A" pattern="A" pendingTestsIds=""   />
 	<BloodTestingRule id="3" bloodTest_id="1" category="BLOODTYPING"
-		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="B" pattern="B" pendingTestsIds="" subCategory="BLOODABO" />
+		donationFieldChanged="BLOODABO"
+		isDeleted="0"  
+		newInformation="B" pattern="B" pendingTestsIds=""   />
 	<BloodTestingRule id="4" bloodTest_id="1" category="BLOODTYPING"
-		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="AB" pattern="AB" pendingTestsIds="" subCategory="BLOODABO" />
+		donationFieldChanged="BLOODABO"
+		isDeleted="0"  
+		newInformation="AB" pattern="AB" pendingTestsIds=""   />
 
 	<DataType id="1" dataType="text"/>
 	<DataType id="2" dataType="integer"/>

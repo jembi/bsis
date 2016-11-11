@@ -4,199 +4,183 @@
 		isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin" />
 
 	<BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
-		context="RECORD_BLOOD_TYPING_TESTS" isActive="1"
+		  isActive="1"
 		negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
 		testName="ABO" testNameShort="ABO" validResults="A,B,AB,O" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="2" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
-		context="RECORD_BLOOD_TYPING_TESTS" isActive="1"
+		  isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="2"
 		testName="Rh" testNameShort="Rh" validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="3" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
-		context="RECORD_BLOOD_TYPING_TESTS" isActive="1"
+		  isActive="1"
 		negativeResults="LOW" positiveResults="HIGH" rankInCategory="3"
 		testName="Titre" testNameShort="Titre" validResults="HIGH,LOW,NT" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 
 	<BloodTest id="17" bloodTestType="BASIC_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		  isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="HIV" testNameShort="HIV" validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="18" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		  isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="HIV Confirmatory 1" testNameShort="HIV Conf 1" validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="19" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		  isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="HIV Confirmatory 2" testNameShort="HIV Conf 2" validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="20" bloodTestType="BASIC_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		  isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="HBV" testNameShort="HBV" validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="21" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		  isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="HBV Confirmatory 1" testNameShort="HBV Conf 1" validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="22" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="HBV Confirmatory 2" testNameShort="HBV Conf 2" validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="23" bloodTestType="BASIC_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="HCV" testNameShort="HCV" validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="24" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="HCV Confirmatory 1" testNameShort="HCV Conf 1" validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="25" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="HCV Confirmatory 2" testNameShort="HCV Conf 2" validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="26" bloodTestType="BASIC_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="Syphilis" testNameShort="Syphilis" validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="27" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="Syphilis Confirmatory 1" testNameShort="Syphilis Conf 1"
 		validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="28" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-		context="RECORD_TTI_TESTS" isActive="1"
+		isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="1"
 		testName="Syphilis Confirmatory 2" testNameShort="Syphilis Conf 2"
 		validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="29" bloodTestType="REPEAT_BLOODTYPING" category="BLOODTYPING"
-		context="RECORD_BLOOD_TYPING_TESTS" isActive="1"
+		isActive="1"
 		negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
 		testName="ABO Repeat 1" testNameShort="ABO Repeat 1"
 		validResults="A,B,AB,O" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTest id="30" bloodTestType="REPEAT_BLOODTYPING" category="BLOODTYPING"
-		context="RECORD_BLOOD_TYPING_TESTS" isActive="1"
+		isActive="1"
 		negativeResults="NEG" positiveResults="POS" rankInCategory="2"
 		testName="Rh Repeat 1" testNameShort="Rh Repeat 1"
 		validResults="POS,NEG" flagComponentsForDiscard="0"
 		flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
 	<BloodTestingRule id="1" bloodTest_id="1" category="BLOODTYPING"
-		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="O" pattern="O" pendingTestsIds="29" subCategory="BLOODABO" />
+		donationFieldChanged="BLOODABO"
+		isDeleted="0" 
+		newInformation="O" pattern="O" pendingTestsIds="29"   />
 	<BloodTestingRule id="2" bloodTest_id="1" category="BLOODTYPING"
-	donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-	extraInformation="" isDeleted="0" markSampleAsUnsafe="0" newInformation="A"
-	pattern="A" pendingTestsIds="29" subCategory="BLOODABO" />
+	donationFieldChanged="BLOODABO"
+	isDeleted="0"    newInformation="A"
+	pattern="A" pendingTestsIds="29"   />
 	<BloodTestingRule id="3" bloodTest_id="1" category="BLOODTYPING"
-		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="B" pattern="B" pendingTestsIds="29" subCategory="BLOODABO" />
+		donationFieldChanged="BLOODABO"
+		isDeleted="0"
+		newInformation="B" pattern="B" pendingTestsIds="29"   />
 	<BloodTestingRule id="4" bloodTest_id="1" category="BLOODTYPING"
-		donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="AB" pattern="AB" pendingTestsIds="29" subCategory="BLOODABO" />
+		donationFieldChanged="BLOODABO"
+		isDeleted="0"   
+		newInformation="AB" pattern="AB" pendingTestsIds="29"   />
 	<BloodTestingRule id="5" bloodTest_id="2" category="BLOODTYPING"
-		donationFieldChanged="BLOODRH" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="+" pattern="POS" pendingTestsIds="30" subCategory="BLOODRH" />
+		donationFieldChanged="BLOODRH"
+		isDeleted="0"   
+		newInformation="+" pattern="POS" pendingTestsIds="30"  />
 	<BloodTestingRule id="6" bloodTest_id="2" category="BLOODTYPING"
-		donationFieldChanged="BLOODRH" context="RECORD_BLOOD_TYPING_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="-" pattern="NEG" pendingTestsIds="30" subCategory="BLOODRH" />
+		donationFieldChanged="BLOODRH"
+		isDeleted="0"   
+		newInformation="-" pattern="NEG" pendingTestsIds="30" />
 	<BloodTestingRule id="7" bloodTest_id="17" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""/>
 	<BloodTestingRule id="8" bloodTest_id="17" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="18,19"
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="18,19" />
 	<BloodTestingRule id="9" bloodTest_id="18" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
 	<BloodTestingRule id="10" bloodTest_id="19" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
 	<BloodTestingRule id="11" bloodTest_id="20" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
 	<BloodTestingRule id="12" bloodTest_id="20" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="21,22"
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="21,22" />
 	<BloodTestingRule id="13" bloodTest_id="21" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
 	<BloodTestingRule id="14" bloodTest_id="22" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
 	<BloodTestingRule id="15" bloodTest_id="23" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
 	<BloodTestingRule id="16" bloodTest_id="23" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="24,25"
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="24,25" />
 	<BloodTestingRule id="17" bloodTest_id="24" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
 	<BloodTestingRule id="18" bloodTest_id="25" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
 	<BloodTestingRule id="19" bloodTest_id="26" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
 	<BloodTestingRule id="20" bloodTest_id="26" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="27,28"
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="27,28" />
 	<BloodTestingRule id="21" bloodTest_id="27" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
 	<BloodTestingRule id="22" bloodTest_id="28" category="TTI"
-		donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-		extraInformation="" isDeleted="0" markSampleAsUnsafe="0"
-		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-		subCategory="TTI" />
+		donationFieldChanged="TTISTATUS"
+		isDeleted="0"   
+		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
 
 	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
 	<DonationType id="2" donationType="Family" isDeleted="false" />
@@ -356,7 +340,7 @@
 	<Donation id="1" bloodAbo="O"
 		bloodPressureSystolic="110" bloodRh="+" bloodTypingStatus="NOT_DONE"
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1234567"
-		donorWeight="80.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
+		donorWeight="80.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-06 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
@@ -365,7 +349,7 @@
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="2" bloodAbo="A" bloodRh="-"
 		bloodTypingStatus="NOT_DONE" donationDate="2015-02-02 00:00:00.0"
-		donationIdentificationNumber="1212129" extraBloodTypeInformation="" isDeleted="0"
+		donationIdentificationNumber="1212129" isDeleted="0"
 		createdDate="2015-02-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="2"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
@@ -380,7 +364,7 @@
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="4" bloodAbo="B" bloodRh="+"
 		bloodTypingStatus="NOT_DONE" donationDate="2015-04-03 00:00:00.0"
-		donationIdentificationNumber="123123" extraBloodTypeInformation="" isDeleted="0"
+		donationIdentificationNumber="123123" isDeleted="0"
 		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
@@ -388,7 +372,7 @@
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="5" bloodAbo="A" bloodRh="-"
 		bloodTypingStatus="NOT_DONE" donationDate="2015-04-04 00:00:00.0"
-		donationIdentificationNumber="124124" extraBloodTypeInformation="" isDeleted="0"
+		donationIdentificationNumber="124124" isDeleted="0"
 		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
@@ -396,14 +380,14 @@
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="6" bloodAbo="" bloodRh=""
 		bloodTypingStatus="NOT_DONE" donationDate="2015-04-05 00:00:00.0"
-		donationIdentificationNumber="125125" extraBloodTypeInformation="" isDeleted="0"
+		donationIdentificationNumber="125125" isDeleted="0"
 		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="7" bloodAbo="" bloodRh="" donationDate="2015-04-05 00:00:00.0"
-		donationIdentificationNumber="126126" extraBloodTypeInformation=""
+		donationIdentificationNumber="126126"
 		isDeleted="0" createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		packType_id="1" donationBatch_id="1" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="1970-01-01 14:53:37.0"
@@ -411,7 +395,7 @@
 	<Donation id="8" bloodAbo="O"
 		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NOT_DONE"
 		donationDate="2016-01-26 00:00:00.0" donationIdentificationNumber="2345678"
-		donorWeight="50.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
+		donorWeight="50.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
@@ -421,7 +405,7 @@
 	<Donation id="9" bloodAbo="O"
 		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NOT_DONE"
 		donationDate="2016-01-26 00:00:00.0" donationIdentificationNumber="3456789"
-		donorWeight="50.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
+		donorWeight="50.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
@@ -431,7 +415,7 @@
 	<Donation id="10" bloodAbo="O"
 		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NOT_DONE"
 		donationDate="2016-01-26 00:00:00.0" donationIdentificationNumber="4567890"
-		donorWeight="50.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
+		donorWeight="50.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
@@ -441,7 +425,7 @@
 	<Donation id="11" bloodAbo="O"
 		bloodPressureSystolic="110" bloodRh="-" bloodTypingStatus="NOT_DONE"
 		donationDate="2016-01-26 00:00:00.0" donationIdentificationNumber="5678901"
-		donorWeight="50.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
+		donorWeight="50.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
@@ -450,7 +434,7 @@
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="12" bloodAbo="" bloodRh="" bloodTypingStatus="NOT_DONE"
 		bloodTypingMatchStatus="NOT_DONE" donationDate="2016-04-05 00:00:00.0"
-		donationIdentificationNumber="126226" extraBloodTypeInformation=""
+		donationIdentificationNumber="126226"
 		isDeleted="0" createdDate="2016-04-18 07:53:57.0" lastUpdated="2016-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
@@ -458,7 +442,7 @@
 		ineligibleDonor="0" released="0" />
 	<Donation id="13" bloodAbo="" bloodRh="" bloodTypingStatus="NOT_DONE"
 		bloodTypingMatchStatus="NOT_DONE" donationDate="2016-04-05 00:00:00.0"
-		donationIdentificationNumber="126326" extraBloodTypeInformation=""
+		donationIdentificationNumber="126326"
 		isDeleted="0" createdDate="2016-04-18 07:53:57.0" lastUpdated="2016-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
@@ -466,7 +450,7 @@
 		ineligibleDonor="0" released="0" />
 	<Donation id="14" bloodAbo="" bloodRh="" bloodTypingStatus="NOT_DONE"
 		bloodTypingMatchStatus="NOT_DONE" donationDate="2016-04-05 00:00:00.0"
-		donationIdentificationNumber="126426" extraBloodTypeInformation=""
+		donationIdentificationNumber="126426"
 		isDeleted="0" createdDate="2016-04-18 07:53:57.0" lastUpdated="2016-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
@@ -474,7 +458,7 @@
 		ineligibleDonor="0" released="0" />
 	<Donation id="15" bloodAbo="" bloodRh="" bloodTypingStatus="COMPLETE"
 		bloodTypingMatchStatus="NO_TYPE_DETERMINED" donationDate="2016-05-05 00:00:00.0"
-		donationIdentificationNumber="126526" extraBloodTypeInformation=""
+		donationIdentificationNumber="126526"
 		isDeleted="0" createdDate="2016-05-05 07:53:57.0" lastUpdated="2016-05-05 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
@@ -482,7 +466,7 @@
 		ineligibleDonor="0" released="0" />
 	<Donation id="16" bloodAbo="A" bloodRh="+" bloodTypingStatus="COMPLETE"
 		bloodTypingMatchStatus="RESOLVED" donationDate="2016-05-05 00:00:00.0"
-		donationIdentificationNumber="126826" extraBloodTypeInformation=""
+		donationIdentificationNumber="126826"
 		isDeleted="0" createdDate="2016-05-05 07:53:57.0" lastUpdated="2016-05-05 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
@@ -491,7 +475,7 @@
 	<Donation id="17" bloodAbo="O"
 		bloodPressureSystolic="110" bloodRh="+" bloodTypingStatus="COMPLETE"
 		donationDate="2016-02-02 00:00:00.0" donationIdentificationNumber="1134567"
-		donorWeight="80.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
+		donorWeight="80.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-02-02 03:42:04.0" lastUpdated="2016-02-06 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"

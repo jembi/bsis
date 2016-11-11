@@ -70,9 +70,6 @@ public class BloodTestingRuleResultSet {
   /* collection of the various blood typing TTI tests done */
   private Set<String> ttiStatusChanges = new HashSet<String>();
 
-  /* collection of the extra and new information provided by the BloodTestingRules */
-  private Set<String> extraInformation = new HashSet<String>();
-
   /* collection of the ABO tests that are still outstanding */
   private List<String> pendingAboTestsIds = new ArrayList<String>();
 
@@ -211,14 +208,6 @@ public class BloodTestingRuleResultSet {
     this.ttiStatusChanges.add(ttiStatusChange);
   }
 
-  public Set<String> getExtraInformation() {
-    return extraInformation;
-  }
-
-  public void addExtraInformation(String extraInformation) {
-    this.extraInformation.add(extraInformation);
-  }
-
   public List<String> getPendingAboTestsIds() {
     return pendingAboTestsIds;
   }
@@ -296,11 +285,6 @@ public class BloodTestingRuleResultSet {
 
   public void setTtiStatusChanges(Set<String> ttiStatusChanges) {
     this.ttiStatusChanges = ttiStatusChanges;
-  }
-
-
-  public void setExtraInformation(Set<String> extraInformation) {
-    this.extraInformation = extraInformation;
   }
 
 
