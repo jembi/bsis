@@ -2,15 +2,15 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.LinkedHashSet;
 
+import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
-import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
 public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTestingRuleBackingForm> {
 
   private Long id;
-  private BloodTest bloodTest;
+  private BloodTestBackingForm bloodTest;
   private String pattern;
   private DonationField donationFieldChanged;
   private String newInformation;
@@ -23,7 +23,7 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
     return this;
   }
   
-  public BloodTestingRuleBackingFormBuilder withBloodTest(BloodTest bloodTest) {
+  public BloodTestingRuleBackingFormBuilder withBloodTest(BloodTestBackingForm bloodTest) {
     this.bloodTest = bloodTest;
     return this;
   }
@@ -63,7 +63,7 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
     BloodTestingRuleBackingForm bloodTestingRuleBackingForm = new BloodTestingRuleBackingForm();
     bloodTestingRuleBackingForm.setBloodTest(bloodTest);
     bloodTestingRuleBackingForm.setCategory(category);
-    bloodTestingRuleBackingForm.setDeleted(isDeleted);
+    bloodTestingRuleBackingForm.setIsDeleted(isDeleted);
     bloodTestingRuleBackingForm.setDonationFieldChanged(donationFieldChanged);
     bloodTestingRuleBackingForm.setId(id);
     bloodTestingRuleBackingForm.setNewInformation(newInformation);
