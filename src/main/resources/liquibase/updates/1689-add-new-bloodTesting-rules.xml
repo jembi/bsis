@@ -43,4 +43,10 @@
       <column name="lastUpdatedBy_id" valueNumeric="1" />
     </update>
   </changeSet>
+  
+  <changeSet id="20161111-1600" author="tumijacob">
+    <comment>Remove references to category</comment>
+    <dropColumn tableName="BloodTestingRule" columnName="category"/>
+    <dropColumn tableName="BloodTestingRule_AUD" columnName="category"/>
+  </changeSet>
 </databaseChangeLog>
