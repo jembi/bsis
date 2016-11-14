@@ -71,7 +71,6 @@ public class BloodTestingRuleFactory {
     BloodTestingRule bloodTestingRule = new BloodTestingRule();    
     bloodTestingRule.setId(bloodTestingRuleBackingForm.getId());
     BloodTest bloodTest = bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId());
-    bloodTestingRule.setCategory(bloodTest.getCategory());
     bloodTestingRule.setDonationFieldChanged(bloodTestingRuleBackingForm.getDonationFieldChanged());
     bloodTestingRule.setIsDeleted(bloodTestingRuleBackingForm.getIsDeleted());
     bloodTestingRule.setNewInformation(bloodTestingRuleBackingForm.getNewInformation());
