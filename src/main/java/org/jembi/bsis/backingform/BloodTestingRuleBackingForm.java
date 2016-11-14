@@ -23,43 +23,43 @@ public class BloodTestingRuleBackingForm {
 
   private Boolean isDeleted;
 
-  public Long getId () {
+  public Long getId() {
     return id;
   }
 
-  public void setId (Long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
-  public BloodTestBackingForm getBloodTest () {
+  public BloodTestBackingForm getBloodTest() {
     return bloodTest;
   }
 
-  public void setBloodTest (BloodTestBackingForm bloodTest) {
+  public void setBloodTest(BloodTestBackingForm bloodTest) {
     this.bloodTest = bloodTest;
   }
 
-  public String getPattern () {
+  public String getPattern() {
     return pattern;
   }
 
-  public void setPattern (String pattern) {
+  public void setPattern(String pattern) {
     this.pattern = pattern;
   }
 
-  public DonationField getDonationFieldChanged () {
+  public DonationField getDonationFieldChanged() {
     return donationFieldChanged;
   }
 
-  public void setDonationFieldChanged (DonationField donationFieldChanged) {
+  public void setDonationFieldChanged(DonationField donationFieldChanged) {
     this.donationFieldChanged = donationFieldChanged;
   }
 
-  public String getNewInformation () {
+  public String getNewInformation() {
     return newInformation;
   }
 
-  public void setNewInformation (String newInformation) {
+  public void setNewInformation(String newInformation) {
     this.newInformation = newInformation;
   }
 
@@ -71,16 +71,16 @@ public class BloodTestingRuleBackingForm {
     this.pendingTests = pendingTests;
   }
 
-  public Boolean getIsDeleted () {
+  public Boolean getIsDeleted() {
     return isDeleted;
   }
 
-  public void setIsDeleted (Boolean isDeleted) {
+  public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
 
   @JsonIgnore
   public void setCategory(BloodTestCategory category) {
-    //ignore
+    // ignore
   }
 }
