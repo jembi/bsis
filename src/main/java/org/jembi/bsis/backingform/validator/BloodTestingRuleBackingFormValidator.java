@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform.validator;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
@@ -82,13 +83,13 @@ public class BloodTestingRuleBackingFormValidator extends BaseValidator<BloodTes
     }
 
     // Validate pendingTestsIds
-    Set<Long> pendingTestsIds = form.getPendingTestsIds();
-    if (pendingTestsIds == null || pendingTestsIds.isEmpty()) {
+    Set<BloodTestBackingForm> pendingTests = form.getPendingTests();
+    if (pendingTests == null || pendingTests.isEmpty()) {
       errors.rejectValue("pendingTestsIds", "errors.required", "Pending Tests Ids are required");
     } else {
       String pendingTestsIdsError = "";
-      for (Long id : pendingTestsIds) {
-        pendingTestsIdsError = validatePendingTest(id, bloodTest, pendingTestsIdsError);
+      for (BloodTestBackingForm pendingTest : pendingTests) {
+        pendingTestsIdsError = validatePendingTest(pendingTest.getId(), bloodTest, pendingTestsIdsError);
       }
       if (pendingTestsIdsError.length() > 0) {
         errors.rejectValue("pendingTestsIds", "errors.invalid",

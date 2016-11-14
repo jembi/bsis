@@ -24,7 +24,7 @@ public class BloodTestingRuleFullViewModelMatcher extends TypeSafeMatcher<BloodT
         .appendText("\nNew information: ").appendValue(expected.getNewInformation())
         .appendText("\nPattern: ").appendValue(expected.getPattern())
         .appendText("\nBloodTest: ").appendValue(expected.getBloodTest())
-        .appendText("\nPending Tests Ids: ").appendValue(expected.getPendingTestsIds())
+        .appendText("\nPending Tests: ").appendValue(expected.getPendingTests())
         .appendText("\nIs deleted: ").appendValue(expected.getIsDeleted());
   }
 
@@ -37,7 +37,7 @@ public class BloodTestingRuleFullViewModelMatcher extends TypeSafeMatcher<BloodT
         Objects.equals(actual.getPattern(), expected.getPattern()) &&
         Objects.equals(actual.getNewInformation(), expected.getNewInformation()) &&
         Objects.equals(actual.getBloodTest(), expected.getBloodTest()) &&
-        Objects.equals(actual.getPendingTestsIds(), expected.getPendingTestsIds()) &&
+        Objects.equals(actual.getPendingTests(), expected.getPendingTests()) &&
         Objects.equals(actual.getIsDeleted(), expected.getIsDeleted());
   }
 

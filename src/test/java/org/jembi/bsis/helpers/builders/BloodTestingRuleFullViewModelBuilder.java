@@ -2,9 +2,11 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.Set;
 
+import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
+import org.jembi.bsis.viewmodel.BloodTestViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleFullViewModel;
 
 public class BloodTestingRuleFullViewModelBuilder extends AbstractBuilder<BloodTestingRuleFullViewModel> {
@@ -16,7 +18,7 @@ public class BloodTestingRuleFullViewModelBuilder extends AbstractBuilder<BloodT
   private String newInformation;
   private String pattern;
   private BloodTestFullViewModel bloodTest;
-  private Set<Long> pendingTestsIds;
+  private Set<BloodTestViewModel> pendingTests;
   private boolean isDeleted = false;
   
   public BloodTestingRuleFullViewModelBuilder withId(Long id) {
@@ -65,8 +67,8 @@ public class BloodTestingRuleFullViewModelBuilder extends AbstractBuilder<BloodT
   }
 
 
-  public BloodTestingRuleFullViewModelBuilder withPendingTestIds(Set<Long> pendingTestIds) {
-    this.pendingTestsIds = pendingTestIds;
+  public BloodTestingRuleFullViewModelBuilder withPendingTests(Set<BloodTestViewModel> pendingTests) {
+    this.pendingTests = pendingTests;
     return this;
   }
   
@@ -81,7 +83,7 @@ public class BloodTestingRuleFullViewModelBuilder extends AbstractBuilder<BloodT
     bloodTestingRuleFullViewModel.setPattern(pattern);
     bloodTestingRuleFullViewModel.setIsDeleted(isDeleted);
     bloodTestingRuleFullViewModel.setBloodTest(bloodTest);
-    bloodTestingRuleFullViewModel.setPendingTestsIds(pendingTestsIds);
+    bloodTestingRuleFullViewModel.setPendingTests(pendingTests);
     return bloodTestingRuleFullViewModel;
   }
   

@@ -2,17 +2,18 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
 import static org.jembi.bsis.helpers.builders.BloodTestBackingFormBuilder.aBloodTestBackingForm;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestViewModelBuilder.aBloodTestViewModel;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleBackingFormBuilder.aBloodTestingRuleBackingForm;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleBuilder.aBloodTestingRule;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleFullViewModelBuilder.aBloodTestingRuleFullViewModel;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleViewModelBuilder.aBloodTestingRuleViewModel;
+import static org.jembi.bsis.helpers.matchers.BloodTestingRuleFullViewModelMatcher.hasSameStateAsBloodTestingRuleFullViewModel;
 import static org.jembi.bsis.helpers.matchers.BloodTestingRuleMatcher.hasSameStateAsBloodTestingRule;
 import static org.jembi.bsis.helpers.matchers.BloodTestingRuleViewModelMatcher.hasSameStateAsBloodTestingRuleViewModel;
-import static org.jembi.bsis.helpers.matchers.BloodTestingRuleFullViewModelMatcher.hasSameStateAsBloodTestingRuleFullViewModel;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
+import org.jembi.bsis.viewmodel.BloodTestViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleViewModel;
 import org.junit.Test;
@@ -123,7 +125,9 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withId(1L)
         .withBloodTest(bloodTestBackingForm)
         .withDonationFieldChanged(DonationField.BLOODRH)
-        .withPendingTestsIds(new HashSet<>(Arrays.asList(1L, 3L)))
+        .withPendingTests(new HashSet<>(Arrays.asList(
+            aBloodTestBackingForm().withId(2L).build(),
+            aBloodTestBackingForm().withId(3L).build())))
         .withNewInformation("+")
         .withPattern("POS")
         .build();
@@ -132,7 +136,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withId(1L)
         .withBloodTest(bloodTest)
         .withDonationFieldChanged(DonationField.BLOODRH)
-        .withPendingTestsIds("1,3")
+        .withPendingTestsIds("2, 3")
         .withNewInformation("+")
         .withPattern("POS")
         .build();
@@ -161,7 +165,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withNewInformation("+")
         .withPattern("POS")
-        .withPendingTestsIds("1")
+        .withPendingTestsIds("2")
         .withBloodTest(bloodTest)
         .build();
 
@@ -171,6 +175,12 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withTestNameShort("Rh")
         .withCategory(bloodTest.getCategory())
         .build();
+
+    BloodTestViewModel pendingBloodTestViewModel = aBloodTestViewModel()
+        .withId(2L) 
+        .withTestNameShort("Repeat Rh")
+        .withCategory(bloodTest.getCategory())
+        .build();
     
     BloodTestingRuleFullViewModel expectedFullViewModel = aBloodTestingRuleFullViewModel()
         .withId(1L)
@@ -178,7 +188,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withNewInformation("+")
         .withPattern("POS")
-        .withPendingTestIds(new HashSet<Long>(Arrays.asList(1L)))
+        .withPendingTests(new HashSet<BloodTestViewModel>(Arrays.asList(pendingBloodTestViewModel)))
         .withBloodTest(bloodTestFullViewModel)
         .withBloodTestCategory(bloodTest.getCategory())
         .build();
@@ -208,6 +218,18 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withCategory(bloodTest.getCategory())
         .withTestNameShort("Rh")
         .build();
+
+    BloodTestViewModel bloodTestViewModel1 = aBloodTestViewModel()
+        .withId(2L)
+        .withCategory(bloodTest.getCategory())
+        .withTestNameShort("Repeat Rh")
+        .build();
+
+    BloodTestViewModel bloodTestViewModel2 = aBloodTestViewModel()
+        .withId(3L)
+        .withCategory(bloodTest.getCategory())
+        .withTestNameShort("Repeat again Rh")
+        .build();
     
     List<BloodTestingRule> bloodTestingRules = Arrays.asList(
         aBloodTestingRule()
@@ -215,7 +237,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
             .withDonationFieldChanged(DonationField.BLOODRH)
             .withNewInformation("+")
             .withPattern("POS")
-            .withPendingTestsIds("1")
+            .withPendingTestsIds("2")
             .withBloodTest(bloodTest)
             .build(),
         aBloodTestingRule()
@@ -223,7 +245,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
             .withDonationFieldChanged(DonationField.BLOODRH)
             .withNewInformation("+")
             .withPattern("NEG")
-            .withPendingTestsIds("2")
+            .withPendingTestsIds("3")
             .withBloodTest(bloodTest)
             .build());
 
@@ -235,7 +257,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
             .withDonationFieldChanged(DonationField.BLOODRH)
             .withNewInformation("+")
             .withPattern("POS")
-            .withPendingTestIds(new HashSet<Long>(Arrays.asList(1L)))
+            .withPendingTests(new HashSet<BloodTestViewModel>(Arrays.asList(bloodTestViewModel1)))
             .withBloodTest(bloodTestFullViewModel)
             .withBloodTestCategory(bloodTest.getCategory())
             .build(),
@@ -245,7 +267,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
             .withDonationFieldChanged(DonationField.BLOODRH)
             .withNewInformation("+")
             .withPattern("NEG")
-            .withPendingTestIds(new HashSet<Long>(Arrays.asList(2L)))
+            .withPendingTests(new HashSet<BloodTestViewModel>(Arrays.asList(bloodTestViewModel2)))
             .withBloodTest(bloodTestFullViewModel)
             .withBloodTestCategory(bloodTest.getCategory())
             .build());

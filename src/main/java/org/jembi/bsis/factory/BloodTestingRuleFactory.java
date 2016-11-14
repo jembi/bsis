@@ -1,13 +1,17 @@
 package org.jembi.bsis.factory;
 
-import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.repository.BloodTestRepository;
+import org.jembi.bsis.viewmodel.BloodTestViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,13 +80,23 @@ public class BloodTestingRuleFactory {
     bloodTestingRule.setNewInformation(bloodTestingRuleBackingForm.getNewInformation());
     bloodTestingRule.setPattern(bloodTestingRuleBackingForm.getPattern());
     bloodTestingRule.setBloodTest(bloodTest);
-    bloodTestingRule.setPendingTestsIds(StringUtils.join(bloodTestingRuleBackingForm.getPendingTestsIds(), ','));
+    List<Long> pendingTestsIds = new ArrayList<>();
+    for (BloodTestBackingForm pendingBloodTest : bloodTestingRuleBackingForm.getPendingTests()) {
+      pendingTestsIds.add(pendingBloodTest.getId()); 
+    }
+    bloodTestingRule.setPendingTestsIds(StringUtils.join(pendingTestsIds, ','));
     return bloodTestingRule;
   }
 
   private void populateBloodTestingRuleFullViewModel(BloodTestingRuleFullViewModel fullViewModel,
       BloodTestingRule bloodTestingRule) {
-    fullViewModel.setPendingTestsIds(bloodTestingRule.getPendingTestsIds());
+    Set<BloodTestViewModel> pendingBloodTests = new HashSet<>();
+    for (Long id : bloodTestingRule.getPendingTestsIds()) {
+      BloodTestViewModel bloodTest = new BloodTestViewModel();
+      bloodTest.setId(id);
+      pendingBloodTests.add(bloodTest);
+    }
+    fullViewModel.setPendingTests(pendingBloodTests);
     fullViewModel.setBloodTest(bloodTestFactory.createFullViewModel(bloodTestingRule.getBloodTest()));
   }
 }

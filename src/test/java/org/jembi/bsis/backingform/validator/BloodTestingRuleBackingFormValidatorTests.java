@@ -48,7 +48,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
         .withDonationFieldChanged(DonationField.TTISTATUS)
         .withNewInformation(TTIStatus.TTI_UNSAFE.name())
         .withPattern("POS")
-        .withPendingTestsIds(new LinkedHashSet<>(Arrays.asList(2L)))
+        .withPendingTests(new LinkedHashSet<>(Arrays.asList(aBloodTestBackingForm().withId(2L).build())))
         .build();
     return backingForm;
   }
@@ -298,7 +298,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
 
     // Set up data
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
-    backingForm.setPendingTestsIds(null);
+    backingForm.setPendingTests(null);
 
     // Set up mocks
     when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());

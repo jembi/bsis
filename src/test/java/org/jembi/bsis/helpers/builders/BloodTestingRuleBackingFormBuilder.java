@@ -13,7 +13,7 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
   private String pattern;
   private DonationField donationFieldChanged;
   private String newInformation;
-  private Set<Long> pendingTestsIds;
+  private Set<BloodTestBackingForm> pendingTests;
   private boolean isDeleted = false;
 
   public BloodTestingRuleBackingFormBuilder withId(Long id) {
@@ -41,8 +41,8 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
     return this;
   }
   
-  public BloodTestingRuleBackingFormBuilder withPendingTestsIds(Set<Long> pendingTestsIds) {
-    this.pendingTestsIds = pendingTestsIds;
+  public BloodTestingRuleBackingFormBuilder withPendingTests(Set<BloodTestBackingForm> pendingTests) {
+    this.pendingTests = pendingTests;
     return this;
   }  
   public BloodTestingRuleBackingFormBuilder withDeleted(boolean isDeleted) {
@@ -59,7 +59,7 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
     bloodTestingRuleBackingForm.setId(id);
     bloodTestingRuleBackingForm.setNewInformation(newInformation);
     bloodTestingRuleBackingForm.setPattern(pattern);
-    bloodTestingRuleBackingForm.setPendingTestsIds(pendingTestsIds);
+    bloodTestingRuleBackingForm.setPendingTests(pendingTests);
     return bloodTestingRuleBackingForm;
   }
   

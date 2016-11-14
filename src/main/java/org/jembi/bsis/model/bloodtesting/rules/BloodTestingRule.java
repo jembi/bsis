@@ -96,7 +96,7 @@ public class BloodTestingRule extends BaseModificationTrackerEntity {
     Set<Long> ids = new HashSet<>();
     StringTokenizer st = new StringTokenizer(pendingTestsIds, ",");
     while (st.hasMoreTokens()) {
-      ids.add(Long.valueOf(st.nextToken()));
+      ids.add(Long.valueOf(st.nextToken().trim()));
     }
     return Collections.unmodifiableSet(ids);
   }
