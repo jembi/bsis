@@ -1,4 +1,4 @@
-package org.jembi.bsis.repository.bloodtesting;
+package org.jembi.bsis.service;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -17,14 +17,12 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
-import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.service.BloodTestingRuleEngine;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
