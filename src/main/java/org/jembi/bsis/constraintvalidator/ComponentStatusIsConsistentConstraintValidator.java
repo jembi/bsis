@@ -30,6 +30,7 @@ public class ComponentStatusIsConsistentConstraintValidator implements Constrain
       ComponentStatus.QUARANTINED);
 
   private static final List<ComponentStatus> REMOVED_COMPATIBLE_STATUSES = Arrays.asList(
+      ComponentStatus.PROCESSED,
       ComponentStatus.ISSUED,
       ComponentStatus.DISCARDED);
 
