@@ -16,7 +16,7 @@ public class BloodTestingRuleFullViewModelBuilder extends AbstractBuilder<BloodT
   private String newInformation;
   private String pattern;
   private BloodTestFullViewModel bloodTest;
-  private Set<String> pendingTestsIds;
+  private Set<Long> pendingTestsIds;
   private boolean isDeleted = false;
   
   public BloodTestingRuleFullViewModelBuilder withId(Long id) {
@@ -65,7 +65,7 @@ public class BloodTestingRuleFullViewModelBuilder extends AbstractBuilder<BloodT
   }
 
 
-  public BloodTestingRuleFullViewModelBuilder withPendingTestIds(Set<String> pendingTestIds) {
+  public BloodTestingRuleFullViewModelBuilder withPendingTestIds(Set<Long> pendingTestIds) {
     this.pendingTestsIds = pendingTestIds;
     return this;
   }

@@ -13,7 +13,7 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
   private String pattern;
   private DonationField donationFieldChanged;
   private String newInformation;
-  private Set<String> pendingTestsIds;
+  private Set<Long> pendingTestsIds;
   private boolean isDeleted = false;
 
   public BloodTestingRuleBackingFormBuilder withId(Long id) {
@@ -41,7 +41,7 @@ public class BloodTestingRuleBackingFormBuilder extends AbstractBuilder<BloodTes
     return this;
   }
   
-  public BloodTestingRuleBackingFormBuilder withPendingTestsIds(Set<String> pendingTestsIds) {
+  public BloodTestingRuleBackingFormBuilder withPendingTestsIds(Set<Long> pendingTestsIds) {
     this.pendingTestsIds = pendingTestsIds;
     return this;
   }  

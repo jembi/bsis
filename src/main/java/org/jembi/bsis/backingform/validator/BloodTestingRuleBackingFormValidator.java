@@ -82,12 +82,12 @@ public class BloodTestingRuleBackingFormValidator extends BaseValidator<BloodTes
     }
 
     // Validate pendingTestsIds
-    Set<String> pendingTestsIds = form.getPendingTestsIds();
+    Set<Long> pendingTestsIds = form.getPendingTestsIds();
     if (pendingTestsIds == null || pendingTestsIds.isEmpty()) {
       errors.rejectValue("pendingTestsIds", "errors.required", "Pending Tests Ids are required");
     } else {
       String pendingTestsIdsError = "";
-      for (String id : pendingTestsIds) {
+      for (Long id : pendingTestsIds) {
         pendingTestsIdsError = validatePendingTest(id, bloodTest, pendingTestsIdsError);
       }
       if (pendingTestsIdsError.length() > 0) {
@@ -102,17 +102,11 @@ public class BloodTestingRuleBackingFormValidator extends BaseValidator<BloodTes
     }
   }
 
-  private String validatePendingTest(String idStr, BloodTest bloodTest, String pendingTestsError) {
-    Long id = null;
-    try {
-      id = Long.valueOf(idStr);
-    } catch (Exception e) {
-      pendingTestsError += ", " + idStr;
-    }
+  private String validatePendingTest(Long id, BloodTest bloodTest, String pendingTestsError) {
     if (id != null) {
       boolean testExists = bloodTestRepository.verifyBloodTestExists(Long.valueOf(id));
       if (!testExists) {
-        pendingTestsError += ", " + idStr;
+        pendingTestsError += ", " + id.toString();
       }
     }
     return pendingTestsError;

@@ -19,7 +19,7 @@ public class BloodTestingRuleBackingForm {
 
   private String newInformation;
 
-  private Set<String> pendingTestsIds;
+  private Set<Long> pendingTestsIds;
 
   private Boolean isDeleted;
 
@@ -63,11 +63,11 @@ public class BloodTestingRuleBackingForm {
     this.newInformation = newInformation;
   }
 
-  public Set<String> getPendingTestsIds () {
+  public Set<Long> getPendingTestsIds () {
     return pendingTestsIds;
   }
 
-  public void setPendingTestsIds (Set<String> pendingTestsIds) {
+  public void setPendingTestsIds (Set<Long> pendingTestsIds) {
     this.pendingTestsIds = pendingTestsIds;
   }
 

@@ -48,7 +48,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
         .withDonationFieldChanged(DonationField.TTISTATUS)
         .withNewInformation(TTIStatus.TTI_UNSAFE.name())
         .withPattern("POS")
-        .withPendingTestsIds(new LinkedHashSet<>(Arrays.asList("2")))
+        .withPendingTestsIds(new LinkedHashSet<>(Arrays.asList(2L)))
         .build();
     return backingForm;
   }
@@ -311,26 +311,6 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     // Verify
     assertThat(errors.getErrorCount(), is(1));
     assertThat(errors.getFieldError("pendingTestsIds").getCode(), is("errors.required"));
-  }
-
-  @Test
-  public void testValidateFormWithInvalidPendingTestsIds_shouldHaveOneError() {
-
-    // Set up data
-    BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
-    backingForm.setPendingTestsIds(new LinkedHashSet<>(Arrays.asList("2A", "xx")));
-
-    // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(false);
-
-    // Run test
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
-    bloodTestingRuleBackingFormvalidator.validateForm(backingForm, errors);
-
-    // Verify
-    assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("pendingTestsIds").getCode(), is("errors.invalid"));
   }
 
   @Test

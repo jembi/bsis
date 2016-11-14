@@ -1,9 +1,9 @@
 package org.jembi.bsis.model.bloodtesting.rules;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -89,11 +89,16 @@ public class BloodTestingRule extends BaseModificationTrackerEntity {
     this.newInformation = newInformation;
   }
 
-  public Set<String> getPendingTestsIds() {
+  public Set<Long> getPendingTestsIds() {
     if (pendingTestsIds == null || pendingTestsIds.isEmpty()) {
       return Collections.emptySet();
     }
-    return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(pendingTestsIds.split(","))));
+    Set<Long> ids = new HashSet<>();
+    StringTokenizer st = new StringTokenizer(pendingTestsIds, ",");
+    while (st.hasMoreTokens()) {
+      ids.add(Long.valueOf(st.nextToken()));
+    }
+    return Collections.unmodifiableSet(ids);
   }
 
   public void setPendingTestsIds(String pendingTestsIds) {

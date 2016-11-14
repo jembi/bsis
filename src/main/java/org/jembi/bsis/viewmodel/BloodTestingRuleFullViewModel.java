@@ -6,7 +6,7 @@ public class BloodTestingRuleFullViewModel extends BloodTestingRuleViewModel {
 
   private BloodTestFullViewModel bloodTest;
 
-  private Set<String> pendingTestsIds;
+  private Set<Long> pendingTestsIds;
 
   public BloodTestFullViewModel getBloodTest () {
     return bloodTest;
@@ -16,11 +16,11 @@ public class BloodTestingRuleFullViewModel extends BloodTestingRuleViewModel {
     this.bloodTest = bloodTest;
   }
 
-  public Set<String> getPendingTestsIds () {
+  public Set<Long> getPendingTestsIds () {
     return pendingTestsIds;
   }
 
-  public void setPendingTestsIds (Set<String> pendingTestsIds) {
+  public void setPendingTestsIds (Set<Long> pendingTestsIds) {
     this.pendingTestsIds = pendingTestsIds;
   }
 }

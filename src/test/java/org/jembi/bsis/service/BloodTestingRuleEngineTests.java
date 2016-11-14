@@ -154,7 +154,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.INDETERMINATE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -194,7 +194,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -233,7 +233,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_UNSAFE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -272,7 +272,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_UNSAFE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -311,7 +311,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_UNSAFE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -352,7 +352,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.INDETERMINATE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -389,7 +389,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
@@ -426,7 +426,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -464,7 +464,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -501,7 +501,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
@@ -538,7 +538,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -577,7 +577,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -616,7 +616,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -655,7 +655,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_MATCH);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.PENDING_TESTS);
@@ -697,7 +697,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -739,7 +739,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -782,7 +782,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), resultsMap, rules);
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
     expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
