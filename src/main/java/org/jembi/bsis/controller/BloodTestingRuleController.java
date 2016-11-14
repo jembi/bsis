@@ -11,8 +11,6 @@ import org.jembi.bsis.backingform.validator.BloodTestingRuleBackingFormValidator
 import org.jembi.bsis.controllerservice.BloodTestingRuleControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
