@@ -105,7 +105,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   }
   
   @Test
-  public void testConvertBloodTestingRuleBackingFormToBloodTestingRuleEntity_shouldReturnExpectedEntity() {
+  public void testCreateEntity_shouldReturnExpectedEntity() {
     // Set up fixture
     BloodTest bloodTest = aBloodTest()
         .withCategory(BloodTestCategory.BLOODTYPING)
