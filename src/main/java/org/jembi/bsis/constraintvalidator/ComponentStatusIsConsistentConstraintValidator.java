@@ -60,7 +60,8 @@ public class ComponentStatusIsConsistentConstraintValidator implements Constrain
       return true;
     }
 
-    LOGGER.warn("Component status '" + target.getStatus() + "' and inventory status '" + target.getInventoryStatus() + "' are not consistent for Component with id: " + target.getId());
+    LOGGER.warn("Component status '" + target.getStatus() + "' and inventory status '" + target.getInventoryStatus()
+        + "' are not consistent for Component with id: " + target.getId());
 
     return false;
   }
