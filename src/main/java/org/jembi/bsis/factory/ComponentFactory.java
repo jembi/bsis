@@ -62,6 +62,7 @@ public class ComponentFactory {
     permissions.put("canUnprocess", componentConstraintChecker.canUnprocess(component));
     permissions.put("canUndiscard", componentConstraintChecker.canUndiscard(component));
     viewModel.setPermissions(permissions);
+    viewModel.setHasComponentBatch(component.getComponentBatch() != null);
     return viewModel;
   }
 

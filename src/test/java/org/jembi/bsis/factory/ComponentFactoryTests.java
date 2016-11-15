@@ -179,6 +179,7 @@ public class ComponentFactoryTests {
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
         .withExpiryStatus("Already expired")
+        .whichHasComponentBatch(Boolean.FALSE)
         .build();
 
     // setup mocks

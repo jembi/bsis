@@ -19,6 +19,12 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   private String componentCode;
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
+  private Boolean hasComponentBatch;
+
+  public ComponentManagementViewModelBuilder whichHasComponentBatch(Boolean hasComponentBatch) {
+    this.hasComponentBatch = hasComponentBatch;
+    return this;
+  }
 
   public ComponentManagementViewModelBuilder withId(Long id) {
     this.id = id;
@@ -77,6 +83,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     viewModel.setWeight(weight);
     viewModel.setComponentType(componentType);
     viewModel.setPermissions(permissions);
+    viewModel.setHasComponentBatch(hasComponentBatch);
     return viewModel;
   }
   
