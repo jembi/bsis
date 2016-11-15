@@ -105,9 +105,9 @@ public class ComponentFactory {
     viewModel.setNotes(component.getNotes());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
     if (component.getParentComponent() != null) {
-      viewModel.setIsInitialComponent(true);
-    } else {
       viewModel.setIsInitialComponent(false);
+    } else {
+      viewModel.setIsInitialComponent(true);
     }
     return viewModel;
   }
