@@ -8,7 +8,6 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
-import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.viewmodel.BloodTestViewModel;
@@ -74,12 +73,11 @@ public class BloodTestingRuleFactory {
   public BloodTestingRule createEntity(BloodTestingRuleBackingForm bloodTestingRuleBackingForm) {
     BloodTestingRule bloodTestingRule = new BloodTestingRule();    
     bloodTestingRule.setId(bloodTestingRuleBackingForm.getId());
-    BloodTest bloodTest = bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId());
     bloodTestingRule.setDonationFieldChanged(bloodTestingRuleBackingForm.getDonationFieldChanged());
     bloodTestingRule.setIsDeleted(bloodTestingRuleBackingForm.getIsDeleted());
     bloodTestingRule.setNewInformation(bloodTestingRuleBackingForm.getNewInformation());
     bloodTestingRule.setPattern(bloodTestingRuleBackingForm.getPattern());
-    bloodTestingRule.setBloodTest(bloodTest);
+    bloodTestingRule.setBloodTest(bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId()));
     List<Long> pendingTestsIds = new ArrayList<>();
     for (BloodTestBackingForm pendingBloodTest : bloodTestingRuleBackingForm.getPendingTests()) {
       pendingTestsIds.add(pendingBloodTest.getId()); 
