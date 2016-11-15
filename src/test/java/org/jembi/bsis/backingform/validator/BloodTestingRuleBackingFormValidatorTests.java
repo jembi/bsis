@@ -310,7 +310,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("pendingTestsIds").getCode(), is("errors.required"));
+    assertThat(errors.getFieldError("pendingTests").getCode(), is("errors.required"));
   }
 
   @Test
@@ -329,7 +329,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("pendingTestsIds").getCode(), is("errors.invalid"));
+    assertThat(errors.getFieldError("pendingTests").getCode(), is("errors.invalid"));
   }
 
   @Test
