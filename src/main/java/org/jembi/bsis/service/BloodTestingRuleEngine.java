@@ -406,18 +406,16 @@ public class BloodTestingRuleEngine {
    * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
    */
   private void updatePendingAboRhTests(BloodTestingRuleResultSet resultSet) {
-    if (!resultSet.getPendingAboTestsIds().isEmpty() || !resultSet.getPendingRhTestsIds().isEmpty()) {
-      if (resultSet.getBloodTypingMatchStatus() != BloodTypingMatchStatus.NOT_DONE
-          && resultSet.getBloodTypingMatchStatus() != BloodTypingMatchStatus.NO_MATCH) {
-        if (LOGGER.isInfoEnabled()) {
-          LOGGER.info("Donor " + resultSet.getDonation().getDonor().getId()
-              + " is not a first time donor, so pending ABO tests ("
-              + resultSet.getPendingAboTestsIds().size() + ") and pending Rh tests ("
-              + resultSet.getPendingRhTestsIds().size() + ") are not required.");
-        }
-        resultSet.getPendingAboTestsIds().clear();
-        resultSet.getPendingRhTestsIds().clear();
+    if (resultSet.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NO_MATCH) {
+      if (LOGGER.isInfoEnabled()) {
+        LOGGER.info("Donor " + resultSet.getDonation().getDonor().getId()
+            + " is a first time donor, so pending ABO tests ("
+            + resultSet.getPendingAboTestsIds().size() + ") and pending Rh tests ("
+            + resultSet.getPendingRhTestsIds().size() + ") are required.");
       }
+    } else {
+      resultSet.getPendingAboTestsIds().clear();
+      resultSet.getPendingRhTestsIds().clear();
     }
   }
 
