@@ -37,6 +37,7 @@ public class LabellingFactory {
     permissions.put("canPrintDiscardLabel", labellingConstraintChecker.canPrintDiscardLabel(component));
     permissions.put("canPrintPackLabel", labellingConstraintChecker.canPrintPackLabel(component));
     viewModel.setPermissions(permissions);
+    viewModel.setHasComponentBatch(component.getComponentBatch() != null);
     return viewModel;
   }
 
