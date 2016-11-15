@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.jembi.bsis.factory.BloodTestingRuleResultViewModelFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
-import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
@@ -597,6 +596,43 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
+
+  @Test
+  public void testApplyBloodTestsWithRepeatDonorOnlyABO_bloodTypingStatusShouldBeNotDoneAndNoPendingTests() throws Exception {
+
+    // Setup fixtures
+    setupFixtures();
+
+    // Setup donation
+    PackType packType = aPackType().withTestSampleProduced(true).build();
+    Donor donor = aDonor().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).build();
+
+    // Setup existing test results for that donation
+    Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
+    resultsMap.put(3L, aBloodTestResult().withBloodTest(aboBloodTest).withResult("A").withReEntryRequired(false).build());
+
+    // Setup expected rule engine result set
+    BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.addBloodAboChanges("A");
+
+    // Setup mocks
+    when(bloodTestingRuleRepository.getBloodTestingRules(false)).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest));
+
+    // Apply test
+    bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+
+    // Verify last step of applyBloodTests before returning view model
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+        argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
+
+  }
   
   @Test
   public void testApplyBloodTestsWithRepeatDonorABORh_bloodTypingStatusShouldBeAmbiguous() throws Exception {
@@ -661,6 +697,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.PENDING_TESTS);
     expectedBloodTestingRuleResultSet.addBloodAboChanges("A");
     expectedBloodTestingRuleResultSet.addBloodRhChanges("+");
+    expectedBloodTestingRuleResultSet.setPendingAboTestsIds(Arrays.asList(5L));
+    expectedBloodTestingRuleResultSet.setPendingRhTestsIds(Arrays.asList(6L));
 
     // Setup mocks
     when(bloodTestingRuleRepository.getBloodTestingRules(false)).thenReturn(rules);
