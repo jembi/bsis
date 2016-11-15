@@ -89,7 +89,12 @@ public class BloodTestingRuleBackingFormValidator extends BaseValidator<BloodTes
     } else {
       String pendingTestsError = "";
       for (BloodTestBackingForm pendingTest : pendingTests) {
-        pendingTestsError = validatePendingTest(pendingTest.getId(), bloodTest, pendingTestsError);
+        if (bloodTest != null && bloodTest.getId().equals(pendingTest.getId())) {
+          errors.rejectValue("pendingTests", "errors.invalid", "Selected blood test " + bloodTest.getId()
+              + " cannot be included the list of pending blood tests");
+        } else {
+          pendingTestsError = validatePendingTest(pendingTest.getId(), pendingTestsError);
+        }
       }
       if (pendingTestsError.length() > 0) {
         errors.rejectValue("pendingTests", "errors.invalid",
@@ -103,7 +108,7 @@ public class BloodTestingRuleBackingFormValidator extends BaseValidator<BloodTes
     }
   }
 
-  private String validatePendingTest(Long id, BloodTest bloodTest, String pendingTestsError) {
+  private String validatePendingTest(Long id, String pendingTestsError) {
     if (id != null) {
       boolean testExists = bloodTestRepository.verifyBloodTestExists(id);
       if (!testExists) {
