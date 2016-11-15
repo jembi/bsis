@@ -88,7 +88,9 @@ public class ComponentFactoryTests {
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withComponentType(componentType)
         .withLocation(location)
-        .withDonation(donation).withParentComponent(parentComponent).build();
+        .withDonation(donation)
+        .withParentComponent(parentComponent)
+        .build();
     
     ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
         .withId(1L)
