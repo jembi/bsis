@@ -425,6 +425,11 @@ public class ComponentCRUDService {
       componentRepository.update(child);
     }
 
+    // Add component back into inventory if it has previously been removed
+    if (parentComponent.getInventoryStatus() == InventoryStatus.REMOVED) {
+      parentComponent.setInventoryStatus(InventoryStatus.IN_STOCK);
+    }
+
     // FIXME: Create component status change for when processing a component
     return rollBackComponentStatus(parentComponent, null);
   }
