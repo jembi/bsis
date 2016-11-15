@@ -28,7 +28,7 @@ public class ComponentFullViewModelMatcher extends TypeSafeMatcher<ComponentFull
         .appendText("\nExpiresOn: ").appendValue(expected.getExpiresOn())
         .appendText("\nBlood ABO: ").appendValue(expected.getBloodAbo())
         .appendText("\nBlood Rh: ").appendValue(expected.getBloodRh())
-        .appendText("\nIsIntialComponent: ").appendValue(expected.getIsInitialComponent())
+        .appendText("\nIs IntialComponent: ").appendValue(expected.getIsInitialComponent())
         ;
   }
 
