@@ -27,6 +27,11 @@ public class ComponentConstraintChecker {
       ComponentStatus.EXPIRED);
   
   public boolean canDiscard(Component component) {
+    // There must be a componentBatch attached to the component
+    if (!hasComponentBatch(component)){
+      return false;
+    }
+    
     // Check component status is allowed to discard
     return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
   }
@@ -37,6 +42,11 @@ public class ComponentConstraintChecker {
   }
 
   public boolean canRecordWeight(Component component) {
+    // There must be a componentBatch attached to the component
+    if (!hasComponentBatch(component)){
+      return false;
+    }
+    
     // Only initial components can record weight
     if (component.getParentComponent() != null) {
       return false;
@@ -46,6 +56,11 @@ public class ComponentConstraintChecker {
   }
 
   public boolean canProcess(Component component) {
+    // There must be a componentBatch attached to the component
+    if (!hasComponentBatch(component)){
+      return false;
+    }
+    
     // If it's an initial component, check that weight is valid
     if (component.getParentComponent() == null) {
       if (!isWeightValid(component)) {
@@ -89,6 +104,14 @@ public class ComponentConstraintChecker {
       }
     }
     return false;
+  }
+  
+  private boolean hasComponentBatch(Component component) {
+    if (component.getComponentBatch() != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }
