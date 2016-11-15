@@ -104,6 +104,11 @@ public class ComponentFactory {
     viewModel.setLocation(locationFactory.createFullViewModel(component.getLocation()));
     viewModel.setNotes(component.getNotes());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
+    if (component.getParentComponent() != null) {
+      viewModel.setIsInitialComponent(true);
+    } else {
+      viewModel.setIsInitialComponent(false);
+    }
     return viewModel;
   }
 

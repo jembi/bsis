@@ -15,6 +15,7 @@ public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFull
   private String bloodRh;
   private String bloodAbo;
   private ComponentTypeViewModel componentType;
+  private boolean isInitialComponent = false;
 
   public ComponentFullViewModelBuilder withId(Long id) {
     this.id = id;
@@ -50,6 +51,11 @@ public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFull
     this.componentType = componentType;
     return this;
   }
+  
+  public ComponentFullViewModelBuilder withInitialComponent(boolean isInitialComponent) {
+    this.isInitialComponent = isInitialComponent;
+    return this;
+  }
 
   @Override
   public ComponentFullViewModel build() {
@@ -61,6 +67,7 @@ public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFull
     viewModel.setBloodAbo(bloodAbo);
     viewModel.setBloodRh(bloodRh);
     viewModel.setComponentType(componentType);
+    viewModel.setIsInitialComponent(isInitialComponent);
     return viewModel;
   }
   
