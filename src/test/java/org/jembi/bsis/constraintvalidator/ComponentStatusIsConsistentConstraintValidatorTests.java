@@ -14,11 +14,6 @@ import org.mockito.InjectMocks;
  * ComponentStatusIsConsistentConstraintValidatorTests validates all compatible combinations
  * (there's integration tests for the non compatible ones in
  * ComponentStatusIsConsistentRoundTripTests)
- * 
- * IN_STOCK_COMPATIBLE_STATUSES = AVAILABLE, EXPIRED, UNSAFE 
- * NOT_IN_STOCK_COMPATIBLE_STATUSES = AVAILABLE, EXPIRED, UNSAFE, DISCARDED, PROCESSED, QUARANTINED 
- * REMOVED_COMPATIBLE_STATUSES = ISSUED, DISCARDED
- * 
  */
 public class ComponentStatusIsConsistentConstraintValidatorTests extends UnitTestSuite {
   
@@ -102,4 +97,10 @@ public class ComponentStatusIsConsistentConstraintValidatorTests extends UnitTes
     Assert.assertTrue("Is compatible", valid);
   }
 
+  @Test
+  public void testConsistencyRemovedProcessed_shouldBeCompatible() {
+    Component component = ComponentBuilder.aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.PROCESSED).build();
+    boolean valid = constraintValidator.isValid(component, null);
+    Assert.assertTrue("Is compatible", valid);
+  }
 }
