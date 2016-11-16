@@ -24,7 +24,10 @@ import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
 @NamedQueries({
   @NamedQuery(
       name = BloodTestingRuleNamedQueryConstants.NAME_GET_BLOOD_TESTING_RULES,
-      query = BloodTestingRuleNamedQueryConstants.QUERY_GET_BLOOD_TESTING_RULES)
+      query = BloodTestingRuleNamedQueryConstants.QUERY_GET_BLOOD_TESTING_RULES),
+  @NamedQuery(
+      name = BloodTestingRuleNamedQueryConstants.NAME_FIND_BLOOD_TESTING_RULE_BY_ID,
+      query = BloodTestingRuleNamedQueryConstants.QUERY_FIND_BLOOD_TESTING_RULE_BY_ID)
 })
 public class BloodTestingRule extends BaseModificationTrackerEntity {
 
