@@ -1,4 +1,4 @@
-package org.jembi.bsis.controller.bloodtesting;
+package org.jembi.bsis.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;

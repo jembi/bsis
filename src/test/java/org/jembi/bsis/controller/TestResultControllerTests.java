@@ -85,10 +85,10 @@ public class TestResultControllerTests extends UnitTestSuite {
         .withReEntryRequired()
         .build();
             
-    Map<String, BloodTestResultViewModel> recentTestResults = new HashMap<>();
-    recentTestResults.put("1", basicTTIBloodTestResultViewModel);
+    Map<Long, BloodTestResultViewModel> recentTestResults = new HashMap<>();
+    recentTestResults.put(1L, basicTTIBloodTestResultViewModel);
     
-    List<String> noTestIds = new ArrayList<String>();
+    List<Long> noTestIds = new ArrayList<>();
     List<BloodTestingRuleResult> bloodTestingRuleResult = Arrays.asList(
         aBloodTestingRuleResult()
             .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
@@ -153,8 +153,8 @@ public class TestResultControllerTests extends UnitTestSuite {
         .withReEntryRequired()
         .build();
             
-    Map<String, BloodTestResultViewModel> recentTestResults1 = new HashMap<>();
-    recentTestResults1.put("1", basicTTIBloodTestResultViewModel);
+    Map<Long, BloodTestResultViewModel> recentTestResults1 = new HashMap<>();
+    recentTestResults1.put(1L, basicTTIBloodTestResultViewModel);
      
     BloodTestFullViewModel repeatTTIBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
         .withId(1L)
@@ -167,10 +167,10 @@ public class TestResultControllerTests extends UnitTestSuite {
         .withReEntryRequired()
         .build();
             
-    Map<String, BloodTestResultViewModel> recentTestResults2 = new HashMap<>();
-    recentTestResults2.put("1", repeatTTIBloodTestResultViewModel);
+    Map<Long, BloodTestResultViewModel> recentTestResults2 = new HashMap<>();
+    recentTestResults2.put(1L, repeatTTIBloodTestResultViewModel);
    
-    List<String> noTestIds = new ArrayList<String>();
+    List<Long> noTestIds = new ArrayList<>();
 
     List<BloodTestingRuleResult> bloodTestingRuleResult = Arrays.asList(
         aBloodTestingRuleResult()
@@ -243,11 +243,11 @@ public class TestResultControllerTests extends UnitTestSuite {
         .withReEntryNotRequired()
         .build();
             
-    Map<String, BloodTestResultViewModel> recentTestResults = new HashMap<>();
-    recentTestResults.put("1", basicBloodTypingBloodTestResultViewModel);
+    Map<Long, BloodTestResultViewModel> recentTestResults = new HashMap<>();
+    recentTestResults.put(1L, basicBloodTypingBloodTestResultViewModel);
 
-    List<String> bloodTypeTestsIds = Arrays.asList("1L", "2L", "3L");
-    List<String> noTestIds = new ArrayList<String>();
+    List<Long> bloodTypeTestsIds = Arrays.asList(1L, 2L, 3L);
+    List<Long> noTestIds = new ArrayList<>();
     List<BloodTestingRuleResult> bloodTestingRuleResult = Arrays.asList(aBloodTestingRuleResult()
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withPendingRepeatAndConfirmatoryTtiTestsIds(noTestIds)
@@ -294,9 +294,9 @@ public class TestResultControllerTests extends UnitTestSuite {
     TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
 
-    Map<String, BloodTestResultViewModel> recentTestResults = new HashMap<>();
+    Map<Long, BloodTestResultViewModel> recentTestResults = new HashMap<>();
 
-    List<String> testsIds = Arrays.asList("1L", "2L", "3L");
+    List<Long> testsIds = Arrays.asList(1L, 2L, 3L);
     List<BloodTestingRuleResult> bloodTestingRuleResult = Arrays.asList(
         aBloodTestingRuleResult()
             .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
@@ -394,15 +394,15 @@ public class TestResultControllerTests extends UnitTestSuite {
         .withReEntryRequired()
         .build();
     
-    Map<String, BloodTestResultViewModel> recentTestResults = new HashMap<>();
-    recentTestResults.put("1", bloodTypingTestResultViewModel);
-    recentTestResults.put("2", bloodTTITestResultViewModel);
-    recentTestResults.put("3", repeatBloodTypingTestResultViewModel);
-    recentTestResults.put("4", confirmatoryTTITestResultViewModel);
-    recentTestResults.put("5", repeatTTITestResultViewModel);
+    Map<Long, BloodTestResultViewModel> recentTestResults = new HashMap<>();
+    recentTestResults.put(1L, bloodTypingTestResultViewModel);
+    recentTestResults.put(2L, bloodTTITestResultViewModel);
+    recentTestResults.put(3L, repeatBloodTypingTestResultViewModel);
+    recentTestResults.put(4L, confirmatoryTTITestResultViewModel);
+    recentTestResults.put(5L, repeatTTITestResultViewModel);
 
 
-    List<String> noTestIds = new ArrayList<String>();
+    List<Long> noTestIds = new ArrayList<>();
     List<BloodTestingRuleResult> bloodTestingRuleResult = Arrays.asList(
         aBloodTestingRuleResult()
             .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)

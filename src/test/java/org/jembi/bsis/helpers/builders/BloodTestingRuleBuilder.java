@@ -5,7 +5,6 @@ import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.BloodTestingRulePersister;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
-import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
@@ -17,7 +16,6 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
   private String newInformation;
   private DonationField donationFieldChanged;
   private String pendingTestsIds;
-  private BloodTestCategory category;
   private boolean isDeleted = false;
 
   public BloodTestingRuleBuilder withId(Long id) {
@@ -49,11 +47,6 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
     this.pendingTestsIds = pendingTestsIds;
     return this;
   }
-  
-  public BloodTestingRuleBuilder withCategory(BloodTestCategory category) {
-    this.category = category;
-    return this;
-  }
 
   public BloodTestingRuleBuilder thatIsDeleted() {
     this.isDeleted = true;
@@ -69,7 +62,6 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
     bloodTestingRule.setNewInformation(newInformation);
     bloodTestingRule.setDonationFieldChanged(donationFieldChanged);
     bloodTestingRule.setPendingTestsIds(pendingTestsIds);
-    bloodTestingRule.setCategory(category);
     bloodTestingRule.setIsDeleted(isDeleted);
     return bloodTestingRule;
   }
