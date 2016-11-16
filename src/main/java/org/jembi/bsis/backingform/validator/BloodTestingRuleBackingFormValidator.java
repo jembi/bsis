@@ -67,26 +67,24 @@ public class BloodTestingRuleBackingFormValidator extends BaseValidator<BloodTes
       }
     }
 
-    // Validate newInformation
+    // Validate newInformation (if it has been specified)
     String newInformation = form.getNewInformation();
-    if (StringUtils.isBlank(newInformation)) {
-      errors.rejectValue("newInformation", "errors.required", "New Information is required");
-    } else if (newInformation.length() > MAX_LENGTH_NEW_INFORMATION) {
-      errors.rejectValue("newInformation", "errors.fieldLength",
-          "Maximum length for this field is " + MAX_LENGTH_NEW_INFORMATION);
-    } else {
-      // validate that newInformation matches possible values
-      if (validDonationField
-          && !DonationField.getNewInformationForDonationField(donationFieldChanged).contains(newInformation)) {
-        errors.rejectValue("newInformation", "errors.invalid", "Invalid newInformation, doesn't match donation field");
+    if (StringUtils.isNotBlank(newInformation)) {
+      if (StringUtils.isNotBlank(newInformation) && newInformation.length() > MAX_LENGTH_NEW_INFORMATION) {
+        errors.rejectValue("newInformation", "errors.fieldLength",
+            "Maximum length for this field is " + MAX_LENGTH_NEW_INFORMATION);
+      } else {
+        // validate that newInformation matches possible values
+        if (validDonationField
+            && !DonationField.getNewInformationForDonationField(donationFieldChanged).contains(newInformation)) {
+          errors.rejectValue("newInformation", "errors.invalid", "Invalid newInformation, doesn't match donation field");
+        }
       }
     }
 
     // Validate pendingTests
     Set<BloodTestBackingForm> pendingTests = form.getPendingTests();
-    if (pendingTests == null || pendingTests.isEmpty()) {
-      errors.rejectValue("pendingTests", "errors.required", "Pending Tests are required");
-    } else {
+    if (pendingTests != null) {
       String pendingTestsError = "";
       for (BloodTestBackingForm pendingTest : pendingTests) {
         if (bloodTest != null && bloodTest.getId().equals(pendingTest.getId())) {
