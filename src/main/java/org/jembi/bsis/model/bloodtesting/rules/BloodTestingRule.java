@@ -92,7 +92,13 @@ public class BloodTestingRule extends BaseModificationTrackerEntity {
     this.newInformation = newInformation;
   }
 
-  public Set<Long> getPendingTestsIds() {
+  /**
+   * Get the pending test IDs as a set. The Set cannot be modified since changes can only be made by
+   * updating the {@link #pendingTestsIds} string.
+   *
+   * @return An immutable set of pending test IDs.
+   */
+  public Set<Long> getPendingTestsIdsSet() {
     if (pendingTestsIds == null || pendingTestsIds.isEmpty()) {
       return Collections.emptySet();
     }

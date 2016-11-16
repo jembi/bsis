@@ -179,7 +179,7 @@ public class BloodTestingRuleEngine {
         LOGGER.trace("Test id: " + rule.getBloodTest().getId());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
-        LOGGER.trace("Pending test ids: " + rule.getPendingTestsIds());
+        LOGGER.trace("Pending test ids: " + rule.getPendingTestsIdsSet());
         LOGGER.trace("Changes to result: " + rule.getNewInformation());
       }
       
@@ -201,7 +201,7 @@ public class BloodTestingRuleEngine {
       }
 
       // determine which tests are pending
-      for (Long extraTestId : rule.getPendingTestsIds()) {
+      for (Long extraTestId : rule.getPendingTestsIdsSet()) {
         if (!availableTestResults.containsKey(extraTestId)) {
           switch (rule.getDonationFieldChanged()) {
             case BLOODABO:
@@ -336,7 +336,7 @@ public class BloodTestingRuleEngine {
       for (BloodTestingRule bloodTestingRule : resultSet.getBloodTestingRules()) {
 
         // Find which tests resulted in the repeat test
-        Set<Long> pendingTestIds = bloodTestingRule.getPendingTestsIds();
+        Set<Long> pendingTestIds = bloodTestingRule.getPendingTestsIdsSet();
         if (pendingTestIds.contains(repeatBloodTypingTest.getId())) {
 
           // Compare the result of the repeat test to previous test

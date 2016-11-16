@@ -47,7 +47,7 @@ public class BloodTestingRuleBackingFormValidator extends BaseValidator<BloodTes
       errors.rejectValue("pattern", "errors.fieldLength", "Maximum length for this field is " + MAX_LENGTH_PATTERN);
     } else {
       // validate that pattern is one of bloodTest validResults
-      if (bloodTest != null && !bloodTest.getValidResultsList().contains(pattern)) {
+      if (bloodTest != null && !bloodTest.getValidResultsSet().contains(pattern)) {
         errors.rejectValue("pattern", "errors.invalid", "Invalid pattern, not in blood test valid results");
       }
     }
