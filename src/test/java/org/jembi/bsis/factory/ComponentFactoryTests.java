@@ -100,7 +100,7 @@ public class ComponentFactoryTests {
         .withLocation(new LocationFullViewModel(location))
         .withBloodAbo(donation.getBloodAbo())
         .withBloodRh(donation.getBloodRh())
-        .withInitialComponent(true)
+        .withInitialComponent(false)
         .build();
 
     // setup mocks
@@ -278,7 +278,7 @@ public class ComponentFactoryTests {
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withInitialComponent(false)
+        .withInitialComponent(true)
         .build();
 
     // run test
