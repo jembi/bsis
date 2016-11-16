@@ -110,6 +110,10 @@ public class BloodTestingRule extends BaseModificationTrackerEntity {
     return Collections.unmodifiableSet(ids);
   }
 
+  public String getPendingTestingIds() {
+    return this.pendingTestsIds;
+  }
+
   public void setPendingTestsIds(String pendingTestsIds) {
     this.pendingTestsIds = pendingTestsIds;
   }
