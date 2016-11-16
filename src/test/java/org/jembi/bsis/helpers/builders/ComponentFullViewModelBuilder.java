@@ -15,7 +15,7 @@ public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFull
   private String bloodRh;
   private String bloodAbo;
   private ComponentTypeViewModel componentType;
-  private boolean isInitialComponent;
+  private boolean isInitialComponent = false;
 
   public ComponentFullViewModelBuilder withId(Long id) {
     this.id = id;
