@@ -20,13 +20,13 @@ public class ComponentManagementViewModel extends BaseViewModel {
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
   private PackTypeFullViewModel packType;
-  private Boolean hasComponentBatch;
+  private boolean hasComponentBatch;
 
-  public Boolean getHasComponentBatch () {
+  public boolean getHasComponentBatch () {
     return hasComponentBatch;
   }
 
-  public void setHasComponentBatch (Boolean hasComponentBatch) {
+  public void setHasComponentBatch (boolean hasComponentBatch) {
     this.hasComponentBatch = hasComponentBatch;
   }
 
