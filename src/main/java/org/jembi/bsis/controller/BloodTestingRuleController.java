@@ -14,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -39,6 +41,14 @@ public class BloodTestingRuleController {
   public Map<String, Object> getBloodTestingRules() {
     Map<String, Object> map = new HashMap<>();
     map.put("bloodTestingRules", bloodTestingRuleControllerService.getAllBloodTestingRules());
+    return map;
+  }
+  
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTING_RULES + "')")
+  public Map<String, Object> getBloodTestingRuleById(@PathVariable long id) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("BloodTestingRule", bloodTestingRuleControllerService.findBloodTestingRuleById(id));
     return map;
   }
 
