@@ -72,4 +72,8 @@ public class BloodTestingRuleControllerService {
     BloodTestingRule bloodTestingRule = bloodTestingRuleFactory.createEntity(backingForm);
     return bloodTestingRuleFactory.createFullViewModel(bloodTestingRuleCRUDService.createBloodTestingRule(bloodTestingRule));
   }
+  
+  public BloodTestingRuleViewModel findBloodTestingRuleById(long id) {
+    return bloodTestingRuleFactory.createFullViewModel(bloodTestingRuleRepository.findBloodTestingRuleById(id));
+  }
 }
