@@ -47,7 +47,6 @@ public class LabellingFactoryTests extends UnitTestSuite {
     // Mock
     when(labellingConstraintChecker.canPrintPackLabel(component)).thenReturn(true);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
-    when(labellingConstraintChecker.hasComponentBatch(component)).thenReturn(true);
 
     // Run test
     LabellingViewModel viewModel = labellingFactory.createViewModel(component);

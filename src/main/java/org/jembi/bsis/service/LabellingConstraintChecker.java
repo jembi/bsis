@@ -20,7 +20,7 @@ public class LabellingConstraintChecker {
   
   public boolean canPrintPackLabel(Component component) {
     // Check that component has been received before printing label
-    if (!hasComponentBatch(component)) {
+    if (!component.hasComponentBatch()) {
       return false;
     }
 
@@ -71,7 +71,7 @@ public class LabellingConstraintChecker {
   
   public boolean canPrintDiscardLabel(Component component) {
     // Check if component has been received before printing discard label
-    if (!hasComponentBatch(component)) {
+    if (!component.hasComponentBatch()) {
       return false;
     }
 
@@ -92,12 +92,4 @@ public class LabellingConstraintChecker {
     return true;
 
   }
-
-  public boolean hasComponentBatch(Component component) {
-    if (component.getComponentBatch() != null) {
-      return true;
-    }
-    return false;
-  }
-
 }

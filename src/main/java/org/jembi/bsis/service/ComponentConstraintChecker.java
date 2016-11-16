@@ -28,7 +28,7 @@ public class ComponentConstraintChecker {
   
   public boolean canDiscard(Component component) {
     // There must be a componentBatch attached to the component
-    if (!hasComponentBatch(component)){
+    if (!component.hasComponentBatch()){
       return false;
     }
     
@@ -43,7 +43,7 @@ public class ComponentConstraintChecker {
 
   public boolean canRecordWeight(Component component) {
     // There must be a componentBatch attached to the component
-    if (!hasComponentBatch(component)){
+    if (!component.hasComponentBatch()){
       return false;
     }
     
@@ -57,7 +57,7 @@ public class ComponentConstraintChecker {
 
   public boolean canProcess(Component component) {
     // There must be a componentBatch attached to the component
-    if (!hasComponentBatch(component)){
+    if (!component.hasComponentBatch()){
       return false;
     }
     
@@ -105,13 +105,4 @@ public class ComponentConstraintChecker {
     }
     return false;
   }
-  
-  private boolean hasComponentBatch(Component component) {
-    if (component.getComponentBatch() != null) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
 }

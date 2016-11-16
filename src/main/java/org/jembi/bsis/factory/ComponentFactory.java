@@ -44,6 +44,7 @@ public class ComponentFactory {
 
   public ComponentManagementViewModel createManagementViewModel(Component component) {
     ComponentManagementViewModel viewModel = new ComponentManagementViewModel();
+
     viewModel.setComponentCode(component.getComponentCode());
     viewModel.setComponentType(componentTypeFactory.createFullViewModel(component.getComponentType()));
     viewModel.setCreatedOn(component.getCreatedOn());
@@ -53,6 +54,7 @@ public class ComponentFactory {
     viewModel.setStatus(component.getStatus());
     viewModel.setWeight(component.getWeight());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
+    viewModel.setHasComponentBatch(component.hasComponentBatch());
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();
@@ -62,7 +64,7 @@ public class ComponentFactory {
     permissions.put("canUnprocess", componentConstraintChecker.canUnprocess(component));
     permissions.put("canUndiscard", componentConstraintChecker.canUndiscard(component));
     viewModel.setPermissions(permissions);
-    viewModel.setHasComponentBatch(component.getComponentBatch() != null);
+
     return viewModel;
   }
 
