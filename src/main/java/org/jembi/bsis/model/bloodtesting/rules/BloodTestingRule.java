@@ -111,7 +111,7 @@ public class BloodTestingRule extends BaseModificationTrackerEntity {
   }
 
   public String getPendingTestingIds() {
-    return this.pendingTestsIds;
+    return pendingTestsIds;
   }
 
   public void setPendingTestsIds(String pendingTestsIds) {
