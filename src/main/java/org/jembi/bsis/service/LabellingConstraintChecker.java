@@ -19,6 +19,11 @@ public class LabellingConstraintChecker {
   private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
   
   public boolean canPrintPackLabel(Component component) {
+    // Check that component has been received before printing label
+    if (!hasComponentBatch(component)) {
+      return false;
+    }
+
     if (!component.getComponentType().getCanBeIssued()) {
       return false;
     }
@@ -65,7 +70,11 @@ public class LabellingConstraintChecker {
   }
   
   public boolean canPrintDiscardLabel(Component component) {
-    
+    // Check if component has been received before printing discard label
+    if (!hasComponentBatch(component)) {
+      return false;
+    }
+
     // Check that the status belongs to the canPrintDiscardLabelStatuses list
     List<ComponentStatus> canPrintDiscardLabelStatuses = Arrays.asList(
         ComponentStatus.EXPIRED,
@@ -82,6 +91,13 @@ public class LabellingConstraintChecker {
     
     return true;
 
+  }
+
+  public boolean hasComponentBatch(Component component) {
+    if (component.getComponentBatch() != null) {
+      return true;
+    }
+    return false;
   }
 
 }
