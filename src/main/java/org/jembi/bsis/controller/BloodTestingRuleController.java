@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.ws.rs.PathParam;
 
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
 import org.jembi.bsis.backingform.validator.BloodTestingRuleBackingFormValidator;
@@ -67,6 +68,17 @@ public class BloodTestingRuleController {
   public Map<String, Object> createBloodTestingRule(@Valid @RequestBody BloodTestingRuleBackingForm bloodTestingRuleBackingForm) {
     Map<String, Object> map = new HashMap<>();
     map.put("bloodTestingRule", bloodTestingRuleControllerService.createBloodTestingRule(bloodTestingRuleBackingForm));
+    return map;
+  }
+  
+  @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTING_RULES + "')")
+  public Map<String, Object> updateBloodTestingRule(@PathVariable("id") long id, 
+      @RequestBody BloodTestingRuleBackingForm bloodTestingRuleBackingform) {
+    // set the id parameter from the path
+    bloodTestingRuleBackingform.setId(id);
+    Map<String, Object> map = new HashMap<>();
+    map.put("bloodTestingRule", bloodTestingRuleControllerService.updateBloodTestinRule(bloodTestingRuleBackingform));
     return map;
   }
 }
