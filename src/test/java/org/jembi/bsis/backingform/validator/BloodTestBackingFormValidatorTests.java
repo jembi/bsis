@@ -1,14 +1,5 @@
 package org.jembi.bsis.backingform.validator;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.BloodTestBackingFormBuilder.aBloodTestBackingForm;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
@@ -20,6 +11,16 @@ import org.mockito.Mock;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.BloodTestBackingFormBuilder.aBloodTestBackingForm;
+import static org.mockito.Mockito.when;
+
 public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
   @InjectMocks
@@ -30,9 +31,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   
   private BloodTestBackingForm getBaseBloodTestBackingForm() {
     LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "NT"));
-    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS"));
-    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG"));
-    BloodTestBackingForm backingForm = aBloodTestBackingForm()
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Collections.singletonList("POS"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Collections.singletonList("NEG"));
+    return aBloodTestBackingForm()
         .withTestName("aBasicBloodTypingTest")
         .withTestNameShort("basicBloodTypingShort")
         .withCategory(BloodTestCategory.BLOODTYPING)
@@ -45,7 +46,6 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
         .thatShouldFlagComponentsForDiscard()
         .thatShouldNotFlagComponentsContainingPlasmaForDiscard()
         .build();
-    return backingForm;
   }
 
   @Test
@@ -189,6 +189,24 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
     // Verify
     assertThat(errors.getErrorCount(), is(1));
     assertThat(errors.getFieldError("validResults").getCode(), is("errors.required"));
+  }
+
+  @Test
+  public void testValidateFormWithValidOutcomeExceedingTenCharacters_shouldHaveOneError() {
+    // Set up data
+    BloodTestBackingForm backingForm = getBaseBloodTestBackingForm();
+    backingForm.setValidResults(new LinkedHashSet<>(Collections.singleton("this is too long")));
+
+    // Set up mocks
+    when(bloodTestRepository.isUniqueTestName(null, backingForm.getTestName())).thenReturn(true);
+
+    // Run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
+    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("validResults").getCode(), is("errors.validResultsLong"));
   }
   
   @Test
