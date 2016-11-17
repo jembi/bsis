@@ -30,6 +30,7 @@ public class ComponentStatusIsConsistentConstraintValidator implements Constrain
       ComponentStatus.QUARANTINED);
 
   private static final List<ComponentStatus> REMOVED_COMPATIBLE_STATUSES = Arrays.asList(
+      ComponentStatus.PROCESSED,
       ComponentStatus.ISSUED,
       ComponentStatus.DISCARDED);
 
@@ -59,7 +60,8 @@ public class ComponentStatusIsConsistentConstraintValidator implements Constrain
       return true;
     }
 
-    LOGGER.warn("Component status and inventory status are not consistent for Component with id: " + target.getId());
+    LOGGER.warn("Component status '" + target.getStatus() + "' and inventory status '" + target.getInventoryStatus()
+        + "' are not consistent for Component with id: " + target.getId());
 
     return false;
   }

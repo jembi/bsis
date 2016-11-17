@@ -233,7 +233,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateFormWithNoNewInformation_shouldHaveOneError() {
+  public void testValidateFormWithNoNewInformation_shouldHaveNoErrors() {
 
     // Set up data
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
@@ -248,8 +248,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     bloodTestingRuleBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
-    assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("newInformation").getCode(), is("errors.required"));
+    assertThat(errors.getErrorCount(), is(0));
   }
 
   @Test
@@ -294,7 +293,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateFormWithNoPendingTestsIds_shouldHaveOneError() {
+  public void testValidateFormWithNoPendingTestsIds_shouldHaveNoErrors() {
 
     // Set up data
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
@@ -309,8 +308,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     bloodTestingRuleBackingFormvalidator.validateForm(backingForm, errors);
 
     // Verify
-    assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("pendingTestsIds").getCode(), is("errors.required"));
+    assertThat(errors.getErrorCount(), is(0));
   }
 
   @Test
@@ -329,7 +327,27 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("pendingTestsIds").getCode(), is("errors.invalid"));
+    assertThat(errors.getFieldError("pendingTests").getCode(), is("errors.invalid"));
+  }
+
+  @Test
+  public void testValidateFormWithBloodTestInPendingTests_shouldHaveOneError() {
+
+    // Set up data
+    BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
+    backingForm.getPendingTests().add(backingForm.getBloodTest());
+
+    // Set up mocks
+    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+
+    // Run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
+    bloodTestingRuleBackingFormvalidator.validateForm(backingForm, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("pendingTests").getCode(), is("errors.invalid"));
   }
 
   @Test

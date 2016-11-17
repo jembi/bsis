@@ -69,31 +69,37 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
         .withId(1L)
         .withPositiveResults("POS,NEG,NT")
         .withTestNameShort("HIV")
+        .withCategory(BloodTestCategory.BLOODTYPING)
         .build();
     hbvBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI)
         .withId(2L)
         .withPositiveResults("POS,NEG,NT")
         .withTestNameShort("HBV")
+        .withCategory(BloodTestCategory.BLOODTYPING)
         .build();
     aboBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
         .withId(3L)
         .withValidResults("A,B,AB,O,NT")
         .withTestNameShort("ABO")
+        .withCategory(BloodTestCategory.BLOODTYPING)
         .build();
     rhBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
         .withId(4L)
         .withValidResults("POS,NEG,NT")
         .withTestNameShort("Rh")
+        .withCategory(BloodTestCategory.BLOODTYPING)
         .build();
     aboRepeatBloodTest = aBloodTest().withBloodTestType(BloodTestType.REPEAT_BLOODTYPING)
         .withId(5L)
         .withValidResults("A,B,AB,O,NT")
         .withTestNameShort("ABO Repeat")
+        .withCategory(BloodTestCategory.BLOODTYPING)
         .build();
     rhRepeatBloodTest = aBloodTest().withBloodTestType(BloodTestType.REPEAT_BLOODTYPING)
         .withId(6L)
         .withValidResults("POS,NEG,NT")
         .withTestNameShort("Rh Repeat")
+        .withCategory(BloodTestCategory.BLOODTYPING)
         .build();
     
     // Setup rules

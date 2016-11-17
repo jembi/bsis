@@ -159,6 +159,7 @@ public class ComponentFactoryTests {
         .withCreatedOn(createdOn)
         .withExpiresOn(expiresOn)
         .withWeight(222)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
     
     ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
@@ -179,6 +180,7 @@ public class ComponentFactoryTests {
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
         .withExpiryStatus("Already expired")
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
 
     // setup mocks
