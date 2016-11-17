@@ -201,6 +201,8 @@ public class BloodTestingRuleEngine {
       }
 
       // determine which tests are pending
+      // Note: pending tests are dependant on having a donation field changed.
+      // This might not be desired in the future
       for (Long extraTestId : rule.getPendingTestsIdsSet()) {
         if (!availableTestResults.containsKey(extraTestId)) {
           switch (rule.getDonationFieldChanged()) {

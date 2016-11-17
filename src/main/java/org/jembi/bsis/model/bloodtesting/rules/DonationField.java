@@ -10,7 +10,7 @@ import org.jembi.bsis.model.util.BloodAbo;
 import org.jembi.bsis.model.util.BloodRh;
 
 public enum DonationField {
-  BLOODABO, BLOODRH, NOCHANGE, TTISTATUS;
+  BLOODABO, BLOODRH, TTISTATUS;
 
   /**
    * Get a subset of the relevant DonationFields given a BloodTestCategory.
@@ -21,13 +21,11 @@ public enum DonationField {
   public static List<DonationField> getDonationFieldsForCategory(BloodTestCategory category) {
     if (category == BloodTestCategory.TTI) {
       return Arrays.asList(
-          DonationField.TTISTATUS,
-          DonationField.NOCHANGE);
+          DonationField.TTISTATUS);
     } else if (category == BloodTestCategory.BLOODTYPING) {
       return Arrays.asList(
           DonationField.BLOODABO,
-          DonationField.BLOODRH,
-          DonationField.NOCHANGE);
+          DonationField.BLOODRH);
     } else {
       return new ArrayList<>();
     }
@@ -37,7 +35,7 @@ public enum DonationField {
    * Get a list of the possible new information values for a given DonationField.
    *
    * @param donationField DonationField
-   * @return List of String values, an empty list for DonationField.NOCHANGE
+   * @return List of String values
    */
   public static List<String> getNewInformationForDonationField(DonationField donationField) {
     List<String> newInformation = new ArrayList<>();
