@@ -47,7 +47,7 @@ public class BloodTestingRuleController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTING_RULES + "')")
   public Map<String, Object> getBloodTestingRuleById(@PathVariable long id) {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("BloodTestingRule", bloodTestingRuleControllerService.findBloodTestingRuleById(id));
+    map.put("bloodTestingRule", bloodTestingRuleControllerService.findBloodTestingRuleById(id));
     return map;
   }
 
