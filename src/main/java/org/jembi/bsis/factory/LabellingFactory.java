@@ -34,7 +34,6 @@ public class LabellingFactory {
     viewModel.setComponentName(component.getComponentType().getComponentTypeName());
     viewModel.setHasComponentBatch(component.hasComponentBatch());
     viewModel.setPermissions(new HashMap<String, Boolean>());
-    viewModel.setHasComponentBatch(component.hasComponentBatch());
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canPrintDiscardLabel", labellingConstraintChecker.canPrintDiscardLabel(component));
     permissions.put("canPrintPackLabel", labellingConstraintChecker.canPrintPackLabel(component));

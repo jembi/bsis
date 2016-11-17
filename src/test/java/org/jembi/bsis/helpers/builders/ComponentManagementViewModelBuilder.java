@@ -19,7 +19,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   private String componentCode;
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
-  private boolean hasComponentBatch;
+  private boolean hasComponentBatch = false;
 
   public ComponentManagementViewModelBuilder whichHasComponentBatch() {
     this.hasComponentBatch = true;
