@@ -75,24 +75,23 @@ public class BloodTestingRuleEngine {
     List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false);
 
     // Get the latest test results
-    Map<String, String> storedTestResults = new TreeMap<String, String>();
-    Map<String, String> availableTestResults = new TreeMap<String, String>();
+    Map<Long, String> storedTestResults = new TreeMap<>();
+    Map<Long, String> availableTestResults = new TreeMap<>();
     Map<Long, BloodTestResult> recentTestResults = bloodTestingRepository
         .getRecentTestResultsForDonation(donation.getId());
     for (Long testId : recentTestResults.keySet()) {
       BloodTestResult testResult = recentTestResults.get(testId);
       if (!testResult.getReEntryRequired()) {
-        String testKey = testId.toString();
         String testValue = testResult.getResult();
-        storedTestResults.put(testKey, testValue);
-        availableTestResults.put(testKey, testValue);
+        storedTestResults.put(testId, testValue);
+        availableTestResults.put(testId, testValue);
       }
     }
 
     // Overwrite the existing blood  and (where necessary) with the new bloodTestResults provided (as a parameter)
     for (Long testId : bloodTestResults.keySet()) {
       String testResult = bloodTestResults.get(testId);
-      availableTestResults.put(testId.toString(), testResult);
+      availableTestResults.put(testId, testResult);
     }
 
     BloodTestingRuleResultSet resultSet = new BloodTestingRuleResultSet(donation, storedTestResults,
@@ -158,13 +157,13 @@ public class BloodTestingRuleEngine {
    *            results
    */
   private void processRule(BloodTestingRule rule, BloodTestingRuleResultSet resultSet,
-      Map<String, String> availableTestResults) {
+      Map<Long, String> availableTestResults) {
 
     boolean patternMatch = false;
     boolean atLeastOneResultFound = false;
 
     String expectedResult = rule.getPattern();
-    String actualResult = availableTestResults.get(String.valueOf(rule.getBloodTest().getId()));
+    String actualResult = availableTestResults.get(rule.getBloodTest().getId());
 
     if (actualResult != null) {
       atLeastOneResultFound = true;
@@ -202,7 +201,7 @@ public class BloodTestingRuleEngine {
       }
 
       // determine which tests are pending
-      for (String extraTestId : rule.getPendingTestsIds()) {
+      for (Long extraTestId : rule.getPendingTestsIds()) {
         if (!availableTestResults.containsKey(extraTestId)) {
           switch (rule.getDonationFieldChanged()) {
             case BLOODABO:
@@ -260,16 +259,16 @@ public class BloodTestingRuleEngine {
    *            results
    */
   private void setBasicTtiTestsNotDone(BloodTestingRuleResultSet resultSet, List<BloodTest> basicTTITests,
-      Map<String, String> availableTestResults) {
+      Map<Long, String> availableTestResults) {
     Set<Long> basicTtiTestsNotDone = new HashSet<Long>();
     for (BloodTest bt : basicTTITests) {
       basicTtiTestsNotDone.add(bt.getId());
     }
-    for (String testId : availableTestResults.keySet()) {
+    for (Long testId : availableTestResults.keySet()) {
       if (LOGGER.isTraceEnabled()) {
         LOGGER.trace("available test=" + testId + " result=" + availableTestResults.get(testId));
       }
-      basicTtiTestsNotDone.remove(Long.parseLong(testId));
+      basicTtiTestsNotDone.remove(testId);
     }
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("basicTtiTestsNotDone=" + basicTtiTestsNotDone);
@@ -287,10 +286,10 @@ public class BloodTestingRuleEngine {
    *            results
    */
   private void setBloodTypingTestsDone(BloodTestingRuleResultSet resultSet, List<BloodTest> bloodTypingTests,
-      Map<String, String> availableTestResults) {
+      Map<Long, String> availableTestResults) {
     int numBloodTypingTests = 0;
     for (BloodTest bt : bloodTypingTests) {
-      if (availableTestResults.containsKey((bt.getId().toString())))
+      if (availableTestResults.containsKey(bt.getId()))
         numBloodTypingTests++;
     }
     resultSet.setNumBloodTypingTests(numBloodTypingTests);
@@ -300,12 +299,12 @@ public class BloodTestingRuleEngine {
    * Determine the blood status based on ABO/Rh tests (and pending tests) results. Saves the
    * BloodTypingStatus result in the resultSet.
    */
-  private void setBloodTypingStatus(BloodTestingRuleResultSet resultSet, Map<String, String> availableTestResults, Donation donation) {
+  private void setBloodTypingStatus(BloodTestingRuleResultSet resultSet, Map<Long, String> availableTestResults, Donation donation) {
 
     // Determine if there are missing required basic blood typing tests
     List<BloodTest> basicBloodTypingTests = bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
     for (BloodTest bt : basicBloodTypingTests) {
-      if (availableTestResults.get(bt.getId().toString()) == null) {
+      if (availableTestResults.get(bt.getId()) == null) {
         resultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
         return;
       }
@@ -322,13 +321,12 @@ public class BloodTestingRuleEngine {
 
   private BloodTypingMatchStatus getBloodTypingMatchStatusForFirstTimeDonor(BloodTestingRuleResultSet resultSet) {
 
-    Map<String, String> availableTestResults = resultSet.getAvailableTestResults();
+    Map<Long, String> availableTestResults = resultSet.getAvailableTestResults();
     List<BloodTest> repeatBloodtypingTests = bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING);
 
     for (BloodTest repeatBloodTypingTest : repeatBloodtypingTests) {
 
-      String repeatBloodTypingTestId = Long.toString(repeatBloodTypingTest.getId());
-      String repeatResult = availableTestResults.get(repeatBloodTypingTestId);
+      String repeatResult = availableTestResults.get(repeatBloodTypingTest.getId());
 
       if (repeatResult == null) {
         // There is a missing repeat result
@@ -338,11 +336,11 @@ public class BloodTestingRuleEngine {
       for (BloodTestingRule bloodTestingRule : resultSet.getBloodTestingRules()) {
 
         // Find which tests resulted in the repeat test
-        Set<String> pendingTestIds = bloodTestingRule.getPendingTestsIds();
-        if (pendingTestIds.contains(repeatBloodTypingTestId)) {
+        Set<Long> pendingTestIds = bloodTestingRule.getPendingTestsIds();
+        if (pendingTestIds.contains(repeatBloodTypingTest.getId())) {
 
           // Compare the result of the repeat test to previous test
-          String initialResult = availableTestResults.get(Long.toString(bloodTestingRule.getBloodTest().getId()));
+          String initialResult = availableTestResults.get(bloodTestingRule.getBloodTest().getId());
           if (!repeatResult.equals(initialResult)) {
             // There is a repeat result which does not match the initial result
             return BloodTypingMatchStatus.AMBIGUOUS;
@@ -460,14 +458,14 @@ public class BloodTestingRuleEngine {
   private void setSeparateRepeatAndConfirmatoryPendingTTITests(BloodTestingRuleResultSet resultSet,
       List<BloodTest> repeatTTITests, List<BloodTest> confirmatoryTTITests) {
     for (BloodTest repeatTTITest : repeatTTITests) {
-      if (resultSet.getPendingRepeatAndConfirmatoryTtiTestsIds().contains((repeatTTITest.getId().toString()))) {
-        resultSet.addPendingRepeatTtiTestsIds(repeatTTITest.getId().toString());
+      if (resultSet.getPendingRepeatAndConfirmatoryTtiTestsIds().contains((repeatTTITest.getId()))) {
+        resultSet.addPendingRepeatTtiTestsIds(repeatTTITest.getId());
       }
     }
 
     for (BloodTest confirmatoryTTITest : confirmatoryTTITests) {
-      if (resultSet.getPendingRepeatAndConfirmatoryTtiTestsIds().contains((confirmatoryTTITest.getId().toString()))) {
-        resultSet.addPendingConfirmatoryTtiTestsIds(confirmatoryTTITest.getId().toString());
+      if (resultSet.getPendingRepeatAndConfirmatoryTtiTestsIds().contains((confirmatoryTTITest.getId()))) {
+        resultSet.addPendingConfirmatoryTtiTestsIds(confirmatoryTTITest.getId());
       }
     }
 

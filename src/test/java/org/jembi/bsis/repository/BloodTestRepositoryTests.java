@@ -3,9 +3,9 @@ package org.jembi.bsis.repository;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicBloodTypingBloodTest;
-import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aRepeatBloodTypingBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicTTIBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aRepeatBloodTypingBloodTest;
 
 import java.util.List;
 
@@ -187,5 +187,18 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Verify result
     assertThat(unique, is(true));
+  }
+
+  @Test
+  public void testVerifyBloodTestExists_shouldReturnTrue() {
+    BloodTest bloodTest = aBloodTest().buildAndPersist(entityManager);
+    boolean exists = bloodTestRepository.verifyBloodTestExists(bloodTest.getId());
+    assertThat(exists, is(true));
+  }
+
+  @Test
+  public void testVerifyBloodTestExists_shouldReturnFalse() {
+    boolean exists = bloodTestRepository.verifyBloodTestExists(1L);
+    assertThat(exists, is(false));
   }
 }

@@ -1,62 +1,86 @@
 package org.jembi.bsis.backingform;
 
-import org.jembi.bsis.model.bloodtesting.BloodTest;
+import java.util.Set;
+
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import scala.actors.threadpool.Arrays;
-
 public class BloodTestingRuleBackingForm {
 
-  @JsonIgnore
-  private BloodTestingRule typingRule;
+  private Long id;
 
-  public BloodTestingRuleBackingForm() {
-    typingRule = new BloodTestingRule();
-  }
+  private BloodTestBackingForm bloodTest;
 
-  public BloodTestingRule getTypingRule() {
-    return typingRule;
-  }
+  private String pattern;
 
-  public void setTypingRule(BloodTestingRule typingRule) {
-    this.typingRule = typingRule;
+  private DonationField donationFieldChanged;
+
+  private String newInformation;
+
+  private Set<BloodTestBackingForm> pendingTests;
+
+  private Boolean isDeleted;
+
+  public Long getId() {
+    return id;
   }
 
   public void setId(Long id) {
-    typingRule.setId(id);
+    this.id = id;
   }
 
-  public void setPendingTestsIds(int[] pendingTestsIds) {
-    String testIds = Arrays.toString(pendingTestsIds).replaceAll("\\s", "");
-    typingRule.setPendingTestsIds(testIds.substring(1, testIds.length() - 1));
+  public BloodTestBackingForm getBloodTest() {
+    return bloodTest;
   }
 
-  public void setCategory(String category) {
-    typingRule.setCategory(BloodTestCategory.valueOf(category.replaceAll("\\s", "").toUpperCase()));
+  public void setBloodTest(BloodTestBackingForm bloodTest) {
+    this.bloodTest = bloodTest;
   }
 
-  public void setDonationFieldChanged(String donationField) {
-    typingRule.setDonationFieldChanged(DonationField.valueOf(donationField.replaceAll("\\s", "").toUpperCase()));
+  public String getPattern() {
+    return pattern;
   }
 
   public void setPattern(String pattern) {
-    typingRule.setPattern(pattern);
+    this.pattern = pattern;
   }
 
-  public void setIsDeleted(Boolean isDeleted) {
-    typingRule.setIsDeleted(isDeleted);
+  public DonationField getDonationFieldChanged() {
+    return donationFieldChanged;
+  }
+
+  public void setDonationFieldChanged(DonationField donationFieldChanged) {
+    this.donationFieldChanged = donationFieldChanged;
+  }
+
+  public String getNewInformation() {
+    return newInformation;
   }
 
   public void setNewInformation(String newInformation) {
-    typingRule.setNewInformation(newInformation);
+    this.newInformation = newInformation;
   }
 
-  public void setBloodTest(BloodTest bloodTest) {
-    typingRule.setBloodTest(bloodTest);
+  public Set<BloodTestBackingForm> getPendingTests() {
+    return pendingTests;
   }
 
+  public void setPendingTests(Set<BloodTestBackingForm> pendingTests) {
+    this.pendingTests = pendingTests;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+
+  @JsonIgnore
+  public void setCategory(BloodTestCategory category) {
+    // ignore
+  }
 }

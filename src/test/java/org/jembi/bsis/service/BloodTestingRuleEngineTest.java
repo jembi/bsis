@@ -1,4 +1,4 @@
-package org.jembi.bsis.repository.bloodtesting;
+package org.jembi.bsis.service;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -17,14 +17,12 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
-import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.service.BloodTestingRuleEngine;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
@@ -97,11 +95,11 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("bloodRh is +", "+", result.getBloodRh());
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
-    Map<String, String> tests = result.getAvailableTestResults();
+    Map<Long, String> tests = result.getAvailableTestResults();
     Iterator<String> testIts = tests.values().iterator();
     Assert.assertEquals("Available test result value", "O", testIts.next());
-    Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "POS", testIts.next());
+    Assert.assertEquals("Available test result value", "LOW", testIts.next());
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
@@ -123,15 +121,15 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("Available Test results", 7, result.getAvailableTestResults().size());
-    Map<String, String> tests = result.getAvailableTestResults();
+    Map<Long, String> tests = result.getAvailableTestResults();
     Iterator<String> testIts = tests.values().iterator();
     Assert.assertEquals("Available test result value", "A", testIts.next());
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
-    Assert.assertEquals("Available test result value", "NEG", testIts.next());
-    Assert.assertEquals("Available test result value", "NEG", testIts.next());
-    Assert.assertEquals("Available test result value", "NEG", testIts.next());
-    Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "LOW", testIts.next());
+    Assert.assertEquals("Available test result value", "NEG", testIts.next());
+    Assert.assertEquals("Available test result value", "NEG", testIts.next());
+    Assert.assertEquals("Available test result value", "NEG", testIts.next());
+    Assert.assertEquals("Available test result value", "NEG", testIts.next());
 
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
@@ -209,12 +207,12 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("Available Test results", 4, result.getAvailableTestResults().size());
-    Map<String, String> tests = result.getAvailableTestResults();
+    Map<Long, String> tests = result.getAvailableTestResults();
     Iterator<String> testIts = tests.values().iterator();
     Assert.assertEquals("Available test result value", "B", testIts.next());
-    Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "POS", testIts.next());
     Assert.assertEquals("Available test result value", "LOW", testIts.next());
+    Assert.assertEquals("Available test result value", "NEG", testIts.next());
 
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
@@ -234,15 +232,15 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("2 pending TTI tests", 2, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("Available Test results", 7, result.getAvailableTestResults().size());
-    Map<String, String> tests = result.getAvailableTestResults();
+    Map<Long, String> tests = result.getAvailableTestResults();
     Iterator<String> testIts = tests.values().iterator();
     Assert.assertEquals("Available test result value", "A", testIts.next());
+    Assert.assertEquals("Available test result value", "NEG", testIts.next());
+    Assert.assertEquals("Available test result value", "LOW", testIts.next());
     Assert.assertEquals("Available test result value", "POS", testIts.next());
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
     Assert.assertEquals("Available test result value", "NEG", testIts.next());
-    Assert.assertEquals("Available test result value", "NEG", testIts.next());
-    Assert.assertEquals("Available test result value", "LOW", testIts.next());
 
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
@@ -262,11 +260,11 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
     Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("Available Test results", 3, result.getAvailableTestResults().size());
-    Map<String, String> tests = result.getAvailableTestResults();
+    Map<Long, String> tests = result.getAvailableTestResults();
     Iterator<String> testIts = tests.values().iterator();
     Assert.assertEquals("Available test result value", "Z", testIts.next());
-    Assert.assertEquals("Available test result value", "?", testIts.next());
     Assert.assertEquals("Available test result value", "-", testIts.next());
+    Assert.assertEquals("Available test result value", "?", testIts.next());
     Assert.assertTrue("ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertTrue("RH Uninterpretable", result.getRhUninterpretable());
     // TTI Uninterpretable is always set to false - is this a bug?
@@ -281,8 +279,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, testResults);
 
     ArrayList<Long> reEntryRequiredTTITestIds = new ArrayList<>();
-    Map<String, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
-    for (String key : resultViewModelMap.keySet()) {
+    Map<Long, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
+    for (Long key : resultViewModelMap.keySet()) {
       BloodTestResultViewModel bloodTestResultViewModel = resultViewModelMap.get(key);
       if (bloodTestResultViewModel.getReEntryRequired().equals(true)
           && bloodTestResultViewModel.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
