@@ -70,7 +70,7 @@ public class BloodTestingRuleBackingFormValidator extends BaseValidator<BloodTes
     // Validate newInformation (if it has been specified)
     String newInformation = form.getNewInformation();
     if (StringUtils.isNotBlank(newInformation)) {
-      if (StringUtils.isNotBlank(newInformation) && newInformation.length() > MAX_LENGTH_NEW_INFORMATION) {
+      if (newInformation.length() > MAX_LENGTH_NEW_INFORMATION) {
         errors.rejectValue("newInformation", "errors.fieldLength",
             "Maximum length for this field is " + MAX_LENGTH_NEW_INFORMATION);
       } else {
