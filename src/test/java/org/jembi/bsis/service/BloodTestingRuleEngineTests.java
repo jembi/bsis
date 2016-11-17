@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.jembi.bsis.factory.BloodTestingRuleResultViewModelFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
+import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
