@@ -16,6 +16,7 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
 
   private static final Integer MAX_LENGTH_TEST_NAME = 40;
   private static final Integer MAX_LENGTH_TEST_NAME_SHORT = 25;
+  private static final  Integer MAX_LENGTH_VALID_RESULTS = 10;
 
   @Autowired
   private BloodTestRepository bloodTestRepository;
@@ -49,7 +50,7 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
     Set<String> positiveResults = form.getPositiveResults();
     if (validResults == null || validResults.isEmpty()) {
       errors.rejectValue("validResults", "errors.required", "Valid outcomes are required");
-    } else if (form.getValidResults().size() > 10) {
+    } else if (form.getValidResults().size() > MAX_LENGTH_VALID_RESULTS) {
       errors.rejectValue("validResults", "errors.stringGreaterThanTen",
               "Input less than ten characters required");
     } else {
