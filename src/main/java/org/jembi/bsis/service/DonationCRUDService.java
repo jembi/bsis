@@ -1,9 +1,7 @@
 package org.jembi.bsis.service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.NoResultException;
@@ -178,6 +176,9 @@ public class DonationCRUDService {
         existingDonation.setTTIStatus(TTIStatus.NOT_DONE);
         existingDonation.setBloodAbo(null);
         existingDonation.setBloodRh(null);
+      } else {
+        existingDonation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+        existingDonation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
       }
     }
 
