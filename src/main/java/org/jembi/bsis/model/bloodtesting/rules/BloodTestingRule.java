@@ -1,9 +1,9 @@
 package org.jembi.bsis.model.bloodtesting.rules;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,9 +15,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
-import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
 
 @Entity
@@ -27,7 +26,7 @@ import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
       name = BloodTestingRuleNamedQueryConstants.NAME_GET_BLOOD_TESTING_RULES,
       query = BloodTestingRuleNamedQueryConstants.QUERY_GET_BLOOD_TESTING_RULES)
 })
-public class BloodTestingRule extends BaseEntity {
+public class BloodTestingRule extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -46,14 +45,6 @@ public class BloodTestingRule extends BaseEntity {
 
   @Column(length = 60)
   private String pendingTestsIds;
-
-  @Enumerated(EnumType.STRING)
-  @Column(length = 30)
-  private BloodTestCategory category;
-
-  /**
-   * TODO: Not used right now.
-   */
 
   @Column(nullable = false)
   private boolean isDeleted = false;
@@ -98,19 +89,16 @@ public class BloodTestingRule extends BaseEntity {
     this.newInformation = newInformation;
   }
 
-  public BloodTestCategory getCategory() {
-    return category;
-  }
-
-  public void setCategory(BloodTestCategory category) {
-    this.category = category;
-  }
-
-  public Set<String> getPendingTestsIds() {
+  public Set<Long> getPendingTestsIds() {
     if (pendingTestsIds == null || pendingTestsIds.isEmpty()) {
       return Collections.emptySet();
     }
-    return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(pendingTestsIds.split(","))));
+    Set<Long> ids = new HashSet<>();
+    StringTokenizer st = new StringTokenizer(pendingTestsIds, ",");
+    while (st.hasMoreTokens()) {
+      ids.add(Long.valueOf(st.nextToken().trim()));
+    }
+    return Collections.unmodifiableSet(ids);
   }
 
   public void setPendingTestsIds(String pendingTestsIds) {

@@ -141,10 +141,9 @@ public class BloodTestingRepository {
     List<BloodTestingRuleResult> bloodTestingRuleResults = getAllTestsStatusForDonationBatches(donationBatchIds);
     List<BloodTestingRuleResult> filteredRuleResults = new ArrayList<BloodTestingRuleResult>();
     for (BloodTestingRuleResult result : bloodTestingRuleResults) {
-      Map<String, BloodTestResultViewModel> modelMap = result.getRecentTestResults();
-      Map<String, BloodTestResultViewModel> filteredModelMap = new HashMap<String, BloodTestResultViewModel>();
-      for (String key : modelMap.keySet()) {
-        BloodTestResultViewModel model = modelMap.get(key);
+      Map<Long, BloodTestResultViewModel> filteredModelMap = new HashMap<>();
+      for (Long key : result.getRecentTestResults().keySet()) {
+        BloodTestResultViewModel model = result.getRecentTestResults().get(key);
         if (model.getBloodTest().getBloodTestType().equals(bloodTestType)) {
           filteredModelMap.put(key, model);
         }

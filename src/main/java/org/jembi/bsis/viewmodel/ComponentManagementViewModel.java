@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -21,6 +22,7 @@ public class ComponentManagementViewModel extends BaseViewModel {
   private Map<String, Boolean> permissions = new HashMap<>();
   private PackTypeFullViewModel packType;
   private boolean hasComponentBatch;
+  private InventoryStatus inventoryStatus;
 
   public boolean getHasComponentBatch () {
     return hasComponentBatch;
@@ -28,6 +30,14 @@ public class ComponentManagementViewModel extends BaseViewModel {
 
   public void setHasComponentBatch (boolean hasComponentBatch) {
     this.hasComponentBatch = hasComponentBatch;
+  }
+
+  public InventoryStatus getInventoryStatus () {
+    return inventoryStatus;
+  }
+
+  public void setInventoryStatus (InventoryStatus inventoryStatus) {
+    this.inventoryStatus = inventoryStatus;
   }
 
   public ComponentTypeViewModel getComponentType() {

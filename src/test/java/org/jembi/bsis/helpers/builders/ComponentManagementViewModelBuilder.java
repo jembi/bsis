@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 
@@ -20,6 +21,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
   private boolean hasComponentBatch = false;
+  private InventoryStatus inventoryStatus;
 
   public ComponentManagementViewModelBuilder whichHasComponentBatch() {
     this.hasComponentBatch = true;
@@ -28,6 +30,11 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
 
   public ComponentManagementViewModelBuilder whichHasNoComponentBatch() {
     this.hasComponentBatch = false;
+    return this;
+  }
+
+  public ComponentManagementViewModelBuilder withInventoryStatus(InventoryStatus inventoryStatus) {
+    this.inventoryStatus = inventoryStatus;
     return this;
   }
 
@@ -89,6 +96,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     viewModel.setComponentType(componentType);
     viewModel.setPermissions(permissions);
     viewModel.setHasComponentBatch(hasComponentBatch);
+    viewModel.setInventoryStatus(inventoryStatus);
     return viewModel;
   }
   

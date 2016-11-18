@@ -39,7 +39,7 @@ public class BloodTestingRuleResultViewModelFactory {
     ruleResult.setDonation(donationFactory.createDonationViewModelWithoutPermissions(donation));
 
     // pending tests
-    List<String> pendingBloodTypingTestsIds = new ArrayList<String>();
+    List<Long> pendingBloodTypingTestsIds = new ArrayList<>();
     pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingAboTestsIds());
     pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingRhTestsIds());
     ruleResult.setPendingBloodTypingTestsIds(pendingBloodTypingTestsIds);
@@ -86,9 +86,9 @@ public class BloodTestingRuleResultViewModelFactory {
 
     // test data in various formats
     ruleResult.setStoredTestResults(bloodTestingRuleResultSet.getStoredTestResults());
-    Map<String, BloodTestResultViewModel> recentTestResultsViewModel = new HashMap<String, BloodTestResultViewModel>();
+    Map<Long, BloodTestResultViewModel> recentTestResultsViewModel = new HashMap<>();
     for (Long testId : bloodTestingRuleResultSet.getRecentTestResults().keySet()) {
-      recentTestResultsViewModel.put(testId.toString(), createBloodTestResultViewModel(bloodTestingRuleResultSet, bloodTestingRuleResultSet.getRecentTestResults().get(testId), isDonationReleased));
+      recentTestResultsViewModel.put(testId, createBloodTestResultViewModel(bloodTestingRuleResultSet, bloodTestingRuleResultSet.getRecentTestResults().get(testId), isDonationReleased));
     }
     ruleResult.setRecentTestResults(recentTestResultsViewModel);
     ruleResult.setAvailableTestResults(bloodTestingRuleResultSet.getAvailableTestResults());

@@ -53,4 +53,11 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
         .setParameter("bloodTestId", bloodTestId)
         .getSingleResult();
   }
+  
+  public boolean verifyBloodTestExists(Long id) {
+    return entityManager
+        .createNamedQuery(BloodTestNamedQueryConstants.NAME_VERIFY_BLOOD_TEST_WITH_ID_EXISTS, Boolean.class)
+        .setParameter("id", id)
+        .getSingleResult();
+  }
 }

@@ -17,11 +17,11 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
   private TTIStatus ttiStatus;
   private BloodTypingStatus bloodTypingStatus;
   private BloodTypingMatchStatus bloodTypingMatchStatus;
-  private List<String> pendingRepeatAndConfirmatoryTtiTestsIds;
-  private Map<String, BloodTestResultViewModel> recentTestResults;
-  private List<String> pendingBloodTypingTestsIds;
-  private List<String> pendingConfirmatoryTTITestsIds;
-  private List<String> pendingRepeatTTITestsIds;
+  private List<Long> pendingRepeatAndConfirmatoryTtiTestsIds;
+  private Map<Long, BloodTestResultViewModel> recentTestResults;
+  private List<Long> pendingBloodTypingTestsIds;
+  private List<Long> pendingConfirmatoryTTITestsIds;
+  private List<Long> pendingRepeatTTITestsIds;
  
   public BloodTestingRuleResultBuilder withBloodAbo(String bloodAbo) {
     this.bloodAbo = bloodAbo;
@@ -44,16 +44,16 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
   }
   
   public BloodTestingRuleResultBuilder withPendingRepeatAndConfirmatoryTtiTestsIds(
-      String pendingRepeatAndConfirmatoryTtiTestsId) {
+      Long pendingRepeatAndConfirmatoryTtiTestsId) {
     if (pendingRepeatAndConfirmatoryTtiTestsIds == null) {
-      pendingRepeatAndConfirmatoryTtiTestsIds = new ArrayList<String>();
+      pendingRepeatAndConfirmatoryTtiTestsIds = new ArrayList<>();
     }
     pendingRepeatAndConfirmatoryTtiTestsIds.add(pendingRepeatAndConfirmatoryTtiTestsId);
     return this;
   }
 
   public BloodTestingRuleResultBuilder withPendingRepeatAndConfirmatoryTtiTestsIds(
-      List<String> pendingRepeatAndConfirmatoryTtiTestsIds) {
+      List<Long> pendingRepeatAndConfirmatoryTtiTestsIds) {
     this.pendingRepeatAndConfirmatoryTtiTestsIds = pendingRepeatAndConfirmatoryTtiTestsIds;
     return this;
   }
@@ -63,22 +63,22 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
     return this;
   }
   
-  public BloodTestingRuleResultBuilder withRecentResults(Map<String, BloodTestResultViewModel> recentTestResults) {
+  public BloodTestingRuleResultBuilder withRecentResults(Map<Long, BloodTestResultViewModel> recentTestResults) {
     this.recentTestResults = recentTestResults;
     return this;
   }
   
-  public BloodTestingRuleResultBuilder withPendingBloodTypingTestsIds(List<String> pendingBloodTypingTestsIds) {
+  public BloodTestingRuleResultBuilder withPendingBloodTypingTestsIds(List<Long> pendingBloodTypingTestsIds) {
     this.pendingBloodTypingTestsIds = pendingBloodTypingTestsIds;
     return this;
   }
   
-  public BloodTestingRuleResultBuilder withPendingConfirmatoryTTITestsIds(List<String> pendingConfirmatoryTTITestsIds) {
+  public BloodTestingRuleResultBuilder withPendingConfirmatoryTTITestsIds(List<Long> pendingConfirmatoryTTITestsIds) {
     this.pendingConfirmatoryTTITestsIds = pendingConfirmatoryTTITestsIds;
     return this;
   }
   
-  public BloodTestingRuleResultBuilder withPendingRepeatTTITestsIds(List<String> pendingRepeatTTITestsIds) {
+  public BloodTestingRuleResultBuilder withPendingRepeatTTITestsIds(List<Long> pendingRepeatTTITestsIds) {
     this.pendingRepeatTTITestsIds = pendingRepeatTTITestsIds;
     return this;
   }

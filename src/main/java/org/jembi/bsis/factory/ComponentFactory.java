@@ -54,6 +54,7 @@ public class ComponentFactory {
     viewModel.setWeight(component.getWeight());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
     viewModel.setHasComponentBatch(component.hasComponentBatch());
+    viewModel.setInventoryStatus(component.getInventoryStatus());
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();
@@ -106,6 +107,7 @@ public class ComponentFactory {
     viewModel.setLocation(locationFactory.createFullViewModel(component.getLocation()));
     viewModel.setNotes(component.getNotes());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
+    viewModel.setIsInitialComponent(component.getParentComponent() == null);
     return viewModel;
   }
 
