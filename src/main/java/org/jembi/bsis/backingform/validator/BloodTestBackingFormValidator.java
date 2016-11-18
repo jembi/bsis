@@ -50,10 +50,13 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
     Set<String> positiveResults = form.getPositiveResults();
     if (validResults == null || validResults.isEmpty()) {
       errors.rejectValue("validResults", "errors.required", "Valid outcomes are required");
-    } else if (form.getValidResults().size() > MAX_LENGTH_VALID_RESULTS) {
-      errors.rejectValue("validResults", "errors.stringGreaterThanTen",
-              "Input less than ten characters required");
     } else {
+      for (String validResult : form.getValidResults()) {
+        if (validResult.length() > MAX_LENGTH_VALID_RESULTS) {
+          errors.rejectValue("validResults", "errors.validResultsLong",
+              "Valid results entry : ["+validResult+"] is too long. Maximum length for this field is " + MAX_LENGTH_VALID_RESULTS);
+        }
+      }
       if (positiveResults != null) {
         // validate that all positive results are inside valid results.
         String errorPositiveResults = null;
