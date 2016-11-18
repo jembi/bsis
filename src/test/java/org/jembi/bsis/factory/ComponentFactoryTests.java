@@ -185,6 +185,7 @@ public class ComponentFactoryTests {
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
         .withExpiryStatus("Already expired")
+        .whichHasNoComponentBatch()
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
 

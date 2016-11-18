@@ -53,6 +53,7 @@ public class ComponentFactory {
     viewModel.setStatus(component.getStatus());
     viewModel.setWeight(component.getWeight());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
+    viewModel.setHasComponentBatch(component.hasComponentBatch());
     viewModel.setInventoryStatus(component.getInventoryStatus());
 
     // Set permissions
@@ -63,6 +64,7 @@ public class ComponentFactory {
     permissions.put("canUnprocess", componentConstraintChecker.canUnprocess(component));
     permissions.put("canUndiscard", componentConstraintChecker.canUndiscard(component));
     viewModel.setPermissions(permissions);
+
     return viewModel;
   }
 
