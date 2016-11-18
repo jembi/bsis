@@ -195,7 +195,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithValidOutcomeExceedingTenCharacters_shouldHaveOneError() {
     // Set up data
     BloodTestBackingForm backingForm = getBaseBloodTestBackingForm();
-    backingForm.setValidResults(new LinkedHashSet<>(Collections.singleton("this is too long")));
+    backingForm.getValidResults().add("this is too long");
 
     // Set up mocks
     when(bloodTestRepository.isUniqueTestName(null, backingForm.getTestName())).thenReturn(true);
@@ -278,9 +278,9 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateFormWithOutcomeInPositiveAndNegativeOutcomeList_shouldHaveOneError() {
 
     // Set up data
-    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "OUTCOMEINBOTHLISTS"));
-    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS", "OUTCOMEINBOTHLISTS"));
-    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG", "OUTCOMEINBOTHLISTS"));
+    LinkedHashSet<String> validResults = new LinkedHashSet<String>(Arrays.asList("POS", "NEG", "INBOTH"));
+    LinkedHashSet<String> positiveResults = new LinkedHashSet<String>(Arrays.asList("POS", "INBOTH"));
+    LinkedHashSet<String> negativeResults = new LinkedHashSet<String>(Arrays.asList("NEG", "INBOTH"));
     BloodTestBackingForm backingForm = getBaseBloodTestBackingForm();
     backingForm.setValidResults(validResults);
     backingForm.setPositiveResults(positiveResults);
