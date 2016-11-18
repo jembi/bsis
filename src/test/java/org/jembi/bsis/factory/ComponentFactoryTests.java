@@ -1,6 +1,7 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
@@ -67,6 +68,7 @@ public class ComponentFactoryTests {
     // set up data
     Donation donation = DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build();
     Location location = aLocation().build();
+    Component parentComponent = aComponent().withId(2L).build();
     
     ComponentType componentType = aComponentType()
         .withId(1L)
@@ -86,7 +88,9 @@ public class ComponentFactoryTests {
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withComponentType(componentType)
         .withLocation(location)
-        .withDonation(donation).build();
+        .withDonation(donation)
+        .withParentComponent(parentComponent)
+        .build();
     
     ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
         .withId(1L)
@@ -96,6 +100,7 @@ public class ComponentFactoryTests {
         .withLocation(new LocationFullViewModel(location))
         .withBloodAbo(donation.getBloodAbo())
         .withBloodRh(donation.getBloodRh())
+        .thatIsNotInitialComponent()
         .build();
 
     // setup mocks
@@ -159,6 +164,7 @@ public class ComponentFactoryTests {
         .withCreatedOn(createdOn)
         .withExpiresOn(expiresOn)
         .withWeight(222)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
     
     ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
@@ -179,6 +185,7 @@ public class ComponentFactoryTests {
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
         .withExpiryStatus("Already expired")
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
 
     // setup mocks
@@ -256,5 +263,29 @@ public class ComponentFactoryTests {
     // do asserts
     Assert.assertNotNull("View models created", viewModels);
     Assert.assertEquals("Correct number of view models created", 2, viewModels.size());
+  }
+  
+  @Test
+  public void createComponentFullViewModelWithNullParentComponent_shouldSetIntialComponent() {
+    // set up data
+    
+    Component component = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withParentComponent(null)
+        .build();
+    
+    ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
+        .withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .thatIsInitialComponent()
+        .build();
+
+    // run test
+    ComponentFullViewModel returnedViewModel = componentFactory.createComponentFullViewModel(component);
+  
+    assertThat(returnedViewModel, is(hasSameStateAsComponentFullViewModel(expectedViewModel)));
   }
 }

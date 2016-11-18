@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 
@@ -19,6 +20,12 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   private String componentCode;
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
+  private InventoryStatus inventoryStatus;
+
+  public ComponentManagementViewModelBuilder withInventoryStatus(InventoryStatus inventoryStatus) {
+    this.inventoryStatus = inventoryStatus;
+    return this;
+  }
 
   public ComponentManagementViewModelBuilder withId(Long id) {
     this.id = id;
@@ -77,6 +84,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     viewModel.setWeight(weight);
     viewModel.setComponentType(componentType);
     viewModel.setPermissions(permissions);
+    viewModel.setInventoryStatus(inventoryStatus);
     return viewModel;
   }
   

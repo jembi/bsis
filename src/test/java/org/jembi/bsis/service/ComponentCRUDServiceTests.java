@@ -1108,6 +1108,59 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child2Deleted)));
 
     assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
+    assertThat("Parent inventory status is NOT_IN_STOCK", unprocessedComponent.getInventoryStatus(), is(InventoryStatus.NOT_IN_STOCK));
+  }
+
+  
+  @Test
+  public void testUnprocessComponentThatWasRemovedFromStock_shouldPutBackInStock() throws Exception {
+    // set up data
+    Donation donation = aDonation().build();
+    Location location = aLocation().build();
+    Component parentComponent = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withInventoryStatus(InventoryStatus.REMOVED)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    Component child1 = aComponent().withId(2L).withDonation(donation).withLocation(location).build();
+    Component child2 = aComponent().withId(3L).withDonation(donation).withLocation(location).build();
+
+    Component componentToUpdate = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+
+    Component updatedComponent = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+
+    Component child1Deleted = aComponent().withId(2L).withDonation(donation).withLocation(location).withIsDeleted(true).build();
+    Component child2Deleted = aComponent().withId(3L).withDonation(donation).withLocation(location).withIsDeleted(true).build();
+
+    // mocks
+    when(componentConstraintChecker.canUnprocess(parentComponent)).thenReturn(true);
+    when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child1, child2));
+    when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)))).thenReturn(updatedComponent);
+    
+    // SUT
+    Component unprocessedComponent = componentCRUDService.unprocessComponent(parentComponent);
+
+    // check
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)));
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child1Deleted)));
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child2Deleted)));
+
+    assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
+    assertThat("Parent inventory status is IN_STOCK", unprocessedComponent.getInventoryStatus(), is(InventoryStatus.IN_STOCK));
   }
   
   @Test
@@ -1618,6 +1671,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     assertThat(unsafe.getIsDeleted(), is(false));
     assertThat(unsafe.getStatusChangeReason().getCategory(), is(ComponentStatusChangeReasonCategory.UNSAFE));
   }
+ 
   
   @Test
   public void testEditWeightToValidRangeForComponentThatCantRollBack_componentStatusIsUnsafeAndCorrectStatusChangeDeletes() {

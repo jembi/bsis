@@ -18,6 +18,7 @@ public class ComponentFullViewModel extends ComponentViewModel {
   private String bloodAbo;
   private String bloodRh;
   private InventoryStatus inventoryStatus;
+  private boolean isInitialComponent;
 
   public LocationFullViewModel getLocation() {
     return location;
@@ -93,4 +94,11 @@ public class ComponentFullViewModel extends ComponentViewModel {
     this.inventoryStatus = inventoryStatus;
   }
 
+  public boolean getIsInitialComponent() {   
+    return this.isInitialComponent;
+  }
+
+  public void setIsInitialComponent(boolean isInitialComponent) {
+    this.isInitialComponent = isInitialComponent;
+  }
 }
