@@ -15,6 +15,7 @@ import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
+import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.repository.BloodTestRepository;
@@ -29,18 +30,24 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
 
   @InjectMocks
   private BloodTestingRuleBackingFormValidator bloodTestingRuleBackingFormvalidator;
-  
+
   @Mock
   private BloodTestRepository bloodTestRepository;
-  
+
   private BloodTest getBaseBloodTest() {
-    return aBasicTTIBloodTest().withId(1L).withValidResults("POS").build();
+    return aBasicTTIBloodTest()
+        .withId(1L)
+        .withValidResults("POS")
+        .withBloodTestType(BloodTestType.BASIC_TTI)
+        .withCategory(BloodTestCategory.TTI)
+        .build();
   }
 
   private BloodTestingRuleBackingForm getBaseBloodTestingRuleBackingForm() {
     BloodTestBackingForm bloodTestBackingForm = aBloodTestBackingForm()
         .withId(1L)
         .withCategory(BloodTestCategory.TTI)
+        .withBloodTestType(BloodTestType.BASIC_TTI)
         .withValidResults(new LinkedHashSet<>(Arrays.asList("POS", "NEG")))
         .build();
     BloodTestingRuleBackingForm backingForm = aBloodTestingRuleBackingForm()
@@ -48,7 +55,11 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
         .withDonationFieldChanged(DonationField.TTISTATUS)
         .withNewInformation(TTIStatus.TTI_UNSAFE.name())
         .withPattern("POS")
-        .withPendingTests(new LinkedHashSet<>(Arrays.asList(aBloodTestBackingForm().withId(2L).build())))
+        .withPendingTests(new LinkedHashSet<>(Arrays.asList(aBloodTestBackingForm()
+            .withBloodTestType(BloodTestType.REPEAT_TTI)
+            .withCategory(BloodTestCategory.TTI)
+            .withId(2L)
+            .build())))
         .build();
     return backingForm;
   }
@@ -58,7 +69,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
 
     // Set up data
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
-    
+
     // Set up mocks
     when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
     when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
@@ -70,7 +81,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     // Verify
     assertThat(errors.getErrorCount(), is(0));
   }
-  
+
   @Test
   public void testValidateFormWithNoBloodTest_shouldHaveOneError() {
 
@@ -90,7 +101,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     assertThat(errors.getErrorCount(), is(1));
     assertThat(errors.getFieldError("bloodTest").getCode(), is("errors.required"));
   }
-  
+
   @Test
   public void testValidateFormWithBloodTestWithNoId_shouldHaveOneError() {
 
@@ -336,6 +347,27 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     // Set up data
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
     backingForm.getPendingTests().add(backingForm.getBloodTest());
+
+    // Set up mocks
+    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+
+    // Run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
+    bloodTestingRuleBackingFormvalidator.validateForm(backingForm, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("pendingTests").getCode(), is("errors.invalid"));
+  }
+
+  @Test
+  public void testValidateFormPendingTestOfDifferentCategory_shouldHaveOneError() {
+    // Set up data
+    BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
+    backingForm.getPendingTests().add(aBloodTestBackingForm()
+        .withCategory(BloodTestCategory.BLOODTYPING)
+        .withBloodTestType(BloodTestType.REPEAT_BLOODTYPING).build());
 
     // Set up mocks
     when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());

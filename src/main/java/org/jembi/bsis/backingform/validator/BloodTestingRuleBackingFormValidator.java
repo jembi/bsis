@@ -7,6 +7,7 @@ import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
+import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.repository.BloodTestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,11 +88,20 @@ public class BloodTestingRuleBackingFormValidator extends BaseValidator<BloodTes
     if (pendingTests != null) {
       String pendingTestsError = "";
       for (BloodTestBackingForm pendingTest : pendingTests) {
-        if (bloodTest != null && bloodTest.getId().equals(pendingTest.getId())) {
-          errors.rejectValue("pendingTests", "errors.invalid", "Selected blood test " + bloodTest.getId()
-              + " cannot be included the list of pending blood tests");
-        } else {
-          pendingTestsError = validatePendingTest(pendingTest.getId(), pendingTestsError);
+        if (bloodTest != null) {
+          if (bloodTest.getId().equals(pendingTest.getId())) {
+            errors.rejectValue("pendingTests", "errors.invalid", "Selected blood test " + bloodTest.getId()
+                + " cannot be included the list of pending blood tests");
+          } else if (pendingTest.getBloodTestType().equals(BloodTestType.BASIC_TTI) || pendingTest.getBloodTestType().equals(BloodTestType.BASIC_BLOODTYPING)) {
+            errors.rejectValue("pendingTests", "errors.invalid", "Pending tests cannot contain " +
+                "blood test of type BASIC_TTI or BASIC_BLOODTYPING");
+          } else if (!pendingTest.getCategory().equals(bloodTest.getCategory())) {
+            errors.rejectValue("pendingTests", "errors.invalid", "Pending tests for blood test " +
+                "of category " + bloodTest.getCategory() + " cannot contain blood test of category " +
+                pendingTest.getCategory());
+          } else {
+            pendingTestsError = validatePendingTest(pendingTest.getId(), pendingTestsError);
+          }
         }
       }
       if (pendingTestsError.length() > 0) {
