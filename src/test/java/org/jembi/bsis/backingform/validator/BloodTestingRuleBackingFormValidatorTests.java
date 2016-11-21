@@ -404,7 +404,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateFormPendingTestWithInvalidTTIBloodTestType_shouldHaveOneError() {
+  public void testValidateFormPendingTestWithInvalidBasicTTITestType_shouldHaveOneError() {
     // Set up data
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
     backingForm.getPendingTests().add(aBloodTestBackingForm()
@@ -425,7 +425,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateFormPendingTestWithInvalidBloodTypingBloodTestType_shouldHaveOneError() {
+  public void testValidateFormPendingTestWithInvalidBasicBloodTypingTestType_shouldHaveOneError() {
     // Set up data
     BloodTestingRuleBackingForm backingForm = aBloodTestingRuleBackingForm()
         .withBloodTest(aBloodTestBackingForm()
