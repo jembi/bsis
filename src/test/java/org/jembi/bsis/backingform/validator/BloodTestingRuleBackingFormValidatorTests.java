@@ -402,4 +402,25 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     assertThat(errors.getFieldError("isDeleted").getCode(), is("errors.required"));
   }
 
+  @Test
+  public void testValidateFormPendingTestWithInvalidBloodTestType_shouldHaveOneError() {
+    // Set up data
+    BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
+    backingForm.getPendingTests().add(aBloodTestBackingForm()
+        .withCategory(BloodTestCategory.TTI)
+        .withBloodTestType(BloodTestType.BASIC_TTI).build());
+
+    // Set up mocks
+    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+
+    // Run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
+    bloodTestingRuleBackingFormvalidator.validateForm(backingForm, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("pendingTests").getCode(), is("errors.invalid"));
+  }
+
 }

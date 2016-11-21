@@ -96,9 +96,9 @@ public class BloodTestingRuleBackingFormValidator extends BaseValidator<BloodTes
             errors.rejectValue("pendingTests", "errors.invalid", "Pending tests cannot contain " +
                 "blood test of type BASIC_TTI or BASIC_BLOODTYPING");
           } else if (!pendingTest.getCategory().equals(bloodTest.getCategory())) {
-            errors.rejectValue("pendingTests", "errors.invalid", "Pending tests for blood test " +
-                "of category " + bloodTest.getCategory() + " cannot contain blood test of category " +
-                pendingTest.getCategory());
+            errors.rejectValue("pendingTests", "errors.invalid",  "A pending test with category " +
+                pendingTest.getCategory() + " is invalid. The pending test categories must match " +
+                "the category of the the blood test i.e. " + bloodTest.getCategory());
           } else {
             pendingTestsError = validatePendingTest(pendingTest.getId(), pendingTestsError);
           }
