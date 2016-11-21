@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform.validator;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBackingFormBuilder.aBloodTestBackingForm;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicBloodTypingBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicTTIBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleBackingFormBuilder.aBloodTestingRuleBackingForm;
 import static org.mockito.Mockito.when;
@@ -403,7 +404,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateFormPendingTestWithInvalidBloodTestType_shouldHaveOneError() {
+  public void testValidateFormPendingTestWithInvalidTTIBloodTestType_shouldHaveOneError() {
     // Set up data
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
     backingForm.getPendingTests().add(aBloodTestBackingForm()
@@ -423,4 +424,39 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     assertThat(errors.getFieldError("pendingTests").getCode(), is("errors.invalid"));
   }
 
+  @Test
+  public void testValidateFormPendingTestWithInvalidBloodTypingBloodTestType_shouldHaveOneError() {
+    // Set up data
+    BloodTestingRuleBackingForm backingForm = aBloodTestingRuleBackingForm()
+        .withBloodTest(aBloodTestBackingForm()
+            .withId(1L)
+            .withCategory(BloodTestCategory.BLOODTYPING)
+            .withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
+            .withValidResults(new LinkedHashSet<>(Arrays.asList("A", "B")))
+            .build())
+        .withDonationFieldChanged(DonationField.BLOODABO)
+        .withPattern("A")
+        .withPendingTests(new LinkedHashSet<>(Arrays.asList(aBloodTestBackingForm()
+            .withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
+            .withCategory(BloodTestCategory.BLOODTYPING)
+            .withId(2L)
+            .build())))
+        .build();
+    // Set up mocks
+    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(aBasicBloodTypingBloodTest()
+        .withId(1L)
+        .withValidResults("A")
+        .withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
+        .withCategory(BloodTestCategory.BLOODTYPING)
+        .build());
+    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+
+    // Run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
+    bloodTestingRuleBackingFormvalidator.validateForm(backingForm, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("pendingTests").getCode(), is("errors.invalid"));
+  }
 }
