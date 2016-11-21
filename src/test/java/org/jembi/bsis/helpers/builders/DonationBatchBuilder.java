@@ -26,7 +26,6 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
   private boolean closed;
   private boolean backEntry;
   private ComponentBatch componentBatch;
-  private Date createdDate;
   private Date lastUpdatedDate;
   private Date donationBatchDate = new Date();
 
@@ -93,11 +92,6 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     return this;
   }
 
-  public DonationBatchBuilder withCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
-    return this;
-  }
-
   public DonationBatchBuilder withLastUpdatedDate(Date lastUpdatedDate) {
     this.lastUpdatedDate = lastUpdatedDate;
     return this;
@@ -126,7 +120,6 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     donationBatch.setBackEntry(backEntry);
     donationBatch.setTestBatch(testBatch);
     donationBatch.setComponentBatch(componentBatch);
-    donationBatch.setCreatedDate(createdDate);
     donationBatch.setLastUpdated(lastUpdatedDate);
     donationBatch.setDonationBatchDate(donationBatchDate);
     return donationBatch;

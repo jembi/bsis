@@ -1,27 +1,5 @@
 package org.jembi.bsis.controller;
 
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicTTIBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aConfirmatoryTTIBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aRepeatBloodTypingBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aRepeatTTIBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestResultViewModelBuilder.aBloodTestResultViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
-import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
-import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -40,6 +18,28 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicTTIBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aConfirmatoryTTIBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aRepeatBloodTypingBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aRepeatTTIBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestResultViewModelBuilder.aBloodTestResultViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
+import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
+import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
+import static org.mockito.Mockito.when;
 
 public class TestResultControllerTests extends UnitTestSuite {
   @Spy
@@ -61,7 +61,7 @@ public class TestResultControllerTests extends UnitTestSuite {
         aDonationBatch()
             .withId(1L)
             .withBatchNumber("123")
-            .withCreatedDate(new Date())
+            .withDonationBatchDate(new Date())
             .build()
       )
     );
@@ -134,7 +134,7 @@ public class TestResultControllerTests extends UnitTestSuite {
         aDonationBatch()
             .withId(1L)
             .withBatchNumber("123")
-            .withCreatedDate(new Date())
+            .withDonationBatchDate(new Date())
             .build()
       )
     );
@@ -224,7 +224,7 @@ public class TestResultControllerTests extends UnitTestSuite {
         aDonationBatch()
             .withId(1L)
             .withBatchNumber("123")
-            .withCreatedDate(new Date())
+            .withDonationBatchDate(new Date())
             .build()
       )
     );
@@ -289,7 +289,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
     Set<DonationBatch> donationBatches = new HashSet<>(
-        Arrays.asList(aDonationBatch().withId(1L).withBatchNumber("123").withCreatedDate(new Date()).build()));
+        Arrays.asList(aDonationBatch().withId(1L).withBatchNumber("123").withDonationBatchDate(new Date()).build()));
 
     TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
@@ -342,7 +342,7 @@ public class TestResultControllerTests extends UnitTestSuite {
         aDonationBatch()
             .withId(1L)
             .withBatchNumber("123")
-            .withCreatedDate(new Date())
+            .withDonationBatchDate(new Date())
             .build()
       )
     );

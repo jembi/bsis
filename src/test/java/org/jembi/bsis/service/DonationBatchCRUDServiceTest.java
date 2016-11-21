@@ -1,13 +1,5 @@
 package org.jembi.bsis.service;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.DonorBuilder;
@@ -19,11 +11,18 @@ import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.DonationBatchRepository;
-import org.jembi.bsis.service.DonationBatchCRUDService;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 public class DonationBatchCRUDServiceTest extends ContextDependentTestSuite {
 
@@ -69,13 +68,13 @@ public class DonationBatchCRUDServiceTest extends ContextDependentTestSuite {
     Location venue2 = new LocationBuilder().withName("Durban").buildAndPersist(entityManager);
 
     donationBatch.setVenue(venue2);
-    donationBatch.setCreatedDate(date2);
+    donationBatch.setDonationBatchDate(date2);
 
     donationBatchCRUDService.updateDonationBatch(donationBatch);
 
     DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchByBatchNumber("TEST123");
     Assert.assertNotNull("DonationBatch is found", updatedDonationBatch);
-    Assert.assertEquals("DonationBatch is updated", date2, updatedDonationBatch.getCreatedDate());
+    Assert.assertEquals("DonationBatch is updated", date2, updatedDonationBatch.getDonationBatchDate());
     Assert.assertEquals("DonationBatch is updated", venue2.getId(), updatedDonationBatch.getVenue().getId());
     List<Donation> savedDonations = updatedDonationBatch.getDonations();
     Assert.assertNotNull("DonationBatch is updated", savedDonations);

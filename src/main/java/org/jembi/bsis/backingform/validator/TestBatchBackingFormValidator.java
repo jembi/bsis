@@ -1,11 +1,5 @@
 package org.jembi.bsis.backingform.validator;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.NoResultException;
-
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
@@ -15,6 +9,12 @@ import org.jembi.bsis.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.NoResultException;
 
 @Component
 public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackingForm> {
@@ -36,7 +36,8 @@ public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackin
         DonationBatch db = donationBatchRepository.findDonationBatchById(donationBatchId);
         if (db.getTestBatch() != null) {
           if (testBatch.getId() == null || !testBatch.getId().equals(db.getTestBatch().getId())) {
-            errors.rejectValue("donationBatchIds", "errors.invalid", "Donation batch at " + db.getVenue().getName() + " from " + db.getCreatedDate() + " is already in a test batch.");
+            errors.rejectValue("donationBatchIds", "errors.invalid", "Donation batch at " + db.getVenue().getName() +
+                " from " + db.getDonationBatchDate() + " is already in a test batch.");
           }
         }
         donationBatches.add(db);
