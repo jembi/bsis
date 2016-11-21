@@ -176,7 +176,6 @@ public class DonationCRUDService {
         existingDonation.setTTIStatus(TTIStatus.NOT_DONE);
         existingDonation.setBloodAbo(null);
         existingDonation.setBloodRh(null);
-      } else {
         existingDonation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
         existingDonation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
       }
