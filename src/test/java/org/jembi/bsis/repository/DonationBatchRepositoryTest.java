@@ -1,6 +1,18 @@
 package org.jembi.bsis.repository;
 
-import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
+import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.componentbatch.ComponentBatch;
+import org.jembi.bsis.model.componenttype.ComponentType;
+import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donationbatch.DonationBatch;
+import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -12,18 +24,7 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.jembi.bsis.model.component.Component;
-import org.jembi.bsis.model.componentbatch.ComponentBatch;
-import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
-import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 
 /**
  * Test using DBUnit to test the DonationBatchRepository
@@ -80,15 +81,19 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testAddDonationBatches() throws Exception {
-    DonationBatch donationBatch = new DonationBatch();
-    donationBatch.setBatchNumber("JUNIT123");
-    donationBatch.setCreatedDate(new Date());
-    donationBatch.setLastUpdated(new Date());
-    donationBatch.setIsDeleted(false);
-    donationBatch.setIsClosed(true);
-    donationBatch.setNotes("Testing 123");
     Location location = locationRepository.findLocationByName("Maseru");
-    donationBatch.setVenue(location);
+
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()
+        .withBatchNumber("JUNIT123")
+        .withVenue(location)
+        .withCreatedDate(new Date())
+        .withLastUpdatedDate(new Date())
+        .thatIsNotDeleted()
+        .thatIsClosed()
+        .withDonationBatchDate(new Date())
+        .withNotes("Testing 123")
+        .build();
+
     donationBatchRepository.addDonationBatch(donationBatch);
 
     DonationBatch savedDonationBatch = donationBatchRepository.findDonationBatchByBatchNumber("JUNIT123");
@@ -115,13 +120,16 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     Location venue = locationRepository.getLocation(1l);
 
     // create an unassigned batch
-    DonationBatch donationBatch = new DonationBatch();
-    donationBatch.setBatchNumber("JUNIT123");
-    donationBatch.setCreatedDate(new Date());
-    donationBatch.setLastUpdated(new Date());
-    donationBatch.setIsDeleted(false);
-    donationBatch.setIsClosed(true);
-    donationBatch.setVenue(venue);
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()
+        .withBatchNumber("JUNIT123")
+        .withVenue(venue)
+        .withCreatedDate(new Date())
+        .withLastUpdatedDate(new Date())
+        .thatIsNotDeleted()
+        .thatIsClosed()
+        .withDonationBatchDate(new Date())
+        .build();
+
     donationBatchRepository.addDonationBatch(donationBatch);
 
     unassigned = donationBatchRepository.findUnassignedDonationBatches();

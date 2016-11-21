@@ -18,6 +18,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
 
   private Long id;
   private String batchNumber;
+  private String notes;
   private List<Donation> donations;
   private Location venue = aVenue().build();
   private TestBatch testBatch;
@@ -26,7 +27,8 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
   private boolean backEntry;
   private ComponentBatch componentBatch;
   private Date createdDate;
-  private Date donationBatchDate;
+  private Date lastUpdatedDate;
+  private Date donationBatchDate = new Date();
 
   public DonationBatchBuilder withId(Long id) {
     this.id = id;
@@ -51,6 +53,11 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     return this;
   }
 
+  public DonationBatchBuilder thatIsNotDeleted() {
+    deleted = false;
+    return this;
+  }
+
   public DonationBatchBuilder thatIsClosed() {
     closed = true;
     return this;
@@ -71,6 +78,11 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     return this;
   }
 
+  public DonationBatchBuilder withNotes(String notes) {
+    this.notes = notes;
+    return this;
+  }
+
   public DonationBatchBuilder thatIsBackEntry() {
     backEntry = true;
     return this;
@@ -83,6 +95,11 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
 
   public DonationBatchBuilder withCreatedDate(Date createdDate) {
     this.createdDate = createdDate;
+    return this;
+  }
+
+  public DonationBatchBuilder withLastUpdatedDate(Date lastUpdatedDate) {
+    this.lastUpdatedDate = lastUpdatedDate;
     return this;
   }
 
@@ -101,6 +118,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     DonationBatch donationBatch = new DonationBatch();
     donationBatch.setId(id);
     donationBatch.setBatchNumber(batchNumber);
+    donationBatch.setNotes(notes);
     donationBatch.setDonation(donations);
     donationBatch.setIsDeleted(deleted);
     donationBatch.setIsClosed(closed);
@@ -109,6 +127,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     donationBatch.setTestBatch(testBatch);
     donationBatch.setComponentBatch(componentBatch);
     donationBatch.setCreatedDate(createdDate);
+    donationBatch.setLastUpdated(lastUpdatedDate);
     donationBatch.setDonationBatchDate(donationBatchDate);
     return donationBatch;
   }
