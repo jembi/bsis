@@ -277,6 +277,18 @@ public class Component extends BaseModificationTrackerEntity {
     return componentBatch;
   }
 
+  /**
+   * Determines if this Component has been received by the processing Location.
+   *
+   * @return true if this Component has a ComponentBatch, false otherwise
+   */
+  public boolean hasComponentBatch() {
+    if (getComponentBatch() != null) {
+      return true;
+    }
+    return false;
+  }
+
   public void setComponentBatch(ComponentBatch componentBatch) {
     this.componentBatch = componentBatch;
   }

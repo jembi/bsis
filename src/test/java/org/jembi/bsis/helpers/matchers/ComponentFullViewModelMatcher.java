@@ -28,6 +28,7 @@ public class ComponentFullViewModelMatcher extends TypeSafeMatcher<ComponentFull
         .appendText("\nExpiresOn: ").appendValue(expected.getExpiresOn())
         .appendText("\nBlood ABO: ").appendValue(expected.getBloodAbo())
         .appendText("\nBlood Rh: ").appendValue(expected.getBloodRh())
+        .appendText("\nIs InitialComponent: ").appendValue(expected.getIsInitialComponent())
         ;
   }
 
@@ -43,7 +44,8 @@ public class ComponentFullViewModelMatcher extends TypeSafeMatcher<ComponentFull
         (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn()) || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
         (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn()) || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getBloodAbo(), expected.getBloodAbo()) &&
-        Objects.equals(actual.getBloodAbo(), expected.getBloodAbo());
+        Objects.equals(actual.getBloodAbo(), expected.getBloodAbo()) &&
+        Objects.equals(actual.getIsInitialComponent(), expected.getIsInitialComponent());
   }
 
   public static ComponentFullViewModelMatcher hasSameStateAsComponentFullViewModel(ComponentFullViewModel expected) {

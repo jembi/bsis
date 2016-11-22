@@ -179,7 +179,7 @@ public class BloodTestingRuleEngine {
         LOGGER.trace("Test id: " + rule.getBloodTest().getId());
         LOGGER.trace("pattern: " + rule.getPattern());
         LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
-        LOGGER.trace("Pending test ids: " + rule.getPendingTestsIds());
+        LOGGER.trace("Pending test ids: " + rule.getPendingTestsIdsSet());
         LOGGER.trace("Changes to result: " + rule.getNewInformation());
       }
       
@@ -201,7 +201,9 @@ public class BloodTestingRuleEngine {
       }
 
       // determine which tests are pending
-      for (Long extraTestId : rule.getPendingTestsIds()) {
+      // Note: pending tests are dependant on having a donation field changed.
+      // This might not be desired in the future
+      for (Long extraTestId : rule.getPendingTestsIdsSet()) {
         if (!availableTestResults.containsKey(extraTestId)) {
           switch (rule.getDonationFieldChanged()) {
             case BLOODABO:
@@ -336,7 +338,7 @@ public class BloodTestingRuleEngine {
       for (BloodTestingRule bloodTestingRule : resultSet.getBloodTestingRules()) {
 
         // Find which tests resulted in the repeat test
-        Set<Long> pendingTestIds = bloodTestingRule.getPendingTestsIds();
+        Set<Long> pendingTestIds = bloodTestingRule.getPendingTestsIdsSet();
         if (pendingTestIds.contains(repeatBloodTypingTest.getId())) {
 
           // Compare the result of the repeat test to previous test
@@ -404,18 +406,16 @@ public class BloodTestingRuleEngine {
    * @param resultSet BloodTestingRuleResultSet that contains the processed test results.
    */
   private void updatePendingAboRhTests(BloodTestingRuleResultSet resultSet) {
-    if (!resultSet.getPendingAboTestsIds().isEmpty() || !resultSet.getPendingRhTestsIds().isEmpty()) {
-      if (resultSet.getBloodTypingMatchStatus() != BloodTypingMatchStatus.NOT_DONE
-          && resultSet.getBloodTypingMatchStatus() != BloodTypingMatchStatus.NO_MATCH) {
-        if (LOGGER.isInfoEnabled()) {
-          LOGGER.info("Donor " + resultSet.getDonation().getDonor().getId()
-              + " is not a first time donor, so pending ABO tests ("
-              + resultSet.getPendingAboTestsIds().size() + ") and pending Rh tests ("
-              + resultSet.getPendingRhTestsIds().size() + ") are not required.");
-        }
-        resultSet.getPendingAboTestsIds().clear();
-        resultSet.getPendingRhTestsIds().clear();
+    if (resultSet.getBloodTypingMatchStatus() == BloodTypingMatchStatus.NO_MATCH) {
+      if (LOGGER.isInfoEnabled()) {
+        LOGGER.info("Donor " + resultSet.getDonation().getDonor().getId()
+            + " is a first time donor, so pending ABO tests ("
+            + resultSet.getPendingAboTestsIds().size() + ") and pending Rh tests ("
+            + resultSet.getPendingRhTestsIds().size() + ") are required.");
       }
+    } else {
+      resultSet.getPendingAboTestsIds().clear();
+      resultSet.getPendingRhTestsIds().clear();
     }
   }
 

@@ -1,12 +1,13 @@
 package org.jembi.bsis.factory;
 
 import static org.mockito.Mockito.when;
+import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jembi.bsis.helpers.builders.ComponentBuilder;
-import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.service.LabellingConstraintChecker;
 import org.jembi.bsis.suites.UnitTestSuite;
@@ -27,9 +28,12 @@ public class LabellingFactoryTests extends UnitTestSuite {
   public void testCreateLabellingViewModel_shouldReturnViewModelWithTheCorrectState() {
 
     // Setup
-    Component component = ComponentBuilder.aComponent()
+    Component component = aComponent()
         .withId(1L)
-        .withComponentType(ComponentTypeBuilder.aComponentType()
+        .withComponentBatch(aComponentBatch()
+            .withId(1L)
+            .build())
+        .withComponentType(aComponentType()
             .withComponentTypeName("name")
             .withId(1L)
             .withComponentTypeCode("code")
@@ -39,7 +43,7 @@ public class LabellingFactoryTests extends UnitTestSuite {
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canPrintDiscardLabel", true);
     permissions.put("canPrintPackLabel", true);
-    
+
     // Mock
     when(labellingConstraintChecker.canPrintPackLabel(component)).thenReturn(true);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
@@ -52,9 +56,8 @@ public class LabellingFactoryTests extends UnitTestSuite {
     Assert.assertEquals("id is correct", component.getId(), viewModel.getId());
     Assert.assertEquals("componentName is correct", component.getComponentType().getComponentTypeName(),
         viewModel.getComponentName());
+    Assert.assertTrue("component is assigned to a batch", viewModel.getHasComponentBatch());
     Assert.assertEquals("componentCode is correct", component.getComponentCode(), viewModel.getComponentCode());
     Assert.assertEquals("permissions are correct", permissions, viewModel.getPermissions());
-
   }
-
 }

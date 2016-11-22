@@ -21,7 +21,16 @@ public class ComponentManagementViewModel extends BaseViewModel {
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
   private PackTypeFullViewModel packType;
+  private boolean hasComponentBatch;
   private InventoryStatus inventoryStatus;
+
+  public boolean getHasComponentBatch () {
+    return hasComponentBatch;
+  }
+
+  public void setHasComponentBatch (boolean hasComponentBatch) {
+    this.hasComponentBatch = hasComponentBatch;
+  }
 
   public InventoryStatus getInventoryStatus () {
     return inventoryStatus;
