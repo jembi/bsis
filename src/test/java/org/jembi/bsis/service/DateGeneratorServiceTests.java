@@ -28,7 +28,7 @@ public class DateGeneratorServiceTests {
     cal.set(Calendar.MILLISECOND, 0);
     Date expectedDate = cal.getTime();
 
-    Date aDate = service.generateDateWithoutTimePart(date);
+    Date aDate = service.generateDate(date);
 
     assertEquals(aDate, expectedDate);
 

@@ -74,7 +74,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
     when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
-    when(dateGeneratorService.generateDateWithoutTimePart(donationBatchDate)).thenReturn(new LocalDate().toDate());
+    when(dateGeneratorService.generateDate(donationBatchDate)).thenReturn(new LocalDate().toDate());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -109,7 +109,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
     when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
-    when(dateGeneratorService.generateDateWithoutTimePart(donationBatchDate)).thenReturn(new LocalDate().toDate());
+    when(dateGeneratorService.generateDate(donationBatchDate)).thenReturn(new LocalDate().toDate());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -143,7 +143,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
     when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
-    when(dateGeneratorService.generateDateWithoutTimePart(donationBatchDate)).thenReturn(new LocalDate().toDate());
+    when(dateGeneratorService.generateDate(donationBatchDate)).thenReturn(new LocalDate().toDate());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -180,7 +180,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
     when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
-    when(dateGeneratorService.generateDateWithoutTimePart(donationBatchDate)).thenReturn(new LocalDate().toDate());
+    when(dateGeneratorService.generateDate(donationBatchDate)).thenReturn(new LocalDate().toDate());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -215,7 +215,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(donationBatchRepository.findDonationBatches(false, Arrays.asList(new Long[]{1l}), null, null)).thenReturn(donationBatches);
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
-    when(dateGeneratorService.generateDateWithoutTimePart(donationBatchDate)).thenReturn(new LocalDate().toDate());
+    when(dateGeneratorService.generateDate(donationBatchDate)).thenReturn(new LocalDate().toDate());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -250,7 +250,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(donationBatchRepository.findDonationBatches(false, Arrays.asList(new Long[]{1l}), null, null)).thenReturn(donationBatches);
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
-    when(dateGeneratorService.generateDateWithoutTimePart(donationBatchDate)).thenReturn(new LocalDate().toDate());
+    when(dateGeneratorService.generateDate(donationBatchDate)).thenReturn(new LocalDate().toDate());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -286,7 +286,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
     when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
-    when(dateGeneratorService.generateDateWithoutTimePart(donationBatchDate)).thenReturn(new LocalDate().toDate());
+    when(dateGeneratorService.generateDate(donationBatchDate)).thenReturn(new LocalDate().toDate());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -321,7 +321,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
     when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
-    when(dateGeneratorService.generateDateWithoutTimePart(donationBatchDate)).thenReturn(new LocalDate().toDate());
+    when(dateGeneratorService.generateDate(donationBatchDate)).thenReturn(new LocalDate().toDate());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -388,7 +388,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[]{}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
     when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
-    when(dateGeneratorService.generateDateWithoutTimePart(donationBatchDate)).thenReturn(new LocalDate().plusDays(2).toDate());
+    when(dateGeneratorService.generateDate(donationBatchDate)).thenReturn(new LocalDate().plusDays(2).toDate());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -421,7 +421,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[] {}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
     when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
-    when(dateGeneratorService.generateDateWithoutTimePart(donationBatchDate)).thenReturn(new LocalDate().toDate());
+    when(dateGeneratorService.generateDate(donationBatchDate)).thenReturn(new LocalDate().toDate());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");
@@ -453,7 +453,7 @@ public class DonationBatchBackingFormValidatorTest {
     when(formFieldRepository.getRequiredFormFields("donationBatch")).thenReturn(Arrays.asList(new String[] {}));
     when(formFieldRepository.getFieldMaxLengths("donationBatch")).thenReturn(new HashMap<String, Integer>());
     when(locationRepository.getLocation(venue.getId())).thenReturn(venue);
-    when(dateGeneratorService.generateDateWithoutTimePart(donationBatchDate)).thenReturn(new LocalDate().minusDays(5).toDate());
+    when(dateGeneratorService.generateDate(donationBatchDate)).thenReturn(new LocalDate().minusDays(5).toDate());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationBatch");

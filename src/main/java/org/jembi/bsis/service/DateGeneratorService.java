@@ -40,7 +40,7 @@ public class DateGeneratorService {
    * @param date
    * @return Date without the time part.
    */
-  public Date generateDateWithoutTimePart(Date date) {
+  public Date generateDate(Date date) {
     return new LocalDate(date).toDate();
   }
 }

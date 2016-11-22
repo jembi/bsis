@@ -62,10 +62,10 @@ public class DonationBatchBackingFormValidator extends BaseValidator<DonationBat
       errors.rejectValue("donationBatch.donationBatchDate", "donationBatchDate.empty",
           "donationBatchDate is required.");
     } else {
-      if (dateGeneratorService.generateDateWithoutTimePart(donationBatchDate).after(new Date())) {
+      if (dateGeneratorService.generateDate(donationBatchDate).after(new Date())) {
         errors.rejectValue("donationBatch.donationBatchDate", "donationBatchDate.invalid",
             "The donationBatchDate provided: [" + CustomDateFormatter.getDateString(donationBatchDate)
-                + "] must be a date in the past. The time part is not relevant.");
+                + "] must be a date in the past.");
       }
     }
 
