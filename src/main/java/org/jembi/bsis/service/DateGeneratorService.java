@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,5 +32,15 @@ public class DateGeneratorService {
     destCal.set(Calendar.YEAR, sourceCal.get(Calendar.YEAR));
 
     return destCal.getTime();
+  }
+
+  /**
+   * Returns a Date with the time part zeroed out to 00:00:00.
+   * 
+   * @param date
+   * @return Date without the time part.
+   */
+  public Date generateDateWithoutTimePart(Date date) {
+    return new LocalDate(date).toDate();
   }
 }
