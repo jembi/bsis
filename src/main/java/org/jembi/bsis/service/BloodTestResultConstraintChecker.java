@@ -71,7 +71,7 @@ public class BloodTestResultConstraintChecker {
       if (rule.getBloodTest().getId().equals(bloodTestId)) {
         // go through the pending tests and check if there are any results
         // if there is a result for a confirmation then this result cannot be edited
-        for (Long pendingTestId : rule.getPendingTestsIds()) {
+        for (Long pendingTestId : rule.getPendingTestsIdsSet()) {
           String testResult = availableTestResults.get(pendingTestId);
           if (StringUtils.isBlank(testResult)) {
             // no result for this pending test, check if it has any pending tests

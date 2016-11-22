@@ -53,9 +53,9 @@ public class BloodTestFactory {
   }
 
   private void populateFullViewModelFields(BloodTest bloodTest, BloodTestFullViewModel viewModel) {
-    viewModel.setValidResults(bloodTest.getValidResultsList());
-    viewModel.setPositiveResults(bloodTest.getPositiveResultsList());
-    viewModel.setNegativeResults(bloodTest.getNegativeResultsList());
+    viewModel.setValidResults(bloodTest.getValidResultsSet());
+    viewModel.setPositiveResults(bloodTest.getPositiveResultsSet());
+    viewModel.setNegativeResults(bloodTest.getNegativeResultsSet());
     viewModel.setRankInCategory(bloodTest.getRankInCategory());
     viewModel.setFlagComponentsForDiscard(bloodTest.isFlagComponentsForDiscard());
     viewModel.setFlagComponentsContainingPlasmaForDiscard(bloodTest.getFlagComponentsContainingPlasmaForDiscard());

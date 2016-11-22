@@ -390,8 +390,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Donation donation = donationRepository.findDonationById(16l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("BloodTypingMatchStatus is RESOLVED", BloodTypingMatchStatus.RESOLVED, result.getBloodTypingMatchStatus());
-    Assert.assertEquals("Blood ABO not set", "A", result.getBloodAbo());
-    Assert.assertEquals("Blood Rh not set", "+", result.getBloodRh());
+    Assert.assertEquals("Blood ABO not set", "", result.getBloodAbo());
+    Assert.assertEquals("Blood Rh not set", "", result.getBloodRh());
   }
   
   @Test
@@ -399,8 +399,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Donation donation = donationRepository.findDonationById(17l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("BloodTypingMatchStatus is RESOLVED", BloodTypingMatchStatus.RESOLVED, result.getBloodTypingMatchStatus());
-    Assert.assertEquals("Blood ABO not set", "O", result.getBloodAbo());
-    Assert.assertEquals("Blood Rh not set", "+", result.getBloodRh());
+    Assert.assertEquals("Blood ABO not set", "", result.getBloodAbo());
+    Assert.assertEquals("Blood Rh not set", "", result.getBloodRh());
     Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
   }
 }

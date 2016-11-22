@@ -1124,7 +1124,7 @@ public class DataImportService {
             outcome = cell.getStringCellValue();
             if (bloodTest != null) {
               testResults.put(bloodTest.getId(), cell.getStringCellValue());
-              if (!bloodTest.getValidResultsList().contains(cell.getStringCellValue())) {
+              if (!bloodTest.getValidResultsSet().contains(cell.getStringCellValue())) {
                 errors.rejectValue("testResults", "testResults.invalid", "Invalid outcome");
               }
             }

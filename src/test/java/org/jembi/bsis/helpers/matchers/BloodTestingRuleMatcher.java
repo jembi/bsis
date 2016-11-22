@@ -22,7 +22,7 @@ public class BloodTestingRuleMatcher extends TypeSafeMatcher<BloodTestingRule> {
         .appendText("\nDonation field changed: ").appendValue(expected.getDonationFieldChanged())
         .appendText("\nNew information: ").appendValue(expected.getNewInformation())
         .appendText("\nPattern: ").appendValue(expected.getPattern())
-        .appendText("\nPending tests ids: ").appendValue(expected.getPendingTestsIds())
+        .appendText("\nPending tests ids: ").appendValue(expected.getPendingTestsIdsSet())
         .appendText("\nIs deleted: ").appendValue(expected.getIsDeleted());
   }
 
@@ -33,7 +33,7 @@ public class BloodTestingRuleMatcher extends TypeSafeMatcher<BloodTestingRule> {
         && Objects.equals(actual.getDonationFieldChanged(), expected.getDonationFieldChanged())
         && Objects.equals(actual.getNewInformation(), expected.getNewInformation())
         && Objects.equals(actual.getPattern(), expected.getPattern())
-        && Objects.equals(actual.getPendingTestsIds(), expected.getPendingTestsIds())
+        && Objects.equals(actual.getPendingTestsIdsSet(), expected.getPendingTestsIdsSet())
         && Objects.equals(actual.getIsDeleted(), expected.getIsDeleted())
         ;
   }
