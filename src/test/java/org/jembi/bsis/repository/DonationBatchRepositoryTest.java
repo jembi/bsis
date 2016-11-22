@@ -1,5 +1,17 @@
 package org.jembi.bsis.repository;
 
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.NoResultException;
+
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
@@ -13,18 +25,6 @@ import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.NoResultException;
-
-import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 
 /**
  * Test using DBUnit to test the DonationBatchRepository
@@ -169,7 +169,7 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     String endDate = "2015-03-04 22:00:00";
     List<DonationBatch> batches = donationBatchRepository.findDonationBatches(false, locationIds, df.parse(startDate), df.parse(endDate));
     Assert.assertNotNull("There are batches in this date range", batches);
-    Assert.assertEquals("There are 2 donation batches in this date range", 2, batches.size());
+    Assert.assertEquals("There are 3 donation batches in this date range", 3, batches.size());
   }
 
   @Test
