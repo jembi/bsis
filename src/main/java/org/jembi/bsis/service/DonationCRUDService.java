@@ -1,9 +1,7 @@
 package org.jembi.bsis.service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.NoResultException;
@@ -157,20 +155,27 @@ public class DonationCRUDService {
           throw new IllegalArgumentException("Cannot set pack type that produces components");
         }
       }
-
-      // Set new pack type
-      existingDonation.setPackType(newPackType);
-
-      // If an initial component was created previously, delete it
-      if (!existingDonation.getComponents().isEmpty()) {
-        existingDonation.getComponents().get(0).setIsDeleted(true);
+      
+      Component component = componentCRUDService.createInitialComponent(existingDonation);
+      
+      // If the new packType does not count as donation, delete initial component
+      if (!newPackType.getCountAsDonation()) {
+        if (!existingDonation.getComponents().isEmpty())
+          component.setIsDeleted(true);
       }
-
-      // If the new pack type produces components, create a new initial component
-      if (newPackType.getCountAsDonation()) {
-        Component component = componentCRUDService.createInitialComponent(existingDonation);
+     
+      // If the new packType count as donation, update initial component
+      if (newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {    
+        componentCRUDService.updateComponentWithNewPackType(updatedDonation.getComponents().get(0), newPackType);  
+      }
+      
+      // If the new PackType count as donation and there is no initial component then create it
+      if (newPackType.getCountAsDonation() && existingDonation.getComponents().isEmpty()) {
         existingDonation.getComponents().add(component);
       }
+    
+      // Set new pack type
+      existingDonation.setPackType(newPackType);
       
       // If the new pack type doesn't produce test samples, delete test outcomes and clear statuses
       if (!newPackType.getTestSampleProduced()) {
@@ -251,5 +256,4 @@ public class DonationCRUDService {
     donorRepository.saveDonor(donor);
     return donor;
   }
-
 }
