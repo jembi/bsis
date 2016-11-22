@@ -24,6 +24,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
@@ -135,6 +136,17 @@ public class ComponentCRUDService {
     componentRepository.save(component);
     return component;
 
+  }
+
+  /**
+   * Change the specified Component's PackType and update. Note: this will change the Component's code, the Component's type and the expiresOn date 
+   * 
+   * @param newPackType PackType Donation's updated PackType
+   * @param component Component to update
+   * @return Component that has been updated
+   */
+  public Component updateComponentWithNewPackType(Component component, PackType newPackType) {
+    return component;
   }
 
   /**
