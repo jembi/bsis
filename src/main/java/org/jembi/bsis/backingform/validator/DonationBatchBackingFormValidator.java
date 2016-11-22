@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform.validator;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +11,8 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.SequenceNumberRepository;
+import org.jembi.bsis.service.DateGeneratorService;
+import org.jembi.bsis.utils.CustomDateFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -25,6 +28,9 @@ public class DonationBatchBackingFormValidator extends BaseValidator<DonationBat
 
   @Autowired
   private SequenceNumberRepository sequenceNumberRepository;
+
+  @Autowired
+  private DateGeneratorService dateGeneratorService;
 
   @Override
   public void validateForm(DonationBatchBackingForm form, Errors errors) {
@@ -48,6 +54,18 @@ public class DonationBatchBackingFormValidator extends BaseValidator<DonationBat
       } else if (form.getId() == null && findOpenDonationBatches(venueIds).size() > 0) {
         errors.rejectValue("donationBatch.venue", "venue.openBatch",
             "There is already an open donation batch for that venue.");
+      }
+    }
+
+    Date donationBatchDate = form.getDonationBatchDate();
+    if (donationBatchDate == null) {
+      errors.rejectValue("donationBatch.donationBatchDate", "donationBatchDate.empty",
+          "donationBatchDate is required.");
+    } else {
+      if (dateGeneratorService.generateDateWithoutTimePart(donationBatchDate).after(new Date())) {
+        errors.rejectValue("donationBatch.donationBatchDate", "donationBatchDate.invalid",
+            "The donationBatchDate provided: [" + CustomDateFormatter.getDateString(donationBatchDate)
+                + "] must be a date in the past. The time part is not relevant.");
       }
     }
 
@@ -82,4 +100,5 @@ public class DonationBatchBackingFormValidator extends BaseValidator<DonationBat
   private List<DonationBatch> findOpenDonationBatches(List<Long> venueIds) {
     return donationBatchRepository.findDonationBatches(false, venueIds, null, null);
   }
+
 }
