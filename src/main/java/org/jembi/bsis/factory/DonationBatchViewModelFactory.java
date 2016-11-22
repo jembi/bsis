@@ -97,13 +97,6 @@ public class DonationBatchViewModelFactory {
     donationBatchViewModel.setNotes(donationBatch.getNotes());
     donationBatchViewModel.setBackEntry(donationBatch.isBackEntry());
     donationBatchViewModel.setNumDonations(donationBatch.getDonations().size());
-
-    // Audit fields
-    User createdBy = donationBatch.getCreatedBy();
-    User lastUpdatedBy = donationBatch.getLastUpdatedBy();
-    donationBatchViewModel.setCreatedBy(createdBy == null ? "" : createdBy.getUsername());
-    donationBatchViewModel.setUpdatedDate(donationBatch.getLastUpdated());
-    donationBatchViewModel.setLastUpdatedBy(lastUpdatedBy == null ? "" : lastUpdatedBy.getUsername());
     donationBatchViewModel.setDonationBatchDate(donationBatch.getDonationBatchDate());
 
     return donationBatchViewModel;
