@@ -72,7 +72,7 @@ public class BloodTestingRuleController {
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTING_RULES + "')")
   public Map<String, Object> updateBloodTestingRule(@PathVariable("id") long id, 
-      @RequestBody BloodTestingRuleBackingForm bloodTestingRuleBackingform) {
+      @Valid @RequestBody BloodTestingRuleBackingForm bloodTestingRuleBackingform) {
     // set the id parameter from the path
     bloodTestingRuleBackingform.setId(id);
     Map<String, Object> map = new HashMap<>();
