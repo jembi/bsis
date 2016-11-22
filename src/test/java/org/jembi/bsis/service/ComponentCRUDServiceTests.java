@@ -72,6 +72,7 @@ import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -124,7 +125,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateInitialComponent_shouldCreateCorrectComponent() {
     // Set up data
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().build();
+    Integer expiresAfterDays = 12;
+    ComponentType componentType = ComponentTypeBuilder.aComponentType().withExpiresAfter(expiresAfterDays).build();
     PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).withComponentType(componentType).build();
     Location donationBatchVenue = aVenue().build();
     DonationBatch donationBatchWithComponentBatch = aDonationBatch()
@@ -142,9 +144,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withBleedEndTime(new Date())
         .withVenue(donationVenue)
         .build();
+
+    Date createdOn = new Date();
+    Date expiresOn = new DateTime(createdOn).plusDays(expiresAfterDays).toDate();
     
     // Set up mocks
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
+    when(dateGeneratorService.generateDateTime(donation.getDonationDate(), donation.getBleedEndTime())).thenReturn(createdOn);
 
     // Run test
     Component component = componentCRUDService.createInitialComponent(donation);
@@ -154,6 +160,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     assertThat(component.getComponentType(), is(componentType));
     assertThat(component.getStatus(), is(ComponentStatus.QUARANTINED));
     assertThat(component.getInventoryStatus(), is(InventoryStatus.NOT_IN_STOCK));
+    assertThat(component.getCreatedOn(), is(createdOn));
+    assertThat(component.getExpiresOn(), is(expiresOn));
   }
 
   @Test
@@ -185,6 +193,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
     when(donationBatchRepository.findComponentBatchByDonationbatchId(donationBatchWithComponentBatch.getId()))
         .thenReturn(componentBatch);
+    when(dateGeneratorService.generateDateTime(donation.getDonationDate(), donation.getBleedEndTime())).thenReturn(new Date());
+
     // Run test
     Component component = componentCRUDService.createInitialComponent(donation);
     
@@ -216,6 +226,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Set up mocks
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
     when(donationBatchRepository.findComponentBatchByDonationbatchId(donationBatchWithComponentBatch.getId())).thenReturn(null);
+    when(dateGeneratorService.generateDateTime(donation.getDonationDate(), donation.getBleedEndTime())).thenReturn(new Date());
 
     // Run test
     Component component = componentCRUDService.createInitialComponent(donation);
@@ -1802,6 +1813,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
     when(donationBatchRepository.findComponentBatchByDonationbatchId(donationBatchWithComponentBatch.getId()))
         .thenReturn(componentBatch);
+    when(dateGeneratorService.generateDateTime(donation.getDonationDate(), donation.getBleedEndTime())).thenReturn(new Date());
     
     // Run test
     Component component = componentCRUDService.createInitialComponent(donation);
@@ -1809,5 +1821,39 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Verify
     assertThat(component.getComponentBatch(), is(componentBatch));
     
+  }
+
+  @Test
+  public void testUpdateComponentWithNewPackTypet_shouldUpdateComponentTypeCodeAndExpiresOn() {
+    // Set up data
+    Integer expiresAfterDays = 12;
+    String componentTypeCode = "new123";
+    Date createdOn = new Date();
+    Date expiresOn = new Date();
+
+    ComponentType newComponentType = aComponentType().withComponentTypeCode(componentTypeCode).withExpiresAfter(expiresAfterDays).build();
+    PackType newPackType = aPackType().withComponentType(newComponentType).build();
+
+    Component component = aComponent()
+        .withComponentType(aComponentType().build())
+        .withComponentCode("123")
+        .withCreatedOn(createdOn)
+        .withExpiresOn(expiresOn)
+        .build();
+
+    Date expectedExpiresOn = new DateTime(createdOn).plusDays(expiresAfterDays).toDate();
+    
+    // Set up mocks
+    when(componentRepository.update(component)).thenReturn(component);
+
+    // Run test
+    Component updatedComponent = componentCRUDService.updateComponentWithNewPackType(component, newPackType);
+    
+    // Verify
+    verify(componentRepository).update(component);
+    assertThat(updatedComponent.getComponentType(), is(newComponentType));
+    assertThat(updatedComponent.getComponentCode(), is(componentTypeCode));
+    assertThat(updatedComponent.getCreatedOn(), is(createdOn));
+    assertThat(updatedComponent.getExpiresOn(), is(expectedExpiresOn));
   }
 }
