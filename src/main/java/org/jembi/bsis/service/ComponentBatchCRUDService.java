@@ -1,12 +1,5 @@
 package org.jembi.bsis.service;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.NoResultException;
-
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentbatch.ComponentBatchStatus;
@@ -17,6 +10,13 @@ import org.jembi.bsis.repository.DonationBatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.NoResultException;
 
 @Transactional
 @Service
@@ -44,7 +44,7 @@ public class ComponentBatchCRUDService {
         donationBatchRepository.findDonationBatchById(componentBatch.getDonationBatch().getId());
     donationBatch.setComponentBatch(componentBatch);
     componentBatch.setDonationBatch(donationBatch);
-    componentBatch.setCollectionDate(donationBatch.getCreatedDate());
+    componentBatch.setCollectionDate(donationBatch.getDonationBatchDate());
     setInitialComponentsFromDonationBatch(donationBatch, componentBatch);
     componentBatch.setStatus(ComponentBatchStatus.OPEN);
 

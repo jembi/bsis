@@ -1,10 +1,7 @@
 package org.jembi.bsis.backingform;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.Valid;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -12,8 +9,11 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 public class DonationBatchBackingForm {
 
@@ -77,13 +77,13 @@ public class DonationBatchBackingForm {
     return donationBatch.getLastUpdated();
   }
 
-  public Date getCreatedDate() {
-    return donationBatch.getCreatedDate();
+  public Date getDonationBatchDate() {
+    return donationBatch.getDonationBatchDate();
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
-  public void setCreatedDate(Date createdDate) {
-    donationBatch.setCreatedDate(createdDate);
+  public void setDonationBatchDate(Date donationBatchDate) {
+    donationBatch.setDonationBatchDate(donationBatchDate);
   }
 
   @JsonIgnore

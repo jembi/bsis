@@ -54,7 +54,7 @@
            preferredLanguage_id="1" title="Mr" addressId="5" contactId="5"
            dueToDonate="2015-11-09"/>
     <DonationBatch id="1" batchNumber="000000" isDeleted="false"
-                   createdDate="2015-08-11 09:05:56.0" lastUpdated="2015-08-11 09:07:10.0"
+                   createdDate="2015-08-11 09:05:56.0" donationBatchDate="2015-08-11 09:05:56.0" lastUpdated="2015-08-11 09:07:10.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1"
                    backEntry="false" />
     <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"

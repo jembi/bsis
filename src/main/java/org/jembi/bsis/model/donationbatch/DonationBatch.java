@@ -1,18 +1,7 @@
 package org.jembi.bsis.model.donationbatch;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
@@ -25,8 +14,20 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.DonationBatchQueryConstants;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 @NamedQueries({
     @NamedQuery(name = DonationBatchQueryConstants.NAME_COUNT_DONATION_BATCHES,
@@ -74,6 +75,10 @@ public class DonationBatch extends BaseModificationTrackerEntity {
 
   @Column(nullable = false)
   private boolean backEntry;
+
+  @NotNull
+  @Column(nullable = false)
+  private Date donationBatchDate;
 
   public DonationBatch() {
     super();
@@ -157,6 +162,11 @@ public class DonationBatch extends BaseModificationTrackerEntity {
     this.componentBatch = componentBatch;
   }
 
+  public Date getDonationBatchDate() {
+    return donationBatchDate;
+  }
 
-
+  public void setDonationBatchDate(Date donationBatchDate) {
+    this.donationBatchDate = donationBatchDate;
+  }
 }

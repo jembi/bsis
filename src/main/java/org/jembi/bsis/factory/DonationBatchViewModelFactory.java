@@ -1,10 +1,5 @@
 package org.jembi.bsis.factory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.user.User;
@@ -15,6 +10,11 @@ import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class DonationBatchViewModelFactory {
@@ -97,14 +97,7 @@ public class DonationBatchViewModelFactory {
     donationBatchViewModel.setNotes(donationBatch.getNotes());
     donationBatchViewModel.setBackEntry(donationBatch.isBackEntry());
     donationBatchViewModel.setNumDonations(donationBatch.getDonations().size());
-
-    // Audit fields
-    User createdBy = donationBatch.getCreatedBy();
-    User lastUpdatedBy = donationBatch.getLastUpdatedBy();
-    donationBatchViewModel.setCreatedDate(donationBatch.getCreatedDate());
-    donationBatchViewModel.setCreatedBy(createdBy == null ? "" : createdBy.getUsername());
-    donationBatchViewModel.setUpdatedDate(donationBatch.getLastUpdated());
-    donationBatchViewModel.setLastUpdatedBy(lastUpdatedBy == null ? "" : lastUpdatedBy.getUsername());
+    donationBatchViewModel.setDonationBatchDate(donationBatch.getDonationBatchDate());
 
     return donationBatchViewModel;
   }

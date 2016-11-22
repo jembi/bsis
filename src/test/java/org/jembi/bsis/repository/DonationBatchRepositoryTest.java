@@ -14,6 +14,7 @@ import javax.persistence.NoResultException;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -80,15 +81,19 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testAddDonationBatches() throws Exception {
-    DonationBatch donationBatch = new DonationBatch();
-    donationBatch.setBatchNumber("JUNIT123");
-    donationBatch.setCreatedDate(new Date());
-    donationBatch.setLastUpdated(new Date());
-    donationBatch.setIsDeleted(false);
-    donationBatch.setIsClosed(true);
-    donationBatch.setNotes("Testing 123");
     Location location = locationRepository.findLocationByName("Maseru");
-    donationBatch.setVenue(location);
+
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()
+        .withBatchNumber("JUNIT123")
+        .withVenue(location)
+        .withDonationBatchDate(new Date())
+        .withLastUpdatedDate(new Date())
+        .thatIsNotDeleted()
+        .thatIsClosed()
+        .withDonationBatchDate(new Date())
+        .withNotes("Testing 123")
+        .build();
+
     donationBatchRepository.addDonationBatch(donationBatch);
 
     DonationBatch savedDonationBatch = donationBatchRepository.findDonationBatchByBatchNumber("JUNIT123");
@@ -115,13 +120,16 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     Location venue = locationRepository.getLocation(1l);
 
     // create an unassigned batch
-    DonationBatch donationBatch = new DonationBatch();
-    donationBatch.setBatchNumber("JUNIT123");
-    donationBatch.setCreatedDate(new Date());
-    donationBatch.setLastUpdated(new Date());
-    donationBatch.setIsDeleted(false);
-    donationBatch.setIsClosed(true);
-    donationBatch.setVenue(venue);
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()
+        .withBatchNumber("JUNIT123")
+        .withVenue(venue)
+        .withDonationBatchDate(new Date())
+        .withLastUpdatedDate(new Date())
+        .thatIsNotDeleted()
+        .thatIsClosed()
+        .withDonationBatchDate(new Date())
+        .build();
+
     donationBatchRepository.addDonationBatch(donationBatch);
 
     unassigned = donationBatchRepository.findUnassignedDonationBatches();
@@ -161,7 +169,7 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     String endDate = "2015-03-04 22:00:00";
     List<DonationBatch> batches = donationBatchRepository.findDonationBatches(false, locationIds, df.parse(startDate), df.parse(endDate));
     Assert.assertNotNull("There are batches in this date range", batches);
-    Assert.assertEquals("There are 2 donation batches in this date range", 2, batches.size());
+    Assert.assertEquals("There are 3 donation batches in this date range", 3, batches.size());
   }
 
   @Test
