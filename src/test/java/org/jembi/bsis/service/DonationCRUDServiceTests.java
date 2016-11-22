@@ -980,13 +980,13 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
     when(componentCRUDService.createInitialComponent(existingDonation)).thenReturn(existingComponent);
-    when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation))))
-        .thenAnswer(returnsFirstArg());
+    when(componentCRUDService.updateComponentWithNewPackType(existingComponent, newPackType)).thenReturn(updatedComponent);
+    when(donationRepository.updateDonation(expectedDonation)).thenReturn(expectedDonation);
     
     // Run test
     Donation returnedDonation = donationCRUDService.updateDonation(expectedDonation);
     
-  //verify
+    // Verify
     verify(componentCRUDService).updateComponentWithNewPackType(expectedDonation.getComponents().get(0), newPackType);
     assertThat(returnedDonation, hasSameStateAsDonation(expectedDonation));  
   }
