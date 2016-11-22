@@ -89,7 +89,7 @@ public class BloodTestingRuleFactory {
   private void populateBloodTestingRuleFullViewModel(BloodTestingRuleFullViewModel fullViewModel,
       BloodTestingRule bloodTestingRule) {
     Set<BloodTestViewModel> pendingBloodTests = new HashSet<>();
-    for (Long id : bloodTestingRule.getPendingTestsIds()) {
+    for (Long id : bloodTestingRule.getPendingTestsIdsSet()) {
       BloodTestViewModel bloodTest = new BloodTestViewModel();
       bloodTest.setId(id);
       pendingBloodTests.add(bloodTest);

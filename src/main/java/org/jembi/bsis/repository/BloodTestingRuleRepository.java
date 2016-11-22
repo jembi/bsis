@@ -19,4 +19,10 @@ public class BloodTestingRuleRepository extends AbstractRepository<BloodTestingR
     return query.getResultList();
   }
 
+  public BloodTestingRule findBloodTestingRuleById(Long bloodTestingRuleId) {
+    return entityManager.createNamedQuery(BloodTestingRuleNamedQueryConstants.NAME_FIND_BLOOD_TESTING_RULE_BY_ID, BloodTestingRule.class)
+        .setParameter("bloodTestingRuleId", bloodTestingRuleId)
+        .getSingleResult();
+  }
+
 }

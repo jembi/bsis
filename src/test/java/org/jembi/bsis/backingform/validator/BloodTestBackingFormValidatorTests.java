@@ -1,5 +1,15 @@
 package org.jembi.bsis.backingform.validator;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.BloodTestBackingFormBuilder.aBloodTestBackingForm;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
@@ -11,20 +21,10 @@ import org.mockito.Mock;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.BloodTestBackingFormBuilder.aBloodTestBackingForm;
-import static org.mockito.Mockito.when;
-
 public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
   @InjectMocks
-  private BloodTestBackingFormValidator bloodTestBackingFormvalidator;
+  private BloodTestBackingFormValidator bloodTestBackingFormValidator;
   
   @Mock
   private BloodTestRepository bloodTestRepository;
@@ -59,7 +59,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
     
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(0));
@@ -74,7 +74,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -90,7 +90,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -109,7 +109,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
     
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -128,7 +128,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -146,7 +146,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -165,7 +165,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -184,7 +184,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -202,7 +202,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -223,7 +223,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -244,7 +244,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -266,7 +266,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(2));
@@ -291,7 +291,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -310,7 +310,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -329,7 +329,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -349,7 +349,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -368,7 +368,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -387,7 +387,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -406,7 +406,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
@@ -425,7 +425,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
-    bloodTestBackingFormvalidator.validateForm(backingForm, errors);
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));

@@ -187,7 +187,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("bloodAb has a result", 1, result.getBloodAbo().length());
     Assert.assertEquals("bloodRh is empty", 0, result.getBloodRh().length());
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
-    Assert.assertEquals("No pending blood typing tests", 1, result.getPendingBloodTypingTestsIds().size());
+    Assert.assertEquals("No pending blood typing tests", 0, result.getPendingBloodTypingTestsIds().size());
     Assert.assertEquals("1 available test result(s)", 1, result.getAvailableTestResults().size());
     Assert.assertFalse("No ABO Uninterpretable", result.getAboUninterpretable());
     Assert.assertFalse("No RH Uninterpretable", result.getRhUninterpretable());
@@ -390,8 +390,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Donation donation = donationRepository.findDonationById(16l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("BloodTypingMatchStatus is RESOLVED", BloodTypingMatchStatus.RESOLVED, result.getBloodTypingMatchStatus());
-    Assert.assertEquals("Blood ABO not set", "A", result.getBloodAbo());
-    Assert.assertEquals("Blood Rh not set", "+", result.getBloodRh());
+    Assert.assertEquals("Blood ABO not set", "", result.getBloodAbo());
+    Assert.assertEquals("Blood Rh not set", "", result.getBloodRh());
   }
   
   @Test
@@ -399,8 +399,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Donation donation = donationRepository.findDonationById(17l);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("BloodTypingMatchStatus is RESOLVED", BloodTypingMatchStatus.RESOLVED, result.getBloodTypingMatchStatus());
-    Assert.assertEquals("Blood ABO not set", "O", result.getBloodAbo());
-    Assert.assertEquals("Blood Rh not set", "+", result.getBloodRh());
+    Assert.assertEquals("Blood ABO not set", "", result.getBloodAbo());
+    Assert.assertEquals("Blood Rh not set", "", result.getBloodRh());
     Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
   }
 }

@@ -20,7 +20,18 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   private String componentCode;
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
+  private boolean hasComponentBatch = false;
   private InventoryStatus inventoryStatus;
+
+  public ComponentManagementViewModelBuilder whichHasComponentBatch() {
+    this.hasComponentBatch = true;
+    return this;
+  }
+
+  public ComponentManagementViewModelBuilder whichHasNoComponentBatch() {
+    this.hasComponentBatch = false;
+    return this;
+  }
 
   public ComponentManagementViewModelBuilder withInventoryStatus(InventoryStatus inventoryStatus) {
     this.inventoryStatus = inventoryStatus;
@@ -84,6 +95,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     viewModel.setWeight(weight);
     viewModel.setComponentType(componentType);
     viewModel.setPermissions(permissions);
+    viewModel.setHasComponentBatch(hasComponentBatch);
     viewModel.setInventoryStatus(inventoryStatus);
     return viewModel;
   }

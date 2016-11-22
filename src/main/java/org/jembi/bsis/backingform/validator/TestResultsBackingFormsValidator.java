@@ -52,7 +52,7 @@ public class TestResultsBackingFormsValidator extends BaseValidator<TestResultsB
 
       String result = form.getTestResults().get(testId);
 
-      if (!activeBloodTest.getValidResultsList().contains(result)) {
+      if (!activeBloodTest.getValidResultsSet().contains(result)) {
         // The provided result is not in the list of valid results
         errors.rejectValue("testOutcomesForDonations[" + index + "].testResults", "invalid", "Invalid value specified");
       }
