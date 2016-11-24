@@ -11,6 +11,9 @@ public class DonationBatchViewModel {
   private Long id;
   private String batchNumber;
   private String notes;
+  private Date lastUpdatedDate;
+  private String createdByUsername;
+  private String lastUpdatedByUsername;
   private Date donationBatchDate;
   private Boolean closed;
   private LocationFullViewModel venue;
@@ -51,6 +54,31 @@ public class DonationBatchViewModel {
 
   public void setNotes(String notes) {
     this.notes = notes;
+  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getLastUpdated() {
+    return lastUpdatedDate;
+  }
+
+  public void setUpdatedDate(Date lastUpdatedDate) {
+    this.lastUpdatedDate = lastUpdatedDate;
+  }
+
+  public String getCreatedBy() {
+    return createdByUsername;
+  }
+
+  public void setCreatedBy(String createdByUsername) {
+    this.createdByUsername = createdByUsername;
+  }
+
+  public String getLastUpdatedBy() {
+    return lastUpdatedByUsername;
+  }
+
+  public void setLastUpdatedBy(String lastUpdatedByUsername) {
+    this.lastUpdatedByUsername = lastUpdatedByUsername;
   }
 
   public Boolean getIsClosed() {
