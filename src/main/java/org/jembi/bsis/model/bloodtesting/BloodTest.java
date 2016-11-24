@@ -102,12 +102,12 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
   }
 
   /**
-   * Get the valid results for this test as a list. The list cannot be modified since changes to the
+   * Get the valid results for this test as a set. The Set cannot be modified since changes to the
    * valid results must be done by updating the {@link #validResults} string.
    *
-   * @return An immutable list of valid results.
+   * @return An immutable set of valid results.
    */
-  public Set<String> getValidResultsList() {
+  public Set<String> getValidResultsSet() {
     if (validResults == null || validResults.isEmpty()) {
       return Collections.emptySet();
     }
@@ -204,9 +204,9 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
   }
 
   /**
-   * @return An immutable list of negative results from the comma separated list.
+   * @return An immutable set of negative results from the comma separated list.
    */
-  public Set<String> getNegativeResultsList() {
+  public Set<String> getNegativeResultsSet() {
     if (negativeResults == null || negativeResults.isEmpty()) {
       return Collections.emptySet();
     }
@@ -214,9 +214,9 @@ public class BloodTest extends BaseModificationTrackerEntity implements Comparab
   }
 
   /**
-   * @return An immutable list of positive results from the comma separated list.
+   * @return An immutable set of positive results from the comma separated list.
    */
-  public Set<String> getPositiveResultsList() {
+  public Set<String> getPositiveResultsSet() {
     if (positiveResults == null || positiveResults.isEmpty()) {
       return Collections.emptySet();
     }

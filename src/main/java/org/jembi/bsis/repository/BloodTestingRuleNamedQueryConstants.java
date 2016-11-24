@@ -8,4 +8,9 @@ public class BloodTestingRuleNamedQueryConstants {
       "SELECT btr " 
       + "FROM BloodTestingRule btr "
       + "WHERE (:includeDeleted = TRUE OR btr.isDeleted = FALSE)";
+  
+  public static final String NAME_FIND_BLOOD_TESTING_RULE_BY_ID = 
+      "BloodTestingRule.findBloodTestingRuleById";
+  public static final String QUERY_FIND_BLOOD_TESTING_RULE_BY_ID = 
+      "SELECT btr FROM BloodTestingRule btr WHERE btr.id=:bloodTestingRuleId";
 }

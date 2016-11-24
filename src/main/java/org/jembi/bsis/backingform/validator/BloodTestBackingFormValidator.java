@@ -16,13 +16,14 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
 
   private static final Integer MAX_LENGTH_TEST_NAME = 40;
   private static final Integer MAX_LENGTH_TEST_NAME_SHORT = 25;
-  
+  private static final  Integer MAX_LENGTH_VALID_RESULTS = 10;
+
   @Autowired
   private BloodTestRepository bloodTestRepository;
-  
+
   @Override
   public void validateForm(BloodTestBackingForm form, Errors errors) {
-    
+
     // Validate testName
     if (StringUtils.isBlank(form.getTestName())) {
       errors.rejectValue("testName", "errors.required", "Test name is required");
@@ -42,7 +43,7 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
       errors.rejectValue("testNameShort", "errors.fieldLength",
           "Maximum length for this field is " + MAX_LENGTH_TEST_NAME_SHORT);
     }
-    
+
     // Validate Results (also called Outcomes)
     Set<String> validResults = form.getValidResults();
     Set<String> negativeResults = form.getNegativeResults();
@@ -50,6 +51,12 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
     if (validResults == null || validResults.isEmpty()) {
       errors.rejectValue("validResults", "errors.required", "Valid outcomes are required");
     } else {
+      for (String validResult : form.getValidResults()) {
+        if (validResult.length() > MAX_LENGTH_VALID_RESULTS) {
+          errors.rejectValue("validResults", "errors.validResultsLong",
+              "Valid results entry : ["+validResult+"] is too long. Maximum length for this field is " + MAX_LENGTH_VALID_RESULTS);
+        }
+      }
       if (positiveResults != null) {
         // validate that all positive results are inside valid results.
         String errorPositiveResults = null;
@@ -86,7 +93,7 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
         }
       }
     }
-    
+
     // validate that positive results are not in negative results
     if (positiveResults != null && negativeResults != null) {
       String errorPositiveResultsInNegativeResults = null;
@@ -107,7 +114,7 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
                 + "] appear in both the Negative and Positive list of outcomes.");
       }
     }
-    
+
     // Validate category
     if (form.getCategory() == null) {
       errors.rejectValue("category", "errors.required", "Blood Test Category is required");
@@ -128,7 +135,7 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
             "Blood test type is not applicable to current category");
       }
     }
-    
+
     // Validate isDeleted
     if (form.getIsDeleted() == null) {
       errors.rejectValue("isDeleted", "errors.required", "isDeleted is required");
@@ -143,7 +150,7 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
     if (form.getFlagComponentsForDiscard() == null) {
       errors.rejectValue("flagComponentsForDiscard", "errors.required", "flagComponentsForDiscard is required");
     }
-    
+
     // Validate flagComponentsContainingPlasmaForDiscard
     if (form.getFlagComponentsContainingPlasmaForDiscard() == null) {
       errors.rejectValue("flagComponentsContainingPlasmaForDiscard", "errors.required",
@@ -155,5 +162,5 @@ public class BloodTestBackingFormValidator extends BaseValidator<BloodTestBackin
   @Override
   public String getFormName() {
     return "BloodTestBackingForm";
-  }  
+  }
 }

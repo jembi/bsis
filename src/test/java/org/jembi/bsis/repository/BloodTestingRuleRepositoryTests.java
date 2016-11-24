@@ -18,7 +18,7 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
   private BloodTestingRuleRepository bloodTestingRuleRepository;
   
   @Test
-  public void tesGetBloodTestingRules_shouldReturnEnabled() {
+  public void testGetBloodTestingRules_shouldReturnEnabled() {
     
     BloodTestingRule enabledRule = aBloodTestingRule().buildAndPersist(entityManager);
     aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager); // excluded due to being deleted
@@ -30,7 +30,7 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
   }
 
   @Test
-  public void tesGetBloodTestingRules_shouldReturnAll() {
+  public void testGetBloodTestingRules_shouldReturnAll() {
     
     BloodTestingRule enabledRule = aBloodTestingRule().buildAndPersist(entityManager);
     BloodTestingRule deletedRule = aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager);
@@ -40,5 +40,20 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
     assertThat("All rules returned", rules.size(), is(2));
     assertThat("Enabled rule returned", rules.get(0), hasSameStateAsBloodTestingRule(enabledRule));
     assertThat("Deleted rule returned", rules.get(1), hasSameStateAsBloodTestingRule(deletedRule));
+  }
+
+  @Test
+  public void testFindBloodTestingRuleById_shouldReturnCorrectBloodTestingRule() {
+    // Set up fixture
+    aBloodTestingRule().buildAndPersist(entityManager);
+    BloodTestingRule expectedBloodTestingRule = aBloodTestingRule().buildAndPersist(entityManager);
+    aBloodTestingRule().buildAndPersist(entityManager);
+
+    // Exercise SUT
+    BloodTestingRule returnedDivision =
+        bloodTestingRuleRepository.findBloodTestingRuleById(expectedBloodTestingRule.getId());
+
+    // Verify
+    assertThat(returnedDivision, is(expectedBloodTestingRule));
   }
 }

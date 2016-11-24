@@ -53,6 +53,11 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
     return this;
   }
 
+  public BloodTestingRuleBuilder thatIsNotDeleted() {
+    this.isDeleted = false;
+    return this;
+  }
+
   @Override
   public BloodTestingRule build() {
     BloodTestingRule bloodTestingRule = new BloodTestingRule();

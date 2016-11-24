@@ -1,11 +1,5 @@
 package org.jembi.bsis.helpers.builders;
 
-import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.DonationBatchPersister;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
@@ -14,10 +8,17 @@ import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+
 public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
 
   private Long id;
   private String batchNumber;
+  private String notes;
   private List<Donation> donations;
   private Location venue = aVenue().build();
   private TestBatch testBatch;
@@ -25,7 +26,8 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
   private boolean closed;
   private boolean backEntry;
   private ComponentBatch componentBatch;
-  private Date createdDate;
+  private Date lastUpdatedDate;
+  private Date donationBatchDate = new Date();
 
   public DonationBatchBuilder withId(Long id) {
     this.id = id;
@@ -50,6 +52,11 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     return this;
   }
 
+  public DonationBatchBuilder thatIsNotDeleted() {
+    deleted = false;
+    return this;
+  }
+
   public DonationBatchBuilder thatIsClosed() {
     closed = true;
     return this;
@@ -70,6 +77,11 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     return this;
   }
 
+  public DonationBatchBuilder withNotes(String notes) {
+    this.notes = notes;
+    return this;
+  }
+
   public DonationBatchBuilder thatIsBackEntry() {
     backEntry = true;
     return this;
@@ -80,8 +92,13 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     return this;
   }
 
-  public DonationBatchBuilder withCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
+  public DonationBatchBuilder withLastUpdatedDate(Date lastUpdatedDate) {
+    this.lastUpdatedDate = lastUpdatedDate;
+    return this;
+  }
+
+  public DonationBatchBuilder withDonationBatchDate(Date donationBatchDate){
+    this.donationBatchDate = donationBatchDate;
     return this;
   }
 
@@ -95,6 +112,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     DonationBatch donationBatch = new DonationBatch();
     donationBatch.setId(id);
     donationBatch.setBatchNumber(batchNumber);
+    donationBatch.setNotes(notes);
     donationBatch.setDonation(donations);
     donationBatch.setIsDeleted(deleted);
     donationBatch.setIsClosed(closed);
@@ -102,7 +120,8 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     donationBatch.setBackEntry(backEntry);
     donationBatch.setTestBatch(testBatch);
     donationBatch.setComponentBatch(componentBatch);
-    donationBatch.setCreatedDate(createdDate);
+    donationBatch.setLastUpdated(lastUpdatedDate);
+    donationBatch.setDonationBatchDate(donationBatchDate);
     return donationBatch;
   }
 

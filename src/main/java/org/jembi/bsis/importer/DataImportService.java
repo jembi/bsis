@@ -1,15 +1,5 @@
 package org.jembi.bsis.importer;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -55,8 +45,8 @@ import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
-import org.jembi.bsis.repository.BloodTestingRuleRepository;
 import org.jembi.bsis.repository.BloodTestRepository;
+import org.jembi.bsis.repository.BloodTestingRuleRepository;
 import org.jembi.bsis.repository.ContactMethodTypeRepository;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DivisionRepository;
@@ -78,6 +68,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Transactional
 @Service
@@ -1124,7 +1124,7 @@ public class DataImportService {
             outcome = cell.getStringCellValue();
             if (bloodTest != null) {
               testResults.put(bloodTest.getId(), cell.getStringCellValue());
-              if (!bloodTest.getValidResultsList().contains(cell.getStringCellValue())) {
+              if (!bloodTest.getValidResultsSet().contains(cell.getStringCellValue())) {
                 errors.rejectValue("testResults", "testResults.invalid", "Invalid outcome");
               }
             }
@@ -1218,7 +1218,7 @@ public class DataImportService {
       donationBatch.setIsClosed(true);
       donationBatch.setBackEntry(true);
       donationBatch.setTestBatch(testBatch);
-      donationBatch.setCreatedDate(donationDate);
+      donationBatch.setDonationBatchDate(donationDate);
       donationBatchRepository.addDonationBatch(donationBatch);
       donationBatches.put(key, donationBatch);
     }

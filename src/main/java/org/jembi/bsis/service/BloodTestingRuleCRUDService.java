@@ -17,4 +17,15 @@ public class BloodTestingRuleCRUDService {
     bloodTestingRuleRepository.save(bloodTestingRule);
     return bloodTestingRule;
   }
+
+  public BloodTestingRule updateBloodTestingRule(BloodTestingRule bloodTestingRule) {
+    BloodTestingRule existingBloodTestingRule = bloodTestingRuleRepository.findBloodTestingRuleById(bloodTestingRule.getId());
+    existingBloodTestingRule.setBloodTest(bloodTestingRule.getBloodTest());
+    existingBloodTestingRule.setIsDeleted(bloodTestingRule.getIsDeleted());
+    existingBloodTestingRule.setDonationFieldChanged(bloodTestingRule.getDonationFieldChanged());
+    existingBloodTestingRule.setNewInformation(bloodTestingRule.getNewInformation());
+    existingBloodTestingRule.setPattern(bloodTestingRule.getPattern());
+    existingBloodTestingRule.setPendingTestsIds(bloodTestingRule.getPendingTestingIds());
+    return bloodTestingRuleRepository.update(existingBloodTestingRule);
+  }
 }

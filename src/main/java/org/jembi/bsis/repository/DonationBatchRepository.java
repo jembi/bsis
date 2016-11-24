@@ -89,11 +89,11 @@ public class DonationBatchRepository {
     }
 
     if (startDate != null) {
-      queryStr += "AND b.modificationTracker.createdDate >= :startDate ";
+      queryStr += "AND b.donationBatchDate >= :startDate ";
     }
 
     if (endDate != null) {
-      queryStr += "AND b.modificationTracker.createdDate <= :endDate ";
+      queryStr += "AND b.donationBatchDate <= :endDate ";
     }
 
     if (isClosed != null) {

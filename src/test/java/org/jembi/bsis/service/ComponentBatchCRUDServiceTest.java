@@ -1,15 +1,5 @@
 package org.jembi.bsis.service;
 
-import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
-import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
-import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
-import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
-import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
-
-import java.util.Arrays;
-import java.util.Date;
-
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentbatch.ComponentBatchStatus;
@@ -19,7 +9,6 @@ import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.ComponentBatchRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
-import org.jembi.bsis.service.ComponentBatchCRUDService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +16,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.Arrays;
+import java.util.Date;
+
+import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComponentBatchCRUDServiceTest {
@@ -76,7 +75,7 @@ public class ComponentBatchCRUDServiceTest {
         .withId(1L)
         .withDonation(donation1)
         .withDonation(donation2)
-        .withCreatedDate(new Date())
+        .withDonationBatchDate(new Date())
         .build();
     ComponentBatch componentBatch = aComponentBatch()
         .withDonationBatch(aDonationBatch().withId(1L).build())
@@ -92,7 +91,7 @@ public class ComponentBatchCRUDServiceTest {
     // do asserts
     Mockito.verify(componentBatchRepository).save(componentBatch);
     Assert.assertEquals("ComponentBatch has status OPEN", ComponentBatchStatus.OPEN, componentBatch.getStatus());
-    Assert.assertEquals("ComponentBatch has collection date", donationBatch.getCreatedDate(), componentBatch.getCollectionDate());
+    Assert.assertEquals("ComponentBatch has collection date", donationBatch.getDonationBatchDate(), componentBatch.getCollectionDate());
     Assert.assertNotNull("ComponentBatch has Components", componentBatch.getComponents());
     Assert.assertEquals("ComponentBatch has Components", 2, componentBatch.getComponents().size());
     Component component = componentBatch.getComponents().iterator().next();
