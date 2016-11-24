@@ -1822,38 +1822,47 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     assertThat(component.getComponentBatch(), is(componentBatch));
     
   }
-
+  
   @Test
-  public void testUpdateComponentWithNewPackTypet_shouldUpdateComponentTypeCodeAndExpiresOn() {
+  public void testUpdateComponentWithNewPackType_shouldUpdateComponentTypeCodeAndExpiresOn() {
     // Set up data
     Integer expiresAfterDays = 12;
     String componentTypeCode = "new123";
     Date createdOn = new Date();
     Date expiresOn = new Date();
 
-    ComponentType newComponentType = aComponentType().withComponentTypeCode(componentTypeCode).withExpiresAfter(expiresAfterDays).build();
+    ComponentType newComponentType = aComponentType()
+        .withId(3L)
+        .withComponentTypeCode(componentTypeCode)
+        .withExpiresAfter(expiresAfterDays)
+        .build();
+    
     PackType newPackType = aPackType().withComponentType(newComponentType).build();
 
     Component component = aComponent()
-        .withComponentType(aComponentType().build())
+        .withComponentType(aComponentType().withId(2L).build())
         .withComponentCode("123")
         .withCreatedOn(createdOn)
         .withExpiresOn(expiresOn)
         .build();
 
     Date expectedExpiresOn = new DateTime(createdOn).plusDays(expiresAfterDays).toDate();
+    Component expectedComponent = aComponent()
+        .withComponentType(newComponentType)
+        .withComponentCode(componentTypeCode)
+        .withCreatedOn(createdOn)
+        .withExpiresOn(expectedExpiresOn)
+        .withStatus(component.getStatus())
+        .withInventoryStatus(component.getInventoryStatus())
+        .withLocation(component.getLocation())
+        .withDonation(component.getDonation())
+        .build();
     
-    // Set up mocks
-    when(componentRepository.update(component)).thenReturn(component);
-
     // Run test
     Component updatedComponent = componentCRUDService.updateComponentWithNewPackType(component, newPackType);
     
     // Verify
-    verify(componentRepository).update(component);
-    assertThat(updatedComponent.getComponentType(), is(newComponentType));
-    assertThat(updatedComponent.getComponentCode(), is(componentTypeCode));
-    assertThat(updatedComponent.getCreatedOn(), is(createdOn));
-    assertThat(updatedComponent.getExpiresOn(), is(expectedExpiresOn));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedComponent)));
+    assertThat(updatedComponent, hasSameStateAsComponent(expectedComponent));
   }
 }
