@@ -840,39 +840,28 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withComponent(initialComponent)
         .build();
     
-    Donation updatedDonation = aDonation()
-        .withId(IRRELEVANT_DONATION_ID)
-        .withPackType(newPackType)
-        .withBleedStartTime(irrelevantBleedStartTime)
-        .withBleedEndTime(irrelevantBleedEndTime)
-        .build();
-    
     Donation expectedDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withPackType(newPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
-        .withComponent(initialComponent)
         .build();
     
     // Exercise SUT
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
-    when(componentCRUDService.createInitialComponent(expectedDonation)).thenReturn(initialComponent);
     when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
-    when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation))))
-        .thenAnswer(returnsFirstArg());
     
     // Test
-    donationCRUDService.updateDonation(updatedDonation);
+    donationCRUDService.updateDonation(existingDonation);
     
     // assertion
-    assertThat(updatedDonation.getComponents().size(), is(0));
+    assertThat(expectedDonation.getComponents().size(), is(0));
   }
   
   @Test
-  public void testUpdateDonationWithNewPackTypeThatCountsAsDonationAndNoInitialComponent_shouldCreateNewInitComponent() {
+  public void testUpdateDonationWithNewPackTypeThatCountsAsDonationAndNoInitialComponent_shouldCreateInitialComponent() {
     // Set up fixture
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
@@ -936,7 +925,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testUpdateDonationWithNewPacktTypeThatCountsAsDonation_shouldUpdateExistingComponent() {
+  public void testUpdateDonationWithNewPackTypeThatCountsAsDonation_shouldUpdateExistingComponent() {
     Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
@@ -979,7 +968,6 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
     when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
-    when(componentCRUDService.createInitialComponent(existingDonation)).thenReturn(existingComponent);
     when(componentCRUDService.updateComponentWithNewPackType(existingComponent, newPackType)).thenReturn(updatedComponent);
     when(donationRepository.updateDonation(expectedDonation)).thenReturn(expectedDonation);
     

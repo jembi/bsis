@@ -166,7 +166,7 @@ public class DonationCRUDService {
      
       // If the new packType count as donation, update initial component
       if (newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {    
-        componentCRUDService.updateComponentWithNewPackType(updatedDonation.getComponents().get(0), newPackType);  
+        componentCRUDService.updateComponentWithNewPackType(existingDonation.getComponents().get(0), newPackType);  
       }
       
       // If the new PackType count as donation and there is no initial component then create it
