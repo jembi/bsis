@@ -75,6 +75,11 @@ public class ComponentBatchViewModelFactoryTests {
         .withStatus(ComponentBatchStatus.OPEN)
         .withBloodTransportBox(box)
         .withComponent(component)
+        .withComponent(aComponent()
+            .withId(2L)
+            .withDonation(donation)
+            .withParentComponent(component)
+            .build())
         .withDeliveryDate(deliveryDate)
         .withCollectionDate(collectionDate)   
         .withDonationBatch(donationBatch)
@@ -108,6 +113,7 @@ public class ComponentBatchViewModelFactoryTests {
     Assert.assertFalse("ComponentViewModels are set", viewModel.getComponents().isEmpty());
     Assert.assertNotNull("BloodTransportBoxViewModels are set", viewModel.getBloodTransportBoxes());
     Assert.assertFalse("BloodTransportBoxViewModels are set", viewModel.getBloodTransportBoxes().isEmpty());
+    Assert.assertEquals("numberOfInitialComponents is correct", 1, viewModel.getNumberOfInitialComponents());
   }
   
   @Test
