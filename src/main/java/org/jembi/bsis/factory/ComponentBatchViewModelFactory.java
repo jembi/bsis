@@ -1,5 +1,6 @@
 package org.jembi.bsis.factory;
 
+import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.viewmodel.ComponentBatchFullViewModel;
@@ -53,7 +54,13 @@ public class ComponentBatchViewModelFactory {
     }
     viewModel.setCollectionDate(componentBatch.getCollectionDate());
     viewModel.setNumberOfBoxes(componentBatch.getBloodTransportBoxes().size());
-    viewModel.setNumberOfComponents(componentBatch.getComponents().size());
+    int count = 0;
+    for (Component component : componentBatch.getComponents()) {
+      if (component.getParentComponent() == null) {
+        count ++;
+      }
+    }
+    viewModel.setNumberOfInitialComponents(count);
     return viewModel;
   }
 
