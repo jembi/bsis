@@ -197,15 +197,24 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
   }
   
   private void validateDonationIdentificationNumber(DonationBackingForm form, Errors errors) {
+    Integer dinLength = generalConfigAccessorService.getIntValue("donation.dinLength");
     Donation donation = form.getDonation();
     String donationIdentificationNumber = donation.getDonationIdentificationNumber();
-    
+    Integer actualDinLength = 0;
+    if (donationIdentificationNumber != null) {
+      actualDinLength = donationIdentificationNumber.length();
+    }
+
     if (StringUtils.isNotBlank(donationIdentificationNumber)) {
       Donation existingDonation = donationRepository
               .findDonationByDonationIdentificationNumberIncludeDeleted(donationIdentificationNumber);
       if (existingDonation != null && !existingDonation.getId().equals(donation.getId())) {
         errors.rejectValue("donation.donationIdentificationNumber", "donationIdentificationNumber.nonunique",
             "There is another donation with the same donation identification number.");
+      }
+      if (actualDinLength == 0 || actualDinLength > dinLength) {
+        errors.rejectValue("donation.donationIdentificationNumber", "donationIdentificationNumber.invalid",
+            "The donation identification number length must be greater than zero and less that " + dinLength + " characters");
       }
     }
   }

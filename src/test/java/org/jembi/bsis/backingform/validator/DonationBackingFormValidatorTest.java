@@ -13,8 +13,6 @@ import java.util.HashMap;
 import org.jembi.bsis.backingform.DonationBackingForm;
 import org.jembi.bsis.backingform.DonationTypeBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
-import org.jembi.bsis.backingform.validator.AdverseEventBackingFormValidator;
-import org.jembi.bsis.backingform.validator.DonationBackingFormValidator;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.DonorBuilder;
@@ -541,6 +539,44 @@ public class DonationBackingFormValidatorTest {
   }
 
   @Test
+  public void testInvalidDinAboveMaximum() throws Exception {
+    // set up data
+    DonationBackingForm form = createBasicBackingForm();
+    form.setDonationIdentificationNumber("DIN111111111111111111111111111111111111");
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DIN111111111111111111111111111111111111", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DIN111111111111111111111111111111111111")).thenReturn(form.getDonationBatch());
+    mockGeneralConfigAndFormFields();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Errors exist", 3, errors.getErrorCount());
+  }
+
+  @Test
+  public void testInvalidDinBelowMinimum() throws Exception {
+    // set up data
+    DonationBackingForm form = createBasicBackingForm();
+    form.setDonationIdentificationNumber("");
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("")).thenReturn(form.getDonationBatch());
+    mockGeneralConfigAndFormFields();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Errors exist", 2, errors.getErrorCount());
+  }
+
+  @Test
   public void testValidUpdateExistingDonation() throws Exception {
     // set up data
     DonationBackingForm form = createBasicBackingForm();
@@ -608,6 +644,7 @@ public class DonationBackingFormValidatorTest {
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMax")).thenReturn("300");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMin")).thenReturn("30");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMax")).thenReturn("200");
+    when(generalConfigAccessorService.getIntValue("donation.dinLength")).thenReturn(19);
     when(formFieldRepository.getRequiredFormFields("donation")).thenReturn(Arrays.asList(new String[] {"packType", "donationType"}));
     when(formFieldRepository.getFieldMaxLengths("donation")).thenReturn(new HashMap<String, Integer>());    
   }

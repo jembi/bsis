@@ -8,6 +8,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
+import static org.jembi.bsis.helpers.builders.GeneralConfigBuilder.aGeneralConfig;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.matchers.DivisionMatcher.hasSameStateAsDivision;
 import static org.jembi.bsis.helpers.matchers.LocationMatcher.hasSameStateAsLocation;
@@ -25,6 +26,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder;
+import org.jembi.bsis.helpers.builders.DataTypeBuilder;
 import org.jembi.bsis.helpers.builders.DonationTypeBuilder;
 import org.jembi.bsis.helpers.builders.FormFieldBuilder;
 import org.jembi.bsis.helpers.builders.PackTypeBuilder;
@@ -66,7 +68,15 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     FileInputStream fileInputStream = new FileInputStream("src/test/resources/fixtures/BSIS-import.xlsx");
     Workbook workbook = WorkbookFactory.create(fileInputStream);
     createSupportingTestData();
-
+    DataType dataType = DataTypeBuilder
+        .aDataType()
+        .withDataType("Integer")
+        .buildAndPersist(entityManager);
+    aGeneralConfig()
+        .withName("donation.dinLength")
+        .withValue("19")
+        .withDataType(dataType)
+        .buildAndPersist(entityManager);
     // Exercise SUT
     dataImportService.importData(workbook, false);
     
