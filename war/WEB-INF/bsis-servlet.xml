@@ -31,7 +31,7 @@
   <!-- Annotations like PreAuthorize, needed here and not in security-bsis-servlet.xml
        as this is the MVC configuration dealing with URLs??? -->
   <security:global-method-security pre-post-annotations="enabled" />
-  <context:property-placeholder location="classpath:database.properties, classpath:swagger.properties, classpath:email.properties" />
+  <context:property-placeholder ignore-resource-not-found="true" location="classpath:database.properties, classpath:swagger.properties, classpath:email.properties, file:${bsis.properties}" />
 
   <!-- Configures the @Controller programming model -->
   <mvc:annotation-driven>
