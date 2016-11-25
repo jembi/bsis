@@ -110,18 +110,6 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.5.1</version>
-                <configuration>
-                    <propertyFile>liquibase/liquibase.properties</propertyFile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id></id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>update</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
