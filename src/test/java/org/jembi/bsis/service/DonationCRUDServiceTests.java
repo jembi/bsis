@@ -799,8 +799,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     
     // assertion
     assertThat(returnedDonation.getComponents().size(), is(0));
-    assertThat(returnedDonation, is(expectedDonation));
-    
+    assertThat(returnedDonation, hasSameStateAsDonation(expectedDonation)); 
   }
   
   @Test
