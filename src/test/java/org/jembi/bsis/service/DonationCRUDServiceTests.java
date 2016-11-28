@@ -798,7 +798,9 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation returnedDonation = donationCRUDService.updateDonation(updatedDonation);
     
     // assertion
+    assertThat(returnedDonation.getComponents().size(), is(0));
     assertThat(returnedDonation, is(expectedDonation));
+    
   }
   
   @Test
@@ -916,7 +918,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation returnedDonation = donationCRUDService.updateDonation(expectedDonation);
     
     // Verify
-    verify(componentCRUDService).updateComponentWithNewPackType(expectedDonation.getComponents().get(0), newPackType);
+    verify(componentCRUDService).updateComponentWithNewPackType(existingDonation.getComponents().get(0), newPackType);
     assertThat(returnedDonation, hasSameStateAsDonation(expectedDonation));  
   }
 }
