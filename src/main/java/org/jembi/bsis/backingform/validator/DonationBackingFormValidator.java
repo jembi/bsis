@@ -198,6 +198,9 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
   
   private void validateDonationIdentificationNumber(DonationBackingForm form, Errors errors) {
     Integer dinLength = generalConfigAccessorService.getIntValue("donation.dinLength");
+    if (dinLength > 20) {
+      dinLength = 20;
+    }
     Donation donation = form.getDonation();
     String donationIdentificationNumber = donation.getDonationIdentificationNumber();
     Integer actualDinLength = 0;
@@ -214,7 +217,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
       }
       if (actualDinLength == 0 || actualDinLength > dinLength) {
         errors.rejectValue("donation.donationIdentificationNumber", "donationIdentificationNumber.invalid",
-            "The donation identification number length must be greater than zero and less that " + dinLength + " characters");
+            "The donation identification number length must be greater than zero and less than " + dinLength + " characters");
       }
     }
   }
