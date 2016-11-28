@@ -180,6 +180,10 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   // If this donation has been released in a test batch
   @Column(nullable = false)
   private boolean released = false;
+  
+  @Range(min = 0, max = 9)
+  @Column(nullable = true)
+  private Integer checkDigit;
 
   public Donation() {
     super();
@@ -496,6 +500,14 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
 
   public void setReleased(boolean released) {
     this.released = released;
+  }
+
+  public Integer getCheckDigit() {
+    return checkDigit;
+  }
+
+  public void setCheckDigit(Integer checkDigit) {
+    this.checkDigit = checkDigit;
   }
 
 }
