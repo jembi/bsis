@@ -34,7 +34,8 @@ public class DonationMatcher extends TypeSafeMatcher<Donation> {
         .appendText("\nTTI status: ").appendValue(expected.getTTIStatus())
         .appendText("\nBlood ABO: ").appendValue(expected.getBloodAbo())
         .appendText("\nBlood rh: ").appendValue(expected.getBloodRh())
-        .appendText("\nComponents: ").appendValue(expected.getComponents());
+        .appendText("\nComponents: ").appendValue(expected.getComponents())
+        .appendText("\nCheck Digit: ").appendValue(expected.getCheckDigit());
   }
 
   @Override
@@ -56,7 +57,8 @@ public class DonationMatcher extends TypeSafeMatcher<Donation> {
         Objects.equals(actual.getTTIStatus(), expected.getTTIStatus()) &&
         Objects.equals(actual.getBloodAbo(), expected.getBloodAbo()) &&
         Objects.equals(actual.getBloodRh(), expected.getBloodRh()) &&
-        Objects.equals(actual.getComponents(), expected.getComponents());
+        Objects.equals(actual.getComponents(), expected.getComponents()) &&
+        Objects.equals(actual.getCheckDigit(), expected.getCheckDigit());
   }
 
   public static DonationMatcher hasSameStateAsDonation(Donation expected) {
