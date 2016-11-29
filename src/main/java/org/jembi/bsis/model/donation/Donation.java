@@ -181,9 +181,8 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @Column(nullable = false)
   private boolean released = false;
   
-  @Range(min = 0, max = 9)
   @Column(nullable = true)
-  private Integer checkDigit;
+  private String flagCharacters;
 
   public Donation() {
     super();
@@ -502,12 +501,12 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.released = released;
   }
 
-  public Integer getCheckDigit() {
-    return checkDigit;
+  public String getFlagCharacters() {
+    return flagCharacters;
   }
 
-  public void setCheckDigit(Integer checkDigit) {
-    this.checkDigit = checkDigit;
+  public void setFlagCharacters(String flagCharacters) {
+    this.flagCharacters = flagCharacters;
   }
 
 }
