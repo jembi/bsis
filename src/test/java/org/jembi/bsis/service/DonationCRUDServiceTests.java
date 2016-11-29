@@ -42,6 +42,8 @@ import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.model.testbatch.TestBatch;
+import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
@@ -58,6 +60,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
   private static final long IRRELEVANT_DONATION_ID = 2;
   private static final long IRRELEVANT_DONOR_ID = 7;
+  private static final long IRRELEVANT_DONATION_BATCH_ID = 27;
+  private static final long IRRELEVANT_TEST_BATCH_ID = 64;
   private static final long IRRELEVANT_PACK_TYPE_ID = 5009;
   private static final Date IRRELEVANT_DATE_OF_FIRST_DONATION = new DateTime().minusDays(7).toDate();
   private static final Date IRRELEVANT_DATE_OF_LAST_DONATION = new DateTime().minusDays(2).toDate();
@@ -561,12 +565,12 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   public void testCreateDonationWithDonationWithPackTypeThatDoesNotCountAsDonation_shouldAddDonation() {
 
     long donorId = 993L;
-    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(false).build();
+    PackType packTypeThatDoesNotCountAsDonation = aPackType().withCountAsDonation(false).build();
 
     Donation donation = aDonation()
         .withDonationDate(new Date())
         .withDonor(aDonor().withId(donorId).build())
-        .withPackType(packTypeThatCountsAsDonation)
+        .withPackType(packTypeThatDoesNotCountAsDonation)
         .build();
 
     Donation returnedDonation = donationCRUDService.createDonation(donation);
@@ -745,7 +749,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     // Verify
     assertThat("No initial components were created", donation.getComponents().isEmpty());
   }
-  
+
   @Test
   public void testUpdateDonationWithNewPackTypeThatDoesntCountAsDonation_shouldDeleteInitialComponent() {
     // Set up fixture
@@ -764,7 +768,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withCountAsDonation(false)
         .build();
     
-    Component initialComponent = ComponentBuilder.aComponent().build();  
+    Component initialComponent = ComponentBuilder.aComponent().build();
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
@@ -772,20 +776,24 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withComponent(initialComponent)
+        .thatIsNotReleased()
         .build();
     
     Donation updatedDonation = aDonation()   
         .withId(IRRELEVANT_DONATION_ID)   
         .withPackType(newPackType)    
         .withBleedStartTime(irrelevantBleedStartTime)   
-        .withBleedEndTime(irrelevantBleedEndTime)   
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .thatIsNotReleased()
         .build();
-    
+
     Donation expectedDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withPackType(newPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
+        .thatIsNotReleased()
+        .withComponent(initialComponent)
         .build();
     
     // Exercise SUT
@@ -793,12 +801,14 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
-    when(donationRepository.updateDonation(expectedDonation)).thenReturn(expectedDonation);
+    when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenReturn(expectedDonation);
+
     // Test
     Donation returnedDonation = donationCRUDService.updateDonation(updatedDonation);
     
     // assertion
-    assertThat(returnedDonation.getComponents().size(), is(0));
+    verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
+    assertThat(returnedDonation.getComponents().get(0).getIsDeleted(), is(true));
     assertThat(returnedDonation, hasSameStateAsDonation(expectedDonation)); 
   }
   
@@ -864,6 +874,205 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     // assertions
     assertThat(existingDonation.getComponents().size(), is(1));
     assertThat(returnedDonation, hasSameStateAsDonation(expectedDonation)); 
+  }
+
+  @Test
+  public void testUpdateDonationInAReleasedTestBatchWithNewPackTypeThatCountsAsDonationAndNoInitialComponent_shouldPerformRelease() {
+    // Set up fixture
+    Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
+    Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
+    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    Component initialComponent = ComponentBuilder.aComponent().build();
+    DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withDonationBatch(donationBatch).withStatus(TestBatchStatus.RELEASED).build();
+    donationBatch.setTestBatch(testBatch);
+
+    PackType packType = aPackType()
+        .withTestSampleProduced(true)
+        .withCountAsDonation(false)
+        .build();
+
+    PackType newPackType = aPackType()
+        .withId(2L)
+        .withTestSampleProduced(true)
+        .withCountAsDonation(true)
+        .build();
+
+    Donation existingDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(donor)
+        .withPackType(packType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .withDonationBatch(donationBatch)
+        .build();
+
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(donor)
+        .withPackType(newPackType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .withDonationBatch(donationBatch)
+        .build();
+
+    Donation expectedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(donor)
+        .withPackType(newPackType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .withComponents(Arrays.asList(initialComponent))
+        .withDonationBatch(donationBatch)
+        .build();
+
+    // Exercise SUT
+    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+    when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
+    when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
+    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(componentCRUDService.createInitialComponent(updatedDonation)).thenReturn(initialComponent);
+    when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenAnswer(returnsFirstArg());
+
+    // Test
+    donationCRUDService.updateDonation(updatedDonation);
+
+    //verify
+    verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
+    verify(testBatchStatusChangeService).handleRelease(argThat(hasSameStateAsDonation(expectedDonation)));
+  }
+
+  @Test
+  public void testUpdateDonationInAClosedTestBatchWithNewPackTypeThatCountsAsDonationAndNoInitialComponent_shouldPerformRelease() {
+    // Set up fixture
+    Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
+    Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
+    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    Component initialComponent = ComponentBuilder.aComponent().build();
+    DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withDonationBatch(donationBatch).withStatus(TestBatchStatus.CLOSED).build();
+    donationBatch.setTestBatch(testBatch);
+
+    PackType packType = aPackType()
+        .withTestSampleProduced(true)
+        .withCountAsDonation(false)
+        .build();
+
+    PackType newPackType = aPackType()
+        .withId(2L)
+        .withTestSampleProduced(true)
+        .withCountAsDonation(true)
+        .build();
+
+    Donation existingDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(donor)
+        .withPackType(packType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .withDonationBatch(donationBatch)
+        .build();
+
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(donor)
+        .withPackType(newPackType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .withDonationBatch(donationBatch)
+        .build();
+
+    Donation expectedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(donor)
+        .withPackType(newPackType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .withComponents(Arrays.asList(initialComponent))
+        .withDonationBatch(donationBatch)
+        .build();
+
+    // Exercise SUT
+    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+    when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
+    when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
+    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(componentCRUDService.createInitialComponent(updatedDonation)).thenReturn(initialComponent);
+    when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenAnswer(returnsFirstArg());
+
+    // Test
+    donationCRUDService.updateDonation(updatedDonation);
+
+    //verify
+    verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
+    verify(testBatchStatusChangeService).handleRelease(argThat(hasSameStateAsDonation(expectedDonation)));
+  }
+
+  @Test
+  public void testUpdateDonationNotInATestBatchWithNewPackTypeThatCountsAsDonationAndNoInitialComponent_shouldNotPerformRelease() {
+    // Set up fixture
+    Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
+    Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
+    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    Component initialComponent = ComponentBuilder.aComponent().build();
+    DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
+
+    PackType packType = aPackType()
+        .withTestSampleProduced(true)
+        .withCountAsDonation(false)
+        .build();
+
+    PackType newPackType = aPackType()
+        .withId(2L)
+        .withTestSampleProduced(true)
+        .withCountAsDonation(true)
+        .build();
+
+    Donation existingDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(donor)
+        .withPackType(packType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .withDonationBatch(donationBatch)
+        .build();
+
+    Donation updatedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(donor)
+        .withPackType(newPackType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .withDonationBatch(donationBatch)
+        .build();
+
+    Donation expectedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(donor)
+        .withPackType(newPackType)
+        .withBleedStartTime(irrelevantBleedStartTime)
+        .withBleedEndTime(irrelevantBleedEndTime)
+        .withComponents(Arrays.asList(initialComponent))
+        .withDonationBatch(donationBatch)
+        .build();
+
+    // Exercise SUT
+    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+    when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
+    when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
+    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(componentCRUDService.createInitialComponent(updatedDonation)).thenReturn(initialComponent);
+    when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenAnswer(returnsFirstArg());
+
+    // Test
+    donationCRUDService.updateDonation(updatedDonation);
+
+    //verify
+    verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
+    verify(testBatchStatusChangeService, never()).handleRelease(argThat(hasSameStateAsDonation(expectedDonation)));
   }
   
   @Test

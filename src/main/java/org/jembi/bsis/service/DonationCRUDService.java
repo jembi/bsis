@@ -133,6 +133,9 @@ public class DonationCRUDService {
       throw new IllegalArgumentException("Cannot edit bleed times");
     }
 
+    // See if donation should be released (in the case of pack type being updated and a new initial component created)
+    boolean releaseDonation = false;
+
     if (packTypeUpdated) {
 
       // Check if the packType can be updated for this donation
@@ -173,6 +176,9 @@ public class DonationCRUDService {
       if (newPackType.getCountAsDonation() && existingDonation.getComponents().isEmpty()) {
         Component component = componentCRUDService.createInitialComponent(existingDonation);
         existingDonation.getComponents().add(component);
+        // ensure that the Donation is released, so that the new initial component is made available (or not)
+        releaseDonation = existingDonation.getDonationBatch().getTestBatch() != null
+                && TestBatchStatus.hasBeenReleased(existingDonation.getDonationBatch().getTestBatch().getStatus());
       }
       
       // If the new pack type doesn't produce test samples, delete test outcomes and clear statuses
@@ -196,10 +202,15 @@ public class DonationCRUDService {
     existingDonation.setBleedStartTime(updatedDonation.getBleedStartTime());
     existingDonation.setBleedEndTime(updatedDonation.getBleedEndTime());
     existingDonation.setAdverseEvent(updatedDonation.getAdverseEvent());
+
     Donation donation = donationRepository.updateDonation(existingDonation);
 
     if (packTypeUpdated) {
       donorService.setDonorDueToDonate(existingDonation.getDonor());
+    }
+
+    if (releaseDonation) {
+      testBatchStatusChangeService.handleRelease(donation);
     }
 
     return donation;
