@@ -7,8 +7,8 @@
     <comment>Add dinLength property where the length of the din should be less than 20 digits</comment>	
     <insert tableName = "GeneralConfig">
       <column name="name" value="donation.dinLength"/>
-      <column name="value" value="19"/>
-      <column name="description" value="Donation DIN maximum length"/>
+      <column name="value" value="7"/>
+      <column name="description" value="Donation Identification Number (DIN) length in characters. Must not be greater than 20."/>
       <column name="dataType_id" value="2"/>
     </insert>
   </changeSet>
