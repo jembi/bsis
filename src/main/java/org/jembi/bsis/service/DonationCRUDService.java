@@ -121,7 +121,7 @@ public class DonationCRUDService {
 
   public Donation updateDonation(Donation updatedDonation) {
     Donation existingDonation = donationRepository.findDonationById(updatedDonation.getId());
-
+    
     // Check if pack type has been updated
     boolean packTypeUpdated = !Objects.equals(existingDonation.getPackType(), updatedDonation.getPackType());
 
@@ -155,17 +155,22 @@ public class DonationCRUDService {
           throw new IllegalArgumentException("Cannot set pack type that produces components");
         }
       }
-
+      
       // Set new pack type
       existingDonation.setPackType(newPackType);
-
-      // If an initial component was created previously, delete it
-      if (!existingDonation.getComponents().isEmpty()) {
-        existingDonation.getComponents().get(0).setIsDeleted(true);
+      
+      // If the new packType does not count as donation, delete initial component
+      if (!newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {
+          existingDonation.getComponents().get(0).setIsDeleted(true);
       }
-
-      // If the new pack type produces components, create a new initial component
-      if (newPackType.getCountAsDonation()) {
+     
+      // If the new packType count as donation, update initial component
+      if (newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {    
+        componentCRUDService.updateComponentWithNewPackType(existingDonation.getComponents().get(0), newPackType);  
+      }
+      
+      // If the new PackType count as donation and there is no initial component then create it
+      if (newPackType.getCountAsDonation() && existingDonation.getComponents().isEmpty()) {
         Component component = componentCRUDService.createInitialComponent(existingDonation);
         existingDonation.getComponents().add(component);
       }
@@ -251,5 +256,4 @@ public class DonationCRUDService {
     donorRepository.saveDonor(donor);
     return donor;
   }
-
 }
