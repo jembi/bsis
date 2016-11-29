@@ -215,9 +215,9 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
         errors.rejectValue("donation.donationIdentificationNumber", "donationIdentificationNumber.nonunique",
             "There is another donation with the same donation identification number.");
       }
-      if (actualDinLength == 0 || actualDinLength > dinLength) {
+      if (actualDinLength != dinLength) {
         errors.rejectValue("donation.donationIdentificationNumber", "donationIdentificationNumber.invalid",
-            "The donation identification number length must be greater than zero and less than " + dinLength + " characters");
+            "The donation identification number length must be " + dinLength + " characters");
       }
     }
   }

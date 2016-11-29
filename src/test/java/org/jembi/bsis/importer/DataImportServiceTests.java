@@ -74,7 +74,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .buildAndPersist(entityManager);
     aGeneralConfig()
         .withName("donation.dinLength")
-        .withValue("19")
+        .withValue("7")
         .withDataType(dataType)
         .buildAndPersist(entityManager);
     // Exercise SUT
