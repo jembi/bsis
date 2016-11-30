@@ -84,6 +84,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   private BloodTestResultRepository bloodTestResultRepository;
   @Mock
   private BloodTestsService bloodTestsService;
+  @Mock
+  private CheckCharacterService checkCharacterService;
 
   @Test(expected = IllegalStateException.class)
   public void testDeleteDonationWithConstraints_shouldThrow() {
@@ -596,10 +598,12 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation donation = aDonation()
         .withDonationDate(new Date())
         .withDonor(aDonor().withId(donorId).build())
+        .withDonationIdentificationNumber("3000505")
         .withPackType(packTypeThatCountsAsDonation)
         .build();
 
     when(donorConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(true);
+    when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");
 
     Donation returnedDonation = donationCRUDService.createDonation(donation);
 
@@ -620,6 +624,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withPackType(packTypeThatCountsAsDonation)
         .build();
 
+    when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");
+
     Donation returnedDonation = donationCRUDService.createDonation(donation);
 
     verify(donationRepository).saveDonation(donation);
@@ -637,6 +643,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation donation = aDonation()
         .withDonor(aDonor().withId(donorId).build())
         .withDonationBatch(donationBatch)
+        .withDonationIdentificationNumber("3000505")
         .withPackType(aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build())
         .withDonationBatch(donationBatch)
         .build();
@@ -662,11 +669,13 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withDonationDate(new Date())
         .withDonor(aDonor().withId(donorId).build())
         .withDonationBatch(donationBatch)
+        .withDonationIdentificationNumber("3000505")
         .withPackType(packTypeThatCountsAsDonation)
         .build();
 
     when(donorConstraintChecker.isDonorEligibleToDonate(donorId)).thenReturn(false);
     when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donationBatch);
+    when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");
 
     Donation returnedDonation = donationCRUDService.createDonation(donation);
 
@@ -755,6 +764,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withDonationDate(new Date())
         .withDonor(donor)
         .withPackType(packType)
+        .withDonationIdentificationNumber("3000505")
         .withDonationBatch(DonationBatchBuilder.aDonationBatch().withBatchNumber(donationBatchNumber).build())
         .build();
 
@@ -762,6 +772,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donation.getDonationBatch());
     when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(true);
     when(componentCRUDService.createInitialComponent(donation)).thenReturn(ComponentBuilder.aComponent().build());
+    when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");
 
     
     // Exercise SUT
@@ -782,6 +793,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withDonationDate(new Date())
         .withDonor(donor)
         .withPackType(packType)
+        .withDonationIdentificationNumber("3000505")
         .withDonationBatch(DonationBatchBuilder.aDonationBatch().withBatchNumber(donationBatchNumber).build())
         .build();
 
@@ -789,6 +801,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(true);
     when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donation.getDonationBatch());
     when(componentCRUDService.createInitialComponent(donation)).thenReturn(null);
+    when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");
     
     // Exercise SUT
     donationCRUDService.createDonation(donation);
