@@ -27,11 +27,16 @@ public class CheckCharacterService {
   /**
    * Calculates an eye readable check character given flag characters calculated using the ISO 7064 Mod37,2 algorithm. 
    *
-   * @param flagCharacters String flag characters, calculated previously
+   * @param flagCharacters String flag characters, must be a number between 0 and 36
    * @return String containing the ISBT128 check character
+   * @throws NumberFormatException if the flagCharacters are not digits or are not in the correct range
    */
-  public String calculateCheckCharacter(String flagCharacters) {
+  public String calculateCheckCharacter(String flagCharacters) throws NumberFormatException {
     int flagDigits = Integer.valueOf(flagCharacters);
+    if (flagDigits < 0 || flagDigits > (iso7064ValueToCharTable.length-1)) {
+      throw new NumberFormatException("The flagCharacters '" + flagDigits + "' are not in the correct range of 0.."
+          + (iso7064ValueToCharTable.length-1));
+    }
     char checkCharacter =  iso7064ValueToCharTable[flagDigits];
     return String.valueOf(checkCharacter);
   }

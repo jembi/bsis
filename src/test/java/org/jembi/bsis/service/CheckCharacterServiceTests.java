@@ -82,4 +82,29 @@ public class CheckCharacterServiceTests extends ContextDependentTestSuite {
     String checkSum = checkCharacterService.calculateCheckCharacter(checkDigits);
     assertThat(checkSum, is("F"));
   }
+
+  public void testcalculateCheckCharacter0_shouldReturn0() throws Exception {
+    String checkSum = checkCharacterService.calculateCheckCharacter("00");
+    assertThat(checkSum, is("0"));
+  }
+
+  @Test(expected = java.lang.NumberFormatException.class)
+  public void testcalculateCheckCharacterInvalid_shouldThrow() throws Exception {
+    checkCharacterService.calculateCheckCharacter("hello!");
+  }
+
+  @Test(expected = java.lang.NumberFormatException.class)
+  public void testcalculateCheckCharacterSmallNumber_shouldThrow() throws Exception {
+    checkCharacterService.calculateCheckCharacter("-23");
+  }
+
+  @Test(expected = java.lang.NumberFormatException.class)
+  public void testcalculateCheckCharacterLargeNumber_shouldThrow() throws Exception {
+    checkCharacterService.calculateCheckCharacter("123");
+  }
+
+  @Test(expected = java.lang.NumberFormatException.class)
+  public void testcalculateCheckCharacterLengthNumber_shouldThrow() throws Exception {
+    checkCharacterService.calculateCheckCharacter("37");
+  }
 }
