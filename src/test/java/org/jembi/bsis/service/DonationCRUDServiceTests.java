@@ -622,6 +622,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withDonationDate(new Date())
         .withDonor(aDonor().withId(donorId).build())
         .withPackType(packTypeThatCountsAsDonation)
+        .withDonationIdentificationNumber("3000505")
         .build();
 
     when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");
