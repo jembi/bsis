@@ -16,7 +16,7 @@ public class CheckCharacterService {
   /**
    * Calculates check characters given a string using the ISO7064 modulus 37,2 algorithm.
    *
-   * @param inputString String for which the flag characters will be calculated
+   * @param inputString String for which the flag characters will be calculated (e.g. DIN)
    * @return String containing ISBT128 flag characters of two digits
    */
   public String calculateFlagCharacters(String inputString) {
@@ -25,23 +25,12 @@ public class CheckCharacterService {
   }
 
   /**
-   * Calculates an eye readable check character given a string using the ISO7064Mod37,2 algorithm. 
-   *
-   * @param inputString String for which the check character will be calculated
-   * @return String containing the ISBT128 check character
-   */
-  public String calculateCheckCharacter(String inputString) {
-    char checkCharacter = iso7064ValueToCharTable[calculateISO7064Mod37Comma2CheckDigits(inputString)];
-    return String.valueOf(checkCharacter);
-  }
-
-  /**
    * Calculates an eye readable check character given flag characters calculated using the ISO 7064 Mod37,2 algorithm. 
    *
    * @param flagCharacters String flag characters, calculated previously
    * @return String containing the ISBT128 check character
    */
-  public String calculateCheckCharacterFromFlagCharacters(String flagCharacters) {
+  public String calculateCheckCharacter(String flagCharacters) {
     int flagDigits = Integer.valueOf(flagCharacters);
     char checkCharacter =  iso7064ValueToCharTable[flagDigits];
     return String.valueOf(checkCharacter);

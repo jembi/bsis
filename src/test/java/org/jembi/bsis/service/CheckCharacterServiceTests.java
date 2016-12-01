@@ -12,66 +12,74 @@ public class CheckCharacterServiceTests extends ContextDependentTestSuite {
   CheckCharacterService checkCharacterService;
 
   @Test
-  public void testCalculateFlagCharacters_shouldReturn17() throws Exception {
-    String flagDigits = checkCharacterService.calculateFlagCharacters("G123 498 654 321");
-    assertThat(flagDigits, is("17"));
-  }
-
-  @Test
-  public void testCalculateFlagCharacters_shouldReturn11() throws Exception {
+  public void testCalculateCheckCharacter3000505_shouldReturnB() throws Exception {
     String flagDigits = checkCharacterService.calculateFlagCharacters("3000505");
     assertThat(flagDigits, is("11"));
+    String checkCharacter = checkCharacterService.calculateCheckCharacter(flagDigits);
+    assertThat(checkCharacter, is("B"));
   }
 
   @Test
-  public void testCalculateFlagCharacters_shouldReturnH() throws Exception {
-    String flagDigits = checkCharacterService.calculateCheckCharacter("G123 498 654 321");
-    assertThat(flagDigits, is("H"));
-  }
-
-  @Test
-  public void testCalculateCheckCharacterFromFlagCharacters17_shouldReturnH() throws Exception {
-    String checkCharacter = checkCharacterService.calculateCheckCharacterFromFlagCharacters("17");
+  public void testCalculateCheckCharacterG123498654321_shouldReturnH() throws Exception {
+    String flagDigits = checkCharacterService.calculateFlagCharacters("G123 498 654 321");
+    assertThat(flagDigits, is("17"));
+    String checkCharacter = checkCharacterService.calculateCheckCharacter(flagDigits);
     assertThat(checkCharacter, is("H"));
   }
 
   @Test
   public void testCalculateCheckCharacter3000509_shouldReturn3() throws Exception {
-    String checkCharacter = checkCharacterService.calculateCheckCharacter("3000509");
+    String flagDigits = checkCharacterService.calculateFlagCharacters("3000509");
+    assertThat(flagDigits, is("03"));
+    String checkCharacter = checkCharacterService.calculateCheckCharacter(flagDigits);
     assertThat(checkCharacter, is("3"));
   }
 
   @Test
   public void testCalculateCheckCharacter2210579_shouldReturnH() throws Exception {
-    String checkCharacter = checkCharacterService.calculateCheckCharacter("2210579");
+    String flagDigits = checkCharacterService.calculateFlagCharacters("2210579");
+    assertThat(flagDigits, is("17"));
+    String checkCharacter = checkCharacterService.calculateCheckCharacter(flagDigits);
     assertThat(checkCharacter, is("H"));
   }
 
   @Test
   public void testCalculateCheckCharacter8332514_shouldReturnB() throws Exception {
-    String checkCharacter = checkCharacterService.calculateCheckCharacter("8332514");
+    String flagDigits = checkCharacterService.calculateFlagCharacters("8332514");
+    assertThat(flagDigits, is("11"));
+    String checkCharacter = checkCharacterService.calculateCheckCharacter(flagDigits);
     assertThat(checkCharacter, is("B"));
   }
 
   @Test
   public void testCalculateCheckCharacterG123489654321_shouldReturnY() throws Exception {
-    String checkSum = checkCharacterService.calculateCheckCharacter("G123489654321");
-    assertThat(checkSum, is("Y"));
+    String flagDigits = checkCharacterService.calculateFlagCharacters("G123489654321");
+    assertThat(flagDigits, is("34"));
+    String checkCharacter = checkCharacterService.calculateCheckCharacter(flagDigits);
+    assertThat(checkCharacter, is("Y"));
   }
 
   @Test
   public void testCalculateCheckCharacter7432269_shouldReturnW() throws Exception {
     String checkDigits = checkCharacterService.calculateFlagCharacters("7432269");
     assertThat(checkDigits, is("32"));
-    String checkSum = checkCharacterService.calculateCheckCharacterFromFlagCharacters(checkDigits);
+    String checkSum = checkCharacterService.calculateCheckCharacter(checkDigits);
     assertThat(checkSum, is("W"));
   }
 
   @Test
-  public void testCalculateCheckCharacter7432269_shouldReturnF() throws Exception {
+  public void testCalculateCheckCharacter3946294_shouldReturnF() throws Exception {
     String checkDigits = checkCharacterService.calculateFlagCharacters("3946294");
     assertThat(checkDigits, is("15"));
-    String checkSum = checkCharacterService.calculateCheckCharacterFromFlagCharacters(checkDigits);
+    String checkSum = checkCharacterService.calculateCheckCharacter(checkDigits);
+    assertThat(checkSum, is("F"));
+  }
+
+  @Test
+  public void testCalculateCheckCharacter394abc6294_shouldReturnF() throws Exception {
+    String checkDigits = checkCharacterService.calculateFlagCharacters("394 <abc> [6] {294}");
+    assertThat(checkDigits, is("15"));
+    String checkSum = checkCharacterService.calculateCheckCharacter(checkDigits);
     assertThat(checkSum, is("F"));
   }
 }
