@@ -217,6 +217,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.bleedEndTime = donation.getBleedEndTime();
     this.venue = donation.getVenue();
     this.adverseEvent = donation.getAdverseEvent();
+    this.flagCharacters = donation.getFlagCharacters();
   }
 
   public String getDonationIdentificationNumber() {
@@ -287,6 +288,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.venue = donation.getVenue();
     this.bloodAbo = donation.bloodAbo;
     this.bloodRh = donation.bloodRh;
+    this.flagCharacters = donation.flagCharacters;
     this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
   }
 
