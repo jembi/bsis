@@ -99,6 +99,11 @@
   <bean id="applicationContextProvider" class="org.jembi.bsis.repository.events.ApplicationContextProvider"></bean>
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
   </bean>
+  
+  <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase"  >
+    <property name="dataSource" ref="dataSource"/>
+    <property name="changeLog" value="classpath:/liquibase/baselineAndChangeLog.xml" />
+  </bean>
 
   <mvc:interceptors>
     <bean id="loggingInterceptor" class="org.jembi.bsis.interceptor.LoggingInterceptor" />
