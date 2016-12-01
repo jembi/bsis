@@ -68,7 +68,7 @@
           destroy-method="close">
         <property name="driverClass" value="${driver}" />
         <property name="jdbcUrl" value="${url}" />
-        <property name="user" value="${user}" />
+        <property name="user" value="${username}" />
         <property name="password" value="${password}" />
 
         <!-- these are C3P0 properties -->
