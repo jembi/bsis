@@ -20,7 +20,9 @@ public class LabellingService {
   private LabellingConstraintChecker labellingConstraintChecker;
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
-
+  @Autowired 
+  private CheckCharacterService checkCharacterService;
+  
   public String printPackLabel(long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
     Donation donation = component.getDonation();
@@ -46,6 +48,11 @@ public class LabellingService {
     DateFormat dateTimeFormat = new SimpleDateFormat(dateTimeFormatString);
     DateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    // Update all donations without flag charactors
+    if (donation.getFlagCharacters() == null || donation.getFlagCharacters().isEmpty() ) {
+      donation.setFlagCharacters(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber()));
+    }
+    
     // Generate element for blood Rh
     String bloodRh = "";
     if (donation.getBloodRh().contains("+")) {

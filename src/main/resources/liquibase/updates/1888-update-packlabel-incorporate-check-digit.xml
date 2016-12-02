@@ -1,0 +1,20 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+	logicalFilePath="./src/main/resources/liquibase/updates/1888-update-packlabel-incorporate-check-digit.xml">
+
+  <changeSet id="20161128-1006" author="tmvumbi2">
+    <comment>Add column flagCharacters to Donation</comment>
+    <addColumn tableName="Donation">
+		<column name="flagCharacters" type="VARCHAR(2)" defaultValue="NULL" />
+	</addColumn>
+  </changeSet>
+  
+  <changeSet id="20161128-1053" author="tmvumbi2">
+    <comment>Add column flagCharacters to Donation_AUD</comment>	
+    <addColumn tableName="Donation_AUD">
+		<column name="flagCharacters" type="VARCHAR(2)" defaultValue="NULL" />
+	</addColumn>
+  </changeSet>
+    
+ </databaseChangeLog>

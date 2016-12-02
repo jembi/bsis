@@ -44,6 +44,8 @@ public class LabellingServiceTests extends UnitTestSuite {
   
   @Mock
   private GeneralConfigAccessorService generalConfigAccessorService;
+  @Mock
+  private CheckCharacterService checkCharacterService;
   
   @Test
   public void testPrintDiscardLabel_shouldReturnZPLContainingText() throws Exception {
@@ -101,6 +103,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
+        .withFlagCharacters(checkCharacterService.calculateFlagCharacters(donationIdentificationNumber))
         .build();
     String componentTypeName = "blood";
     ComponentType componentType = aComponentType()
@@ -158,6 +161,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
+        .withFlagCharacters(checkCharacterService.calculateFlagCharacters(donationIdentificationNumber))
         .build();
     String componentTypeName = "blood";
     ComponentType componentType = aComponentType()
@@ -215,6 +219,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
+        .withFlagCharacters(checkCharacterService.calculateFlagCharacters(donationIdentificationNumber))
         .build();
     String componentTypeName = "blood";
     ComponentType componentType = aComponentType()
