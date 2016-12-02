@@ -69,5 +69,6 @@
   <include file="liquibase/updates/2020-refactor-blood-test-rule.xml" />
   <include file="liquibase/updates/1689-add-new-bloodTesting-rules.xml" />
   <include file="liquibase/updates/2033-add-donation-batch-date-to-donation-batch.xml"/>
+  <include file="liquibase/updates/2035-delete-components-related-to-deleted-donations.xml"/>
   
 </databaseChangeLog>
