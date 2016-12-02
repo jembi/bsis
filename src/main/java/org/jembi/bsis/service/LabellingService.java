@@ -23,6 +23,18 @@ public class LabellingService {
   @Autowired 
   private CheckCharacterService checkCharacterService;
   
+  public boolean verifyPackLabel(long componentId, String packDin, String labelDin) {
+    Component component = componentCRUDService.findComponentById(componentId);
+    String recordedDin = component.getDonation().getDonationIdentificationNumber();
+    String recordedFlagCharacters = component.getDonation().getFlagCharacters();
+    if (!recordedDin.equals(packDin) ||!(recordedDin+recordedFlagCharacters).equals(labelDin)) {
+      return false;
+    } else {
+      componentCRUDService.putComponentInStock(component);
+      return true;
+    }
+  }
+  
   public String printPackLabel(long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
     Donation donation = component.getDonation();

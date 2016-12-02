@@ -6,8 +6,11 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentTyp
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
+import static org.hamcrest.Matchers.is;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,6 +49,89 @@ public class LabellingServiceTests extends UnitTestSuite {
   private GeneralConfigAccessorService generalConfigAccessorService;
   @Mock
   private CheckCharacterService checkCharacterService;
+  
+  @Test
+  public void testVerifyPackLabelWithValidInputs_shouldReturnTrue() {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("3000505")
+        .withFlagCharacters("11")
+        .build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withStatus(ComponentStatus.EXPIRED)
+        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+        .build();
+    Component componentInStock = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withStatus(ComponentStatus.EXPIRED)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+        .build();
+    
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.putComponentInStock(component)).thenReturn(componentInStock);
+    
+    // run test
+    boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "3000505", "300050511");
+    
+    // check outcome
+    assertThat(dinMatches, is(true));
+    verify(componentCRUDService).putComponentInStock(argThat(hasSameStateAsComponent(component)));
+  }
+
+  @Test
+  public void testVerifyPackLabelWithInvalidPackDin_shouldReturnFalse() {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("3000505")
+        .withFlagCharacters("11")
+        .build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withStatus(ComponentStatus.EXPIRED)
+        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+        .build();
+    
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    
+    // run test
+    boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "1234567", "300050511");
+    
+    // check outcome
+    assertThat(dinMatches, is(false));
+    verify(componentCRUDService, never()).putComponentInStock(any(Component.class));
+  }
+
+  @Test
+  public void testVerifyPackLabelWithInvalidLabelDin_shouldReturnFalse() {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("3000505")
+        .withFlagCharacters("11")
+        .build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withStatus(ComponentStatus.EXPIRED)
+        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+        .build();
+    
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    
+    // run test
+    boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "3000505", "123456789");
+    
+    // check outcome
+    assertThat(dinMatches, is(false));
+    verify(componentCRUDService, never()).putComponentInStock(any(Component.class));
+  }  
   
   @Test
   public void testPrintDiscardLabel_shouldReturnZPLContainingText() throws Exception {
