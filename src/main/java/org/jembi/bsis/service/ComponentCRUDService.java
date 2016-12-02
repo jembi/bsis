@@ -342,6 +342,14 @@ public class ComponentCRUDService {
     }
   }
 
+  public Component removeComponentFromStock(long componentId) {
+    LOGGER.info("Removing component "+ componentId + " from stock");
+
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    existingComponent.setInventoryStatus(InventoryStatus.NOT_IN_STOCK);
+    return componentRepository.update(existingComponent);
+  }
+
   public Component discardComponent(Long componentId, Long discardReasonId, String discardReasonText) {
     Component existingComponent = componentRepository.findComponentById(componentId);
     

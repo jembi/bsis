@@ -236,6 +236,37 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test
+  public void testremoveComponentFromStock_shouldReturnComponentNOT_INSTOCK() {
+    Location location = aLocation().withId(1L).build();
+    Donation donation = aDonation().withId(1L).build();
+
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withLocation(location)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .build();
+
+    Component expectedNotInStockComponent = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withLocation(location)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .build();
+
+    when(componentRepository.findComponentById(1L)).thenReturn(component);
+    when(componentRepository.update(argThat(
+        hasSameStateAsComponent(expectedNotInStockComponent)))).thenReturn(expectedNotInStockComponent);
+
+    // Exercise SUT
+    Component notInstockComponent = componentCRUDService.removeComponentFromStock(component.getId());
+
+    // Verify
+    assertThat(notInstockComponent, hasSameStateAsComponent(expectedNotInStockComponent));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedNotInStockComponent)));
+  }
+
+  @Test
   public void testMarkComponentsBelongingToDonorAsUnsafe_shouldMarkComponentsAsUnsafe() {
     // Set up fixture
     Donation firstDonation = aDonation().withId(1L).build();
