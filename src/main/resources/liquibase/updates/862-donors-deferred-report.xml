@@ -1,7 +1,8 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  	logicalFilePath="./src/main/resources/liquibase/updates/862-donors-deferred-report.xml">
 
 	<changeSet id="20160810-0839" author="timler">
 		<comment>Add permission for Donor reporting and assign to appropriate roles: </comment>

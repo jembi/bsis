@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
 import org.jembi.bsis.model.donation.Donation;
@@ -19,8 +18,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BloodTestingRuleResultViewModelFactory {
-
-  private static final Logger LOGGER = Logger.getLogger(BloodTestingRuleResultViewModelFactory.class);
 
   @Autowired
   private BloodTestResultConstraintChecker bloodTestResultConstraintChecker;
@@ -66,20 +63,14 @@ public class BloodTestingRuleResultViewModelFactory {
 
     ruleResult.setAllBloodAboChanges(bloodTestingRuleResultSet.getBloodAboChanges());
     ruleResult.setAllBloodRhChanges(bloodTestingRuleResultSet.getBloodRhChanges());
-    String bloodAbo = "";
+    String bloodAbo = donation.getBloodAbo();
     if (bloodTestingRuleResultSet.getBloodAboChanges() != null && bloodTestingRuleResultSet.getBloodAboChanges().size() == 1) {
       bloodAbo = bloodTestingRuleResultSet.getBloodAboChanges().iterator().next();
-    } else {
-      LOGGER.warn("Donation with id: " + donation.getId() + " has a conflicting ABO outcome: "+
-          bloodTestingRuleResultSet.getBloodAboChanges() + ". This is caused by misconfiguration of the Blood Testing Rules");
     }
     ruleResult.setBloodAbo(bloodAbo);
-    String bloodRh = "";
+    String bloodRh = donation.getBloodRh();
     if (bloodTestingRuleResultSet.getBloodRhChanges() != null && bloodTestingRuleResultSet.getBloodRhChanges().size() == 1) {
       bloodRh = bloodTestingRuleResultSet.getBloodRhChanges().iterator().next();
-    } else {
-      LOGGER.warn("Donation with id: " + donation.getId() + " has a conflicting Rh outcome: " +
-          bloodTestingRuleResultSet.getBloodRhChanges() + ". This is caused by misconfiguration of the Blood Testing Rules");
     }
     ruleResult.setBloodRh(bloodRh);
 
