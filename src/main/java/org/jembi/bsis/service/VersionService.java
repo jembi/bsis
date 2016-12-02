@@ -23,6 +23,7 @@ public class VersionService {
 
   String version = null;
   String gitDescribe = null;
+  String buildNumber = null;
 
   @PostConstruct
   public void loadVersionInformation() {
@@ -36,6 +37,9 @@ public class VersionService {
         prop.load(is);
         version = prop.getProperty("Implementation-Version");
         gitDescribe = prop.getProperty("git-describe");
+        if (gitDescribe != null) {
+          buildNumber = gitDescribe.substring(gitDescribe.lastIndexOf("-g") + 2);
+        }
       }
     } catch (Exception e) {
       LOGGER.error(
@@ -54,6 +58,7 @@ public class VersionService {
     VersionViewModel versionViewModel = new VersionViewModel();
     versionViewModel.setVersion(version);
     versionViewModel.setGitDescribe(gitDescribe);
+    versionViewModel.setBuildNumber(buildNumber);
 
     return versionViewModel;
   }

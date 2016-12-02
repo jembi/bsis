@@ -167,6 +167,11 @@
                   </goals>
                   <id>git-describe</id>
                   <phase>initialize</phase>
+                  <configuration>
+                    <extraArguments>
+                      <param>--long</param>
+                    </extraArguments>
+                  </configuration>
                 </execution>
               </executions>
             </plugin>
