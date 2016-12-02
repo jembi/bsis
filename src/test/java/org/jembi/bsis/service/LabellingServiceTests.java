@@ -103,7 +103,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
-        .withFlagCharacters(checkCharacterService.calculateFlagCharacters(donationIdentificationNumber))
+        .withFlagCharacters("96")
         .build();
     String componentTypeName = "blood";
     ComponentType componentType = aComponentType()
@@ -161,7 +161,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
-        .withFlagCharacters(checkCharacterService.calculateFlagCharacters(donationIdentificationNumber))
+        .withFlagCharacters("98")
         .build();
     String componentTypeName = "blood";
     ComponentType componentType = aComponentType()
@@ -219,7 +219,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
-        .withFlagCharacters(checkCharacterService.calculateFlagCharacters(donationIdentificationNumber))
+        .withFlagCharacters("17")
         .build();
     String componentTypeName = "blood";
     ComponentType componentType = aComponentType()
@@ -275,6 +275,57 @@ public class LabellingServiceTests extends UnitTestSuite {
     
     // check outcome
     verify(componentCRUDService).putComponentInStock(argThat(hasSameStateAsComponent(labelledComponent)));
+  }
+  
+  @Test
+  public void testPrintPackLabelOfComponent_Donation_Without_FlagCharacters_Should_Add_Flagcharacters_Before_Printing() throws Exception {
+    // set up data
+    Long donationId = Long.valueOf(1);
+    String bloodAbo = "B";
+    String bloodRh = "-";
+    String donationIdentificationNumber = "3000505";
+    Date donationDate = new Date();
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withDonationDate(donationDate)
+        .withBloodAbo(bloodAbo)
+        .withBloodRh(bloodRh)
+        .build();
+    String componentTypeName = "blood";
+    ComponentType componentType = aComponentType()
+        .withComponentTypeName(componentTypeName)
+        .withPreparationInfo(PREPARATION_INFO)
+        .withStorageInfo(STORAGE_INFO)
+        .withTransportInfo(TRANSPORT_INFO)
+        .build();
+    Long componentId = Long.valueOf(1);
+    String componentCode = "123";
+    Date expiresOn = new DateTime().plusDays(90).toDate();    
+    Component labelledComponent = aComponent()
+        .withId(componentId)
+        .withComponentCode(componentCode)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(expiresOn)
+        .build();
+    
+    when(componentCRUDService.findComponentById(componentId)).thenReturn(labelledComponent);
+    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(labelledComponent)).thenReturn(true);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
+    when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");
+    
+    // check that this donation before calling printPackLabel()
+    assertThat("This donation has no flag characters", donation.getFlagCharacters() == null || donation.getFlagCharacters().isEmpty());
+    
+    // run test
+    labellingService.printPackLabel(labelledComponent.getId());
+    
+    // check outcome
+    assertThat("This donation now has flag characters", donation.getFlagCharacters().length() > 0);
   }
   
   @Test(expected = IllegalArgumentException.class)
