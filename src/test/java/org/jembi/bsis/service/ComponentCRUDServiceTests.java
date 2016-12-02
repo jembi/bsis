@@ -236,7 +236,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testremoveComponentFromStock_shouldReturnComponentNOT_INSTOCK() {
+  public void testupdateComponentToNotInStock_shouldReturnComponentNOT_INSTOCK() {
     Location location = aLocation().withId(1L).build();
     Donation donation = aDonation().withId(1L).build();
 
@@ -259,7 +259,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         hasSameStateAsComponent(expectedNotInStockComponent)))).thenReturn(expectedNotInStockComponent);
 
     // Exercise SUT
-    Component notInstockComponent = componentCRUDService.removeComponentFromStock(component.getId());
+    Component notInstockComponent = componentCRUDService.updateComponentToNotInStock(component);
 
     // Verify
     assertThat(notInstockComponent, hasSameStateAsComponent(expectedNotInStockComponent));
