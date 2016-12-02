@@ -63,7 +63,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
-    Component componentInStock = aComponent()
+    Component componentNotInStock = aComponent()
         .withId(1L)
         .withDonation(donation)
         .withStatus(ComponentStatus.EXPIRED)
@@ -73,14 +73,13 @@ public class LabellingServiceTests extends UnitTestSuite {
     
     // set up mocks
     when(componentCRUDService.findComponentById(1L)).thenReturn(component);
-    when(componentCRUDService.putComponentInStock(component)).thenReturn(componentInStock);
+    when(componentCRUDService.removeComponentFromStock(component.getId())).thenReturn(componentNotInStock);
     
     // run test
     boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "3000505", "300050511");
     
     // check outcome
     assertThat(dinMatches, is(true));
-    verify(componentCRUDService).putComponentInStock(argThat(hasSameStateAsComponent(component)));
   }
 
   @Test
@@ -105,7 +104,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     
     // check outcome
     assertThat(dinMatches, is(false));
-    verify(componentCRUDService, never()).putComponentInStock(any(Component.class));
+    verify(componentCRUDService, never()).removeComponentFromStock(component.getId());
   }
 
   @Test
@@ -130,7 +129,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     
     // check outcome
     assertThat(dinMatches, is(false));
-    verify(componentCRUDService, never()).putComponentInStock(any(Component.class));
+    verify(componentCRUDService, never()).removeComponentFromStock(component.getId());
   }  
   
   @Test
@@ -210,13 +209,23 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
         .build();
+
+    Component componentNotInStock = aComponent()
+        .withId(componentId)
+        .withComponentCode(componentCode)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(expiresOn)
+        .build();
     
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.putComponentInStock(component)).thenReturn(component);
+    when(componentCRUDService.removeComponentFromStock(component.getId())).thenReturn(componentNotInStock);
 
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -268,13 +277,23 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
         .build();
+
+    Component componentNotInStock = aComponent()
+        .withId(componentId)
+        .withComponentCode(componentCode)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(expiresOn)
+        .build();
     
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.putComponentInStock(component)).thenReturn(component);
+    when(componentCRUDService.removeComponentFromStock(component.getId())).thenReturn(componentNotInStock);
     
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -292,7 +311,7 @@ public class LabellingServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testPrintPackLabelWithNotInStockComponent_shouldMarkAsInStock() throws Exception {
+  public void testPrintPackLabelWithInStockComponent_shouldMarkAsNotInStock() throws Exception {
     // set up data
     Long donationId = Long.valueOf(1);
     String bloodAbo = "A";
@@ -321,7 +340,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withDonation(donation)
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
@@ -338,29 +357,18 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withExpiresOn(expiresOn)
         .build();
     
-    Component finalComponent = aComponent()
-        .withId(componentId)
-        .withComponentCode(componentCode)
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withDonation(donation)
-        .withComponentType(componentType)
-        .withLocation(component.getLocation())
-        .withExpiresOn(expiresOn)
-        .build();
-    
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.putComponentInStock(argThat(hasSameStateAsComponent(labelledComponent)))).thenReturn(finalComponent);
-    
+    when(componentCRUDService.removeComponentFromStock(componentId)).thenReturn(labelledComponent);
+
     // run test
     labellingService.printPackLabel(componentId);
     
     // check outcome
-    verify(componentCRUDService).putComponentInStock(argThat(hasSameStateAsComponent(labelledComponent)));
+    assertThat(labelledComponent, hasSameStateAsComponent(componentCRUDService.removeComponentFromStock(componentId)) );
   }
   
   @Test(expected = IllegalArgumentException.class)

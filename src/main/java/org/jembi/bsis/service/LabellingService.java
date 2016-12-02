@@ -47,9 +47,10 @@ public class LabellingService {
       throw new IllegalArgumentException("Pack Label can't be printed");
     }
 
-    // If current status is NOT_IN_STOCK, update inventory status to IN_STOCK for this component
-    if (component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK)) {
-      componentCRUDService.putComponentInStock(component);
+    // If current status is IN_STOCK, update inventory status to NOT_IN_STOCK for this component
+    // The component will be put in stock upon successful verification of packLabel
+    if (component.getInventoryStatus().equals(InventoryStatus.IN_STOCK)) {
+      componentCRUDService.removeComponentFromStock(component.getId());
     }
 
     // Set up date formats
