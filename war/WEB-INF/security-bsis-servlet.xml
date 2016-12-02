@@ -284,11 +284,11 @@
     <intercept-url pattern="/bloodtestingrules/**" access="isFullyAuthenticated()" />
   </http>
   
-  <http pattern="/version/**" create-session="never" use-expressions="true">
+  <http pattern="/version" create-session="never" use-expressions="true">
     <http-basic />
     <session-management />
-    <intercept-url pattern="/version/**" access="isAnonymous()" method="OPTIONS"/>
-    <intercept-url pattern="/version/**" access="isFullyAuthenticated()" />
+    <intercept-url pattern="/version" access="isAnonymous()" method="OPTIONS"/>
+    <intercept-url pattern="/version" access="permitAll" method="GET"/>
   </http>
 
   <!-- Enable stateful access to swagger-ui  -->
