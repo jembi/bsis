@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.hamcrest.core.Is;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.component.Component;
