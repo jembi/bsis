@@ -58,18 +58,18 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withFlagCharacters("11")
         .build();
     Component component = aComponent()
-        .withId(1L)
-        .withDonation(donation)
-        .withStatus(ComponentStatus.EXPIRED)
-        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
-        .build();
+      .withId(1L)
+      .withDonation(donation)
+      .withStatus(ComponentStatus.AVAILABLE)
+      .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+      .build();
     Component componentInStock = aComponent()
-        .withId(1L)
-        .withDonation(donation)
-        .withStatus(ComponentStatus.EXPIRED)
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
-        .build();
+      .withId(1L)
+      .withDonation(donation)
+      .withStatus(ComponentStatus.AVAILABLE)
+      .withInventoryStatus(InventoryStatus.IN_STOCK)
+      .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+      .build();
 
     // set up mocks
     when(componentCRUDService.findComponentById(1L)).thenReturn(component);
@@ -84,6 +84,31 @@ public class LabellingServiceTests extends UnitTestSuite {
   }
 
   @Test
+  public void testVerifyPackLabelWithComponentStatusNotAvailable_shouldReturnFalse () {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("3000505")
+        .withFlagCharacters("11")
+        .build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+        .build();
+  
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+  
+    // run test
+    boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "3000505", "300050511");
+  
+    // check outcome
+    assertThat(dinMatches, is(false));
+    verify(componentCRUDService, never()).putComponentInStock(any(Component.class));
+  }  
+
+  @Test
   public void testVerifyPackLabelWithInvalidPackDin_shouldReturnFalse () {
     // set up data
     Donation donation = aDonation()
@@ -93,7 +118,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     Component component = aComponent()
         .withId(1L)
         .withDonation(donation)
-        .withStatus(ComponentStatus.EXPIRED)
+        .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
 
@@ -118,7 +143,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     Component component = aComponent()
         .withId(1L)
         .withDonation(donation)
-        .withStatus(ComponentStatus.EXPIRED)
+        .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
 

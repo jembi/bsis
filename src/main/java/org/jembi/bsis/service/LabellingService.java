@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -25,6 +26,10 @@ public class LabellingService {
   
   public boolean verifyPackLabel(long componentId, String packDin, String labelDin) {
     Component component = componentCRUDService.findComponentById(componentId);
+    if (!component.getStatus().equals(ComponentStatus.AVAILABLE)) {
+      return false;
+    }
+    
     String recordedDin = component.getDonation().getDonationIdentificationNumber();
     String recordedFlagCharacters = component.getDonation().getFlagCharacters();
     if (!recordedDin.equals(packDin) ||!(recordedDin+recordedFlagCharacters).equals(labelDin)) {
