@@ -31,7 +31,7 @@
   <!-- Annotations like PreAuthorize, needed here and not in security-bsis-servlet.xml
        as this is the MVC configuration dealing with URLs??? -->
   <security:global-method-security pre-post-annotations="enabled" />
-  <context:property-placeholder location="classpath:database.properties, classpath:swagger.properties, classpath:email.properties" />
+  <context:property-placeholder ignore-resource-not-found="true" location="classpath:swagger.properties, classpath:email.properties, classpath:bsis.properties, file:${bsis.properties}" />
 
   <!-- Configures the @Controller programming model -->
   <mvc:annotation-driven>
@@ -66,10 +66,10 @@
 
   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
           destroy-method="close">
-        <property name="driverClass" value="${database.driver}" />
-        <property name="jdbcUrl" value="${database.url}" />
-        <property name="user" value="${database.user}" />
-        <property name="password" value="${database.password}" /> 
+        <property name="driverClass" value="${driver}" />
+        <property name="jdbcUrl" value="${url}" />
+        <property name="user" value="${username}" />
+        <property name="password" value="${password}" />
 
         <!-- these are C3P0 properties -->
         <property name="acquireIncrement" value="${database.acquireIncrement}" />
