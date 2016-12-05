@@ -56,7 +56,7 @@ public class LabellingController {
       @RequestParam(required = true, value = "packDin") String packDin,
       @RequestParam(required = true, value = "labelDin") String labelDin) {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("labelZPL", labellingControllerService.verifyPackLabel(componentId, packDin, labelDin));
+    map.put("labelVerified", labellingControllerService.verifyPackLabel(componentId, packDin, labelDin));
     return map;
   }
 
