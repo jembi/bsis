@@ -1,0 +1,15 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+	logicalFilePath="./src/main/resources/liquibase/updates/2134-add-donation-dinLength-property.xml">
+
+  <changeSet id="20161125-1236" author="jmuzinda">
+    <comment>Add dinLength property where the length of the din should be less than 20 digits</comment>	
+    <insert tableName = "GeneralConfig">
+      <column name="name" value="donation.dinLength"/>
+      <column name="value" value="7"/>
+      <column name="description" value="Donation Identification Number (DIN) length in characters. Must not be greater than 20."/>
+      <column name="dataType_id" value="2"/>
+    </insert>
+  </changeSet>
+ </databaseChangeLog>
