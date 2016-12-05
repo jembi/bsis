@@ -51,7 +51,6 @@ public class LabellingService {
     // Update donation without flag characters
     if (donation.getFlagCharacters() == null || donation.getFlagCharacters().isEmpty() ) {
       donation.setFlagCharacters(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber()));
-      //donation.setFlagCharacters("54");
     }
     
     // Generate element for blood Rh

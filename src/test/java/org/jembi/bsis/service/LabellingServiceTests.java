@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.hamcrest.core.Is;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.component.Component;
@@ -103,7 +104,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
-        .withFlagCharacters("96")
+        .withFlagCharacters("28")
         .build();
     String componentTypeName = "blood";
     ComponentType componentType = aComponentType()
@@ -161,7 +162,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
-        .withFlagCharacters("98")
+        .withFlagCharacters("32")
         .build();
     String componentTypeName = "blood";
     ComponentType componentType = aComponentType()
@@ -278,16 +279,14 @@ public class LabellingServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testPrintPackLabelOfComponent_Donation_Without_FlagCharacters_Should_Add_Flagcharacters_Before_Printing() throws Exception {
+  public void testPrintPackLabelWithComponentLinkedToDonationWithoutFlagCharacters_ShouldAddFlagcharactersBeforePrinting() throws Exception {
     // set up data
-    Long donationId = Long.valueOf(1);
     String bloodAbo = "B";
     String bloodRh = "-";
-    String donationIdentificationNumber = "3000505";
     Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(donationId)
-        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withId(1L)
+        .withDonationIdentificationNumber("3000505")
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
@@ -318,14 +317,12 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");
     
-    // check that this donation before calling printPackLabel()
-    assertThat("This donation has no flag characters", donation.getFlagCharacters() == null || donation.getFlagCharacters().isEmpty());
-    
     // run test
     labellingService.printPackLabel(labelledComponent.getId());
     
     // check outcome
-    assertThat("This donation now has flag characters", donation.getFlagCharacters().length() > 0);
+    verify(checkCharacterService).calculateFlagCharacters(donation.getDonationIdentificationNumber());
+    assertThat("This donation now has flag characters", donation.getFlagCharacters().equals("11"));
   }
   
   @Test(expected = IllegalArgumentException.class)
