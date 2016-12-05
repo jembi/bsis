@@ -260,6 +260,38 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test
+  public void testDeleteComponent_shouldDeleteAComponent() {
+    // Set up fixture
+    Location location = aLocation().withId(1L).build();
+    Donation donation = aDonation().withId(1L).build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    
+    Component expectedDeletedComponent = aComponent()
+        .withLocation(location)
+        .withDonation(donation)
+        .withId(1L)
+        .thatIsDeleted()
+        .build();
+    
+    // set up mocks
+    when(componentRepository.findComponentById(1L)).thenReturn(component);
+    when(componentRepository
+        .update(argThat(hasSameStateAsComponent(expectedDeletedComponent))))
+    .thenReturn(expectedDeletedComponent);
+    
+    // Exercise SUT
+    Component deletedComponent = componentCRUDService.deleteComponent(1L);
+    
+    // Verify
+    assertThat(deletedComponent, hasSameStateAsComponent(expectedDeletedComponent));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedDeletedComponent)));
+  }
+
+  @Test
   public void testMarkComponentsBelongingToDonationAsUnsafe_shouldMarkComponentsAsUnsafe() {
     // Set up fixture
     Component firstComponent = aComponent().withId(1L).build();
