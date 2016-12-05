@@ -103,6 +103,9 @@ public class DonorDeferralCRUDService {
   }
 
   public DonorDeferral updateDeferral(DonorDeferral deferral) {
+    if (!deferralConstraintChecker.canEditDonorDeferral(deferral.getId())) {
+      throw new IllegalStateException("Cannot edit deferral with constraints");
+    }
     DonorDeferral existingDeferral = donorDeferralRepository.findDonorDeferralById(deferral.getId());
     existingDeferral.setDeferralReason(deferral.getDeferralReason());
     existingDeferral.setDeferredUntil(deferral.getDeferredUntil());
