@@ -11,6 +11,14 @@ script: mvn -Dsurefire.useFile=false clean install && mvn liquibase:update
 
 sudo: false
 
+deploy:
+  provider: releases
+  api_key: "60bc59b1-74af-468a-b386-7cc209586d00"
+  file: "bsis.war"
+  skip_cleanup: true
+  on:
+    tags: true
+
 notifications:
   email:
     on_success: change
