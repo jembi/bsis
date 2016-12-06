@@ -13,7 +13,7 @@ sudo: false
 
 deploy:
   provider: releases
-  api_key: "60bc59b1-74af-468a-b386-7cc209586d00"
+  api_key: "47a92f9761a055720a1b35ec021db098d6a2e2d1"
   file: "bsis.war"
   skip_cleanup: true
   on:
