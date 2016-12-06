@@ -50,7 +50,7 @@ public class LabellingControllerService {
     return labellingService.printDiscardLabel(componentId);
   }
   
-  public boolean verifyPackLabel(long componentId, String packDin, String labelDin) {
-    return labellingService.verifyPackLabel(componentId, packDin, labelDin);
+  public boolean verifyPackLabel(long componentId, String prePrintedDIN, String packLabelDIN) {
+    return labellingService.verifyPackLabel(componentId, prePrintedDIN, packLabelDIN);
   }
 }

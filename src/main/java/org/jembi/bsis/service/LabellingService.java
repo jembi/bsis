@@ -24,7 +24,7 @@ public class LabellingService {
   @Autowired 
   private CheckCharacterService checkCharacterService;
   
-  public boolean verifyPackLabel(long componentId, String packDin, String labelDin) {
+  public boolean verifyPackLabel(long componentId, String prePrintedDIN, String packLabelDIN) {
     Component component = componentCRUDService.findComponentById(componentId);
     if (!component.getStatus().equals(ComponentStatus.AVAILABLE)) {
       return false;
@@ -32,7 +32,7 @@ public class LabellingService {
     
     String recordedDin = component.getDonation().getDonationIdentificationNumber();
     String recordedFlagCharacters = component.getDonation().getFlagCharacters();
-    if (!recordedDin.equals(packDin) ||!(recordedDin+recordedFlagCharacters).equals(labelDin)) {
+    if (!recordedDin.equals(prePrintedDIN) ||!(recordedDin+recordedFlagCharacters).equals(packLabelDIN)) {
       return false;
     } else {
       componentCRUDService.putComponentInStock(component);

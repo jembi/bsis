@@ -109,7 +109,7 @@ public class LabellingServiceTests extends UnitTestSuite {
   }  
 
   @Test
-  public void testVerifyPackLabelWithInvalidPackDin_shouldReturnFalse () {
+  public void testVerifyPackLabelWithInvalidPrePrintedDIN_shouldReturnFalse () {
     // set up data
     Donation donation = aDonation()
         .withDonationIdentificationNumber("3000505")
@@ -134,7 +134,7 @@ public class LabellingServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testVerifyPackLabelWithInvalidLabelDin_shouldReturnFalse() {
+  public void testVerifyPackLabelWithInvalidPackLabelDIN_shouldReturnFalse() {
     // set up data
     Donation donation = aDonation()
         .withDonationIdentificationNumber("3000505")

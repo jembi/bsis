@@ -53,10 +53,10 @@ public class LabellingController {
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public Map<String, Object> verifyLabel(
       @RequestParam(required = true, value = "componentId") long componentId,
-      @RequestParam(required = true, value = "packDin") String packDin,
-      @RequestParam(required = true, value = "labelDin") String labelDin) {
+      @RequestParam(required = true, value = "prePrintedDIN") String prePrintedDIN,
+      @RequestParam(required = true, value = "packLabelDIN") String packLabelDIN) {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("labelVerified", labellingControllerService.verifyPackLabel(componentId, packDin, labelDin));
+    map.put("labelVerified", labellingControllerService.verifyPackLabel(componentId, prePrintedDIN, packLabelDIN));
     return map;
   }
 
