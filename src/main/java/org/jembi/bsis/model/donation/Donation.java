@@ -182,7 +182,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   private boolean released = false;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 20)
+  @Column(length = 10)
   private Titre titre;
 
   public Donation() {
