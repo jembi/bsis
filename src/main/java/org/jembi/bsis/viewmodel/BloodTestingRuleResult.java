@@ -45,12 +45,6 @@ public class BloodTestingRuleResult {
 
   private TTIStatus ttiStatus;
 
-  private boolean aboUninterpretable;
-
-  private boolean rhUninterpretable;
-
-  private boolean ttiUninterpretable;
-
   public BloodTestingRuleResult() {
   }
 
@@ -176,30 +170,6 @@ public class BloodTestingRuleResult {
 
   public void setPendingRepeatAndConfirmatoryTtiTestsIds(List<Long> pendingRepeatAndConfirmatoryTtiTestsIds) {
     this.pendingRepeatAndConfirmatoryTtiTestsIds = pendingRepeatAndConfirmatoryTtiTestsIds;
-  }
-
-  public boolean getAboUninterpretable() {
-    return aboUninterpretable;
-  }
-
-  public void setAboUninterpretable(boolean aboUninterpretable) {
-    this.aboUninterpretable = aboUninterpretable;
-  }
-
-  public boolean getRhUninterpretable() {
-    return rhUninterpretable;
-  }
-
-  public void setRhUninterpretable(boolean rhUninterpretable) {
-    this.rhUninterpretable = rhUninterpretable;
-  }
-
-  public boolean getTtiUninterpretable() {
-    return ttiUninterpretable;
-  }
-
-  public void setTtiUninterpretable(boolean ttiUninterpretable) {
-    this.ttiUninterpretable = ttiUninterpretable;
   }
 
   public Map<Long, BloodTestResultViewModel> getRecentTestResults() {

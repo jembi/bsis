@@ -37,15 +37,6 @@ public class BloodTestingRuleResultSet {
   /* only the recent (saved) blood test results */
   private Map<Long, BloodTestResult> recentTestResults;
 
-  /* indicates that there was no match for an ABO test */
-  private boolean aboUninterpretable = false;
-
-  /* indicates that there was no match for an Rh test */
-  private boolean rhUninterpretable = false;
-
-  /* indicates that there was no match for a TTI test */
-  private boolean ttiUninterpretable = false;
-
   /* how many blood typing tests were done */
   private Integer numBloodTypingTests = 0;
 
@@ -161,30 +152,6 @@ public class BloodTestingRuleResultSet {
 
   public void setTtiStatus(TTIStatus ttiStatus) {
     this.ttiStatus = ttiStatus;
-  }
-
-  public boolean getAboUninterpretable() {
-    return aboUninterpretable;
-  }
-
-  public void setAboUninterpretable(boolean aboUninterpretable) {
-    this.aboUninterpretable = aboUninterpretable;
-  }
-
-  public boolean getRhUninterpretable() {
-    return rhUninterpretable;
-  }
-
-  public void setRhUninterpretable(boolean rhUninterpretable) {
-    this.rhUninterpretable = rhUninterpretable;
-  }
-
-  public boolean getTtiUninterpretable() {
-    return ttiUninterpretable;
-  }
-
-  public void setTtiUninterpretable(boolean ttiUninterpretable) {
-    this.ttiUninterpretable = ttiUninterpretable;
   }
 
   public Set<String> getBloodAboChanges() {

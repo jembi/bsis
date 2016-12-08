@@ -51,16 +51,6 @@ public class BloodTestingRuleResultViewModelFactory {
     ruleResult.setBloodTypingMatchStatus(bloodTestingRuleResultSet.getBloodTypingMatchStatus());
     ruleResult.setBloodTypingStatus(bloodTestingRuleResultSet.getBloodTypingStatus());
 
-    // determine if there are any uninterpretable results
-    if (bloodTestingRuleResultSet.getBloodAboChanges().isEmpty() && bloodTestingRuleResultSet.getPendingAboTestsIds().isEmpty() && bloodTestingRuleResultSet.getAboUninterpretable()) {
-      // there was an attempt to match a rule for blood ABO
-      ruleResult.setAboUninterpretable(true);
-    }
-    if (bloodTestingRuleResultSet.getBloodRhChanges().isEmpty() && bloodTestingRuleResultSet.getPendingRhTestsIds().isEmpty() && bloodTestingRuleResultSet.getRhUninterpretable()) {
-      // there was an attempt to match a rule for blood Rh
-      ruleResult.setRhUninterpretable(true);
-    }
-
     ruleResult.setAllBloodAboChanges(bloodTestingRuleResultSet.getBloodAboChanges());
     ruleResult.setAllBloodRhChanges(bloodTestingRuleResultSet.getBloodRhChanges());
     String bloodAbo = donation.getBloodAbo();
@@ -78,7 +68,6 @@ public class BloodTestingRuleResultViewModelFactory {
     ruleResult.setTTIStatus(bloodTestingRuleResultSet.getTtiStatus());
     ruleResult.setTTIStatusChanges(bloodTestingRuleResultSet.getTtiStatusChanges());
     ruleResult.setTTIStatus(bloodTestingRuleResultSet.getTtiStatus());
-    ruleResult.setTtiUninterpretable(false);
 
     // Determine if the Donation is released
     TestBatch testBatch = donation.getDonationBatch().getTestBatch();
