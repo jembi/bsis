@@ -79,6 +79,9 @@ public class BloodTestingRuleResultSet {
   /* collection of the Rh tests that are still outstanding */
   private List<Long> pendingRhTestsIds = new ArrayList<>();
 
+  /* collection of the Titre tests that are still outstanding */
+  private List<Long> pendingTitreTestsIds = new ArrayList<>();
+
   /* collection of the TTI Confirmatory tests that are still outstanding */
   private List<Long> pendingConfirmatoryTtiTestsIds = new ArrayList<>();
 
@@ -233,6 +236,14 @@ public class BloodTestingRuleResultSet {
 
   public void addPendingRhTestsIds(Long pendingRhTestsId) {
     this.pendingRhTestsIds.add(pendingRhTestsId);
+  }
+
+  public List<Long> getPendingTitreTestsIds() {
+    return pendingTitreTestsIds;
+  }
+
+  public void addPendingTitreTestsIds(Long pendingTitreTestsId) {
+    this.pendingTitreTestsIds.add(pendingTitreTestsId);
   }
 
   public List<Long> getPendingConfirmatoryTtiTestsIds() {
