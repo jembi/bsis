@@ -5,5 +5,5 @@ package org.jembi.bsis.model.donation;
  * once the Donation is released from the TestBatch.
  */
 public enum Titre {
-  HIGH, LOW, NT
+  HIGH, LOW
 }

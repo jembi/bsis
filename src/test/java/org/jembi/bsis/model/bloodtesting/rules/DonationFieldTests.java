@@ -59,7 +59,7 @@ public class DonationFieldTests extends UnitTestSuite {
 
   @Test
   public void testGetNewInformationForDonationFieldForTitre_returnsCorrectStrings() throws Exception {
-    List<String> expectedNewInformation = Arrays.asList("HIGH","LOW", "NT"); 
+    List<String> expectedNewInformation = Arrays.asList("HIGH", "LOW");
     List<String> newInformation = DonationField.getNewInformationForDonationField(DonationField.TITRE);    
     assertThat(newInformation, is(expectedNewInformation));
   }
