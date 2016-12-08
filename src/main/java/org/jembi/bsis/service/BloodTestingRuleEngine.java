@@ -195,13 +195,16 @@ public class BloodTestingRuleEngine {
         case TTISTATUS:
           resultSet.addTtiStatusChanges(rule.getNewInformation());
           break;
+        case TITRE:
+          resultSet.addTitreChanges(rule.getNewInformation());
+          break;
         default:
           LOGGER.warn("Unknown donation field: " + donationFieldChanged);
           break;
       }
 
       // determine which tests are pending
-      // Note: pending tests are dependant on having a donation field changed.
+      // Note: pending tests are dependent on having a donation field changed.
       // This might not be desired in the future
       for (Long extraTestId : rule.getPendingTestsIdsSet()) {
         if (!availableTestResults.containsKey(extraTestId)) {
@@ -214,6 +217,9 @@ public class BloodTestingRuleEngine {
               break;
             case TTISTATUS:
               resultSet.addPendingRepeatAndConfirmatoryTtiTestsIds(extraTestId);
+              break;
+            case TITRE:
+              // see note above
               break;
             default:
               LOGGER.warn("Unknown rule donationFieldChanged: " + rule.getDonationFieldChanged());
