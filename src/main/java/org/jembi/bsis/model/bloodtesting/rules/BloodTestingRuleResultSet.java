@@ -70,6 +70,9 @@ public class BloodTestingRuleResultSet {
   /* collection of the various blood typing TTI tests done */
   private Set<String> ttiStatusChanges = new HashSet<>();
 
+  /* collection of the blood typing Titre test outcomes */
+  private Set<String> titreChanges = new HashSet<>();
+
   /* collection of the ABO tests that are still outstanding */
   private List<Long> pendingAboTestsIds = new ArrayList<>();
 
@@ -208,6 +211,14 @@ public class BloodTestingRuleResultSet {
     this.ttiStatusChanges.add(ttiStatusChange);
   }
 
+  public Set<String> getTitreChanges() {
+    return titreChanges;
+  }
+
+  public void addTitreChanges(String titreChange) {
+    this.titreChanges.add(titreChange);
+  }
+
   public List<Long> getPendingAboTestsIds() {
     return pendingAboTestsIds;
   }
@@ -313,7 +324,6 @@ public class BloodTestingRuleResultSet {
   public List<BloodTestingRule> getBloodTestingRules() {
     return bloodTestingRules;
   }
-
 
   public void setBloodTestingRules(List<BloodTestingRule> bloodTestingRules) {
     this.bloodTestingRules = bloodTestingRules;
