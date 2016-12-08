@@ -7,6 +7,7 @@ import java.util.Set;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.TTIStatus;
+import org.jembi.bsis.model.donation.Titre;
 
 public class BloodTestingRuleResult {
 
@@ -19,6 +20,8 @@ public class BloodTestingRuleResult {
   private String bloodAbo;
 
   private String bloodRh;
+
+  private Titre titre;
 
   private List<Long> pendingBloodTypingTestsIds;
 
@@ -86,6 +89,14 @@ public class BloodTestingRuleResult {
 
   public void setBloodRh(String bloodRh) {
     this.bloodRh = bloodRh;
+  }
+
+  public Titre getTitre() {
+    return titre;
+  }
+
+  public void setTitre(Titre titre) {
+    this.titre = titre;
   }
 
   public List<Long> getPendingBloodTypingTestsIds() {

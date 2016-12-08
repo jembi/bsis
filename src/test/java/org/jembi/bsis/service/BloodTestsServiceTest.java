@@ -4,6 +4,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +32,7 @@ import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
+import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
@@ -243,6 +247,66 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // do asserts
     Assert.assertTrue("Donation updated", updated);
     Assert.assertEquals("TTI status set", TTIStatus.TTI_UNSAFE, donation.getTTIStatus());
+  }
+
+  @Test
+  public void testUpdateDonationWithTestResultsUpdatedTitreFromNull_shouldUpdate() throws Exception {
+    // set up data
+    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(null).build();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setTitre(Titre.LOW);
+
+    // run test
+    boolean updated = service.updateDonationWithTestResults(donation, ruleResult);
+
+    // do asserts
+    assertThat(updated, is(true));
+    assertThat(donation.getTitre(), is(Titre.LOW));
+  }
+
+  @Test
+  public void testUpdateDonationWithTestResultsUpdatedTitreFromHighToLow_shouldUpdate() throws Exception {
+    // set up data
+    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(Titre.HIGH).build();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setTitre(Titre.LOW);
+
+    // run test
+    boolean updated = service.updateDonationWithTestResults(donation, ruleResult);
+
+    // do asserts
+    assertThat(updated, is(true));
+    assertThat(donation.getTitre(), is(Titre.LOW));
+  }
+
+  @Test
+  public void testUpdateDonationWithTestResultsUpdatedTitreFromHighToNT_shouldUpdate() throws Exception {
+    // set up data
+    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(Titre.HIGH).build();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setTitre(null);
+
+    // run test
+    boolean updated = service.updateDonationWithTestResults(donation, ruleResult);
+
+    // do asserts
+    assertThat(updated, is(true));
+    assertThat(donation.getTitre(), nullValue());
+  }
+
+  @Test
+  public void testUpdateDonationWithTestResults_shouldNotUpdate() throws Exception {
+    // set up data
+    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(Titre.HIGH).build();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setTitre(Titre.HIGH);
+
+    // run test
+    boolean updated = service.updateDonationWithTestResults(donation, ruleResult);
+
+    // do asserts
+    assertThat(updated, is(false));
+    assertThat(donation.getTitre(), is(Titre.HIGH));
   }
 
   @Test

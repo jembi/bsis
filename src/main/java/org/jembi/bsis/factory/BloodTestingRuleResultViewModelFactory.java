@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.service.BloodTestResultConstraintChecker;
 import org.jembi.bsis.service.DonationConstraintChecker;
@@ -63,6 +65,16 @@ public class BloodTestingRuleResultViewModelFactory {
       bloodRh = bloodTestingRuleResultSet.getBloodRhChanges().iterator().next();
     }
     ruleResult.setBloodRh(bloodRh);
+    Titre titre = donation.getTitre();
+    if (bloodTestingRuleResultSet.getTitreChanges() != null && bloodTestingRuleResultSet.getTitreChanges().size() == 1) {
+      String titreValue = bloodTestingRuleResultSet.getTitreChanges().iterator().next();
+      if (StringUtils.isBlank(titreValue)) {
+        titre = null;
+      } else {
+        titre = Titre.valueOf(titreValue);
+      }
+    }
+    ruleResult.setTitre(titre);
 
     // TTI test information
     ruleResult.setTTIStatus(bloodTestingRuleResultSet.getTtiStatus());
