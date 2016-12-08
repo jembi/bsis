@@ -45,9 +45,10 @@ public class TestResultsBackingFormsValidator extends BaseValidator<TestResultsB
       BloodTest activeBloodTest = activeBloodTestsMap.get(testId.toString());
 
       if (activeBloodTest == null) {
-        // No active test was found for the provided id, do not validate just skip
-        continue;
-      }   
+        // No active test was found for the provided id
+        errors.rejectValue("testOutcomesForDonations[" + index + "].testResults", "invalid", "Invalid test");
+        return;
+      }
 
       String result = form.getTestResults().get(testId);
 

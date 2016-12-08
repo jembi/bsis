@@ -148,7 +148,7 @@ public class TestResultsBackingFormsValidatorTest {
 
   @SuppressWarnings("unchecked")
   @Test
-  public void testValidateTestResultValuesInvalidTest_shouldNotValidate() throws Exception {
+  public void testValidateTestResultValuesInvalidTest() throws Exception {
     // set up data
     Map<Long, String> bloodTypingTestResults = new HashMap<>();
     bloodTypingTestResults.put(123l, "FALSE");
@@ -173,8 +173,9 @@ public class TestResultsBackingFormsValidatorTest {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "testOutcomesForDonations");
     testResultsBackingFormsValidator.validateForm(testResultsBackingForms, errors);
 
-    // check asserts, should not validate for invalid blood test (active = false or deleted = true)
-    Assert.assertEquals("errors found", 0, errors.getErrorCount());
+    // check asserts
+    Assert.assertEquals("errors found", 1, errors.getErrorCount());
+    Assert.assertEquals("error message correct", "Invalid test", errors.getAllErrors().get(0).getDefaultMessage());
   }
 
 }
