@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Test using DBUnit to test the SequenceNumberRepository
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
+@ContextConfiguration(locations = "classpath:**/applicationContextTest.xml")
 @Transactional
 @WebAppConfiguration
 public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
