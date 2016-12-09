@@ -24,30 +24,14 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
     BloodTestingRule enabledRule = aBloodTestingRule().buildAndPersist(entityManager);
     aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager); // excluded due to being deleted
 
-    List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false, false, false);
+    List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false, true);
 
     assertThat("Only enabled rules returned", rules.size(), is(1));
     assertThat("Only enabled rule returned", rules.get(0), hasSameStateAsBloodTestingRule(enabledRule));
   }
 
   @Test
-  public void testGetBloodTestingRules_shouldReturnEnabledWithActiveBloodTest() {
-
-    BloodTestingRule enabledRule = aBloodTestingRule().buildAndPersist(entityManager);
-    aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager); // excluded due to being deleted
-    aBloodTestingRule().withBloodTest(// excluded because the blood test for the rule is inactive
-        aBloodTest()
-            .thatIsInActive()
-            .buildAndPersist(entityManager))
-        .buildAndPersist(entityManager);
-    List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false, false, false);
-
-    assertThat("Only enabled rules returned", rules.size(), is(1));
-    assertThat("Only enabled rule returned", rules.get(0), hasSameStateAsBloodTestingRule(enabledRule));
-  }
-
-  @Test
-  public void testGetBloodTestingRules_shouldReturnEnabledWithEnabledBloodTest() {
+  public void testGetBloodTestingRules_shouldReturnEnabledWithEnabledActiveBloodTest() {
 
     BloodTestingRule enabledRule = aBloodTestingRule().buildAndPersist(entityManager);
     aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager); // excluded due to being deleted
@@ -56,17 +40,6 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
             .thatIsDeleted()
             .buildAndPersist(entityManager))
         .buildAndPersist(entityManager);
-    List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false, false, false);
-
-    assertThat("Only enabled rules returned", rules.size(), is(1));
-    assertThat("Only enabled rule returned", rules.get(0), hasSameStateAsBloodTestingRule(enabledRule));
-  }
-
-  @Test
-  public void testGetBloodTestingRules_shouldReturnEnabledForAnyBloodTest() {
-
-    BloodTestingRule enabledRule = aBloodTestingRule().buildAndPersist(entityManager);
-    aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager); // excluded due to being deleted
     aBloodTestingRule().withBloodTest(// expected with inactive blood test
         aBloodTest()
             .thatIsInActive()
@@ -77,9 +50,9 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
             .thatIsDeleted()
             .buildAndPersist(entityManager))
         .buildAndPersist(entityManager);
-    List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false, true, true);
+    List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false, false);
 
-    assertThat("All enabled rules returned for any blood test", rules.size(), is(3));
+    assertThat("Only enabled rules returned", rules.size(), is(1));
     assertThat("Only enabled rule returned", rules.get(0), hasSameStateAsBloodTestingRule(enabledRule));
   }
 
@@ -89,7 +62,7 @@ public class BloodTestingRuleRepositoryTests extends ContextDependentTestSuite {
     BloodTestingRule enabledRule = aBloodTestingRule().buildAndPersist(entityManager);
     BloodTestingRule deletedRule = aBloodTestingRule().thatIsDeleted().buildAndPersist(entityManager);
 
-    List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(true, true, true);
+    List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(true, true);
 
     assertThat("All rules returned", rules.size(), is(2));
     assertThat("Enabled rule returned", rules.get(0), hasSameStateAsBloodTestingRule(enabledRule));
