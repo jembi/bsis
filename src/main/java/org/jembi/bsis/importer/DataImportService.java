@@ -369,7 +369,7 @@ public class DataImportService {
     Map<String, IdType> idTypeCache = buildIdTypeCache();
     Map<String, ContactMethodType> contactMethodTypeCache = buildContactMethodTypeCache();
     Map<String, AddressType> addressTypeCache = buildAddressTypeCache();
-    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRuleRepository.getBloodTestingRules(false);
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRuleRepository.getBloodTestingRules(false, false, false);
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -683,7 +683,7 @@ public class DataImportService {
     Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
     Map<String, DonationBatch> donationBatches = new HashMap<>();
     Map<String, TestBatch> testBatches = new HashMap<>();
-    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRuleRepository.getBloodTestingRules(false);
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRuleRepository.getBloodTestingRules(false, false, false);
 
     // Keep a reference to the row containing the headers
     Row headers = null;

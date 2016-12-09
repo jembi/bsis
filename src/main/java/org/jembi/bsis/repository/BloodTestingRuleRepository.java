@@ -12,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BloodTestingRuleRepository extends AbstractRepository<BloodTestingRule> {
 
-  public List<BloodTestingRule> getBloodTestingRules(boolean includeDeleted) {
+  public List<BloodTestingRule> getBloodTestingRules(boolean includeDeleted, boolean includeWithDeletedBloodTest, boolean includeWithInActiveBloodTest) {
     TypedQuery<BloodTestingRule> query;
     query = entityManager.createNamedQuery(BloodTestingRuleNamedQueryConstants.NAME_GET_BLOOD_TESTING_RULES, BloodTestingRule.class);
     query.setParameter("includeDeleted", includeDeleted);
+    query.setParameter("includeWithDeletedBloodTest", includeWithDeletedBloodTest);
+    query.setParameter("includeWithInActiveBloodTest", includeWithInActiveBloodTest);
     return query.getResultList();
   }
 

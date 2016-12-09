@@ -5,9 +5,11 @@ public class BloodTestingRuleNamedQueryConstants {
   public static final String NAME_GET_BLOOD_TESTING_RULES =
       "BloodTestingRule.getBloodTestingRules";
   public static final String QUERY_GET_BLOOD_TESTING_RULES = 
-      "SELECT btr " 
+      "SELECT btr "
       + "FROM BloodTestingRule btr "
-      + "WHERE (:includeDeleted = TRUE OR btr.isDeleted = FALSE)";
+      + "WHERE (:includeDeleted = TRUE OR btr.isDeleted = FALSE) "
+      + "AND (:includeWithDeletedBloodTest = TRUE OR btr.bloodTest.isDeleted = FALSE) "
+      + "AND (:includeWithInActiveBloodTest = TRUE OR btr.bloodTest.isActive = TRUE)";
   
   public static final String NAME_FIND_BLOOD_TESTING_RULE_BY_ID = 
       "BloodTestingRule.findBloodTestingRuleById";
