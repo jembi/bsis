@@ -13,8 +13,6 @@ import java.util.HashMap;
 import org.jembi.bsis.backingform.DonationBackingForm;
 import org.jembi.bsis.backingform.DonationTypeBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
-import org.jembi.bsis.backingform.validator.AdverseEventBackingFormValidator;
-import org.jembi.bsis.backingform.validator.DonationBackingFormValidator;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.DonorBuilder;
@@ -79,7 +77,7 @@ public class DonationBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
-    Assert.assertEquals("DIN wasn't updated", "DIN123", form.getDonationIdentificationNumber());
+    Assert.assertEquals("DIN wasn't updated", "DIN1234", form.getDonationIdentificationNumber());
     Assert.assertEquals("DonationDate wasn't updated", donationDate, form.getDonationDate());
   }
   
@@ -105,7 +103,7 @@ public class DonationBackingFormValidatorTest {
     donationBackingFormValidator.validate(form, errors);
 
     // check asserts
-    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertEquals("DIN was generated", "DIN234", form.getDonationIdentificationNumber());
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Assert.assertEquals("DonationDate was set to today", sdf.format(new Date()), sdf.format(form.getDonationDate()));
@@ -145,7 +143,7 @@ public class DonationBackingFormValidatorTest {
     Donation otherDonation = DonationBuilder.aDonation().withId(2L).build();
 
     // set up mocks
-    when(donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("DIN123")).thenReturn(otherDonation);
+    when(donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("DIN1234")).thenReturn(otherDonation);
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     mockGeneralConfigAndFormFields();
@@ -541,6 +539,76 @@ public class DonationBackingFormValidatorTest {
   }
 
   @Test
+  public void testInvalidDinAboveMaximum() throws Exception {
+    // set up data
+    DonationBackingForm form = createBasicBackingForm();
+    form.setDonationIdentificationNumber("DIN111111111111111111111111111111111111");
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    mockGeneralConfigAndFormFields();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
+  }
+
+  @Test
+  public void testInvalidDinBelowMinimum() throws Exception {
+    // set up data
+    DonationBackingForm form = createBasicBackingForm();
+    form.setDonationIdentificationNumber("DIN12");
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    mockGeneralConfigAndFormFields();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
+  }
+
+  @Test
+  public void testInvalidDinLenthConfiguration_shouldDefaultTo20() throws Exception {
+    // set up data
+    DonationBackingForm form = createBasicBackingForm();
+    form.setDonationIdentificationNumber("DIN12345678901234567"); // DIN of 20 characters
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+
+    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpSystolicMin")).thenReturn("70");
+    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpSystolicMax")).thenReturn("190");
+    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpDiastolicMin")).thenReturn("40");
+    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpDiastolicMax")).thenReturn("100");
+    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.hbMin")).thenReturn("1");
+    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.hbMax")).thenReturn("25");
+    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMin")).thenReturn("30");
+    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMax")).thenReturn("300");
+    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMin")).thenReturn("30");
+    when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMax")).thenReturn("200");
+    when(generalConfigAccessorService.getIntValue("donation.dinLength")).thenReturn(35);
+    when(formFieldRepository.getRequiredFormFields("donation")).thenReturn(Arrays.asList(new String[] {"packType", "donationType"}));
+    when(formFieldRepository.getFieldMaxLengths("donation")).thenReturn(new HashMap<String, Integer>());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+
+  @Test
   public void testValidUpdateExistingDonation() throws Exception {
     // set up data
     DonationBackingForm form = createBasicBackingForm();
@@ -548,7 +616,7 @@ public class DonationBackingFormValidatorTest {
     donation.setId(1L);
 
     // set up mocks
-    when(donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("DIN123")).thenReturn(form.getDonation());
+    when(donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("DIN1234")).thenReturn(form.getDonation());
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     mockGeneralConfigAndFormFields();
@@ -591,7 +659,7 @@ public class DonationBackingFormValidatorTest {
     donationBackingFormValidator.validate(form, errors);
 
     // check asserts
-    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertEquals("DIN was generated", "DIN234", form.getDonationIdentificationNumber());
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Assert.assertEquals("DonationDate was set to today", sdf.format(new Date()), sdf.format(form.getDonationDate()));
@@ -608,6 +676,7 @@ public class DonationBackingFormValidatorTest {
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMax")).thenReturn("300");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMin")).thenReturn("30");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMax")).thenReturn("200");
+    when(generalConfigAccessorService.getIntValue("donation.dinLength")).thenReturn(7);
     when(formFieldRepository.getRequiredFormFields("donation")).thenReturn(Arrays.asList(new String[] {"packType", "donationType"}));
     when(formFieldRepository.getFieldMaxLengths("donation")).thenReturn(new HashMap<String, Integer>());    
   }
@@ -629,7 +698,7 @@ public class DonationBackingFormValidatorTest {
     form.setDonorNumber("DN123");
     form.setDonationBatch(donationBatch);
     form.setDonor(donor);
-    form.setDonationIdentificationNumber("DIN123");
+    form.setDonationIdentificationNumber("DIN1234");
     form.setPackType(packType);
     form.setDonationType(donationType);
     Date donationDate = new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01");

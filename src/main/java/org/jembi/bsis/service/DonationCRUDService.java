@@ -79,6 +79,11 @@ public class DonationCRUDService {
       donorRepository.updateDonor(donor);
     }
 
+    // Soft delete related components
+    for (Component component: donation.getComponents()) {
+      componentCRUDService.deleteComponent(component.getId());
+    }
+
     donorService.setDonorDueToDonate(donor);
   }
 
@@ -124,7 +129,7 @@ public class DonationCRUDService {
 
   public Donation updateDonation(Donation updatedDonation) {
     Donation existingDonation = donationRepository.findDonationById(updatedDonation.getId());
-
+    
     // Check if pack type has been updated
     boolean packTypeUpdated = !Objects.equals(existingDonation.getPackType(), updatedDonation.getPackType());
 
@@ -135,6 +140,9 @@ public class DonationCRUDService {
     if (bleedTimesUpdated && !donationConstraintChecker.canEditBleedTimes(updatedDonation.getId())) {
       throw new IllegalArgumentException("Cannot edit bleed times");
     }
+
+    // See if donation should be released (in the case of pack type being updated and a new initial component created)
+    boolean releaseDonation = false;
 
     if (packTypeUpdated) {
 
@@ -158,19 +166,27 @@ public class DonationCRUDService {
           throw new IllegalArgumentException("Cannot set pack type that produces components");
         }
       }
-
+      
       // Set new pack type
       existingDonation.setPackType(newPackType);
-
-      // If an initial component was created previously, delete it
-      if (!existingDonation.getComponents().isEmpty()) {
-        existingDonation.getComponents().get(0).setIsDeleted(true);
+      
+      // If the new packType does not count as donation, delete initial component
+      if (!newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {
+          existingDonation.getComponents().get(0).setIsDeleted(true);
       }
-
-      // If the new pack type produces components, create a new initial component
-      if (newPackType.getCountAsDonation()) {
+     
+      // If the new packType count as donation, update initial component
+      if (newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {    
+        componentCRUDService.updateComponentWithNewPackType(existingDonation.getComponents().get(0), newPackType);  
+      }
+      
+      // If the new PackType count as donation and there is no initial component then create it
+      if (newPackType.getCountAsDonation() && existingDonation.getComponents().isEmpty()) {
         Component component = componentCRUDService.createInitialComponent(existingDonation);
         existingDonation.getComponents().add(component);
+        // ensure that the Donation is released, so that the new initial component is made available (or not)
+        releaseDonation = existingDonation.getDonationBatch().getTestBatch() != null
+                && TestBatchStatus.hasBeenReleased(existingDonation.getDonationBatch().getTestBatch().getStatus());
       }
       
       // If the new pack type doesn't produce test samples, delete test outcomes and clear statuses
@@ -194,10 +210,15 @@ public class DonationCRUDService {
     existingDonation.setBleedStartTime(updatedDonation.getBleedStartTime());
     existingDonation.setBleedEndTime(updatedDonation.getBleedEndTime());
     existingDonation.setAdverseEvent(updatedDonation.getAdverseEvent());
+
     Donation donation = donationRepository.updateDonation(existingDonation);
 
     if (packTypeUpdated) {
       donorService.setDonorDueToDonate(existingDonation.getDonor());
+    }
+
+    if (releaseDonation) {
+      testBatchStatusChangeService.handleRelease(donation);
     }
 
     return donation;
@@ -254,5 +275,4 @@ public class DonationCRUDService {
     donorRepository.saveDonor(donor);
     return donor;
   }
-
 }

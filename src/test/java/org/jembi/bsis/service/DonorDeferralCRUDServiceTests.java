@@ -28,9 +28,6 @@ import org.jembi.bsis.model.donordeferral.DurationType;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DonorDeferralRepository;
-import org.jembi.bsis.service.DateGeneratorService;
-import org.jembi.bsis.service.DeferralConstraintChecker;
-import org.jembi.bsis.service.DonorDeferralCRUDService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -186,8 +183,27 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
     Assert.assertEquals("Deferral was deleted when", sdf.format(new Date()), sdf.format(donorDeferral.getVoidedDate()));
   }
 
+  @Test(expected = IllegalStateException.class)
+  public void testUpdateDeferralWithEditingConstraints_shouldThrow() throws Exception {
+    // create test data
+    DeferralReason permanentDeferralReason = DeferralReasonBuilder.aDeferralReason()
+        .withDurationType(DurationType.PERMANENT)
+        .build();
+    DonorDeferral permanentDonorDeferral = DonorDeferralBuilder.aDonorDeferral()
+        .withId(1L)
+        .withDeferralReason(permanentDeferralReason)
+        .build();
+
+    // set up mocks
+    when(donorDeferralRepository.findDonorDeferralById(1l)).thenReturn(permanentDonorDeferral);
+    when(deferralConstraintChecker.canEditDonorDeferral(1L)).thenReturn(false);
+
+    // run tests
+    donorDeferralCRUDService.updateDeferral(permanentDonorDeferral);
+  }
+  
   @Test
-  public void testUpdateDeferral() throws Exception {
+  public void testUpdateDeferral_shouldUpdateCorrectly() throws Exception {
     // create test data
     Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason originalDeferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
@@ -197,7 +213,7 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
         .withDeferredDonor(deferredDonor).withDeferralReason(originalDeferralReason).withDeferredUntil(new Date()).build();
 
     Date newDeferredUntil = new SimpleDateFormat("yyyy-MM-dd").parse("2020-10-20");
-    DeferralReason updatedDeferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
+    DeferralReason updatedDeferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
         .withType(DeferralReasonType.NORMAL).withReason("test2").build();
     DonorDeferral updatedDonorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralDate(createdDate)
         .withDeferredDonor(deferredDonor).withDeferralReason(updatedDeferralReason).withDeferralReasonText("hello").withDeferredUntil(newDeferredUntil).build();
@@ -205,6 +221,7 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
     // set up mocks
     when(donorDeferralRepository.findDonorDeferralById(1l)).thenReturn(originalDonorDeferral);
     when(donorDeferralRepository.update(originalDonorDeferral)).thenReturn(updatedDonorDeferral);
+    when(deferralConstraintChecker.canEditDonorDeferral(1L)).thenReturn(true);
 
     // run tests
     DonorDeferral savedDonorDeferral = donorDeferralCRUDService.updateDeferral(updatedDonorDeferral);
