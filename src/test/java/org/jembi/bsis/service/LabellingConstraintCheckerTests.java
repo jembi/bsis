@@ -13,9 +13,7 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
-import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.donor.Donor;
-import org.jembi.bsis.model.util.BloodAbo;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -503,99 +501,5 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Verify
     assertThat(canPrintDiscardLabel, is(false));
   }
-  
-  @Test
-  public void testShouldLabelIncludeHighTitre_shouldReturnTrue() {
-    // Set up
-    Donation donation = aDonation()
-        .withTitre(Titre.HIGH)
-        .withBloodAbo(BloodAbo.O.name())
-        .build();
-    Component component = aComponent()
-        .withDonation(donation)
-        .withComponentType(aComponentType().thatContainsPlasma().build())
-        .build();
-    
-    // Exercise SUT
-    boolean includeHighTitre = labellingConstraintChecker.shouldLabelIncludeHighTitre(component);
-    
-    // Verify
-    assertThat(includeHighTitre, is(true));
-  }
-  
-  @Test
-  public void testShouldLabelIncludeHighTitreWithLowTitre_shouldReturnFalse() {
-    // Set up
-    Donation donation = aDonation()
-        .withTitre(Titre.LOW)
-        .withBloodAbo(BloodAbo.O.name())
-        .build();
-    Component component = aComponent()
-        .withDonation(donation)
-        .withComponentType(aComponentType().thatContainsPlasma().build())
-        .build();
-    
-    // Exercise SUT
-    boolean includeHighTitre = labellingConstraintChecker.shouldLabelIncludeHighTitre(component);
-    
-    // Verify
-    assertThat(includeHighTitre, is(false));
-  }
-  
-  @Test
-  public void testShouldLabelIncludeHighTitreWithNoTitre_shouldReturnFalse() {
-    // Set up
-    Donation donation = aDonation()
-        .withTitre(null)
-        .withBloodAbo(BloodAbo.O.name())
-        .build();
-    Component component = aComponent()
-        .withDonation(donation)
-        .withComponentType(aComponentType().thatContainsPlasma().build())
-        .build();
-    
-    // Exercise SUT
-    boolean includeHighTitre = labellingConstraintChecker.shouldLabelIncludeHighTitre(component);
-    
-    // Verify
-    assertThat(includeHighTitre, is(false));
-  }
-  
-  @Test
-  public void testShouldLabelIncludeHighTitreWithNoOAbo_shouldReturnFalse() {
-    // Set up
-    Donation donation = aDonation()
-        .withTitre(Titre.HIGH)
-        .withBloodAbo(BloodAbo.A.name())
-        .build();
-    Component component = aComponent()
-        .withDonation(donation)
-        .withComponentType(aComponentType().thatContainsPlasma().build())
-        .build();
-    
-    // Exercise SUT
-    boolean includeHighTitre = labellingConstraintChecker.shouldLabelIncludeHighTitre(component);
-    
-    // Verify
-    assertThat(includeHighTitre, is(false));
-  }
-  
-  @Test
-  public void testShouldLabelIncludeHighTitreWithNoPlasma_shouldReturnFalse() {
-    // Set up
-    Donation donation = aDonation()
-        .withTitre(Titre.HIGH)
-        .withBloodAbo(BloodAbo.O.name())
-        .build();
-    Component component = aComponent()
-        .withDonation(donation)
-        .withComponentType(aComponentType().thatDoesntContainsPlasma().build())
-        .build();
-    
-    // Exercise SUT
-    boolean includeHighTitre = labellingConstraintChecker.shouldLabelIncludeHighTitre(component);
-    
-    // Verify
-    assertThat(includeHighTitre, is(false));
-  }
+
 }

@@ -1,6 +1,7 @@
 package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
@@ -18,12 +19,15 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.util.BloodAbo;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 
 public class LabellingServiceTests extends UnitTestSuite {
   
@@ -33,6 +37,7 @@ public class LabellingServiceTests extends UnitTestSuite {
   private static final String STORAGE_INFO = "Store below -30°C";
   private static final String TRANSPORT_INFO = "Transport below -25°C";
 
+  @Spy
   @InjectMocks
   LabellingService labellingService;
   
@@ -312,7 +317,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(labellingConstraintChecker.shouldLabelIncludeHighTitre(component)).thenReturn(true);
+    when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(true);
     
     // run test
     String label = labellingService.printPackLabel(1L);
@@ -342,12 +347,82 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(labellingConstraintChecker.shouldLabelIncludeHighTitre(component)).thenReturn(false);
+    when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(false);
     
     // run test
     String label = labellingService.printPackLabel(1L);
 
     // check outcome
     assertThat(label, !label.contains("HIGH TITRE"));
+  }
+
+  @Test
+  public void testShouldLabelIncludeHighTitre_shouldReturnTrue() {
+    // Set up
+    Donation donation = aDonation().withTitre(Titre.HIGH).withBloodAbo(BloodAbo.O.name()).build();
+    Component component =
+        aComponent().withDonation(donation).withComponentType(aComponentType().thatContainsPlasma().build()).build();
+
+    // Exercise SUT
+    boolean includeHighTitre = labellingService.shouldLabelIncludeHighTitre(component);
+
+    // Verify
+    assertThat(includeHighTitre, is(true));
+  }
+
+  @Test
+  public void testShouldLabelIncludeHighTitreWithLowTitre_shouldReturnFalse() {
+    // Set up
+    Donation donation = aDonation().withTitre(Titre.LOW).withBloodAbo(BloodAbo.O.name()).build();
+    Component component =
+        aComponent().withDonation(donation).withComponentType(aComponentType().thatContainsPlasma().build()).build();
+
+    // Exercise SUT
+    boolean includeHighTitre = labellingService.shouldLabelIncludeHighTitre(component);
+
+    // Verify
+    assertThat(includeHighTitre, is(false));
+  }
+
+  @Test
+  public void testShouldLabelIncludeHighTitreWithNoTitre_shouldReturnFalse() {
+    // Set up
+    Donation donation = aDonation().withTitre(null).withBloodAbo(BloodAbo.O.name()).build();
+    Component component =
+        aComponent().withDonation(donation).withComponentType(aComponentType().thatContainsPlasma().build()).build();
+
+    // Exercise SUT
+    boolean includeHighTitre = labellingService.shouldLabelIncludeHighTitre(component);
+
+    // Verify
+    assertThat(includeHighTitre, is(false));
+  }
+
+  @Test
+  public void testShouldLabelIncludeHighTitreWithNoOAbo_shouldReturnFalse() {
+    // Set up
+    Donation donation = aDonation().withTitre(Titre.HIGH).withBloodAbo(BloodAbo.A.name()).build();
+    Component component =
+        aComponent().withDonation(donation).withComponentType(aComponentType().thatContainsPlasma().build()).build();
+
+    // Exercise SUT
+    boolean includeHighTitre = labellingService.shouldLabelIncludeHighTitre(component);
+
+    // Verify
+    assertThat(includeHighTitre, is(false));
+  }
+
+  @Test
+  public void testShouldLabelIncludeHighTitreWithNoPlasma_shouldReturnFalse() {
+    // Set up
+    Donation donation = aDonation().withTitre(Titre.HIGH).withBloodAbo(BloodAbo.O.name()).build();
+    Component component = aComponent().withDonation(donation)
+        .withComponentType(aComponentType().thatDoesntContainsPlasma().build()).build();
+
+    // Exercise SUT
+    boolean includeHighTitre = labellingService.shouldLabelIncludeHighTitre(component);
+
+    // Verify
+    assertThat(includeHighTitre, is(false));
   }
 }

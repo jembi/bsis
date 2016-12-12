@@ -7,7 +7,9 @@ import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.util.BloodAbo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +58,7 @@ public class LabellingService {
     
     // Generate element for high titre
     String highTitre = "";
-    if (labellingConstraintChecker.shouldLabelIncludeHighTitre(component)) {
+    if (shouldLabelIncludeHighTitre(component)) {
       highTitre = "^FT505,409^A0N,36,36,C^FR^FDHIGH TITRE^FS";
     }
 
@@ -138,6 +140,26 @@ public class LabellingService {
         "^XA^ID000.GRF^FS^XZ";
 
     return labelZPL;
+  }
+  
+  /**
+   * The label should include "HIGH TITRE" if:
+   * 
+   * 1- The donation's titre is high
+   * 2- The donation's blood ABO is "O"
+   * 3- The component's type contains plasma
+   *
+   * @param component the component
+   * @return true, if successful
+   */
+  protected boolean shouldLabelIncludeHighTitre(Component component) {
+    Donation donation = component.getDonation();
+    if (donation.getTitre() != null && donation.getTitre().equals(Titre.HIGH) && 
+        donation.getBloodAbo().equals(BloodAbo.O.name()) && 
+        component.getComponentType().getContainsPlasma()) {
+      return true;
+    }
+    return false;
   }
 
 }
