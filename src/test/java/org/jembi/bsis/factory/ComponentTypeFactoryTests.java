@@ -52,6 +52,8 @@ public class ComponentTypeFactoryTests {
         .withTransportInfo("transportInfo")
         .withStorageInfo("storageInfo")
         .withCanBeIssued(false)
+        .withMaxBleedTime(10)
+        .withMaxTimeSinceDonation(5)
         .build();
 
     ComponentTypeCombinationViewModel combinationViewModel = aComponentTypeCombinationViewModel().withId(1L).build();
@@ -76,6 +78,9 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", "transportInfo", viewModel.getTransportInfo());
     Assert.assertEquals("View Model correct", "storageInfo", viewModel.getStorageInfo());
     Assert.assertEquals("View Model correct", false, viewModel.getCanBeIssued());
+    Assert.assertEquals("View Model correct", false, viewModel.getCanBeIssued());
+    Assert.assertEquals("View Model correct", Integer.valueOf(5), viewModel.getMaxTimeSinceDonation());
+    Assert.assertEquals("View Model correct", Integer.valueOf(10), viewModel.getMaxBleedTime());
   }
 
   @Test

@@ -77,6 +77,8 @@ public class ComponentTypeFactory {
     componentTypeFullViewModel.setPreparationInfo(componentType.getPreparationInfo());
     componentTypeFullViewModel.setTransportInfo(componentType.getTransportInfo());
     componentTypeFullViewModel.setStorageInfo(componentType.getStorageInfo());
+    componentTypeFullViewModel.setMaxBleedTime(componentType.getMaxBleedTime());
+    componentTypeFullViewModel.setMaxTimeSinceDonation(componentType.getMaxTimeSinceDonation());
   }
 
   private void populateProducedComponentTypeCombinationViewModels(ComponentTypeFullViewModel viewModel, ComponentType componentType) {
