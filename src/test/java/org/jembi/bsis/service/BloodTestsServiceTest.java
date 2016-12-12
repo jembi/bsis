@@ -295,7 +295,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   }
 
   @Test
-  public void testUpdateDonationWithTestResults_shouldNotUpdate() throws Exception {
+  public void testUpdateDonationWithTestResultsSameTitre_shouldNotUpdate() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(Titre.HIGH).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
