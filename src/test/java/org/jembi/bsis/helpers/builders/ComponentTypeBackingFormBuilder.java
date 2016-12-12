@@ -8,6 +8,8 @@ public class ComponentTypeBackingFormBuilder extends AbstractBuilder<ComponentTy
   private String componentTypeName;
   private String componentTypeCode;
   private Integer expiresAfter;
+  private Integer maxBleedTime;
+  private Integer maxTimeSinceDonation;
 
   public ComponentTypeBackingFormBuilder withId(Long id) {
     this.id = id;
@@ -29,6 +31,16 @@ public class ComponentTypeBackingFormBuilder extends AbstractBuilder<ComponentTy
     return this;
   }
 
+  public ComponentTypeBackingFormBuilder withMaxBleedTime(Integer maxBleedTime) {
+    this.maxBleedTime = maxBleedTime;
+    return this;
+  }
+
+  public ComponentTypeBackingFormBuilder withMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
+    this.maxTimeSinceDonation = maxTimeSinceDonation;
+    return this;
+  }
+
   @Override
   public ComponentTypeBackingForm build() {
     ComponentTypeBackingForm backingForm = new ComponentTypeBackingForm();
@@ -36,6 +48,8 @@ public class ComponentTypeBackingFormBuilder extends AbstractBuilder<ComponentTy
     backingForm.setComponentTypeName(componentTypeName);
     backingForm.setComponentTypeCode(componentTypeCode);
     backingForm.setExpiresAfter(expiresAfter);
+    backingForm.setMaxBleedTime(maxBleedTime);
+    backingForm.setMaxTimeSinceDonation(maxTimeSinceDonation);
     return backingForm;
   }
   

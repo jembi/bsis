@@ -15,6 +15,8 @@ public class ComponentTypeBackingFormValidator extends BaseValidator<ComponentTy
   
   private static final Integer MAX_LENGTH_NAME = 50;
   private static final Integer MAX_LENGTH_CODE = 30;
+  private static final Integer MAX_MAX_BLEED_TIME = 60;
+  private static final Integer MAX_MAX_TIME_SINCE_DONATION = 30;
   
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
@@ -51,6 +53,18 @@ public class ComponentTypeBackingFormValidator extends BaseValidator<ComponentTy
       errors.rejectValue("expiresAfter", "errors.required", "Expires after is required");
     } else if (form.getExpiresAfter() <= 0) {
       errors.rejectValue("expiresAfter", "errors.nonPositive", "Expires after must be greater than zero");
+    }
+
+    if (form.getMaxBleedTime() != null) {
+      if (form.getMaxBleedTime() < 0 || form.getMaxBleedTime() > MAX_MAX_BLEED_TIME) {
+        errors.rejectValue("maxBleedTime", "errors.invalid", "maxBleedTime should be between 0 and " + MAX_MAX_BLEED_TIME);
+      }
+    }
+
+    if (form.getMaxTimeSinceDonation() != null) {
+      if (form.getMaxTimeSinceDonation() < 0 || form.getMaxTimeSinceDonation() > MAX_MAX_TIME_SINCE_DONATION) {
+        errors.rejectValue("maxTimeSinceDonation", "errors.invalid", "maxTimeSinceDonation should be between 0 and " + MAX_MAX_TIME_SINCE_DONATION);
+      }
     }
   }
 
