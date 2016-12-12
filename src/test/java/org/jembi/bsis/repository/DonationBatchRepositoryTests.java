@@ -16,20 +16,12 @@ import javax.persistence.PersistenceContext;
 import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
+import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@WebAppConfiguration
-@Transactional
-public class DonationBatchRepositoryTests {
+public class DonationBatchRepositoryTests extends ContextDependentTestSuite {
 
   @Autowired
   private DonationBatchRepository donationBatchRepository;

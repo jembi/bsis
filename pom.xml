@@ -5,7 +5,7 @@
     <name>BSIS</name>
     <description>Blood Safety Information System (BSIS)</description>
     <artifactId>bsis</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
@@ -14,7 +14,7 @@
         <spring-version>4.1.0.RELEASE</spring-version>
         <spring-security-version>3.2.5.RELEASE</spring-security-version>
         <hibernate-version>4.3.7.Final</hibernate-version>
-        <liquibase.propertyFile>src/main/resources/liquibase/liquibase.properties</liquibase.propertyFile>
+        <liquibase.propertyFile>src/main/resources/bsis.properties</liquibase.propertyFile>
     </properties>
 
     <build>
@@ -28,9 +28,7 @@
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
-
             </resource>
-
         </resources>
 
         <testResources>
@@ -39,13 +37,12 @@
                 <filtering>false</filtering>
                 <includes>
                     <include>**/*.xml</include>
-                    <include>**/*.sql</include>
+                    <include>**/*.properties</include>
                 </includes>
             </testResource>
         </testResources>
 
         <plugins>
-
             <plugin>
               <artifactId>maven-assembly-plugin</artifactId>
               <configuration>
@@ -89,6 +86,7 @@
                     <server>tomcat</server>
                 </configuration>
             </plugin>
+
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.0</version>
@@ -97,6 +95,7 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -104,24 +103,21 @@
                 <configuration>
                     <webXml>${basedir}/war/WEB-INF/web.xml</webXml>
                     <warSourceDirectory>${basedir}/war</warSourceDirectory>
+                    <archive>
+                      <manifest>
+                        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                      </manifest>
+                      <manifestEntries>
+                        <git-describe>${describe}</git-describe>
+                      </manifestEntries>
+                    </archive>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.5.1</version>
-                <configuration>
-                    <propertyFile>liquibase/liquibase.properties</propertyFile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id></id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>update</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
@@ -146,6 +142,26 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+              <groupId>com.lukegb.mojo</groupId>
+              <artifactId>gitdescribe-maven-plugin</artifactId>
+              <version>3.0</version>
+              <executions>
+                <execution>
+                  <goals>
+                    <goal>gitdescribe</goal>
+                  </goals>
+                  <id>git-describe</id>
+                  <phase>initialize</phase>
+                  <configuration>
+                    <extraArguments>
+                      <param>--long</param>
+                    </extraArguments>
+                  </configuration>
+                </execution>
+              </executions>
             </plugin>
         </plugins>
     </build>

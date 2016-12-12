@@ -24,6 +24,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
@@ -65,7 +66,7 @@ public class ComponentCRUDService {
   private ComponentTypeCombinationRepository componentTypeCombinationRepository;
   
   @Autowired
-  private DonationBatchRepository donationBatchRepository; 
+  private DonationBatchRepository donationBatchRepository;
 
   public Component createInitialComponent(Donation donation) {
 
@@ -79,44 +80,20 @@ public class ComponentCRUDService {
 
     Component component = new Component();
     component.setIsDeleted(false);
+    component.setComponentType(componentType);
     component.setComponentCode(componentType.getComponentTypeCode());
     component.setDonation(donation);
     component.setStatus(ComponentStatus.QUARANTINED);
-    component.setCreatedDate(donation.getCreatedDate());
 
-    // set new component creation date to match donation date
-    component.setCreatedOn(donation.getDonationDate());
-    // if bleed time is provided, update component creation time to match bleed start time
-    if (donation.getBleedStartTime() != null) {
-      Calendar donationDate = Calendar.getInstance();
-      donationDate.setTime(donation.getDonationDate());
-      Calendar bleedTime = Calendar.getInstance();
-      bleedTime.setTime(donation.getBleedStartTime());
-      donationDate.set(Calendar.HOUR_OF_DAY, bleedTime.get(Calendar.HOUR_OF_DAY));
-      donationDate.set(Calendar.MINUTE, bleedTime.get(Calendar.MINUTE));
-      donationDate.set(Calendar.SECOND, bleedTime.get(Calendar.SECOND));
-      donationDate.set(Calendar.MILLISECOND, bleedTime.get(Calendar.MILLISECOND));
-      component.setCreatedOn(donationDate.getTime());
-    }
+    // set new component creation date to match donation date and bleedStartTime if specified
+    component.setCreatedOn(calculateCreatedOn(donation.getDonationDate(), donation.getBleedStartTime()));
+    component.setCreatedDate(donation.getCreatedDate());
     component.setCreatedBy(donation.getCreatedBy());
 
-    // set cal to donationDate Date
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(donation.getDonationDate());
+    // set new component expiresOn date to be 'expiresAfter' days after the createdOn date
+    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), componentType.getExpiresAfter()));
 
-    // second calendar to store bleedStartTime
-    Calendar bleedStartTime = Calendar.getInstance();
-    bleedStartTime.setTime(donation.getBleedStartTime());
-
-    // update cal to set time to bleedStartTime
-    cal.set(Calendar.HOUR_OF_DAY, bleedStartTime.get(Calendar.HOUR_OF_DAY));
-    cal.set(Calendar.MINUTE, bleedStartTime.get(Calendar.MINUTE));
-    cal.set(Calendar.SECOND, bleedStartTime.get(Calendar.SECOND));
-
-    // update cal with initial component expiry period
-    cal.add(Calendar.DATE, componentType.getExpiresAfter());
-    Date expiresOn = cal.getTime();
-
+    // set the component venue and component batch (if already created for the donation batch)
     ComponentBatch componentBatch = donationBatchRepository.findComponentBatchByDonationbatchId(
         donation.getDonationBatch().getId());
         
@@ -130,11 +107,42 @@ public class ComponentCRUDService {
       component.setLocation(componentBatch.getLocation());
     }
 
-    component.setExpiresOn(expiresOn);
-    component.setComponentType(componentType);
     componentRepository.save(component);
     return component;
+  }
 
+  /**
+   * Change the specified Component's PackType and update. Note: this will change the Component's
+   * type, the Component's code and the expiresOn date
+   * 
+   * @param newPackType PackType Donation's updated PackType
+   * @param component Component to update
+   * @return Component that has been updated
+   */
+  public Component updateComponentWithNewPackType(Component component, PackType newPackType) {
+    ComponentType newComponentType = newPackType.getComponentType();
+
+    component.setComponentType(newComponentType);
+    component.setComponentCode(newComponentType.getComponentTypeCode());
+    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), newComponentType.getExpiresAfter()));
+
+    componentRepository.update(component);
+    return component;
+  }
+
+  private Date calculateCreatedOn(Date donationDate, Date bleedStartTime) {
+    Date createdOn = donationDate; // default to donationDate
+    if (bleedStartTime != null) {
+      createdOn = dateGeneratorService.generateDateTime(donationDate, bleedStartTime);
+    }
+    return createdOn;
+  }
+
+  private Date calculateExpiresOn(Date createdOn, Integer expiresAfter) {
+    Calendar expiresOn = Calendar.getInstance();
+    expiresOn.setTime(createdOn); // defaults to the createdOn date
+    expiresOn.add(Calendar.DATE, expiresAfter);
+    return expiresOn.getTime();
   }
 
   /**
@@ -171,6 +179,14 @@ public class ComponentCRUDService {
 
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.TEST_RESULTS);
     }
+  }
+
+  public Component deleteComponent(long componentId) {
+    LOGGER.info("Deleting component " + componentId);
+
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    existingComponent.setIsDeleted(true);
+    return componentRepository.update(existingComponent);
   }
 
   public void updateComponentStatusesForDonation(Donation donation) {
