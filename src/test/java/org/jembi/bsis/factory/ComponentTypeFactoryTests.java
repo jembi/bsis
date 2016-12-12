@@ -3,16 +3,19 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBackingFormBuilder.aComponentTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationViewModelBuilder.aComponentTypeCombinationViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeSearchViewModelBuilder.aComponentTypeSearchViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentTypeSearchViewModelMatcher.hasSameStateAsComponentTypeSearchViewModel;
+import static org.jembi.bsis.helpers.matchers.ComponentTypeMatcher.hasSameStateAsComponentType;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
@@ -35,6 +38,60 @@ public class ComponentTypeFactoryTests {
   private ComponentTypeFactory componentTypeFactory;
   @Mock
   private ComponentTypeCombinationFactory componentTypeCombinationFactory;
+  
+  @Test
+  public void testCreateEntity_shouldReturnExpectedEntity() {
+    // Set up
+    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("componentTypeName")
+        .withComponentTypeCode("componentTypeCode")
+        .withExpiresAfter(20)
+        .withMaxBleedTime(3)
+        .withMaxTimeSinceDonation(10)
+        .withExpiresAfterUnit(ComponentTypeTimeUnits.DAYS)
+        .thatHasBloodGroup()
+        .withDescription("description")
+        .thatIsNotDeleted()
+        .withLowStorageTemperature(2)
+        .withHighStorageTemperature(5)
+        .withLowTransportTemperature(7)
+        .withHighTransportTemperature(14)
+        .withPreparationInfo("preparationInfo")
+        .withTransportInfo("transportInfo")
+        .withStorageInfo("storageInfo")
+        .thatCanBeIssued()
+        .thatContainsPlasma()
+        .build();
+    
+    ComponentType componentType = aComponentType()
+        .withId(1L)
+        .withComponentTypeName("componentTypeName")
+        .withComponentTypeCode("componentTypeCode")
+        .withExpiresAfter(20)
+        .withMaxBleedTime(3)
+        .withMaxTimeSinceDonation(10)
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .thatHasBloodGroup()
+        .withDescription("description")
+        .thatIsNotDeleted()
+        .withLowStorageTemperature(2)
+        .withHighStorageTemperature(5)
+        .withLowTransportTemperature(7)
+        .withHighTransportTemperature(14)
+        .withPreparationInfo("preparationInfo")
+        .withTransportInfo("transportInfo")
+        .withStorageInfo("storageInfo")
+        .thatCanBeIssued()
+        .thatContainsPlasma()
+        .build();
+    
+    // Run test
+    ComponentType result = componentTypeFactory.createEntity(componentTypeBackingForm);
+    
+    // Assert
+    assertThat("Correct entity", result, hasSameStateAsComponentType(componentType));
+  }
 
   @Test
   public void testSingleFullComponentType_shouldReturnExpectedViewModel() {
@@ -51,7 +108,7 @@ public class ComponentTypeFactoryTests {
         .withProducedComponentTypeCombination(producedComponentTypeCombination)
         .withTransportInfo("transportInfo")
         .withStorageInfo("storageInfo")
-        .withCanBeIssued(false)
+        .thatCanNotBeIssued()
         .withMaxBleedTime(10)
         .withMaxTimeSinceDonation(5)
         .build();
@@ -105,7 +162,7 @@ public class ComponentTypeFactoryTests {
         .withComponentTypeCode("0001")
         .withDescription("descr")
         .withExpiresAfter(90)
-        .withCanBeIssued(false)
+        .thatCanNotBeIssued()
         .build();
 
     ComponentTypeSearchViewModel viewModel = componentTypeFactory.createSearchViewModel(entity);

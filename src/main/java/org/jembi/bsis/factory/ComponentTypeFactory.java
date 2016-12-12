@@ -62,7 +62,7 @@ public class ComponentTypeFactory {
     componentType.setExpiresAfter(componentTypeBackingForm.getExpiresAfter());
     componentType.setMaxBleedTime(componentTypeBackingForm.getMaxBleedTime());
     componentType.setMaxTimeSinceDonation(componentTypeBackingForm.getMaxTimeSinceDonation());
-    componentType.setExpiresAfterUnits(componentTypeBackingForm.getExpiresAfterUnit());
+    componentType.setExpiresAfterUnits(componentTypeBackingForm.getExpiresAfterUnits());
     componentType.setHasBloodGroup(componentTypeBackingForm.getHasBloodGroup());
     componentType.setDescription(componentTypeBackingForm.getDescription());
     componentType.setIsDeleted(componentTypeBackingForm.getIsDeleted());
@@ -75,6 +75,7 @@ public class ComponentTypeFactory {
     componentType.setTransportInfo(componentTypeBackingForm.getTransportInfo());
     componentType.setCanBeIssued(componentTypeBackingForm.getCanBeIssued());
     componentType.setContainsPlasma(componentTypeBackingForm.getContainsPlasma());
+    componentType.setProducedComponentTypeCombinations(componentTypeBackingForm.getProducedComponentTypeCombinations());
   }
   
   private void populateComponentTypeViewModelFields(ComponentType componentType, ComponentTypeViewModel componentTypeViewModel) {

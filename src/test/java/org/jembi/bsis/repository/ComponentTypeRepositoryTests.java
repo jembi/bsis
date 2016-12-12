@@ -98,9 +98,9 @@ public class ComponentTypeRepositoryTests extends SecurityContextDependentTestSu
   @Test
   public void testGetComponentTypesThatCanBeIssued_shouldReturnComponentsTypesThatCanBeIssued() {
 
-    ComponentType componentType1 = aComponentType().withCanBeIssued(true).buildAndPersist(entityManager);
-    ComponentType componentType2 = aComponentType().withCanBeIssued(true).buildAndPersist(entityManager);
-    aComponentType().withCanBeIssued(false).buildAndPersist(entityManager);
+    ComponentType componentType1 = aComponentType().thatCanBeIssued().buildAndPersist(entityManager);
+    ComponentType componentType2 = aComponentType().thatCanBeIssued().buildAndPersist(entityManager);
+    aComponentType().thatCanNotBeIssued().buildAndPersist(entityManager);
 
     List<ComponentType> all = componentTypeRepository.getAllComponentTypesThatCanBeIssued();
     assertEquals("There are 2 ComponentTypes", 2, all.size());
@@ -111,8 +111,8 @@ public class ComponentTypeRepositoryTests extends SecurityContextDependentTestSu
   @Test
   public void testGetComponentTypesThatCanBeIssued_shouldntReturnDeletedComponentTypes() {
 
-    ComponentType componentType = aComponentType().withCanBeIssued(true).buildAndPersist(entityManager);
-    aComponentType().withCanBeIssued(true).thatIsDeleted().buildAndPersist(entityManager);
+    ComponentType componentType = aComponentType().thatCanBeIssued().buildAndPersist(entityManager);
+    aComponentType().thatCanBeIssued().thatIsDeleted().buildAndPersist(entityManager);
 
     List<ComponentType> all = componentTypeRepository.getAllComponentTypesThatCanBeIssued();
     assertEquals("There is 1 ComponentType", 1, all.size());

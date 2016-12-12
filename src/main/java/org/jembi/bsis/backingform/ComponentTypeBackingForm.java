@@ -1,5 +1,8 @@
 package org.jembi.bsis.backingform;
 
+import java.util.Set;
+
+import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 
 public class ComponentTypeBackingForm {
@@ -10,7 +13,7 @@ public class ComponentTypeBackingForm {
   private Integer expiresAfter;
   private Integer maxBleedTime;
   private Integer maxTimeSinceDonation;
-  private ComponentTypeTimeUnits expiresAfterUnit;
+  private ComponentTypeTimeUnits expiresAfterUnits;
   private Boolean hasBloodGroup;
   private String description;
   private boolean isDeleted = false;
@@ -23,7 +26,8 @@ public class ComponentTypeBackingForm {
   private String storageInfo;
   private boolean canBeIssued = true;
   private boolean containsPlasma = true;
-  
+  private Set<ComponentTypeCombination> producedComponentTypeCombinations;
+
   /**
    * Returns the max bleed time in minutes
    * @return
@@ -56,6 +60,14 @@ public class ComponentTypeBackingForm {
     this.maxTimeSinceDonation = maxTimeSinceDonation;
   }
 
+  public void setProducedComponentTypeCombinations(Set<ComponentTypeCombination> producedComponentTypeCombinations) {
+    this.producedComponentTypeCombinations = producedComponentTypeCombinations;
+  }
+
+  public Set<ComponentTypeCombination> getProducedComponentTypeCombinations() {
+    return this.producedComponentTypeCombinations;
+  }
+  
   public String getComponentTypeName() {
     return componentTypeName;
   }
@@ -80,12 +92,12 @@ public class ComponentTypeBackingForm {
     this.expiresAfter = expiresAfter;
   }
 
-  public ComponentTypeTimeUnits getExpiresAfterUnit() {
-    return expiresAfterUnit;
+  public ComponentTypeTimeUnits getExpiresAfterUnits() {
+    return expiresAfterUnits;
   }
 
-  public void setExpiresAfterUnit(ComponentTypeTimeUnits expiresAfterUnit) {
-    this.expiresAfterUnit = expiresAfterUnit;
+  public void setExpiresAfterUnits(ComponentTypeTimeUnits expiresAfterUnits) {
+    this.expiresAfterUnits = expiresAfterUnits;
   }
 
   public Boolean getHasBloodGroup() {
@@ -108,7 +120,7 @@ public class ComponentTypeBackingForm {
     return isDeleted;
   }
 
-  public void setDeleted(boolean isDeleted) {
+  public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
 
