@@ -1,69 +1,35 @@
 package org.jembi.bsis.backingform;
 
-import java.util.List;
-import java.util.Set;
-
-import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class ComponentTypeBackingForm {
-
-  @JsonIgnore
-  private ComponentType componentType;
-
-  public ComponentTypeBackingForm() {
-    componentType = new ComponentType();
-  }
-
-  public ComponentType getComponentType() {
-    return componentType;
-  }
-
-  public void setComponentType(ComponentType componentType) {
-    this.componentType = componentType;
-  }
   
-  public Long getId() {
-    return componentType.getId();
-  }
-
-  public void setId(Long id) {
-    componentType.setId(id);
-  }
-
-  public String getComponentTypeName() {
-    return componentType.getComponentTypeName();
-  }
-  
-  public boolean getContainsPlasma() {
-    return componentType.getContainsPlasma();
-  }
-  
-  public void setComponentTypeName(String componentTypeName) {
-    componentType.setComponentTypeName(componentTypeName);
-  }
-
-  public String getComponentTypeCode() {
-    return componentType.getComponentTypeCode();
-  }
-
-  public void setComponentTypeCode(String componentTypeCode) {
-    componentType.setComponentTypeCode(componentTypeCode);
-  }
-  
-  public Integer getExpiresAfter() {
-    return componentType.getExpiresAfter();
-  }
+  private Long id;
+  private String componentTypeName;
+  private String componentTypeCode;
+  private Integer expiresAfter;
+  private Integer maxBleedTime;
+  private Integer maxTimeSinceDonation;
+  private ComponentTypeTimeUnits expiresAfterUnit;
+  private Boolean hasBloodGroup;
+  private String description;
+  private boolean isDeleted = false;
+  private Integer lowStorageTemperature;
+  private Integer highStorageTemperature;
+  private Integer lowTransportTemperature;
+  private Integer highTransportTemperature;
+  private String preparationInfo;
+  private String transportInfo;
+  private String storageInfo;
+  private boolean canBeIssued = true;
+  private boolean containsPlasma = true;
   
   /**
    * Returns the max bleed time in minutes
    * @return
    */
   public Integer getMaxBleedTime() {
-    return componentType.getMaxBleedTime();
+    return maxBleedTime;
   }
   
   /**
@@ -71,7 +37,7 @@ public class ComponentTypeBackingForm {
    * @return
    */
   public Integer getMaxTimeSinceDonation() {
-    return componentType.getMaxTimeSinceDonation();
+    return maxTimeSinceDonation;
   }
   
   /**
@@ -79,7 +45,7 @@ public class ComponentTypeBackingForm {
    * @param maxBleedTime
    */
   public void setMaxBleedTime(Integer maxBleedTime) {
-    componentType.setMaxBleedTime(maxBleedTime);
+    this.maxBleedTime = maxBleedTime;
   }
   
   /**
@@ -87,71 +53,142 @@ public class ComponentTypeBackingForm {
    * @param maxTimeSinceDonation
    */
   public void setMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
-    componentType.setMaxTimeSinceDonation(maxTimeSinceDonation);
-  } 
+    this.maxTimeSinceDonation = maxTimeSinceDonation;
+  }
+
+  public String getComponentTypeName() {
+    return componentTypeName;
+  }
+
+  public void setComponentTypeName(String componentTypeName) {
+    this.componentTypeName = componentTypeName;
+  }
+
+  public String getComponentTypeCode() {
+    return componentTypeCode;
+  }
+
+  public void setComponentTypeCode(String componentTypeCode) {
+    this.componentTypeCode = componentTypeCode;
+  }
+
+  public Integer getExpiresAfter() {
+    return expiresAfter;
+  }
 
   public void setExpiresAfter(Integer expiresAfter) {
-    componentType.setExpiresAfter(expiresAfter);
+    this.expiresAfter = expiresAfter;
   }
 
-  public void setExpiresAfterUnits(String componentTypeTimeUnits) {
-    componentType.setExpiresAfterUnits(ComponentTypeTimeUnits.valueOf(componentTypeTimeUnits));
+  public ComponentTypeTimeUnits getExpiresAfterUnit() {
+    return expiresAfterUnit;
   }
 
-  public void setDescription(String description) {
-    componentType.setDescription(description);
+  public void setExpiresAfterUnit(ComponentTypeTimeUnits expiresAfterUnit) {
+    this.expiresAfterUnit = expiresAfterUnit;
+  }
+
+  public Boolean getHasBloodGroup() {
+    return hasBloodGroup;
   }
 
   public void setHasBloodGroup(Boolean hasBloodGroup) {
-    componentType.setHasBloodGroup(hasBloodGroup);
+    this.hasBloodGroup = hasBloodGroup;
   }
 
-  public void setComponentTypeCombinations(List<ComponentTypeCombination> componentTypeCombinations) {
-    componentType.setComponentTypeCombinations(componentTypeCombinations);
+  public String getDescription() {
+    return description;
   }
 
-  public void setProducedComponentTypeCombinations(Set<ComponentTypeCombination> producedComponentTypeCombinations) {
-    componentType.setProducedComponentTypeCombinations(producedComponentTypeCombinations);
+  public void setDescription(String description) {
+    this.description = description;
   }
 
-  public void setHighStorageTemperature(Integer highStorageTemperature) {
-    componentType.setHighStorageTemperature(highStorageTemperature);
+  public boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+
+  public Integer getLowStorageTemperature() {
+    return lowStorageTemperature;
   }
 
   public void setLowStorageTemperature(Integer lowStorageTemperature) {
-    componentType.setLowStorageTemperature(lowStorageTemperature);
+    this.lowStorageTemperature = lowStorageTemperature;
+  }
+
+  public Integer getHighStorageTemperature() {
+    return highStorageTemperature;
+  }
+
+  public void setHighStorageTemperature(Integer highStorageTemperature) {
+    this.highStorageTemperature = highStorageTemperature;
+  }
+
+  public Integer getLowTransportTemperature() {
+    return lowTransportTemperature;
   }
 
   public void setLowTransportTemperature(Integer lowTransportTemperature) {
-    componentType.setLowTransportTemperature(lowTransportTemperature);
+    this.lowTransportTemperature = lowTransportTemperature;
+  }
+
+  public Integer getHighTransportTemperature() {
+    return highTransportTemperature;
   }
 
   public void setHighTransportTemperature(Integer highTransportTemperature) {
-    componentType.setHighTransportTemperature(highTransportTemperature);
+    this.highTransportTemperature = highTransportTemperature;
+  }
+
+  public String getPreparationInfo() {
+    return preparationInfo;
   }
 
   public void setPreparationInfo(String preparationInfo) {
-    componentType.setPreparationInfo(preparationInfo);
+    this.preparationInfo = preparationInfo;
+  }
+
+  public String getTransportInfo() {
+    return transportInfo;
   }
 
   public void setTransportInfo(String transportInfo) {
-    componentType.setTransportInfo(transportInfo);
+    this.transportInfo = transportInfo;
+  }
+
+  public String getStorageInfo() {
+    return storageInfo;
   }
 
   public void setStorageInfo(String storageInfo) {
-    componentType.setStorageInfo(storageInfo);
+    this.storageInfo = storageInfo;
+  }
+
+  public boolean getCanBeIssued() {
+    return canBeIssued;
   }
 
   public void setCanBeIssued(boolean canBeIssued) {
-    componentType.setCanBeIssued(canBeIssued);
+    this.canBeIssued = canBeIssued;
   }
 
-  public void setIsDeleted(boolean isDeleted) {
-    componentType.setIsDeleted(isDeleted);
+  public boolean getContainsPlasma() {
+    return containsPlasma;
   }
-  
+
   public void setContainsPlasma(boolean containsPlasma) {
-    componentType.setContainsPlasma(containsPlasma);
+    this.containsPlasma = containsPlasma;
   }
-  
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  } 
 }
