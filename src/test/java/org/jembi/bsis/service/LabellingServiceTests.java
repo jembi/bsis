@@ -69,6 +69,36 @@ public class LabellingServiceTests extends UnitTestSuite {
     assertThat(label, label.contains("Line 1"));
     assertThat(label, label.contains("Line 2"));
   }
+
+  @Test
+  public void testPrintDiscardLabel_shouldReturnZPLContainingDin() throws Exception {
+    // set up data
+    Long componentId = Long.valueOf(1);
+    String donationIdentificationNumber = "1234567";
+    Donation donation = aDonation()
+        .withId(1L)
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .build();
+    Component component = aComponent()
+        .withId(componentId)
+        .withDonation(donation)
+        .withStatus(ComponentStatus.EXPIRED)
+        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+        .build();
+
+    // set up mocks
+    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.SERVICE_INFO_LINE_1)).thenReturn("Line 1");
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.SERVICE_INFO_LINE_2)).thenReturn("Line 2");
+
+    // run test
+    String label = labellingService.printDiscardLabel(componentId);
+
+    // check outcome
+    assertThat(label, label.contains(donationIdentificationNumber));
+    assertThat(label, label.contains("Line 1"));
+  }
   
   @Test(expected = IllegalArgumentException.class)
   public void testPrintDiscardLabel_throwsException() throws Exception {
