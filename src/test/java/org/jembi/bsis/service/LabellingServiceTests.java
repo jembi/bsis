@@ -394,13 +394,5 @@ public class LabellingServiceTests extends UnitTestSuite {
     assertThat(label, label.contains(donationIdentificationNumber + flagCharacters));
     assertThat(label, label.contains("^FD34^FS"));  // assert that Label contains Flag Characters
     assertThat(label, label.contains("^FDY^FS"));   // assert that Label contains Check Character
-    assertThat(label, label.contains(bloodAbo));
-    assertThat(label, label.contains("RhD POSITIVE"));
-    assertThat(label, label.contains(new SimpleDateFormat(DATE_FORMAT).format(donationDate)));
-    assertThat(label, label.contains(new SimpleDateFormat(DATE_TIME_FORMAT).format(expiresOn)));
-    assertThat(label, label.contains(componentTypeName));
-    assertThat(label, label.contains(PREPARATION_INFO));
-    assertThat(label, label.contains(STORAGE_INFO));
-    assertThat(label, label.contains(TRANSPORT_INFO));
   }
 }
