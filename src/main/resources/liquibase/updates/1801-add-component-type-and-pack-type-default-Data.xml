@@ -21,51 +21,59 @@
     <comment>Add component types</comment>
     <insert tableName = "ComponentType">
       <column name="id" value="1"/>
-      <column name="componentTypeNameShort" value="0011"/>
+      <column name="componentTypeCode" value="0011"/>
       <column name="componentTypeName" value="Whole Blood Single Pack - CPDA"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="35"/>
       <column name="expiresAfterUnits" value="DAYS"/>
       <column name="hasBloodGroup" value="1"/>
-      <column name="pediComponentType_id" value="NULL"/>
+      <column name="pediComponentType_id" value = "NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="canBeIssued" value="0"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="2"/>
-      <column name="componentTypeNameShort" value="0012"/>
+      <column name="componentTypeCode" value="0012"/>
       <column name="componentTypeName" value="Whole Blood Double Pack - CPDA"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="35"/>
       <column name="expiresAfterUnits" value="DAYS"/>
       <column name="hasBloodGroup" value="1"/>
-      <column name="pediComponentType_id" value="NULL"/>
+      <column name="pediComponentType_id" value = "NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="canBeIssued" value="0"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="3"/>
-      <column name="componentTypeNameShort" value="0013"/>
+      <column name="componentTypeCode" value="0013"/>
       <column name="componentTypeName" value="Whole Blood Triple Pack - CPDA"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="35"/>
       <column name="expiresAfterUnits" value="DAYS"/>
       <column name="hasBloodGroup" value="1"/>
-      <column name="pediComponentType_id" value="NULL"/>
+      <column name="pediComponentType_id" value = "NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="canBeIssued" value="0"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="4"/>
-      <column name="componentTypeNameShort" value="0014"/>
+      <column name="componentTypeCode" value="0014"/>
       <column name="componentTypeName" value="Whole Blood Quad Pack - CPDA"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="35"/>
       <column name="expiresAfterUnits" value="DAYS"/>
       <column name="hasBloodGroup" value="1"/>
-      <column name="pediComponentType_id" value="NULL"/>
+      <column name="pediComponentType_id" value = "NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="canBeIssued" value="0"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="5"/>
-      <column name="componentTypeNameShort" value="0021"/>
+      <column name="componentTypeCode" value="0021"/>
       <column name="componentTypeName" value="Apheresis"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="5"/>
@@ -73,10 +81,12 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="canBeIssued" value="0"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="6"/>
-      <column name="componentTypeNameShort" value="1001"/>
+      <column name="componentTypeCode" value="1001"/>
       <column name="componentTypeName" value="Whole Blood - CPDA"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="35"/>
@@ -84,10 +94,14 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store at 2-6°C"/>
+      <column name="transportInfo" value="Transport at 2-10°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="7"/>
-      <column name="componentTypeNameShort" value="1005"/>
+      <column name="componentTypeCode" value="1005"/>
       <column name="componentTypeName" value="Whole Blood Poor Platelets - CPDA"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="35"/>
@@ -95,10 +109,14 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store at 2-6°C"/>
+      <column name="transportInfo" value="Transport at 2-10°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="8"/>
-      <column name="componentTypeNameShort" value="2001"/>
+      <column name="componentTypeCode" value="2001"/>
       <column name="componentTypeName" value="Packed Red Cells - CPDA"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="35"/>
@@ -106,10 +124,14 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="0"/>
+      <column name="storageInfo" value="Store at 2-6°C"/>
+      <column name="transportInfo" value="Transport at 2-10°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="9"/>
-      <column name="componentTypeNameShort" value="2011"/>
+      <column name="componentTypeCode" value="2011"/>
       <column name="componentTypeName" value="Packed Red Cells - SAGM"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="42"/>
@@ -117,10 +139,14 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="0"/>
+      <column name="storageInfo" value="Store at 2-6°C"/>
+      <column name="transportInfo" value="Transport at 2-10°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="10"/>
-      <column name="componentTypeNameShort" value="3001"/>
+      <column name="componentTypeCode" value="3001"/>
       <column name="componentTypeName" value="Fresh Frozen Plasma - Whole Blood"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="365"/>
@@ -128,10 +154,14 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store below -30°C"/>
+      <column name="transportInfo" value="Transport below -25°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="11"/>
-      <column name="componentTypeNameShort" value="3002"/>
+      <column name="componentTypeCode" value="3002"/>
       <column name="componentTypeName" value="Frozen Plasma - Whole Blood"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="365"/>
@@ -139,10 +169,14 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store below -30°C"/>
+      <column name="transportInfo" value="Transport below -25°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="12"/>
-      <column name="componentTypeNameShort" value="4001"/>
+      <column name="componentTypeCode" value="4001"/>
       <column name="componentTypeName" value="Platelets Concentrate - Whole Blood"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="5"/>
@@ -150,10 +184,14 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store at 20-24°C"/>
+      <column name="transportInfo" value="Transport at 20-24°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="13"/>
-      <column name="componentTypeNameShort" value="4011"/>
+      <column name="componentTypeCode" value="4011"/>
       <column name="componentTypeName" value="Platelets Concentrate - Whole Blood - 24H"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="1"/>
@@ -161,10 +199,14 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store at 20-24°C"/>
+      <column name="transportInfo" value="Transport at 20-24°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="14"/>
-      <column name="componentTypeNameShort" value="2101"/>
+      <column name="componentTypeCode" value="2101"/>
       <column name="componentTypeName" value="Packed Red Cells - Paediatric - CPDA"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="35"/>
@@ -172,10 +214,14 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store at 2-6°C"/>
+      <column name="transportInfo" value="Transport at 2-10°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="15"/>
-      <column name="componentTypeNameShort" value="3011"/>
+      <column name="componentTypeCode" value="3011"/>
       <column name="componentTypeName" value="Fresh Frozen Plasma - Apheresis"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="365"/>
@@ -183,10 +229,13 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store below -30°C"/>
+      <column name="transportInfo" value="Transport below -25°C"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="16"/>
-      <column name="componentTypeNameShort" value="4021"/>
+      <column name="componentTypeCode" value="4021"/>
       <column name="componentTypeName" value="Platelets Concentrate - Apheresis"/>
       <column name="description" value=""/>
       <column name="expiresAfter" value="5"/>
@@ -194,6 +243,9 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store at 20-24°C"/>
+      <column name="transportInfo" value="Transport at 20-24°C"/>
     </insert>
     <insert tableName = "ComponentType">
       <column name="componentTypeNameShort" value="WB"/>
