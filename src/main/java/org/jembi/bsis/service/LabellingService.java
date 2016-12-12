@@ -57,14 +57,13 @@ public class LabellingService {
     String din = donation.getDonationIdentificationNumber();
     String flagChars = donation.getFlagCharacters();
     String checkCharacter = checkCharacterService.calculateCheckCharacter(flagChars);
-    checkCharacter = checkCharacter != null ? checkCharacter : "";
 
     final int dinCharWidth = 10 + 2; // 10 for font width, and 2 for ICG (inter character gap).
     final int flagCharPosForDINLength_1 = 75;
 
-    String flagCharPos = String.valueOf(flagCharPosForDINLength_1 + ((din.length() - 1) * dinCharWidth));
-    String boxPos = String.valueOf(Integer.valueOf(flagCharPos) + 30);
-    String checkCharPos = String.valueOf(Integer.valueOf(boxPos) + 9);
+    int flagCharPos = flagCharPosForDINLength_1 + ((din.length() - 1) * dinCharWidth);
+    int boxPos = flagCharPos + 30;
+    int checkCharPos = boxPos + 9;
 
     String dinZPL = 
       "^FT59,52^A0N,17,38^FH^FDDIN^FS" +
