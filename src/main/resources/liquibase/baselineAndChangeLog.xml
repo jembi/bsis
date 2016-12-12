@@ -71,5 +71,6 @@
   <include file="liquibase/updates/2033-add-donation-batch-date-to-donation-batch.xml"/>
   <include file="liquibase/updates/2035-delete-components-related-to-deleted-donations.xml"/>
   <include file="liquibase/updates/2134-add-donation-dinLength-property.xml"/>
+  <include file="liquibase/updates/2252-add-bleed-times-to -component-type.xml"/>
   
 </databaseChangeLog>
