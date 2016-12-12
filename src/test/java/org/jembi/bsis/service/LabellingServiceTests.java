@@ -342,4 +342,65 @@ public class LabellingServiceTests extends UnitTestSuite {
     // run test
     labellingService.printPackLabel(componentId);
   }
+  
+  @Test
+  public void testPrintPackLabelWithFlagCharacters34AndCheckCharacterY_shouldReturnZPLContainingText() throws Exception {
+    // set up data
+    Long donationId = Long.valueOf(1);
+    String bloodAbo = "A";
+    String bloodRh = "+";
+    String donationIdentificationNumber = "123456789102345678";
+    String flagCharacters = "34";
+    Date donationDate = new Date();
+    Donation donation = aDonation()
+        .withId(donationId)
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withDonationDate(donationDate)
+        .withBloodAbo(bloodAbo)
+        .withBloodRh(bloodRh)
+        .withFlagCharacters(flagCharacters)
+        .build();
+    String componentTypeName = "blood";
+    ComponentType componentType = aComponentType()
+        .withComponentTypeName(componentTypeName)
+        .withPreparationInfo(PREPARATION_INFO)
+        .withStorageInfo(STORAGE_INFO)
+        .withTransportInfo(TRANSPORT_INFO)
+        .build();
+    Long componentId = Long.valueOf(1);
+    String componentCode = "123";
+    Date expiresOn = new DateTime().plusDays(90).toDate();
+    Component component = aComponent()
+        .withId(componentId)
+        .withComponentCode(componentCode)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(expiresOn)
+        .build();
+    
+    // set up mocks
+    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
+    when(componentCRUDService.putComponentInStock(component)).thenReturn(component);
+    when(checkCharacterService.calculateCheckCharacter("34")).thenReturn("Y");
+    // run test
+    String label = labellingService.printPackLabel(componentId);
+    
+    // check outcome
+    assertThat(label, label.contains(donationIdentificationNumber + flagCharacters));
+    assertThat(label, label.contains("^FD34^FS"));  // assert that Label contains Flag Characters
+    assertThat(label, label.contains("^FDY^FS"));   // assert that Label contains Check Character
+    assertThat(label, label.contains(bloodAbo));
+    assertThat(label, label.contains("RhD POSITIVE"));
+    assertThat(label, label.contains(new SimpleDateFormat(DATE_FORMAT).format(donationDate)));
+    assertThat(label, label.contains(new SimpleDateFormat(DATE_TIME_FORMAT).format(expiresOn)));
+    assertThat(label, label.contains(componentTypeName));
+    assertThat(label, label.contains(PREPARATION_INFO));
+    assertThat(label, label.contains(STORAGE_INFO));
+    assertThat(label, label.contains(TRANSPORT_INFO));
+  }
 }
