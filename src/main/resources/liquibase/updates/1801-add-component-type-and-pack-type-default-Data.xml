@@ -1,0 +1,371 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <!-- Moved and ID changed (micnice): for #1801 (refacring) -->
+  <!-- Updated (timler): for #294 (refactoring) -->
+  <changeSet id="20161209-1642" author="danfuterman">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        <![CDATA[
+				SELECT count(*) FROM ComponentType;
+				]]>
+      </sqlCheck>
+      <sqlCheck expectedResult="0">
+        <![CDATA[
+				SELECT count(*) FROM ComponentType WHERE componentTypeNameShort = "0011";
+				]]>
+      </sqlCheck>
+    </preConditions>
+    <comment>Add component types</comment>
+    <insert tableName = "ComponentType">
+      <column name="id" value="1"/>
+      <column name="componentTypeNameShort" value="0011"/>
+      <column name="componentTypeName" value="Whole Blood Single Pack - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="2"/>
+      <column name="componentTypeNameShort" value="0012"/>
+      <column name="componentTypeName" value="Whole Blood Double Pack - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="3"/>
+      <column name="componentTypeNameShort" value="0013"/>
+      <column name="componentTypeName" value="Whole Blood Triple Pack - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="4"/>
+      <column name="componentTypeNameShort" value="0014"/>
+      <column name="componentTypeName" value="Whole Blood Quad Pack - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="5"/>
+      <column name="componentTypeNameShort" value="0021"/>
+      <column name="componentTypeName" value="Apheresis"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="5"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="6"/>
+      <column name="componentTypeNameShort" value="1001"/>
+      <column name="componentTypeName" value="Whole Blood - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="7"/>
+      <column name="componentTypeNameShort" value="1005"/>
+      <column name="componentTypeName" value="Whole Blood Poor Platelets - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="8"/>
+      <column name="componentTypeNameShort" value="2001"/>
+      <column name="componentTypeName" value="Packed Red Cells - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="9"/>
+      <column name="componentTypeNameShort" value="2011"/>
+      <column name="componentTypeName" value="Packed Red Cells - SAGM"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="42"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="10"/>
+      <column name="componentTypeNameShort" value="3001"/>
+      <column name="componentTypeName" value="Fresh Frozen Plasma - Whole Blood"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="365"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="11"/>
+      <column name="componentTypeNameShort" value="3002"/>
+      <column name="componentTypeName" value="Frozen Plasma - Whole Blood"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="365"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="12"/>
+      <column name="componentTypeNameShort" value="4001"/>
+      <column name="componentTypeName" value="Platelets Concentrate - Whole Blood"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="5"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="13"/>
+      <column name="componentTypeNameShort" value="4011"/>
+      <column name="componentTypeName" value="Platelets Concentrate - Whole Blood - 24H"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="1"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="14"/>
+      <column name="componentTypeNameShort" value="2101"/>
+      <column name="componentTypeName" value="Packed Red Cells - Paediatric - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="15"/>
+      <column name="componentTypeNameShort" value="3011"/>
+      <column name="componentTypeName" value="Fresh Frozen Plasma - Apheresis"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="365"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="id" value="16"/>
+      <column name="componentTypeNameShort" value="4021"/>
+      <column name="componentTypeName" value="Platelets Concentrate - Apheresis"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="5"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="componentTypeNameShort" value="WB"/>
+      <column name="componentTypeName" value="Whole Blood"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="componentTypeNameShort" value="RCC"/>
+      <column name="componentTypeName" value="Red Cell Concentrate"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="componentTypeNameShort" value="FFP"/>
+      <column name="componentTypeName" value="Fresh Frozen Plasma"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="365"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="componentTypeNameShort" value="Platelets"/>
+      <column name="componentTypeName" value="Platelets"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="5"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="componentTypeNameShort" value="Whole Blood Pedi"/>
+      <column name="componentTypeName" value="Whole Blood Pedi"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="0"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="componentTypeNameShort" value="RCC Pedi"/>
+      <column name="componentTypeName" value="Red Cell Concentrate Pedi"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="0"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="componentTypeNameShort" value="FFP Pedi"/>
+      <column name="componentTypeName" value="Fresh Frozen Plasma Pedi"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="365"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="0"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+    <insert tableName = "ComponentType">
+      <column name="componentTypeNameShort" value="Platelets Pedi"/>
+      <column name="componentTypeName" value="Platelets Pedi"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="5"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="0"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+    </insert>
+  </changeSet>
+
+  <!-- Moved and ID changed (micnice): #1801 (refactoring) -->
+  <changeSet id="20161209-1650" author="timler">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        <![CDATA[
+				SELECT count(*) FROM PackType;
+				]]>
+      </sqlCheck>
+    </preConditions>
+    <comment>Add pack types with weight</comment>
+    <insert tableName = "PackType">
+      <column name="packType" value="Single"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="1"/>
+      <column name="countAsDonation" value="1"/>
+      <column name="periodBetweenDonations" value="90"/>
+      <column name="testSampleProduced" value="1"/>
+      <column name="minWeight" value="426"/>
+      <column name="maxWeight" value="520"/>
+      <column name="lowVolumeWeight" value="316"/>
+    </insert>
+    <insert tableName = "PackType">
+      <column name="packType" value="Double"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="2"/>
+      <column name="countAsDonation" value="1"/>
+      <column name="periodBetweenDonations" value="90"/>
+      <column name="testSampleProduced" value="1"/>
+      <column name="minWeight" value="426"/>
+      <column name="maxWeight" value="520"/>
+      <column name="lowVolumeWeight" value="316"/>
+    </insert>
+    <insert tableName = "PackType">
+      <column name="packType" value="Triple"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="3"/>
+      <column name="countAsDonation" value="1"/>
+      <column name="periodBetweenDonations" value="90"/>
+      <column name="testSampleProduced" value="1"/>
+      <column name="minWeight" value="426"/>
+      <column name="maxWeight" value="520"/>
+      <column name="lowVolumeWeight" value="316"/>
+    </insert>
+    <insert tableName = "PackType">
+      <column name="packType" value="Quad"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="4"/>
+      <column name="countAsDonation" value="1"/>
+      <column name="periodBetweenDonations" value="90"/>
+      <column name="testSampleProduced" value="1"/>
+      <column name="minWeight" value="426"/>
+      <column name="maxWeight" value="520"/>
+      <column name="lowVolumeWeight" value="316"/>
+    </insert>
+    <insert tableName = "PackType">
+      <column name="packType" value="Apheresis"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="5"/>
+      <column name="countAsDonation" value="1"/>
+      <column name="periodBetweenDonations" value="30"/>
+      <column name="testSampleProduced" value="1"/>
+      <column name="minWeight" value="1"/>
+      <column name="maxWeight" value="600"/>
+      <column name="lowVolumeWeight" value="1"/>
+    </insert>
+    <insert tableName = "PackType">
+      <column name="packType" value="Dry Pack"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="NULL"/>
+      <column name="countAsDonation" value="0"/>
+      <column name="periodBetweenDonations" value="0"/>
+      <column name="testSampleProduced" value="1"/>
+    </insert>
+    <insert tableName = "PackType">
+      <column name="packType" value="Test Only"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="NULL"/>
+      <column name="countAsDonation" value="0"/>
+      <column name="periodBetweenDonations" value="0"/>
+      <column name="testSampleProduced" value="1"/>
+    </insert>
+    <insert tableName = "PackType">
+      <column name="packType" value="Did Not Bleed"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="NULL"/>
+      <column name="countAsDonation" value="0"/>
+      <column name="periodBetweenDonations" value="0"/>
+      <column name="testSampleProduced" value="0"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>
