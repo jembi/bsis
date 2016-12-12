@@ -6,12 +6,12 @@
   <changeSet id="20161212-0910" author="jmuzinda">
     <comment>Add maxBleedTime and maxTimeSinceDonation columns to ComponentType</comment>
     <addColumn tableName="ComponentType">
-      <column name="maxBleedTime" type="INT(11)" defaultValue="NULL" />
-      <column name="maxTimeSinceDonation" type="INT(11)" defaultValue="NULL" />
+      <column name="maxBleedTime" type="TINYINT(3)" defaultValue="NULL" />
+      <column name="maxTimeSinceDonation" type="TINYINT(3)" defaultValue="NULL" />
     </addColumn>
     <addColumn tableName="ComponentType_AUD">
-      <column name="maxBleedTime" type="INT(11)" defaultValue="NULL" />
-      <column name="maxTimeSinceDonation" type="INT(11)" defaultValue="NULL" />
+      <column name="maxBleedTime" type="TINYINT(3)" defaultValue="NULL" />
+      <column name="maxTimeSinceDonation" type="TINYINT(3)" defaultValue="NULL" />
     </addColumn>
   </changeSet>
   
