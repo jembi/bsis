@@ -57,6 +57,38 @@ public class ComponentTypeBackingForm {
   public Integer getExpiresAfter() {
     return componentType.getExpiresAfter();
   }
+  
+  /**
+   * Returns the max bleed time in minutes
+   * @return
+   */
+  public Integer getMaxBleedTime() {
+    return componentType.getMaxBleedTime();
+  }
+  
+  /**
+   * Returns the max time since donation in hours
+   * @return
+   */
+  public Integer getMaxTimeSinceDonation() {
+    return componentType.getMaxTimeSinceDonation();
+  }
+  
+  /**
+   * Sets the max bleed time (in minutes)
+   * @param maxBleedTime
+   */
+  public void setMaxBleedTime(Integer maxBleedTime) {
+    componentType.setMaxBleedTime(maxBleedTime);
+  }
+  
+  /**
+   * Sets the  max time since donation (in hours)
+   * @param maxTimeSinceDonation
+   */
+  public void setMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
+    componentType.setMaxTimeSinceDonation(maxTimeSinceDonation);
+  } 
 
   public void setExpiresAfter(Integer expiresAfter) {
     componentType.setExpiresAfter(expiresAfter);

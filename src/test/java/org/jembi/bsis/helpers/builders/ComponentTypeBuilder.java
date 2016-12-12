@@ -28,6 +28,8 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   private boolean canBeIssued = true;
   private Set<ComponentTypeCombination> producedComponentTypeCombinations;
   private boolean containsPlasma = false;
+  private Integer maxBleedTime;
+  private Integer maxTimeSinceDonation;
 
   public ComponentTypeBuilder withId(Long id) {
     this.id = id;
@@ -104,6 +106,16 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     return this;
   }
 
+  public ComponentTypeBuilder withMaxBleedTime(Integer maxBleedTime) {
+    this.maxBleedTime = maxBleedTime;
+    return this;
+  }
+
+  public ComponentTypeBuilder withMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
+    this.maxTimeSinceDonation = maxTimeSinceDonation;
+    return this;
+  }
+
   public ComponentTypeBuilder withProducedComponentTypeCombination(ComponentTypeCombination producedComponentTypeCombination) {
     if (this.producedComponentTypeCombinations == null) {
       this.producedComponentTypeCombinations = new HashSet<>();
@@ -136,6 +148,8 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     componentType.setStorageInfo(storageInfo);
     componentType.setCanBeIssued(canBeIssued);
     componentType.setContainsPlasma(containsPlasma);
+    componentType.setMaxBleedTime(maxBleedTime);
+    componentType.setMaxTimeSinceDonation(maxTimeSinceDonation);
     return componentType;
   }
 
