@@ -214,7 +214,7 @@
       <column name="hasBloodGroup" value="1"/>
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
-      <column name="containsPlasma" value="1"/>
+      <column name="containsPlasma" value="0"/>
       <column name="storageInfo" value="Store at 2-6°C"/>
       <column name="transportInfo" value="Transport at 2-10°C"/>
       <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
