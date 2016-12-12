@@ -59,9 +59,9 @@ public class LabellingService {
     String checkCharacter = checkCharacterService.calculateCheckCharacter(flagChars);
 
     final int dinCharWidth = 10 + 2; // 10 for font width, and 2 for ICG (inter character gap).
-    final int flagCharPosForDINLength_1 = 75;
+    final int startFlagCharsPos = 75;
 
-    int flagCharPos = flagCharPosForDINLength_1 + ((din.length() - 1) * dinCharWidth);
+    int flagCharPos = startFlagCharsPos + ((din.length() - 1) * dinCharWidth);
     int boxPos = flagCharPos + 30;
     int checkCharPos = boxPos + 9;
 
