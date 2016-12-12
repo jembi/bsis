@@ -5,7 +5,7 @@
     logicalFilePath="./src/main/resources/liquibase/updates/1597-add-contains-plasma.xml">
 
     <changeSet id="20160920-1406" author="micnice">
-      <preConditions>
+      <preConditions onFail="MARK_RAN">
         <not>
           <columnExists tableName="ComponentType" columnName="containsPlasma" />
         </not>
