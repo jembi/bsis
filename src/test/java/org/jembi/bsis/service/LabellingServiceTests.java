@@ -97,7 +97,6 @@ public class LabellingServiceTests extends UnitTestSuite {
 
     // check outcome
     assertThat(label, label.contains(donationIdentificationNumber));
-    assertThat(label, label.contains("Line 1"));
   }
   
   @Test(expected = IllegalArgumentException.class)
