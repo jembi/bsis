@@ -85,6 +85,19 @@
                testName="Syphilis Confirmatory 2" testNameShort="Syphilis Conf 2"
                validResults="POS,NEG" flagComponentsForDiscard="0"
                flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
+    <BloodTest id="29" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
+               isActive="1"
+               negativeResults="NEG" positiveResults="POS" rankInCategory="7"
+               testName="AntibodyScreen" testNameShort="AbScr"
+               validResults="POS,NEG" flagComponentsForDiscard="0"
+               flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
+    <BloodTest id="30" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
+               isActive="0"
+               negativeResults="NEG" positiveResults="POS" rankInCategory="7"
+               testName="TuberCulosis" testNameShort="TB"
+               validResults="POS,NEG" flagComponentsForDiscard="0"
+               flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
+               
     <BloodTestingRule id="1" bloodTest_id="1"  
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"
@@ -173,6 +186,14 @@
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
+    <BloodTestingRule id="23" bloodTest_id="29" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
+    <BloodTestingRule id="24" bloodTest_id="30" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
 
     <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
     <DonationType id="2" donationType="Family" isDeleted="false"/>
@@ -272,6 +293,9 @@
     <TestBatch id="2" batchNumber="TB0415000000" isDeleted="false" location_id="3"
                createdDate="2015-04-24 04:42:17.0" lastUpdated="2015-04-24 04:42:17.0"
                status="OPEN" createdBy_id="1" lastUpdatedBy_id="1"/>
+    <TestBatch id="3" batchNumber="TB0815000000" isDeleted="false" location_id="3"
+               createdDate="2016-12-07 11:15:03" lastUpdated="2016-12-07 11:17:09"
+               status="CLOSED" createdBy_id="1" lastUpdatedBy_id="1"/>
 
     <DonationBatch id="1" batchNumber="B0215000000"
                    isDeleted="false" createdDate="2015-02-02 03:41:09.0" donationBatchDate="2015-02-02 03:41:09.0"
@@ -287,6 +311,11 @@
                    isDeleted="false" createdDate="2015-06-26 03:19:33.0" donationBatchDate="2015-06-26 03:19:33.0"
 				   lastUpdated="2015-06-26 03:19:33.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="1"
+                   backEntry="false"/>
+    <DonationBatch id="4" batchNumber="TB0815000000"
+                   isDeleted="false" createdDate="2016-12-07 09:57:15" donationBatchDate="2016-12-07 09:57:09"
+                   lastUpdated="2016-12-07 11:17:09"
+                   createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1"
                    backEntry="false"/>
 
     <Contact id="1"/>
@@ -321,6 +350,22 @@
            lastUpdatedBy_id="1" dateOfFirstDonation="2015-02-02"
            preferredLanguage_id="1" title="Mr" addressId="3" contactId="3"
            dueToDonate="2015-05-03"/>
+    <Donor id="4" birthDate="1989-01-22" bloodAbo="A" bloodRh="-"
+           dateOfLastDonation="2016-12-07 09:57:09" donorHash="d071e86ef96daf0ca388bd589cd74870"
+           donorNumber="028215" donorStatus="NORMAL" firstName="Sipho" gender="male"
+           isDeleted="false" lastName="Mabuza" createdDate="2016-12-07 11:11:31"
+           lastUpdated="2016-12-07 11:16:57" venue_id="1" createdBy_id="1"
+           lastUpdatedBy_id="1" dateOfFirstDonation="2016-12-07"
+           preferredLanguage_id="1" title="Mr" addressId="3" contactId="3"
+           dueToDonate="2017-03-07"/>
+    <Donor id="5" birthDate="1989-01-22" bloodAbo="A" bloodRh="-"
+           dateOfLastDonation="2016-12-07 09:57:09" donorHash="d071e86ef96daf0ca388bd589cd74870"
+           donorNumber="028315" donorStatus="NORMAL" firstName="Koos" gender="male"
+           isDeleted="false" lastName="Merve" createdDate="2016-12-07 11:11:31"
+           lastUpdated="2016-12-07 11:16:57" venue_id="1" createdBy_id="1"
+           lastUpdatedBy_id="1" dateOfFirstDonation="2016-12-07"
+           preferredLanguage_id="1" title="Mr" addressId="3" contactId="3"
+           dueToDonate="2017-03-07"/>
 
 	<Donation id="1" bloodAbo="O"
 		bloodPressureSystolic="110" bloodRh="+" bloodTypingStatus="COMPLETE"
@@ -389,6 +434,18 @@
 		packType_id="1" donationBatch_id="1" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="1970-01-01 14:53:37.0"
 		bleedEndTime="1970-01-01 14:53:37.0" ineligibleDonor="0" released="0" ttiStatus="NOT_DONE"/>
+    <Donation id="10" bloodAbo="A" bloodRh="-" donationDate="2016-12-07 09:57:09"
+        donationIdentificationNumber="080012"
+        isDeleted="0" createdDate="2016-12-07 11:14:26" lastUpdated="2016-12-07 11:17:51"
+        packType_id="1" donationBatch_id="4" donationType_id="1" donor_id="4"
+        createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="2016-12-07 11:14:11"
+        bleedEndTime="2016-12-07 11:14:11" ineligibleDonor="0" released="1" ttiStatus="TTI_SAFE"/>
+    <Donation id="11" bloodAbo="A" bloodRh="-" donationDate="2016-12-07 09:57:09"
+        donationIdentificationNumber="080013"
+        isDeleted="0" createdDate="2016-12-07 11:14:26" lastUpdated="2016-12-07 11:17:51"
+        packType_id="1" donationBatch_id="4" donationType_id="1" donor_id="5"
+        createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="2016-12-07 11:14:11"
+        bleedEndTime="2016-12-07 11:14:11" ineligibleDonor="0" released="1" ttiStatus="TTI_SAFE"/>
 
 	<BloodTestResult isDeleted="false" id="1" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
@@ -546,6 +603,14 @@
 		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
 		testedOn="2016-02-05 09:17:06.0" bloodTest_id="26" donation_id="8"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false" />
+    <BloodTestResult isDeleted="false" id="41" createdDate="2016-11-24 15:36:00"
+        lastUpdated="2016-11-24 15:36:15" notes="" result="NT"
+        testedOn="2016-11-24 15:36:00" bloodTest_id="29" donation_id="10"
+        createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false" />
+    <BloodTestResult isDeleted="false" id="42" createdDate="2016-11-24 15:36:00"
+        lastUpdated="2016-11-24 15:36:15" notes="" result="NT"
+        testedOn="2016-11-24 15:36:00" bloodTest_id="30" donation_id="11"
+        createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false" />
 
     <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="1" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"
                isDeleted="false" createdDate="2015-02-02 03:42:04.0"

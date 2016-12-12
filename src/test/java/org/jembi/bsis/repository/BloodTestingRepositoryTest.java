@@ -6,9 +6,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.BloodTestResultBuilder.aBloodTestResult;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
+import static org.jembi.bsis.helpers.matchers.BloodTestResultMatcher.hasSameStateAsBloodTestResult;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
@@ -199,5 +205,22 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     BloodTestingRuleResult result = results.get(0);
     Assert.assertTrue("Number of tests of type BASIC_TTI for donation batch 2 is 4",
         result.getRecentTestResults().size() == 4);
+  }
+  
+  @Test
+  public void testGetRecentTestResultsForDonation_shouldReturnResultsWithActiveBloodTests() {
+    Donation donation = donationRepository.findDonationById(10l);
+    //Test
+    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    assertThat(returnedResults.size(), is(1));
+  }
+  
+  @Test
+  public void testGetRecentTestResultsForDonation_shouldReturnResultZeroInActiveBloodTestss() {
+    // Data setUp
+    Donation donation = donationRepository.findDonationById(11l);
+    //Test
+    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    assertThat(returnedResults.size(), is(0));
   }
 }

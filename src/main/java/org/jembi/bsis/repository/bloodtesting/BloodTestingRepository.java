@@ -166,12 +166,15 @@ public class BloodTestingRepository {
 
   public Map<Long, BloodTestResult> getRecentTestResultsForDonation(
       Long donationId) {
-    String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted";
+    String queryStr = "SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted";
     TypedQuery<BloodTestResult> query = em.createQuery(queryStr,
         BloodTestResult.class);
     query.setParameter("donationId", donationId);
     query.setParameter("testOutcomeDeleted", false);
+    query.setParameter("isActive",true);
+    query.setParameter("isDeleted", false);
     List<BloodTestResult> bloodTestResults = query.getResultList();
     Map<Long, BloodTestResult> recentBloodTestResults = new HashMap<Long, BloodTestResult>();
     for (BloodTestResult bt : bloodTestResults) {
