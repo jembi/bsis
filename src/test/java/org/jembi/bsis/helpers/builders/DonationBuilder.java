@@ -58,6 +58,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private boolean ineligibleDonor;
   private List<Component> components = new ArrayList<>();
   private User createdBy;
+  private String flagCharacters;
 
   public DonationBuilder withId(Long id) {
     this.id = id;
@@ -226,6 +227,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     this.createdDate = createdDate;
     return this;
   }
+  
+  public DonationBuilder withFlagCharacters(String flagCharacters) {
+    this.flagCharacters = flagCharacters;
+    return this;
+  }
 
   @Override
   public Donation build() {
@@ -260,6 +266,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     donation.setReleased(released);
     donation.setIneligibleDonor(ineligibleDonor);
     donation.setComponents(components);
+    donation.setFlagCharacters(flagCharacters);
     return donation;
   }
 

@@ -48,6 +48,8 @@ public class DonationCRUDService {
   private TestBatchStatusChangeService testBatchStatusChangeService;
   @Autowired
   private BloodTestsService bloodTestsService;
+  @Autowired
+  private CheckCharacterService checkCharacterService;
 
   public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
 
@@ -91,6 +93,7 @@ public class DonationCRUDService {
     donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     donation.setTTIStatus(TTIStatus.NOT_DONE);
     donation.setIsDeleted(false);
+    donation.setFlagCharacters(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber()));
 
     boolean discardComponents = false;
 
