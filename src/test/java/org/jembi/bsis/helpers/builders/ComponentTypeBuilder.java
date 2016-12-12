@@ -117,6 +117,11 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     return this;
   }
 
+  public ComponentTypeBuilder thatDoesntContainsPlasma() {
+    this.containsPlasma = false;;
+    return this;
+  }
+
   @Override
   public ComponentType build() {
     ComponentType componentType = new ComponentType();

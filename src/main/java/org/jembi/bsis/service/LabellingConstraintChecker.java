@@ -8,7 +8,9 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
+import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.model.util.BloodAbo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,27 @@ public class LabellingConstraintChecker {
   @Autowired
   private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
   
+
+  /**
+   * The label should include "HIGH TITRE" if:
+   * 
+   * 1- The donation's titre is high
+   * 2- The donation's blood ABO is "O"
+   * 3- The component's type contains plasma
+   *
+   * @param component the component
+   * @return true, if successful
+   */
+  public boolean shouldLabelIncludeHighTitre(Component component) {
+    Donation donation = component.getDonation();
+    if (donation.getTitre() != null && donation.getTitre().equals(Titre.HIGH) && 
+        donation.getBloodAbo().equals(BloodAbo.O.name()) && 
+        component.getComponentType().getContainsPlasma()) {
+      return true;
+    }
+    return false;
+  }
+
   public boolean canPrintPackLabel(Component component) {
     // Check that component has been received before printing label
     if (!component.hasComponentBatch()) {

@@ -290,4 +290,64 @@ public class LabellingServiceTests extends UnitTestSuite {
     // run test
     labellingService.printPackLabel(componentId);
   }
+  
+  @Test
+  public void testPrintPackLabelThatShouldContainHighTitre_shouldReturnZPLWithHighTitreText() {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationDate(new Date())
+        .withBloodRh("+")
+        .build();
+    ComponentType componentType = aComponentType().withComponentTypeName("name").build();
+    Date expiresOn = new DateTime().plusDays(90).toDate();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(expiresOn)
+        .build();
+    
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
+    when(labellingConstraintChecker.shouldLabelIncludeHighTitre(component)).thenReturn(true);
+    
+    // run test
+    String label = labellingService.printPackLabel(1L);
+
+    // check outcome
+    assertThat(label, label.contains("HIGH TITRE"));
+  }
+  
+  @Test
+  public void testPrintPackLabelThatShouldntContainHighTitre_shouldntReturnZPLWithHighTitreText() {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationDate(new Date())
+        .withBloodRh("+")
+        .build();
+    ComponentType componentType = aComponentType().withComponentTypeName("name").build();
+    Date expiresOn = new DateTime().plusDays(90).toDate();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(expiresOn)
+        .build();
+    
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
+    when(labellingConstraintChecker.shouldLabelIncludeHighTitre(component)).thenReturn(false);
+    
+    // run test
+    String label = labellingService.printPackLabel(1L);
+
+    // check outcome
+    assertThat(label, !label.contains("HIGH TITRE"));
+  }
 }
