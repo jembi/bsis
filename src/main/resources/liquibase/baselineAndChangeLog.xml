@@ -72,5 +72,5 @@
   <include file="liquibase/updates/2035-delete-components-related-to-deleted-donations.xml"/>
   <include file="liquibase/updates/2134-add-donation-dinLength-property.xml"/>
   <include file="liquibase/updates/1888-update-packlabel-incorporate-check-digit.xml"/>
-  
+
 </databaseChangeLog>

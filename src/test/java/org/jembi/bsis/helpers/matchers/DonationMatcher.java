@@ -34,9 +34,9 @@ public class DonationMatcher extends TypeSafeMatcher<Donation> {
         .appendText("\nTTI status: ").appendValue(expected.getTTIStatus())
         .appendText("\nBlood ABO: ").appendValue(expected.getBloodAbo())
         .appendText("\nBlood rh: ").appendValue(expected.getBloodRh())
+        .appendText("\nReleased: ").appendValue(expected.isReleased())
         .appendText("\nComponents: ").appendValue(expected.getComponents())
-        .appendText("\nFlag Characters: ").appendValue(expected.getFlagCharacters())
-        .appendText("\nReleased: ").appendValue(expected.isReleased());
+        .appendText("\nFlag Characters: ").appendValue(expected.getFlagCharacters());
   }
 
   @Override
@@ -58,9 +58,9 @@ public class DonationMatcher extends TypeSafeMatcher<Donation> {
         Objects.equals(actual.getTTIStatus(), expected.getTTIStatus()) &&
         Objects.equals(actual.getBloodAbo(), expected.getBloodAbo()) &&
         Objects.equals(actual.getBloodRh(), expected.getBloodRh()) &&
+        Objects.equals(actual.isReleased(), expected.isReleased()) &&
         Objects.equals(actual.getComponents(), expected.getComponents()) &&
-        Objects.equals(actual.getFlagCharacters(), expected.getFlagCharacters()) &&
-        Objects.equals(actual.isReleased(), expected.isReleased());
+        Objects.equals(actual.getFlagCharacters(), expected.getFlagCharacters());
   }
 
   public static DonationMatcher hasSameStateAsDonation(Donation expected) {

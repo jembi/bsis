@@ -6,8 +6,11 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentTyp
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
+import static org.hamcrest.Matchers.is;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,6 +50,114 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Mock
   private CheckCharacterService checkCharacterService;
   
+  @Test
+  public void testVerifyPackLabelWithValidInputs_shouldReturnTrue() {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("3000505")
+        .withFlagCharacters("11")
+        .build();
+    Component component = aComponent()
+      .withId(1L)
+      .withDonation(donation)
+      .withStatus(ComponentStatus.AVAILABLE)
+      .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+      .build();
+    Component componentInStock = aComponent()
+      .withId(1L)
+      .withDonation(donation)
+      .withStatus(ComponentStatus.AVAILABLE)
+      .withInventoryStatus(InventoryStatus.IN_STOCK)
+      .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+      .build();
+
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.putComponentInStock(component)).thenReturn(componentInStock);
+
+    // run test
+    boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "3000505", "300050511");
+
+    // check outcome
+    assertThat(dinMatches, is(true));
+    verify(componentCRUDService).putComponentInStock(argThat(hasSameStateAsComponent(component)));
+  }
+
+  @Test
+  public void testVerifyPackLabelWithComponentStatusNotAvailable_shouldReturnFalse () {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("3000505")
+        .withFlagCharacters("11")
+        .build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+        .build();
+  
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+  
+    // run test
+    boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "3000505", "300050511");
+  
+    // check outcome
+    assertThat(dinMatches, is(false));
+    verify(componentCRUDService, never()).putComponentInStock(any(Component.class));
+  }  
+
+  @Test
+  public void testVerifyPackLabelWithInvalidPrePrintedDIN_shouldReturnFalse () {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("3000505")
+        .withFlagCharacters("11")
+        .build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+        .build();
+
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+
+    // run test
+    boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "1234567", "300050511");
+
+    // check outcome
+    assertThat(dinMatches, is(false));
+    verify(componentCRUDService, never()).putComponentInStock(any(Component.class));
+  }
+
+  @Test
+  public void testVerifyPackLabelWithInvalidPackLabelDIN_shouldReturnFalse() {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("3000505")
+        .withFlagCharacters("11")
+        .build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
+        .build();
+
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+
+    // run test
+    boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "3000505", "123456789");
+
+    // check outcome
+    assertThat(dinMatches, is(false));
+    verify(componentCRUDService, never()).putComponentInStock(any(Component.class));
+  }
+
   @Test
   public void testPrintDiscardLabel_shouldReturnZPLContainingText() throws Exception {
     // set up data
@@ -124,13 +235,23 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
         .build();
+
+    Component componentNotInStock = aComponent()
+        .withId(componentId)
+        .withComponentCode(componentCode)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(expiresOn)
+        .build();
     
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.putComponentInStock(component)).thenReturn(component);
+    when(componentCRUDService.updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentNotInStock);
 
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -182,13 +303,23 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
         .build();
+
+    Component componentNotInStock = aComponent()
+        .withId(componentId)
+        .withComponentCode(componentCode)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(expiresOn)
+        .build();
     
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.putComponentInStock(component)).thenReturn(component);
+    when(componentCRUDService.updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentNotInStock);
     
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -206,7 +337,7 @@ public class LabellingServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testPrintPackLabelWithNotInStockComponent_shouldMarkAsInStock() throws Exception {
+  public void testPrintPackLabelWithInStockComponent_shouldMarkAsNotInStock() throws Exception {
     // set up data
     Long donationId = Long.valueOf(1);
     String bloodAbo = "A";
@@ -235,7 +366,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withDonation(donation)
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
@@ -252,29 +383,18 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withExpiresOn(expiresOn)
         .build();
     
-    Component finalComponent = aComponent()
-        .withId(componentId)
-        .withComponentCode(componentCode)
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withDonation(donation)
-        .withComponentType(componentType)
-        .withLocation(component.getLocation())
-        .withExpiresOn(expiresOn)
-        .build();
-    
     // set up mocks
     when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.putComponentInStock(argThat(hasSameStateAsComponent(labelledComponent)))).thenReturn(finalComponent);
-    
+    when(componentCRUDService.updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)))).thenReturn(labelledComponent);
+
     // run test
     labellingService.printPackLabel(componentId);
     
     // check outcome
-    verify(componentCRUDService).putComponentInStock(argThat(hasSameStateAsComponent(labelledComponent)));
+    verify(componentCRUDService).updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)));
   }
   
   @Test
