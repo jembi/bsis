@@ -149,4 +149,9 @@ public class ComponentBackingForm {
     // Ignore
   }
 
+  @JsonIgnore
+  public void setIsInitialComponent(boolean isInitialComponent) {
+    // Ignore
+  }
+
 }
