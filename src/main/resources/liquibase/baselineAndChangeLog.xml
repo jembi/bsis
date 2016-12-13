@@ -73,5 +73,5 @@
   <include file="liquibase/updates/2134-add-donation-dinLength-property.xml"/>
   <include file="liquibase/updates/1725-print-high-titre-on-label-type-o.xml"/>
   <include file="liquibase/updates/1888-update-packlabel-incorporate-check-digit.xml"/>
-  
+
 </databaseChangeLog>

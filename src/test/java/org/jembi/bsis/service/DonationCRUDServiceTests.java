@@ -96,9 +96,9 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Mock
   private BloodTestsService bloodTestsService;
   @Mock
-  private CheckCharacterService checkCharacterService;
-  @Mock
   private ComponentRepository componentRepository;
+  @Mock
+  private CheckCharacterService checkCharacterService;
 
   @Test(expected = IllegalStateException.class)
   public void testDeleteDonationWithConstraints_shouldThrow() {
@@ -630,7 +630,6 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withDonor(aDonor().withId(donorId).build())
         .withPackType(packTypeThatDoesNotCountAsDonation)
         .withDonationIdentificationNumber("3000505")
-        .withPackType(packTypeThatDoesNotCountAsDonation)
         .build();
 
     when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");

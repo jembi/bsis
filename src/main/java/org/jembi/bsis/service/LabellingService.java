@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.Titre;
@@ -25,6 +26,22 @@ public class LabellingService {
   @Autowired 
   private CheckCharacterService checkCharacterService;
   
+  public boolean verifyPackLabel(long componentId, String prePrintedDIN, String packLabelDIN) {
+    Component component = componentCRUDService.findComponentById(componentId);
+    if (!component.getStatus().equals(ComponentStatus.AVAILABLE)) {
+      return false;
+    }
+    
+    String recordedDin = component.getDonation().getDonationIdentificationNumber();
+    String recordedFlagCharacters = component.getDonation().getFlagCharacters();
+    if (!recordedDin.equals(prePrintedDIN) ||!(recordedDin+recordedFlagCharacters).equals(packLabelDIN)) {
+      return false;
+    } else {
+      componentCRUDService.putComponentInStock(component);
+      return true;
+    }
+  }
+  
   public String printPackLabel(long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
     Donation donation = component.getDonation();
@@ -37,9 +54,10 @@ public class LabellingService {
       throw new IllegalArgumentException("Pack Label can't be printed");
     }
 
-    // If current status is NOT_IN_STOCK, update inventory status to IN_STOCK for this component
-    if (component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK)) {
-      componentCRUDService.putComponentInStock(component);
+    // If current status is IN_STOCK, update inventory status to NOT_IN_STOCK for this component
+    // The component will be put in stock upon successful verification of packLabel
+    if (component.getInventoryStatus().equals(InventoryStatus.IN_STOCK)) {
+      componentCRUDService.updateComponentToNotInStock(component);
     }
 
     // Set up date formats
