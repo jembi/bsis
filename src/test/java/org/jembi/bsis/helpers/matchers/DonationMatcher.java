@@ -36,6 +36,7 @@ public class DonationMatcher extends TypeSafeMatcher<Donation> {
         .appendText("\nBlood rh: ").appendValue(expected.getBloodRh())
         .appendText("\nReleased: ").appendValue(expected.isReleased())
         .appendText("\nComponents: ").appendValue(expected.getComponents())
+        .appendText("\nTitre: ").appendValue(expected.getTitre())
         .appendText("\nFlag Characters: ").appendValue(expected.getFlagCharacters());
   }
 
@@ -60,6 +61,7 @@ public class DonationMatcher extends TypeSafeMatcher<Donation> {
         Objects.equals(actual.getBloodRh(), expected.getBloodRh()) &&
         Objects.equals(actual.isReleased(), expected.isReleased()) &&
         Objects.equals(actual.getComponents(), expected.getComponents()) &&
+        Objects.equals(actual.getTitre(), expected.getTitre()) &&
         Objects.equals(actual.getFlagCharacters(), expected.getFlagCharacters());
   }
 

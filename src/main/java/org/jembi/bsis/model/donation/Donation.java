@@ -184,6 +184,10 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @Column(nullable = true)
   private String flagCharacters;
 
+  @Enumerated(EnumType.STRING)
+  @Column(length = 10)
+  private Titre titre;
+
   public Donation() {
     super();
   }
@@ -217,6 +221,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.bleedEndTime = donation.getBleedEndTime();
     this.venue = donation.getVenue();
     this.adverseEvent = donation.getAdverseEvent();
+    this.titre = donation.getTitre();
     this.flagCharacters = donation.getFlagCharacters();
   }
 
@@ -290,6 +295,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.bloodRh = donation.bloodRh;
     this.flagCharacters = donation.flagCharacters;
     this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
+    this.titre = donation.titre;
   }
 
   public List<Component> getComponents() {
@@ -501,6 +507,14 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
 
   public void setReleased(boolean released) {
     this.released = released;
+  }
+
+  public Titre getTitre () {
+    return titre;
+  }
+
+  public void setTitre (Titre titre) {
+    this.titre = titre;
   }
 
   public String getFlagCharacters() {

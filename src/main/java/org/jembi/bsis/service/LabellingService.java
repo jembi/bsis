@@ -8,7 +8,9 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.util.BloodAbo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -98,11 +100,17 @@ public class LabellingService {
     // Generate element for blood Rh
     String bloodRh = "";
     if (donation.getBloodRh().contains("+")) {
-      bloodRh = "^FT487,385^A0N,40,38^FB221,1,0,C^FH^FDRhD POSITIVE^FS";
+      bloodRh = "^FT487,365^A0N,40,38^FB221,1,0,C^FH^FDRhD POSITIVE^FS";
     } else if (donation.getBloodRh().contains("-")) {
-      bloodRh = "^FO482,346^GB233,50,50^FS^FT482,386^A0N,40,38^FB233,1,0,C^FR^FH^FDRhD NEGATIVE^FS";
+      bloodRh = "^FO482,326^GB233,50,50^FS^FT482,363^A0N,40,38^FB233,1,0,C^FR^FH^FDRhD NEGATIVE^FS";
     }
     
+    // Generate element for high titre
+    String highTitre = "";
+    if (shouldLabelIncludeHighTitre(component)) {
+      highTitre = "^FT505,409^A0N,36,36,C^FR^FDHIGH TITRE^FS";
+    }
+
     // Get configured service info values
     String serviceInfoLine1 = generalConfigAccessorService.getGeneralConfigValueByName(
         GeneralConfigConstants.SERVICE_INFO_LINE_1);
@@ -129,6 +137,7 @@ public class LabellingService {
         "^BY3,3,77^FT65,535^BCN,,Y,N^FD" + component.getComponentCode() + "^FS" +
         "^FT64,616^A0N,43,16^FD" + componentType.getComponentTypeName() + "^FS" +
         "^BY2,3,84^FT62,305^BCN,,N,N^FD" + isoDateFormat.format(donation.getDonationDate()) + "^FS" +
+        highTitre +
         "^FT450,439^A0N,17,38^FDExpires On^FS" +
         "^BY2,3,82^FT451,535^BCN,,N,N^FD" + isoDateFormat.format(component.getExpiresOn()) + "^FS" +
         "^FT452,565^A0N,23,31^FD" + dateTimeFormat.format(component.getExpiresOn()) + "^FS" +
@@ -180,4 +189,25 @@ public class LabellingService {
 
     return labelZPL;
   }
+  
+  /**
+   * The label should include "HIGH TITRE" if:
+   * 
+   * 1- The donation's titre is high
+   * 2- The donation's blood ABO is "O"
+   * 3- The component's type contains plasma
+   *
+   * @param component the component
+   * @return true, if successful
+   */
+  protected boolean shouldLabelIncludeHighTitre(Component component) {
+    Donation donation = component.getDonation();
+    if (donation.getTitre() != null && donation.getTitre().equals(Titre.HIGH) && 
+        donation.getBloodAbo().equals(BloodAbo.O.name()) && 
+        component.getComponentType().getContainsPlasma()) {
+      return true;
+    }
+    return false;
+  }
+
 }
