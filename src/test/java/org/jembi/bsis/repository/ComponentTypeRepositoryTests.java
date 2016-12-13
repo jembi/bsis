@@ -4,8 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class ComponentTypeRepositoryTests extends SecurityContextDependentTestSu
   private ComponentTypeRepository componentTypeRepository;
   
   @Test
-  public void testIsUniqueComponentTypeName_shouldReturnFalseIfComponentNameIsNotUnique() {
+  public void testIsUniqueComponentTypeName_shouldReturnFalseIfComponentNameExists() {
     String componentTypeCode = "0011";
     String componentTypeName = "Blood";
     
@@ -62,6 +62,43 @@ public class ComponentTypeRepositoryTests extends SecurityContextDependentTestSu
     
     // Verify result
     assertThat(unique, is(true));
+  }
+  
+  @Test
+  public void testIsUniqueComponentTypeName_shouldReturnFalseIfComponentNameExistsButDeleted() {
+    String componentTypeCode = "0011";
+    String componentTypeName = "Blood";
+    
+    // Test data: ComponentType with same name but deleted
+    aComponentType()
+        .withComponentTypeCode(componentTypeCode)
+        .withComponentTypeName(componentTypeName)
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+    
+    // Run test
+    boolean unique = componentTypeRepository.isUniqueComponentTypeName(null, componentTypeName);
+    
+    // Verify result
+    assertThat(unique, is(false));
+  }
+  
+  @Test
+  public void testIsUniqueComponentTypeName_shouldReturnFalseIfComponentNameExistsButDifferentCase() {
+    String componentTypeCode = "0011";
+    String componentTypeName = "blood";
+    
+    // Test data: ComponentType with same name but different case
+    aComponentType()
+        .withComponentTypeCode(componentTypeCode)
+        .withComponentTypeName(componentTypeName.toUpperCase())
+        .buildAndPersist(entityManager);
+    
+    // Run test
+    boolean unique = componentTypeRepository.isUniqueComponentTypeName(null, componentTypeName);
+    
+    // Verify result
+    assertThat(unique, is(false));
   }
   
   @Test
