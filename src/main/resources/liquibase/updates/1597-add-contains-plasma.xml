@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
     logicalFilePath="./src/main/resources/liquibase/updates/1597-add-contains-plasma.xml">
 
-    <changeSet id="20160920-1406" author="micnice">
+    <changeSet id="20161212-1406" author="micnice">
       <preConditions onFail="MARK_RAN">
         <not>
           <columnExists tableName="ComponentType" columnName="containsPlasma" />

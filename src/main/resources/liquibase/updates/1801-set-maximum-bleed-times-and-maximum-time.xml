@@ -15,8 +15,7 @@
     </addColumn>
   </changeSet>
 
-  <!-- Moved and ID changed (micnice): for #1801 (refacring) -->
-  <!-- Updated (timler): for #294 (refactoring) -->
+  <!-- Moved and ID changed (micnice): for #1801 (refactoring) -->
   <changeSet id="20161209-1642" author="danfuterman">
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
@@ -42,6 +41,8 @@
       <column name="pediComponentType_id" value = "NULL"/>
       <column name="isDeleted" value="0"/>
       <column name="containsPlasma" value="1"/>
+      <column name="transportInfo" value=""/>
+      <column name="preparationInfo" value=""/>
       <column name="canBeIssued" value="0"/>
     </insert>
     <insert tableName = "ComponentType">
@@ -55,6 +56,8 @@
       <column name="pediComponentType_id" value = "NULL"/>
       <column name="isDeleted" value="0"/>
       <column name="containsPlasma" value="1"/>
+      <column name="transportInfo" value=""/>
+      <column name="preparationInfo" value=""/>
       <column name="canBeIssued" value="0"/>
     </insert>
     <insert tableName = "ComponentType">
@@ -68,6 +71,8 @@
       <column name="pediComponentType_id" value = "NULL"/>
       <column name="isDeleted" value="0"/>
       <column name="containsPlasma" value="1"/>
+      <column name="transportInfo" value=""/>
+      <column name="preparationInfo" value=""/>
       <column name="canBeIssued" value="0"/>
     </insert>
     <insert tableName = "ComponentType">
@@ -81,6 +86,8 @@
       <column name="pediComponentType_id" value = "NULL"/>
       <column name="isDeleted" value="0"/>
       <column name="containsPlasma" value="1"/>
+      <column name="transportInfo" value=""/>
+      <column name="preparationInfo" value=""/>
       <column name="canBeIssued" value="0"/>
     </insert>
     <insert tableName = "ComponentType">
@@ -94,6 +101,8 @@
       <column name="pediComponentType_id" value="NULL"/>
       <column name="isDeleted" value="0"/>
       <column name="containsPlasma" value="1"/>
+      <column name="transportInfo" value=""/>
+      <column name="preparationInfo" value=""/>
       <column name="canBeIssued" value="0"/>
     </insert>
     <insert tableName = "ComponentType">
@@ -364,13 +373,11 @@
   </changeSet>
 
   <!-- Moved and ID changed (micnice): #1801 (refactoring) -->
-  <!-- Updated (timler): for #294 (refactoring) -->
   <changeSet id="20161213-0910" author="danfuterman">
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         <![CDATA[
-				SELECT count(*) FROM ComponentTypeCombination_ComponentType
-				where componentTypeCombinations_id = 1 and componentTypes_id = 6;
+				SELECT count(*) FROM ComponentTypeCombination_ComponentType;
 				]]>
       </sqlCheck>
     </preConditions>
@@ -470,13 +477,11 @@
   </changeSet>
 
   <!-- Moved and ID changed (micnice): #1801 (refactoring) -->
-  <!-- Updated (timler): for #294 (refactoring) -->
   <changeSet id="20161213-0911" author="danfuterman">
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         <![CDATA[
-				SELECT count(*) FROM ComponentType_ComponentTypeCombination
-				where sourceComponentTypes_id = 1 and producedComponentTypeCombinations_id = 1;
+				SELECT count(*) FROM ComponentType_ComponentTypeCombination;
 				]]>
       </sqlCheck>
     </preConditions>
