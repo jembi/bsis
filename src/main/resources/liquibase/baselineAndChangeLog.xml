@@ -71,6 +71,7 @@
   <include file="liquibase/updates/2033-add-donation-batch-date-to-donation-batch.xml"/>
   <include file="liquibase/updates/2035-delete-components-related-to-deleted-donations.xml"/>
   <include file="liquibase/updates/2134-add-donation-dinLength-property.xml"/>
+  <include file="liquibase/updates/1725-print-high-titre-on-label-type-o.xml"/>
+  <include file="liquibase/updates/1888-update-packlabel-incorporate-check-digit.xml"/>
   <include file="liquibase/updates/1801-set-maximum-bleed-times-and-maximum-time.xml"/>
-  
 </databaseChangeLog>

@@ -145,7 +145,12 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     this.highTransportTemperature = highTransportTemperature;
     return this;
   }
-  
+
+  public ComponentTypeBuilder thatDoesntContainsPlasma() {
+    this.containsPlasma = false;;
+    return this;
+  }
+
   @Override
   public ComponentType build() {
     ComponentType componentType = new ComponentType();
