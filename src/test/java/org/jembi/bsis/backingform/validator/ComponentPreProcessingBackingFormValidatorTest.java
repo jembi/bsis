@@ -2,7 +2,7 @@ package org.jembi.bsis.backingform.validator;
 
 import java.util.HashMap;
 
-import org.jembi.bsis.backingform.ComponentBackingForm;
+import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,15 +12,15 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ComponentBackingFormValidatorTest {
+public class ComponentPreProcessingBackingFormValidatorTest {
 
   @InjectMocks
-  private ComponentBackingFormValidator validator;
+  private ComponentPreProcessingBackingFormValidator validator;
 
   @Test
   public void testValidateComponentWithWeight_hasNoErrors() throws Exception {
     // set up data
-    ComponentBackingForm form = new ComponentBackingForm();
+    ComponentPreProcessingBackingForm form = new ComponentPreProcessingBackingForm();
     form.setWeight(333);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "Component");
     
@@ -34,7 +34,7 @@ public class ComponentBackingFormValidatorTest {
   @Test
   public void testValidateComponentWithNoWeight_hasNoErrors() throws Exception {
     // set up data
-    ComponentBackingForm form = new ComponentBackingForm();
+    ComponentPreProcessingBackingForm form = new ComponentPreProcessingBackingForm();
     form.setWeight(null);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "Component");
 
@@ -48,7 +48,7 @@ public class ComponentBackingFormValidatorTest {
   @Test
   public void testValidateComponentWithNegativeWeight_hasInvalidWeightError() throws Exception {
     // set up data
-    ComponentBackingForm form = new ComponentBackingForm();
+    ComponentPreProcessingBackingForm form = new ComponentPreProcessingBackingForm();
     form.setWeight(-4);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "Component");
 
@@ -64,7 +64,7 @@ public class ComponentBackingFormValidatorTest {
   @Test
   public void testValidateComponentWithTooLargeWeight_hasInvalidWeightError() throws Exception {
     // set up data
-    ComponentBackingForm form = new ComponentBackingForm();
+    ComponentPreProcessingBackingForm form = new ComponentPreProcessingBackingForm();
     form.setWeight(1000);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "Component");
 

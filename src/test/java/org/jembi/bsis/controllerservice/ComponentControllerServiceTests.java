@@ -2,7 +2,7 @@ package org.jembi.bsis.controllerservice;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
+import static org.jembi.bsis.helpers.builders.ComponentPreProcessingBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.backingform.ComponentBackingForm;
+import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
@@ -311,7 +311,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // setup data
     Long componentId = Long.valueOf(1);
     int componentWeight = 123;
-    ComponentBackingForm backingForm = aComponentBackingForm().withId(componentId).withWeight(componentWeight).build();
+    ComponentPreProcessingBackingForm backingForm = aComponentBackingForm().withId(componentId).withWeight(componentWeight).build();
     Component component = aComponent().withId(componentId).withWeight(componentWeight).build();
     
     // setup mocks

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jembi.bsis.backingform.ComponentBackingForm;
+import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.backingform.UndiscardComponentsBackingForm;
@@ -150,11 +150,11 @@ public class ComponentController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
   
-  @RequestMapping(value = "{id}/weight", method = RequestMethod.PUT)
+  @RequestMapping(value = "{id}/preprocess ", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> updateComponentWeight(
+  public ResponseEntity<Map<String, Object>> preProcessComponent(
       @PathVariable("id") long componentId,
-      @RequestBody @Valid ComponentBackingForm componentBackingForm) {
+      @RequestBody @Valid ComponentPreProcessingBackingForm componentBackingForm) {
 
     componentBackingForm.setId(componentId); // Use the id parameter from the path
 

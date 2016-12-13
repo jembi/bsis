@@ -10,7 +10,7 @@ import org.jembi.bsis.model.packtype.PackType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class ComponentBackingForm {
+public class ComponentPreProcessingBackingForm {
 
   private Long id;
   private Integer weight;
