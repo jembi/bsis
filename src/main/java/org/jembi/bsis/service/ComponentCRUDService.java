@@ -181,6 +181,14 @@ public class ComponentCRUDService {
     }
   }
 
+  public Component deleteComponent(long componentId) {
+    LOGGER.info("Deleting component " + componentId);
+
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    existingComponent.setIsDeleted(true);
+    return componentRepository.update(existingComponent);
+  }
+
   public void updateComponentStatusesForDonation(Donation donation) {
 
     LOGGER.info("Updating component statuses for donation: " + donation);

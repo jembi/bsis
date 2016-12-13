@@ -48,8 +48,9 @@ Development Environment
     * The project dependencies are configured using [Maven] (http://maven.apache.org/). Install Eclipse plugin [m2eclipse] (http://maven.apache.org/eclipse-plugin.html) for easier integration of Maven with your development environment. In Eclipse, select Help>Install New Software and add the site http://download.eclipse.org/technology/m2e/releases to add the m2eclipse plugin.Setup m2eclipse so that it automatically downloads all the required dependencies, sources, javadocs.
     * Import the source code into Eclipse by using 'Import Existing project' option. The master branch contains the required eclipse project files (e.g. .project and .settings), so you should be able to start working right away. For other IDE's you will need to more work.
 2. You will also need to setup a MySQL database:
-    *  Run the Maven build `mvn clean install` which will call the liquibase scripts to create and initialise your database.
-    * `BSIS/src/database.properties` contains your database connection information.
+    *  Run the Maven build `mvn liquibase:update` which will call the liquibase scripts to create and initialise your database.
+    * `src/main/resources/bsis.properties` contains your database connection information.
+    * Note: Liquibase is executed on application startup, so this step is optional.
 
 Important Coding Conventions
 ----------------------------

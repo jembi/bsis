@@ -1,0 +1,16 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/2035-delete-components-related-to-deleted-donations.xml">
+
+  <changeSet id="20161202-0837" author="tmvumbi2">
+    <comment>Soft delete all components related to a deleted donation</comment>
+    <sql>
+      UPDATE Component c
+      LEFT JOIN Donation d ON d.id = c.donation_id
+      SET c.isDeleted = 1 
+      WHERE d.isDeleted = 1;
+    </sql>
+  </changeSet>
+</databaseChangeLog>

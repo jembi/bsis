@@ -79,6 +79,11 @@ public class DonationCRUDService {
       donorRepository.updateDonor(donor);
     }
 
+    // Soft delete related components
+    for (Component component: donation.getComponents()) {
+      componentCRUDService.deleteComponent(component.getId());
+    }
+
     donorService.setDonorDueToDonate(donor);
   }
 
