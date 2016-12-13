@@ -57,13 +57,15 @@ public class ComponentTypeBackingFormValidator extends BaseValidator<ComponentTy
 
     if (form.getMaxBleedTime() != null) {
       if (form.getMaxBleedTime() < 0 || form.getMaxBleedTime() > MAX_MAX_BLEED_TIME) {
-        errors.rejectValue("maxBleedTime", "errors.invalid", "maxBleedTime should be between 0 and " + MAX_MAX_BLEED_TIME);
+        errors.rejectValue("maxBleedTime", "errors.invalid", "maxBleedTime should be between 0 and "
+            + MAX_MAX_BLEED_TIME + " minutes");
       }
     }
 
     if (form.getMaxTimeSinceDonation() != null) {
       if (form.getMaxTimeSinceDonation() < 0 || form.getMaxTimeSinceDonation() > MAX_MAX_TIME_SINCE_DONATION) {
-        errors.rejectValue("maxTimeSinceDonation", "errors.invalid", "maxTimeSinceDonation should be between 0 and " + MAX_MAX_TIME_SINCE_DONATION);
+        errors.rejectValue("maxTimeSinceDonation", "errors.invalid", "maxTimeSinceDonation should be between 0 and "
+            + MAX_MAX_TIME_SINCE_DONATION + " hours");
       }
     }
   }
