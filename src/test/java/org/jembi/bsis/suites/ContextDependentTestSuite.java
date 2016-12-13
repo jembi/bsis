@@ -10,7 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
+@ContextConfiguration(locations = "classpath:**/applicationContextTest.xml")
 @WebAppConfiguration
 @Transactional
 public abstract class ContextDependentTestSuite {

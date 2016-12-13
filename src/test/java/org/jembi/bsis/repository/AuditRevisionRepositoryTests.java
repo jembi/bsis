@@ -14,21 +14,12 @@ import javax.persistence.PersistenceContext;
 
 import org.jembi.bsis.model.audit.AuditRevision;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.repository.AuditRevisionRepository;
+import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@Transactional
-@WebAppConfiguration
-public class AuditRevisionRepositoryTests {
+public class AuditRevisionRepositoryTests extends ContextDependentTestSuite  {
 
   private static final DateTime END_OF_RANGE = new DateTime().minusDays(1);
   private static final DateTime START_OF_RANGE = END_OF_RANGE.minusDays(7);

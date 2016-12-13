@@ -22,7 +22,9 @@ public class LabellingService {
   private LabellingConstraintChecker labellingConstraintChecker;
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
-
+  @Autowired 
+  private CheckCharacterService checkCharacterService;
+  
   public String printPackLabel(long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
     Donation donation = component.getDonation();
@@ -47,6 +49,35 @@ public class LabellingService {
     DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
     DateFormat dateTimeFormat = new SimpleDateFormat(dateTimeFormatString);
     DateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    // Update donation without flag characters
+    if (donation.getFlagCharacters() == null || donation.getFlagCharacters().isEmpty() ) {
+      donation.setFlagCharacters(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber()));
+    }
+
+    // Generate DIN related elements
+    String din = donation.getDonationIdentificationNumber();
+    String flagChars = donation.getFlagCharacters();
+    String checkCharacter = checkCharacterService.calculateCheckCharacter(flagChars);
+
+    final int dinCharWidth = 10 + 2; // 10 for font width, and 2 for ICG (inter character gap).
+    final int startFlagCharsPos = 75;
+
+    int flagCharPos = startFlagCharsPos + ((din.length() - 1) * dinCharWidth);
+    int boxPos = flagCharPos + 30;
+    int checkCharPos = boxPos + 9;
+
+    String dinZPL = 
+      "^FT59,52^A0N,17,38^FH^FDDIN^FS" +
+      // Bar code with flag characters, Note "A" - automatic mode used to determine best packing
+      // mode
+      "^BY2,3,82^FT61,144^BCN,,N,N,N,A" +
+      "^FD" + din + flagChars + "^FS" + 
+      // manual interpretation line below
+      "^FT61,180^ADN,30,10^FH^FD" + din + "^FS" + // DIN
+      "^FT" + flagCharPos +",155^ADR,30,10^FH^FD" + flagChars + "^FS"+  // flag character
+      "^FO" + boxPos + ",148^GB30,38,3^FS" +  // box around check character
+      "^FT" + checkCharPos + ",180^ADN,27,14^FH^FD" + checkCharacter + "^FS"; // check character
 
     // Generate element for blood Rh
     String bloodRh = "";
@@ -77,8 +108,7 @@ public class LabellingService {
         "^PW799" +
         "^LL0799" +
         "^LS0" +
-        "^FT61,64^A0N,17,38^FDDIN^FS" +
-        "^BY3,3,82^FT62,150^BCN,,Y,N^FD" + donation.getDonationIdentificationNumber() + "^FS" +
+        dinZPL +
         "^BY3,3,80^FT445,147^BCN,,Y,N^FD" + donation.getBloodAbo() + donation.getBloodRh() + "^FS" +
         "^FT62,208^A0N,17,38^FDCollected On^FS" +
         "^FT64,331^A0N,23,36^FD" + dateFormat.format(donation.getDonationDate()) + "^FS" +

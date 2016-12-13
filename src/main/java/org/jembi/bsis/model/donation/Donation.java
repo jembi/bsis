@@ -180,6 +180,9 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   // If this donation has been released in a test batch
   @Column(nullable = false)
   private boolean released = false;
+  
+  @Column(nullable = true)
+  private String flagCharacters;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 10)
@@ -219,6 +222,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.venue = donation.getVenue();
     this.adverseEvent = donation.getAdverseEvent();
     this.titre = donation.getTitre();
+    this.flagCharacters = donation.getFlagCharacters();
   }
 
   public String getDonationIdentificationNumber() {
@@ -289,6 +293,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.venue = donation.getVenue();
     this.bloodAbo = donation.bloodAbo;
     this.bloodRh = donation.bloodRh;
+    this.flagCharacters = donation.flagCharacters;
     this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
     this.titre = donation.titre;
   }
@@ -511,4 +516,13 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   public void setTitre (Titre titre) {
     this.titre = titre;
   }
+
+  public String getFlagCharacters() {
+    return flagCharacters;
+  }
+
+  public void setFlagCharacters(String flagCharacters) {
+    this.flagCharacters = flagCharacters;
+  }
+
 }
