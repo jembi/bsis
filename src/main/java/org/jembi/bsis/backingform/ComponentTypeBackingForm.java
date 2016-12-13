@@ -13,7 +13,7 @@ public class ComponentTypeBackingForm {
   private Integer expiresAfter;
   private Integer maxBleedTime;
   private Integer maxTimeSinceDonation;
-  private ComponentTypeTimeUnits expiresAfterUnits;
+  private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
   private Boolean hasBloodGroup;
   private String description;
   private boolean isDeleted = false;

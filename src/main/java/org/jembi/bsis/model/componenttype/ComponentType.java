@@ -298,6 +298,8 @@ public class ComponentType extends BaseModificationTrackerEntity {
     this.canBeIssued = componentType.getCanBeIssued();
     this.isDeleted = componentType.getIsDeleted();
     this.containsPlasma = componentType.getContainsPlasma();
+    this.maxBleedTime = componentType.getMaxBleedTime();
+    this.maxTimeSinceDonation = componentType.getMaxTimeSinceDonation();
   }
 
   /**
