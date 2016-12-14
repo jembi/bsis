@@ -205,15 +205,27 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   }
   
   @Test
-  public void testGetRecentTestResultsForDonation_shouldReturnResultsWithActiveBloodTests() {
-    Donation donation = donationRepository.findDonationById(10l);
+  public void testGetRecentTestResultsForDonationWithActiveAndUnDeletedBloodTest_shouldReturnABloodTestResult() {
+    Donation donation = donationRepository.findDonationById(9l);
     //Test
     Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    System.out.println(returnedResults);
+    BloodTestResult result = returnedResults.get(28l);
     assertThat(returnedResults.size(), is(1));
+    assertThat(result.getBloodTest().getIsActive(), is(true));
+    assertThat(result.getBloodTest().getIsDeleted(), is(false));
   }
   
   @Test
-  public void testGetRecentTestResultsForDonation_shouldReturnResultZeroInActiveBloodTestss() {
+  public void testGetRecentTestResultsForDonationWithActiveAndDeletedBloodTest_shouldNotReturnABloodTestResult() {
+    Donation donation = donationRepository.findDonationById(10l);
+    //Test
+    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    assertThat(returnedResults.size(), is(0));
+  }
+  
+  @Test
+  public void testGetRecentTestResultsForDonationWithInactiveAndUnDeletedBloodTest_shouldNotReturnABloodTestResult() {
     // Data setUp
     Donation donation = donationRepository.findDonationById(11l);
     //Test
