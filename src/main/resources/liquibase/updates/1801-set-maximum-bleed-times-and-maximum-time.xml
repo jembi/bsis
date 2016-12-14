@@ -16,7 +16,7 @@
   </changeSet>
 
   <!-- Moved and ID changed (micnice): for #1801 (refactoring) -->
-  <changeSet id="20161209-1642" author="danfuterman">
+  <changeSet id="20161214-1350" author="danfuterman">
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         <![CDATA[
@@ -39,6 +39,8 @@
       <column name="transportInfo" value=""/>
       <column name="preparationInfo" value=""/>
       <column name="canBeIssued" value="0"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="2"/>
@@ -54,6 +56,8 @@
       <column name="transportInfo" value=""/>
       <column name="preparationInfo" value=""/>
       <column name="canBeIssued" value="0"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="3"/>
@@ -69,6 +73,8 @@
       <column name="transportInfo" value=""/>
       <column name="preparationInfo" value=""/>
       <column name="canBeIssued" value="0"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="4"/>
@@ -84,6 +90,8 @@
       <column name="transportInfo" value=""/>
       <column name="preparationInfo" value=""/>
       <column name="canBeIssued" value="0"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="5"/>
@@ -99,6 +107,8 @@
       <column name="transportInfo" value=""/>
       <column name="preparationInfo" value=""/>
       <column name="canBeIssued" value="0"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="6"/>
@@ -115,6 +125,8 @@
       <column name="transportInfo" value="Transport at 2-10°C"/>
       <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
       <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="7"/>
@@ -131,6 +143,8 @@
       <column name="transportInfo" value="Transport at 2-10°C"/>
       <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
       <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="12" />
+      <column name="maxTimeSinceDonation" value="24" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="8"/>
@@ -147,6 +161,8 @@
       <column name="transportInfo" value="Transport at 2-10°C"/>
       <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
       <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="9"/>
@@ -163,6 +179,8 @@
       <column name="transportInfo" value="Transport at 2-10°C"/>
       <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
       <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="10"/>
@@ -179,6 +197,8 @@
       <column name="transportInfo" value="Transport below -25°C"/>
       <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
       <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="15" />
+      <column name="maxTimeSinceDonation" value="24" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="11"/>
@@ -195,6 +215,8 @@
       <column name="transportInfo" value="Transport below -25°C"/>
       <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
       <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="12"/>
@@ -211,6 +233,8 @@
       <column name="transportInfo" value="Transport at 20-24°C"/>
       <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
       <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="12" />
+      <column name="maxTimeSinceDonation" value="24" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="13"/>
@@ -227,6 +251,8 @@
       <column name="transportInfo" value="Transport at 20-24°C"/>
       <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
       <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="12" />
+      <column name="maxTimeSinceDonation" value="24" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="14"/>
@@ -243,6 +269,8 @@
       <column name="transportInfo" value="Transport at 2-10°C"/>
       <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
       <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="15"/>
@@ -258,6 +286,8 @@
       <column name="storageInfo" value="Store below -30°C"/>
       <column name="transportInfo" value="Transport below -25°C"/>
       <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="15" />
+      <column name="maxTimeSinceDonation" value="24" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="16"/>
@@ -273,6 +303,8 @@
       <column name="storageInfo" value="Store at 20-24°C"/>
       <column name="transportInfo" value="Transport at 20-24°C"/>
       <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="12" />
+      <column name="maxTimeSinceDonation" value="24" />
     </insert>
   </changeSet>
 
