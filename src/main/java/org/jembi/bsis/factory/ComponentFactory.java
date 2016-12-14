@@ -55,6 +55,8 @@ public class ComponentFactory {
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
     viewModel.setHasComponentBatch(component.hasComponentBatch());
     viewModel.setInventoryStatus(component.getInventoryStatus());
+    viewModel.setBleedStartTime(component.getDonation().getBleedStartTime());
+    viewModel.setBleedEndTime(component.getDonation().getBleedEndTime());
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();
