@@ -1,0 +1,31 @@
+package org.jembi.bsis.backingform.validator;
+
+import java.util.Date;
+
+import org.jembi.bsis.backingform.RecordComponentBackingForm;
+import org.springframework.validation.Errors;
+
+public class RecordComponentBackingFormValidator extends BaseValidator<RecordComponentBackingForm> {
+
+  @Override
+  public void validateForm(RecordComponentBackingForm form, Errors errors) {
+    validateProcessedOnDate(form, errors);  
+  }
+
+  @Override
+  public String getFormName() {
+    return "RecordComponentBackingForm";
+  }
+  
+  private void validateProcessedOnDate(RecordComponentBackingForm recordComponentBackingForm, Errors errors) {
+    Date processedOn = recordComponentBackingForm.getProcessedOn();
+    
+    if (processedOn == null) {
+      errors.rejectValue("processedOn","required.processedOn", "This is required");
+    }
+    
+    if (processedOn.before(new Date())) {
+      errors.rejectValue("processedOn", "date.futureDate", "Cannot be a future date");
+    }
+  }
+}
