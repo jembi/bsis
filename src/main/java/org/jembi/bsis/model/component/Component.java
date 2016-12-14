@@ -92,6 +92,9 @@ public class Component extends BaseModificationTrackerEntity {
   @Temporal(TemporalType.TIMESTAMP)
   private Date issuedOn;
 
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date processedOn;
+
   @Enumerated(EnumType.STRING)
   @Column(length = 30, nullable = false)
   private ComponentStatus status;
@@ -300,4 +303,13 @@ public class Component extends BaseModificationTrackerEntity {
   public void setWeight(Integer weight) {
     this.weight = weight;
   }
+
+  public Date getProcessedOn() {
+    return processedOn;
+  }
+
+  public void setProcessedOn(Date processedOn) {
+    this.processedOn = processedOn;
+  }
+
 }
