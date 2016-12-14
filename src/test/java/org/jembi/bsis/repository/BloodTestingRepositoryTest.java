@@ -206,9 +206,9 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   
   @Test
   public void testGetRecentTestResultsForDonationWithActiveAndUnDeletedBloodTest_shouldReturnABloodTestResult() {
+    
     //Test
     Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(9l);
-    System.out.println(returnedResults);
     BloodTestResult result = returnedResults.get(28l);
     assertThat(returnedResults.size(), is(1));
     assertThat(result.getBloodTest().getIsActive(), is(true));
