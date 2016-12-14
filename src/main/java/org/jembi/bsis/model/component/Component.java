@@ -132,22 +132,6 @@ public class Component extends BaseModificationTrackerEntity {
 
   private Integer weight;
 
-  public Component() {
-    super();
-  }
-
-  public void copy(Component component) {
-    assert (this.getId().equals(component.getId()));
-    this.donation = component.donation;
-    this.componentType = component.componentType;
-    this.createdOn = component.createdOn;
-    this.expiresOn = component.expiresOn;
-    this.notes = component.notes;
-    this.componentCode = component.componentCode;
-    this.location = component.location;
-    this.inventoryStatus = component.inventoryStatus;
-  }
-
   public Donation getDonation() {
     return donation;
   }
