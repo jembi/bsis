@@ -91,34 +91,6 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20150114-1146" author="danfuterman">
-		<comment>Add locations</comment>
-		<insert tableName = "Location">
-			<column name="name" value="Maseru"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="Leribe"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="Mohale's Hoek"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>
-	</changeSet>
-
 	<changeSet id="20141117-0945" author="srikanthmalyala">
 		<comment>Add contact method types</comment>
 		<insert tableName = "ContactMethodType">
