@@ -23,11 +23,6 @@
             SELECT count(*) FROM ComponentType;
 			]]>
       </sqlCheck>
-      <sqlCheck expectedResult="0">
-        <![CDATA[
-			SELECT count(*) FROM ComponentType WHERE componentTypeCode = "0011";
-			]]>
-      </sqlCheck>
     </preConditions>
     <comment>Add component types</comment>
     <insert tableName = "ComponentType">
