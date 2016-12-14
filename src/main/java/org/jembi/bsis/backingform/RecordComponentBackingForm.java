@@ -13,11 +13,6 @@ public class RecordComponentBackingForm {
   @NotBlank
   private String parentComponentId;
 
-	/*
-  @NotBlank
-    private String childComponentTypeId;
-    */
-
   @NotBlank
   private ComponentTypeCombination componentTypeCombination;
 
@@ -40,16 +35,6 @@ public class RecordComponentBackingForm {
   public void setParentComponentId(String parentComponentId) {
     this.parentComponentId = parentComponentId;
   }
-
-	/*
-  public String getChildComponentTypeId() {
-        return childComponentTypeId;
-    }
-	
-	public void setChildComponentTypeId(String childComponentTypeId){
-		this.childComponentTypeId = childComponentTypeId;
-	}
-	*/
 
   public ComponentTypeCombination getComponentTypeCombination() {
     return componentTypeCombination;
