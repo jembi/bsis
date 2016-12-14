@@ -206,9 +206,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   
   @Test
   public void testGetRecentTestResultsForDonationWithActiveAndUnDeletedBloodTest_shouldReturnABloodTestResult() {
-    Donation donation = donationRepository.findDonationById(9l);
     //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(9l);
     System.out.println(returnedResults);
     BloodTestResult result = returnedResults.get(28l);
     assertThat(returnedResults.size(), is(1));
@@ -218,18 +217,17 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   
   @Test
   public void testGetRecentTestResultsForDonationWithActiveAndDeletedBloodTest_shouldNotReturnABloodTestResult() {
-    Donation donation = donationRepository.findDonationById(10l);
+
     //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(10l);
     assertThat(returnedResults.size(), is(0));
   }
   
   @Test
   public void testGetRecentTestResultsForDonationWithInactiveAndUnDeletedBloodTest_shouldNotReturnABloodTestResult() {
-    // Data setUp
-    Donation donation = donationRepository.findDonationById(11l);
+  
     //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(11l);
     assertThat(returnedResults.size(), is(0));
   }
 }
