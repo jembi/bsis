@@ -143,7 +143,7 @@ public class ComponentController {
   @RequestMapping(value = "/recordcombinations", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> recordNewComponentCombinations(
-      @RequestBody RecordComponentBackingForm recordComponentForm) throws ParseException {
+      @RequestBody @Valid RecordComponentBackingForm recordComponentForm) throws ParseException {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("components", componentControllerService.processComponent(recordComponentForm));
