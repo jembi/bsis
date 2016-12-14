@@ -1,17 +1,12 @@
 package org.jembi.bsis.backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.List;
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import org.hibernate.validator.constraints.NotBlank;
-import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.user.User;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class RecordComponentBackingForm {
 
@@ -36,6 +31,7 @@ public class RecordComponentBackingForm {
   private User lastUpdatedBy;
   @JsonIgnore
   private User createdBy;
+  private Date processedOn;
 
   public String getParentComponentId() {
     return parentComponentId;
@@ -107,4 +103,11 @@ public class RecordComponentBackingForm {
     this.lastUpdatedBy = lastUpdatedBy;
   }
 
+  public Date getProcessedOn() {
+    return processedOn;
+  }
+
+  public void setProcessedOn(Date processedOn) {
+    this.processedOn = processedOn;
+  }
 }
