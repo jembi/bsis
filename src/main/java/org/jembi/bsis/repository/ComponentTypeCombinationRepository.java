@@ -43,4 +43,11 @@ public class ComponentTypeCombinationRepository extends AbstractRepository<Compo
         .setParameter("combinationName", combinationName)
         .getSingleResult();
   }
+  
+  public boolean verifyComponentTypeCombinationExists(Long id) {
+    return em.createNamedQuery(ComponentTypeCombinationsQueryConstants.NAME_VERIFY_COMPONENT_TYPE_COMBINATION_WITH_ID_EXISTS, Boolean.class)
+        .setParameter("id", id)
+        .setParameter("deleted", false)
+        .getSingleResult();
+  }
 }
