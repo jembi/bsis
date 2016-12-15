@@ -1041,7 +1041,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
     
     // SUT
-    Component returnedComponent = componentCRUDService.recordComponentWeight(componentId, componentWeight);
+    Component returnedComponent = componentCRUDService.preProcessComponent(componentId, componentWeight);
     
     assertThat(returnedComponent, hasSameStateAsComponent(oldComponent));
   }
@@ -1057,10 +1057,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(false);
+    when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(false);
     
     // SUT
-    componentCRUDService.recordComponentWeight(componentId, 320);
+    componentCRUDService.preProcessComponent(componentId, 320);
   }
 
   @Test
@@ -1085,7 +1085,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
+    when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(true);
     doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(oldComponent)), eq(ComponentStatusChangeReasonType.INVALID_WEIGHT));
@@ -1093,7 +1093,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.update(unsafeComponent)).thenReturn(unsafeComponent);
     
     // SUT
-    Component updatedComponent = componentCRUDService.recordComponentWeight(componentId, 320);
+    Component updatedComponent = componentCRUDService.preProcessComponent(componentId, 320);
     
     // check
     verify(componentCRUDService).markComponentAsUnsafe(oldComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
@@ -1111,13 +1111,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
+    when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(false);
     when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(false);
     when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
     
     // SUT
-    Component updatedComponent = componentCRUDService.recordComponentWeight(componentId, 420);
+    Component updatedComponent = componentCRUDService.preProcessComponent(componentId, 420);
     
     // check
     assertThat("Component was not flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
@@ -1141,13 +1141,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
+    when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(false);
     when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(true);
     when(componentRepository.update(reEvaluatedcomponent)).thenReturn(reEvaluatedcomponent);
     
     // SUT
-    Component updatedComponent = componentCRUDService.recordComponentWeight(componentId, 420);
+    Component updatedComponent = componentCRUDService.preProcessComponent(componentId, 420);
     
     // check
     assertThat("Component status was re-evaluated", updatedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
@@ -1761,12 +1761,12 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .build();
     
     when(componentRepository.findComponentById(componentId)).thenReturn(component);
-    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
+    when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(component)).thenReturn(false);
     when(componentRepository.update(component)).thenReturn(component);
     
     // Exercise SUT
-    Component returnedComponent = componentCRUDService.recordComponentWeight(componentId, 320);
+    Component returnedComponent = componentCRUDService.preProcessComponent(componentId, 320);
 
     // Verify
     assertThat(returnedComponent.getStatus(), is(ComponentStatus.UNSAFE));
@@ -1790,12 +1790,12 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .build();
     
     when(componentRepository.findComponentById(componentId)).thenReturn(component);
-    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
+    when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(component)).thenReturn(false);
     when(componentRepository.update(component)).thenReturn(component);
     
     // Exercise SUT
-    Component returnedComponent = componentCRUDService.recordComponentWeight(componentId, 320);
+    Component returnedComponent = componentCRUDService.preProcessComponent(componentId, 320);
 
     // Verify
     assertThat(returnedComponent.getStatus(), is(ComponentStatus.QUARANTINED));

@@ -315,15 +315,15 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     Component component = aComponent().withId(componentId).withWeight(componentWeight).build();
     
     // setup mocks
-    Mockito.when(componentCRUDService.recordComponentWeight(componentId, componentWeight)).thenReturn(component);
+    Mockito.when(componentCRUDService.preProcessComponent(componentId, componentWeight)).thenReturn(component);
     Mockito.when(componentFactory.createManagementViewModel(component))
     .thenReturn(ComponentManagementViewModelBuilder.aComponentManagementViewModel().build());
     
     // SUT
-    componentControllerService.recordComponentWeight(backingForm);
+    componentControllerService.preProcessComponent(backingForm);
     
     // verify
-    Mockito.verify(componentCRUDService).recordComponentWeight(componentId, componentWeight);
+    Mockito.verify(componentCRUDService).preProcessComponent(componentId, componentWeight);
     Mockito.verify(componentFactory).createManagementViewModel(component);
   }
   

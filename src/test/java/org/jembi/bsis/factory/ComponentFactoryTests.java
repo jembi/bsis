@@ -202,7 +202,7 @@ public class ComponentFactoryTests {
     when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(componentTypeFullViewModel);
     when(componentConstraintChecker.canDiscard(component)).thenReturn(true);
     when(componentConstraintChecker.canProcess(component)).thenReturn(true);
-    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
+    when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
     when(componentConstraintChecker.canUnprocess(component)).thenReturn(true);
     when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
 

@@ -159,7 +159,7 @@ public class ComponentController {
     componentBackingForm.setId(componentId); // Use the id parameter from the path
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("component", componentControllerService.recordComponentWeight(componentBackingForm));
+    map.put("component", componentControllerService.preProcessComponent(componentBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   

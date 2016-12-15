@@ -41,7 +41,7 @@ public class ComponentConstraintChecker {
     return component.getStatus() == ComponentStatus.DISCARDED;
   }
 
-  public boolean canRecordWeight(Component component) {
+  public boolean canPreProcess(Component component) {
     // There must be a componentBatch attached to the component
     if (!component.hasComponentBatch()){
       return false;

@@ -344,7 +344,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.QUARANTINED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(true));
   }
 
@@ -354,7 +354,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(true));
   }
 
@@ -364,7 +364,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withStatus(ComponentStatus.UNSAFE)
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(true));
   }
 
@@ -374,7 +374,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(true));
   }
   
@@ -383,7 +383,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
     Component component = aComponent()
         .withStatus(ComponentStatus.QUARANTINED)
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(false));
   }
   
@@ -393,7 +393,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.ISSUED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(false));
   }
 
@@ -403,7 +403,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.USED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(false));
   }
 
@@ -413,7 +413,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.DISCARDED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(false));
   }
 
@@ -423,7 +423,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.PROCESSED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(false));
   }
 
@@ -433,7 +433,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.SPLIT)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(false));
   }
 
@@ -444,7 +444,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(null)
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(true));
   }
 
@@ -455,7 +455,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(aComponent().build())
         .build();
-    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    boolean canRecordWeight = componentConstraintChecker.canPreProcess(component);
     assertThat(canRecordWeight, is(false));
   }
 

@@ -98,9 +98,9 @@ public class ComponentControllerService {
     return componentViewModels;
   }
   
-  public ComponentManagementViewModel recordComponentWeight(ComponentPreProcessingBackingForm componentBackingForm) {
-    Component component = componentCRUDService.recordComponentWeight(componentBackingForm.getId(),
-        componentBackingForm.getWeight());
+  public ComponentManagementViewModel preProcessComponent(ComponentPreProcessingBackingForm componentBackingForm) {
+    Component component = componentCRUDService.preProcessComponent(componentBackingForm.getId(),
+        componentBackingForm.getWeight(), componentBackingForm.getBleedStartTime(), componentBackingForm.getBleedEndTime());
     return componentFactory.createManagementViewModel(component);
   }
   
