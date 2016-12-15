@@ -18,14 +18,6 @@ public class RecordComponentBackingForm {
 
   private Integer numUnits;
 
-  @JsonIgnore
-  private Date createdDate;
-  @JsonIgnore
-  private Date lastUpdated;
-  @JsonIgnore
-  private User lastUpdatedBy;
-  @JsonIgnore
-  private User createdBy;
   private Date processedOn;
 
   public Long getParentComponentId() {
@@ -52,47 +44,31 @@ public class RecordComponentBackingForm {
     this.numUnits = numUnits;
   }
 
-  @JsonIgnore
-  public Date getLastUpdated() {
-    return lastUpdated;
-  }
-
-  @JsonIgnore
-  public Date getCreatedDate() {
-    return createdDate;
-  }
-
-  @JsonIgnore
-  public User getCreatedBy() {
-    return createdBy;
-  }
-
-  @JsonIgnore
-  public User getLastUpdatedBy() {
-    return lastUpdatedBy;
-  }
-
-  public void setLastUpdated(Date lastUpdated) {
-    this.lastUpdated = lastUpdated;
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
-  }
-
-  public void setCreatedBy(User createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public void setLastUpdatedBy(User lastUpdatedBy) {
-    this.lastUpdatedBy = lastUpdatedBy;
-  }
-
   public Date getProcessedOn() {
     return processedOn;
   }
 
   public void setProcessedOn(Date processedOn) {
     this.processedOn = processedOn;
+  }
+
+  @JsonIgnore
+  public void setLastUpdated(Date lastUpdated) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setCreatedDate(Date createdDate) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setCreatedBy(User createdBy) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setLastUpdatedBy(User lastUpdatedBy) {
+    // Ignore
   }
 }
