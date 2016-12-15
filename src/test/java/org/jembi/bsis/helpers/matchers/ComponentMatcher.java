@@ -33,7 +33,7 @@ public class ComponentMatcher extends TypeSafeMatcher<Component> {
         .appendText("\nNotes: ").appendValue(expected.getNotes())
         .appendText("\nStatusChanges: ").appendValue(expected.getStatusChanges())
         .appendText("\nComponentBatch: ").appendValue(expected.getComponentBatch())
-        ;
+        .appendText("\nProcessedOn: ").appendValue(expected.getProcessedOn());
   }
 
   @Override
@@ -55,7 +55,8 @@ public class ComponentMatcher extends TypeSafeMatcher<Component> {
         Objects.equals(actual.getIsDeleted(), expected.getIsDeleted()) &&
         Objects.equals(actual.getNotes(), expected.getNotes()) &&
         Objects.equals(actual.getStatusChanges(), expected.getStatusChanges()) &&
-        Objects.equals(actual.getComponentBatch(), expected.getComponentBatch());
+        Objects.equals(actual.getComponentBatch(), expected.getComponentBatch()) &&
+        Objects.equals(actual.getProcessedOn(), expected.getProcessedOn());
   }
 
   public static ComponentMatcher hasSameStateAsComponent(Component expected) {

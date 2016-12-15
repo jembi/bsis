@@ -201,9 +201,10 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component processComponent(long parentComponentId, long componentTypeCombinationId) {
+  public Component processComponent(long parentComponentId, long componentTypeCombinationId, Date processedOn) {
 
-    Component parentComponent = componentRepository.findComponentById(Long.valueOf(parentComponentId));
+    Component parentComponent = componentRepository.findComponentById(parentComponentId);
+    parentComponent.setProcessedOn(processedOn);
     ComponentTypeCombination componentTypeCombination =
         componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId);
     

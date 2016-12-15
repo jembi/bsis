@@ -216,6 +216,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   public void testProcessComponent_shouldCallServiceRepositoryAndFactory() throws Exception {
     // setup data
     String donationIdentificationNumber = "1234567";
+    Date processedOn = new Date();
     List<Component> components = Arrays.asList(
         ComponentBuilder.aComponent().withId(1L)
           .withDonation(DonationBuilder.aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
@@ -229,22 +230,22 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     RecordComponentBackingForm form = new RecordComponentBackingForm();
     form.setParentComponentId(1L);
     form.setComponentTypeCombination(aComponentTypeCombination().withId(1L).build());
+    form.setProcessedOn(processedOn);
     
     // setup mocks   
-    Mockito.when(
-        componentCRUDService.processComponent(form.getParentComponentId(), form.getComponentTypeCombination().getId()))
-        .thenReturn(components.get(0));
-    Mockito.when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
-    Mockito.when(componentFactory.createManagementViewModels(components)).thenReturn(componentViewModels);
+    when(componentCRUDService.processComponent(form.getParentComponentId(), form.getComponentTypeCombination().getId(),
+        processedOn)).thenReturn(components.get(0));
+    when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
+    when(componentFactory.createManagementViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
     componentControllerService.processComponent(form);
     
     // verify
-    Mockito.verify(componentCRUDService).processComponent(form.getParentComponentId(),
-        form.getComponentTypeCombination().getId());
-    Mockito.verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
-    Mockito.verify(componentFactory).createManagementViewModels(components);
+    verify(componentCRUDService).processComponent(form.getParentComponentId(),
+        form.getComponentTypeCombination().getId(), processedOn);
+    verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    verify(componentFactory).createManagementViewModels(components);
   }
   
   @Test
