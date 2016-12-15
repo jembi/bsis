@@ -2,6 +2,7 @@ package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
@@ -1291,6 +1292,42 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
 
     assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
     assertThat("Parent inventory status is IN_STOCK", unprocessedComponent.getInventoryStatus(), is(InventoryStatus.IN_STOCK));
+  }
+  
+  @Test
+  public void testUnprocessComponent_shouldResetProcessedOnDate() throws Exception {
+    // set up data
+    Donation donation = aDonation().build();
+    Location location = aLocation().build();
+    Component parentComponent = aComponent().withId(1L)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withDonation(donation)
+        .withLocation(location)
+        .withProcessedOn(new Date())
+        .build();
+    Component componentToUpdate = aComponent().withId(1L)
+        .withDonation(donation)
+        .withLocation(location)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withProcessedOn(null)
+        .build();
+
+    Component updatedComponent = aComponent().withId(1L)
+        .withDonation(donation)
+        .withLocation(location)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .build();
+
+    // mocks
+    when(componentConstraintChecker.canUnprocess(parentComponent)).thenReturn(true);
+    when(componentRepository.findChildComponents(parentComponent)).thenReturn(new ArrayList<Component>());
+    when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)))).thenReturn(updatedComponent);
+    
+    // SUT
+    Component unprocessedComponent = componentCRUDService.unprocessComponent(parentComponent);
+
+    // Check
+    assertThat("Parent component processedOn is null", unprocessedComponent.getProcessedOn(), is(nullValue()));
   }
   
   @Test

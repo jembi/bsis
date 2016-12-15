@@ -454,6 +454,9 @@ public class ComponentCRUDService {
       parentComponent.setInventoryStatus(InventoryStatus.IN_STOCK);
     }
 
+    // Reset processedOn date
+    parentComponent.setProcessedOn(null);
+
     // FIXME: Create component status change for when processing a component
     return rollBackComponentStatus(parentComponent, null);
   }
