@@ -333,11 +333,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted", BloodTestResult.class))
+    when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
             .thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
     when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -379,11 +382,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted", BloodTestResult.class))
+    when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
             .thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
     when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -429,11 +435,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults)).thenReturn(ruleResult).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted", BloodTestResult.class))
+    when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
             .thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
     when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -476,11 +485,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted", BloodTestResult.class))
+    when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
             .thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
     when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -528,11 +540,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
         .thenReturn(donation1);
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_2))
         .thenReturn(donation2);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted", BloodTestResult.class))
+    when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
             .thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
     when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
