@@ -53,7 +53,7 @@ public class ComponentPreProcessingBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error on field bleedEndTime", errors.getFieldError("Component.donation"));
+    Assert.assertNotNull("Error on field bleedEndTime", errors.getFieldError("bleedEndTime"));
   }
 
   @Test
@@ -71,7 +71,7 @@ public class ComponentPreProcessingBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error on field bleedStartTime", errors.getFieldError("Component.donation.bleedStartTime"));
+    Assert.assertNotNull("Error on field bleedStartTime", errors.getFieldError("bleedStartTime"));
   }
 
   @Test
@@ -89,7 +89,7 @@ public class ComponentPreProcessingBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error on field bleedEndTime", errors.getFieldError("Component.donation.bleedEndTime"));
+    Assert.assertNotNull("Error on field bleedEndTime", errors.getFieldError("bleedEndTime"));
   }
 
   @Test
@@ -107,7 +107,7 @@ public class ComponentPreProcessingBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error on field bleedEndTime", errors.getFieldError("Component.donation"));
+    Assert.assertNotNull("Error on field bleedEndTime", errors.getFieldError("bleedEndTime"));
   }
 
   @Test
