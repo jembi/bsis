@@ -15,6 +15,7 @@ import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.backingform.UndiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidator;
+import org.jembi.bsis.backingform.validator.RecordComponentBackingFormValidator;
 import org.jembi.bsis.controllerservice.ComponentControllerService;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -43,9 +44,17 @@ public class ComponentController {
   @Autowired
   private DiscardComponentsBackingFormValidator discardComponentsBackingFormValidator;
 
+  @Autowired
+  private RecordComponentBackingFormValidator recordComponentBackingFormValidator;
+
   @InitBinder("discardComponentsBackingForm")
-  protected void initBinder(WebDataBinder binder) {
+  protected void discardInitBinder(WebDataBinder binder) {
     binder.setValidator(discardComponentsBackingFormValidator);
+  }
+
+  @InitBinder("recordComponentBackingForm")
+  protected void recordInitBinder(WebDataBinder binder) {
+    binder.setValidator(recordComponentBackingFormValidator);
   }
 
   @RequestMapping(value = "/discard/form", method = RequestMethod.GET)
@@ -143,10 +152,10 @@ public class ComponentController {
   @RequestMapping(value = "/recordcombinations", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> recordNewComponentCombinations(
-      @RequestBody @Valid RecordComponentBackingForm recordComponentForm) throws ParseException {
+      @RequestBody @Valid RecordComponentBackingForm recordComponentBackingForm) throws ParseException {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("components", componentControllerService.processComponent(recordComponentForm));
+    map.put("components", componentControllerService.processComponent(recordComponentBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
   
