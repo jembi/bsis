@@ -2,21 +2,15 @@ package org.jembi.bsis.backingform;
 
 import java.util.Date;
 
-import org.hibernate.validator.constraints.NotBlank;
-import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.user.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class RecordComponentBackingForm {
 
-  @NotBlank
   private Long parentComponentId;
 
-  @NotBlank
-  private ComponentTypeCombination componentTypeCombination;
-
-  private Integer numUnits;
+  private ComponentTypeCombinationBackingForm componentTypeCombination;
 
   private Date processedOn;
 
@@ -28,20 +22,12 @@ public class RecordComponentBackingForm {
     this.parentComponentId = parentComponentId;
   }
 
-  public ComponentTypeCombination getComponentTypeCombination() {
+  public ComponentTypeCombinationBackingForm getComponentTypeCombination() {
     return componentTypeCombination;
   }
 
-  public void setComponentTypeCombination(ComponentTypeCombination componentTypeCombination) {
+  public void setComponentTypeCombination(ComponentTypeCombinationBackingForm componentTypeCombination) {
     this.componentTypeCombination = componentTypeCombination;
-  }
-
-  public Integer getNumUnits() {
-    return numUnits;
-  }
-
-  public void setNumUnits(Integer numUnits) {
-    this.numUnits = numUnits;
   }
 
   public Date getProcessedOn() {

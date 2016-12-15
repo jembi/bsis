@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBackingFormBuilder.aComponentTypeCombinationBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.mockito.Mockito.verify;
@@ -229,7 +229,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     );
     RecordComponentBackingForm form = new RecordComponentBackingForm();
     form.setParentComponentId(1L);
-    form.setComponentTypeCombination(aComponentTypeCombination().withId(1L).build());
+    form.setComponentTypeCombination(aComponentTypeCombinationBackingForm().withId(1L).build());
     form.setProcessedOn(processedOn);
     
     // setup mocks   
