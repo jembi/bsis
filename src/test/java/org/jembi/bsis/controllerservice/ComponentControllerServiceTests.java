@@ -11,6 +11,7 @@ import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aCompone
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -310,12 +311,18 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   public void testRecordComponentWeight_shouldCallServiceRepositoryAndFactory() throws Exception {
     // setup data
     Long componentId = Long.valueOf(1);
+    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     int componentWeight = 123;
-    ComponentPreProcessingBackingForm backingForm = aComponentBackingForm().withId(componentId).withWeight(componentWeight).build();
+    ComponentPreProcessingBackingForm backingForm = aComponentBackingForm()
+        .withId(componentId)
+        .withWeight(componentWeight)
+        .withBleedStartTime(dateFormat.parse("2016-12-14 08:10"))
+        .withBleedEndTime(dateFormat.parse("2016-12-14 08:20"))
+        .build();
     Component component = aComponent().withId(componentId).withWeight(componentWeight).build();
     
     // setup mocks
-    Mockito.when(componentCRUDService.preProcessComponent(componentId, componentWeight)).thenReturn(component);
+    Mockito.when(componentCRUDService.preProcessComponent(componentId, componentWeight, backingForm.getBleedStartTime(), backingForm.getBleedEndTime())).thenReturn(component);
     Mockito.when(componentFactory.createManagementViewModel(component))
     .thenReturn(ComponentManagementViewModelBuilder.aComponentManagementViewModel().build());
     
@@ -323,7 +330,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     componentControllerService.preProcessComponent(backingForm);
     
     // verify
-    Mockito.verify(componentCRUDService).preProcessComponent(componentId, componentWeight);
+    Mockito.verify(componentCRUDService).preProcessComponent(componentId, componentWeight, backingForm.getBleedStartTime(), backingForm.getBleedEndTime());
     Mockito.verify(componentFactory).createManagementViewModel(component);
   }
   
