@@ -160,15 +160,8 @@ public class BloodTestingRuleEngine {
       Map<Long, String> availableTestResults) {
 
     boolean patternMatch = false;
-    boolean atLeastOneResultFound = false;
-
     String expectedResult = rule.getPattern();
     String actualResult = availableTestResults.get(rule.getBloodTest().getId());
-
-    if (actualResult != null) {
-      atLeastOneResultFound = true;
-    }
-
     if (actualResult != null && expectedResult != null && expectedResult.equals(actualResult)) {
       patternMatch = true;
     }
@@ -195,13 +188,16 @@ public class BloodTestingRuleEngine {
         case TTISTATUS:
           resultSet.addTtiStatusChanges(rule.getNewInformation());
           break;
+        case TITRE:
+          resultSet.addTitreChanges(rule.getNewInformation());
+          break;
         default:
           LOGGER.warn("Unknown donation field: " + donationFieldChanged);
           break;
       }
 
       // determine which tests are pending
-      // Note: pending tests are dependant on having a donation field changed.
+      // Note: pending tests are dependent on having a donation field changed.
       // This might not be desired in the future
       for (Long extraTestId : rule.getPendingTestsIdsSet()) {
         if (!availableTestResults.containsKey(extraTestId)) {
@@ -215,38 +211,14 @@ public class BloodTestingRuleEngine {
             case TTISTATUS:
               resultSet.addPendingRepeatAndConfirmatoryTtiTestsIds(extraTestId);
               break;
+            case TITRE:
+              // see note above
+              break;
             default:
               LOGGER.warn("Unknown rule donationFieldChanged: " + rule.getDonationFieldChanged());
               break;
           }
         }
-      }
-    } else {
-      if (LOGGER.isTraceEnabled()) {
-        LOGGER.trace("Pattern NOT matched for rule with id '" + rule.getId()
-            + "' and at least one result was found: " + atLeastOneResultFound);
-        LOGGER.trace("Test id: " + rule.getBloodTest().getId());
-        LOGGER.trace("pattern: " + rule.getPattern());
-        LOGGER.trace("Donation field changed: " + rule.getDonationFieldChanged());
-        LOGGER.trace("Changes to result: " + rule.getNewInformation());
-      }
-      DonationField donationFieldChanged = rule.getDonationFieldChanged();
-      switch (donationFieldChanged) {
-        case BLOODABO:
-          if (atLeastOneResultFound)
-            resultSet.setAboUninterpretable(true);
-          break;
-        case BLOODRH:
-          if (atLeastOneResultFound)
-            resultSet.setRhUninterpretable(true);
-          break;
-        case TTISTATUS:
-          if (atLeastOneResultFound)
-            resultSet.setTtiUninterpretable(true);
-          break;
-        default:
-          LOGGER.warn("Unknown donation field: " + donationFieldChanged);
-          break;
       }
     }
   }

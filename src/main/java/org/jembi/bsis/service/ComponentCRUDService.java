@@ -181,6 +181,14 @@ public class ComponentCRUDService {
     }
   }
 
+  public Component deleteComponent(long componentId) {
+    LOGGER.info("Deleting component " + componentId);
+
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    existingComponent.setIsDeleted(true);
+    return componentRepository.update(existingComponent);
+  }
+
   public void updateComponentStatusesForDonation(Donation donation) {
 
     LOGGER.info("Updating component statuses for donation: " + donation);
@@ -340,6 +348,13 @@ public class ComponentCRUDService {
     for (Long id : componentIds) {
       discardComponent(id, discardReasonId, discardReasonText);
     }
+  }
+
+  public Component updateComponentToNotInStock (Component component) {
+    LOGGER.info("Removing component "+ component.getId() + " from stock");
+
+    component.setInventoryStatus(InventoryStatus.NOT_IN_STOCK);
+    return componentRepository.update(component);
   }
 
   public Component discardComponent(Long componentId, Long discardReasonId, String discardReasonText) {

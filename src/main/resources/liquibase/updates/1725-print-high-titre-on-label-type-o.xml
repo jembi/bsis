@@ -1,0 +1,63 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20161207-1650" author="tmvumbi2">
+    <addColumn tableName="Donation">
+      <column name="titre" type="VARCHAR(10)" defaultValue="NULL"/>
+    </addColumn>
+    <addColumn tableName="Donation_AUD">
+      <column name="titre" type="VARCHAR(10)" defaultValue="NULL"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20161208-0912" author="timler">
+    <!-- Add BloodTestingRules for Titre -->
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0"> 
+        <![CDATA[
+          SELECT count(*) FROM BloodTestingRule where bloodTest_id=3 and donationFieldChanged='TITRE';
+        ]]>
+      </sqlCheck>
+    </preConditions>
+    <comment>Add BloodTestingRules for Titre (HIGH, LOW, NT)</comment>
+    <insert tableName="BloodTestingRule">
+      <column name="bloodTest_id" value="3"></column>
+      <column name="donationFieldChanged" value="TITRE"></column>
+      <column name="pattern" value="HIGH"></column>
+      <column name="newInformation" value="HIGH"></column>
+      <column name="pendingTestsIds" value=""></column>
+      <column name="isDeleted" value="0"></column>
+      <column name="createdDate" value="2016-12-08 09:12:00"></column>
+      <column name="createdBy_id" value="1"></column>
+      <column name="lastUpdated" value="2016-12-08 09:12:00"></column>
+      <column name="lastUpdatedBy_id" value="1"></column>
+    </insert>
+    <insert tableName="BloodTestingRule">
+      <column name="bloodTest_id" value="3"></column>
+      <column name="donationFieldChanged" value="TITRE"></column>
+      <column name="pattern" value="LOW"></column>
+      <column name="newInformation" value="LOW"></column>
+      <column name="pendingTestsIds" value=""></column>
+      <column name="isDeleted" value="0"></column>
+      <column name="createdDate" value="2016-12-08 09:12:00"></column>
+      <column name="createdBy_id" value="1"></column>
+      <column name="lastUpdated" value="2016-12-08 09:12:00"></column>
+      <column name="lastUpdatedBy_id" value="1"></column>
+    </insert>
+    <insert tableName="BloodTestingRule">
+      <column name="bloodTest_id" value="3"></column>
+      <column name="donationFieldChanged" value="TITRE"></column>
+      <column name="pattern" value="NT"></column>
+      <column name="newInformation" value=""></column>
+      <column name="pendingTestsIds" value=""></column>
+      <column name="isDeleted" value="0"></column>
+      <column name="createdDate" value="2016-12-08 09:12:00"></column>
+      <column name="createdBy_id" value="1"></column>
+      <column name="lastUpdated" value="2016-12-08 09:12:00"></column>
+      <column name="lastUpdatedBy_id" value="1"></column>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

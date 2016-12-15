@@ -63,6 +63,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
   private BloodTest rhBloodTest;
   private BloodTest aboRepeatBloodTest;
   private BloodTest rhRepeatBloodTest;
+  private BloodTest titreBloodTest;
 
   private void setupFixtures() {
     // Setup blood tests
@@ -102,6 +103,12 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
         .withTestNameShort("Rh Repeat")
         .withCategory(BloodTestCategory.BLOODTYPING)
         .build();
+    titreBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
+        .withId(7L)
+        .withValidResults("HIGH,LOW,NT")
+        .withTestNameShort("Titre")
+        .withCategory(BloodTestCategory.BLOODTYPING)
+        .build();
     
     // Setup rules
     rules = new ArrayList<>();
@@ -139,6 +146,14 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
          .withPattern("NEG").withNewInformation("-").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODRH)
          .withPattern("NT").withNewInformation("").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
+
+    // Titre
+    rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TITRE)
+        .withPattern("HIGH").withNewInformation("HIGH").withBloodTest(titreBloodTest).build());
+    rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TITRE)
+        .withPattern("LOW").withNewInformation("LOW").withBloodTest(titreBloodTest).build());
+    rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TITRE)
+        .withPattern("NT").withNewInformation("").withBloodTest(titreBloodTest).build());
   }
 
   @Test
@@ -844,5 +859,115 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
+  }
+
+  @Test
+  public void testApplyBloodTestsWithTitreHighTest_titreShouldBeHigh() throws Exception {
+
+    // Setup fixtures
+    setupFixtures();
+
+    // Setup donation
+    PackType packType = aPackType().withTestSampleProduced(true).build();
+    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    
+    // Setup existing test results for that donation
+    Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
+    resultsMap.put(titreBloodTest.getId(), 
+        aBloodTestResult().withBloodTest(titreBloodTest).withResult("HIGH").withReEntryRequired(false).build());
+    
+    // Setup expected rule engine result set
+    BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
+    expectedBloodTestingRuleResultSet.addTitreChanges("HIGH");
+    expectedBloodTestingRuleResultSet.setPendingAboTestsIds(new ArrayList<Long>());
+    expectedBloodTestingRuleResultSet.setPendingRhTestsIds(new ArrayList<Long>());
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+
+    // Setup mocks
+    when(bloodTestingRuleRepository.getBloodTestingRules(false)).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest, titreBloodTest));
+
+    // Apply test
+    bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+
+    // Verify last step of applyBloodTests before returning view model
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+        argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
+  }
+
+  @Test
+  public void testApplyBloodTestsWithTitreLowTest_titreShouldBeLow() throws Exception {
+
+    // Setup fixtures
+    setupFixtures();
+
+    // Setup donation
+    PackType packType = aPackType().withTestSampleProduced(true).build();
+    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    
+    // Setup existing test results for that donation
+    Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
+    resultsMap.put(titreBloodTest.getId(), 
+        aBloodTestResult().withBloodTest(titreBloodTest).withResult("LOW").withReEntryRequired(false).build());
+    
+    // Setup expected rule engine result set
+    BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
+    expectedBloodTestingRuleResultSet.addTitreChanges("LOW");
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+
+    // Setup mocks
+    when(bloodTestingRuleRepository.getBloodTestingRules(false)).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest, titreBloodTest));
+
+    // Apply test
+    bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+
+    // Verify last step of applyBloodTests before returning view model
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+        argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
+  }
+
+  @Test
+  public void testApplyBloodTestsWithTitreNTTest_titreShouldBeEmpty() throws Exception {
+
+    // Setup fixtures
+    setupFixtures();
+
+    // Setup donation
+    PackType packType = aPackType().withTestSampleProduced(true).build();
+    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    
+    // Setup existing test results for that donation
+    Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
+    resultsMap.put(titreBloodTest.getId(), 
+        aBloodTestResult().withBloodTest(titreBloodTest).withResult("NT").withReEntryRequired(false).build());
+    
+    // Setup expected rule engine result set
+    BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
+        new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
+    expectedBloodTestingRuleResultSet.addTitreChanges("");
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+
+    // Setup mocks
+    when(bloodTestingRuleRepository.getBloodTestingRules(false)).thenReturn(rules);
+    when(bloodTestingRepository.getRecentTestResultsForDonation(donation.getId())).thenReturn(resultsMap);
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(aboBloodTest, rhBloodTest, titreBloodTest));
+
+    // Apply test
+    bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
+
+    // Verify last step of applyBloodTests before returning view model
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+        argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
   }
 }

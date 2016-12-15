@@ -236,6 +236,37 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test
+  public void testupdateComponentToNotInStock_shouldReturnComponentNOT_INSTOCK() {
+    Location location = aLocation().withId(1L).build();
+    Donation donation = aDonation().withId(1L).build();
+
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withLocation(location)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .build();
+
+    Component expectedNotInStockComponent = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withLocation(location)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .build();
+
+    when(componentRepository.findComponentById(1L)).thenReturn(component);
+    when(componentRepository.update(argThat(
+        hasSameStateAsComponent(expectedNotInStockComponent)))).thenReturn(expectedNotInStockComponent);
+
+    // Exercise SUT
+    Component notInstockComponent = componentCRUDService.updateComponentToNotInStock(component);
+
+    // Verify
+    assertThat(notInstockComponent, hasSameStateAsComponent(expectedNotInStockComponent));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedNotInStockComponent)));
+  }
+
+  @Test
   public void testMarkComponentsBelongingToDonorAsUnsafe_shouldMarkComponentsAsUnsafe() {
     // Set up fixture
     Donation firstDonation = aDonation().withId(1L).build();
@@ -257,6 +288,38 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(argThat(hasSameStateAsDonation(firstDonation)));
     verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(argThat(hasSameStateAsDonation(secondDonation)));
     verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(argThat(hasSameStateAsDonation(deletedDonation)));
+  }
+
+  @Test
+  public void testDeleteComponent_shouldDeleteAComponent() {
+    // Set up fixture
+    Location location = aLocation().withId(1L).build();
+    Donation donation = aDonation().withId(1L).build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    
+    Component expectedDeletedComponent = aComponent()
+        .withLocation(location)
+        .withDonation(donation)
+        .withId(1L)
+        .thatIsDeleted()
+        .build();
+    
+    // set up mocks
+    when(componentRepository.findComponentById(1L)).thenReturn(component);
+    when(componentRepository
+        .update(argThat(hasSameStateAsComponent(expectedDeletedComponent))))
+    .thenReturn(expectedDeletedComponent);
+    
+    // Exercise SUT
+    Component deletedComponent = componentCRUDService.deleteComponent(1L);
+    
+    // Verify
+    assertThat(deletedComponent, hasSameStateAsComponent(expectedDeletedComponent));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedDeletedComponent)));
   }
 
   @Test
