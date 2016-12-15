@@ -10,6 +10,10 @@ public class RecordComponentBackingFormValidator extends BaseValidator<RecordCom
   @Override
   public void validateForm(RecordComponentBackingForm form, Errors errors) {
     validateProcessedOnDate(form, errors);  
+
+    if (form.getParentComponentId() == null) {
+      errors.rejectValue("processedOn", "errors.required", "This is required");
+    }
   }
 
   @Override

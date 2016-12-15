@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class RecordComponentBackingForm {
 
   @NotBlank
-  private String parentComponentId;
+  private Long parentComponentId;
 
   @NotBlank
   private ComponentTypeCombination componentTypeCombination;
@@ -28,11 +28,11 @@ public class RecordComponentBackingForm {
   private User createdBy;
   private Date processedOn;
 
-  public String getParentComponentId() {
+  public Long getParentComponentId() {
     return parentComponentId;
   }
 
-  public void setParentComponentId(String parentComponentId) {
+  public void setParentComponentId(Long parentComponentId) {
     this.parentComponentId = parentComponentId;
   }
 

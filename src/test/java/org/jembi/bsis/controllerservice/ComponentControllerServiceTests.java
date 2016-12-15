@@ -227,7 +227,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
         ComponentManagementViewModelBuilder.aComponentManagementViewModel().build()
     );
     RecordComponentBackingForm form = new RecordComponentBackingForm();
-    form.setParentComponentId("1");
+    form.setParentComponentId(1L);
     form.setComponentTypeCombination(aComponentTypeCombination().withId(1L).build());
     
     // setup mocks   

@@ -536,7 +536,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
@@ -605,7 +605,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
@@ -696,7 +696,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
@@ -802,7 +802,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
     // SUT
-    parentComponent = componentCRUDService.processComponent("1", componentTypeCombination.getId());
+    parentComponent = componentCRUDService.processComponent(1L, componentTypeCombination.getId());
 
     // verify that both components are created
     verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)));
@@ -891,7 +891,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    parentComponent = componentCRUDService.processComponent(parentComponent.getId().toString(), componentTypeCombination.getId());
+    parentComponent = componentCRUDService.processComponent(parentComponent.getId(), componentTypeCombination.getId());
 
     // verify that the component is not marked as unsafe, as the initial component change status is checked and is TRCP
     verify(componentCRUDService, times(0)).markComponentAsUnsafe(any(Component.class), any(ComponentStatusChangeReasonType.class));
@@ -931,7 +931,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository, times(0)).save(Mockito.any(Component.class));
@@ -971,7 +971,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository, times(0)).save(Mockito.any(Component.class));
@@ -992,7 +992,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(false);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId());
   }
   
   @Test
