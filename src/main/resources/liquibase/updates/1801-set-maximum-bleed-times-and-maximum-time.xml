@@ -15,6 +15,14 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="20161215-0958" author="timler">
+    <comment>Make tracking columns on ComponentType not nullable</comment>
+    <addNotNullConstraint tableName="ComponentType" columnName="createdDate" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="ComponentType" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="ComponentType" columnName="lastUpdated" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="ComponentType" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
+  </changeSet>
+
   <!-- Moved and ID changed (micnice): for #1801 (refactoring) -->
   <changeSet id="20161214-1350" author="danfuterman">
     <preConditions onFail="MARK_RAN">
@@ -41,6 +49,10 @@
       <column name="canBeIssued" value="0"/>
       <column name="maxBleedTime" value="NULL" />
       <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="2"/>
@@ -58,6 +70,10 @@
       <column name="canBeIssued" value="0"/>
       <column name="maxBleedTime" value="NULL" />
       <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="3"/>
@@ -75,6 +91,10 @@
       <column name="canBeIssued" value="0"/>
       <column name="maxBleedTime" value="NULL" />
       <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="4"/>
@@ -92,6 +112,10 @@
       <column name="canBeIssued" value="0"/>
       <column name="maxBleedTime" value="NULL" />
       <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="5"/>
@@ -109,6 +133,10 @@
       <column name="canBeIssued" value="0"/>
       <column name="maxBleedTime" value="NULL" />
       <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="6"/>
@@ -127,6 +155,10 @@
       <column name="canBeIssued" value="1"/>
       <column name="maxBleedTime" value="NULL" />
       <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="7"/>
@@ -145,6 +177,10 @@
       <column name="canBeIssued" value="1"/>
       <column name="maxBleedTime" value="12" />
       <column name="maxTimeSinceDonation" value="24" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="8"/>
@@ -163,6 +199,10 @@
       <column name="canBeIssued" value="1"/>
       <column name="maxBleedTime" value="NULL" />
       <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="9"/>
@@ -181,6 +221,10 @@
       <column name="canBeIssued" value="1"/>
       <column name="maxBleedTime" value="NULL" />
       <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="10"/>
@@ -199,6 +243,10 @@
       <column name="canBeIssued" value="1"/>
       <column name="maxBleedTime" value="15" />
       <column name="maxTimeSinceDonation" value="24" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="11"/>
@@ -217,6 +265,10 @@
       <column name="canBeIssued" value="1"/>
       <column name="maxBleedTime" value="NULL" />
       <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="12"/>
@@ -235,6 +287,10 @@
       <column name="canBeIssued" value="1"/>
       <column name="maxBleedTime" value="12" />
       <column name="maxTimeSinceDonation" value="24" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="13"/>
@@ -253,6 +309,10 @@
       <column name="canBeIssued" value="1"/>
       <column name="maxBleedTime" value="12" />
       <column name="maxTimeSinceDonation" value="24" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="14"/>
@@ -271,6 +331,10 @@
       <column name="canBeIssued" value="1"/>
       <column name="maxBleedTime" value="NULL" />
       <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="15"/>
@@ -288,6 +352,10 @@
       <column name="canBeIssued" value="1"/>
       <column name="maxBleedTime" value="15" />
       <column name="maxTimeSinceDonation" value="24" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
     <insert tableName = "ComponentType">
       <column name="id" value="16"/>
@@ -305,6 +373,10 @@
       <column name="canBeIssued" value="1"/>
       <column name="maxBleedTime" value="12" />
       <column name="maxTimeSinceDonation" value="24" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
     </insert>
   </changeSet>
 
