@@ -312,7 +312,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // setup data
     Long componentId = Long.valueOf(1);
     final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    int componentWeight = 123;
+    Integer componentWeight = Integer.valueOf(123);
     ComponentPreProcessingBackingForm backingForm = aComponentBackingForm()
         .withId(componentId)
         .withWeight(componentWeight)

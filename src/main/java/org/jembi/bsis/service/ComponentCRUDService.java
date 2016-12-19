@@ -404,7 +404,7 @@ public class ComponentCRUDService {
     return rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.DISCARDED);
   }
   
-  public Component preProcessComponent(long componentId, int componentWeight, Date bleedStartTime, Date bleedEndTime) {
+  public Component preProcessComponent(long componentId, Integer componentWeight, Date bleedStartTime, Date bleedEndTime) {
     Component existingComponent = componentRepository.findComponentById(componentId);
 
     // update donation bleed times if available

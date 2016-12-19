@@ -1034,7 +1034,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testUpdateComponentWeight_shouldReturnExistingComponent() throws ParseException {
     // set up data
     long componentId = 1L;
-    int componentWeight = 420;
+    Integer componentWeight = Integer.valueOf(420);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     Date bleedStartTime = sdf.parse("2016-01-01 13:00");
     Date bleedEndTime = sdf.parse("2016-01-01 13:16");
