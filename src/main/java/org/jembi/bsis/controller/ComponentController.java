@@ -10,10 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.backingform.UndiscardComponentsBackingForm;
+import org.jembi.bsis.backingform.validator.ComponentPreProcessingBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidator;
 import org.jembi.bsis.controllerservice.ComponentControllerService;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -43,9 +45,17 @@ public class ComponentController {
   @Autowired
   private DiscardComponentsBackingFormValidator discardComponentsBackingFormValidator;
 
+  @Autowired
+  private ComponentPreProcessingBackingFormValidator componentPreProcessingBackingFormValidator;
+
   @InitBinder("discardComponentsBackingForm")
-  protected void initBinder(WebDataBinder binder) {
+  protected void initDiscardBinder(WebDataBinder binder) {
     binder.setValidator(discardComponentsBackingFormValidator);
+  }
+
+  @InitBinder("componentPreProcessingBackingForm")
+  protected void initPreProcessBinder(WebDataBinder binder) {
+    binder.setValidator(componentPreProcessingBackingFormValidator);
   }
 
   @RequestMapping(value = "/discard/form", method = RequestMethod.GET)
@@ -154,12 +164,12 @@ public class ComponentController {
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> preProcessComponent(
       @PathVariable("id") long componentId,
-      @RequestBody @Valid ComponentPreProcessingBackingForm componentBackingForm) {
+      @RequestBody @Valid ComponentPreProcessingBackingForm componentPreProcessingBackingForm) {
 
-    componentBackingForm.setId(componentId); // Use the id parameter from the path
+    componentPreProcessingBackingForm.setId(componentId); // Use the id parameter from the path
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("component", componentControllerService.preProcessComponent(componentBackingForm));
+    map.put("component", componentControllerService.preProcessComponent(componentPreProcessingBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
