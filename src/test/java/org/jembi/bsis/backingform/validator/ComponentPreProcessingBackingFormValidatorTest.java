@@ -39,12 +39,30 @@ public class ComponentPreProcessingBackingFormValidatorTest {
   }
 
   @Test
-  public void testValidateBleedtime_shouldNotBeZeroOrLess () throws Exception {
+  public void testValidateBleedtime_shouldNotBeTheSame() throws Exception {
     // set up data
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     ComponentPreProcessingBackingForm form = aComponentBackingForm()
         .withBleedStartTime(sdf.parse("2016-01-01 13:00"))
         .withBleedEndTime(sdf.parse("2016-01-01 13:00"))
+        .build();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "Component");
+    validator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
+    Assert.assertNotNull("Error on field bleedEndTime", errors.getFieldError("bleedEndTime"));
+  }
+
+  @Test
+  public void testValidateBleedtime_shouldNotBeZeroMinutes() throws Exception {
+    // set up data
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    ComponentPreProcessingBackingForm form = aComponentBackingForm()
+        .withBleedStartTime(sdf.parse("2016-01-01 13:00:10"))
+        .withBleedEndTime(sdf.parse("2016-01-01 13:00:45"))
         .build();
 
     // run test

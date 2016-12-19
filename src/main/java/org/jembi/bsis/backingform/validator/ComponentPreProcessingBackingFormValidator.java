@@ -26,11 +26,6 @@ public class ComponentPreProcessingBackingFormValidator extends BaseValidator<Co
   private void validateDonationBleedTimes(ComponentPreProcessingBackingForm form, Errors errors) {
     Date bleedStartTime = form.getBleedStartTime();
     Date bleedEndTime = form.getBleedEndTime();
-    long timeDiffInMinutes = 0L;
-    if (bleedEndTime !=null && bleedStartTime != null) {
-      //Get time Difference in minutes
-      timeDiffInMinutes = TimeUnit.MILLISECONDS.toMinutes(bleedEndTime.getTime() - bleedStartTime.getTime());
-    }
 
     if (bleedStartTime == null || bleedEndTime == null) {
       if (bleedStartTime == null) {
@@ -41,7 +36,7 @@ public class ComponentPreProcessingBackingFormValidator extends BaseValidator<Co
       }
     } else if (bleedStartTime.after(bleedEndTime)) {
       errors.rejectValue("bleedEndTime", "errors.invalid", "Bleed end time should be after start time");
-    } else if (timeDiffInMinutes <= 0) {
+    } else if (isSameTimeInMinutes(bleedStartTime, bleedEndTime)) {
       errors.rejectValue("bleedEndTime", "errors.invalid", "Start and end bleed times are the same: please re-enter");
     }
   }
@@ -53,6 +48,13 @@ public class ComponentPreProcessingBackingFormValidator extends BaseValidator<Co
 
   @Override
   public boolean formHasBaseEntity() {
+    return false;
+  }
+
+  private boolean isSameTimeInMinutes(Date startTime, Date endTime) {
+    if (TimeUnit.MILLISECONDS.toMinutes(endTime.getTime() - startTime.getTime()) == 0) {
+      return true;
+    }
     return false;
   }
 }
