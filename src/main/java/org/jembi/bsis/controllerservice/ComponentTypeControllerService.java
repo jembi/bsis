@@ -33,12 +33,12 @@ public class ComponentTypeControllerService {
   }
   
   public ComponentTypeFullViewModel addComponentType(ComponentTypeBackingForm form) {
-    ComponentType componentType = componentTypeRepository.saveComponentType(form.getComponentType());
+    ComponentType componentType = componentTypeRepository.saveComponentType(componentTypeFactory.createEntity(form));
     return componentTypeFactory.createFullViewModel(componentType);
   }
   
   public ComponentTypeFullViewModel updateComponentType(ComponentTypeBackingForm form) {
-    ComponentType componentType = form.getComponentType();
+    ComponentType componentType = componentTypeFactory.createEntity(form);
     
     componentType = componentTypeRepository.updateComponentType(componentType);
     return componentTypeFactory.createFullViewModel(componentType);

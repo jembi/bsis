@@ -322,7 +322,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
    
     ComponentType componentType = aComponentType()
         .withComponentTypeName("type1")
-        .withCanBeIssued(true)
+        .thatCanBeIssued()
         .buildAndPersist(entityManager);
     
     ComponentBatch componentBatch = aComponentBatch()
@@ -373,7 +373,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     // Excluded component by component Type that cannot be issued. 
     ComponentType componentTypeThatCannotBeIssued = aComponentType()
         .withComponentTypeName("typeThatCannotBeIssued")
-        .withCanBeIssued(false)
+        .thatCanNotBeIssued()
         .buildAndPersist(entityManager);
     aComponent()
         .withComponentType(componentTypeThatCannotBeIssued)
@@ -420,10 +420,10 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .thatContainsPlasma()
         .withComponentTypeName("Whole Blood Quad Pack - CPDA")
         .withComponentTypeCode("100111")
-        .withCanBeIssued(Boolean.FALSE)
+        .thatCanNotBeIssued()
         .buildAndPersist(entityManager);
     ComponentType componentType2 = aComponentType()
-        .withCanBeIssued(Boolean.TRUE)
+        .thatCanBeIssued()
         .withComponentTypeCode("100011")
         .withComponentTypeName("Packed Red Cells - CPDA")
         .buildAndPersist(entityManager);
@@ -540,10 +540,10 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .thatContainsPlasma()
         .withComponentTypeName("Whole Blood Quad Pack - CPDA")
         .withComponentTypeCode("100111")
-        .withCanBeIssued(Boolean.FALSE)
+        .thatCanNotBeIssued()
         .buildAndPersist(entityManager);
     ComponentType componentType2 = aComponentType()
-        .withCanBeIssued(Boolean.TRUE)
+        .thatCanBeIssued()
         .withComponentTypeCode("100011")
         .withComponentTypeName("Packed Red Cells - CPDA")
         .buildAndPersist(entityManager);
@@ -628,10 +628,10 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .thatContainsPlasma()
         .withComponentTypeName("Whole Blood Quad Pack - CPDA")
         .withComponentTypeCode("100111")
-        .withCanBeIssued(Boolean.FALSE)
+        .thatCanNotBeIssued()
         .buildAndPersist(entityManager);
     ComponentType componentType2 = aComponentType()
-        .withCanBeIssued(Boolean.TRUE)
+        .thatCanBeIssued()
         .withComponentTypeCode("100011")
         .withComponentTypeName("Packed Red Cells - CPDA")
         .buildAndPersist(entityManager);
@@ -710,12 +710,12 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         
     ComponentType componentType1 = aComponentType()
         .withComponentTypeName("componentType1")
-        .withCanBeIssued(true)
+        .thatCanBeIssued()
         .buildAndPersist(entityManager);
     
     ComponentType componentType2 = aComponentType()
         .withComponentTypeName("componentType2")
-        .withCanBeIssued(true)
+        .thatCanBeIssued()
         .buildAndPersist(entityManager);
    
     // Expected component batches

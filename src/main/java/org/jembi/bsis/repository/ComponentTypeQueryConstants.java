@@ -15,9 +15,8 @@ public class ComponentTypeQueryConstants {
   public static final String QUERY_VERIFY_UNIQUE_COMPONENT_TYPE_NAME =
       "SELECT count(ct) = 0 " +
           "FROM ComponentType ct " +
-          "WHERE ct.componentTypeName = :componentTypeName " +
-          "AND ct.id != :id " +
-          "AND ct.isDeleted = :deleted ";
+          "WHERE upper(ct.componentTypeName) = :componentTypeName " +
+          "AND ct.id != :id";
   
   public static final String NAME_FIND_COMPONENT_TYPE_BY_CODE =
       "ComponentType.findComponentTypeByCode";

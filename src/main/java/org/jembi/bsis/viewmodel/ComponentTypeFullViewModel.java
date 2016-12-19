@@ -11,6 +11,8 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
   private String transportInfo;
   private String storageInfo;
   List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations;
+  private Integer maxBleedTime;
+  private Integer maxTimeSinceDonation;
 
   public Boolean isHasBloodGroup() {
     return hasBloodGroup;
@@ -67,5 +69,21 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
 
   public void setTransportInfo(String transportInfo) {
     this.transportInfo = transportInfo;
+  }
+
+  public Integer getMaxBleedTime() {
+    return maxBleedTime;
+  }
+
+  public void setMaxBleedTime(Integer maxBleedTime) {
+    this.maxBleedTime = maxBleedTime;
+  }
+
+  public Integer getMaxTimeSinceDonation() {
+    return maxTimeSinceDonation;
+  }
+
+  public void setMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
+    this.maxTimeSinceDonation = maxTimeSinceDonation;
   }
 }
