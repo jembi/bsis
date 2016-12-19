@@ -1031,30 +1031,33 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testUpdateComponentWeight_shouldReturnExistingComponent() throws ParseException {
+  public void testPreProcessComponent_shouldReturnExistingComponent() throws ParseException {
     // set up data
     long componentId = 1L;
     Integer componentWeight = Integer.valueOf(420);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     Date bleedStartTime = sdf.parse("2016-01-01 13:00");
     Date bleedEndTime = sdf.parse("2016-01-01 13:16");
+    Donation donation = aDonation().build();
     Component oldComponent = aComponent()
         .withId(componentId)
+        .withDonation(donation)
         .withStatus(ComponentStatus.PROCESSED)
         .withWeight(componentWeight)
         .build();
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    
+    when(donationCRUDService.updateDonation(donation)).thenReturn(donation);
     // SUT
     Component returnedComponent = componentCRUDService.preProcessComponent(componentId, componentWeight, bleedStartTime, bleedEndTime);
-    
+    verify(donationCRUDService, times(1)).updateDonation(any(Donation.class));
+    assertThat(donation.getBleedStartTime(), is(bleedStartTime));
     assertThat(returnedComponent, hasSameStateAsComponent(oldComponent));
   }
   
   @Test(expected = java.lang.IllegalStateException.class)
-  public void testUpdateComponentWeight_shouldThrowException() throws Exception {
+  public void testPreProcessComponentWithIncorrectWeight_shouldDiscardComponent() throws Exception {
     // set up data
     Long componentId = Long.valueOf(1);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -1117,7 +1120,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testUpdateComponentWeight_shouldNotDiscardComponent() throws Exception {
+  public void testPreProcessComponentWeight_shouldNotDiscardComponent() throws Exception {
     // set up data
     Long componentId = Long.valueOf(1);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");

@@ -407,13 +407,11 @@ public class ComponentCRUDService {
   public Component preProcessComponent(long componentId, Integer componentWeight, Date bleedStartTime, Date bleedEndTime) {
     Component existingComponent = componentRepository.findComponentById(componentId);
 
-    // update donation bleed times if available
-    if (bleedStartTime != null && bleedEndTime != null) {
-      Donation existingDonation = existingComponent.getDonation();
-      existingDonation.setBleedStartTime(bleedStartTime);
-      existingDonation.setBleedEndTime(bleedEndTime);
-      donationCRUDService.updateDonation(existingDonation);
-    }
+    // update donation bleed times
+    Donation existingDonation = existingComponent.getDonation();
+    existingDonation.setBleedStartTime(bleedStartTime);
+    existingDonation.setBleedEndTime(bleedEndTime);
+    donationCRUDService.updateDonation(existingDonation);
     
     // check if the weight is being updated
     if (existingComponent.getWeight() != null && existingComponent.getWeight() == componentWeight) {
