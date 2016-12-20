@@ -167,4 +167,9 @@ public class ComponentPreProcessingBackingForm {
     // Ignore
   }
 
+  @JsonIgnore
+  public void setProcessedOn(Date processedOn) {
+    // Ignore
+  }
+
 }
