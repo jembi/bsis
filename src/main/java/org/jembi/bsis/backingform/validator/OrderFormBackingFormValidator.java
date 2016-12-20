@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import org.jembi.bsis.backingform.ComponentBackingForm;
+import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -74,7 +74,7 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
     
     // Validate components
     if (form.getComponents() != null) { // it can be null if the Order has just been created
-      List<ComponentBackingForm> components = form.getComponents();
+      List<ComponentPreProcessingBackingForm> components = form.getComponents();
       for (int i = 0, len = components.size(); i < len; i++) {
         errors.pushNestedPath("components[" + i + "]");
         try {
@@ -88,7 +88,7 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
     commonFieldChecks(form, errors);
   }
 
-  private void validateComponentForm(ComponentBackingForm componentBackingForm, Location dispatchedFrom, Errors errors) {
+  private void validateComponentForm(ComponentPreProcessingBackingForm componentBackingForm, Location dispatchedFrom, Errors errors) {
     if (componentBackingForm.getId() == null) {
       errors.rejectValue("id", "required", "component id is required.");
     } else {

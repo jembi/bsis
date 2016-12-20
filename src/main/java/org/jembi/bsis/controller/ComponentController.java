@@ -10,10 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jembi.bsis.backingform.ComponentBackingForm;
+import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.backingform.UndiscardComponentsBackingForm;
+import org.jembi.bsis.backingform.validator.ComponentPreProcessingBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidator;
 import org.jembi.bsis.backingform.validator.RecordComponentBackingFormValidator;
 import org.jembi.bsis.controllerservice.ComponentControllerService;
@@ -47,6 +48,9 @@ public class ComponentController {
   @Autowired
   private RecordComponentBackingFormValidator recordComponentBackingFormValidator;
 
+  @Autowired
+  private ComponentPreProcessingBackingFormValidator componentPreProcessingBackingFormValidator;
+
   @InitBinder("discardComponentsBackingForm")
   protected void discardInitBinder(WebDataBinder binder) {
     binder.setValidator(discardComponentsBackingFormValidator);
@@ -55,6 +59,11 @@ public class ComponentController {
   @InitBinder("recordComponentBackingForm")
   protected void recordInitBinder(WebDataBinder binder) {
     binder.setValidator(recordComponentBackingFormValidator);
+  }
+
+  @InitBinder("componentPreProcessingBackingForm")
+  protected void preProcessInitBinder(WebDataBinder binder) {
+    binder.setValidator(componentPreProcessingBackingFormValidator);
   }
 
   @RequestMapping(value = "/discard/form", method = RequestMethod.GET)
@@ -159,16 +168,16 @@ public class ComponentController {
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
   
-  @RequestMapping(value = "{id}/weight", method = RequestMethod.PUT)
+  @RequestMapping(value = "{id}/preprocess ", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> updateComponentWeight(
+  public ResponseEntity<Map<String, Object>> preProcessComponent(
       @PathVariable("id") long componentId,
-      @RequestBody @Valid ComponentBackingForm componentBackingForm) {
+      @RequestBody @Valid ComponentPreProcessingBackingForm componentPreProcessingBackingForm) {
 
-    componentBackingForm.setId(componentId); // Use the id parameter from the path
+    componentPreProcessingBackingForm.setId(componentId); // Use the id parameter from the path
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("component", componentControllerService.recordComponentWeight(componentBackingForm));
+    map.put("component", componentControllerService.preProcessComponent(componentPreProcessingBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   

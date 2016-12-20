@@ -30,7 +30,9 @@ public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<Compone
         .appendText("\nPermissions: ").appendValue(expected.getPermissions())
         .appendText("\nPack type: ").appendValue(expected.getPackType())
         .appendText("\nHas component batch: ").appendValue(expected.getHasComponentBatch())
-        .appendText("\nInventory Status: ").appendValue(expected.getInventoryStatus());
+        .appendText("\nInventory Status: ").appendValue(expected.getInventoryStatus())
+        .appendText("\nBleed Start Time: ").appendValue(expected.getBleedStartTime())
+        .appendText("\nBleed End Time: ").appendValue(expected.getBleedEndTime());
   }
 
   @Override
@@ -45,8 +47,10 @@ public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<Compone
         (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn()) || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
         (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn()) || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getPackType(), expected.getPackType()) &&
-        Objects.equals(actual.getHasComponentBatch(), expected.getHasComponentBatch() &&
-        Objects.equals(actual.getInventoryStatus(), expected.getInventoryStatus()));
+        Objects.equals(actual.getHasComponentBatch(), expected.getHasComponentBatch()) &&
+        Objects.equals(actual.getInventoryStatus(), expected.getInventoryStatus()) &&
+        Objects.equals(actual.getBleedStartTime(), expected.getBleedStartTime()) &&
+        Objects.equals(actual.getBleedEndTime(), expected.getBleedEndTime());
   }
 
   public static ComponentManagementViewModelMatcher hasSameStateAsComponentManagementViewModel(ComponentManagementViewModel expected) {

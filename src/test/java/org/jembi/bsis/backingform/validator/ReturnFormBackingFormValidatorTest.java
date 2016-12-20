@@ -1,6 +1,6 @@
 package org.jembi.bsis.backingform.validator;
 
-import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
+import static org.jembi.bsis.helpers.builders.ComponentPreProcessingBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aDistributionSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aUsageSiteBackingForm;
@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import org.jembi.bsis.backingform.ComponentBackingForm;
+import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.ReturnFormBackingForm;
 import org.jembi.bsis.backingform.validator.ReturnFormBackingFormValidator;
@@ -74,8 +74,8 @@ public class ReturnFormBackingFormValidatorTest {
     return aDistributionSite().withName("LocTo").withId(2l).build();
   }
 
-  private ComponentBackingForm getBaseReturnFormComponentBackingForm() {
-    ComponentBackingForm component = aComponentBackingForm().withId(1L).build();
+  private ComponentPreProcessingBackingForm getBaseReturnFormComponentBackingForm() {
+    ComponentPreProcessingBackingForm component = aComponentBackingForm().withId(1L).build();
     return component;
   }
 
@@ -221,15 +221,15 @@ public class ReturnFormBackingFormValidatorTest {
     Component component6 = aComponent().withStatus(ComponentStatus.UNSAFE).withLocation(getBaseReturnedFrom()).build();
     Component component7 = aComponent().withStatus(ComponentStatus.DISCARDED).withLocation(getBaseReturnedFrom()).build();
     Component component8 = aComponent().withStatus(ComponentStatus.PROCESSED).withLocation(getBaseReturnedFrom()).build();
-    ComponentBackingForm componentBackingForm1 = aComponentBackingForm().withId(1L).build();
-    ComponentBackingForm componentBackingForm2 = aComponentBackingForm().withId(2L).build();
-    ComponentBackingForm componentBackingForm3 = aComponentBackingForm().withId(3L).build();
-    ComponentBackingForm componentBackingForm4 = aComponentBackingForm().withId(4L).build();
-    ComponentBackingForm componentBackingForm5 = aComponentBackingForm().withId(5L).build();
-    ComponentBackingForm componentBackingForm6 = aComponentBackingForm().withId(6L).build();
-    ComponentBackingForm componentBackingForm7 = aComponentBackingForm().withId(7L).build();
-    ComponentBackingForm componentBackingForm8 = aComponentBackingForm().withId(8L).build();
-    List<ComponentBackingForm> componentBackingForms = new ArrayList<>();
+    ComponentPreProcessingBackingForm componentBackingForm1 = aComponentBackingForm().withId(1L).build();
+    ComponentPreProcessingBackingForm componentBackingForm2 = aComponentBackingForm().withId(2L).build();
+    ComponentPreProcessingBackingForm componentBackingForm3 = aComponentBackingForm().withId(3L).build();
+    ComponentPreProcessingBackingForm componentBackingForm4 = aComponentBackingForm().withId(4L).build();
+    ComponentPreProcessingBackingForm componentBackingForm5 = aComponentBackingForm().withId(5L).build();
+    ComponentPreProcessingBackingForm componentBackingForm6 = aComponentBackingForm().withId(6L).build();
+    ComponentPreProcessingBackingForm componentBackingForm7 = aComponentBackingForm().withId(7L).build();
+    ComponentPreProcessingBackingForm componentBackingForm8 = aComponentBackingForm().withId(8L).build();
+    List<ComponentPreProcessingBackingForm> componentBackingForms = new ArrayList<>();
     componentBackingForms.add(componentBackingForm1);
     componentBackingForms.add(componentBackingForm2);
     componentBackingForms.add(componentBackingForm3);
@@ -295,7 +295,7 @@ public class ReturnFormBackingFormValidatorTest {
     ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
 
     // component backing form with null id
-    ComponentBackingForm componentBackingForm = aComponentBackingForm().withId(null).build();
+    ComponentPreProcessingBackingForm componentBackingForm = aComponentBackingForm().withId(null).build();
     backingForm.setComponents(Arrays.asList(componentBackingForm));
 
     // set up mocks

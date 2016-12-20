@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.hamcrest.Matchers;
 import org.jembi.bsis.backingform.ReturnFormBackingForm;
-import org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder;
+import org.jembi.bsis.helpers.builders.ComponentPreProcessingBackingFormBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder;
 import org.jembi.bsis.helpers.builders.LocationBackingFormBuilder;
@@ -72,7 +72,7 @@ public class ReturnFormFactoryTests {
         .withReturnedFrom(LocationBackingFormBuilder.aUsageSiteBackingForm().withId(1L).build())
         .withReturnedTo(LocationBackingFormBuilder.aDistributionSiteBackingForm().withId(2L).build())
         .withReturnDate(returnDate)
-        .withComponent(ComponentBackingFormBuilder.aComponentBackingForm().withId(1L).build())
+        .withComponent(ComponentPreProcessingBackingFormBuilder.aComponentBackingForm().withId(1L).build())
         .build();
 
     // Setup mock
