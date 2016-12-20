@@ -420,8 +420,8 @@ public class ComponentCRUDService {
 
     // check if it is possible to update the weight
     if (!componentConstraintChecker.canPreProcess(existingComponent)) {
-      throw new IllegalStateException("The weight of Component " + componentId 
-          + " cannot be updated from " + existingComponent.getWeight() + " to " + componentWeight);
+      throw new IllegalStateException("The component " + componentId 
+          + " cannot be pre-processed");
     }
     // it's OK to update the weight
     existingComponent.setWeight(componentWeight);

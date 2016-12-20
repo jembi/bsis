@@ -1053,11 +1053,12 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Component returnedComponent = componentCRUDService.preProcessComponent(componentId, componentWeight, bleedStartTime, bleedEndTime);
     verify(donationCRUDService, times(1)).updateDonation(any(Donation.class));
     assertThat(donation.getBleedStartTime(), is(bleedStartTime));
+    assertThat(donation.getBleedEndTime(), is(bleedEndTime));
     assertThat(returnedComponent, hasSameStateAsComponent(oldComponent));
   }
   
   @Test(expected = java.lang.IllegalStateException.class)
-  public void testPreProcessComponentWithIncorrectWeight_shouldDiscardComponent() throws Exception {
+  public void testPreProcessComponentWithIncorrectWeight_shouldThrowException() throws Exception {
     // set up data
     Long componentId = Long.valueOf(1);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
