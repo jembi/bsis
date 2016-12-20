@@ -344,8 +344,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.QUARANTINED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(true));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(true));
   }
 
   @Test
@@ -354,8 +354,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(true));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(true));
   }
 
   @Test
@@ -364,8 +364,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withStatus(ComponentStatus.UNSAFE)
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(true));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(true));
   }
 
   @Test
@@ -374,8 +374,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(true));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(true));
   }
   
   @Test
@@ -383,8 +383,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
     Component component = aComponent()
         .withStatus(ComponentStatus.QUARANTINED)
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(false));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(false));
   }
   
   @Test
@@ -393,8 +393,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.ISSUED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(false));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(false));
   }
 
   @Test
@@ -403,8 +403,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.USED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(false));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(false));
   }
 
   @Test
@@ -413,8 +413,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.DISCARDED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(false));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(false));
   }
 
   @Test
@@ -423,8 +423,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.PROCESSED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(false));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(false));
   }
 
   @Test
@@ -433,8 +433,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withStatus(ComponentStatus.SPLIT)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(false));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(false));
   }
 
   @Test
@@ -444,8 +444,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(null)
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(true));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(true));
   }
 
   @Test
@@ -455,8 +455,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(aComponent().build())
         .build();
-    boolean CanPreProcessComponent = componentConstraintChecker.canPreProcess(component);
-    assertThat(CanPreProcessComponent, is(false));
+    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
+    assertThat(canPreProcess, is(false));
   }
 
   @Test
