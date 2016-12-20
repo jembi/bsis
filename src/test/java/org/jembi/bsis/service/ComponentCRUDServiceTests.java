@@ -1081,7 +1081,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testUpdateComponentWeight_shouldDiscardComponent() throws Exception {
+  public void testPreProcessComponentWithValidWeight_shouldNotDiscardComponent() throws Exception {
     // set up data
     long componentId = 1L;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
