@@ -67,6 +67,9 @@ public class ComponentCRUDService {
   
   @Autowired
   private DonationBatchRepository donationBatchRepository;
+  
+  @Autowired
+  private DonationCRUDService donationCRUDService;
 
   public Component createInitialComponent(Donation donation) {
 
@@ -401,18 +404,24 @@ public class ComponentCRUDService {
     return rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.DISCARDED);
   }
   
-  public Component recordComponentWeight(long componentId, int componentWeight) {
+  public Component preProcessComponent(long componentId, Integer componentWeight, Date bleedStartTime, Date bleedEndTime) {
     Component existingComponent = componentRepository.findComponentById(componentId);
 
+    // update donation bleed times
+    Donation existingDonation = existingComponent.getDonation();
+    existingDonation.setBleedStartTime(bleedStartTime);
+    existingDonation.setBleedEndTime(bleedEndTime);
+    donationCRUDService.updateDonation(existingDonation);
+    
     // check if the weight is being updated
     if (existingComponent.getWeight() != null && existingComponent.getWeight() == componentWeight) {
       return existingComponent;
     }
 
     // check if it is possible to update the weight
-    if (!componentConstraintChecker.canRecordWeight(existingComponent)) {
-      throw new IllegalStateException("The weight of Component " + componentId 
-          + " cannot be updated from " + existingComponent.getWeight() + " to " + componentWeight);
+    if (!componentConstraintChecker.canPreProcess(existingComponent)) {
+      throw new IllegalStateException("The component " + componentId 
+          + " cannot be pre-processed");
     }
     // it's OK to update the weight
     existingComponent.setWeight(componentWeight);
