@@ -7,6 +7,7 @@ import java.util.Map;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.TTIStatus;
+import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 
@@ -15,6 +16,7 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
   private String bloodAbo;
   private String bloodRh;
   private TTIStatus ttiStatus;
+  private Titre titre;
   private BloodTypingStatus bloodTypingStatus;
   private BloodTypingMatchStatus bloodTypingMatchStatus;
   private List<Long> pendingRepeatAndConfirmatoryTtiTestsIds;
@@ -35,6 +37,11 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
 
   public BloodTestingRuleResultBuilder withTTIStatus(TTIStatus ttiStatus) {
     this.ttiStatus = ttiStatus;
+    return this;
+  }
+
+  public BloodTestingRuleResultBuilder withTitre(Titre titre) {
+    this.titre = titre;
     return this;
   }
 
@@ -89,6 +96,7 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
     bloodTestingRuleResult.setBloodAbo(bloodAbo);
     bloodTestingRuleResult.setBloodRh(bloodRh);
     bloodTestingRuleResult.setTTIStatus(ttiStatus);
+    bloodTestingRuleResult.setTitre(titre);
     bloodTestingRuleResult.setBloodTypingStatus(bloodTypingStatus);
     bloodTestingRuleResult.setBloodTypingMatchStatus(bloodTypingMatchStatus);
     bloodTestingRuleResult.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingRepeatAndConfirmatoryTtiTestsIds);

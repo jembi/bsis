@@ -55,12 +55,14 @@ public class ComponentFactory {
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
     viewModel.setHasComponentBatch(component.hasComponentBatch());
     viewModel.setInventoryStatus(component.getInventoryStatus());
+    viewModel.setBleedStartTime(component.getDonation().getBleedStartTime());
+    viewModel.setBleedEndTime(component.getDonation().getBleedEndTime());
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDiscard", componentConstraintChecker.canDiscard(component));
     permissions.put("canProcess", componentConstraintChecker.canProcess(component));
-    permissions.put("canRecordWeight", componentConstraintChecker.canRecordWeight(component));
+    permissions.put("canPreProcess", componentConstraintChecker.canPreProcess(component));
     permissions.put("canUnprocess", componentConstraintChecker.canUnprocess(component));
     permissions.put("canUndiscard", componentConstraintChecker.canUndiscard(component));
     viewModel.setPermissions(permissions);

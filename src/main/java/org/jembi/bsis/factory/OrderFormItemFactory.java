@@ -23,7 +23,7 @@ public class OrderFormItemFactory {
   public OrderFormItem createEntity(OrderForm orderForm, OrderFormItemBackingForm backingForm) {
     OrderFormItem entity = new OrderFormItem();
     entity.setId(backingForm.getId());
-    entity.setComponentType(backingForm.getComponentType().getComponentType());
+    entity.setComponentType(componentTypeFactory.createEntity(backingForm.getComponentType()));
     BloodGroup bloodGroup = new BloodGroup(backingForm.getBloodGroup());
     entity.setBloodAbo(bloodGroup.getBloodAbo());
     entity.setBloodRh(bloodGroup.getBloodRh());

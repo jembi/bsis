@@ -15,6 +15,7 @@ import static org.jembi.bsis.helpers.matchers.ComponentManagementViewModelMatche
 import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameStateAsComponentViewModel;
 import static org.mockito.Mockito.when;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -147,14 +148,19 @@ public class ComponentFactoryTests {
   }
 
   @Test
-  public void createManagementViewModel_oneComponent() {
+  public void createManagementViewModel_oneComponent() throws Exception {
     // set up data
     Date createdOn = new Date();
     Calendar cal = Calendar.getInstance();
     cal.setTime(createdOn);
     cal.add(Calendar.DAY_OF_YEAR, -1);
     Date expiresOn = cal.getTime();
-    
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    Donation donation = DonationBuilder.aDonation()
+        .withDonationIdentificationNumber("1234567")
+        .withBleedStartTime(sdf.parse("2016-01-01 13:00"))
+        .withBleedEndTime(sdf.parse("2016-01-01 13:17"))
+        .build();
     ComponentType componentType = aComponentType().build();
     Component component = aComponent()
         .withId(1L)
@@ -165,6 +171,7 @@ public class ComponentFactoryTests {
         .withExpiresOn(expiresOn)
         .withWeight(222)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation)
         .build();
     
     ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
@@ -181,19 +188,21 @@ public class ComponentFactoryTests {
         .withWeigth(222)
         .withPermission("canDiscard", true)
         .withPermission("canProcess", true)
-        .withPermission("canRecordWeight", true)
+        .withPermission("canPreProcess", true)
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
         .withExpiryStatus("Already expired")
         .whichHasNoComponentBatch()
         .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withBleedStartTime(donation.getBleedStartTime())
+        .withBleedEndTime(donation.getBleedEndTime())
         .build();
 
     // setup mocks
     when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(componentTypeFullViewModel);
     when(componentConstraintChecker.canDiscard(component)).thenReturn(true);
     when(componentConstraintChecker.canProcess(component)).thenReturn(true);
-    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
+    when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
     when(componentConstraintChecker.canUnprocess(component)).thenReturn(true);
     when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
 
@@ -213,7 +222,7 @@ public class ComponentFactoryTests {
     cal.setTime(createdOn);
     cal.add(Calendar.DAY_OF_YEAR, -1);
     Date expiresOn = cal.getTime();
-    
+
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber("1234567").build();
     ComponentType componentType = aComponentType().build();
     Component component = aComponent()

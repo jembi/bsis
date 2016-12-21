@@ -22,7 +22,7 @@ public class ReturnFormBackingForm {
 
   private ReturnStatus status;
 
-  private List<ComponentBackingForm> components;
+  private List<ComponentPreProcessingBackingForm> components;
 
   public Long getId() {
     return id;
@@ -65,11 +65,11 @@ public class ReturnFormBackingForm {
     this.status = status;
   }
 
-  public List<ComponentBackingForm> getComponents() {
+  public List<ComponentPreProcessingBackingForm> getComponents() {
     return components;
   }
 
-  public void setComponents(List<ComponentBackingForm> components) {
+  public void setComponents(List<ComponentPreProcessingBackingForm> components) {
     this.components = components;
   }
   

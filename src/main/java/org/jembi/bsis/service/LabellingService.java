@@ -5,9 +5,12 @@ import java.text.SimpleDateFormat;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.util.BloodAbo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +23,25 @@ public class LabellingService {
   private LabellingConstraintChecker labellingConstraintChecker;
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
-
+  @Autowired 
+  private CheckCharacterService checkCharacterService;
+  
+  public boolean verifyPackLabel(long componentId, String prePrintedDIN, String packLabelDIN) {
+    Component component = componentCRUDService.findComponentById(componentId);
+    if (!component.getStatus().equals(ComponentStatus.AVAILABLE)) {
+      return false;
+    }
+    
+    String recordedDin = component.getDonation().getDonationIdentificationNumber();
+    String recordedFlagCharacters = component.getDonation().getFlagCharacters();
+    if (!recordedDin.equals(prePrintedDIN) ||!(recordedDin+recordedFlagCharacters).equals(packLabelDIN)) {
+      return false;
+    } else {
+      componentCRUDService.putComponentInStock(component);
+      return true;
+    }
+  }
+  
   public String printPackLabel(long componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
     Donation donation = component.getDonation();
@@ -33,9 +54,10 @@ public class LabellingService {
       throw new IllegalArgumentException("Pack Label can't be printed");
     }
 
-    // If current status is NOT_IN_STOCK, update inventory status to IN_STOCK for this component
-    if (component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK)) {
-      componentCRUDService.putComponentInStock(component);
+    // If current status is IN_STOCK, update inventory status to NOT_IN_STOCK for this component
+    // The component will be put in stock upon successful verification of packLabel
+    if (component.getInventoryStatus().equals(InventoryStatus.IN_STOCK)) {
+      componentCRUDService.updateComponentToNotInStock(component);
     }
 
     // Set up date formats
@@ -46,14 +68,49 @@ public class LabellingService {
     DateFormat dateTimeFormat = new SimpleDateFormat(dateTimeFormatString);
     DateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    // Update donation without flag characters
+    if (donation.getFlagCharacters() == null || donation.getFlagCharacters().isEmpty() ) {
+      donation.setFlagCharacters(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber()));
+    }
+
+    // Generate DIN related elements
+    String din = donation.getDonationIdentificationNumber();
+    String flagChars = donation.getFlagCharacters();
+    String checkCharacter = checkCharacterService.calculateCheckCharacter(flagChars);
+
+    final int dinCharWidth = 10 + 2; // 10 for font width, and 2 for ICG (inter character gap).
+    final int startFlagCharsPos = 75;
+
+    int flagCharPos = startFlagCharsPos + ((din.length() - 1) * dinCharWidth);
+    int boxPos = flagCharPos + 30;
+    int checkCharPos = boxPos + 9;
+
+    String dinZPL = 
+      "^FT59,52^A0N,17,38^FH^FDDIN^FS" +
+      // Bar code with flag characters, Note "A" - automatic mode used to determine best packing
+      // mode
+      "^BY2,3,82^FT61,144^BCN,,N,N,N,A" +
+      "^FD" + din + flagChars + "^FS" + 
+      // manual interpretation line below
+      "^FT61,180^ADN,30,10^FH^FD" + din + "^FS" + // DIN
+      "^FT" + flagCharPos +",155^ADR,30,10^FH^FD" + flagChars + "^FS"+  // flag character
+      "^FO" + boxPos + ",148^GB30,38,3^FS" +  // box around check character
+      "^FT" + checkCharPos + ",180^ADN,27,14^FH^FD" + checkCharacter + "^FS"; // check character
+
     // Generate element for blood Rh
     String bloodRh = "";
     if (donation.getBloodRh().contains("+")) {
-      bloodRh = "^FT487,385^A0N,40,38^FB221,1,0,C^FH^FDRhD POSITIVE^FS";
+      bloodRh = "^FT487,365^A0N,40,38^FB221,1,0,C^FH^FDRhD POSITIVE^FS";
     } else if (donation.getBloodRh().contains("-")) {
-      bloodRh = "^FO482,346^GB233,50,50^FS^FT482,386^A0N,40,38^FB233,1,0,C^FR^FH^FDRhD NEGATIVE^FS";
+      bloodRh = "^FO482,326^GB233,50,50^FS^FT482,363^A0N,40,38^FB233,1,0,C^FR^FH^FDRhD NEGATIVE^FS";
     }
     
+    // Generate element for high titre
+    String highTitre = "";
+    if (shouldLabelIncludeHighTitre(component)) {
+      highTitre = "^FT505,409^A0N,36,36,C^FR^FDHIGH TITRE^FS";
+    }
+
     // Get configured service info values
     String serviceInfoLine1 = generalConfigAccessorService.getGeneralConfigValueByName(
         GeneralConfigConstants.SERVICE_INFO_LINE_1);
@@ -69,8 +126,7 @@ public class LabellingService {
         "^PW799" +
         "^LL0799" +
         "^LS0" +
-        "^FT61,64^A0N,17,38^FDDIN^FS" +
-        "^BY3,3,82^FT62,150^BCN,,Y,N^FD" + donation.getDonationIdentificationNumber() + "^FS" +
+        dinZPL +
         "^BY3,3,80^FT445,147^BCN,,Y,N^FD" + donation.getBloodAbo() + donation.getBloodRh() + "^FS" +
         "^FT62,208^A0N,17,38^FDCollected On^FS" +
         "^FT64,331^A0N,23,36^FD" + dateFormat.format(donation.getDonationDate()) + "^FS" +
@@ -81,6 +137,7 @@ public class LabellingService {
         "^BY3,3,77^FT65,535^BCN,,Y,N^FD" + component.getComponentCode() + "^FS" +
         "^FT64,616^A0N,43,16^FD" + componentType.getComponentTypeName() + "^FS" +
         "^BY2,3,84^FT62,305^BCN,,N,N^FD" + isoDateFormat.format(donation.getDonationDate()) + "^FS" +
+        highTitre +
         "^FT450,439^A0N,17,38^FDExpires On^FS" +
         "^BY2,3,82^FT451,535^BCN,,N,N^FD" + isoDateFormat.format(component.getExpiresOn()) + "^FS" +
         "^FT452,565^A0N,23,31^FD" + dateTimeFormat.format(component.getExpiresOn()) + "^FS" +
@@ -121,6 +178,8 @@ public class LabellingService {
         "^LL0799" +
         "^LS0" +
         "^BY3,3,77^FT75,140^BCN,,Y,N" +
+        "^FD" + component.getDonation().getDonationIdentificationNumber() + "^FS" +
+        "^BY3,3,77^FT75,280^BCN,,Y,N" +
         "^FD" + component.getComponentType().getComponentTypeCode() + "^FS" +
         "^FT415,102^A0N,20,14^FD" + serviceInfoLine1 + "^FS" +
         "^FT416,133^A0N,20,14^FD" + serviceInfoLine2 + "^FS" +
@@ -131,6 +190,26 @@ public class LabellingService {
         "^XA^ID000.GRF^FS^XZ";
 
     return labelZPL;
+  }
+  
+  /**
+   * The label should include "HIGH TITRE" if:
+   * 
+   * 1- The donation's titre is high
+   * 2- The donation's blood ABO is "O"
+   * 3- The component's type contains plasma
+   *
+   * @param component the component
+   * @return true, if successful
+   */
+  protected boolean shouldLabelIncludeHighTitre(Component component) {
+    Donation donation = component.getDonation();
+    if (donation.getTitre() != null && donation.getTitre().equals(Titre.HIGH) && 
+        donation.getBloodAbo().equals(BloodAbo.O.name()) && 
+        component.getComponentType().getContainsPlasma()) {
+      return true;
+    }
+    return false;
   }
 
 }

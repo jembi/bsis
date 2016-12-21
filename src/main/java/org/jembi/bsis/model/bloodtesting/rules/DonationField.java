@@ -6,11 +6,12 @@ import java.util.List;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.donation.TTIStatus;
+import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.util.BloodAbo;
 import org.jembi.bsis.model.util.BloodRh;
 
 public enum DonationField {
-  BLOODABO, BLOODRH, TTISTATUS;
+  BLOODABO, BLOODRH, TTISTATUS, TITRE;
 
   /**
    * Get a subset of the relevant DonationFields given a BloodTestCategory.
@@ -25,7 +26,8 @@ public enum DonationField {
     } else if (category == BloodTestCategory.BLOODTYPING) {
       return Arrays.asList(
           DonationField.BLOODABO,
-          DonationField.BLOODRH);
+          DonationField.BLOODRH,
+          DonationField.TITRE);
     } else {
       return new ArrayList<>();
     }
@@ -51,6 +53,10 @@ public enum DonationField {
     } else if (donationField == DonationField.TTISTATUS) {
       for (TTIStatus ttiStatus : TTIStatus.values()) {
         newInformation.add(ttiStatus.name());
+      }
+    } else if (donationField == DonationField.TITRE) {
+      for (Titre titre : Titre.values()) {
+        newInformation.add(titre.name());
       }
     }
 

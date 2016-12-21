@@ -10,10 +10,28 @@ import org.jembi.bsis.model.packtype.PackType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class ComponentBackingForm {
+public class ComponentPreProcessingBackingForm {
 
   private Long id;
   private Integer weight;
+  private Date bleedStartTime;
+  private Date bleedEndTime;
+
+  public Date getBleedStartTime () {
+    return bleedStartTime;
+  }
+
+  public void setBleedStartTime (Date bleedStartTime) {
+    this.bleedStartTime = bleedStartTime;
+  }
+
+  public Date getBleedEndTime () {
+    return bleedEndTime;
+  }
+
+  public void setBleedEndTime (Date bleedEndTime) {
+    this.bleedEndTime = bleedEndTime;
+  }
 
   public void setId(Long id) {
     this.id = id;
