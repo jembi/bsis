@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
@@ -20,7 +20,7 @@ public class OrderFormBackingFormBuilder {
   private OrderStatus status = OrderStatus.CREATED;
   private OrderType type = OrderType.ISSUE;
   private List<OrderFormItemBackingForm> items;
-  private List<ComponentPreProcessingBackingForm> components = new ArrayList<>();
+  private List<ComponentBackingForm> components = new ArrayList<>();
 
   public OrderFormBackingFormBuilder withId(Long id) {
     this.id = id;
@@ -60,7 +60,7 @@ public class OrderFormBackingFormBuilder {
     return this;
   }
 
-  public OrderFormBackingFormBuilder withComponent(ComponentPreProcessingBackingForm component) {
+  public OrderFormBackingFormBuilder withComponent(ComponentBackingForm component) {
     components.add(component);
     return this;
   }

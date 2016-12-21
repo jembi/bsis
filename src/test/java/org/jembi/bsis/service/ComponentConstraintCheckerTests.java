@@ -339,102 +339,102 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanPreProcessComponentWithQuarantinedComponent_shouldReturnTrue() {
+  public void testCanRecordWeightWithQuarantinedComponent_shouldReturnTrue() {
     Component component = aComponent()
         .withStatus(ComponentStatus.QUARANTINED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(true));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(true));
   }
 
   @Test
-  public void testCanPreProcessComponentWithAvailableComponent_shouldReturnTrue() {
+  public void testCanRecordWeightWithAvailableComponent_shouldReturnTrue() {
     Component component = aComponent()
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(true));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(true));
   }
 
   @Test
-  public void testCanPreProcessComponentWithUnsafeComponent_shouldReturnTrue() {
+  public void testCanRecordWeightWithUnsafeComponent_shouldReturnTrue() {
     Component component = aComponent()
         .withComponentBatch(aComponentBatch().build())
         .withStatus(ComponentStatus.UNSAFE)
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(true));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(true));
   }
 
   @Test
-  public void testCanPreProcessComponentWithExpiredComponent_shouldReturnTrue() {
+  public void testCanRecordWeightWithExpiredComponent_shouldReturnTrue() {
     Component component = aComponent()
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(true));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(true));
   }
   
   @Test
-  public void testCanPreProcessComponentWithNoComponentBatch_shouldReturnFalse() {
+  public void testCanRecordWeightWithNoComponentBatch_shouldReturnFalse() {
     Component component = aComponent()
         .withStatus(ComponentStatus.QUARANTINED)
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(false));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
   }
   
   @Test
-  public void testCanPreProcessComponentWithIssuedComponent_shouldReturnFalse() {
+  public void testCanRecordWeightWithIssuedComponent_shouldReturnFalse() {
     Component component = aComponent()
         .withStatus(ComponentStatus.ISSUED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(false));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
   }
 
   @Test
-  public void testCanPreProcessComponentWithUsedComponent_shouldReturnFalse() {
+  public void testCanRecordWeightWithUsedComponent_shouldReturnFalse() {
     Component component = aComponent()
         .withStatus(ComponentStatus.USED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(false));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
   }
 
   @Test
-  public void testCanPreProcessComponentWithcanPreProcessComponentedComponent_shouldReturnFalse() {
+  public void testCanRecordWeightWithRecordWeightedComponent_shouldReturnFalse() {
     Component component = aComponent()
         .withStatus(ComponentStatus.DISCARDED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(false));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
   }
 
   @Test
-  public void testCanPreProcessComponentWithProcessedComponent_shouldReturnFalse() {
+  public void testCanRecordWeightWithProcessedComponent_shouldReturnFalse() {
     Component component = aComponent()
         .withStatus(ComponentStatus.PROCESSED)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(false));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
   }
 
   @Test
-  public void testCanPreProcessComponentWithSplitComponent_shouldReturnFalse() {
+  public void testCanRecordWeightWithSplitComponent_shouldReturnFalse() {
     Component component = aComponent()
         .withStatus(ComponentStatus.SPLIT)
         .withComponentBatch(aComponentBatch().build())
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(false));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
   }
 
   @Test
@@ -444,8 +444,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(null)
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(true));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(true));
   }
 
   @Test
@@ -455,8 +455,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(aComponent().build())
         .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(false));
+    boolean canRecordWeight = componentConstraintChecker.canRecordWeight(component);
+    assertThat(canRecordWeight, is(false));
   }
 
   @Test

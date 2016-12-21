@@ -37,6 +37,15 @@ public class BloodTestingRuleResultSet {
   /* only the recent (saved) blood test results */
   private Map<Long, BloodTestResult> recentTestResults;
 
+  /* indicates that there was no match for an ABO test */
+  private boolean aboUninterpretable = false;
+
+  /* indicates that there was no match for an Rh test */
+  private boolean rhUninterpretable = false;
+
+  /* indicates that there was no match for a TTI test */
+  private boolean ttiUninterpretable = false;
+
   /* how many blood typing tests were done */
   private Integer numBloodTypingTests = 0;
 
@@ -60,9 +69,6 @@ public class BloodTestingRuleResultSet {
 
   /* collection of the various blood typing TTI tests done */
   private Set<String> ttiStatusChanges = new HashSet<>();
-
-  /* collection of the blood typing Titre test outcomes */
-  private Set<String> titreChanges = new HashSet<>();
 
   /* collection of the ABO tests that are still outstanding */
   private List<Long> pendingAboTestsIds = new ArrayList<>();
@@ -154,6 +160,30 @@ public class BloodTestingRuleResultSet {
     this.ttiStatus = ttiStatus;
   }
 
+  public boolean getAboUninterpretable() {
+    return aboUninterpretable;
+  }
+
+  public void setAboUninterpretable(boolean aboUninterpretable) {
+    this.aboUninterpretable = aboUninterpretable;
+  }
+
+  public boolean getRhUninterpretable() {
+    return rhUninterpretable;
+  }
+
+  public void setRhUninterpretable(boolean rhUninterpretable) {
+    this.rhUninterpretable = rhUninterpretable;
+  }
+
+  public boolean getTtiUninterpretable() {
+    return ttiUninterpretable;
+  }
+
+  public void setTtiUninterpretable(boolean ttiUninterpretable) {
+    this.ttiUninterpretable = ttiUninterpretable;
+  }
+
   public Set<String> getBloodAboChanges() {
     return bloodAboChanges;
   }
@@ -176,14 +206,6 @@ public class BloodTestingRuleResultSet {
 
   public void addTtiStatusChanges(String ttiStatusChange) {
     this.ttiStatusChanges.add(ttiStatusChange);
-  }
-
-  public Set<String> getTitreChanges() {
-    return titreChanges;
-  }
-
-  public void addTitreChanges(String titreChange) {
-    this.titreChanges.add(titreChange);
   }
 
   public List<Long> getPendingAboTestsIds() {
@@ -291,6 +313,7 @@ public class BloodTestingRuleResultSet {
   public List<BloodTestingRule> getBloodTestingRules() {
     return bloodTestingRules;
   }
+
 
   public void setBloodTestingRules(List<BloodTestingRule> bloodTestingRules) {
     this.bloodTestingRules = bloodTestingRules;

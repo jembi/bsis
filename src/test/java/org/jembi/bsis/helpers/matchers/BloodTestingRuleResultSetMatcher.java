@@ -20,7 +20,6 @@ public class BloodTestingRuleResultSetMatcher extends TypeSafeMatcher<BloodTesti
         .appendText("\nTtiStatus: ").appendValue(expected.getTtiStatus())
         .appendText("\nBloodTypingStatus: ").appendValue(expected.getBloodTypingStatus())
         .appendText("\nBloodTypingMatchStatus: ").appendValue(expected.getBloodTypingMatchStatus())
-        .appendText("\nTitreChanges: ").appendValue(expected.getTitreChanges())
         .appendText("\nPendingAboTestsIds: ").appendValue(expected.getPendingAboTestsIds())
         .appendText("\nPendingRhTestsIds: ").appendValue(expected.getPendingRhTestsIds());
     
@@ -45,7 +44,6 @@ public class BloodTestingRuleResultSetMatcher extends TypeSafeMatcher<BloodTesti
     return Objects.equals(actual.getTtiStatus(), expected.getTtiStatus())
         && Objects.equals(actual.getBloodTypingStatus(), expected.getBloodTypingStatus())
         && Objects.equals(actual.getBloodTypingMatchStatus(), expected.getBloodTypingMatchStatus())
-        && Objects.equals(actual.getTitreChanges(), expected.getTitreChanges())
         && Objects.equals(actual.getPendingAboTestsIds(), expected.getPendingAboTestsIds())
         && Objects.equals(actual.getPendingRhTestsIds(), expected.getPendingRhTestsIds())
         && Objects.equals(actualAbo, expectedAbo)

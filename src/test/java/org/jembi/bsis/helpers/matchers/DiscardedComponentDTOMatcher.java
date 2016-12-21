@@ -1,10 +1,11 @@
 package org.jembi.bsis.helpers.matchers;
 
-import java.util.Objects;
-
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.dto.DiscardedComponentDTO;
+import org.jembi.bsis.dto.DonorExportDTO;
+
+import java.util.Objects;
 
 public class DiscardedComponentDTOMatcher extends TypeSafeMatcher<DiscardedComponentDTO> {
 

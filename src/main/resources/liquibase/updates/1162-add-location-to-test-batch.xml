@@ -3,45 +3,7 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
 	logicalFilePath="./src/main/resources/liquibase/updates/1162-add-location-to-test-batch.xml">
 
-    <!-- refactored in BSIS-2286 -->
-	<changeSet id="20161213-1428" author="lauravignoli">
-      <preConditions onFail="MARK_RAN">
-        <sqlCheck expectedResult="0">
-          <![CDATA[ SELECT count(*) FROM TestBatch; ]]>
-        </sqlCheck>
-        <sqlCheck expectedResult="0">
-          <![CDATA[ SELECT count(*) FROM Location where name='Default Testing Location'; ]]>
-        </sqlCheck>
-        <not>
-          <columnExists tableName="TestBatch" columnName="location_id" />
-        </not>
-      </preConditions>
- 		<comment>Adding Location to TestBatch for a new installation</comment>
-		<sql dbms="mysql">
-			ALTER TABLE TestBatch CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
-		</sql>
-		<modifyDataType tableName="Location" columnName="isVenue" newDataType="tinyint(1)"/>
-		<addColumn tableName="TestBatch">
-			<column name="location_id" type="BIGINT(20)" defaultValue="NULL" />
-		</addColumn>
-		<addColumn tableName="TestBatch_AUD">
-			<column name="location_id" type="BIGINT(20)" defaultValue="NULL" />
-		</addColumn>
-		<addNotNullConstraint tableName="TestBatch"
-			columnName="location_id" columnDataType="BIGINT(20)" />
-		<addForeignKeyConstraint constraintName="FK_TESTBATCH_LOCATION_ID"
-			referencedTableName="Location" baseColumnNames="location_id"
-			baseTableName="TestBatch" referencedColumnNames="id" />
-	</changeSet>
-
-    <!-- refactored in BSIS-2286 -->
-	<changeSet id="20161213-1429" author="lauravignoli">
-      <preConditions onFail="MARK_RAN">
-        <not>
-          <columnExists tableName="TestBatch" columnName="location_id" />
-        </not>
-      </preConditions>
- 		<comment>Adding Location to TestBatch for an existing installation where a Default Testing Location is added</comment>
+	<changeSet id="20160711-1648" author="lauravignoli">
 		<sql dbms="mysql">
 			ALTER TABLE TestBatch CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 		</sql>

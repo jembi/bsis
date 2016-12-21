@@ -36,8 +36,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -107,8 +105,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   private ComponentTypeCombinationRepository componentTypeCombinationRepository;
   @Mock
   private DonationBatchRepository donationBatchRepository;
-  @Mock
-  private DonationCRUDService donationCRUDService;
   
   @Test
   public void testCreateInitialComponentWithFalseConfig_shouldReturnNull() {
@@ -240,37 +236,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testupdateComponentToNotInStock_shouldReturnComponentNOT_INSTOCK() {
-    Location location = aLocation().withId(1L).build();
-    Donation donation = aDonation().withId(1L).build();
-
-    Component component = aComponent()
-        .withId(1L)
-        .withDonation(donation)
-        .withLocation(location)
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .build();
-
-    Component expectedNotInStockComponent = aComponent()
-        .withId(1L)
-        .withDonation(donation)
-        .withLocation(location)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .build();
-
-    when(componentRepository.findComponentById(1L)).thenReturn(component);
-    when(componentRepository.update(argThat(
-        hasSameStateAsComponent(expectedNotInStockComponent)))).thenReturn(expectedNotInStockComponent);
-
-    // Exercise SUT
-    Component notInstockComponent = componentCRUDService.updateComponentToNotInStock(component);
-
-    // Verify
-    assertThat(notInstockComponent, hasSameStateAsComponent(expectedNotInStockComponent));
-    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedNotInStockComponent)));
-  }
-
-  @Test
   public void testMarkComponentsBelongingToDonorAsUnsafe_shouldMarkComponentsAsUnsafe() {
     // Set up fixture
     Donation firstDonation = aDonation().withId(1L).build();
@@ -292,38 +257,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(argThat(hasSameStateAsDonation(firstDonation)));
     verify(componentCRUDService).markComponentsBelongingToDonationAsUnsafe(argThat(hasSameStateAsDonation(secondDonation)));
     verify(componentCRUDService, never()).markComponentsBelongingToDonationAsUnsafe(argThat(hasSameStateAsDonation(deletedDonation)));
-  }
-
-  @Test
-  public void testDeleteComponent_shouldDeleteAComponent() {
-    // Set up fixture
-    Location location = aLocation().withId(1L).build();
-    Donation donation = aDonation().withId(1L).build();
-    Component component = aComponent()
-        .withId(1L)
-        .withDonation(donation)
-        .withLocation(location)
-        .build();
-    
-    Component expectedDeletedComponent = aComponent()
-        .withLocation(location)
-        .withDonation(donation)
-        .withId(1L)
-        .thatIsDeleted()
-        .build();
-    
-    // set up mocks
-    when(componentRepository.findComponentById(1L)).thenReturn(component);
-    when(componentRepository
-        .update(argThat(hasSameStateAsComponent(expectedDeletedComponent))))
-    .thenReturn(expectedDeletedComponent);
-    
-    // Exercise SUT
-    Component deletedComponent = componentCRUDService.deleteComponent(1L);
-    
-    // Verify
-    assertThat(deletedComponent, hasSameStateAsComponent(expectedDeletedComponent));
-    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedDeletedComponent)));
   }
 
   @Test
@@ -1031,62 +964,46 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testPreProcessComponent_shouldReturnExistingComponent() throws ParseException {
+  public void testUpdateComponentWeight_shouldReturnExistingComponent() {
     // set up data
     long componentId = 1L;
-    Integer componentWeight = Integer.valueOf(420);
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    Date bleedStartTime = sdf.parse("2016-01-01 13:00");
-    Date bleedEndTime = sdf.parse("2016-01-01 13:16");
-    Donation donation = aDonation().build();
+    int componentWeight = 420;
     Component oldComponent = aComponent()
         .withId(componentId)
-        .withDonation(donation)
         .withStatus(ComponentStatus.PROCESSED)
         .withWeight(componentWeight)
         .build();
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(donationCRUDService.updateDonation(donation)).thenReturn(donation);
+    
     // SUT
-    Component returnedComponent = componentCRUDService.preProcessComponent(componentId, componentWeight, bleedStartTime, bleedEndTime);
-    verify(donationCRUDService, times(1)).updateDonation(any(Donation.class));
-    assertThat(donation.getBleedStartTime(), is(bleedStartTime));
-    assertThat(donation.getBleedEndTime(), is(bleedEndTime));
+    Component returnedComponent = componentCRUDService.recordComponentWeight(componentId, componentWeight);
+    
     assertThat(returnedComponent, hasSameStateAsComponent(oldComponent));
   }
   
   @Test(expected = java.lang.IllegalStateException.class)
-  public void testPreProcessComponentWithIncorrectWeight_shouldThrowException() throws Exception {
+  public void testUpdateComponentWeight_shouldThrowException() throws Exception {
     // set up data
     Long componentId = Long.valueOf(1);
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    Date bleedStartTime = sdf.parse("2016-01-01 13:00");
-    Date bleedEndTime = sdf.parse("2016-01-01 13:16");
-    Donation donation = aDonation().build();
     Component oldComponent = aComponent()
         .withId(componentId)
         .withStatus(ComponentStatus.PROCESSED)
-        .withDonation(donation)
-        .build();    
+        .build();
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(donationCRUDService.updateDonation(donation)).thenReturn(donation);
-    when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(false);
+    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(false);
     
     // SUT
-    componentCRUDService.preProcessComponent(componentId, 320, bleedStartTime, bleedEndTime);
+    componentCRUDService.recordComponentWeight(componentId, 320);
   }
 
   @Test
-  public void testPreProcessComponentWithInvalidWeight_shouldDiscardComponent() throws Exception {
+  public void testUpdateComponentWeight_shouldDiscardComponent() throws Exception {
     // set up data
     long componentId = 1L;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    Date bleedStartTime = sdf.parse("2016-01-01 13:00");
-    Date bleedEndTime = sdf.parse("2016-01-01 13:16");
     Donation donation = aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build();
     Component oldComponent = aComponent()
         .withId(componentId)
@@ -1105,7 +1022,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(true);
+    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(true);
     doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(oldComponent)), eq(ComponentStatusChangeReasonType.INVALID_WEIGHT));
@@ -1113,7 +1030,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.update(unsafeComponent)).thenReturn(unsafeComponent);
     
     // SUT
-    Component updatedComponent = componentCRUDService.preProcessComponent(componentId, 320, bleedStartTime, bleedEndTime);
+    Component updatedComponent = componentCRUDService.recordComponentWeight(componentId, 320);
     
     // check
     verify(componentCRUDService).markComponentAsUnsafe(oldComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
@@ -1121,12 +1038,9 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testPreProcessComponentWeight_shouldNotDiscardComponent() throws Exception {
+  public void testUpdateComponentWeight_shouldNotDiscardComponent() throws Exception {
     // set up data
     Long componentId = Long.valueOf(1);
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    Date bleedStartTime = sdf.parse("2016-01-01 13:00");
-    Date bleedEndTime = sdf.parse("2016-01-01 13:16");
     Component oldComponent = aComponent()
         .withId(componentId)
         .withStatus(ComponentStatus.QUARANTINED)
@@ -1134,13 +1048,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(true);
+    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(false);
     when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(false);
     when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
     
     // SUT
-    Component updatedComponent = componentCRUDService.preProcessComponent(componentId, 420, bleedStartTime, bleedEndTime);
+    Component updatedComponent = componentCRUDService.recordComponentWeight(componentId, 420);
     
     // check
     assertThat("Component was not flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
@@ -1150,9 +1064,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testUpdateComponentWeight_shouldReEvaluateUnsafeStatus() throws Exception {
     // set up data
     Long componentId = Long.valueOf(1);
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    Date bleedStartTime = sdf.parse("2016-01-01 13:00");
-    Date bleedEndTime = sdf.parse("2016-01-01 13:16");
     Component oldComponent = aComponent()
         .withId(componentId)
         .withStatus(ComponentStatus.UNSAFE)
@@ -1167,13 +1078,13 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(true);
+    when(componentConstraintChecker.canRecordWeight(oldComponent)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(false);
     when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(true);
     when(componentRepository.update(reEvaluatedcomponent)).thenReturn(reEvaluatedcomponent);
     
     // SUT
-    Component updatedComponent = componentCRUDService.preProcessComponent(componentId, 420, bleedStartTime, bleedEndTime);
+    Component updatedComponent = componentCRUDService.recordComponentWeight(componentId, 420);
     
     // check
     assertThat("Component status was re-evaluated", updatedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
@@ -1774,12 +1685,9 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
  
   
   @Test
-  public void testEditWeightToValidRangeForComponentThatCantRollBack_componentStatusIsUnsafeAndCorrectStatusChangeDeletes() throws ParseException {
+  public void testEditWeightToValidRangeForComponentThatCantRollBack_componentStatusIsUnsafeAndCorrectStatusChangeDeletes() {
     // Set up fixture
     long componentId = 76L;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    Date bleedStartTime = sdf.parse("2016-01-01 13:00");
-    Date bleedEndTime = sdf.parse("2016-01-01 13:16");
     Component component =
         aComponent().withId(componentId).withStatus(ComponentStatus.UNSAFE)
         .withComponentStatusChange(aComponentStatusChange()
@@ -1790,12 +1698,12 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .build();
     
     when(componentRepository.findComponentById(componentId)).thenReturn(component);
-    when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
+    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(component)).thenReturn(false);
     when(componentRepository.update(component)).thenReturn(component);
     
     // Exercise SUT
-    Component returnedComponent = componentCRUDService.preProcessComponent(componentId, 320, bleedStartTime, bleedEndTime);
+    Component returnedComponent = componentCRUDService.recordComponentWeight(componentId, 320);
 
     // Verify
     assertThat(returnedComponent.getStatus(), is(ComponentStatus.UNSAFE));
@@ -1806,12 +1714,9 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testEditWeightToValidRangeForComponentThatCanRollBack_componentStatusQuarantinedAndCorrectStatusChangeDeletes() throws ParseException {
+  public void testEditWeightToValidRangeForComponentThatCanRollBack_componentStatusQuarantinedAndCorrectStatusChangeDeletes() {
     // Set up fixture
     long componentId = 76L;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    Date bleedStartTime = sdf.parse("2016-01-01 13:00");
-    Date bleedEndTime = sdf.parse("2016-01-01 13:16");
     Component component =
         aComponent().withId(componentId).withStatus(ComponentStatus.UNSAFE)
         .withComponentStatusChange(aComponentStatusChange()
@@ -1822,12 +1727,12 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .build();
     
     when(componentRepository.findComponentById(componentId)).thenReturn(component);
-    when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
+    when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
     when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(component)).thenReturn(false);
     when(componentRepository.update(component)).thenReturn(component);
     
     // Exercise SUT
-    Component returnedComponent = componentCRUDService.preProcessComponent(componentId, 320, bleedStartTime, bleedEndTime);
+    Component returnedComponent = componentCRUDService.recordComponentWeight(componentId, 320);
 
     // Verify
     assertThat(returnedComponent.getStatus(), is(ComponentStatus.QUARANTINED));

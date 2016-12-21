@@ -19,7 +19,6 @@ import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donation.TTIStatus;
-import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.donor.Donor;
@@ -59,13 +58,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private boolean ineligibleDonor;
   private List<Component> components = new ArrayList<>();
   private User createdBy;
-  private Titre titre;
-  private String flagCharacters;
 
-  public DonationBuilder withTitre(Titre titre) {
-    this.titre = titre;
-    return this;
-  }
   public DonationBuilder withId(Long id) {
     this.id = id;
     return this;
@@ -233,11 +226,6 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     this.createdDate = createdDate;
     return this;
   }
-  
-  public DonationBuilder withFlagCharacters(String flagCharacters) {
-    this.flagCharacters = flagCharacters;
-    return this;
-  }
 
   @Override
   public Donation build() {
@@ -272,8 +260,6 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     donation.setReleased(released);
     donation.setIneligibleDonor(ineligibleDonor);
     donation.setComponents(components);
-    donation.setTitre(titre);
-    donation.setFlagCharacters(flagCharacters);
     return donation;
   }
 

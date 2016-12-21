@@ -21,9 +21,7 @@ public class ComponentTypeFactory {
   private ComponentTypeCombinationFactory componentTypeCombinationFactory;
 
   public ComponentType createEntity(ComponentTypeBackingForm backingForm) {
-    ComponentType entity = new ComponentType();
-    populateComponentTypeEntity(backingForm, entity);
-    return entity;
+    return backingForm.getComponentType();
   }
 
   public ComponentTypeViewModel createViewModel(ComponentType componentType) {
@@ -55,29 +53,6 @@ public class ComponentTypeFactory {
     return viewModel;
   }
   
-  private void populateComponentTypeEntity(ComponentTypeBackingForm componentTypeBackingForm, ComponentType componentType) {
-    componentType.setId(componentTypeBackingForm.getId());
-    componentType.setComponentTypeName(componentTypeBackingForm.getComponentTypeName());
-    componentType.setComponentTypeCode(componentTypeBackingForm.getComponentTypeCode());
-    componentType.setExpiresAfter(componentTypeBackingForm.getExpiresAfter());
-    componentType.setMaxBleedTime(componentTypeBackingForm.getMaxBleedTime());
-    componentType.setMaxTimeSinceDonation(componentTypeBackingForm.getMaxTimeSinceDonation());
-    componentType.setExpiresAfterUnits(componentTypeBackingForm.getExpiresAfterUnits());
-    componentType.setHasBloodGroup(componentTypeBackingForm.getHasBloodGroup());
-    componentType.setDescription(componentTypeBackingForm.getDescription());
-    componentType.setIsDeleted(componentTypeBackingForm.getIsDeleted());
-    componentType.setLowStorageTemperature(componentTypeBackingForm.getLowStorageTemperature());
-    componentType.setHighStorageTemperature(componentTypeBackingForm.getHighStorageTemperature());
-    componentType.setHighTransportTemperature(componentTypeBackingForm.getHighTransportTemperature());
-    componentType.setLowTransportTemperature(componentTypeBackingForm.getLowTransportTemperature());
-    componentType.setStorageInfo(componentTypeBackingForm.getStorageInfo());
-    componentType.setPreparationInfo(componentTypeBackingForm.getPreparationInfo());
-    componentType.setTransportInfo(componentTypeBackingForm.getTransportInfo());
-    componentType.setCanBeIssued(componentTypeBackingForm.getCanBeIssued());
-    componentType.setContainsPlasma(componentTypeBackingForm.getContainsPlasma());
-    componentType.setProducedComponentTypeCombinations(componentTypeBackingForm.getProducedComponentTypeCombinations());
-  }
-  
   private void populateComponentTypeViewModelFields(ComponentType componentType, ComponentTypeViewModel componentTypeViewModel) {
     componentTypeViewModel.setId(componentType.getId());
     componentTypeViewModel.setComponentTypeName(componentType.getComponentTypeName());
@@ -102,8 +77,6 @@ public class ComponentTypeFactory {
     componentTypeFullViewModel.setPreparationInfo(componentType.getPreparationInfo());
     componentTypeFullViewModel.setTransportInfo(componentType.getTransportInfo());
     componentTypeFullViewModel.setStorageInfo(componentType.getStorageInfo());
-    componentTypeFullViewModel.setMaxBleedTime(componentType.getMaxBleedTime());
-    componentTypeFullViewModel.setMaxTimeSinceDonation(componentType.getMaxTimeSinceDonation());
   }
 
   private void populateProducedComponentTypeCombinationViewModels(ComponentTypeFullViewModel viewModel, ComponentType componentType) {

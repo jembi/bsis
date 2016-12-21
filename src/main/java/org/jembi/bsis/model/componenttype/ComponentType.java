@@ -52,10 +52,6 @@ public class ComponentType extends BaseModificationTrackerEntity {
 
   @Column(nullable = false)
   private Integer expiresAfter;
-  
-  private Integer maxBleedTime;
-  
-  private Integer maxTimeSinceDonation;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 30, nullable = false)
@@ -298,40 +294,7 @@ public class ComponentType extends BaseModificationTrackerEntity {
     this.canBeIssued = componentType.getCanBeIssued();
     this.isDeleted = componentType.getIsDeleted();
     this.containsPlasma = componentType.getContainsPlasma();
-    this.maxBleedTime = componentType.getMaxBleedTime();
-    this.maxTimeSinceDonation = componentType.getMaxTimeSinceDonation();
   }
 
-  /**
-   * Returns the max bleed time in minutes
-   * @return
-   */
-  public Integer getMaxBleedTime() {
-    return maxBleedTime;
-  }
-
-  /**
-   *  Sets the max bleed time (in minutes)
-   * @param maxBleedTime
-   */
-  public void setMaxBleedTime(Integer maxBleedTime) {
-    this.maxBleedTime = maxBleedTime;
-  }
-
-  /**
-   * Returns the max time since donation in hours
-   * @return
-   */
-  public Integer getMaxTimeSinceDonation() {
-    return maxTimeSinceDonation;
-  }
-
-  /**
-   * Sets the  max time since donation (in hours)
-   * @param maxTimeSinceDonation
-   */
-  public void setMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
-    this.maxTimeSinceDonation = maxTimeSinceDonation;
-  }
 
 }

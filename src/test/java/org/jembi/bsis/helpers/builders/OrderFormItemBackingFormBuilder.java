@@ -33,6 +33,7 @@ public class OrderFormItemBackingFormBuilder {
   
   public OrderFormItemBackingFormBuilder withComponentType(ComponentType componentType) {
     this.componentType = new ComponentTypeBackingForm();
+    this.componentType.setComponentType(componentType);
     return this;
   }
 

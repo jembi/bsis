@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.factory.ComponentFactory;
@@ -98,9 +98,9 @@ public class ComponentControllerService {
     return componentViewModels;
   }
   
-  public ComponentManagementViewModel preProcessComponent(ComponentPreProcessingBackingForm componentBackingForm) {
-    Component component = componentCRUDService.preProcessComponent(componentBackingForm.getId(),
-        componentBackingForm.getWeight(), componentBackingForm.getBleedStartTime(), componentBackingForm.getBleedEndTime());
+  public ComponentManagementViewModel recordComponentWeight(ComponentBackingForm componentBackingForm) {
+    Component component = componentCRUDService.recordComponentWeight(componentBackingForm.getId(),
+        componentBackingForm.getWeight());
     return componentFactory.createManagementViewModel(component);
   }
   

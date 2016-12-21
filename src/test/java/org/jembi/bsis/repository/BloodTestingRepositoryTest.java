@@ -1,8 +1,5 @@
 package org.jembi.bsis.repository;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -202,32 +199,5 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     BloodTestingRuleResult result = results.get(0);
     Assert.assertTrue("Number of tests of type BASIC_TTI for donation batch 2 is 4",
         result.getRecentTestResults().size() == 4);
-  }
-  
-  @Test
-  public void testGetRecentTestResultsForDonationWithActiveAndUnDeletedBloodTest_shouldReturnABloodTestResult() {
-    
-    //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(9l);
-    BloodTestResult result = returnedResults.get(28l);
-    assertThat(returnedResults.size(), is(1));
-    assertThat(result.getBloodTest().getIsActive(), is(true));
-    assertThat(result.getBloodTest().getIsDeleted(), is(false));
-  }
-  
-  @Test
-  public void testGetRecentTestResultsForDonationWithActiveAndDeletedBloodTest_shouldNotReturnABloodTestResult() {
-
-    //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(10l);
-    assertThat(returnedResults.size(), is(0));
-  }
-  
-  @Test
-  public void testGetRecentTestResultsForDonationWithInactiveAndUnDeletedBloodTest_shouldNotReturnABloodTestResult() {
-  
-    //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(11l);
-    assertThat(returnedResults.size(), is(0));
   }
 }

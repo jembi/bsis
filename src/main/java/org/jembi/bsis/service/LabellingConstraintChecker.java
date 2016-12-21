@@ -17,7 +17,7 @@ public class LabellingConstraintChecker {
   
   @Autowired
   private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
-
+  
   public boolean canPrintPackLabel(Component component) {
     // Check that component has been received before printing label
     if (!component.hasComponentBatch()) {

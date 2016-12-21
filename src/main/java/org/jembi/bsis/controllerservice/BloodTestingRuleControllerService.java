@@ -43,7 +43,7 @@ public class BloodTestingRuleControllerService {
 
   
   public List<BloodTestingRuleViewModel> getAllBloodTestingRules() {
-    List<BloodTestingRule> bloodTestingRules = bloodTestingRuleRepository.getBloodTestingRules(true, true);
+    List<BloodTestingRule> bloodTestingRules = bloodTestingRuleRepository.getBloodTestingRules(true);
     return bloodTestingRuleFactory.createViewModels(bloodTestingRules);
   }
 

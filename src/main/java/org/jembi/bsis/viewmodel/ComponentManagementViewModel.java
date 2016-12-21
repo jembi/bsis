@@ -23,26 +23,6 @@ public class ComponentManagementViewModel extends BaseViewModel {
   private PackTypeFullViewModel packType;
   private boolean hasComponentBatch;
   private InventoryStatus inventoryStatus;
-  private Date bleedStartTime;
-  private Date bleedEndTime;
-
-  @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getBleedStartTime () {
-    return bleedStartTime;
-  }
-
-  public void setBleedStartTime (Date bleedStartTime) {
-    this.bleedStartTime = bleedStartTime;
-  }
-
-  @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getBleedEndTime () {
-    return bleedEndTime;
-  }
-
-  public void setBleedEndTime (Date bleedEndTime) {
-    this.bleedEndTime = bleedEndTime;
-  }
 
   public boolean getHasComponentBatch () {
     return hasComponentBatch;

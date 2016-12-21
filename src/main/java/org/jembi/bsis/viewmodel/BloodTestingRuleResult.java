@@ -7,7 +7,6 @@ import java.util.Set;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.TTIStatus;
-import org.jembi.bsis.model.donation.Titre;
 
 public class BloodTestingRuleResult {
 
@@ -20,8 +19,6 @@ public class BloodTestingRuleResult {
   private String bloodAbo;
 
   private String bloodRh;
-
-  private Titre titre;
 
   private List<Long> pendingBloodTypingTestsIds;
 
@@ -47,6 +44,12 @@ public class BloodTestingRuleResult {
   private Set<String> ttiStatusChanges;
 
   private TTIStatus ttiStatus;
+
+  private boolean aboUninterpretable;
+
+  private boolean rhUninterpretable;
+
+  private boolean ttiUninterpretable;
 
   public BloodTestingRuleResult() {
   }
@@ -89,14 +92,6 @@ public class BloodTestingRuleResult {
 
   public void setBloodRh(String bloodRh) {
     this.bloodRh = bloodRh;
-  }
-
-  public Titre getTitre() {
-    return titre;
-  }
-
-  public void setTitre(Titre titre) {
-    this.titre = titre;
   }
 
   public List<Long> getPendingBloodTypingTestsIds() {
@@ -181,6 +176,30 @@ public class BloodTestingRuleResult {
 
   public void setPendingRepeatAndConfirmatoryTtiTestsIds(List<Long> pendingRepeatAndConfirmatoryTtiTestsIds) {
     this.pendingRepeatAndConfirmatoryTtiTestsIds = pendingRepeatAndConfirmatoryTtiTestsIds;
+  }
+
+  public boolean getAboUninterpretable() {
+    return aboUninterpretable;
+  }
+
+  public void setAboUninterpretable(boolean aboUninterpretable) {
+    this.aboUninterpretable = aboUninterpretable;
+  }
+
+  public boolean getRhUninterpretable() {
+    return rhUninterpretable;
+  }
+
+  public void setRhUninterpretable(boolean rhUninterpretable) {
+    this.rhUninterpretable = rhUninterpretable;
+  }
+
+  public boolean getTtiUninterpretable() {
+    return ttiUninterpretable;
+  }
+
+  public void setTtiUninterpretable(boolean ttiUninterpretable) {
+    this.ttiUninterpretable = ttiUninterpretable;
   }
 
   public Map<Long, BloodTestResultViewModel> getRecentTestResults() {

@@ -1,7 +1,8 @@
 package org.jembi.bsis.backingform.validator;
 
-import static org.jembi.bsis.helpers.builders.ComponentPreProcessingBackingFormBuilder.aComponentBackingForm;
+import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aDistributionSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 
 import javax.persistence.NoResultException;
 
-import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
@@ -70,13 +71,13 @@ public class OrderFormBackingFormValidatorTest {
     backingForm.setBloodGroup("A+");
     backingForm.setNumberOfUnits(22);
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setId(1L);
+    componentType.setComponentType(aComponentType().withId(1L).build());
     backingForm.setComponentType(componentType);
     return backingForm;
   }
 
-  private ComponentPreProcessingBackingForm getBaseOrderFormComponentBackingForm() {
-    ComponentPreProcessingBackingForm component = aComponentBackingForm().withId(1L).build();
+  private ComponentBackingForm getBaseOrderFormComponentBackingForm() {
+    ComponentBackingForm component = aComponentBackingForm().withId(1L).build();
     return component;
   }
 
@@ -348,7 +349,7 @@ public class OrderFormBackingFormValidatorTest {
     OrderFormBackingForm backingForm = getBaseOrderFormBackingForm();
     
     // component backing form with null id
-    ComponentPreProcessingBackingForm componentBackingForm = aComponentBackingForm().withId(null).build();
+    ComponentBackingForm componentBackingForm = aComponentBackingForm().withId(null).build();
     backingForm.setComponents(Arrays.asList(componentBackingForm));
 
     // set up mocks

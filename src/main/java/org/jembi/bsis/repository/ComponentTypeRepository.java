@@ -45,13 +45,16 @@ public class ComponentTypeRepository {
         .getSingleResult();
   }
 
+  // FIXME: This shouldn't check for undeleted component types, as they can be undeleted. A db
+  // constraint should be added
   public boolean isUniqueComponentTypeName(Long id, String componentTypeName) {
     // passing null as the ID parameter does not work because the IDs in mysql are never null. So if
     // id is null, the below rather uses -1 which achieves the same result in the case of this
     // query.
     return em.createNamedQuery(ComponentTypeQueryConstants.NAME_VERIFY_UNIQUE_COMPONENT_TYPE_NAME, Boolean.class)
         .setParameter("id", id != null ? id : -1L)
-        .setParameter("componentTypeName", componentTypeName.toUpperCase())
+        .setParameter("componentTypeName", componentTypeName)
+        .setParameter("deleted", false)
         .getSingleResult();
   }
 

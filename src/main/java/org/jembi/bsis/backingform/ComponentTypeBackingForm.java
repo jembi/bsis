@@ -1,206 +1,125 @@
 package org.jembi.bsis.backingform;
 
+import java.util.List;
 import java.util.Set;
 
+import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ComponentTypeBackingForm {
-  
-  private Long id;
-  private String componentTypeName;
-  private String componentTypeCode;
-  private Integer expiresAfter;
-  private Integer maxBleedTime;
-  private Integer maxTimeSinceDonation;
-  private ComponentTypeTimeUnits expiresAfterUnits = ComponentTypeTimeUnits.DAYS;
-  private Boolean hasBloodGroup;
-  private String description;
-  private boolean isDeleted = false;
-  private Integer lowStorageTemperature;
-  private Integer highStorageTemperature;
-  private Integer lowTransportTemperature;
-  private Integer highTransportTemperature;
-  private String preparationInfo;
-  private String transportInfo;
-  private String storageInfo;
-  private boolean canBeIssued = true;
-  private boolean containsPlasma = true;
-  private Set<ComponentTypeCombination> producedComponentTypeCombinations;
 
-  /**
-   * Returns the max bleed time in minutes
-   * @return
-   */
-  public Integer getMaxBleedTime() {
-    return maxBleedTime;
+  @JsonIgnore
+  private ComponentType componentType;
+
+  public ComponentTypeBackingForm() {
+    componentType = new ComponentType();
+  }
+
+  public ComponentType getComponentType() {
+    return componentType;
+  }
+
+  public void setComponentType(ComponentType componentType) {
+    this.componentType = componentType;
   }
   
-  /**
-   * Returns the max time since donation in hours
-   * @return
-   */
-  public Integer getMaxTimeSinceDonation() {
-    return maxTimeSinceDonation;
-  }
-  
-  /**
-   * Sets the max bleed time (in minutes)
-   * @param maxBleedTime
-   */
-  public void setMaxBleedTime(Integer maxBleedTime) {
-    this.maxBleedTime = maxBleedTime;
-  }
-  
-  /**
-   * Sets the  max time since donation (in hours)
-   * @param maxTimeSinceDonation
-   */
-  public void setMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
-    this.maxTimeSinceDonation = maxTimeSinceDonation;
-  }
-
-  public void setProducedComponentTypeCombinations(Set<ComponentTypeCombination> producedComponentTypeCombinations) {
-    this.producedComponentTypeCombinations = producedComponentTypeCombinations;
-  }
-
-  public Set<ComponentTypeCombination> getProducedComponentTypeCombinations() {
-    return this.producedComponentTypeCombinations;
-  }
-  
-  public String getComponentTypeName() {
-    return componentTypeName;
-  }
-
-  public void setComponentTypeName(String componentTypeName) {
-    this.componentTypeName = componentTypeName;
-  }
-
-  public String getComponentTypeCode() {
-    return componentTypeCode;
-  }
-
-  public void setComponentTypeCode(String componentTypeCode) {
-    this.componentTypeCode = componentTypeCode;
-  }
-
-  public Integer getExpiresAfter() {
-    return expiresAfter;
-  }
-
-  public void setExpiresAfter(Integer expiresAfter) {
-    this.expiresAfter = expiresAfter;
-  }
-
-  public ComponentTypeTimeUnits getExpiresAfterUnits() {
-    return expiresAfterUnits;
-  }
-
-  public void setExpiresAfterUnits(ComponentTypeTimeUnits expiresAfterUnits) {
-    this.expiresAfterUnits = expiresAfterUnits;
-  }
-
-  public Boolean getHasBloodGroup() {
-    return hasBloodGroup;
-  }
-
-  public void setHasBloodGroup(Boolean hasBloodGroup) {
-    this.hasBloodGroup = hasBloodGroup;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public boolean getIsDeleted() {
-    return isDeleted;
-  }
-
-  public void setIsDeleted(boolean isDeleted) {
-    this.isDeleted = isDeleted;
-  }
-
-  public Integer getLowStorageTemperature() {
-    return lowStorageTemperature;
-  }
-
-  public void setLowStorageTemperature(Integer lowStorageTemperature) {
-    this.lowStorageTemperature = lowStorageTemperature;
-  }
-
-  public Integer getHighStorageTemperature() {
-    return highStorageTemperature;
-  }
-
-  public void setHighStorageTemperature(Integer highStorageTemperature) {
-    this.highStorageTemperature = highStorageTemperature;
-  }
-
-  public Integer getLowTransportTemperature() {
-    return lowTransportTemperature;
-  }
-
-  public void setLowTransportTemperature(Integer lowTransportTemperature) {
-    this.lowTransportTemperature = lowTransportTemperature;
-  }
-
-  public Integer getHighTransportTemperature() {
-    return highTransportTemperature;
-  }
-
-  public void setHighTransportTemperature(Integer highTransportTemperature) {
-    this.highTransportTemperature = highTransportTemperature;
-  }
-
-  public String getPreparationInfo() {
-    return preparationInfo;
-  }
-
-  public void setPreparationInfo(String preparationInfo) {
-    this.preparationInfo = preparationInfo;
-  }
-
-  public String getTransportInfo() {
-    return transportInfo;
-  }
-
-  public void setTransportInfo(String transportInfo) {
-    this.transportInfo = transportInfo;
-  }
-
-  public String getStorageInfo() {
-    return storageInfo;
-  }
-
-  public void setStorageInfo(String storageInfo) {
-    this.storageInfo = storageInfo;
-  }
-
-  public boolean getCanBeIssued() {
-    return canBeIssued;
-  }
-
-  public void setCanBeIssued(boolean canBeIssued) {
-    this.canBeIssued = canBeIssued;
-  }
-
-  public boolean getContainsPlasma() {
-    return containsPlasma;
-  }
-
-  public void setContainsPlasma(boolean containsPlasma) {
-    this.containsPlasma = containsPlasma;
-  }
-
   public Long getId() {
-    return id;
+    return componentType.getId();
   }
 
   public void setId(Long id) {
-    this.id = id;
-  } 
+    componentType.setId(id);
+  }
+
+  public String getComponentTypeName() {
+    return componentType.getComponentTypeName();
+  }
+  
+  public boolean getContainsPlasma() {
+    return componentType.getContainsPlasma();
+  }
+  
+  public void setComponentTypeName(String componentTypeName) {
+    componentType.setComponentTypeName(componentTypeName);
+  }
+
+  public String getComponentTypeCode() {
+    return componentType.getComponentTypeCode();
+  }
+
+  public void setComponentTypeCode(String componentTypeCode) {
+    componentType.setComponentTypeCode(componentTypeCode);
+  }
+  
+  public Integer getExpiresAfter() {
+    return componentType.getExpiresAfter();
+  }
+
+  public void setExpiresAfter(Integer expiresAfter) {
+    componentType.setExpiresAfter(expiresAfter);
+  }
+
+  public void setExpiresAfterUnits(String componentTypeTimeUnits) {
+    componentType.setExpiresAfterUnits(ComponentTypeTimeUnits.valueOf(componentTypeTimeUnits));
+  }
+
+  public void setDescription(String description) {
+    componentType.setDescription(description);
+  }
+
+  public void setHasBloodGroup(Boolean hasBloodGroup) {
+    componentType.setHasBloodGroup(hasBloodGroup);
+  }
+
+  public void setComponentTypeCombinations(List<ComponentTypeCombination> componentTypeCombinations) {
+    componentType.setComponentTypeCombinations(componentTypeCombinations);
+  }
+
+  public void setProducedComponentTypeCombinations(Set<ComponentTypeCombination> producedComponentTypeCombinations) {
+    componentType.setProducedComponentTypeCombinations(producedComponentTypeCombinations);
+  }
+
+  public void setHighStorageTemperature(Integer highStorageTemperature) {
+    componentType.setHighStorageTemperature(highStorageTemperature);
+  }
+
+  public void setLowStorageTemperature(Integer lowStorageTemperature) {
+    componentType.setLowStorageTemperature(lowStorageTemperature);
+  }
+
+  public void setLowTransportTemperature(Integer lowTransportTemperature) {
+    componentType.setLowTransportTemperature(lowTransportTemperature);
+  }
+
+  public void setHighTransportTemperature(Integer highTransportTemperature) {
+    componentType.setHighTransportTemperature(highTransportTemperature);
+  }
+
+  public void setPreparationInfo(String preparationInfo) {
+    componentType.setPreparationInfo(preparationInfo);
+  }
+
+  public void setTransportInfo(String transportInfo) {
+    componentType.setTransportInfo(transportInfo);
+  }
+
+  public void setStorageInfo(String storageInfo) {
+    componentType.setStorageInfo(storageInfo);
+  }
+
+  public void setCanBeIssued(boolean canBeIssued) {
+    componentType.setCanBeIssued(canBeIssued);
+  }
+
+  public void setIsDeleted(boolean isDeleted) {
+    componentType.setIsDeleted(isDeleted);
+  }
+  
+  public void setContainsPlasma(boolean containsPlasma) {
+    componentType.setContainsPlasma(containsPlasma);
+  }
+  
 }

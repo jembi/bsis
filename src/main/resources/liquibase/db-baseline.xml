@@ -27,17 +27,16 @@
 		<sqlFile path="./initial_data.sql"/>
 	</changeSet>
 	
-    <!-- Updated (timler): for #293 (refactoring) -->
-	<!-- Updated (lauravignoli): for BSIS-2305 (refactoring) -->
-	<changeSet id="20161214-1535" author="lauravignoli">
+	<!-- Updated (timler): for #293 (refactoring) -->
+	<changeSet id="201507121-1237" author="devang">
 	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="1"> 
+		    <sqlCheck expectedResult="0"> 
 				<![CDATA[
-				SELECT count(*) = 0 FROM BloodTest;
+				SELECT count(*) FROM MicrotiterPlate where plateKey = 'bloodtyping' and plateName = 'Blood Typing Plate';
 				]]>
 			</sqlCheck>
 		</preConditions>
-		<sqlFile path="./blood_tests.sql"/>
+		<sqlFile path="./tests-lbts.sql"/>
 	</changeSet>
 
 </databaseChangeLog>

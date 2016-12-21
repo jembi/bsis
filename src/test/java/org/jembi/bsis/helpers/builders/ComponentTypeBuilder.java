@@ -22,16 +22,12 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   private boolean hasBloodGroup = false;
   private Integer lowStorageTemperature;
   private Integer highStorageTemperature;
-  private Integer lowTransportTemperature;
-  private Integer highTransportTemperature;
   private String preparationInfo;
   private String transportInfo;
   private String storageInfo;
   private boolean canBeIssued = true;
   private Set<ComponentTypeCombination> producedComponentTypeCombinations;
   private boolean containsPlasma = false;
-  private Integer maxBleedTime;
-  private Integer maxTimeSinceDonation;
 
   public ComponentTypeBuilder withId(Long id) {
     this.id = id;
@@ -102,24 +98,9 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     this.storageInfo = storageInfo;
     return this;
   }
-  
-  public ComponentTypeBuilder thatCanBeIssued() {
-    this.canBeIssued = true;
-    return this;
-  }  
-  
-  public ComponentTypeBuilder thatCanNotBeIssued() {
-    this.canBeIssued = false;
-    return this;
-  }  
 
-  public ComponentTypeBuilder withMaxBleedTime(Integer maxBleedTime) {
-    this.maxBleedTime = maxBleedTime;
-    return this;
-  }
-
-  public ComponentTypeBuilder withMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
-    this.maxTimeSinceDonation = maxTimeSinceDonation;
+  public ComponentTypeBuilder withCanBeIssued(boolean canBeIssued) {
+    this.canBeIssued = canBeIssued;
     return this;
   }
 
@@ -133,21 +114,6 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   
   public ComponentTypeBuilder thatContainsPlasma() {
     this.containsPlasma = true;;
-    return this;
-  }
-  
-  public ComponentTypeBuilder withLowTransportTemperature(Integer lowTransportTemperature) {
-    this.lowTransportTemperature = lowTransportTemperature;
-    return this;
-  }
-  
-  public ComponentTypeBuilder withHighTransportTemperature(Integer highTransportTemperature) {
-    this.highTransportTemperature = highTransportTemperature;
-    return this;
-  }
-
-  public ComponentTypeBuilder thatDoesntContainsPlasma() {
-    this.containsPlasma = false;;
     return this;
   }
 
@@ -170,10 +136,6 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     componentType.setStorageInfo(storageInfo);
     componentType.setCanBeIssued(canBeIssued);
     componentType.setContainsPlasma(containsPlasma);
-    componentType.setMaxBleedTime(maxBleedTime);
-    componentType.setMaxTimeSinceDonation(maxTimeSinceDonation);
-    componentType.setLowTransportTemperature(lowTransportTemperature);
-    componentType.setHighTransportTemperature(highTransportTemperature);
     return componentType;
   }
 

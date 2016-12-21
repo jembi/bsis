@@ -4,8 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class ComponentTypeRepositoryTests extends SecurityContextDependentTestSu
   private ComponentTypeRepository componentTypeRepository;
   
   @Test
-  public void testIsUniqueComponentTypeName_shouldReturnFalseIfComponentNameExists() {
+  public void testIsUniqueComponentTypeName_shouldReturnFalseIfComponentNameIsNotUnique() {
     String componentTypeCode = "0011";
     String componentTypeName = "Blood";
     
@@ -65,43 +65,6 @@ public class ComponentTypeRepositoryTests extends SecurityContextDependentTestSu
   }
   
   @Test
-  public void testIsUniqueComponentTypeName_shouldReturnFalseIfComponentNameExistsButDeleted() {
-    String componentTypeCode = "0011";
-    String componentTypeName = "Blood";
-    
-    // Test data: ComponentType with same name but deleted
-    aComponentType()
-        .withComponentTypeCode(componentTypeCode)
-        .withComponentTypeName(componentTypeName)
-        .thatIsDeleted()
-        .buildAndPersist(entityManager);
-    
-    // Run test
-    boolean unique = componentTypeRepository.isUniqueComponentTypeName(null, componentTypeName);
-    
-    // Verify result
-    assertThat(unique, is(false));
-  }
-  
-  @Test
-  public void testIsUniqueComponentTypeName_shouldReturnFalseIfComponentNameExistsButDifferentCase() {
-    String componentTypeCode = "0011";
-    String componentTypeName = "blood";
-    
-    // Test data: ComponentType with same name but different case
-    aComponentType()
-        .withComponentTypeCode(componentTypeCode)
-        .withComponentTypeName(componentTypeName.toUpperCase())
-        .buildAndPersist(entityManager);
-    
-    // Run test
-    boolean unique = componentTypeRepository.isUniqueComponentTypeName(null, componentTypeName);
-    
-    // Verify result
-    assertThat(unique, is(false));
-  }
-  
-  @Test
   public void testFindComponentTypeByCodeWithMultipleComponentTypes_shouldReturnCorrectComponentType() {
     String componentTypeCode = "0011";
     
@@ -135,9 +98,9 @@ public class ComponentTypeRepositoryTests extends SecurityContextDependentTestSu
   @Test
   public void testGetComponentTypesThatCanBeIssued_shouldReturnComponentsTypesThatCanBeIssued() {
 
-    ComponentType componentType1 = aComponentType().thatCanBeIssued().buildAndPersist(entityManager);
-    ComponentType componentType2 = aComponentType().thatCanBeIssued().buildAndPersist(entityManager);
-    aComponentType().thatCanNotBeIssued().buildAndPersist(entityManager);
+    ComponentType componentType1 = aComponentType().withCanBeIssued(true).buildAndPersist(entityManager);
+    ComponentType componentType2 = aComponentType().withCanBeIssued(true).buildAndPersist(entityManager);
+    aComponentType().withCanBeIssued(false).buildAndPersist(entityManager);
 
     List<ComponentType> all = componentTypeRepository.getAllComponentTypesThatCanBeIssued();
     assertEquals("There are 2 ComponentTypes", 2, all.size());
@@ -148,8 +111,8 @@ public class ComponentTypeRepositoryTests extends SecurityContextDependentTestSu
   @Test
   public void testGetComponentTypesThatCanBeIssued_shouldntReturnDeletedComponentTypes() {
 
-    ComponentType componentType = aComponentType().thatCanBeIssued().buildAndPersist(entityManager);
-    aComponentType().thatCanBeIssued().thatIsDeleted().buildAndPersist(entityManager);
+    ComponentType componentType = aComponentType().withCanBeIssued(true).buildAndPersist(entityManager);
+    aComponentType().withCanBeIssued(true).thatIsDeleted().buildAndPersist(entityManager);
 
     List<ComponentType> all = componentTypeRepository.getAllComponentTypesThatCanBeIssued();
     assertEquals("There is 1 ComponentType", 1, all.size());
