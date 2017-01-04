@@ -8,8 +8,10 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentTyp
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationViewModelBuilder.aComponentTypeCombinationViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeSearchViewModelBuilder.aComponentTypeSearchViewModel;
-import static org.jembi.bsis.helpers.matchers.ComponentTypeSearchViewModelMatcher.hasSameStateAsComponentTypeSearchViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentTypeMatcher.hasSameStateAsComponentType;
+import static org.jembi.bsis.helpers.matchers.ComponentTypeSearchViewModelMatcher.hasSameStateAsComponentTypeSearchViewModel;
+import static org.jembi.bsis.helpers.matchers.ComponentTypeViewModelMatcher.hasSameStateAsComponentTypeViewModel;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -20,19 +22,17 @@ import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.ComponentTypeCombinationViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeSearchViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ComponentTypeFactoryTests {
+public class ComponentTypeFactoryTests extends UnitTestSuite {
 
   @InjectMocks
   private ComponentTypeFactory componentTypeFactory;
@@ -184,15 +184,22 @@ public class ComponentTypeFactoryTests {
         .withComponentTypeName("name")
         .withComponentTypeCode("0001")
         .withDescription("descr")
+        .withMaxBleedTime(3)
+        .withMaxTimeSinceDonation(3)
+        .build();
+    
+    ComponentTypeViewModel expectedViewModel = aComponentTypeViewModel()
+        .withId(1L)
+        .withComponentTypeName("name")
+        .withComponentTypeCode("0001")
+        .withDescription("descr")
+        .withMaxBleedTime(3)
+        .withMaxTimeSinceDonation(3)
         .build();
 
     ComponentTypeViewModel viewModel = componentTypeFactory.createViewModel(entity);
     
-    Assert.assertNotNull("View Model was created", viewModel);
-    Assert.assertEquals("View Model correct", Long.valueOf(1), viewModel.getId());
-    Assert.assertEquals("View Model correct", "name", viewModel.getComponentTypeName());
-    Assert.assertEquals("View Model correct", "0001", viewModel.getComponentTypeCode());
-    Assert.assertEquals("View Model correct", "descr", viewModel.getDescription());
+    assertThat(viewModel, hasSameStateAsComponentTypeViewModel(expectedViewModel));
   }
   
   @Test
