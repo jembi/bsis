@@ -137,6 +137,29 @@ public class DonationBackingFormValidatorTest {
   }
   
   @Test
+  public void testValidUpdateDonationAfterConfigDINLengthPropertyChange() throws Exception {
+    // set up data
+    DonationBackingForm form = createBasicBackingForm();
+    form.setId(1L);
+    form.setDonationIdentificationNumber("DIN5247");
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    mockGeneralConfigAndFormFields();
+    // edit form and change DIN config value
+    form.setLastUpdated(new Date());
+    when(generalConfigAccessorService.getIntValue("donation.dinLength")).thenReturn(10);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Errors exist", 0, errors.getErrorCount());
+  }
+  
+  @Test
   public void testInvalidDINAlreadyExists() throws Exception {
     // set up data
     DonationBackingForm form = createBasicBackingForm();
