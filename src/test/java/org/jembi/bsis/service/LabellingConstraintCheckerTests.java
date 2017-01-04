@@ -192,7 +192,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
             .withId(1L)
             .build())
         .withComponentType(aComponentType()
-            .withCanBeIssued(true)
+            .thatCanBeIssued()
             .build())
         .build();
     
@@ -223,7 +223,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withDonation(donation)
         .withStatus(ComponentStatus.QUARANTINED)
         .withComponentType(aComponentType()
-            .withCanBeIssued(true)
+            .thatCanBeIssued()
             .build())
         .withComponentBatch(aComponentBatch()
             .withId(1L)
@@ -434,7 +434,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
             .withId(1L)
             .build())
         .withComponentType(aComponentType()
-            .withCanBeIssued(true)
+            .thatCanBeIssued()
             .build())
         .build();
 
@@ -455,7 +455,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
             .withId(1L)
             .build())
         .withComponentType(aComponentType()
-            .withCanBeIssued(false)
+            .thatCanNotBeIssued()
             .build())
         .build();
 
@@ -473,7 +473,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(aComponentType()
-            .withCanBeIssued(true)
+            .thatCanBeIssued()
             .build())
         .build();
 
@@ -491,7 +491,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withId(1L)
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentType(aComponentType()
-            .withCanBeIssued(false)
+            .thatCanNotBeIssued()
             .build())
         .build();
 

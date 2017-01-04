@@ -7,7 +7,6 @@ import java.util.HashMap;
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
 import org.jembi.bsis.backingform.validator.OrderFormItemBackingFormValidator;
-import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,7 +31,7 @@ public class OrderFormItemBackingFormValidatorTest {
     // set up data
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setComponentType(ComponentTypeBuilder.aComponentType().withId(1L).build());
+    componentType.setId(1L);
     backingForm.setComponentType(componentType);
     backingForm.setBloodGroup("A+");
     backingForm.setNumberOfUnits(12);
@@ -68,7 +67,6 @@ public class OrderFormItemBackingFormValidatorTest {
     // set up data
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setComponentType(null);
     backingForm.setComponentType(componentType);
     backingForm.setBloodGroup("A+");
     backingForm.setNumberOfUnits(12);
@@ -103,7 +101,7 @@ public class OrderFormItemBackingFormValidatorTest {
     // set up data
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setComponentType(ComponentTypeBuilder.aComponentType().withId(1L).build());
+    componentType.setId(1L);
     backingForm.setComponentType(componentType);
     backingForm.setBloodGroup("A+");
     backingForm.setNumberOfUnits(12);
@@ -124,7 +122,7 @@ public class OrderFormItemBackingFormValidatorTest {
     // set up data
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setComponentType(ComponentTypeBuilder.aComponentType().withId(1L).build());
+    componentType.setId(1L);
     backingForm.setComponentType(componentType);
     backingForm.setNumberOfUnits(12);
 
@@ -144,7 +142,7 @@ public class OrderFormItemBackingFormValidatorTest {
     // set up data
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setComponentType(ComponentTypeBuilder.aComponentType().withId(1L).build());
+    componentType.setId(1L);
     backingForm.setComponentType(componentType);
     backingForm.setBloodGroup("A*");
     backingForm.setNumberOfUnits(12);
@@ -165,7 +163,7 @@ public class OrderFormItemBackingFormValidatorTest {
     // set up data
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setComponentType(ComponentTypeBuilder.aComponentType().withId(1L).build());
+    componentType.setId(1L);
     backingForm.setComponentType(componentType);
     backingForm.setBloodGroup("A+");
     backingForm.setNumberOfUnits(-12);

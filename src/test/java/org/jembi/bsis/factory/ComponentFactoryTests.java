@@ -188,7 +188,7 @@ public class ComponentFactoryTests {
         .withWeigth(222)
         .withPermission("canDiscard", true)
         .withPermission("canProcess", true)
-        .withPermission("canRecordWeight", true)
+        .withPermission("canPreProcess", true)
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
         .withExpiryStatus("Already expired")

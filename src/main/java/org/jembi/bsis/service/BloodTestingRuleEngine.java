@@ -72,7 +72,7 @@ public class BloodTestingRuleEngine {
           "samples");
     }
 
-    List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false);
+    List<BloodTestingRule> rules = bloodTestingRuleRepository.getBloodTestingRules(false, false);
 
     // Get the latest test results
     Map<Long, String> storedTestResults = new TreeMap<>();

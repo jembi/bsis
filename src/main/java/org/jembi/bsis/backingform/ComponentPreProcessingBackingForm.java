@@ -172,4 +172,9 @@ public class ComponentPreProcessingBackingForm {
     // Ignore
   }
 
+  @JsonIgnore
+  public void setIsInitialComponent(boolean isInitialComponent) {
+    // Ignore
+  }
+
 }

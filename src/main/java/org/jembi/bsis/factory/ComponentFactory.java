@@ -62,7 +62,7 @@ public class ComponentFactory {
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDiscard", componentConstraintChecker.canDiscard(component));
     permissions.put("canProcess", componentConstraintChecker.canProcess(component));
-    permissions.put("canRecordWeight", componentConstraintChecker.canPreProcess(component));
+    permissions.put("canPreProcess", componentConstraintChecker.canPreProcess(component));
     permissions.put("canUnprocess", componentConstraintChecker.canUnprocess(component));
     permissions.put("canUndiscard", componentConstraintChecker.canUndiscard(component));
     viewModel.setPermissions(permissions);

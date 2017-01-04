@@ -17,11 +17,11 @@ public class OrderFormItemBackingFormValidator extends BaseValidator<OrderFormIt
   @Override
   public void validateForm(OrderFormItemBackingForm form, Errors errors) {
     // check componentType;
-    if (form.getComponentType() == null || form.getComponentType().getComponentType() == null
-        || form.getComponentType().getComponentType().getId() == null) {
+    if (form.getComponentType() == null || form.getComponentType() == null
+        || form.getComponentType().getId() == null) {
       errors.rejectValue("componentType", "required", "componentType is required");
     } else {
-      if (!componentTypeRepository.verifyComponentTypeExists(form.getComponentType().getComponentType().getId())) {
+      if (!componentTypeRepository.verifyComponentTypeExists(form.getComponentType().getId())) {
         errors.rejectValue("componentType", "invalid", "Invalid componentType");
       }
     }

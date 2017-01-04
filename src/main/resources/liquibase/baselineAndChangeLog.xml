@@ -6,7 +6,7 @@
 	<include file="liquibase/db-baseline.xml" />
  	<include file="liquibase/db-changelog.xml" />
 	<include file="liquibase/db-config.xml" />
-	<include file="liquibase/db-data-lbts.xml" />
+	<include file="liquibase/db-data.xml" />
 	<include file="liquibase/db-after-data.xml" />
 	<include file="liquibase/db-fix-ids.xml" />
 	<include file="liquibase/updates/676-delete-unused-endpoints.xml" />
@@ -74,5 +74,5 @@
   <include file="liquibase/updates/1725-print-high-titre-on-label-type-o.xml"/>
   <include file="liquibase/updates/1888-update-packlabel-incorporate-check-digit.xml"/>
   <include file="liquibase/updates/2221-add-comp-processing-time.xml"/>
-
+  <include file="liquibase/updates/1801-set-maximum-bleed-times-and-maximum-time.xml"/>
 </databaseChangeLog>
