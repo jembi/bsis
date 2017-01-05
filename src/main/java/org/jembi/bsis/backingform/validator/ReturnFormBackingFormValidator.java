@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.ReturnFormBackingForm;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.location.Location;
@@ -55,7 +55,7 @@ public class ReturnFormBackingFormValidator extends BaseValidator<ReturnFormBack
 
     // Validate components
     if (form.getComponents() != null) { // it can be null if the Return form has just been created
-      List<ComponentPreProcessingBackingForm> components = form.getComponents();
+      List<ComponentBackingForm> components = form.getComponents();
       for (int i = 0, len = components.size(); i < len; i++) {
         errors.pushNestedPath("components[" + i + "]");
         try {
@@ -70,7 +70,7 @@ public class ReturnFormBackingFormValidator extends BaseValidator<ReturnFormBack
 
   }
   
-  private void validateComponentForm(ComponentPreProcessingBackingForm componentBackingForm, Errors errors) {
+  private void validateComponentForm(ComponentBackingForm componentBackingForm, Errors errors) {
     if (componentBackingForm.getId() == null) {
       errors.rejectValue("id", "required", "component id is required.");
     } else {
