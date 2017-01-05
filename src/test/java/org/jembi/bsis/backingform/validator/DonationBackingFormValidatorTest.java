@@ -2,6 +2,7 @@ package org.jembi.bsis.backingform.validator;
 
 import static org.jembi.bsis.helpers.builders.DonationTypeBackingFormBuilder.aDonationTypeBackingForm;
 import static org.mockito.Mockito.when;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -156,7 +157,7 @@ public class DonationBackingFormValidatorTest {
     donationBackingFormValidator.validate(form, errors);
 
     // check asserts
-    Assert.assertEquals("Errors exist", 0, errors.getErrorCount());
+    assertThat("Validation error count is zero", errors.getErrorCount() == 0);   
   }
   
   @Test
