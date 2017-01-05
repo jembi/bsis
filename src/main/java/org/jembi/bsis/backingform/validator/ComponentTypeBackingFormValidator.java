@@ -19,6 +19,7 @@ public class ComponentTypeBackingFormValidator extends BaseValidator<ComponentTy
   private static final Integer MAX_MAX_TIME_SINCE_DONATION = 30;
   private static final Double MIN_GRAVITY = 0.001;
   private static final Double MAX_GRAVITY = 2.000;
+  private static final Integer MAX_GRAVITY_DECIMAL_PLACES = 3;
   
   @Autowired
   private ComponentTypeRepository componentTypeRepository;
@@ -76,8 +77,8 @@ public class ComponentTypeBackingFormValidator extends BaseValidator<ComponentTy
         errors.rejectValue("gravity", "errors.invalid", "Gravity should be between "+MIN_GRAVITY+" and "+MAX_GRAVITY);
       }
       String [] numArray = String.valueOf(form.getGravity()).split("\\.");
-      if (numArray.length > 1 && numArray[1].length() > 3) {
-        errors.rejectValue("gravity", "errors.invalid", "Gravity should have a maximum of 3 decimal places");
+      if (numArray.length > 1 && numArray[1].length() > MAX_GRAVITY_DECIMAL_PLACES) {
+        errors.rejectValue("gravity", "errors.invalid", "Gravity should have a maximum of "+MAX_GRAVITY_DECIMAL_PLACES+" decimal places");
       }
     }
   }
