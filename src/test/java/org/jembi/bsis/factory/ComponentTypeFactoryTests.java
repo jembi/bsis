@@ -60,6 +60,7 @@ public class ComponentTypeFactoryTests {
         .withPreparationInfo("preparationInfo")
         .withTransportInfo("transportInfo")
         .withStorageInfo("storageInfo")
+        .withGravity(1.145)
         .thatCanBeIssued()
         .thatContainsPlasma()
         .build();
@@ -82,6 +83,7 @@ public class ComponentTypeFactoryTests {
         .withPreparationInfo("preparationInfo")
         .withTransportInfo("transportInfo")
         .withStorageInfo("storageInfo")
+        .withGravity(1.145)
         .thatCanBeIssued()
         .thatContainsPlasma()
         .build();
@@ -110,6 +112,7 @@ public class ComponentTypeFactoryTests {
         .withStorageInfo("storageInfo")
         .thatCanNotBeIssued()
         .withMaxBleedTime(10)
+        .withGravity(1.145)
         .withMaxTimeSinceDonation(5)
         .build();
 
