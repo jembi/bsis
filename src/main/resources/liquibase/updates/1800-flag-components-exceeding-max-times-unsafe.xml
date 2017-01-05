@@ -1,0 +1,33 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd 
+      http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  logicalFilePath="./src/main/resources/liquibase/updates/1452-add-componentsContainingPlasmaForDiscard-to-bloodTest.xml">
+
+  <changeSet id="20161010-1417" author="tmvumbi2">
+    <comment>Add flagComponentsContainingPlasmaForDiscard column to table BloodTest with default value = 0</comment>
+    <addColumn tableName="BloodTest">
+      <column name="flagComponentsContainingPlasmaForDiscard" type="TINYINT(1)" defaultValue="0">
+        <constraints nullable="0" />
+      </column>
+    </addColumn>
+    <comment>Set flagComponentsContainingPlasmaForDiscard = 1 for AbScr tests (id=33)</comment>
+    <sql>
+      UPDATE BloodTest bt
+      SET bt.flagComponentsContainingPlasmaForDiscard = 1,
+      bt.flagComponentsForDiscard = 0
+      WHERE
+      bt.id = 33;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20161018-1117" author="lauravignoli">
+    <comment>Add ComponentStatusChangeReason for type: TEST_RESULTS_CONTAINS_PLASMA</comment>
+    <insert tableName="ComponentStatusChangeReason">
+      <column name="category" value="UNSAFE" />
+      <column name="isDeleted" value="0" />
+      <column name="type" value="TEST_RESULTS_CONTAINS_PLASMA" />
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

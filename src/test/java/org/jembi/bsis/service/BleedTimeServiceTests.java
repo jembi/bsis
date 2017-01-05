@@ -24,7 +24,7 @@ public class BleedTimeServiceTests extends UnitTestSuite {
     Long bleedTime = bleedTimeService.getBleedTime(bleedStartTime, bleedEndTime);
 
     // do asserts
-    assertThat("BleedTime is correct", bleedTime.equals(35));
+    assertThat("BleedTime is correct", bleedTime.equals(35L));
   }
 
   @Test
@@ -35,9 +35,9 @@ public class BleedTimeServiceTests extends UnitTestSuite {
 
     //run test
     Long timeSinceDonation = bleedTimeService.getTimeSinceDonation(donationDate, processedOn);
-
+    
     //do asserts
-    assertThat("Time since donation is correct", timeSinceDonation.equals(30));
+    assertThat("Time since donation is correct", timeSinceDonation.equals(30L));
   }
 
 }
