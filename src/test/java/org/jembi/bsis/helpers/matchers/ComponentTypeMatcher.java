@@ -36,8 +36,7 @@ public class ComponentTypeMatcher extends TypeSafeMatcher<ComponentType> {
         .appendText("\nStorageInfo: ").appendValue(expected.getStorageInfo())
         .appendText("\nCanBeIssued: ").appendValue(expected.getCanBeIssued())
         .appendText("\nContainsPlasma: ").appendValue(expected.getContainsPlasma())
-        .appendText("\nGravity: ").appendValue(expected.getGravity())
-        ;
+        .appendText("\nGravity: ").appendValue(expected.getGravity());
   }
 
   @Override

@@ -36,8 +36,7 @@ public class ComponentTypeBackingFormMatcher extends TypeSafeMatcher<ComponentTy
         .appendText("\nCanBeIssued: ").appendValue(expected.getCanBeIssued())
         .appendText("\nContainsPlasma: ").appendValue(expected.getContainsPlasma())
         .appendText("\nProducedComponentTypeCombinations: ").appendValue(expected.getProducedComponentTypeCombinations())
-        .appendText("\nGravity: ").appendValue(expected.getGravity())
-        ;
+        .appendText("\nGravity: ").appendValue(expected.getGravity());
   }
 
   @Override
