@@ -111,6 +111,13 @@ public class LabellingService {
       highTitre = "^FT505,409^A0N,36,36,C^FR^FDHIGH TITRE^FS";
     }
 
+    // Generate element for component volume
+    String volumeZPL = "";
+    Integer volume = 375; // FIXME: use service and add test to check that volumeZPL is not displayed
+    if (volume != null) {
+      volumeZPL = "^FT66,655^A0N,23,14^FDVolume: 327ml^FS";
+    }
+
     // Get configured service info values
     String serviceInfoLine1 = generalConfigAccessorService.getGeneralConfigValueByName(
         GeneralConfigConstants.SERVICE_INFO_LINE_1);
@@ -141,9 +148,10 @@ public class LabellingService {
         "^FT445,439^A0N,17,38^FDExpires On^FS" +
         "^BY2,3,82^FT445,535^BCN,,N,N^FD" + isoDateFormat.format(component.getExpiresOn()) + "^FS" +
         "^FT445,565^A0N,23,31^FD" + dateTimeFormat.format(component.getExpiresOn()) + "^FS" +
-        "^FT64,661^A0N,23,14^FD" + componentType.getPreparationInfo() + "^FS" +
-        "^FT64,697^A0N,23,14^FD" + componentType.getStorageInfo() + "^FS" +
-        "^FT64,734^A0N,23,14^FD" + componentType.getTransportInfo() + "^FS" +
+        volumeZPL +
+        "^FT64,681^A0N,23,14^FD" + componentType.getPreparationInfo() + "^FS" +
+        "^FT64,707^A0N,23,14^FD" + componentType.getStorageInfo() + "^FS" +
+        "^FT64,733^A0N,23,14^FD" + componentType.getTransportInfo() + "^FS" +
         "^PQ1,0,1,Y^XZ";
 
     return labelZPL;

@@ -6,12 +6,11 @@ import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
-import static org.hamcrest.Matchers.is;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -510,6 +509,39 @@ public class LabellingServiceTests extends UnitTestSuite {
 
     // check outcome
     assertThat(label, !label.contains("HIGH TITRE"));
+  }
+
+  @Test
+  public void testPrintPackLabelThatShouldContainVolume_shouldReturnZPLWithVolumeText() {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("1234567")
+        .withBloodRh("+")
+        .withDonationDate(new Date())
+        .build();
+    ComponentType componentType = aComponentType()
+        .withGravity(1.03)
+        .build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(new Date())
+        .withWeight(100)
+        .build();
+
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
+    when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(true);
+
+    // run test
+    String label = labellingService.printPackLabel(1L);
+
+    // check outcome
+    assertThat(label, label.contains("Volume: 327ml"));
   }
 
   @Test
