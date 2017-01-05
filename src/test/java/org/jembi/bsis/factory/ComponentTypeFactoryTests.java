@@ -140,6 +140,7 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", false, viewModel.getCanBeIssued());
     Assert.assertEquals("View Model correct", Integer.valueOf(5), viewModel.getMaxTimeSinceDonation());
     Assert.assertEquals("View Model correct", Integer.valueOf(10), viewModel.getMaxBleedTime());
+    assertThat("View Model correct", Double.valueOf(1.145).equals(viewModel.getGravity()));
   }
 
   @Test

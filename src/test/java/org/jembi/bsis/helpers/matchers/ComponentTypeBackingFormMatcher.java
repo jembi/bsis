@@ -36,6 +36,7 @@ public class ComponentTypeBackingFormMatcher extends TypeSafeMatcher<ComponentTy
         .appendText("\nCanBeIssued: ").appendValue(expected.getCanBeIssued())
         .appendText("\nContainsPlasma: ").appendValue(expected.getContainsPlasma())
         .appendText("\nProducedComponentTypeCombinations: ").appendValue(expected.getProducedComponentTypeCombinations())
+        .appendText("\nGravity: ").appendValue(expected.getGravity())
         ;
   }
 
@@ -60,7 +61,8 @@ public class ComponentTypeBackingFormMatcher extends TypeSafeMatcher<ComponentTy
         Objects.equals(actual.getStorageInfo(), expected.getStorageInfo()) &&
         Objects.equals(actual.getCanBeIssued(), expected.getCanBeIssued()) &&
         Objects.equals(actual.getProducedComponentTypeCombinations(), expected.getProducedComponentTypeCombinations()) &&
-        Objects.equals(actual.getContainsPlasma(), expected.getContainsPlasma());
+        Objects.equals(actual.getContainsPlasma(), expected.getContainsPlasma() &&
+        Objects.equals(actual.getGravity(), expected.getGravity()));
   }
 
   public static ComponentTypeBackingFormMatcher hasSameStateAsComponentTypeBackingForm(ComponentTypeBackingForm expected) {

@@ -30,7 +30,8 @@ public class ComponentTypeFullViewModelMatcher extends TypeSafeMatcher<Component
     .appendText("\nComponent name: ").appendValue(expected.getComponentTypeName())
     .appendText("\nComponent code: ").appendValue(expected.getComponentTypeCode())
     .appendText("\nDescription: ").appendValue(expected.getDescription())
-    .appendText("\nContains Plasma: ").appendValue(expected.getContainsPlasma());
+    .appendText("\nContains Plasma: ").appendValue(expected.getContainsPlasma())
+    .appendText("\nGravity: ").appendValue(expected.getGravity());
   }
 
   @Override
@@ -49,7 +50,8 @@ public class ComponentTypeFullViewModelMatcher extends TypeSafeMatcher<Component
         Objects.equals(actual.getComponentTypeName(), expected.getComponentTypeName()) &&
         Objects.equals(actual.getComponentTypeCode(), expected.getComponentTypeCode()) &&
         Objects.equals(actual.getDescription(), expected.getDescription()) &&
-        Objects.equals(actual.getContainsPlasma(), expected.getContainsPlasma());
+        Objects.equals(actual.getContainsPlasma(), expected.getContainsPlasma()) &&
+        Objects.equals(actual.getGravity(), expected.getGravity());
   }
   
   public static ComponentTypeFullViewModelMatcher hasSameStateAsComponentTypeFullViewModel(ComponentTypeFullViewModel expected) {
