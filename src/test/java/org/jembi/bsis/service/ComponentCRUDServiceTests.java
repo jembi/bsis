@@ -111,6 +111,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   private DonationBatchRepository donationBatchRepository;
   @Mock
   private DonationCRUDService donationCRUDService;
+  @Mock
+  private BleedTimeService bleedTimeService;
   
   @Test
   public void testCreateInitialComponentWithFalseConfig_shouldReturnNull() {
@@ -632,11 +634,15 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withComponentTypeName("#1")
         .withExpiresAfter(90)
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .withMaxBleedTime(16)
+        .withMaxTimeSinceDonation(24)
         .build();
     Date donationDate = new Date(); 
     Donation donation = aDonation().withId(1L)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
         .build();
     ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
         .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS).build();
@@ -699,6 +705,9 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .build();
     
     // set up mocks
+    when(bleedTimeService.bleedTimeExceedsMax(donation.getBleedStartTime(),
+        donation.getBleedEndTime(), componentType1.getMaxBleedTime())).thenReturn(false);
+    when(bleedTimeService.exceedsMaxTimeSinceDonation(donationDate, componentType1.getMaxTimeSinceDonation())).thenReturn(false);
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
@@ -731,6 +740,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Donation donation = aDonation().withId(1L)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
         .build();
     ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
         .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA).build();
@@ -745,11 +756,15 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withExpiresAfter(90)
         .withComponentTypeCode("0001")
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .withMaxBleedTime(20)
+        .withMaxTimeSinceDonation(25)
         .build();
     ComponentType componentTypeThatDoesntContainsPlasma = aComponentType().withId(2L)
         .withExpiresAfter(90)
         .withComponentTypeCode("0002")
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .withMaxBleedTime(20)
+        .withMaxTimeSinceDonation(25)
         .build();
     ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
         .withCombinationName("Combination")
@@ -805,6 +820,9 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Component mockedComponent = aComponent().build();
 
     // set up mocks
+    when(bleedTimeService.bleedTimeExceedsMax(donation.getBleedStartTime(),
+        donation.getBleedEndTime(), 20)).thenReturn(false);
+    when(bleedTimeService.exceedsMaxTimeSinceDonation(donationDate, 25)).thenReturn(false);
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeThatContainsPlasma);

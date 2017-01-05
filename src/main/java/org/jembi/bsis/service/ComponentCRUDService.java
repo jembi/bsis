@@ -71,6 +71,9 @@ public class ComponentCRUDService {
   @Autowired
   private DonationCRUDService donationCRUDService;
 
+  @Autowired
+  private BleedTimeService bleedTimeService;
+
   public Component createInitialComponent(Donation donation) {
 
     // Create initial component only if the countAsDonation is true and the config option is enabled
@@ -315,6 +318,7 @@ public class ComponentCRUDService {
    */
   private void markChildComponentsAsUnsafeWhereApplicable(Component component) {
     Component initialComponent = component.getParentComponent();
+    Donation donation = initialComponent.getDonation();
     // If the component was processed more than once, get the initial component as the parent of the parent
     while (initialComponent.getParentComponent() != null) {
       initialComponent = initialComponent.getParentComponent();
@@ -328,7 +332,7 @@ public class ComponentCRUDService {
           // skip deleted status change reasons
           continue;
         }
-        
+
         if (!component.getComponentType().getContainsPlasma()
             && statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE
             && statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA) {
@@ -336,7 +340,15 @@ public class ComponentCRUDService {
           // components that do contain plasma
           continue;
         }
-        
+
+        if (component.getComponentType().getMaxBleedTime() != null) {
+          markComponentAsUnsafe = bleedTimeService.bleedTimeExceedsMax(donation.getBleedStartTime(), 
+              donation.getBleedEndTime(), component.getComponentType().getMaxBleedTime());
+        } else if (component.getComponentType().getMaxTimeSinceDonation() != null) {
+          markComponentAsUnsafe = bleedTimeService.exceedsMaxTimeSinceDonation(donation.getDonationDate(),
+              component.getComponentType().getMaxTimeSinceDonation());
+        }
+
         if (statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE) {
           markComponentAsUnsafe = true;
           break;
