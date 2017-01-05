@@ -705,9 +705,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .build();
     
     // set up mocks
-    when(bleedTimeService.bleedTimeExceedsMax(donation.getBleedStartTime(),
-        donation.getBleedEndTime(), componentType1.getMaxBleedTime())).thenReturn(false);
-    when(bleedTimeService.exceedsMaxTimeSinceDonation(donationDate, componentType1.getMaxTimeSinceDonation())).thenReturn(false);
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
@@ -820,9 +817,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Component mockedComponent = aComponent().build();
 
     // set up mocks
-    when(bleedTimeService.bleedTimeExceedsMax(donation.getBleedStartTime(),
-        donation.getBleedEndTime(), 20)).thenReturn(false);
-    when(bleedTimeService.exceedsMaxTimeSinceDonation(donationDate, 25)).thenReturn(false);
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeThatContainsPlasma);

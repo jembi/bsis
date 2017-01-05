@@ -8,18 +8,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class BleedTimeService {
 
-  public boolean bleedTimeExceedsMax(Date startTime, Date endTime, int maxBleedTime) {
-    long bleedTime = TimeUnit.MILLISECONDS.toMinutes(endTime.getTime() - startTime.getTime());
-    if (bleedTime > maxBleedTime) {
-      return true;
-    }
-    return false;
+  public long getBleedTime(Date startTime, Date endTime) {
+    return TimeUnit.MILLISECONDS.toMinutes(endTime.getTime() - startTime.getTime());
   }
 
-  public boolean exceedsMaxTimeSinceDonation(Date donationDate, int maxTimeSinceDonation) {
-    if(TimeUnit.MILLISECONDS.toHours(new Date().getTime() - donationDate.getTime()) > maxTimeSinceDonation) {
-      return true;
-    }
-    return false;
+  public long getTimeSinceDonation(Date donationDate, Date processedOn) {
+    return TimeUnit.MILLISECONDS.toHours(processedOn.getTime() - donationDate.getTime());
   }
 }

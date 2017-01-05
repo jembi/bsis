@@ -341,14 +341,6 @@ public class ComponentCRUDService {
           continue;
         }
 
-        if (component.getComponentType().getMaxBleedTime() != null) {
-          markComponentAsUnsafe = bleedTimeService.bleedTimeExceedsMax(donation.getBleedStartTime(), 
-              donation.getBleedEndTime(), component.getComponentType().getMaxBleedTime());
-        } else if (component.getComponentType().getMaxTimeSinceDonation() != null) {
-          markComponentAsUnsafe = bleedTimeService.exceedsMaxTimeSinceDonation(donation.getDonationDate(),
-              component.getComponentType().getMaxTimeSinceDonation());
-        }
-
         if (statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE) {
           markComponentAsUnsafe = true;
           break;
