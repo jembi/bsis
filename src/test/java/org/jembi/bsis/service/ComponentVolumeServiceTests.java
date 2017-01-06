@@ -5,7 +5,6 @@ import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
-import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -17,14 +16,11 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 public class ComponentVolumeServiceTests extends UnitTestSuite {
   
   @InjectMocks
   private ComponentVolumeService componentVolumeService;
-  @Mock
-  private ComponentCRUDService componentCRUDService;
   
   @Test
   public void testCalculateVolumeWithGavityAndWeightSet_shouldReturnCorrectResult() {
@@ -46,20 +42,19 @@ public class ComponentVolumeServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
 
-    
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);   
-
     // Verify
-    assertThat("Component weight is set correctly ", weight.equals(component.getWeight()));
-    assertThat("Component type gravity is set correctly ", gravity.equals(component.getComponentType().getGravity()));
-    assertThat(componentVolumeService.calculateVolume(component), is(95));
+    Integer volume = componentVolumeService.calculateVolume(component); 
+    assertThat(volume, is(95));
   }
   
   @Test
   public void testCalculateVolumeWithNULLWieghtAndNULLGravity_shouldReturnNULL() {
     Location location = aLocation().withId(1L).build();
     Donation donation = aDonation().withId(1L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
+    ComponentType componentType = aComponentType()
+        .withId(1L)
+        .withGravity(null)
+        .build();
 
     Component component = aComponent()
         .withId(1L)
@@ -67,10 +62,8 @@ public class ComponentVolumeServiceTests extends UnitTestSuite {
         .withLocation(location)
         .withComponentType(componentType)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withWeight(null)
         .build();
-
-    
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);   
 
     // Verify
     assertThat(componentVolumeService.calculateVolume(component), is(nullValue()));
@@ -78,28 +71,6 @@ public class ComponentVolumeServiceTests extends UnitTestSuite {
   
   @Test
   public void testCalculateVolumeWithNULLWieght_shouldReturnNULL() {
-    Location location = aLocation().withId(1L).build();
-    Donation donation = aDonation().withId(1L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
-
-    Component component = aComponent()
-        .withId(1L)
-        .withDonation(donation)
-        .withLocation(location)
-        .withComponentType(componentType)
-        .withWeight(95)
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .build();
-
-    
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);   
-
-    // Verify
-    assertThat(componentVolumeService.calculateVolume(component), is(nullValue()));
-  }
-  
-  @Test
-  public void testCalculateVolumeWithNULLGravity_shouldReturnNULL() {
     Location location = aLocation().withId(1L).build();
     Donation donation = aDonation().withId(1L).build();
     ComponentType componentType = aComponentType()
@@ -112,11 +83,31 @@ public class ComponentVolumeServiceTests extends UnitTestSuite {
         .withDonation(donation)
         .withLocation(location)
         .withComponentType(componentType)
+        .withWeight(null)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
 
-    
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);   
+    // Verify
+    assertThat(componentVolumeService.calculateVolume(component), is(nullValue()));
+  }
+  
+  @Test
+  public void testCalculateVolumeWithNULLGravity_shouldReturnNULL() {
+    Location location = aLocation().withId(1L).build();
+    Donation donation = aDonation().withId(1L).build();
+    ComponentType componentType = aComponentType()
+        .withId(1L)
+        .withGravity(null)
+        .build();
+
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withLocation(location)
+        .withComponentType(componentType)
+        .withWeight(95)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .build();
 
     // Verify
     assertThat(componentVolumeService.calculateVolume(component), is(nullValue()));

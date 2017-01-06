@@ -16,25 +16,25 @@ public class ComponentVolumeService {
   private static final Logger LOGGER = Logger.getLogger(ComponentVolumeService.class);
   
   public Integer calculateVolume(Component component) {
+    String message = getWarningMessage(component);
+    if (StringUtils.isNotBlank(message)) {
+      if (LOGGER.isInfoEnabled()) {
+        LOGGER.info("Component with id '"+component.getId()+"' has the following properties not configured correctly: "+message);
+      }
+      return null;
+    }
+    return BigDecimal.valueOf((Double.valueOf(component.getWeight()) / component.getComponentType().getGravity())).round(new MathContext(2, RoundingMode.HALF_UP)).intValue();
+  }
+  
+  private String getWarningMessage(Component component) {
     String warningMessage = "";
     if (component.getWeight() == null) {
       warningMessage +="weight not set";
     }
     if (component.getComponentType().getGravity() == null) {
-      String gravityWarningMessage = "gravity not set for component type with id '"
-          + component.getComponentType().getId()+"'";
-      warningMessage += (StringUtils.isBlank(warningMessage) ? gravityWarningMessage : 
-        " and "+gravityWarningMessage);
+      String gravityWarningMessage = "gravity not set for component type with id '"+ component.getComponentType().getId()+"'";
+      warningMessage += (StringUtils.isBlank(warningMessage) ? gravityWarningMessage : " and "+gravityWarningMessage);
     }
-    if (StringUtils.isNotBlank(warningMessage)) {
-      if (LOGGER.isInfoEnabled()) {
-        LOGGER.info("Component with id '"+component.getId()+"' has the "
-            +"following properties not configured correctly: "+warningMessage);
-      }
-      return null;
-    }
-    return BigDecimal.valueOf((Double.valueOf(component.getWeight()) 
-        / component.getComponentType().getGravity()))
-      .round(new MathContext(2, RoundingMode.HALF_UP)).intValue();
+    return warningMessage;
   }
 }
