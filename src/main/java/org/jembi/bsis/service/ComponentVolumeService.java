@@ -19,7 +19,7 @@ public class ComponentVolumeService {
     String message = getWarningMessage(component);
     if (StringUtils.isNotBlank(message)) {
       if (LOGGER.isInfoEnabled()) {
-        LOGGER.info("Component with id '"+component.getId()+"' has the following properties not configured correctly: "+message);
+        LOGGER.info("Component with id '" + component.getId() + "' has the following properties not configured correctly: " + message);
       }
       return null;
     }
@@ -32,8 +32,8 @@ public class ComponentVolumeService {
       warningMessage +="weight not set";
     }
     if (component.getComponentType().getGravity() == null) {
-      String gravityWarningMessage = "gravity not set for component type with id '"+ component.getComponentType().getId()+"'";
-      warningMessage += (StringUtils.isBlank(warningMessage) ? gravityWarningMessage : " and "+gravityWarningMessage);
+      String gravityWarningMessage = "gravity not set";
+      warningMessage += (StringUtils.isBlank(warningMessage) ? gravityWarningMessage : " and " + gravityWarningMessage);
     }
     return warningMessage;
   }
