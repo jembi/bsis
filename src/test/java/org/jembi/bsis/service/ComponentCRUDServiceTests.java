@@ -721,7 +721,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent1)));
     verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
   }
-  
 
   /**
    * Test process unsafe component with unsafe status change TRCP should create unsafe child
@@ -2064,5 +2063,229 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Verify
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedComponent)));
     assertThat(updatedComponent, hasSameStateAsComponent(expectedComponent));
+  }
+
+  /**
+   * Test process unsafe component with unsafe status change EMBT should create unsafe child
+   * components where applicable, which means unsafe if bleed time exceeds maximum bleed time.
+   *
+   * EMBT: EXCEEDS_MAX_BLEED_TIME.
+   */
+  @Test
+  public void testProcessUnsafeComponentWithUnsafeStatusChangeEMBT_shouldCreateUnsafeChildComponentsWhereApplicable() {
+    // set up data
+    Location location = LocationBuilder.aLocation().build();
+    Date donationDate = new Date();
+    Donation donation = aDonation().withId(1L)
+        .withDonationIdentificationNumber("1234567")
+        .withDonationDate(donationDate)
+        .withBleedStartTime(new DateTime().toDate())
+        .withBleedEndTime(new DateTime().plusMinutes(50).toDate())
+        .build();
+    ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME).build();
+    ComponentStatusChange statusChange = aComponentStatusChange()
+        .withId(1L)
+        .withStatusChangedOn(new Date())
+        .withStatusChangeReason(statusChangeReason)
+        .build();
+    ComponentType componentTypeWithMaxBleedTimeEqualToDonationBleedTime = aComponentType().withId(1L)
+        .withExpiresAfter(90)
+        .withComponentTypeCode("100")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .withMaxBleedTime(50)
+        .withMaxTimeSinceDonation(20)
+        .build();
+    ComponentType componentType = aComponentType().withId(2L)
+        .withExpiresAfter(90)
+        .withComponentTypeCode("0002")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .withMaxBleedTime(20)
+        .withMaxTimeSinceDonation(25)
+        .build();
+    ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
+        .withCombinationName("Combination")
+        .withComponentTypes(Arrays.asList(componentTypeWithMaxBleedTimeEqualToDonationBleedTime, componentType))
+        .build();
+    Long parentComponentId = Long.valueOf(1);
+    Component parentComponent = aComponent().withId(parentComponentId)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withLocation(location)
+        .withComponentType(componentType)
+        .withComponentCode("0001")
+        .build();
+    Component expectedParentComponent = aComponent().withId(parentComponentId)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withLocation(location)
+        .withComponentStatusChange(statusChange)
+        .withComponentType(componentType)
+        .withComponentCode("0001")
+        .build();
+    Calendar expiryCal1 = Calendar.getInstance();
+    expiryCal1.setTime(donationDate);
+    expiryCal1.add(Calendar.DAY_OF_YEAR, 90);
+    Component expectedSafeChildComponent = aComponent()
+        .withComponentType(componentTypeWithMaxBleedTimeEqualToDonationBleedTime)
+        .withDonation(donation)
+        .withParentComponent(expectedParentComponent)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withExpiresOn(expiryCal1.getTime())
+        .withLocation(location)
+        .withComponentCode("100")
+        .build();
+    Component expectedChildComponent = aComponent()
+        .withComponentType(componentType)
+        .withDonation(donation)
+        .withParentComponent(expectedParentComponent)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withExpiresOn(expiryCal1.getTime())
+        .withLocation(location)
+        .withComponentCode("0002")
+        .build();
+    Component mockedComponent = aComponent().build();
+
+    // set up mocks
+    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentType);
+    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeWithMaxBleedTimeEqualToDonationBleedTime);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
+    when(bleedTimeService.getBleedTime(donation.getBleedStartTime(), donation.getBleedEndTime())).thenReturn(50L);
+    doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(
+        argThat(hasSameStateAsComponent(expectedChildComponent)), eq(ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME));
+
+    // SUT
+    parentComponent = componentCRUDService.processComponent(1L, componentTypeCombination.getId(), new Date());
+
+    // verify that the components are created
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedChildComponent)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedSafeChildComponent)));
+    // verify that only the component that exceeds max bleed time is marked as unsafe
+    verify(componentCRUDService, times(1)).markComponentAsUnsafe(argThat(hasSameStateAsComponent(expectedChildComponent)), eq(ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME));
+    verify(componentCRUDService, times(0)).markComponentAsUnsafe(argThat(hasSameStateAsComponent(expectedSafeChildComponent)), eq(ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME));
+  }
+
+  /**
+   * Test process unsafe component with unsafe status change EMTSD should create unsafe child
+   * components where applicable, which means unsafe if exceeds max time since donation.
+   *
+   * EMTSD: EXCEEDS_MAXTIME_SINCE_DONATION.
+   */
+  @Test
+  public void testProcessUnsafeComponentWithUnsafeStatusChangeEMTSD_shouldCreateUnsafeChildComponentsWhereApplicable() {
+    // set up data
+    Location location = LocationBuilder.aLocation().build();
+    Date donationDate = new Date();
+    Date processedOn = new DateTime().plusHours(20).toDate();
+    Donation donation = aDonation().withId(1L)
+        .withDonationIdentificationNumber("1234567")
+        .withDonationDate(donationDate)
+        .build();
+    ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION).build();
+    ComponentStatusChange statusChange = aComponentStatusChange()
+        .withId(1L)
+        .withStatusChangedOn(new Date())
+        .withStatusChangeReason(statusChangeReason)
+        .build();
+    ComponentType componentType = aComponentType().withId(2L)
+        .withExpiresAfter(90)
+        .withComponentTypeCode("0002")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .withMaxBleedTime(20)
+        .withMaxTimeSinceDonation(5)
+        .build();
+    ComponentType componentTypeMaxTimeSinceDonationEqualToTimeSinceDonation = aComponentType().withId(1L)
+        .withExpiresAfter(90)
+        .withComponentTypeCode("0001")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .withMaxBleedTime(20)
+        .withMaxTimeSinceDonation(20)
+        .build();
+    ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
+        .withCombinationName("Combination")
+        .withComponentTypes(Arrays.asList(componentType, componentTypeMaxTimeSinceDonationEqualToTimeSinceDonation))
+        .build();
+    Long parentComponentId = Long.valueOf(1);
+    Component parentComponent = aComponent().withId(parentComponentId)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withLocation(location)
+        .withComponentType(componentType)
+        .withComponentCode("0001")
+        .build();
+    Component expectedParentComponent = aComponent().withId(parentComponentId)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withLocation(location)
+        .withComponentStatusChange(statusChange)
+        .withComponentType(componentType)
+        .withProcessedOn(new DateTime().plusHours(20).toDate())
+        .withComponentCode("0001")
+        .build();
+    Calendar expiryCal1 = Calendar.getInstance();
+    expiryCal1.setTime(donationDate);
+    expiryCal1.add(Calendar.DAY_OF_YEAR, 90);
+    Component expectedSafeChildComponent = aComponent()
+        .withComponentType(componentTypeMaxTimeSinceDonationEqualToTimeSinceDonation)
+        .withDonation(donation)
+        .withParentComponent(expectedParentComponent)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withExpiresOn(expiryCal1.getTime())
+        .withLocation(location)
+        .withComponentCode("0001")
+        .build();
+    Component expectedChildComponent = aComponent()
+        .withComponentType(componentType)
+        .withDonation(donation)
+        .withParentComponent(expectedParentComponent)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withExpiresOn(expiryCal1.getTime())
+        .withLocation(location)
+        .withComponentCode("0002")
+        .build();
+    Component mockedComponent = aComponent().build();
+
+    // set up mocks
+    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentType);
+    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeMaxTimeSinceDonationEqualToTimeSinceDonation);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
+    when(bleedTimeService.getTimeSinceDonation(donation.getDonationDate(), processedOn)).thenReturn(20L);
+    doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(
+        argThat(hasSameStateAsComponent(expectedChildComponent)), eq(ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION));
+
+    // SUT
+    parentComponent = componentCRUDService.processComponent(1L, componentTypeCombination.getId(), processedOn);
+
+    // verify that the components are created
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedChildComponent)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedSafeChildComponent)));
+    // verify that only the component that exceeds max time since donation is marked as unsafe
+    verify(componentCRUDService, times(1)).markComponentAsUnsafe(argThat(
+        hasSameStateAsComponent(expectedChildComponent)), eq(ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION));
+    verify(componentCRUDService, times(0)).markComponentAsUnsafe(argThat(
+        hasSameStateAsComponent(expectedSafeChildComponent)), eq(ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION));
   }
 }

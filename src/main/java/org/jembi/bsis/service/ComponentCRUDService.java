@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.persistence.NoResultException;
 
@@ -290,10 +291,8 @@ public class ComponentCRUDService {
           component.setExpiresOn(expiresOn);
 
           addComponent(component);
-          
-          if (parentStatus == ComponentStatus.UNSAFE) {
-            markChildComponentsAsUnsafeWhereApplicable(component);
-          }
+
+          markChildComponentsAsUnsafeWhereApplicable(component);
         }
       }
     }
@@ -323,8 +322,7 @@ public class ComponentCRUDService {
     while (initialComponent.getParentComponent() != null) {
       initialComponent = initialComponent.getParentComponent();
     }
-    
-    boolean markComponentAsUnsafe = false;
+
     if (initialComponent.getStatusChanges() != null) {
       for (ComponentStatusChange statusChange : initialComponent.getStatusChanges()) {
         
@@ -342,14 +340,23 @@ public class ComponentCRUDService {
         }
 
         if (statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE) {
-          markComponentAsUnsafe = true;
+          markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
           break;
         }
+
       }
     }
-    if (markComponentAsUnsafe) {
-      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+
+    long bleedTime = bleedTimeService.getBleedTime(donation.getBleedStartTime(), donation.getBleedEndTime());
+    long timeSinceDonation = bleedTimeService.getTimeSinceDonation(donation.getDonationDate(), initialComponent.getProcessedOn());
+
+    if (component.getComponentType().getMaxBleedTime() != null && bleedTime > component.getComponentType().getMaxBleedTime()) {
+      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME);
+    } else if (component.getComponentType().getMaxBleedTime() != null
+        && timeSinceDonation > component.getComponentType().getMaxTimeSinceDonation()) {
+      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
     }
+
   }
 
   public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
