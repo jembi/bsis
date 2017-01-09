@@ -2,6 +2,7 @@ package org.jembi.bsis.backingform.validator;
 
 import static org.jembi.bsis.helpers.builders.DonationTypeBackingFormBuilder.aDonationTypeBackingForm;
 import static org.mockito.Mockito.when;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -134,6 +135,29 @@ public class DonationBackingFormValidatorTest {
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
     Assert.assertEquals("DIN was not generated", null, form.getDonationIdentificationNumber());
     Assert.assertEquals("DonationDate was not set", null, form.getDonationDate());
+  }
+  
+  @Test
+  public void testValidUpdateDonationAfterConfigDINLengthPropertyChange() throws Exception {
+    // set up data
+    DonationBackingForm form = createBasicBackingForm();
+    form.setId(1L);
+    form.setDonationIdentificationNumber("DIN5247");
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    mockGeneralConfigAndFormFields();
+    // edit form and change DIN config value
+    form.setLastUpdated(new Date());
+    when(generalConfigAccessorService.getIntValue("donation.dinLength")).thenReturn(10);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    assertThat("Validation error count is zero", errors.getErrorCount() == 0);   
   }
   
   @Test

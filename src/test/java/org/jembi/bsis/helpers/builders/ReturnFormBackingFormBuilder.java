@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.ReturnFormBackingForm;
 import org.jembi.bsis.model.returnform.ReturnStatus;
@@ -16,7 +16,7 @@ public class ReturnFormBackingFormBuilder extends AbstractBuilder<ReturnFormBack
   private LocationBackingForm returnedFrom;
   private LocationBackingForm returnedTo;
   private ReturnStatus status = ReturnStatus.CREATED;
-  private List<ComponentPreProcessingBackingForm> components = new ArrayList<>();
+  private List<ComponentBackingForm> components = new ArrayList<>();
 
   public ReturnFormBackingFormBuilder withId(Long id) {
     this.id = id;
@@ -43,7 +43,7 @@ public class ReturnFormBackingFormBuilder extends AbstractBuilder<ReturnFormBack
     return this;
   }
 
-  public ReturnFormBackingFormBuilder withComponent(ComponentPreProcessingBackingForm component) {
+  public ReturnFormBackingFormBuilder withComponent(ComponentBackingForm component) {
     components.add(component);
     return this;
   }

@@ -27,6 +27,7 @@ public class ComponentTypeBackingFormBuilder extends AbstractBuilder<ComponentTy
   private String storageInfo;
   private boolean canBeIssued = true;
   private boolean containsPlasma = true;
+  private Double gravity;
   private Set<ComponentTypeCombination> producedComponentTypeCombinations;
   
   public ComponentTypeBackingFormBuilder withId(Long id) {
@@ -128,6 +129,11 @@ public class ComponentTypeBackingFormBuilder extends AbstractBuilder<ComponentTy
     this.storageInfo = storageInfo;
     return this;
   }
+  
+  public ComponentTypeBackingFormBuilder withGravity(Double gravity){
+    this.gravity = gravity;
+    return this;
+  }
 
   public ComponentTypeBackingFormBuilder thatCanBeIssued() {
     this.canBeIssued = true;
@@ -172,6 +178,7 @@ public class ComponentTypeBackingFormBuilder extends AbstractBuilder<ComponentTy
     backingForm.setCanBeIssued(canBeIssued);
     backingForm.setContainsPlasma(containsPlasma);
     backingForm.setProducedComponentTypeCombinations(producedComponentTypeCombinations);
+    backingForm.setGravity(gravity);
     return backingForm;
   }
   

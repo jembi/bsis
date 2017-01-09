@@ -76,6 +76,7 @@ public class ComponentTypeFactory {
     componentType.setCanBeIssued(componentTypeBackingForm.getCanBeIssued());
     componentType.setContainsPlasma(componentTypeBackingForm.getContainsPlasma());
     componentType.setProducedComponentTypeCombinations(componentTypeBackingForm.getProducedComponentTypeCombinations());
+    componentType.setGravity(componentTypeBackingForm.getGravity());
   }
   
   private void populateComponentTypeViewModelFields(ComponentType componentType, ComponentTypeViewModel componentTypeViewModel) {
@@ -106,6 +107,7 @@ public class ComponentTypeFactory {
     componentTypeFullViewModel.setStorageInfo(componentType.getStorageInfo());
     componentTypeFullViewModel.setMaxBleedTime(componentType.getMaxBleedTime());
     componentTypeFullViewModel.setMaxTimeSinceDonation(componentType.getMaxTimeSinceDonation());
+    componentTypeFullViewModel.setGravity(componentType.getGravity());
   }
 
   private void populateProducedComponentTypeCombinationViewModels(ComponentTypeFullViewModel viewModel, ComponentType componentType) {
