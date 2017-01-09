@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
@@ -153,4 +154,10 @@ public class ComponentControllerService {
     return map;
   }
   
+  public ComponentManagementViewModel recordChildComponentWeight(ComponentBackingForm componentBackingForm) {
+    Component component = componentCRUDService.recordChildComponentWeight(componentBackingForm.getId(), 
+        componentBackingForm.getWeight());
+    return componentFactory.createManagementViewModel(component);
+  }
+
 }
