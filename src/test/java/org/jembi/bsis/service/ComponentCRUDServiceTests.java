@@ -2124,7 +2124,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withCreatedOn(donation.getDonationDate())
         .withLocation(location)
-        .withComponentStatusChange(statusChange)
         .withComponentType(componentType)
         .withComponentCode("0001")
         .build();
@@ -2234,7 +2233,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withCreatedOn(donation.getDonationDate())
         .withLocation(location)
-        .withComponentStatusChange(statusChange)
         .withComponentType(componentType)
         .withProcessedOn(new DateTime().plusHours(20).toDate())
         .withComponentCode("0001")
