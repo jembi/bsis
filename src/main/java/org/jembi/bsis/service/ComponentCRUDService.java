@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import javax.persistence.NoResultException;
 
@@ -292,7 +291,7 @@ public class ComponentCRUDService {
 
           addComponent(component);
 
-          markChildComponentsAsUnsafeWhereApplicable(component);
+          markChildComponentAsUnsafeWhereApplicable(component);
         }
       }
     }
@@ -305,17 +304,21 @@ public class ComponentCRUDService {
 
   /**
    * Mark child components as unsafe where applicable.
-   * 
-   * Loop through the initial component status changes, and only avoid marking the component as
+   *
+   * Loop through the initial component status changes, and avoid marking the component as
    * unsafe for the status change where the status change reason type is
    * TEST_RESULTS_CONTAINS_PLASMA and the component doesn't contain plasma.
-   * 
-   * For all other status change reason types, mark the component as unsafe with reason type
+   *
+   * Check and mark unsafe if donation bleed time exceeds maximum bleed time for component.
+   *
+   * Check and mark unsafe if time since donation exceed max time since donation.
+   *
+   * For all other status change reason types  other tan the above, mark the component as unsafe with reason type
    * UNSAFE_PARENT.
    *
    * @param component the component
    */
-  private void markChildComponentsAsUnsafeWhereApplicable(Component component) {
+  private void markChildComponentAsUnsafeWhereApplicable(Component component) {
     Component initialComponent = component.getParentComponent();
     Donation donation = initialComponent.getDonation();
     // If the component was processed more than once, get the initial component as the parent of the parent
@@ -341,7 +344,7 @@ public class ComponentCRUDService {
 
         if (statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE) {
           markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
-          break;
+          return;
         }
 
       }
@@ -350,13 +353,13 @@ public class ComponentCRUDService {
     long bleedTime = bleedTimeService.getBleedTime(donation.getBleedStartTime(), donation.getBleedEndTime());
     long timeSinceDonation = bleedTimeService.getTimeSinceDonation(donation.getDonationDate(), initialComponent.getProcessedOn());
 
-    if (component.getComponentType().getMaxBleedTime() != null && bleedTime > component.getComponentType().getMaxBleedTime()) {
+    if (component.getComponentType().getMaxBleedTime() != null
+        && bleedTime > component.getComponentType().getMaxBleedTime()) {
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME);
     } else if (component.getComponentType().getMaxBleedTime() != null
         && timeSinceDonation > component.getComponentType().getMaxTimeSinceDonation()) {
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
     }
-
   }
 
   public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
