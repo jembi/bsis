@@ -1,8 +1,10 @@
 package org.jembi.bsis.backingform.validator;
 
 import org.jembi.bsis.backingform.ComponentBackingForm;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
+@Component
 public class ComponentBackingFormValidator extends BaseValidator<ComponentBackingForm> {
 
   @Override

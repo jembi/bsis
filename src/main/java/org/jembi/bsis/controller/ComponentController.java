@@ -10,10 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.backingform.UndiscardComponentsBackingForm;
+import org.jembi.bsis.backingform.validator.ComponentBackingFormValidator;
 import org.jembi.bsis.backingform.validator.ComponentPreProcessingBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidator;
 import org.jembi.bsis.backingform.validator.RecordComponentBackingFormValidator;
@@ -51,6 +53,9 @@ public class ComponentController {
   @Autowired
   private ComponentPreProcessingBackingFormValidator componentPreProcessingBackingFormValidator;
 
+  @Autowired
+  private ComponentBackingFormValidator componentBackingFormValidator;
+
   @InitBinder("discardComponentsBackingForm")
   protected void discardInitBinder(WebDataBinder binder) {
     binder.setValidator(discardComponentsBackingFormValidator);
@@ -64,6 +69,11 @@ public class ComponentController {
   @InitBinder("componentPreProcessingBackingForm")
   protected void preProcessInitBinder(WebDataBinder binder) {
     binder.setValidator(componentPreProcessingBackingFormValidator);
+  }
+
+  @InitBinder("componentBackingForm")
+  protected void recordChildWeightInitBinder(WebDataBinder binder) {
+    binder.setValidator(componentBackingFormValidator);
   }
 
   @RequestMapping(value = "/discard/form", method = RequestMethod.GET)
@@ -189,6 +199,18 @@ public class ComponentController {
       @PathVariable("id") Long componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("component", componentControllerService.unprocessComponent(componentId));
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "{id}/recordchildweight ", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT + "')")
+  public ResponseEntity<Map<String, Object>> recordChildWeight(@PathVariable("id") long componentId,
+      @RequestBody @Valid ComponentBackingForm componentBackingForm) {
+
+    componentBackingForm.setId(componentId); // Use the id parameter from the path
+
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("component", componentControllerService.recordChildComponentWeight(componentBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 }
