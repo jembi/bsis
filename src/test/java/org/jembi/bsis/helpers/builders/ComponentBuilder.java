@@ -39,6 +39,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private ComponentBatch componentBatch;
   private Date createdDate;
   private User createdBy;
+  private Date processedOn;
   
   public ComponentBuilder withId(Long id) {
     this.id = id;
@@ -143,6 +144,11 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     return this;
   }
 
+  public ComponentBuilder withProcessedOn(Date processedOn) {
+    this.processedOn = processedOn;
+    return this;
+  }
+
   @Override
   public Component build() {
     Component component = new Component();
@@ -165,6 +171,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
     component.setNotes(notes);
     component.setCreatedDate(createdDate);
     component.setCreatedBy(createdBy);
+    component.setProcessedOn(processedOn);
     return component;
   }
 

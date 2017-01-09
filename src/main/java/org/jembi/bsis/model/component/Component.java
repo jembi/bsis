@@ -92,6 +92,9 @@ public class Component extends BaseModificationTrackerEntity {
   @Temporal(TemporalType.TIMESTAMP)
   private Date issuedOn;
 
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date processedOn;
+
   @Enumerated(EnumType.STRING)
   @Column(length = 30, nullable = false)
   private ComponentStatus status;
@@ -131,22 +134,6 @@ public class Component extends BaseModificationTrackerEntity {
   private Location location;
 
   private Integer weight;
-
-  public Component() {
-    super();
-  }
-
-  public void copy(Component component) {
-    assert (this.getId().equals(component.getId()));
-    this.donation = component.donation;
-    this.componentType = component.componentType;
-    this.createdOn = component.createdOn;
-    this.expiresOn = component.expiresOn;
-    this.notes = component.notes;
-    this.componentCode = component.componentCode;
-    this.location = component.location;
-    this.inventoryStatus = component.inventoryStatus;
-  }
 
   public Donation getDonation() {
     return donation;
@@ -316,4 +303,13 @@ public class Component extends BaseModificationTrackerEntity {
   public void setWeight(Integer weight) {
     this.weight = weight;
   }
+
+  public Date getProcessedOn() {
+    return processedOn;
+  }
+
+  public void setProcessedOn(Date processedOn) {
+    this.processedOn = processedOn;
+  }
+
 }

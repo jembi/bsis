@@ -1,8 +1,8 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.jembi.bsis.helpers.builders.ComponentPreProcessingBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aDistributionSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
@@ -213,7 +213,7 @@ public class OrderFormFactoryTests {
     Component expectedComponent =
         aComponent().withInventoryStatus(InventoryStatus.IN_STOCK)
         .withLocation(dispatchedFrom).withId(1L).build();
-    ComponentPreProcessingBackingForm componentBackingForm = aComponentBackingForm().withId(1L).build();
+    ComponentBackingForm componentBackingForm = aComponentBackingForm().withId(1L).build();
 
     OrderForm expectedEntity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)

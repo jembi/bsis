@@ -2,6 +2,7 @@ package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
@@ -38,6 +39,7 @@ import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -463,6 +465,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCombinationName("Combination")
         .withComponentTypes(Arrays.asList(componentType1, componentType1, componentType2, componentType3))
         .build();
+    Date processedOn = new Date();
     Component expectedParentComponent = aComponent().withId(parentComponentId)
         .withDonation(donation)
         .withCreatedOn(donationDate)
@@ -471,6 +474,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCreatedOn(donation.getDonationDate())
         .withLocation(location)
         .withComponentBatch(componentBatch)
+        .withProcessedOn(processedOn)
         .build();
     Calendar expiryCal1 = Calendar.getInstance();
     expiryCal1.setTime(donationDate);
@@ -540,7 +544,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId(), processedOn);
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
@@ -578,6 +582,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCombinationName("Combination")
         .withComponentTypes(Arrays.asList(componentType1))
         .build();
+    Date processedOn = new Date();
     Component expectedParentComponent = aComponent().withId(parentComponentId)
         .withDonation(donation)
         .withCreatedOn(donationDate)
@@ -585,6 +590,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.REMOVED)
         .withCreatedOn(donation.getDonationDate())
         .withLocation(location)
+        .withProcessedOn(processedOn)
         .build();
     Calendar expiryCal1 = Calendar.getInstance();
     expiryCal1.setTime(donationDate);
@@ -609,7 +615,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId(), processedOn);
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
@@ -651,6 +657,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCombinationName("Combination")
         .withComponentTypes(Arrays.asList(componentType1))
         .build();
+    Date processedOn = new Date();
     Component expectedParentComponent = aComponent().withId(parentComponentId)
         .withDonation(donation)
         .withCreatedOn(donationDate)
@@ -659,6 +666,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCreatedOn(donation.getDonationDate())
         .withLocation(location)
         .withComponentStatusChange(statusChange)
+        .withProcessedOn(processedOn)
         .build();
     Calendar expiryCal1 = Calendar.getInstance();
     expiryCal1.setTime(donationDate);
@@ -700,7 +708,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId(), processedOn);
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
@@ -806,7 +814,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
     // SUT
-    parentComponent = componentCRUDService.processComponent("1", componentTypeCombination.getId());
+    parentComponent = componentCRUDService.processComponent(1L, componentTypeCombination.getId(), new Date());
 
     // verify that both components are created
     verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)));
@@ -895,7 +903,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    parentComponent = componentCRUDService.processComponent(parentComponent.getId().toString(), componentTypeCombination.getId());
+    parentComponent = componentCRUDService.processComponent(parentComponent.getId(),
+        componentTypeCombination.getId(), new Date());
 
     // verify that the component is not marked as unsafe, as the initial component change status is checked and is TRCP
     verify(componentCRUDService, times(0)).markComponentAsUnsafe(any(Component.class), any(ComponentStatusChangeReasonType.class));
@@ -935,7 +944,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId(), new Date());
     
     // verify results
     verify(componentRepository, times(0)).save(Mockito.any(Component.class));
@@ -975,12 +984,61 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId(), new Date());
     
     // verify results
     verify(componentRepository, times(0)).save(Mockito.any(Component.class));
   }
   
+  @Test
+  public void testProcessComponent_shouldSetProcessedOnOnParent() {
+    // set up data
+    Location location = LocationBuilder.aLocation().build();
+    Long componentTypeId1 = Long.valueOf(1);
+    ComponentType componentType1 = aComponentType().withId(componentTypeId1)
+        .withComponentTypeCode("0001")
+        .withComponentTypeName("#1")
+        .build();
+    Date donationDate = new Date(); 
+    Donation donation = aDonation().withId(1L)
+        .withDonationIdentificationNumber("1234567")
+        .withDonationDate(donationDate)
+        .build();
+    Long parentComponentId = Long.valueOf(1);
+    Component parentComponent = aComponent().withId(parentComponentId)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withLocation(location)
+        .build();
+    ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
+        .withCombinationName("Combination")
+        .withComponentTypes(Arrays.asList(componentType1))
+        .build();
+    Date processedOn = new Date();
+    Component expectedParentComponent = aComponent().withId(parentComponentId).withDonation(donation)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withLocation(location)
+        .withProcessedOn(processedOn)
+        .build();
+    
+    // set up mocks
+    when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
+    
+    // SUT
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId(), processedOn);
+    
+    // verify results
+    verify(componentRepository).update(argThat(ComponentMatcher.hasSameStateAsComponent(expectedParentComponent)));
+  }
+
   @Test(expected = IllegalStateException.class)
   public void testProcessComponentThatCannotBeProcessed_shouldThrow() {
     // set up data
@@ -996,7 +1054,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(false);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
+    componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId(), new Date());
   }
   
   @Test
@@ -1210,7 +1268,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
     assertThat("Parent inventory status is NOT_IN_STOCK", unprocessedComponent.getInventoryStatus(), is(InventoryStatus.NOT_IN_STOCK));
   }
-
   
   @Test
   public void testUnprocessComponentThatWasRemovedFromStock_shouldPutBackInStock() throws Exception {
@@ -1261,6 +1318,42 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
 
     assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
     assertThat("Parent inventory status is IN_STOCK", unprocessedComponent.getInventoryStatus(), is(InventoryStatus.IN_STOCK));
+  }
+  
+  @Test
+  public void testUnprocessComponent_shouldResetProcessedOnDate() throws Exception {
+    // set up data
+    Donation donation = aDonation().build();
+    Location location = aLocation().build();
+    Component parentComponent = aComponent().withId(1L)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withDonation(donation)
+        .withLocation(location)
+        .withProcessedOn(new Date())
+        .build();
+    Component componentToUpdate = aComponent().withId(1L)
+        .withDonation(donation)
+        .withLocation(location)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withProcessedOn(null)
+        .build();
+
+    Component updatedComponent = aComponent().withId(1L)
+        .withDonation(donation)
+        .withLocation(location)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .build();
+
+    // mocks
+    when(componentConstraintChecker.canUnprocess(parentComponent)).thenReturn(true);
+    when(componentRepository.findChildComponents(parentComponent)).thenReturn(new ArrayList<Component>());
+    when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)))).thenReturn(updatedComponent);
+    
+    // SUT
+    Component unprocessedComponent = componentCRUDService.unprocessComponent(parentComponent);
+
+    // Check
+    assertThat("Parent component processedOn is null", unprocessedComponent.getProcessedOn(), is(nullValue()));
   }
   
   @Test
