@@ -191,6 +191,7 @@ public class ComponentFactoryTests {
         .withPermission("canPreProcess", true)
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
+        .withPermission("canRecordChildComponentWeight", true)
         .withExpiryStatus("Already expired")
         .whichHasNoComponentBatch()
         .withInventoryStatus(InventoryStatus.IN_STOCK)
@@ -205,6 +206,7 @@ public class ComponentFactoryTests {
     when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
     when(componentConstraintChecker.canUnprocess(component)).thenReturn(true);
     when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
+    when(componentConstraintChecker.canRecordChildComponentWeight(component)).thenReturn(true);
 
     // run test
     ComponentManagementViewModel convertedViewModel = componentFactory.createManagementViewModel(component);
