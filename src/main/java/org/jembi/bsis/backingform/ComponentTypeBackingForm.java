@@ -26,6 +26,7 @@ public class ComponentTypeBackingForm {
   private String storageInfo;
   private boolean canBeIssued = true;
   private boolean containsPlasma = true;
+  private Double gravity;
   private Set<ComponentTypeCombination> producedComponentTypeCombinations;
 
   /**
@@ -194,6 +195,14 @@ public class ComponentTypeBackingForm {
 
   public void setContainsPlasma(boolean containsPlasma) {
     this.containsPlasma = containsPlasma;
+  }
+
+  public Double getGravity() {
+    return gravity;
+  }
+
+  public void setGravity(Double gravity) {
+    this.gravity = gravity;
   }
 
   public Long getId() {

@@ -60,6 +60,7 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
         .withPreparationInfo("preparationInfo")
         .withTransportInfo("transportInfo")
         .withStorageInfo("storageInfo")
+        .withGravity(1.145)
         .thatCanBeIssued()
         .thatContainsPlasma()
         .build();
@@ -82,6 +83,7 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
         .withPreparationInfo("preparationInfo")
         .withTransportInfo("transportInfo")
         .withStorageInfo("storageInfo")
+        .withGravity(1.145)
         .thatCanBeIssued()
         .thatContainsPlasma()
         .build();
@@ -110,6 +112,7 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
         .withStorageInfo("storageInfo")
         .thatCanNotBeIssued()
         .withMaxBleedTime(10)
+        .withGravity(1.145)
         .withMaxTimeSinceDonation(5)
         .build();
 
@@ -137,6 +140,7 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
     Assert.assertEquals("View Model correct", false, viewModel.getCanBeIssued());
     Assert.assertEquals("View Model correct", Integer.valueOf(5), viewModel.getMaxTimeSinceDonation());
     Assert.assertEquals("View Model correct", Integer.valueOf(10), viewModel.getMaxBleedTime());
+    assertThat("View Model correct", Double.valueOf(1.145).equals(viewModel.getGravity()));
   }
 
   @Test

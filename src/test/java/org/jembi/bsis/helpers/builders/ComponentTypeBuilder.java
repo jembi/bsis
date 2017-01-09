@@ -32,6 +32,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   private boolean containsPlasma = false;
   private Integer maxBleedTime;
   private Integer maxTimeSinceDonation;
+  private Double gravity;
 
   public ComponentTypeBuilder withId(Long id) {
     this.id = id;
@@ -117,6 +118,11 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     this.maxBleedTime = maxBleedTime;
     return this;
   }
+  
+  public ComponentTypeBuilder withGravity(Double gravity) {
+    this.gravity = gravity;
+    return this;
+  }
 
   public ComponentTypeBuilder withMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
     this.maxTimeSinceDonation = maxTimeSinceDonation;
@@ -174,6 +180,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
     componentType.setMaxTimeSinceDonation(maxTimeSinceDonation);
     componentType.setLowTransportTemperature(lowTransportTemperature);
     componentType.setHighTransportTemperature(highTransportTemperature);
+    componentType.setGravity(gravity);
     return componentType;
   }
 
