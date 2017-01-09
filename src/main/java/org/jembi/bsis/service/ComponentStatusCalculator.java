@@ -69,6 +69,8 @@ public class ComponentStatusCalculator {
    * 
    * Reasons:
    *  - initial component weight not between the PackType min and max weight
+   *  - do not discard if component does not contain plasma and is 
+   *  - below lowVolumeWeight and above minWeight
    * 
    * @param component
    * @return
@@ -80,6 +82,9 @@ public class ComponentStatusCalculator {
         throw new IllegalStateException("PackType does not have a min and max weight specified: " + packType);
       }
       Integer weight = component.getWeight();
+      if (packType.getLowVolumeWeight() != null && (!component.getComponentType().getContainsPlasma() && weight < packType.getLowVolumeWeight() && weight > packType.getMinWeight())) {
+        return false;
+      }      
       if (weight > packType.getMaxWeight() || weight < packType.getMinWeight()) {
         return true;
       }

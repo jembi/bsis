@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestResultBuilder.aBloodTestResult;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aReturnReason;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.anUnsafeReason;
@@ -195,6 +196,25 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     
     // verify
     assertThat("component should be discarded", discarded, is(true));
+  }
+  
+  @Test
+  public void testShouldComponentBeDiscardedForWeightNoPlasmaLessThanLowVolumeWeightGreaterThanMinWeight_shouldReturnFalse() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(520)
+        .withComponentType(aComponentType().thatDoesntContainsPlasma().build())
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(530).withMinWeight(400).withMaxWeight(500).build()).build())
+        .build();
+    
+    // set up mocks
+    
+    // SUT
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
+    
+    // verify
+    assertThat("component should not be discarded", discarded, is(false));
   }
   
   @Test
