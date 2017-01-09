@@ -451,6 +451,25 @@ public class ComponentCRUDService {
 
     return updateComponent(existingComponent);
   }
+
+  public Component recordChildComponentWeight(long componentId, Integer componentWeight) {
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    
+    // check if the weight is being updated
+    if (existingComponent.getWeight() != null && existingComponent.getWeight() == componentWeight) {
+      return existingComponent;
+    }
+
+    // check if it is possible to update the weight of the child component
+    if (!componentConstraintChecker.canRecordChildComponentWeight(existingComponent)) {
+      throw new IllegalStateException("The weight of child component " + componentId 
+          + " cannot be updated");
+    }
+    // it's OK to update the weight
+    existingComponent.setWeight(componentWeight);
+
+    return updateComponent(existingComponent);
+  }
   
   public Component findComponentById(Long id) {
     return componentRepository.findComponentById(id);

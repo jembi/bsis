@@ -2286,4 +2286,107 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentCRUDService, times(0)).markComponentAsUnsafe(argThat(
         hasSameStateAsComponent(expectedSafeChildComponent)), eq(ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION));
   }
+
+  @Test
+  public void testRecordChildComponentWeightFirstTime_shouldSetComponentWeight() throws Exception {
+    // set up data
+    Component parentComponent = aComponent()
+        .withId(1L)
+        .withWeight(250)
+        .build();
+    Long componentId = Long.valueOf(2);
+    Component existingComponent = aComponent()
+        .withId(componentId)
+        .withParentComponent(parentComponent)
+        .withWeight(null)
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(existingComponent);
+    when(componentConstraintChecker.canRecordChildComponentWeight(existingComponent)).thenReturn(true);
+    when(componentRepository.update(existingComponent)).thenAnswer(returnsFirstArg());
+    
+    // SUT
+    Integer newWeight = 100;
+    Component updatedComponent = componentCRUDService.recordChildComponentWeight(componentId, newWeight);
+    
+    // check
+    assertThat("Component weight was updated", updatedComponent.getWeight(), is(newWeight));
+  }
+
+  @Test
+  public void testRecordChildComponentWeight_shouldSetComponentWeight() throws Exception {
+    // set up data
+    Component parentComponent = aComponent()
+        .withId(1L)
+        .withWeight(250)
+        .build();
+    Long componentId = Long.valueOf(2);
+    Component existingComponent = aComponent()
+        .withId(componentId)
+        .withParentComponent(parentComponent)
+        .withWeight(100)
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(existingComponent);
+    when(componentConstraintChecker.canRecordChildComponentWeight(existingComponent)).thenReturn(true);
+    when(componentRepository.update(existingComponent)).thenAnswer(returnsFirstArg());
+    
+    // SUT
+    Integer newWeight = 200;
+    Component updatedComponent = componentCRUDService.recordChildComponentWeight(componentId, newWeight);
+    
+    // check
+    assertThat("Component weight was updated", updatedComponent.getWeight(), is(newWeight));
+  }
+
+  @Test
+  public void testRecordChildComponentWeightWithoutChange_shouldDoNothing() throws Exception {
+    // set up data
+    Component parentComponent = aComponent()
+        .withId(1L)
+        .withWeight(250)
+        .build();
+    Long componentId = Long.valueOf(2);
+    Component existingComponent = aComponent()
+        .withId(componentId)
+        .withParentComponent(parentComponent)
+        .withWeight(100)
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(existingComponent);
+    when(componentConstraintChecker.canRecordChildComponentWeight(existingComponent)).thenReturn(true);
+    
+    // SUT
+    Integer newWeight = 100;
+    componentCRUDService.recordChildComponentWeight(componentId, newWeight);
+    
+    // check
+    verify(componentRepository, never()).update(existingComponent);
+  }
+
+  @Test(expected = java.lang.IllegalStateException.class)
+  public void testRecordChildComponentWeightWithConstraint_shouldThrow() throws Exception {
+    // set up data
+    Component parentComponent = aComponent()
+        .withId(1L)
+        .withWeight(250)
+        .build();
+    Long componentId = Long.valueOf(2);
+    Component existingComponent = aComponent()
+        .withId(componentId)
+        .withParentComponent(parentComponent)
+        .withWeight(100)
+        .build();
+    
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(existingComponent);
+    when(componentConstraintChecker.canRecordChildComponentWeight(existingComponent)).thenReturn(false);
+    
+    // SUT
+    Integer newWeight = 200;
+    componentCRUDService.recordChildComponentWeight(componentId, newWeight);
+  }
 }
