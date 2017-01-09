@@ -51,8 +51,12 @@ public class LabellingServiceTests extends UnitTestSuite {
   
   @Mock
   private GeneralConfigAccessorService generalConfigAccessorService;
+
   @Mock
   private CheckCharacterService checkCharacterService;
+
+  @Mock
+  private ComponentVolumeService componentVolumeService;
   
   @Test
   public void testVerifyPackLabelWithValidInputs_shouldReturnTrue() {
@@ -536,12 +540,47 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(true);
+    when(componentVolumeService.calculateVolume(component)).thenReturn(327);
 
     // run test
     String label = labellingService.printPackLabel(1L);
 
     // check outcome
     assertThat(label, label.contains("Volume: 327ml"));
+  }
+
+  @Test
+  public void testPrintPackLabelForComponentWithoutWeight_shouldReturnZPLWithVolumeText() {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("1234567")
+        .withBloodRh("+")
+        .withDonationDate(new Date())
+        .build();
+    ComponentType componentType = aComponentType()
+        .withGravity(1.03)
+        .build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(new Date())
+        .withWeight(null)
+        .build();
+
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
+    when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(true);
+    when(componentVolumeService.calculateVolume(component)).thenReturn(null);
+
+    // run test
+    String label = labellingService.printPackLabel(1L);
+
+    // check outcome
+    assertThat(label.contains("Volume"), is(false));
   }
 
   @Test

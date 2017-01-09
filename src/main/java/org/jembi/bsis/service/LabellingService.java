@@ -25,6 +25,8 @@ public class LabellingService {
   private GeneralConfigAccessorService generalConfigAccessorService;
   @Autowired 
   private CheckCharacterService checkCharacterService;
+  @Autowired
+  private ComponentVolumeService componentVolumeService;
   
   public boolean verifyPackLabel(long componentId, String prePrintedDIN, String packLabelDIN) {
     Component component = componentCRUDService.findComponentById(componentId);
@@ -113,7 +115,7 @@ public class LabellingService {
 
     // Generate element for component volume
     String volumeZPL = "";
-    Integer volume = 375; // FIXME: use service and add test to check that volumeZPL is not displayed
+    Integer volume = componentVolumeService.calculateVolume(component);
     if (volume != null) {
       volumeZPL = "^FT66,655^A0N,23,14^FDVolume: 327ml^FS";
     }

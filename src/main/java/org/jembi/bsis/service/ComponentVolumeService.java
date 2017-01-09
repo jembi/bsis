@@ -19,7 +19,7 @@ public class ComponentVolumeService {
    * Calculate the volume of the specified Component using the weight and the gravity of the corresponding ComponentType
    *
    * @param component Component for which to calculate volume
-   * @return Integer volume (rounded up)
+   * @return Integer volume (rounded up), can return null if weight or gravity is not specified
    */
   public Integer calculateVolume(Component component) {
     String message = getWarningMessage(component);
