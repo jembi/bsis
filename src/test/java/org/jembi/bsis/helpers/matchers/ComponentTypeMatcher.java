@@ -36,7 +36,7 @@ public class ComponentTypeMatcher extends TypeSafeMatcher<ComponentType> {
         .appendText("\nStorageInfo: ").appendValue(expected.getStorageInfo())
         .appendText("\nCanBeIssued: ").appendValue(expected.getCanBeIssued())
         .appendText("\nContainsPlasma: ").appendValue(expected.getContainsPlasma())
-        ;
+        .appendText("\nGravity: ").appendValue(expected.getGravity());
   }
 
   @Override
@@ -59,7 +59,8 @@ public class ComponentTypeMatcher extends TypeSafeMatcher<ComponentType> {
         Objects.equals(actual.getTransportInfo(), expected.getTransportInfo()) &&
         Objects.equals(actual.getStorageInfo(), expected.getStorageInfo()) &&
         Objects.equals(actual.getCanBeIssued(), expected.getCanBeIssued()) &&
-        Objects.equals(actual.getContainsPlasma(), expected.getContainsPlasma());
+        Objects.equals(actual.getContainsPlasma(), expected.getContainsPlasma()) &&
+        Objects.equals(actual.getGravity(), expected.getGravity());
   }
 
   public static ComponentTypeMatcher hasSameStateAsComponentType(ComponentType expected) {

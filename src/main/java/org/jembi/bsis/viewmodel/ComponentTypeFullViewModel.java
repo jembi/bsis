@@ -13,6 +13,7 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
   List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations;
   private Integer maxBleedTime;
   private Integer maxTimeSinceDonation;
+  private Double gravity;
 
   public Boolean isHasBloodGroup() {
     return hasBloodGroup;
@@ -86,4 +87,13 @@ public class ComponentTypeFullViewModel extends ComponentTypeSearchViewModel {
   public void setMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
     this.maxTimeSinceDonation = maxTimeSinceDonation;
   }
+
+  public Double getGravity() {
+    return gravity;
+  }
+
+  public void setGravity(Double gravity) {
+    this.gravity = gravity;
+  }
+  
 }

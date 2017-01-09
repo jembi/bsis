@@ -109,6 +109,8 @@ public class ComponentType extends BaseModificationTrackerEntity {
   private boolean canBeIssued = true;
 
   private boolean containsPlasma = true;
+  
+  private Double gravity;
 
   public Boolean getIsDeleted() {
     return isDeleted;
@@ -279,6 +281,14 @@ public class ComponentType extends BaseModificationTrackerEntity {
     this.containsPlasma = containsPlasma;
   }
 
+  public Double getGravity() {
+    return gravity;
+  }
+
+  public void setGravity(Double gravity) {
+    this.gravity = gravity;
+  }
+
   public void copy(ComponentType componentType) {
     this.componentTypeName = componentType.getComponentTypeName();
     this.componentTypeCode = componentType.getComponentTypeCode();
@@ -300,6 +310,7 @@ public class ComponentType extends BaseModificationTrackerEntity {
     this.containsPlasma = componentType.getContainsPlasma();
     this.maxBleedTime = componentType.getMaxBleedTime();
     this.maxTimeSinceDonation = componentType.getMaxTimeSinceDonation();
+    this.gravity = componentType.getGravity();
   }
 
   /**

@@ -74,4 +74,5 @@
   <include file="liquibase/updates/1725-print-high-titre-on-label-type-o.xml"/>
   <include file="liquibase/updates/1888-update-packlabel-incorporate-check-digit.xml"/>
   <include file="liquibase/updates/1801-set-maximum-bleed-times-and-maximum-time.xml"/>
+  <include file="liquibase/updates/1907-add-update-gravity-for-componenttypes.xml"/>
 </databaseChangeLog>
