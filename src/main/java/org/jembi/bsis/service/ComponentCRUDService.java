@@ -204,9 +204,10 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component processComponent(String parentComponentId, long componentTypeCombinationId) {
+  public Component processComponent(long parentComponentId, long componentTypeCombinationId, Date processedOn) {
 
-    Component parentComponent = componentRepository.findComponentById(Long.valueOf(parentComponentId));
+    Component parentComponent = componentRepository.findComponentById(parentComponentId);
+    parentComponent.setProcessedOn(processedOn);
     ComponentTypeCombination componentTypeCombination =
         componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId);
     
@@ -461,6 +462,9 @@ public class ComponentCRUDService {
     if (parentComponent.getInventoryStatus() == InventoryStatus.REMOVED) {
       parentComponent.setInventoryStatus(InventoryStatus.IN_STOCK);
     }
+
+    // Reset processedOn date
+    parentComponent.setProcessedOn(null);
 
     // FIXME: Create component status change for when processing a component
     return rollBackComponentStatus(parentComponent, null);

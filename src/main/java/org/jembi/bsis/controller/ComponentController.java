@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.backingform.UndiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.validator.ComponentPreProcessingBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidator;
+import org.jembi.bsis.backingform.validator.RecordComponentBackingFormValidator;
 import org.jembi.bsis.controllerservice.ComponentControllerService;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -46,15 +46,23 @@ public class ComponentController {
   private DiscardComponentsBackingFormValidator discardComponentsBackingFormValidator;
 
   @Autowired
+  private RecordComponentBackingFormValidator recordComponentBackingFormValidator;
+
+  @Autowired
   private ComponentPreProcessingBackingFormValidator componentPreProcessingBackingFormValidator;
 
   @InitBinder("discardComponentsBackingForm")
-  protected void initDiscardBinder(WebDataBinder binder) {
+  protected void discardInitBinder(WebDataBinder binder) {
     binder.setValidator(discardComponentsBackingFormValidator);
   }
 
+  @InitBinder("recordComponentBackingForm")
+  protected void recordInitBinder(WebDataBinder binder) {
+    binder.setValidator(recordComponentBackingFormValidator);
+  }
+
   @InitBinder("componentPreProcessingBackingForm")
-  protected void initPreProcessBinder(WebDataBinder binder) {
+  protected void preProcessInitBinder(WebDataBinder binder) {
     binder.setValidator(componentPreProcessingBackingFormValidator);
   }
 
@@ -153,10 +161,10 @@ public class ComponentController {
   @RequestMapping(value = "/recordcombinations", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> recordNewComponentCombinations(
-      @RequestBody RecordComponentBackingForm recordComponentForm) throws ParseException {
+      @RequestBody @Valid RecordComponentBackingForm recordComponentBackingForm) throws ParseException {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("components", componentControllerService.processComponent(recordComponentForm));
+    map.put("components", componentControllerService.processComponent(recordComponentBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
   

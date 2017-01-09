@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
+import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.ReturnFormBackingForm;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
@@ -47,7 +47,7 @@ public class ReturnFormFactory {
     entity.setStatus(backingForm.getStatus());
     List<Component> components = new ArrayList<>();
     if (backingForm.getComponents() != null) {
-      for (ComponentPreProcessingBackingForm component : backingForm.getComponents()) {
+      for (ComponentBackingForm component : backingForm.getComponents()) {
         components.add(componentRepository.findComponent(component.getId()));
       }
     }

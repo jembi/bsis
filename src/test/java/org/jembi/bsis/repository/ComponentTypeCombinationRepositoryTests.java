@@ -138,4 +138,25 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
     // Verify result
     assertThat(unique, is(true));
   }
+
+  @Test
+  public void testVerifyComponentTypeCombinationExistsWithExistent_shouldReturnTrue() {
+    ComponentTypeCombination combination = aComponentTypeCombination().buildAndPersist(entityManager);
+    boolean exists = componentTypeCombinationRepository.verifyComponentTypeCombinationExists(combination.getId());
+    assertThat(exists, is(true));
+  }
+
+  @Test
+  public void testVerifyComponentTypeCombinationExistsWithNonExistent_shouldReturnFalse() {
+    boolean exists = componentTypeCombinationRepository.verifyComponentTypeCombinationExists(1L);
+    assertThat(exists, is(false));
+  }
+
+  @Test
+  public void testVerifyComponentTypeCombinationExistsWithDeleted_shouldReturnFalse() {
+    ComponentTypeCombination combination = aComponentTypeCombination().thatIsDeleted().buildAndPersist(entityManager);
+    boolean exists = componentTypeCombinationRepository.verifyComponentTypeCombinationExists(combination.getId());
+    assertThat(exists, is(false));
+  }
+
 }

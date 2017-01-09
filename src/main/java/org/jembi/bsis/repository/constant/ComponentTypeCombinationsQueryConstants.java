@@ -16,4 +16,12 @@ public class ComponentTypeCombinationsQueryConstants {
           "FROM ComponentTypeCombination c " +
           "WHERE c.combinationName = :combinationName " +
           "AND c.id != :id ";
+
+  public static final String NAME_VERIFY_COMPONENT_TYPE_COMBINATION_WITH_ID_EXISTS =
+      "ComponentTypeCombination.verifyExists";
+  public static final String QUERY_VERIFY_COMPONENT_TYPE_COMBINATION_WITH_ID_EXISTS =
+      "SELECT count(ctc) > 0 " +
+          "FROM ComponentTypeCombination ctc " +
+          "WHERE ctc.id = :id " +
+          "AND ctc.isDeleted = :deleted ";
 }
