@@ -114,10 +114,10 @@ public class LabellingService {
     }
 
     // Generate element for component volume
-    String volumeZPL = "";
+    String volumeText = "";
     Integer volume = componentVolumeService.calculateVolume(component);
     if (volume != null) {
-      volumeZPL = "^FT66,655^A0N,23,14^FDVolume: 327ml^FS";
+      volumeText = "Volume: " + volume + "ml";
     }
 
     // Get configured service info values
@@ -150,7 +150,7 @@ public class LabellingService {
         "^FT445,439^A0N,17,38^FDExpires On^FS" +
         "^BY2,3,82^FT445,535^BCN,,N,N^FD" + isoDateFormat.format(component.getExpiresOn()) + "^FS" +
         "^FT445,565^A0N,23,31^FD" + dateTimeFormat.format(component.getExpiresOn()) + "^FS" +
-        volumeZPL +
+        "^FT64,655^A0N,23,14^FD" + volumeText + "^FS" +
         "^FT64,681^A0N,23,14^FD" + componentType.getPreparationInfo() + "^FS" +
         "^FT64,707^A0N,23,14^FD" + componentType.getStorageInfo() + "^FS" +
         "^FT64,733^A0N,23,14^FD" + componentType.getTransportInfo() + "^FS" +
