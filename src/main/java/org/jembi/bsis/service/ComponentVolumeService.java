@@ -15,6 +15,12 @@ public class ComponentVolumeService {
 
   private static final Logger LOGGER = Logger.getLogger(ComponentVolumeService.class);
   
+  /**
+   * Calculate the volume of the specified Component using the weight and the gravity of the corresponding ComponentType
+   *
+   * @param component Component for which to calculate volume
+   * @return Integer volume (rounded up)
+   */
   public Integer calculateVolume(Component component) {
     String message = getWarningMessage(component);
     if (StringUtils.isNotBlank(message)) {
@@ -23,7 +29,8 @@ public class ComponentVolumeService {
       }
       return null;
     }
-    return BigDecimal.valueOf((Double.valueOf(component.getWeight()) / component.getComponentType().getGravity())).round(new MathContext(2, RoundingMode.HALF_UP)).intValue();
+    return BigDecimal.valueOf((Double.valueOf(component.getWeight()) / component.getComponentType().getGravity()))
+        .round(new MathContext(2, RoundingMode.HALF_UP)).intValue();
   }
   
   private String getWarningMessage(Component component) {
