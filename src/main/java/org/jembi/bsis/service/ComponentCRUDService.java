@@ -303,18 +303,15 @@ public class ComponentCRUDService {
   }
 
   /**
-   * Mark child components as unsafe where applicable.
+   * Mark child component as unsafe where applicable.
    *
-   * Loop through the initial component status changes, and avoid marking the component as
-   * unsafe for the status change where the status change reason type is
-   * TEST_RESULTS_CONTAINS_PLASMA and the component doesn't contain plasma.
+   * If the parent component is unsafe then the child component will be marked as unsafe (using
+   * the reason UNSAFE_PARENT) except where the status change reason type is
+   * TEST_RESULTS_CONTAINS_PLASMA and this component doesn't contain plasma.
    *
-   * Check and mark unsafe if donation bleed time exceeds maximum bleed time for component.
-   *
-   * Check and mark unsafe if time since donation exceed max time since donation.
-   *
-   * For all other status change reason types  other tan the above, mark the component as unsafe with reason type
-   * UNSAFE_PARENT.
+   * If the donation bleed time exceeds the maximum bleed time, or if the time since the donation
+   * exceeds the max time since donation, for this component type then this component will be
+   * marked as unsafe using EXCEEDS_MAX_BLEED_TIME or EXCEEDS_MAXTIME_SINCE_DONATION
    *
    * @param component the component
    */
@@ -356,8 +353,9 @@ public class ComponentCRUDService {
     if (component.getComponentType().getMaxBleedTime() != null
         && bleedTime > component.getComponentType().getMaxBleedTime()) {
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME);
-    } else if (component.getComponentType().getMaxBleedTime() != null
+    } else if (component.getComponentType().getMaxTimeSinceDonation() != null
         && timeSinceDonation > component.getComponentType().getMaxTimeSinceDonation()) {
+      System.out.println("time since donation " + timeSinceDonation);
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
     }
   }

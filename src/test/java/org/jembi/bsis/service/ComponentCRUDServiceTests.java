@@ -2082,13 +2082,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(new DateTime().toDate())
         .withBleedEndTime(new DateTime().plusMinutes(50).toDate())
         .build();
-    ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
-        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME).build();
-    ComponentStatusChange statusChange = aComponentStatusChange()
-        .withId(1L)
-        .withStatusChangedOn(new Date())
-        .withStatusChangeReason(statusChangeReason)
-        .build();
     ComponentType componentTypeWithMaxBleedTimeEqualToDonationBleedTime = aComponentType().withId(1L)
         .withExpiresAfter(90)
         .withComponentTypeCode("100")
@@ -2190,13 +2183,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Donation donation = aDonation().withId(1L)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
-        .build();
-    ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
-        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION).build();
-    ComponentStatusChange statusChange = aComponentStatusChange()
-        .withId(1L)
-        .withStatusChangedOn(new Date())
-        .withStatusChangeReason(statusChangeReason)
         .build();
     ComponentType componentType = aComponentType().withId(2L)
         .withExpiresAfter(90)
