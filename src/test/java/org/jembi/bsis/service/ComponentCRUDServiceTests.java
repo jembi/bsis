@@ -2082,11 +2082,11 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(new DateTime().toDate())
         .withBleedEndTime(new DateTime().plusMinutes(50).toDate())
         .build();
-    ComponentType componentTypeWithMaxBleedTimeEqualToDonationBleedTime = aComponentType().withId(1L)
+    ComponentType componentTypeWithMaxBleedTimeGreaterThanDonationBleedTime = aComponentType().withId(1L)
         .withExpiresAfter(90)
         .withComponentTypeCode("100")
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
-        .withMaxBleedTime(50)
+        .withMaxBleedTime(51)
         .withMaxTimeSinceDonation(20)
         .build();
     ComponentType componentType = aComponentType().withId(2L)
@@ -2098,7 +2098,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .build();
     ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
         .withCombinationName("Combination")
-        .withComponentTypes(Arrays.asList(componentTypeWithMaxBleedTimeEqualToDonationBleedTime, componentType))
+        .withComponentTypes(Arrays.asList(componentTypeWithMaxBleedTimeGreaterThanDonationBleedTime, componentType))
         .build();
     Long parentComponentId = Long.valueOf(1);
     Component parentComponent = aComponent().withId(parentComponentId)
@@ -2124,7 +2124,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     expiryCal1.setTime(donationDate);
     expiryCal1.add(Calendar.DAY_OF_YEAR, 90);
     Component expectedSafeChildComponent = aComponent()
-        .withComponentType(componentTypeWithMaxBleedTimeEqualToDonationBleedTime)
+        .withComponentType(componentTypeWithMaxBleedTimeGreaterThanDonationBleedTime)
         .withDonation(donation)
         .withParentComponent(expectedParentComponent)
         .withStatus(ComponentStatus.QUARANTINED)
@@ -2151,7 +2151,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentType);
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeWithMaxBleedTimeEqualToDonationBleedTime);
+    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeWithMaxBleedTimeGreaterThanDonationBleedTime);
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     when(bleedTimeService.getBleedTime(donation.getBleedStartTime(), donation.getBleedEndTime())).thenReturn(50L);
     doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(
@@ -2191,16 +2191,16 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withMaxBleedTime(20)
         .withMaxTimeSinceDonation(5)
         .build();
-    ComponentType componentTypeMaxTimeSinceDonationEqualToTimeSinceDonation = aComponentType().withId(1L)
+    ComponentType componentTypeMaxTimeSinceDonationGreaterThanTimeSinceDonation = aComponentType().withId(1L)
         .withExpiresAfter(90)
         .withComponentTypeCode("0001")
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
         .withMaxBleedTime(20)
-        .withMaxTimeSinceDonation(20)
+        .withMaxTimeSinceDonation(21)
         .build();
     ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
         .withCombinationName("Combination")
-        .withComponentTypes(Arrays.asList(componentType, componentTypeMaxTimeSinceDonationEqualToTimeSinceDonation))
+        .withComponentTypes(Arrays.asList(componentType, componentTypeMaxTimeSinceDonationGreaterThanTimeSinceDonation))
         .build();
     Long parentComponentId = Long.valueOf(1);
     Component parentComponent = aComponent().withId(parentComponentId)
@@ -2227,7 +2227,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     expiryCal1.setTime(donationDate);
     expiryCal1.add(Calendar.DAY_OF_YEAR, 90);
     Component expectedSafeChildComponent = aComponent()
-        .withComponentType(componentTypeMaxTimeSinceDonationEqualToTimeSinceDonation)
+        .withComponentType(componentTypeMaxTimeSinceDonationGreaterThanTimeSinceDonation)
         .withDonation(donation)
         .withParentComponent(expectedParentComponent)
         .withStatus(ComponentStatus.QUARANTINED)
@@ -2254,7 +2254,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentType);
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeMaxTimeSinceDonationEqualToTimeSinceDonation);
+    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeMaxTimeSinceDonationGreaterThanTimeSinceDonation);
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     when(bleedTimeService.getTimeSinceDonation(donation.getDonationDate(), processedOn)).thenReturn(20L);
     doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(

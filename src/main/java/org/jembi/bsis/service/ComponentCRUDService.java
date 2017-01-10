@@ -351,10 +351,10 @@ public class ComponentCRUDService {
     long timeSinceDonation = bleedTimeService.getTimeSinceDonation(donation.getDonationDate(), initialComponent.getProcessedOn());
 
     if (component.getComponentType().getMaxBleedTime() != null
-        && bleedTime > component.getComponentType().getMaxBleedTime()) {
+        && bleedTime >= component.getComponentType().getMaxBleedTime()) {
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME);
     } else if (component.getComponentType().getMaxTimeSinceDonation() != null
-        && timeSinceDonation > component.getComponentType().getMaxTimeSinceDonation()) {
+        && timeSinceDonation >= component.getComponentType().getMaxTimeSinceDonation()) {
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
     }
   }
