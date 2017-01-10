@@ -355,7 +355,6 @@ public class ComponentCRUDService {
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME);
     } else if (component.getComponentType().getMaxTimeSinceDonation() != null
         && timeSinceDonation > component.getComponentType().getMaxTimeSinceDonation()) {
-      System.out.println("time since donation " + timeSinceDonation);
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
     }
   }
