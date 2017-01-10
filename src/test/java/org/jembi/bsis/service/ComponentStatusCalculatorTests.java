@@ -222,6 +222,52 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   }
   
   @Test
+  public void testShouldComponentBeDiscardedForWeightHasPlasmaLessThanLowVolumeWeightMoreThanMinWeight_shouldReturnFalse() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(360)
+        .withComponentType(aComponentType().thatContainsPlasma().build())
+        .withDonation(aDonation()
+            .withPackType(aPackType()
+                .withLowVolumeWeight(370)
+                .withMinWeight(350)
+                .withMaxWeight(500)
+                .build())
+            .build())
+        .build();
+    
+    // SUT
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
+    
+    // verify
+    assertThat("component should be discarded", discarded, is(false));
+  }
+  
+  @Test
+  public void testShouldComponentBeDiscardedForWeightNoPlasmaLessThanLowVolumeWeightMoreThanMinWeight_shouldReturnFalse() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(360)
+        .withComponentType(aComponentType().thatDoesntContainsPlasma().build())
+        .withDonation(aDonation()
+            .withPackType(aPackType()
+                .withLowVolumeWeight(370)
+                .withMinWeight(350)
+                .withMaxWeight(500)
+                .build())
+            .build())
+        .build();
+    
+    // SUT
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForWeight(component);
+    
+    // verify
+    assertThat("component should be discarded", discarded, is(false));
+  }
+  
+  @Test
   public void testShouldComponentBeDiscardedForWeightNoPlasmaLessThanLowVolumeWeightGreaterThanMinWeight_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
