@@ -82,9 +82,12 @@ public class ComponentStatusCalculator {
         throw new IllegalStateException("PackType does not have a min and max weight specified: " + packType);
       }
       Integer weight = component.getWeight();
-      if (packType.getLowVolumeWeight() != null && (!component.getComponentType().getContainsPlasma() && weight < packType.getLowVolumeWeight() && weight > packType.getMinWeight())) {
-        return false;
-      }      
+      if (packType.getLowVolumeWeight() != null) {
+        if (component.getComponentType().getContainsPlasma() && weight > packType.getLowVolumeWeight() 
+            && weight < packType.getMinWeight()) {
+          return true;
+        }
+      }
       if (weight > packType.getMaxWeight() || weight < packType.getMinWeight()) {
         return true;
       }
