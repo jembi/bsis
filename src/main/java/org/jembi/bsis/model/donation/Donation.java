@@ -298,6 +298,21 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.titre = donation.titre;
   }
 
+  /**
+   * Finds the initial component (which is the component which is the parent
+   * of all other components) for this Donation.
+   *
+   * @return Component, or null if there are no components
+   */
+  public Component getInitialComponent() {
+    for (Component component : this.components) {
+      if (component.isInitialComponent()) {
+        return component;
+      }
+    }
+    return null;
+  }
+
   public List<Component> getComponents() {
     return components;
   }

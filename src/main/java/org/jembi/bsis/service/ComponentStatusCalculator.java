@@ -74,7 +74,7 @@ public class ComponentStatusCalculator {
    * @return
    */
   public boolean shouldComponentBeDiscardedForWeight(Component component) {
-    if (component.getParentComponent() == null && component.getWeight() != null) {
+    if (component.isInitialComponent() && component.getWeight() != null) {
       PackType packType = component.getDonation().getPackType();
       if (packType.getMinWeight() == null || packType.getMaxWeight() == null) {
         throw new IllegalStateException("PackType does not have a min and max weight specified: " + packType);

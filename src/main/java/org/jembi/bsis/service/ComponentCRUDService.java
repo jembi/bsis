@@ -319,7 +319,7 @@ public class ComponentCRUDService {
     Component initialComponent = component.getParentComponent();
     Donation donation = initialComponent.getDonation();
     // If the component was processed more than once, get the initial component as the parent of the parent
-    while (initialComponent.getParentComponent() != null) {
+    while (!initialComponent.isInitialComponent()) {
       initialComponent = initialComponent.getParentComponent();
     }
 
