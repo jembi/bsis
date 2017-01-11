@@ -350,7 +350,7 @@ public class ComponentCRUDService {
 
     long bleedTime = bleedTimeService.getBleedTime(donation.getBleedStartTime(), donation.getBleedEndTime());
     long timeSinceDonation = bleedTimeService.getTimeSinceDonation(
-        donation.getInitialComponent().getCreatedOn(), initialComponent.getProcessedOn());
+        initialComponent.getCreatedOn(), initialComponent.getProcessedOn());
 
     if (component.getComponentType().getMaxBleedTime() != null
         && bleedTime >= component.getComponentType().getMaxBleedTime()) {
