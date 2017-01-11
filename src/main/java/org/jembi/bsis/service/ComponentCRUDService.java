@@ -266,12 +266,11 @@ public class ComponentCRUDService {
           component.setDonation(donation);
           component.setParentComponent(parentComponent);
           component.setStatus(ComponentStatus.QUARANTINED);
-          component.setCreatedOn(donation.getDonationDate());
+          component.setCreatedOn(processedOn);
           component.setLocation(parentComponent.getLocation());
           component.setComponentBatch(parentComponent.getComponentBatch());
 
           Calendar cal = Calendar.getInstance();
-          Date createdOn = cal.getTime();
           cal.setTime(component.getCreatedOn());
 
           // set component expiry date
@@ -283,7 +282,6 @@ public class ComponentCRUDService {
             cal.add(Calendar.YEAR, pt.getExpiresAfter());
 
           Date expiresOn = cal.getTime();
-          component.setCreatedOn(createdOn);
           component.setExpiresOn(expiresOn);
 
           addComponent(component);
