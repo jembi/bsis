@@ -23,6 +23,7 @@ public class ComponentManagementViewModel extends BaseViewModel {
   private PackTypeFullViewModel packType;
   private boolean hasComponentBatch;
   private InventoryStatus inventoryStatus;
+  private Date donationDateTime;
   private Date bleedStartTime;
   private Date bleedEndTime;
 
@@ -133,4 +134,11 @@ public class ComponentManagementViewModel extends BaseViewModel {
     this.packType = packType;
   }
 
+  public Date getDonationDateTime() {
+    return donationDateTime;
+  }
+
+  public void setDonationDateTime(Date donationDateTime) {
+    this.donationDateTime = donationDateTime;
+  }
 }
