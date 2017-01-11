@@ -16,6 +16,7 @@ import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aReleasedTestBatc
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static org.jembi.bsis.helpers.matchers.DonorMatcher.hasSameStateAsDonor;
+import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
@@ -61,6 +62,7 @@ import org.mockito.Mock;
 public class DonationCRUDServiceTests extends UnitTestSuite {
 
   private static final long IRRELEVANT_DONATION_ID = 2;
+  private static final long IRRELEVANT_COMPONENT_ID = 22;
   private static final long IRRELEVANT_DONOR_ID = 7;
   private static final long IRRELEVANT_DONATION_BATCH_ID = 27;
   private static final long IRRELEVANT_TEST_BATCH_ID = 64;
@@ -99,6 +101,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   private ComponentRepository componentRepository;
   @Mock
   private CheckCharacterService checkCharacterService;
+  @Mock
+  private DateGeneratorService dateGeneratorService;
 
   @Test(expected = IllegalStateException.class)
   public void testDeleteDonationWithConstraints_shouldThrow() {
@@ -1268,5 +1272,61 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     // Verify
     verify(componentCRUDService).updateComponentWithNewPackType(existingDonation.getComponents().get(0), newPackType);
     assertThat(returnedDonation, hasSameStateAsDonation(expectedDonation));  
+  }
+
+  @Test
+  public void testUpdateDonationWithDifferentBleedTime_shouldUpdateComponentCreatedOn() {
+    DateTime donationDate = new DateTime().minusDays(2);
+    DateTime createdOn = donationDate;
+    DateTime newBleedStartTime = new DateTime().minusMinutes(130);
+    DateTime newBleedEndTime = new DateTime().minusMinutes(120);
+    DateTime expectedCreatedOn = new DateTime(donationDate.getYear(), donationDate.getMonthOfYear(), donationDate.getDayOfMonth(), 
+        newBleedStartTime.getHourOfDay(), newBleedStartTime.getMinuteOfHour());
+
+    ComponentType irrelevantComponentType = aComponentType().build();
+    Component initialComponent = aComponent()
+        .withId(IRRELEVANT_COMPONENT_ID)
+        .withComponentType(irrelevantComponentType)
+        .withCreatedOn(donationDate.toDate())
+        .build();
+    Component expectedInitialComponent = aComponent()
+        .withId(IRRELEVANT_COMPONENT_ID)
+        .withComponentType(irrelevantComponentType)
+        .withCreatedOn(createdOn.toDate())
+        .build();
+
+    Donor irrelevantDonor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    PackType irrelevantPackType = aPackType().build();
+    Donation existingDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(irrelevantDonor)
+        .withPackType(irrelevantPackType)
+        .withDonationDate(donationDate.toDate())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withComponent(initialComponent)
+        .build();
+    Donation expectedDonation = aDonation()
+        .withId(IRRELEVANT_DONATION_ID)
+        .withDonor(irrelevantDonor)
+        .withPackType(irrelevantPackType)
+        .withDonationDate(donationDate.toDate())
+        .withBleedStartTime(newBleedStartTime.toDate())
+        .withBleedEndTime(newBleedEndTime.toDate())
+        .withComponent(expectedInitialComponent)
+        .build();
+
+    when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
+    when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(donationRepository.updateDonation(expectedDonation)).thenReturn(expectedDonation);
+    when(dateGeneratorService.generateDateTime(createdOn.toDate(), newBleedStartTime.toDate())).thenReturn(expectedCreatedOn.toDate());
+
+    // Run test
+    Donation returnedDonation = donationCRUDService.updateDonation(expectedDonation);
+
+    // Verify
+    verify(dateGeneratorService).generateDateTime(createdOn.toDate(), newBleedStartTime.toDate());
+    assertThat(returnedDonation.getInitialComponent(), hasSameStateAsComponent(expectedDonation.getInitialComponent()));
   }
 }

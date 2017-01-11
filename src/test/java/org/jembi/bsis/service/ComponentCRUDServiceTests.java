@@ -75,6 +75,7 @@ import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
+import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -110,7 +111,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Mock
   private DonationBatchRepository donationBatchRepository;
   @Mock
-  private DonationCRUDService donationCRUDService;
+  private DonationRepository donationRepository;
   @Mock
   private BleedTimeService bleedTimeService;
   
@@ -1105,6 +1106,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     long componentId = 1L;
     Integer componentWeight = Integer.valueOf(420);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    Date donationDate = sdf.parse("2016-01-01 09:00");
     Date bleedStartTime = sdf.parse("2016-01-01 13:00");
     Date bleedEndTime = sdf.parse("2016-01-01 13:16");
     Donation donation = aDonation().build();
@@ -1113,14 +1115,20 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withDonation(donation)
         .withStatus(ComponentStatus.PROCESSED)
         .withWeight(componentWeight)
+        .withCreatedOn(donationDate)
         .build();
+
+    Date expectedCreatedOn = sdf.parse("2016-01-01 13:00");
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(donationCRUDService.updateDonation(donation)).thenReturn(donation);
+    when(donationRepository.updateDonation(donation)).thenReturn(donation);
+    when(dateGeneratorService.generateDateTime(donationDate, bleedStartTime)).thenReturn(expectedCreatedOn);
     // SUT
     Component returnedComponent = componentCRUDService.preProcessComponent(componentId, componentWeight, bleedStartTime, bleedEndTime);
-    verify(donationCRUDService, times(1)).updateDonation(any(Donation.class));
+    // verify
+    verify(donationRepository, times(1)).updateDonation(any(Donation.class));
+    verify(dateGeneratorService).generateDateTime(donationDate, bleedStartTime);
     assertThat(donation.getBleedStartTime(), is(bleedStartTime));
     assertThat(donation.getBleedEndTime(), is(bleedEndTime));
     assertThat(returnedComponent, hasSameStateAsComponent(oldComponent));
@@ -1142,7 +1150,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
-    when(donationCRUDService.updateDonation(donation)).thenReturn(donation);
+    when(donationRepository.updateDonation(donation)).thenReturn(donation);
     when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(false);
     
     // SUT

@@ -30,6 +30,7 @@ import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
+import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,7 @@ public class ComponentCRUDService {
   private DonationBatchRepository donationBatchRepository;
   
   @Autowired
-  private DonationCRUDService donationCRUDService;
+  private DonationRepository donationRepository;
 
   @Autowired
   private BleedTimeService bleedTimeService;
@@ -423,7 +424,11 @@ public class ComponentCRUDService {
     Donation existingDonation = existingComponent.getDonation();
     existingDonation.setBleedStartTime(bleedStartTime);
     existingDonation.setBleedEndTime(bleedEndTime);
-    donationCRUDService.updateDonation(existingDonation);
+    donationRepository.updateDonation(existingDonation);
+
+    // update component createdOn
+    Date newCreatedOn = dateGeneratorService.generateDateTime(existingComponent.getCreatedOn(), bleedStartTime);
+    existingComponent.setCreatedOn(newCreatedOn);
     
     // check if the weight is being updated
     if (existingComponent.getWeight() != null && existingComponent.getWeight() == componentWeight) {
