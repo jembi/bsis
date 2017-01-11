@@ -31,6 +31,9 @@ import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.utils.SecurityUtils;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -246,50 +249,11 @@ public class ComponentCRUDService {
 
     for (ComponentType pt : newComponents.keySet()) {
 
-      String componentTypeCode = pt.getComponentTypeCode();
       int noOfUnits = newComponents.get(pt);
 
       // Add New component
       if (!parentStatus.equals(ComponentStatus.PROCESSED) && !parentStatus.equals(ComponentStatus.DISCARDED)) {
-
-        for (int i = 1; i <= noOfUnits; i++) {
-          Component component = new Component();
-          component.setIsDeleted(false);
-
-          // if there is more than one unit of the component, append unit number suffix
-          if (noOfUnits > 1) {
-            component.setComponentCode(componentTypeCode + "-0" + i);
-          } else {
-            component.setComponentCode(componentTypeCode);
-          }
-          component.setComponentType(pt);
-          component.setDonation(donation);
-          component.setParentComponent(parentComponent);
-          component.setStatus(ComponentStatus.QUARANTINED);
-          component.setCreatedOn(processedOn);
-          component.setLocation(parentComponent.getLocation());
-          component.setComponentBatch(parentComponent.getComponentBatch());
-
-          Calendar cal = Calendar.getInstance();
-          cal.setTime(component.getCreatedOn());
-
-          // set component expiry date
-          if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.DAYS)
-            cal.add(Calendar.DAY_OF_YEAR, pt.getExpiresAfter());
-          else if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.HOURS)
-            cal.add(Calendar.HOUR, pt.getExpiresAfter());
-          else if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.YEARS)
-            cal.add(Calendar.YEAR, pt.getExpiresAfter());
-
-          Date expiresOn = cal.getTime();
-          component.setExpiresOn(expiresOn);
-
-          addComponent(component);
-          
-          if (parentStatus == ComponentStatus.UNSAFE) {
-            markChildComponentsAsUnsafeWhereApplicable(component);
-          }
-        }
+        createChildComponent(pt, noOfUnits, parentComponent);
       }
     }
 
@@ -634,4 +598,56 @@ public class ComponentCRUDService {
     }
   }
 
+  /**
+   * Create child components from produced component types
+   *
+   * @param pt produced component type
+   * @param noOfUnits number of units produced
+   * @param parentComponent component being processed
+   */
+  private void createChildComponent(ComponentType pt, int noOfUnits, Component parentComponent) {
+    String componentTypeCode = pt.getComponentTypeCode();
+    for (int i = 1; i <= noOfUnits; i++) {
+      Component component = new Component();
+      component.setIsDeleted(false);
+
+      // if there is more than one unit of the component, append unit number suffix
+      if (noOfUnits > 1) {
+        component.setComponentCode(componentTypeCode + "-0" + i);
+      } else {
+        component.setComponentCode(componentTypeCode);
+      }
+      component.setComponentType(pt);
+      component.setDonation(parentComponent.getDonation());
+      component.setParentComponent(parentComponent);
+      component.setStatus(ComponentStatus.QUARANTINED);
+      component.setCreatedOn(parentComponent.getProcessedOn());
+      component.setLocation(parentComponent.getLocation());
+      component.setComponentBatch(parentComponent.getComponentBatch());
+
+      DateTime donationBleedDateTime = new DateTime()
+          .withDate(new LocalDate(parentComponent.getDonation().getDonationDate()))
+          .withTime(new LocalTime(parentComponent.getDonation().getBleedStartTime()));
+
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(donationBleedDateTime.toDate());
+
+      // set component expiry date
+      if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.DAYS)
+        cal.add(Calendar.DAY_OF_YEAR, pt.getExpiresAfter());
+      else if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.HOURS)
+        cal.add(Calendar.HOUR, pt.getExpiresAfter());
+      else if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.YEARS)
+        cal.add(Calendar.YEAR, pt.getExpiresAfter());
+
+      Date expiresOn = cal.getTime();
+      component.setExpiresOn(expiresOn);
+
+      addComponent(component);
+
+      if (parentComponent.getStatus() == ComponentStatus.UNSAFE) {
+        markChildComponentsAsUnsafeWhereApplicable(component);
+      }
+    }
+  }
 }
