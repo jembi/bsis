@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
+import org.jembi.bsis.dto.PostDonationCounsellingExportDTO;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.springframework.stereotype.Repository;
@@ -102,5 +103,12 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
     return postDonationCounsellings.size() > 0 ? postDonationCounsellings.get(0) : null;
   }
 
+  public List<PostDonationCounsellingExportDTO> findPostDonationCounsellingsForExport() {
+    return entityManager.createNamedQuery(
+        PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLINGS_FOR_EXPORT,
+        PostDonationCounsellingExportDTO.class)
+        .setParameter("deleted", false)
+        .getResultList();
+  }
 
 }

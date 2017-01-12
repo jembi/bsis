@@ -1,0 +1,89 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/1603-add-new-component-combination.xml">
+
+  <changeSet id="20161018-1440" author="micnice">
+    <comment>Change component type combination name size limit to VARCHAR(255)</comment>
+    <modifyDataType tableName="ComponentTypeCombination" columnName="combinationName"
+                    newDataType="VARCHAR(255)"/>
+  </changeSet>
+
+  <changeSet id="20161017-1028" author="timler">
+    <comment>Ensure that component type combination name is unique and not nullable </comment>
+    <addUniqueConstraint tableName="ComponentTypeCombination" columnNames="combinationName"
+      constraintName="ComponentTypeCombination_combinationName" />
+    <addNotNullConstraint tableName="ComponentTypeCombination" columnName="combinationName"
+      columnDataType="varchar(255)" />
+  </changeSet>
+
+  <changeSet id="20161018-1530" author="lauravignoli">
+    <comment>Add modification tracker fields to ComponentTypeCombination tables and initialize them</comment>
+    <addColumn tableName="ComponentTypeCombination">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)" >
+        <constraints foreignKeyName="fk_ComponentTypeCombination_createdBy" references="User(id)" />
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_ComponentTypeCombination_lastUpdatedBy" references="User(id)" />
+      </column>
+    </addColumn>
+    <addColumn tableName="ComponentTypeCombination_AUD">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)" />
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)" />
+    </addColumn>
+    <update tableName="ComponentTypeCombination">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+    <update tableName="ComponentTypeCombination_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+  </changeSet>
+
+  <changeSet id="20161019-1549" author="timler">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="ComponentType" columnName="createdDate" />
+      </not>
+    </preConditions>
+    <comment>Adding modification tracker fields to ComponentType and ComponentType_AUD tables</comment>
+    <addColumn tableName="ComponentType">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_ComponentType_createdBy" references="User(id)" />
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_ComponentType_lastUpdatedBy" references="User(id)" />
+      </column>
+    </addColumn>
+    <addColumn tableName="ComponentType_AUD">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)" />
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)" />
+    </addColumn>
+    <update tableName="ComponentType">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+    <update tableName="ComponentType_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+  </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,34 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+	logicalFilePath="./src/main/resources/liquibase/updates/1451-Assign-locations-to-an-administrative-division.xml">
+
+	<changeSet id="20160901-1506" author="tumijacob">
+		<addColumn tableName="Location">
+			<column name="divisionLevel1_id" type="BIGINT(20)">
+				<constraints nullable="true" foreignKeyName="fk_Location_divisionLevel1"
+					references="Division(id)" />
+			</column>
+		</addColumn>
+		<addColumn tableName="Location">
+			<column name="divisionLevel2_id" type="BIGINT(20)">
+				<constraints nullable="true" foreignKeyName="fk_Location_divisionLevel2"
+					references="Division(id)" />
+			</column>
+		</addColumn>
+		<addColumn tableName="Location">
+			<column name="divisionLevel3_id" type="BIGINT(20)">
+				<constraints nullable="true" foreignKeyName="fk_Location_divisionLevel3"
+					references="Division(id)" />
+			</column>
+		</addColumn>
+	</changeSet>
+	<changeSet id="20160901-1716" author="tumijacob">
+		<addColumn tableName="Location_AUD">
+			<column name="divisionLevel1_id" type="BIGINT(20)"></column>
+			<column name="divisionLevel2_id" type="BIGINT(20)"></column>
+			<column name="divisionLevel3_id" type="BIGINT(20)"></column>
+		</addColumn>
+	</changeSet>
+</databaseChangeLog>

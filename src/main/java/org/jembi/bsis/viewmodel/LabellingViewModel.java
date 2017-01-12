@@ -8,6 +8,15 @@ public class LabellingViewModel extends BaseViewModel {
   private String componentName;
   private String componentCode;
   private Map<String, Boolean> permissions = new HashMap<>();
+  private boolean hasComponentBatch;
+
+  public boolean getHasComponentBatch () {
+    return hasComponentBatch;
+  }
+
+  public void setHasComponentBatch (boolean hasComponentBatch) {
+    this.hasComponentBatch = hasComponentBatch;
+  }
 
   public String getComponentName() {
     return componentName;

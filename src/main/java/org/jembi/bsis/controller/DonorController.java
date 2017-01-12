@@ -17,8 +17,8 @@ import org.jembi.bsis.backingform.validator.DonorBackingFormValidator;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.controllerservice.DonorControllerService;
 import org.jembi.bsis.dto.DuplicateDonorDTO;
-import org.jembi.bsis.factory.DonationViewModelFactory;
-import org.jembi.bsis.factory.DonorDeferralViewModelFactory;
+import org.jembi.bsis.factory.DonationFactory;
+import org.jembi.bsis.factory.DonorDeferralFactory;
 import org.jembi.bsis.factory.DonorViewModelFactory;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.PostDonationCounsellingViewModelFactory;
@@ -94,10 +94,10 @@ public class DonorController {
   private DonorViewModelFactory donorViewModelFactory;
 
   @Autowired
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
 
   @Autowired
-  private DonorDeferralViewModelFactory donorDeferralViewModelFactory;
+  private DonorDeferralFactory donorDeferralFactory;
 
   @Autowired
   private AdverseEventRepository adverseEventRepository;
@@ -135,7 +135,7 @@ public class DonorController {
 
     map.put("donor", donorViewModelFactory.createDonorViewModelWithPermissions(donor));
 
-    Boolean isCurrentlyDeferred = donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor);
+    Boolean isCurrentlyDeferred = donorDeferralStatusCalculator.isDonorCurrentlyDeferred(id);
     map.put("isDonorCurrentlyDeferred", isCurrentlyDeferred);
     if (isCurrentlyDeferred) {
       map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
@@ -160,19 +160,19 @@ public class DonorController {
     boolean hasCounselling = postDonationCounsellingRepository
         .countNotFlaggedPostDonationCounsellingsForDonor(donor.getId()) > 0;
 
-    map.put("currentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
+    map.put("currentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(id));
     map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("hasCounselling", hasCounselling);
-    map.put("deferredUntil", CustomDateFormatter.getDateString(donorRepository.getLastDonorDeferralDate(id)));
+    map.put("deferredUntil", CustomDateFormatter.getDateTimeString(donorRepository.getLastDonorDeferralDate(id)));
     map.put("deferral", donorRepository.getLastDonorDeferral(id));
     map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
     map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
     map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
     if (donations.size() > 0) {
-      map.put("lastDonation", donationViewModelFactory.createDonationViewModelWithoutPermissions(donations.get(donations.size() - 1)));
-      map.put("dateOfFirstDonation", CustomDateFormatter.getDateString(donations.get(0).getDonationDate()));
+      map.put("lastDonation", donationFactory.createDonationViewModelWithoutPermissions(donations.get(donations.size() - 1)));
+      map.put("dateOfFirstDonation", CustomDateFormatter.getDateTimeString(donations.get(0).getDonationDate()));
       map.put("totalDonations", getNumberOfDonations(donations));
-      map.put("dueToDonate", CustomDateFormatter.getDateString(donor.getDueToDonate()));
+      map.put("dueToDonate", CustomDateFormatter.getDateTimeString(donor.getDueToDonate()));
       map.put("totalAdverseEvents", adverseEventRepository.countAdverseEventsForDonor(donor));
     } else {
       map.put("lastDonation", "");
@@ -310,8 +310,8 @@ public class DonorController {
     List<DonorDeferral> donorDeferrals = donorRepository.getDonorDeferrals(donorId);
 
     Map<String, Object> map = new HashMap<>();
-    map.put("allDonorDeferrals", donorDeferralViewModelFactory.createDonorDeferralViewModels(donorDeferrals));
-    map.put("isDonorCurrentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor));
+    map.put("allDonorDeferrals", donorDeferralFactory.createDonorDeferralViewModels(donorDeferrals));
+    map.put("isDonorCurrentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donorId));
     return map;
   }
 
@@ -389,12 +389,12 @@ public class DonorController {
 
     // Get all the Donations, process the Test Results and update necessary newDonor and Donation fields
     List<Donation> donations = duplicateDonorService.getAllDonationsToMerge(newDonor, donorNumbers);
-    List<DonationViewModel> donationViewModels = donationViewModelFactory
+    List<DonationViewModel> donationViewModels = donationFactory
         .createDonationViewModelsWithoutPermissions(donations);
 
     // gather all Deferrals
     List<DonorDeferral> donorDeferrals = duplicateDonorService.getAllDeferralsToMerge(newDonor, donorNumbers);
-    List<DonorDeferralViewModel> donorDeferralViewModels = donorDeferralViewModelFactory
+    List<DonorDeferralViewModel> donorDeferralViewModels = donorDeferralFactory
         .createDonorDeferralViewModels(donorDeferrals);
 
     form = new DuplicateDonorsBackingForm(newDonor);

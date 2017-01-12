@@ -1,0 +1,46 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/334-view-list-blood-testing-rules.xml">
+
+  <changeSet id="20161031-1352" author="timler">
+    <comment>Rename 'Manage Blood Typing Rules' to 'Manage Blood Testing Rules'</comment>
+    <update tableName="Permission">
+      <column name="name" value="Manage Blood Testing Rules" />
+      <where>id = 48</where>
+    </update>
+  </changeSet>
+  
+  <changeSet id="20161101-0957" author="tmvumbi2">
+    <comment>Rename column 'isActive' to 'isDeleted'; add not null constraint to 'isDeleted'; invert values in 'isDeleted'</comment>
+	<renameColumn tableName="BloodTestingRule" oldColumnName="isActive" newColumnName="isDeleted" columnDataType="TINYINT(1)" />
+	<renameColumn tableName="BloodTestingRule_AUD" oldColumnName="isActive" newColumnName="isDeleted" columnDataType="TINYINT(1)" />
+	<addNotNullConstraint tableName="BloodTestingRule" columnName="isDeleted" columnDataType="TINYINT(1)" />
+	<sql>
+	  UPDATE BloodTestingRule bt SET bt.isDeleted = NOT bt.isDeleted;
+	</sql>
+	<sql>
+	  UPDATE BloodTestingRule_AUD bt SET bt.isDeleted = NOT bt.isDeleted;
+	</sql>
+  </changeSet>
+
+  <changeSet id="20161101-1522" author="tmvumbi2">
+    <comment>Set a default value '0' on 'isDeleted'</comment>
+	<addDefaultValue tableName="BloodTestingRule" columnName="isDeleted" columnDataType="TINYINT(1)" defaultValue="0" />
+  </changeSet>
+
+  <changeSet id="20161102-0903" author="timler">
+    <comment>Rename column 'bloodTestsIds' to 'bloodTest_id' in BloodTestingRule and change type</comment>
+	<renameColumn tableName="BloodTestingRule" oldColumnName="bloodTestsIds" newColumnName="bloodTest_id" columnDataType="BIGINT(20)" />
+    <renameColumn tableName="BloodTestingRule_AUD" oldColumnName="bloodTestsIds" newColumnName="bloodTest_id" columnDataType="BIGINT(20)" />
+  </changeSet>
+
+  <changeSet id="20161102-0906" author="timler">
+    <comment>Add foreign key reference to new column bloodTest_id in BloodTestingRule</comment>
+    <addNotNullConstraint tableName="BloodTestingRule" columnName="bloodTest_id" columnDataType="BIGINT(20)" />
+    <addForeignKeyConstraint constraintName="fk_BloodTestingRule_BloodTest"
+      baseColumnNames="bloodTest_id" baseTableName="BloodTestingRule" referencedColumnNames="id" referencedTableName="BloodTest" />
+  </changeSet>
+
+</databaseChangeLog>

@@ -131,7 +131,7 @@
     <donationtype id="4" donationType="Other" isDeleted="0"></donationtype>
 
     <DonationBatch id="1" batchNumber="B0314000000"
-                   isDeleted="0" isClosed="0" createdDate="2014-02-22 20:18:17"
+                   isDeleted="0" isClosed="0" createdDate="2014-02-22 20:18:17" donationBatchDate="2014-02-22 20:18:17"
                    lastUpdated="2014-02-21 17:31:59"
                    notes="Notes" venue_Id="1"
                    createdBy_id="1" lastUpdatedBy_id="1" backEntry="false"/>
@@ -139,7 +139,7 @@
     <Donation id="1" bloodAbo=""
               bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
               donationDate="2014-03-25 00:00:00" donationIdentificationNumber="000001"
-              donorWeight="60.00" extraBloodTypeInformation="" haemoglobinCount="14.00"
+              donorWeight="60.00" haemoglobinCount="14.00"
               isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
               notes="notes" ttiStatus="NOT_DONE" packType_id="2"
               donationBatch_id="1" venue_Id="1"
@@ -147,13 +147,6 @@
               createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
               donorPulse="60" ineligibleDonor="0" released="0"/>
 
-
-    <genericconfig id="1" propertyName="rowHeight"
-                   propertyOwner="donationsWorksheet" propertyValue="30"/>
-    <genericconfig id="2" propertyName="columnWidth"
-                   propertyOwner="donationsWorksheet" propertyValue="100"/>
-    <genericconfig id="3" propertyName="donationIdentificationNumber"
-                   propertyOwner="donationsWorksheet" propertyValue="true"/>
     <genericconfig id="4" propertyName="haemoglobinUnit"
                    propertyOwner="measurementUnit" propertyValue="g/dL"/>
     <genericconfig id="5" propertyName="bloodPressureUnit"
@@ -202,20 +195,12 @@
                    propertyOwner="labsetup" propertyValue="true"/>
     <genericconfig id="26" propertyName="crossmatchProcedure"
                    propertyOwner="labsetup" propertyValue="CROSSMATCH_DONE_CAN_SKIP"/>
-    <genericconfig id="27" propertyName="bloodTypingContext"
-                   propertyOwner="labsetup" propertyValue="RECORD_BLOOD_TYPING_TESTS"/>
     <genericconfig id="28" propertyName="bloodTypingElisa"
                    propertyOwner="labsetup" propertyValue="true"/>
-    <genericconfig id="29" propertyName="bloodTypingWorksheets"
-                   propertyOwner="labsetup" propertyValue="false"/>
     <genericconfig id="30" propertyName="ttiElisa"
                    propertyOwner="labsetup" propertyValue="true"/>
-    <genericconfig id="31" propertyName="ttiWorksheets"
-                   propertyOwner="labsetup" propertyValue="false"/>
     <genericconfig id="32" propertyName="recordMachineReadingsForTTI"
                    propertyOwner="labsetup" propertyValue="true"/>
-    <genericconfig id="33" propertyName="useWorksheets"
-                   propertyOwner="labsetup" propertyValue="false"/>
     <genericconfig id="34" propertyName="donorsTabEnabled"
                    propertyOwner="labsetup" propertyValue="true"/>
     <genericconfig id="35" propertyName="donationsTabEnabled"

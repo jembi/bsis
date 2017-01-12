@@ -1,0 +1,54 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+      http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  logicalFilePath="./src/main/resources/liquibase/updates/2020-refactor-blood-test-rule.xml">
+
+  <changeSet id="20161108-0921" author="lauravignoli">
+    <comment>Remove references to Worksheet</comment>
+    <dropTable tableName="BloodTest_WorksheetType" />
+    <dropTable tableName="BloodTest_WorksheetType_AUD" />
+    <dropTable tableName="Worksheet_Donation" />
+    <dropTable tableName="Worksheet" />
+    <dropTable tableName="Worksheet_AUD" />
+    <dropTable tableName="WorksheetType" />
+    <dropTable tableName="WorksheetType_AUD" />
+    <delete tableName="FormField">
+      <where>form = 'Worksheet'</where>
+    </delete>
+    <delete tableName="GenericConfig">
+      <where>propertyName like '%Worksheets%'</where>
+    </delete>
+  </changeSet>
+  
+  <changeSet id="20161108-1000" author="lauravignoli">
+  <comment>Remove references to extraInformation</comment>
+    <dropColumn tableName="BloodTestingRule" columnName="extraInformation"/>
+    <dropColumn tableName="BloodTestingRule_AUD" columnName="extraInformation"/>
+    <dropColumn tableName="Donation" columnName="extraBloodTypeInformation"/>
+    <dropColumn tableName="Donation_AUD" columnName="extraBloodTypeInformation"/>
+  </changeSet>
+  
+  <changeSet id="20161108-1053" author="lauravignoli">
+  <comment>Remove references to blood test context</comment>
+    <dropColumn tableName="BloodTestingRule" columnName="context"/>
+    <dropColumn tableName="BloodTestingRule_AUD" columnName="context"/>
+    <dropColumn tableName="BloodTest" columnName="context"/>
+    <dropColumn tableName="BloodTest_AUD" columnName="context"/>
+    <delete tableName="GenericConfig">
+      <where>propertyName = 'bloodTypingContext'</where>
+    </delete>
+  </changeSet>
+  
+  <changeSet id="20161108-1603" author="tumijacob">
+  <comment>Remove references to markSampleAsUnsafe and subCategory</comment>
+    <dropColumn columnName="markSampleAsUnsafe" tableName="BloodTestingRule" />
+    <dropColumn columnName="subCategory" tableName="BloodTestingRule" />
+  </changeSet>
+  
+  <changeSet id="20161110-1306" author="tumijacob">
+  <comment>Remove references to markSampleAsUnsafe and subCategory from BloodTestingRule_AUD</comment>
+    <dropColumn columnName="markSampleAsUnsafe" tableName="BloodTestingRule_AUD" />
+    <dropColumn columnName="subCategory" tableName="BloodTestingRule_AUD" />
+  </changeSet>  
+</databaseChangeLog>

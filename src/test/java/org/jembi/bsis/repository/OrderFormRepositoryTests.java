@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
+import org.jembi.bsis.dto.BloodUnitsOrderDTO;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.OrderFormBuilder;
@@ -24,7 +26,6 @@ import org.jembi.bsis.model.order.OrderFormItem;
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.model.packtype.PackType;
-import org.jembi.bsis.repository.OrderFormRepository;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -233,6 +234,202 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     // Verify
     Assert.assertEquals("Found 1 order", 1, orders.size());
     Assert.assertEquals("Verify right order was returned", dispatchedOrderForm, orders.get(0));
+  }
+
+  @Test
+  public void testFindBloodUnitsOrdered_shouldReturnRightDtos() {
+    // Set up
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().minusDays(2).toDate();
+    ComponentType componentType1 = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
+    ComponentType componentType2 = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
+    
+    OrderForm order1 = OrderFormBuilder.anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .buildAndPersist(entityManager);
+    
+    OrderForm order2 = OrderFormBuilder.anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .buildAndPersist(entityManager);
+    
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType1)
+        .withNumberOfUnits(1)
+        .withOrderForm(order1)
+        .buildAndPersist(entityManager);
+    
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType1)
+        .withNumberOfUnits(5)
+        .withOrderForm(order1)
+        .buildAndPersist(entityManager);
+    
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType1)
+        .withNumberOfUnits(2)
+        .withOrderForm(order2)
+        .buildAndPersist(entityManager);
+
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType2)
+        .withNumberOfUnits(7)
+        .withOrderForm(order2)
+        .buildAndPersist(entityManager);
+
+    // Run test
+    List<BloodUnitsOrderDTO> dtos = orderFormRepository.findBloodUnitsOrdered(startDate, endDate);
+
+    // Verify
+    Assert.assertEquals("Found 2 dtos", 2, dtos.size());
+    Assert.assertEquals("Correct count", 8, dtos.get(0).getCount());
+    Assert.assertEquals("Correct componentType", componentType1, dtos.get(0).getComponentType());
+    Assert.assertEquals("Correct count", 7, dtos.get(1).getCount());
+    Assert.assertEquals("Correct componentType", componentType2, dtos.get(1).getComponentType());
+  }
+  
+  @Test
+  public void testFindBloodUnitsOrderedWithExcludingFields_shouldntReturnDtos() {
+    // Set up
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().minusDays(2).toDate();
+    ComponentType componentType = ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager);
+    
+    // Exclude by order type 'CREATED'
+    OrderForm orderExcludedByType = OrderFormBuilder.anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.CREATED)
+        .withOrderType(OrderType.ISSUE)
+        .buildAndPersist(entityManager);   
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType)
+        .withNumberOfUnits(1)
+        .withOrderForm(orderExcludedByType)
+        .buildAndPersist(entityManager);
+    
+    // Exclude by order status 'TRANSFER'
+    OrderForm orderExcludedByStatus = OrderFormBuilder.anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.TRANSFER)
+        .buildAndPersist(entityManager);   
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType)
+        .withNumberOfUnits(1)
+        .withOrderForm(orderExcludedByStatus)
+        .buildAndPersist(entityManager);
+    
+    // Exclude by date
+    OrderForm orderExcludedByDate = OrderFormBuilder.anOrderForm()
+        .withOrderDate(new DateTime().minusDays(30).toDate())
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .buildAndPersist(entityManager);   
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType)
+        .withNumberOfUnits(1)
+        .withOrderForm(orderExcludedByDate)
+        .buildAndPersist(entityManager);
+    
+    // Exclude by deleted order
+    OrderForm orderExcludedByDeletedOrder = OrderFormBuilder.anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .withIsDeleted(true)
+        .buildAndPersist(entityManager);   
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType)
+        .withNumberOfUnits(1)
+        .withOrderForm(orderExcludedByDeletedOrder)
+        .buildAndPersist(entityManager);
+
+    // Run test
+    List<BloodUnitsOrderDTO> dtos = orderFormRepository.findBloodUnitsOrdered(startDate, endDate);
+
+    // Verify
+    Assert.assertEquals("Found 0 dtos", 0, dtos.size());
+  }
+
+  @Test
+  public void testFindBloodUnitsIssued_shouldReturnCorrectDTOs() {
+    // Set up fixture
+    Date startDate = new DateTime().minusDays(10).toDate();
+    Date endDate = new DateTime().minusDays(1).toDate();
+    
+    ComponentType firstComponentType = aComponentType().buildAndPersist(entityManager);
+    ComponentType secondComponentType = aComponentType().buildAndPersist(entityManager);
+    
+    // Expected, 2 first components, 1 second component
+    anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .buildAndPersist(entityManager);
+
+    // Expected, 1 first component, 1 second component
+    anOrderForm()
+        .withOrderDate(endDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .buildAndPersist(entityManager);
+
+    // Excluded by date
+    anOrderForm()
+        .withOrderDate(new DateTime().minusDays(90).toDate())
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .buildAndPersist(entityManager);
+
+    // Excluded by order status
+    anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.CREATED)
+        .withOrderType(OrderType.ISSUE)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .buildAndPersist(entityManager);
+
+    // Excluded by order type
+    anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.TRANSFER)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .buildAndPersist(entityManager);
+    
+    // Excluded by deleted order
+    anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.ISSUE)
+        .withComponent(aComponent().withComponentType(firstComponentType).build())
+        .withComponent(aComponent().withComponentType(secondComponentType).build())
+        .withIsDeleted(true)
+        .buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    List<BloodUnitsOrderDTO> returnedDTOs = orderFormRepository.findBloodUnitsIssued(startDate, endDate);
+    
+    // Verify
+    Assert.assertEquals("Found 2 DTOs", 2, returnedDTOs.size());
+    // First component type
+    Assert.assertEquals("Correct count", 3, returnedDTOs.get(0).getCount());
+    Assert.assertEquals("Correct componentType", firstComponentType, returnedDTOs.get(0).getComponentType());
+    // Second component type
+    Assert.assertEquals("Correct count", 2, returnedDTOs.get(1).getCount());
+    Assert.assertEquals("Correct componentType", secondComponentType, returnedDTOs.get(1).getComponentType());
   }
 
 }

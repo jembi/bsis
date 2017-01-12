@@ -2,8 +2,10 @@ package org.jembi.bsis.helpers.builders;
 
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,17 +13,18 @@ import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.DonationPersister;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
+import org.jembi.bsis.model.user.User;
 
 public class DonationBuilder extends AbstractEntityBuilder<Donation> {
 
@@ -39,7 +42,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private Integer bloodPressureDiastolic;
   private BigDecimal donorWeight;
   private String notes;
-  private PackType packType;
+  private PackType packType = aPackType().build();
   private Date bleedStartTime;
   private Date bleedEndTime;
   private AdverseEvent adverseEvent;
@@ -50,11 +53,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private BloodTypingMatchStatus bloodTypingMatchStatus;
   private BloodTypingStatus bloodTypingStatus;
   private DonationBatch donationBatch = aDonationBatch().build();
-  private String extraBloodTypeInformation;
   private Date createdDate = new Date();
   private boolean released;
   private boolean ineligibleDonor;
-  private List<Component> components;
+  private List<Component> components = new ArrayList<>();
+  private User createdBy;
 
   public DonationBuilder withId(Long id) {
     this.id = id;
@@ -186,11 +189,6 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     return this;
   }
 
-  public DonationBuilder withExtraBloodTypeInformation(String extraBloodTypeInformation) {
-    this.extraBloodTypeInformation = extraBloodTypeInformation;
-    return this;
-  }
-
   public DonationBuilder thatIsReleased() {
     this.released = true;
     return this;
@@ -208,6 +206,24 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   
   public DonationBuilder withComponents(List<Component> components) {
     this.components = components;
+    return this;
+  }
+  
+  public DonationBuilder withComponent(Component component) {
+    if (components == null) {
+      components = new ArrayList<>();
+    }
+    components.add(component);
+    return this;
+  }
+  
+  public DonationBuilder withCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+    return this;
+  }
+  
+  public DonationBuilder withCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
     return this;
   }
 
@@ -239,7 +255,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
     donation.setBloodTypingStatus(bloodTypingStatus);
     donation.setDonationBatch(donationBatch);
-    donation.setExtraBloodTypeInformation(extraBloodTypeInformation);
+    donation.setCreatedBy(createdBy);
     donation.setCreatedDate(createdDate);
     donation.setReleased(released);
     donation.setIneligibleDonor(ineligibleDonor);

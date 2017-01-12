@@ -1,79 +1,86 @@
 package org.jembi.bsis.backingform;
 
-import scala.actors.threadpool.Arrays;
+import java.util.Set;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.BloodTestContext;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BloodTestingRuleBackingForm {
 
-  @JsonIgnore
-  private BloodTestingRule typingRule;
+  private Long id;
 
-  public BloodTestingRuleBackingForm() {
-    typingRule = new BloodTestingRule();
-  }
+  private BloodTestBackingForm bloodTest;
 
-  public BloodTestingRule getTypingRule() {
-    return typingRule;
-  }
+  private String pattern;
 
-  public void setTypingRule(BloodTestingRule typingRule) {
-    this.typingRule = typingRule;
+  private DonationField donationFieldChanged;
+
+  private String newInformation;
+
+  private Set<BloodTestBackingForm> pendingTests;
+
+  private Boolean isDeleted;
+
+  public Long getId() {
+    return id;
   }
 
   public void setId(Long id) {
-    typingRule.setId(id);
+    this.id = id;
   }
 
-  public void setPendingTestsIds(int[] pendingTestsIds) {
-    String testIds = Arrays.toString(pendingTestsIds).replaceAll("\\s", "");
-    typingRule.setPendingTestsIds(testIds.substring(1, testIds.length() - 1));
+  public BloodTestBackingForm getBloodTest() {
+    return bloodTest;
   }
 
-  public void setCategory(String category) {
-    typingRule.setCategory(BloodTestCategory.valueOf(category.replaceAll("\\s", "").toUpperCase()));
+  public void setBloodTest(BloodTestBackingForm bloodTest) {
+    this.bloodTest = bloodTest;
   }
 
-  public void setDonationFieldChanged(String donationField) {
-    typingRule.setDonationFieldChanged(DonationField.valueOf(donationField.replaceAll("\\s", "").toUpperCase()));
+  public String getPattern() {
+    return pattern;
   }
 
   public void setPattern(String pattern) {
-    typingRule.setPattern(pattern);
+    this.pattern = pattern;
   }
 
-  public void setContext(String context) {
-    typingRule.setContext(BloodTestContext.valueOf(context.replaceAll("\\s", "").toUpperCase()));
+  public DonationField getDonationFieldChanged() {
+    return donationFieldChanged;
   }
 
-  public void setExtraInformation(String extraInformation) {
-    typingRule.setExtraInformation(extraInformation);
+  public void setDonationFieldChanged(DonationField donationFieldChanged) {
+    this.donationFieldChanged = donationFieldChanged;
   }
 
-  public void setSubCategory(String subCategory) {
-    typingRule.setSubCategory(BloodTestSubCategory.valueOf(subCategory.replaceAll("\\s", "").toUpperCase()));
-  }
-
-  public void setIsActive(Boolean isActive) {
-    typingRule.setIsActive(isActive);
-  }
-
-  public void setMarkSampleAsUnsafe(Boolean MarkSampleAsUnsafe) {
-    typingRule.setMarkSampleAsUnsafe(MarkSampleAsUnsafe);
+  public String getNewInformation() {
+    return newInformation;
   }
 
   public void setNewInformation(String newInformation) {
-    typingRule.setNewInformation(newInformation);
+    this.newInformation = newInformation;
   }
 
-  public void setBloodTestsIds(String bloodTestIds) {
-    typingRule.setBloodTestsIds(bloodTestIds);
+  public Set<BloodTestBackingForm> getPendingTests() {
+    return pendingTests;
   }
 
+  public void setPendingTests(Set<BloodTestBackingForm> pendingTests) {
+    this.pendingTests = pendingTests;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+
+  @JsonIgnore
+  public void setCategory(BloodTestCategory category) {
+    // ignore
+  }
 }

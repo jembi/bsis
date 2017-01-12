@@ -1,18 +1,27 @@
 package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.model.bloodtesting.BloodTest;
+import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
 public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
+  
+  // static counter that is used to create a unique default test name
+  private static int UNIQUE_INCREMENT = 0;
 
   private Long id;
+  private BloodTestCategory category;
   private BloodTestType bloodTestType;
   private String positiveResults;
-  private boolean flagComponentsForDiscard;
+  private String negativeResults;
+  private boolean flagComponentsForDiscard = false;
+  private boolean flagComponentsContainingPlasmaForDiscard = false;
   private String validResults;
-  private Boolean isEmptyAllowed;
-  private String testName;
-  private String testNameShort;
+  private String testName = "test " + ++UNIQUE_INCREMENT;
+  private String testNameShort = "t";
+  private Integer rankInCategory;
+  private Boolean isDeleted = Boolean.FALSE;
+  private Boolean isActive = Boolean.TRUE;
 
   public BloodTestBuilder withId(Long id) {
     this.id = id;
@@ -24,8 +33,18 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     return this;
   }
 
+  public BloodTestBuilder withCategory(BloodTestCategory category) {
+    this.category = category;
+    return this;
+  }
+
   public BloodTestBuilder withPositiveResults(String positiveResults) {
     this.positiveResults = positiveResults;
+    return this;
+  }
+
+  public BloodTestBuilder withNegativeResults(String negativeResults) {
+    this.negativeResults = negativeResults;
     return this;
   }
 
@@ -33,14 +52,29 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     this.flagComponentsForDiscard = flagComponentsForDiscard;
     return this;
   }
-
-  public BloodTestBuilder withValidResults(String validResults) {
-    this.validResults = validResults;
+  
+  public BloodTestBuilder thatShouldFlagComponentsForDiscard(){
+    this.flagComponentsForDiscard = true;
     return this;
   }
-
-  public BloodTestBuilder withIsEmptyAllowed(Boolean isEmptyAllowed) {
-    this.isEmptyAllowed = isEmptyAllowed;
+  
+  public BloodTestBuilder thatShouldNotFlagComponentsForDiscard(){
+    this.flagComponentsForDiscard = false;
+    return this;
+  }
+  
+  public BloodTestBuilder thatShouldFlagComponentsContainingPlasmaForDiscard(){
+    this.flagComponentsContainingPlasmaForDiscard = true;
+    return this;
+  }
+  
+  public BloodTestBuilder thatShouldNotFlagComponentsContainingPlasmaForDiscard(){
+    this.flagComponentsContainingPlasmaForDiscard = false;
+    return this;
+  }
+  
+  public BloodTestBuilder withValidResults(String validResults) {
+    this.validResults = validResults;
     return this;
   }
 
@@ -54,17 +88,37 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     return this;
   }
 
+  public BloodTestBuilder withRankInCategory(Integer rankInCategory) {
+    this.rankInCategory = rankInCategory;
+    return this;
+  }
+
+  public BloodTestBuilder thatIsDeleted() {
+    this.isDeleted = Boolean.TRUE;
+    return this;
+  }
+
+  public BloodTestBuilder thatIsInActive() {
+    this.isActive = Boolean.FALSE;
+    return this;
+  }
+
   @Override
   public BloodTest build() {
     BloodTest bloodTest = new BloodTest();
     bloodTest.setId(id);
+    bloodTest.setCategory(category);
     bloodTest.setBloodTestType(bloodTestType);
     bloodTest.setPositiveResults(positiveResults);
+    bloodTest.setNegativeResults(negativeResults);
     bloodTest.setFlagComponentsForDiscard(flagComponentsForDiscard);
     bloodTest.setValidResults(validResults);
-    bloodTest.setIsEmptyAllowed(isEmptyAllowed);
+    bloodTest.setFlagComponentsContainingPlasmaForDiscard(flagComponentsContainingPlasmaForDiscard);
     bloodTest.setTestName(testName);
     bloodTest.setTestNameShort(testNameShort);
+    bloodTest.setRankInCategory(rankInCategory);
+    bloodTest.setIsActive(isActive);
+    bloodTest.setIsDeleted(isDeleted);
     return bloodTest;
   }
 
@@ -72,4 +126,27 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     return new BloodTestBuilder();
   }
 
+  public static BloodTestBuilder aBasicTTIBloodTest() {
+    return new BloodTestBuilder().withCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.BASIC_TTI);
+  }
+
+  public static BloodTestBuilder aRepeatTTIBloodTest() {
+    return new BloodTestBuilder().withCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.REPEAT_TTI);
+  }
+
+  public static BloodTestBuilder aConfirmatoryTTIBloodTest() {
+    return new BloodTestBuilder().withCategory(BloodTestCategory.TTI).withBloodTestType(BloodTestType.CONFIRMATORY_TTI);
+  }
+
+  public static BloodTestBuilder aBasicBloodTypingBloodTest() {
+    return new BloodTestBuilder()
+      .withCategory(BloodTestCategory.BLOODTYPING)
+      .withBloodTestType(BloodTestType.BASIC_BLOODTYPING);
+  }
+
+  public static BloodTestBuilder aRepeatBloodTypingBloodTest() {
+    return new BloodTestBuilder()
+      .withCategory(BloodTestCategory.BLOODTYPING)
+      .withBloodTestType(BloodTestType.REPEAT_BLOODTYPING);
+  }
 }

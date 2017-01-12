@@ -1,0 +1,40 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  	logicalFilePath="./src/main/resources/liquibase/updates/862-donors-deferred-report.xml">
+
+	<changeSet id="20160810-0839" author="timler">
+		<comment>Add permission for Donor reporting and assign to appropriate roles: </comment>
+		<insert tableName="Permission">
+		    <column name="id" value="110"></column>
+		    <column name="name" value="Reporting - Donors"></column>
+		</insert>
+		<comment>Super User, </comment>
+	    <insert tableName="Permission_Role">
+	       <column name="permissions_id" value="110"></column>
+	       <column name="roles_id" value="1"></column>
+	    </insert>
+		<comment>Admin, </comment>
+	    <insert tableName="Permission_Role">
+	       <column name="permissions_id" value="110"></column>
+	       <column name="roles_id" value="2"></column>
+	    </insert>
+		<comment>Donor Clinic Supervisor, </comment>
+	    <insert tableName="Permission_Role">
+	       <column name="permissions_id" value="110"></column>
+	       <column name="roles_id" value="3"></column>
+	    </insert>
+		<comment>Donor Clinic Staff, </comment>
+	    <insert tableName="Permission_Role">
+	       <column name="permissions_id" value="110"></column>
+	       <column name="roles_id" value="4"></column>
+	    </insert>
+		<comment>Donor Counselling Staff.</comment>
+	    <insert tableName="Permission_Role">
+	       <column name="permissions_id" value="110"></column>
+	       <column name="roles_id" value="6"></column>
+	    </insert>
+	</changeSet>
+		
+</databaseChangeLog>

@@ -8,9 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.jembi.bsis.model.admin.ConfigPropertyConstants;
 import org.jembi.bsis.model.admin.GenericConfig;
-import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,10 +43,6 @@ public class GenericConfigRepository {
     em.flush();
   }
 
-  public void updateWorksheetProperties(Map<String, String> params) {
-    updateConfigProperties(ConfigPropertyConstants.DONATIONS_WORKSHEET, params);
-  }
-
   public Map<String, String> getConfigProperties(String propertyOwner) {
     Map<String, String> configProperties = new HashMap<String, String>();
     String queryStr = "SELECT c FROM GenericConfig c WHERE c.propertyOwner = :propertyOwner";
@@ -60,8 +54,4 @@ public class GenericConfigRepository {
     return configProperties;
   }
 
-  public BloodTestContext getCurrentBloodTypingContext() {
-    String contextStr = getConfigProperties("labsetup").get("bloodTypingContext");
-    return BloodTestContext.valueOf(contextStr);
-  }
 }

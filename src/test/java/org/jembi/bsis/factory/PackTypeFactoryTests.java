@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
+import org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder;
 import org.jembi.bsis.helpers.builders.PackTypeBuilder;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.packtype.PackType;
@@ -33,7 +34,11 @@ public class PackTypeFactoryTests extends UnitTestSuite {
   @Test
   public void testConvertEntityToPackTypeFullViewModel_shouldReturnExpectedViewModel() {
     ComponentType componentType = ComponentTypeBuilder.aComponentType().withId(1L).build();
-    ComponentTypeViewModel componentTypeViewModel = new ComponentTypeViewModel(componentType);
+    
+    ComponentTypeViewModel componentTypeViewModel = ComponentTypeViewModelBuilder.aComponentTypeViewModel()
+        .withId(componentType.getId())
+        .build();
+    
     PackTypeFullViewModel expectedViewModel = aPackTypeViewFullModel()
         .withComponentType(componentTypeViewModel)
         .withPackType("Single")

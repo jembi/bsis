@@ -24,10 +24,16 @@ public class DeferralReasonRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public List<DeferralReason> getAllDeferralReasons() {
+  public List<DeferralReason> getAllDeferralReasonsIncludDeleted() {
     TypedQuery<DeferralReason> query;
     query = em.createQuery("SELECT d from DeferralReason d", DeferralReason.class);
     return query.getResultList();
+  }
+  
+  public List<DeferralReason> getAllDeferralReasons() {
+    return em.createNamedQuery(DeferralReasonNamedQueryConstants.NAME_FIND_ALL_DEFERRAL_REASONS, DeferralReason.class)
+        .setParameter("deleted", false)
+        .getResultList();
   }
 
   public DeferralReason findDeferralReason(String reason) {
@@ -50,19 +56,6 @@ public class DeferralReasonRepository {
     if (query.getResultList().size() == 0)
       return null;
     return query.getSingleResult();
-  }
-
-  public void saveAllDeferralReasons(List<DeferralReason> allDeferralReasons) {
-    for (DeferralReason dr : allDeferralReasons) {
-      DeferralReason existingDeferralReason = getDeferralReasonById(dr.getId());
-      if (existingDeferralReason != null) {
-        existingDeferralReason.setReason(dr.getReason());
-        em.merge(existingDeferralReason);
-      } else {
-        em.persist(dr);
-      }
-    }
-    em.flush();
   }
 
   public DeferralReason saveDeferralReason(DeferralReason deferralReason) {

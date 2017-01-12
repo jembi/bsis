@@ -5,10 +5,10 @@ import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.utils.CustomDateFormatter;
 
 public class DonationViewModel extends BaseViewModel {
@@ -48,7 +48,7 @@ public class DonationViewModel extends BaseViewModel {
   }
   
   public String getDonationDate() {
-    return CustomDateFormatter.getDateString(donationDate);
+    return CustomDateFormatter.getDateTimeString(donationDate);
   }
 
   public void setDonationIdentificationNumber(String donationIdentificationNumber) {
@@ -272,5 +272,5 @@ public class DonationViewModel extends BaseViewModel {
 
   public void setAdverseEvent(AdverseEventViewModel adverseEvent) {
     this.adverseEvent = adverseEvent;
-  }
+  } 
 }

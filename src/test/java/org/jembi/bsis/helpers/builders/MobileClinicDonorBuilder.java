@@ -20,6 +20,8 @@ public class MobileClinicDonorBuilder extends AbstractBuilder<MobileClinicDonorD
   private Boolean deleted;
   private DonorStatus donorStatus;
   private Location venue;
+  private String bloodAbo;
+  private String bloodRh;
 
   public MobileClinicDonorBuilder withId(Long id) {
     this.id = id;
@@ -77,6 +79,15 @@ public class MobileClinicDonorBuilder extends AbstractBuilder<MobileClinicDonorD
     return this;
   }
 
+  public MobileClinicDonorBuilder withBloodAbo(String bloodAbo) {
+    this.bloodAbo = bloodAbo;
+    return this;
+  }
+
+  public MobileClinicDonorBuilder withBloodRh(String bloodRh) {
+    this.bloodRh = bloodRh;
+    return this;
+  }
 
   @Override
   public MobileClinicDonorDTO build() {
@@ -90,6 +101,8 @@ public class MobileClinicDonorBuilder extends AbstractBuilder<MobileClinicDonorD
     donorDTO.setIsDeleted(deleted);
     donorDTO.setDonorStatus(donorStatus);
     donorDTO.setVenue(venue);
+    donorDTO.setBloodAbo(bloodAbo);
+    donorDTO.setBloodRh(bloodRh);
     return donorDTO;
   }
 

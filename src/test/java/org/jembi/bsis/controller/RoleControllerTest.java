@@ -6,28 +6,19 @@ package org.jembi.bsis.controller;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jembi.bsis.controller.RoleController;
 import org.jembi.bsis.model.user.Permission;
 import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.repository.RoleRepository;
+import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/bsis-servlet.xml")
-@WebAppConfiguration
-@Transactional
-public class RoleControllerTest {
+public class RoleControllerTest extends ContextDependentTestSuite  {
 
   @SuppressWarnings("unused")
   private MockHttpServletRequest request;

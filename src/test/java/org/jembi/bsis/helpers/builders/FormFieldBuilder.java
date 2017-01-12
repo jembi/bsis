@@ -22,6 +22,8 @@ public class FormFieldBuilder extends AbstractEntityBuilder<FormField> {
   private String field;
   private Integer maxLength;
 
+  private Boolean isRequired;
+
   public FormFieldBuilder withId(Long id) {
     this.id = id;
     return this;
@@ -82,6 +84,11 @@ public class FormFieldBuilder extends AbstractEntityBuilder<FormField> {
     return this;
   }
 
+  public FormFieldBuilder thatIsRequired(Boolean required) {
+    this.isRequired = required;
+    return this;
+  }
+
   @Override
   public FormField build() {
     FormField formField = new FormField();
@@ -98,6 +105,7 @@ public class FormFieldBuilder extends AbstractEntityBuilder<FormField> {
     formField.setIsAutoGeneratable(isAutoGeneratable);
     formField.setIsTimeField(isTimeField);
     formField.setUseCurrentTime(useCurrentTime);
+    formField.setIsRequired(isRequired);
 
     return formField;
   }

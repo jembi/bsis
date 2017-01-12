@@ -13,7 +13,6 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
-import org.jembi.bsis.repository.SequenceNumberRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Test using DBUnit to test the SequenceNumberRepository
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
+@ContextConfiguration(locations = "classpath:**/applicationContextTest.xml")
 @Transactional
 @WebAppConfiguration
 public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
@@ -112,12 +111,6 @@ public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4Spr
   public void testGetSequenceNumber() throws Exception {
     String next = sequenceNumberRepository.getSequenceNumber("Test", "testNumber");
     Assert.assertEquals("next test number is correct", "000023", next);
-  }
-
-  @Test
-  public void testGetNextWorksheetBatchNumber() throws Exception {
-    String next = sequenceNumberRepository.getNextWorksheetBatchNumber();
-    Assert.assertEquals("next worksheet batchNumber is correct", "000001", next);
   }
 
   @Test

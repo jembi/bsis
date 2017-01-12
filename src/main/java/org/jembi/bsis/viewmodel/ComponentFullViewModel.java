@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 public class ComponentFullViewModel extends ComponentViewModel {
 
   private LocationFullViewModel location;
-  private Date expiresOn;
   private String notes;
   private PackTypeFullViewModel packType;
   private Date createdDate;
@@ -19,6 +18,7 @@ public class ComponentFullViewModel extends ComponentViewModel {
   private String bloodAbo;
   private String bloodRh;
   private InventoryStatus inventoryStatus;
+  private boolean isInitialComponent;
 
   public LocationFullViewModel getLocation() {
     return location;
@@ -26,15 +26,6 @@ public class ComponentFullViewModel extends ComponentViewModel {
 
   public void setLocation(LocationFullViewModel location) {
     this.location = location;
-  }
-
-  @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getExpiresOn() {
-    return expiresOn;
-  }
-
-  public void setExpiresOn(Date expiresOn) {
-    this.expiresOn = expiresOn;
   }
 
   public String getNotes() {
@@ -103,4 +94,11 @@ public class ComponentFullViewModel extends ComponentViewModel {
     this.inventoryStatus = inventoryStatus;
   }
 
+  public boolean getIsInitialComponent() {   
+    return this.isInitialComponent;
+  }
+
+  public void setIsInitialComponent(boolean isInitialComponent) {
+    this.isInitialComponent = isInitialComponent;
+  }
 }

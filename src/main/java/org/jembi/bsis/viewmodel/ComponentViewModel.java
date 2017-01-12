@@ -11,6 +11,7 @@ public class ComponentViewModel extends BaseViewModel {
 
   private ComponentTypeViewModel componentType;
   private Date createdOn;
+  private Date expiresOn;
   private String donationIdentificationNumber;
   private ComponentStatus status;
   private String expiryStatus;
@@ -33,6 +34,15 @@ public class ComponentViewModel extends BaseViewModel {
     this.createdOn = createdOn;
   }
 
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getExpiresOn() {
+    return expiresOn;
+  }
+
+  public void setExpiresOn(Date expiresOn) {
+    this.expiresOn = expiresOn;
+  }
+  
   public String getDonationIdentificationNumber() {
     return donationIdentificationNumber;
   }

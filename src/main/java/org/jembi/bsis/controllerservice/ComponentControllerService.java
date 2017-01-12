@@ -91,7 +91,7 @@ public class ComponentControllerService {
   
   public List<ComponentManagementViewModel> processComponent(RecordComponentBackingForm recordComponentForm) {
     Component parentComponent = componentCRUDService.processComponent(recordComponentForm.getParentComponentId(), 
-        recordComponentForm.getComponentTypeCombination());
+        recordComponentForm.getComponentTypeCombination().getId());
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
         parentComponent.getDonationIdentificationNumber());
     List<ComponentManagementViewModel> componentViewModels = componentFactory.createManagementViewModels(results);

@@ -1,10 +1,5 @@
 package org.jembi.bsis.factory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.user.User;
@@ -16,11 +11,16 @@ import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class DonationBatchViewModelFactory {
 
   @Autowired
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
 
   @Autowired
   private DonationBatchConstraintChecker donationBatchConstraintChecker;
@@ -101,10 +101,10 @@ public class DonationBatchViewModelFactory {
     // Audit fields
     User createdBy = donationBatch.getCreatedBy();
     User lastUpdatedBy = donationBatch.getLastUpdatedBy();
-    donationBatchViewModel.setCreatedDate(donationBatch.getCreatedDate());
     donationBatchViewModel.setCreatedBy(createdBy == null ? "" : createdBy.getUsername());
     donationBatchViewModel.setUpdatedDate(donationBatch.getLastUpdated());
     donationBatchViewModel.setLastUpdatedBy(lastUpdatedBy == null ? "" : lastUpdatedBy.getUsername());
+    donationBatchViewModel.setDonationBatchDate(donationBatch.getDonationBatchDate());
 
     return donationBatchViewModel;
   }
@@ -153,7 +153,7 @@ public class DonationBatchViewModelFactory {
           // This donation did not produce a test sample so skip it
           continue;
         }
-        donationViewModels.add(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation));
+        donationViewModels.add(donationFactory.createDonationViewModelWithoutPermissions(donation));
       }
     }
     return donationViewModels;

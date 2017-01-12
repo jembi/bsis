@@ -26,7 +26,10 @@ public class LocationMatcher extends TypeSafeMatcher<Location> {
         .appendText("\nisProcessingSite: ").appendValue(expected.getIsProcessingSite())
         .appendText("\nisTestingSite: ").appendValue(expected.getIsTestingSite())
         .appendText("\nisDeleted: ").appendValue(expected.getIsDeleted())
-        .appendText("\nNotes: ").appendValue(expected.getNotes());
+        .appendText("\nNotes: ").appendValue(expected.getNotes())
+        .appendText("\nDivision level 1: ").appendValue(expected.getDivisionLevel1())
+        .appendText("\nDivision level 2: ").appendValue(expected.getDivisionLevel2())
+        .appendText("\nDivision level 3: ").appendValue(expected.getDivisionLevel3());
   }
 
   @Override
@@ -40,7 +43,10 @@ public class LocationMatcher extends TypeSafeMatcher<Location> {
         && Objects.equals(actual.getIsProcessingSite(), expected.getIsProcessingSite())
         && Objects.equals(actual.getIsTestingSite(), expected.getIsTestingSite())
         && Objects.equals(actual.getIsDeleted(), expected.getIsDeleted())
-        && Objects.equals(actual.getNotes(), expected.getNotes());
+        && Objects.equals(actual.getNotes(), expected.getNotes())
+        && Objects.equals(actual.getDivisionLevel1(), expected.getDivisionLevel1())
+        && Objects.equals(actual.getDivisionLevel2(), expected.getDivisionLevel2())
+        && Objects.equals(actual.getDivisionLevel3(), expected.getDivisionLevel3());
   }
   
   public static LocationMatcher hasSameStateAsLocation(Location expected) {

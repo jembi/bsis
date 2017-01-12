@@ -1,6 +1,5 @@
 package org.jembi.bsis.backingform;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -19,11 +18,12 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.model.util.Gender;
-import org.jembi.bsis.utils.CustomDateFormatter;
+import org.jembi.bsis.utils.DateDeserialiser;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class DonorBackingForm {
@@ -62,7 +62,7 @@ public class DonorBackingForm {
     return donor.getBirthDate();
   }
 
-  @JsonSerialize(using = DateTimeSerialiser.class)
+  @JsonDeserialize(using = DateDeserialiser.class)
   public void setBirthDate(Date birthDate) {
     donor.setBirthDate(birthDate);
   }

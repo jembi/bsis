@@ -27,6 +27,8 @@ public class InventoryViewModel {
 
   private String bloodGroup;
 
+  private Date expiresOn;
+
   public Long getId() {
     return id;
   }
@@ -99,6 +101,15 @@ public class InventoryViewModel {
 
   public void setBloodGroup(String bloodGroup) {
     this.bloodGroup = bloodGroup;
+  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getExpiresOn() {
+    return expiresOn;
+  }
+
+  public void setExpiresOn(Date expiresOn) {
+    this.expiresOn = expiresOn;
   }
 
 }

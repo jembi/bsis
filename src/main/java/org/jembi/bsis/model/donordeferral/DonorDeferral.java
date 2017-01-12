@@ -29,7 +29,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
         query = DonorDeferralNamedQueryConstants.QUERY_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR),
     @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_FIND_DONOR_DEFERRALS_FOR_DONOR_BY_DEFERRAL_REASON,
-        query = DonorDeferralNamedQueryConstants.QUERY_FIND_DONOR_DEFERRALS_FOR_DONOR_BY_DEFERRAL_REASON)
+        query = DonorDeferralNamedQueryConstants.QUERY_FIND_DONOR_DEFERRALS_FOR_DONOR_BY_DEFERRAL_REASON),
+    @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_COUNT_DEFERRALS_BY_VENUE_DEFERRAL_REASON_AND_GENDER,
+        query = DonorDeferralNamedQueryConstants.QUERY_COUNT_DEFERRALS_BY_VENUE_DEFERRAL_REASON_AND_GENDER),
+    @NamedQuery(name = DonorDeferralNamedQueryConstants.NAME_FIND_DEFERRALS_FOR_EXPORT,
+        query = DonorDeferralNamedQueryConstants.QUERY_FIND_DEFERRALS_FOR_EXPORT)
 })
 @Entity
 @Audited

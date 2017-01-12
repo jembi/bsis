@@ -2,190 +2,177 @@
 <dataset>
     <user id="1" emailId="admin" firstName="admin" isactive="1"
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
-    <BloodTestingRule id="1" bloodTestsIds="1" category="BLOODTYPING"
-                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="O" pattern="O" pendingTestsIds="" subCategory="BLOODABO"/>
-    <BloodTestingRule id="2" bloodTestsIds="1" category="BLOODTYPING"
-                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0" newInformation="A"
-                      pattern="A" pendingTestsIds="" subCategory="BLOODABO"/>
-    <BloodTestingRule id="3" bloodTestsIds="1" category="BLOODTYPING"
-                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="B" pattern="B" pendingTestsIds="" subCategory="BLOODABO"/>
-    <BloodTestingRule id="4" bloodTestsIds="1" category="BLOODTYPING"
-                      donationFieldChanged="BLOODABO" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="AB" pattern="AB" pendingTestsIds="" subCategory="BLOODABO"/>
-    <BloodTestingRule id="5" bloodTestsIds="2" category="BLOODTYPING"
-                      donationFieldChanged="BLOODRH" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="+" pattern="POS" pendingTestsIds="" subCategory="BLOODRH"/>
-    <BloodTestingRule id="6" bloodTestsIds="2" category="BLOODTYPING"
-                      donationFieldChanged="BLOODRH" context="RECORD_BLOOD_TYPING_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="-" pattern="NEG" pendingTestsIds="" subCategory="BLOODRH"/>
-    <BloodTestingRule id="7" bloodTestsIds="17" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="8" bloodTestsIds="17" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="18,19"
-                      subCategory="TTI"/>
-    <BloodTestingRule id="9" bloodTestsIds="18" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="10" bloodTestsIds="19" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="11" bloodTestsIds="20" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="12" bloodTestsIds="20" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="21,22"
-                      subCategory="TTI"/>
-    <BloodTestingRule id="13" bloodTestsIds="21" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="14" bloodTestsIds="22" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="15" bloodTestsIds="23" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="16" bloodTestsIds="23" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="24,25"
-                      subCategory="TTI"/>
-    <BloodTestingRule id="17" bloodTestsIds="24" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="18" bloodTestsIds="25" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="19" bloodTestsIds="26" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="20" bloodTestsIds="26" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="27,28"
-                      subCategory="TTI"/>
-    <BloodTestingRule id="21" bloodTestsIds="27" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
-    <BloodTestingRule id="22" bloodTestsIds="28" category="TTI"
-                      donationFieldChanged="TTISTATUS" context="RECORD_TTI_TESTS"
-                      extraInformation="" isActive="1" markSampleAsUnsafe="0"
-                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds=""
-                      subCategory="TTI"/>
+
     <BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
-               context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
                testName="ABO" testNameShort="ABO" validResults="A,B,AB,O"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
     <BloodTest id="2" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
-               context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="2"
                testName="Rh" testNameShort="Rh" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="3" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
-               context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="LOW" positiveResults="HIGH" rankInCategory="3"
                testName="Titre" testNameShort="Titre" validResults="HIGH,LOW"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="4" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
-               context="RECORD_BLOOD_TYPING_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="4"
                testName="Weak D" testNameShort="Weak D" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="17" bloodTestType="BASIC_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HIV" testNameShort="HIV" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="18" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HIV Confirmatory 1" testNameShort="HIV Conf 1" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="19" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HIV Confirmatory 2" testNameShort="HIV Conf 2" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="20" bloodTestType="BASIC_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HBV" testNameShort="HBV" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="21" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HBV Confirmatory 1" testNameShort="HBV Conf 1" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="22" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HBV Confirmatory 2" testNameShort="HBV Conf 2" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="23" bloodTestType="BASIC_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HCV" testNameShort="HCV" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="24" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HCV Confirmatory 1" testNameShort="HCV Conf 1" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="25" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HCV Confirmatory 2" testNameShort="HCV Conf 2" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="26" bloodTestType="BASIC_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="Syphilis" testNameShort="Syphilis" validResults="POS,NEG"
-               flagComponentsForDiscard="0"/>
+               flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="27" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="Syphilis Confirmatory 1" testNameShort="Syphilis Conf 1"
-               validResults="POS,NEG" flagComponentsForDiscard="0"/>
+               validResults="POS,NEG" flagComponentsForDiscard="0" 
+               flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
     <BloodTest id="28" bloodTestType="CONFIRMATORY_TTI" category="TTI"
-               context="RECORD_TTI_TESTS" isActive="1" isEmptyAllowed="0"
+               isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="Syphilis Confirmatory 2" testNameShort="Syphilis Conf 2"
-               validResults="POS,NEG" flagComponentsForDiscard="0"/>
+               validResults="POS,NEG" flagComponentsForDiscard="0"
+               flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
+    <BloodTestingRule id="1" bloodTest_id="1"  
+                      donationFieldChanged="BLOODABO"
+                      isDeleted="0"
+                      newInformation="O" pattern="O" pendingTestsIds="" />
+    <BloodTestingRule id="2" bloodTest_id="1"  
+                      donationFieldChanged="BLOODABO"
+                      isDeleted="0"   newInformation="A"
+                      pattern="A" pendingTestsIds=""  />
+    <BloodTestingRule id="3" bloodTest_id="1"  
+                      donationFieldChanged="BLOODABO"
+                      isDeleted="0"  
+                      newInformation="B" pattern="B" pendingTestsIds=""  />
+    <BloodTestingRule id="4" bloodTest_id="1"  
+                      donationFieldChanged="BLOODABO"
+                      isDeleted="0"  
+                      newInformation="AB" pattern="AB" pendingTestsIds=""  />
+    <BloodTestingRule id="5" bloodTest_id="2"  
+                      donationFieldChanged="BLOODRH"
+                      isDeleted="0"  
+                      newInformation="+" pattern="POS" pendingTestsIds=""  />
+    <BloodTestingRule id="6" bloodTest_id="2"  
+                      donationFieldChanged="BLOODRH"
+                      isDeleted="0"  
+                      newInformation="-" pattern="NEG" pendingTestsIds=""  />
+    <BloodTestingRule id="7" bloodTest_id="17" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
+    <BloodTestingRule id="8" bloodTest_id="17" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="18,19" />
+    <BloodTestingRule id="9" bloodTest_id="18" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
+    <BloodTestingRule id="10" bloodTest_id="19" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
+    <BloodTestingRule id="11" bloodTest_id="20" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
+    <BloodTestingRule id="12" bloodTest_id="20" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="21,22" />
+    <BloodTestingRule id="13" bloodTest_id="21" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
+    <BloodTestingRule id="14" bloodTest_id="22" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
+    <BloodTestingRule id="15" bloodTest_id="23" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
+    <BloodTestingRule id="16" bloodTest_id="23" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="24,25" />
+    <BloodTestingRule id="17" bloodTest_id="24" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
+    <BloodTestingRule id="18" bloodTest_id="25" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
+    <BloodTestingRule id="19" bloodTest_id="26" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
+    <BloodTestingRule id="20" bloodTest_id="26" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="27,28" />
+    <BloodTestingRule id="21" bloodTest_id="27" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
+    <BloodTestingRule id="22" bloodTest_id="28" 
+                      donationFieldChanged="TTISTATUS"
+                      isDeleted="0"  
+                      newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
 
     <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
     <DonationType id="2" donationType="Family" isDeleted="false"/>
@@ -194,61 +181,67 @@
     <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
-                   componentTypeCode="0011"/>
+                   componentTypeCode="0011" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="2" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Double Pack - CPDA"
-                   componentTypeCode="0012"/>
+                   componentTypeCode="0012" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="3" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Triple Pack - CPDA"
-                   componentTypeCode="0013"/>
+                   componentTypeCode="0013" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="4" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Whole Blood Quad Pack - CPDA" componentTypeCode="0014"/>
+                   componentTypeName="Whole Blood Quad Pack - CPDA"
+                   componentTypeCode="0014" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="5" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Apheresis" componentTypeCode="0021"/>
+                   componentTypeName="Apheresis"
+                   componentTypeCode="0021" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="6" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Whole Blood - CPDA" componentTypeCode="1001"/>
+                   componentTypeName="Whole Blood - CPDA"
+                   componentTypeCode="1001" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="7" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Poor Platelets - CPDA"
-                   componentTypeCode="1005"/>
+                   componentTypeCode="1005" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="8" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Packed Red Cells - CPDA" componentTypeCode="2001"/>
+                   componentTypeName="Packed Red Cells - CPDA"
+                   componentTypeCode="2001" containsPlasma="false"/>
     <ComponentType canBeIssued="true" id="9" description="" expiresAfter="42"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Packed Red Cells - SAGM" componentTypeCode="2011"/>
+                   componentTypeName="Packed Red Cells - SAGM"
+                   componentTypeCode="2011" containsPlasma="false"/>
     <ComponentType canBeIssued="true" id="10" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Fresh Frozen Plasma - Whole Blood"
-                   componentTypeCode="3001"/>
+                   componentTypeCode="3001" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="11" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Frozen Plasma - Whole Blood" componentTypeCode="3002"/>
+                   componentTypeName="Frozen Plasma - Whole Blood"
+                   componentTypeCode="3002" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="12" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Whole Blood"
-                   componentTypeCode="4001"/>
+                   componentTypeCode="4001" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="13" description="" expiresAfter="1"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Whole Blood - 24H"
-                   componentTypeCode="4011"/>
+                   componentTypeCode="4011" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="14" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - Paediatric - CPDA"
-                   componentTypeCode="2101"/>
+                   componentTypeCode="2101" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="15" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Fresh Frozen Plasma - Apheresis"
-                   componentTypeCode="3011"/>
+                   componentTypeCode="3011" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="16" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Apheresis"
-                   componentTypeCode="4021"/>
+                   componentTypeCode="4021" containsPlasma="true"/>
     <PackType id="1" packType="Single" isDeleted="false" testSampleProduced="true"
               componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>
     <PackType id="2" packType="Double" isDeleted="false" testSampleProduced="true"
@@ -281,18 +274,18 @@
                status="OPEN" createdBy_id="1" lastUpdatedBy_id="1"/>
 
     <DonationBatch id="1" batchNumber="B0215000000"
-                   isDeleted="false" createdDate="2015-02-02 03:41:09.0"
+                   isDeleted="false" createdDate="2015-02-02 03:41:09.0" donationBatchDate="2015-02-02 03:41:09.0"
                    lastUpdated="2015-02-02 03:42:55.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="1"
                    venue_id="1" backEntry="false"/>
     <DonationBatch id="2" batchNumber="B0215000001"
-                   isDeleted="false" createdDate="2015-02-02 03:43:00.0"
+                   isDeleted="false" createdDate="2015-02-02 03:43:00.0" donationBatchDate="2015-02-02 03:43:00.0"
                    lastUpdated="2015-04-24 04:42:09.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="2"
                    venue_id="2" backEntry="false"/>
     <DonationBatch id="3" batchNumber="B0615000000"
-                   isDeleted="false" createdDate="2015-06-26 03:19:33.0"
-                   lastUpdated="2015-06-26 03:19:33.0"
+                   isDeleted="false" createdDate="2015-06-26 03:19:33.0" donationBatchDate="2015-06-26 03:19:33.0"
+				   lastUpdated="2015-06-26 03:19:33.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="1"
                    backEntry="false"/>
 
@@ -332,7 +325,7 @@
 	<Donation id="1" bloodAbo="O"
 		bloodPressureSystolic="110" bloodRh="+" bloodTypingStatus="COMPLETE"
 		donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1234567"
-		donorWeight="80.00" extraBloodTypeInformation="" haemoglobinCount="15.70"
+		donorWeight="80.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-06 02:09:30.0"
 		ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
 		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
@@ -341,7 +334,7 @@
 		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0" />
 	<Donation id="2" bloodAbo="A" bloodRh="-"
 		bloodTypingStatus="COMPLETE" donationDate="2015-02-02 00:00:00.0"
-		donationIdentificationNumber="1212129" extraBloodTypeInformation="" isDeleted="0"
+		donationIdentificationNumber="1212129" isDeleted="0"
 		createdDate="2015-02-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="TTI_SAFE" packType_id="1" donationBatch_id="2"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
@@ -356,7 +349,7 @@
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="4" bloodAbo="B" bloodRh="+"
 		bloodTypingStatus="NOT_DONE" donationDate="2015-04-03 00:00:00.0"
-		donationIdentificationNumber="123123" extraBloodTypeInformation="" isDeleted="0"
+		donationIdentificationNumber="123123" isDeleted="0"
 		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
@@ -364,7 +357,7 @@
 		bloodTypingMatchStatus="AMBIGUOUS" ineligibleDonor="0" released="0" />
 	<Donation id="5" bloodAbo="A" bloodRh="-"
 		bloodTypingStatus="COMPLETE" donationDate="2015-04-04 00:00:00.0"
-		donationIdentificationNumber="124124" extraBloodTypeInformation="" isDeleted="0"
+		donationIdentificationNumber="124124" isDeleted="0"
 		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="TTI_UNSAFE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
@@ -372,184 +365,184 @@
 		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0" />
 	<Donation id="6" bloodAbo="A" bloodRh="-"
 		bloodTypingStatus="COMPLETE" donationDate="2015-04-05 00:00:00.0"
-		donationIdentificationNumber="125125" extraBloodTypeInformation="" isDeleted="0"
+		donationIdentificationNumber="125125" isDeleted="0"
 		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="TTI_SAFE" packType_id="1" donationBatch_id="1"
 		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0" />
 	<Donation id="7" bloodAbo="" bloodRh="" donationDate="2015-04-05 00:00:00.0"
-		donationIdentificationNumber="126126" extraBloodTypeInformation=""
+		donationIdentificationNumber="126126"
 		isDeleted="0" createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		packType_id="1" donationBatch_id="1" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="1970-01-01 14:53:37.0"
 		bleedEndTime="1970-01-01 14:53:37.0" ineligibleDonor="0" released="0" />
 	<Donation id="8" bloodAbo="" bloodRh="" donationDate="2015-04-05 00:00:00.0"
-		donationIdentificationNumber="127127" extraBloodTypeInformation=""
+		donationIdentificationNumber="127127"
 		isDeleted="0" createdDate="2016-02-04 07:53:57.0" lastUpdated="2016-02-04 07:53:57.0"
 		packType_id="1" donationBatch_id="1" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="1970-01-01 14:53:37.0"
 		bleedEndTime="1970-01-01 14:53:37.0" ineligibleDonor="0" released="0" ttiStatus="NOT_DONE"/>
 	<Donation id="9" bloodAbo="" bloodRh="" donationDate="2015-04-05 00:00:00.0"
-		donationIdentificationNumber="127128" extraBloodTypeInformation=""
+		donationIdentificationNumber="127128"
 		isDeleted="0" createdDate="2016-02-04 07:53:57.0" lastUpdated="2016-02-04 07:53:57.0"
 		packType_id="1" donationBatch_id="1" donationType_id="1" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="1970-01-01 14:53:37.0"
 		bleedEndTime="1970-01-01 14:53:37.0" ineligibleDonor="0" released="0" ttiStatus="NOT_DONE"/>
 
-	<BloodTestResult id="1" createdDate="2015-02-06 02:09:13.0"
+	<BloodTestResult isDeleted="false" id="1" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
 		testedOn="2015-02-06 02:09:13.0" bloodTest_id="17" donation_id="1"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="2" createdDate="2015-02-06 02:09:13.0"
+	<BloodTestResult isDeleted="false" id="2" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
 		testedOn="2015-02-06 02:09:13.0" bloodTest_id="20" donation_id="1"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="3" createdDate="2015-02-06 02:09:13.0"
+	<BloodTestResult isDeleted="false" id="3" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
 		testedOn="2015-02-06 02:09:13.0" bloodTest_id="23" donation_id="1"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="4" createdDate="2015-02-06 02:09:13.0"
+	<BloodTestResult isDeleted="false" id="4" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
 		testedOn="2015-02-06 02:09:13.0" bloodTest_id="26" donation_id="1"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="5" createdDate="2015-02-06 02:09:23.0"
+	<BloodTestResult isDeleted="false" id="5" createdDate="2015-02-06 02:09:23.0"
 		lastUpdated="2015-02-06 02:09:23.0" notes="" result="O"
 		testedOn="2015-02-06 02:09:23.0" bloodTest_id="1" donation_id="1"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="6" createdDate="2015-02-06 02:09:23.0"
+	<BloodTestResult isDeleted="false" id="6" createdDate="2015-02-06 02:09:23.0"
 		lastUpdated="2015-02-06 02:09:23.0" notes="" result="POS"
 		testedOn="2015-02-06 02:09:23.0" bloodTest_id="2" donation_id="1"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="7" createdDate="2015-04-24 04:42:49.0"
+	<BloodTestResult isDeleted="false" id="7" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="17" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="8" createdDate="2015-04-24 04:42:49.0"
+	<BloodTestResult isDeleted="false" id="8" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="20" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="9" createdDate="2015-04-24 04:42:49.0"
+	<BloodTestResult isDeleted="false" id="9" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="23" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="10" createdDate="2015-04-24 04:42:49.0"
+	<BloodTestResult isDeleted="false" id="10" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="26" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="11" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="11" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="12" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="12" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="13" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="13" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="LOW"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="3" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="14" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="14" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="4" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="15" createdDate="2015-06-24 06:39:25.0"
+	<BloodTestResult isDeleted="false" id="15" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
 		testedOn="2015-06-24 06:39:25.0" bloodTest_id="17" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="16" createdDate="2015-06-24 06:39:25.0"
+	<BloodTestResult isDeleted="false" id="16" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
 		testedOn="2015-06-24 06:39:25.0" bloodTest_id="20" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="17" createdDate="2015-06-24 06:39:25.0"
+	<BloodTestResult isDeleted="false" id="17" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
 		testedOn="2015-06-24 06:39:25.0" bloodTest_id="23" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="18" createdDate="2015-06-24 06:39:25.0"
+	<BloodTestResult isDeleted="false" id="18" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
 		testedOn="2015-06-24 06:39:25.0" bloodTest_id="26" donation_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="19" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="19" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="B"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="4"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="20" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="20" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="POS"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="4"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="21" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="21" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="LOW"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="3" donation_id="4"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="22" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="22" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="4" donation_id="4"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="23" createdDate="2015-06-24 06:39:25.0"
+	<BloodTestResult isDeleted="false" id="23" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
 		testedOn="2015-06-24 06:39:25.0" bloodTest_id="17" donation_id="4"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="24" createdDate="2015-04-24 04:42:49.0"
+	<BloodTestResult isDeleted="false" id="24" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:30:49.0" bloodTest_id="17" donation_id="5"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="25" createdDate="2015-04-24 04:42:49.0"
+	<BloodTestResult isDeleted="false" id="25" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="20" donation_id="5"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="26" createdDate="2015-04-24 04:42:49.0"
+	<BloodTestResult isDeleted="false" id="26" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="23" donation_id="5"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="27" createdDate="2015-04-24 04:42:49.0"
+	<BloodTestResult isDeleted="false" id="27" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="26" donation_id="5"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="28" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="28" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="5"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="29" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="29" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="5"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="30" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="30" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="LOW"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="3" donation_id="5"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="31" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="31" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="4" donation_id="5"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="32" createdDate="2015-04-24 04:42:49.0"
+	<BloodTestResult isDeleted="false" id="32" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="POS"
 		testedOn="2015-04-24 04:42:49.0" bloodTest_id="17" donation_id="5"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="33" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="33" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="Z"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="6"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="35" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="35" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="-"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="6"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="36" createdDate="2015-04-24 04:43:06.0"
+	<BloodTestResult isDeleted="false" id="36" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="?"
 		testedOn="2015-04-24 04:43:06.0" bloodTest_id="17" donation_id="6"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="37" createdDate="2016-02-05 09:17:06.0"
+	<BloodTestResult isDeleted="false" id="37" createdDate="2016-02-05 09:17:06.0"
 		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
 		testedOn="2016-02-05 09:17:06.0" bloodTest_id="17" donation_id="8"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="38" createdDate="2016-02-05 09:17:06.0"
+	<BloodTestResult isDeleted="false" id="38" createdDate="2016-02-05 09:17:06.0"
 		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
 		testedOn="2016-02-05 09:17:06.0" bloodTest_id="20" donation_id="8"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="39" createdDate="2016-02-05 09:17:06.0"
+	<BloodTestResult isDeleted="false" id="39" createdDate="2016-02-05 09:17:06.0"
 		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
 		testedOn="2016-02-05 09:17:06.0" bloodTest_id="23" donation_id="8"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false"/>
-	<BloodTestResult id="40" createdDate="2016-02-05 09:17:06.0"
+	<BloodTestResult isDeleted="false" id="40" createdDate="2016-02-05 09:17:06.0"
 		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
 		testedOn="2016-02-05 09:17:06.0" bloodTest_id="26" donation_id="8"
 		createdBy_id="1" lastUpdatedBy_id="1" reEntryRequired="false" />

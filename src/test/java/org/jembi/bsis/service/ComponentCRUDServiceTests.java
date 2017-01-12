@@ -2,6 +2,7 @@ package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aComponentStatusChangeReason;
@@ -11,11 +12,14 @@ import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.anUnsafeReason;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.jembi.bsis.helpers.matchers.ComponentStatusChangeMatcher.hasSameStateAsComponentStatusChange;
@@ -40,11 +44,15 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
+import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.factory.ComponentFactory;
+import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
+import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.matchers.ComponentMatcher;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
@@ -53,23 +61,25 @@ import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
+import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
 public class ComponentCRUDServiceTests extends UnitTestSuite {
 
   @Spy
@@ -89,6 +99,141 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   private DateGeneratorService dateGeneratorService;
   @Mock
   private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
+  @Mock
+  private GeneralConfigAccessorService generalConfigAccessorService;
+  @Mock
+  private ComponentTypeCombinationRepository componentTypeCombinationRepository;
+  @Mock
+  private DonationBatchRepository donationBatchRepository;
+  
+  @Test
+  public void testCreateInitialComponentWithFalseConfig_shouldReturnNull() {
+    // Set up data
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
+    Donation donation = aDonation().withPackType(packTypeThatCountsAsDonation).build();
+
+    // Set up mocks
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(false);
+
+    // Run test
+    Component component = componentCRUDService.createInitialComponent(donation);
+    
+    // Verify
+    assertThat("Component is null", component == null);
+  }
+  
+  @Test
+  public void testCreateInitialComponent_shouldCreateCorrectComponent() {
+    // Set up data
+    Integer expiresAfterDays = 12;
+    ComponentType componentType = ComponentTypeBuilder.aComponentType().withExpiresAfter(expiresAfterDays).build();
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).withComponentType(componentType).build();
+    Location donationBatchVenue = aVenue().build();
+    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
+        .withVenue(donationBatchVenue)
+        .withComponentBatch(null)
+        .build();
+    Donor existingDonor = aDonor().build();
+    Location donationVenue = aVenue().build();
+    Donation donation = aDonation()
+        .withPackType(packTypeThatCountsAsDonation)
+        .withDonationBatch(donationBatchWithComponentBatch)
+        .withDonor(existingDonor)
+        .withDonationDate(new Date())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withVenue(donationVenue)
+        .build();
+
+    Date createdOn = new Date();
+    Date expiresOn = new DateTime(createdOn).plusDays(expiresAfterDays).toDate();
+    
+    // Set up mocks
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
+    when(dateGeneratorService.generateDateTime(donation.getDonationDate(), donation.getBleedEndTime())).thenReturn(createdOn);
+
+    // Run test
+    Component component = componentCRUDService.createInitialComponent(donation);
+    
+    // Verify
+    verify(componentRepository).save(component);
+    assertThat(component.getComponentType(), is(componentType));
+    assertThat(component.getStatus(), is(ComponentStatus.QUARANTINED));
+    assertThat(component.getInventoryStatus(), is(InventoryStatus.NOT_IN_STOCK));
+    assertThat(component.getCreatedOn(), is(createdOn));
+    assertThat(component.getExpiresOn(), is(expiresOn));
+  }
+
+  @Test
+  public void testCreateInitialComponentForDonationBatchWithComponentBatch_shouldSetComponentLocationToProcessingSite() {
+    // Set up data
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
+    Location componentBatchProcessingSite = aProcessingSite().build();
+    ComponentBatch componentBatch = aComponentBatch()
+        .withLocation(componentBatchProcessingSite)
+        .build();
+    
+    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
+        .withComponentBatch(componentBatch)
+        .build();
+    
+    Donor existingDonor = aDonor().build();
+    Location venue = aVenue().build();
+    Donation donation = aDonation()
+        .withPackType(packTypeThatCountsAsDonation)
+        .withDonationBatch(donationBatchWithComponentBatch)
+        .withDonor(existingDonor)
+        .withDonationDate(new Date())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withVenue(venue)
+        .build();
+    
+    // Set up mocks
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
+    when(donationBatchRepository.findComponentBatchByDonationbatchId(donationBatchWithComponentBatch.getId()))
+        .thenReturn(componentBatch);
+    when(dateGeneratorService.generateDateTime(donation.getDonationDate(), donation.getBleedEndTime())).thenReturn(new Date());
+
+    // Run test
+    Component component = componentCRUDService.createInitialComponent(donation);
+    
+    // Verify
+    assertThat(component.getLocation(), is(componentBatchProcessingSite));
+  }
+  
+  @Test
+  public void testCreateInitialComponentForDonationBatchWithoutComponentBatch_shouldSetComponentLocationToDonationBatchVenue() {
+    // Set up data
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
+    Location donationBatchVenue = aVenue().build();
+    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
+        .withVenue(donationBatchVenue)
+        .withComponentBatch(null)
+        .build();
+    Donor existingDonor = aDonor().build();
+    Location donationVenue = aVenue().build();
+    Donation donation = aDonation()
+        .withPackType(packTypeThatCountsAsDonation)
+        .withDonationBatch(donationBatchWithComponentBatch)
+        .withDonor(existingDonor)
+        .withDonationDate(new Date())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withVenue(donationVenue)
+        .build();
+    
+    // Set up mocks
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
+    when(donationBatchRepository.findComponentBatchByDonationbatchId(donationBatchWithComponentBatch.getId())).thenReturn(null);
+    when(dateGeneratorService.generateDateTime(donation.getDonationDate(), donation.getBleedEndTime())).thenReturn(new Date());
+
+    // Run test
+    Component component = componentCRUDService.createInitialComponent(donation);
+    
+    // Verify
+    assertThat(component.getLocation(), is(donationBatchVenue));
+  }
 
   @Test
   public void testMarkComponentsBelongingToDonorAsUnsafe_shouldMarkComponentsAsUnsafe() {
@@ -238,12 +383,14 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withDonationDate(donationDate)
         .build();
     Long parentComponentId = Long.valueOf(1);
+    ComponentBatch componentBatch = ComponentBatchBuilder.aComponentBatch().withLocation(location).build();
     Component parentComponent = aComponent().withId(parentComponentId)
         .withDonation(donation)
         .withCreatedOn(donationDate)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withStatus(ComponentStatus.AVAILABLE)
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
         .withCombinationName("Combination")
@@ -256,6 +403,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withCreatedOn(donation.getDonationDate())
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     Calendar expiryCal1 = Calendar.getInstance();
     expiryCal1.setTime(donationDate);
@@ -270,6 +418,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCreatedOn(donation.getDonationDate())
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     Component expectedComponent2 = aComponent()
         .withComponentType(componentType1)
@@ -281,6 +430,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCreatedOn(donation.getDonationDate())
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     Calendar expiryCal2 = Calendar.getInstance();
     expiryCal2.setTime(donationDate);
@@ -295,6 +445,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCreatedOn(donation.getDonationDate())
         .withExpiresOn(expiryCal2.getTime())
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     Calendar expiryCal3 = Calendar.getInstance();
     expiryCal3.setTime(donationDate);
@@ -309,6 +460,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withCreatedOn(donation.getDonationDate())
         .withExpiresOn(expiryCal3.getTime())
         .withLocation(location)
+        .withComponentBatch(componentBatch)
         .build();
     
     // set up mocks
@@ -318,9 +470,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentTypeRepository.getComponentTypeById(componentTypeId2)).thenReturn(componentType2);
     when(componentTypeRepository.getComponentTypeById(componentTypeId3)).thenReturn(componentType3);
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
@@ -386,9 +539,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
@@ -411,6 +565,12 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .build();
+    ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS).build();
+    ComponentStatusChange statusChange = aComponentStatusChange()
+        .withId(1L)
+        .withStatusChangedOn(new Date())
+        .withStatusChangeReason(statusChangeReason).build();
     Long parentComponentId = Long.valueOf(1);
     Component parentComponent = aComponent().withId(parentComponentId)
         .withDonation(donation)
@@ -418,6 +578,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withStatus(ComponentStatus.UNSAFE)
         .withLocation(location)
+        .withComponentStatusChange(statusChange)
         .build();
     ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
         .withCombinationName("Combination")
@@ -430,6 +591,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withCreatedOn(donation.getDonationDate())
         .withLocation(location)
+        .withComponentStatusChange(statusChange)
         .build();
     Calendar expiryCal1 = Calendar.getInstance();
     expiryCal1.setTime(donationDate);
@@ -466,16 +628,210 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
     verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponent1)));
     verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(expectedComponent1)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
+  }
+  
+
+  /**
+   * Test process unsafe component with unsafe status change TRCP should create unsafe child
+   * components where applicable, which means unsafe only if they contain plasma.
+   * 
+   * TRCP: TEST_RESULTS_CONTAINS_PLASMA.
+   */
+  @Test
+  public void testProcessUnsafeComponentWithUnsafeStatusChangeTRCP_shouldCreateUnsafeChildComponentsWhereApplicable() {
+    // set up data
+    Location location = LocationBuilder.aLocation().build();
+    Date donationDate = new Date(); 
+    Donation donation = aDonation().withId(1L)
+        .withDonationIdentificationNumber("1234567")
+        .withDonationDate(donationDate)
+        .build();
+    ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA).build();
+    ComponentStatusChange statusChange = aComponentStatusChange()
+        .withId(1L)
+        .withStatusChangedOn(new Date())
+        .withStatusChangeReason(statusChangeReason)
+        .build();
+    ComponentType componentTypeThatContainsPlasma = aComponentType()
+        .withId(1L)
+        .thatContainsPlasma()
+        .withExpiresAfter(90)
+        .withComponentTypeCode("0001")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .build();
+    ComponentType componentTypeThatDoesntContainsPlasma = aComponentType().withId(2L)
+        .withExpiresAfter(90)
+        .withComponentTypeCode("0002")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .build();
+    ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
+        .withCombinationName("Combination")
+        .withComponentTypes(Arrays.asList(componentTypeThatContainsPlasma, componentTypeThatDoesntContainsPlasma))
+        .build();
+    Long parentComponentId = Long.valueOf(1);
+    Component parentComponent = aComponent().withId(parentComponentId)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withLocation(location)
+        .withComponentStatusChange(statusChange)
+        .withComponentType(componentTypeThatContainsPlasma)
+        .withComponentCode("0001")
+        .build();
+    Component expectedParentComponent = aComponent().withId(parentComponentId)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withLocation(location)
+        .withComponentStatusChange(statusChange)
+        .withComponentType(componentTypeThatContainsPlasma)
+        .withComponentCode("0001")
+        .build();
+    Calendar expiryCal1 = Calendar.getInstance();
+    expiryCal1.setTime(donationDate);
+    expiryCal1.add(Calendar.DAY_OF_YEAR, 90);
+    Component expectedComponentThatDoesntContainsPlasma = aComponent()
+        .withComponentType(componentTypeThatDoesntContainsPlasma)
+        .withDonation(donation)
+        .withParentComponent(expectedParentComponent)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withExpiresOn(expiryCal1.getTime())
+        .withLocation(location)
+        .withComponentCode("0002")
+        .build();
+    Component expectedComponentThatContainsPlasma = aComponent()
+        .withComponentType(componentTypeThatContainsPlasma)
+        .withDonation(donation)
+        .withParentComponent(expectedParentComponent)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withExpiresOn(expiryCal1.getTime())
+        .withLocation(location)
+        .withComponentCode("0001")
+        .build();
+    Component mockedComponent = aComponent().build();
+
+    // set up mocks
+    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeThatContainsPlasma);
+    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentTypeThatDoesntContainsPlasma);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
+    doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(
+        argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
+    
+    // SUT
+    parentComponent = componentCRUDService.processComponent("1", componentTypeCombination.getId());
+
+    // verify that both components are created
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponentThatDoesntContainsPlasma)));
+    // verify that only the component that contains plasma is marked as unsafe
+    verify(componentCRUDService, times(1)).markComponentAsUnsafe(argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
+    verify(componentCRUDService, times(0)).markComponentAsUnsafe(argThat(hasSameStateAsComponent(expectedComponentThatDoesntContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
+
+  }
+  
+  /**
+   * Test chain process unsafe component into component that doesn't contain plasma, should not mark
+   * component as unsafe.
+   * 
+   * The initial component is the one with the status change with type TEST_RESULTS_CONTAINS_PLASMA,
+   * and this will be checked instead of the parent, so the component produced shouldn't be marked
+   * as UNSAFE.
+   */
+  @Test
+  public void testChainProcessUnsafeComponentIntoComponentThatDoesntContainPlasma_shouldNotMarkComponentAsUnsafe() {
+    // set up data
+    Location location = LocationBuilder.aLocation().build();
+    Date donationDate = new Date(); 
+    Donation donation = aDonation().withId(1L)
+        .withDonationIdentificationNumber("1234567")
+        .withDonationDate(donationDate)
+        .build();
+    ComponentStatusChangeReason statusChangeReasonUP = anUnsafeReason()
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.UNSAFE_PARENT).build();
+    ComponentStatusChangeReason statusChangeReasonTRCP = anUnsafeReason()
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA).build();
+    ComponentStatusChange statusChangeUP = aComponentStatusChange()
+        .withId(1L)
+        .withStatusChangedOn(new Date())
+        .withStatusChangeReason(statusChangeReasonUP)
+        .build();
+    ComponentStatusChange statusChangeTRCP = aComponentStatusChange()
+        .withId(2L)
+        .withStatusChangedOn(new Date())
+        .withStatusChangeReason(statusChangeReasonTRCP)
+        .build();
+    ComponentType componentType = aComponentType()
+        .withId(1L)
+        .withExpiresAfter(90)
+        .withComponentTypeCode("0001")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .build();
+    ComponentType componentTypeThatDoesntContainsPlasma = aComponentType()
+        .withId(2L)
+        .withExpiresAfter(90)
+        .withComponentTypeCode("0002")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .build();
+    ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
+        .withCombinationName("Combination")
+        .withComponentTypes(Arrays.asList(componentTypeThatDoesntContainsPlasma))
+        .build();
+    Component initialComponent = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withLocation(location)
+        .withComponentStatusChange(statusChangeTRCP)
+        .withComponentType(componentType)
+        .withComponentCode("0001")
+        .build();
+    Component parentComponent = aComponent()
+        .withId(2L)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withLocation(location)
+        .withComponentStatusChange(statusChangeUP)
+        .withComponentType(componentType)
+        .withComponentCode("0001")
+        .withParentComponent(initialComponent)
+        .build();
+    
+    // set up mocks
+    when(componentRepository.findComponentById(2L)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentTypeThatDoesntContainsPlasma);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
+    
+    // SUT
+    parentComponent = componentCRUDService.processComponent(parentComponent.getId().toString(), componentTypeCombination.getId());
+
+    // verify that the component is not marked as unsafe, as the initial component change status is checked and is TRCP
+    verify(componentCRUDService, times(0)).markComponentAsUnsafe(any(Component.class), any(ComponentStatusChangeReasonType.class));
   }
   
   @Test
@@ -509,9 +865,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository, times(0)).save(Mockito.any(Component.class));
@@ -548,9 +905,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType1);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
     
     // verify results
     verify(componentRepository, times(0)).save(Mockito.any(Component.class));
@@ -571,7 +929,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(false);
     
     // SUT
-    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination);
+    componentCRUDService.processComponent(parentComponentId.toString(), componentTypeCombination.getId());
   }
   
   @Test
@@ -761,6 +1119,59 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child2Deleted)));
 
     assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
+    assertThat("Parent inventory status is NOT_IN_STOCK", unprocessedComponent.getInventoryStatus(), is(InventoryStatus.NOT_IN_STOCK));
+  }
+
+  
+  @Test
+  public void testUnprocessComponentThatWasRemovedFromStock_shouldPutBackInStock() throws Exception {
+    // set up data
+    Donation donation = aDonation().build();
+    Location location = aLocation().build();
+    Component parentComponent = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withInventoryStatus(InventoryStatus.REMOVED)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    Component child1 = aComponent().withId(2L).withDonation(donation).withLocation(location).build();
+    Component child2 = aComponent().withId(3L).withDonation(donation).withLocation(location).build();
+
+    Component componentToUpdate = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+
+    Component updatedComponent = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+
+    Component child1Deleted = aComponent().withId(2L).withDonation(donation).withLocation(location).withIsDeleted(true).build();
+    Component child2Deleted = aComponent().withId(3L).withDonation(donation).withLocation(location).withIsDeleted(true).build();
+
+    // mocks
+    when(componentConstraintChecker.canUnprocess(parentComponent)).thenReturn(true);
+    when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child1, child2));
+    when(componentRepository.update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)))).thenReturn(updatedComponent);
+    
+    // SUT
+    Component unprocessedComponent = componentCRUDService.unprocessComponent(parentComponent);
+
+    // check
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(componentToUpdate)));
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child1Deleted)));
+    verify(componentRepository, times(1)).update(argThat(ComponentMatcher.hasSameStateAsComponent(child2Deleted)));
+
+    assertThat("Parent component status is AVAILABLE", unprocessedComponent.getStatus(), is(ComponentStatus.AVAILABLE));
+    assertThat("Parent inventory status is IN_STOCK", unprocessedComponent.getInventoryStatus(), is(InventoryStatus.IN_STOCK));
   }
   
   @Test
@@ -1271,6 +1682,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     assertThat(unsafe.getIsDeleted(), is(false));
     assertThat(unsafe.getStatusChangeReason().getCategory(), is(ComponentStatusChangeReasonCategory.UNSAFE));
   }
+ 
   
   @Test
   public void testEditWeightToValidRangeForComponentThatCantRollBack_componentStatusIsUnsafeAndCorrectStatusChangeDeletes() {
@@ -1330,4 +1742,127 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     assertThat(unsafe.getStatusChangeReason().getCategory(), is(ComponentStatusChangeReasonCategory.UNSAFE));
   }
 
+  @Test
+  public void testMarkComponentsBelongingToDonationAsUnsafeIfContainsPlasma_shouldMarkComponentsAsUnsafe() {
+    // Set up fixture
+    Component firstComponent = aComponent().withId(1L)
+        .withComponentType(aComponentType()
+            .thatContainsPlasma()
+            .build())
+        .build();
+    Component secondComponent = aComponent().withId(2L)
+        .withComponentType(aComponentType()
+            .build())
+        .build();
+    Component thirdComponent = aComponent().withId(2L)
+        .withComponentType(aComponentType()
+            .thatContainsPlasma()
+            .build())
+        .build();
+    Component deletedComponent = aComponent().withId(3L)
+        .withComponentType(aComponentType()
+            .thatContainsPlasma()
+            .build())
+        .withIsDeleted(true)
+        .build();
+
+    Donation donation = aDonation()
+        .withId(1L)
+        .withComponents(Arrays.asList(firstComponent, secondComponent, thirdComponent, deletedComponent))
+        .build();
+
+    // Set up expectations
+    doAnswer(returnsFirstArg()).when(componentCRUDService).markComponentAsUnsafe(
+        argThat(hasSameStateAsComponent(firstComponent)), eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
+
+    // Exercise SUT
+    componentCRUDService.markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(donation);
+
+    // Verify
+    verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(firstComponent)),
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
+    verify(componentCRUDService, never()).markComponentAsUnsafe(argThat(hasSameStateAsComponent(secondComponent)),
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
+    verify(componentCRUDService).markComponentAsUnsafe(argThat(hasSameStateAsComponent(thirdComponent)),
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
+    verify(componentCRUDService, never()).markComponentAsUnsafe(argThat(hasSameStateAsComponent(deletedComponent)),
+        eq(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA));
+  }
+  
+  @Test
+  public void testCreateInitialComponentWithComponentBatch_shouldReturnComponentBatch() {
+    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
+    Location componentBatchProcessingSite = aProcessingSite().build();
+    ComponentBatch componentBatch = aComponentBatch().withLocation(componentBatchProcessingSite).build();
+    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
+        .withComponentBatch(componentBatch)
+        .build();
+    Donor existingDonor = aDonor().build();
+    Location venue = aVenue().build();
+    Donation donation = aDonation()
+        .withPackType(packTypeThatCountsAsDonation)
+        .withDonationBatch(donationBatchWithComponentBatch)
+        .withDonor(existingDonor)
+        .withDonationDate(new Date())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withVenue(venue)
+        .build();
+    
+    // Set up mocks
+    when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)).thenReturn(true);
+    when(donationBatchRepository.findComponentBatchByDonationbatchId(donationBatchWithComponentBatch.getId()))
+        .thenReturn(componentBatch);
+    when(dateGeneratorService.generateDateTime(donation.getDonationDate(), donation.getBleedEndTime())).thenReturn(new Date());
+    
+    // Run test
+    Component component = componentCRUDService.createInitialComponent(donation);
+    
+    // Verify
+    assertThat(component.getComponentBatch(), is(componentBatch));
+    
+  }
+  
+  @Test
+  public void testUpdateComponentWithNewPackType_shouldUpdateComponentTypeCodeAndExpiresOn() {
+    // Set up data
+    Integer expiresAfterDays = 12;
+    String componentTypeCode = "new123";
+    Date createdOn = new Date();
+    Date expiresOn = new Date();
+
+    ComponentType newComponentType = aComponentType()
+        .withId(3L)
+        .withComponentTypeCode(componentTypeCode)
+        .withExpiresAfter(expiresAfterDays)
+        .build();
+    
+    PackType newPackType = aPackType().withComponentType(newComponentType).build();
+
+    Component component = aComponent()
+        .withComponentType(aComponentType().withId(2L).build())
+        .withComponentCode("123")
+        .withCreatedOn(createdOn)
+        .withExpiresOn(expiresOn)
+        .build();
+
+    Date expectedExpiresOn = new DateTime(createdOn).plusDays(expiresAfterDays).toDate();
+    Component expectedComponent = aComponent()
+        .withComponentType(newComponentType)
+        .withComponentCode(componentTypeCode)
+        .withCreatedOn(createdOn)
+        .withExpiresOn(expectedExpiresOn)
+        .withStatus(component.getStatus())
+        .withInventoryStatus(component.getInventoryStatus())
+        .withLocation(component.getLocation())
+        .withDonation(component.getDonation())
+        .build();
+    
+    // Run test
+    Component updatedComponent = componentCRUDService.updateComponentWithNewPackType(component, newPackType);
+    
+    // Verify
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedComponent)));
+    assertThat(updatedComponent, hasSameStateAsComponent(expectedComponent));
+  }
 }

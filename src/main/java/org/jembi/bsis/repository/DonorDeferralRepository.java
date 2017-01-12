@@ -1,11 +1,12 @@
 package org.jembi.bsis.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import java.util.List;
-
+import org.jembi.bsis.dto.DeferralExportDTO;
+import org.jembi.bsis.dto.DeferredDonorsDTO;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
@@ -23,6 +24,17 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         .setParameter("voided", false)
         .getSingleResult();
   }
+  
+  public List<DeferredDonorsDTO> countDeferredDonors(Date startDate, Date endDate) {
+    return entityManager.createNamedQuery(DonorDeferralNamedQueryConstants.NAME_COUNT_DEFERRALS_BY_VENUE_DEFERRAL_REASON_AND_GENDER, 
+        DeferredDonorsDTO.class)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("deferralDeleted", false)
+        .setParameter("deferralReasonDeleted", false)
+        .setParameter("donorDeleted", false)
+        .getResultList();
+  }
 
   public int countDonorDeferralsForDonor(Donor donor) {
 
@@ -35,12 +47,12 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         .intValue();
   }
 
-  public int countCurrentDonorDeferralsForDonor(Donor donor) {
+  public int countCurrentDonorDeferralsForDonor(long donorId) {
 
     return entityManager.createNamedQuery(
         DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
         Number.class)
-        .setParameter("donor", donor)
+        .setParameter("donorId", donorId)
         .setParameter("voided", false)
         .setParameter("permanentDuration", DurationType.PERMANENT)
         .setParameter("currentDate", new Date())
@@ -48,12 +60,12 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         .intValue();
   }
 
-  public int countDonorDeferralsForDonorOnDate(Donor donor, Date date) {
+  public int countDonorDeferralsForDonorOnDate(long donorId, Date date) {
 
     return entityManager.createNamedQuery(
         DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
         Number.class)
-        .setParameter("donor", donor)
+        .setParameter("donorId", donorId)
         .setParameter("voided", false)
         .setParameter("permanentDuration", DurationType.PERMANENT)
         .setParameter("currentDate", date)
@@ -68,6 +80,14 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         DonorDeferral.class)
         .setParameter("donor", donor)
         .setParameter("deferralReason", deferralReason)
+        .setParameter("voided", false)
+        .getResultList();
+  }
+  
+  public List<DeferralExportDTO> findDeferralsForExport() {
+    return entityManager.createNamedQuery(
+        DonorDeferralNamedQueryConstants.NAME_FIND_DEFERRALS_FOR_EXPORT,
+        DeferralExportDTO.class)
         .setParameter("voided", false)
         .getResultList();
   }

@@ -11,12 +11,7 @@ import java.util.Map;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
-import org.jembi.bsis.repository.ComponentRepository;
-import org.jembi.bsis.repository.DonationBatchRepository;
-import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Assert;
@@ -208,21 +203,20 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     newDonation.setBleedEndTime(today.getTime());
     today.add(Calendar.MINUTE, -15);
     newDonation.setBleedStartTime(today.getTime());
-    donationRepository.addDonation(newDonation);
+    donationRepository.saveDonation(newDonation);
     Donation savedDonation = donationRepository.findDonationByDonationIdentificationNumber("JUNIT123");
     Assert.assertNotNull("Found new donation", savedDonation);
     Assert.assertNotNull("Donor date of lastDonation has been set", savedDonation.getDonor().getDateOfLastDonation());
   }
 
   @Test(expected = javax.persistence.PersistenceException.class)
-  public void testAddDonationSameDIN() throws Exception {
-    Donation newDonation = new Donation();
+  public void testAddDonationWithSameDIN_shouldThrow() throws Exception {
+    Donation updatedDonation = new Donation();
     Donation existingDonation = donationRepository.findDonationById(1L);
-    newDonation.setId(existingDonation.getId());
-    newDonation.copy(existingDonation);
-    newDonation.setId(null); // don't want to override, just save time with the copy
-    newDonation.getPackType().setCountAsDonation(false);
-    donationRepository.addDonation(newDonation);
+    updatedDonation.setId(existingDonation.getId());
+    updatedDonation.copy(existingDonation);
+    updatedDonation.setId(null); // don't want to override, just save time with the copy
+    donationRepository.saveDonation(updatedDonation);
     // should fail because DIN already exists
   }
 
@@ -233,27 +227,6 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     donationRepository.updateDonation(existingDonation);
     Donation updatedDonation = donationRepository.findDonationById(1L);
     Assert.assertEquals("donor weight was updataed", new BigDecimal(123), updatedDonation.getDonorWeight());
-  }
-
-  @Test
-  public void testAddDonation_shouldCreateInitialComponentWithComponentBatch() {
-
-    DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(1L);
-    Donation newDonation = new Donation();
-    Donation existingDonation = donationRepository.findDonationById(1L);
-    newDonation.setId(existingDonation.getId());
-    newDonation.copy(existingDonation);
-    newDonation.setId(null); // don't want to override, just save time with the copy
-    newDonation.getPackType().setCountAsDonation(true);
-    newDonation.setDonationIdentificationNumber("1111111");
-    newDonation.setDonationBatch(donationBatch);
-    newDonation.setBleedStartTime(new Date());
-
-    donationRepository.addDonation(newDonation);
-
-    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber("1111111");
-    Assert.assertEquals("Component batch with id 1l has been assigned to the initial component", 1l,
-        results.get(0).getComponentBatch().getId().longValue());
   }
 
 }

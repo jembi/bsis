@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 
@@ -13,11 +14,29 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   private Long id;
   private ComponentTypeViewModel componentType;
   private Date createdOn;
+  private Date expiresOn;
   private ComponentStatus status;
   private String expiryStatus;
   private String componentCode;
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
+  private boolean hasComponentBatch = false;
+  private InventoryStatus inventoryStatus;
+
+  public ComponentManagementViewModelBuilder whichHasComponentBatch() {
+    this.hasComponentBatch = true;
+    return this;
+  }
+
+  public ComponentManagementViewModelBuilder whichHasNoComponentBatch() {
+    this.hasComponentBatch = false;
+    return this;
+  }
+
+  public ComponentManagementViewModelBuilder withInventoryStatus(InventoryStatus inventoryStatus) {
+    this.inventoryStatus = inventoryStatus;
+    return this;
+  }
 
   public ComponentManagementViewModelBuilder withId(Long id) {
     this.id = id;
@@ -34,6 +53,11 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     return this;
   }
 
+  public ComponentManagementViewModelBuilder withExpiresOn(Date expiresOn) {
+    this.expiresOn = expiresOn;
+    return this;
+  }
+  
   public ComponentManagementViewModelBuilder withStatus(ComponentStatus status) {
     this.status = status;
     return this;
@@ -64,12 +88,15 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     ComponentManagementViewModel viewModel = new ComponentManagementViewModel();
     viewModel.setId(id);
     viewModel.setCreatedOn(createdOn);
+    viewModel.setExpiresOn(expiresOn);
     viewModel.setExpiryStatus(expiryStatus);
     viewModel.setStatus(status);
     viewModel.setComponentCode(componentCode);
     viewModel.setWeight(weight);
     viewModel.setComponentType(componentType);
     viewModel.setPermissions(permissions);
+    viewModel.setHasComponentBatch(hasComponentBatch);
+    viewModel.setInventoryStatus(inventoryStatus);
     return viewModel;
   }
   

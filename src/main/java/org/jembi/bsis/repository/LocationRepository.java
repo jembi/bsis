@@ -16,13 +16,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class LocationRepository {
+public class LocationRepository extends AbstractRepository<Location>{
   @PersistenceContext
   private EntityManager em;
 
   public void saveLocation(Location location) {
     em.persist(location);
     em.flush();
+  }
+  
+  public List<Location> getMobileVenues() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_MOBILE_VENUES, Location.class)
+        .setParameter("isVenue", true)
+        .setParameter("isMobileSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
   }
   
   public List<Location> getVenues() {
@@ -185,14 +193,5 @@ public class LocationRepository {
 
     // execute Query
     return query.getResultList();
-  }
-  
-  private void addWhereCondition(StringBuilder whereClause, String condition) {
-    if (StringUtils.isBlank(whereClause)) {
-      whereClause.append("WHERE ");
-    } else {
-      whereClause.append("AND ");
-    }
-    whereClause.append(condition);
   }
 }

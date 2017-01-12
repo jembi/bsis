@@ -9,6 +9,10 @@ public class LocationFullViewModel extends BaseViewModel {
   @JsonIgnore
   private Location location;
 
+  private DivisionViewModel divisionLevel1;
+  private DivisionViewModel divisionLevel2;
+  private DivisionViewModel divisionLevel3;
+
   public LocationFullViewModel(Location location) {
     this.location = location;
   }
@@ -49,4 +53,29 @@ public class LocationFullViewModel extends BaseViewModel {
   public boolean getIsTestingSite() {
     return location.getIsTestingSite();
   }
+
+  public void setDivisionLevel1(DivisionViewModel divisionLevel1) {
+    this.divisionLevel1 = divisionLevel1;
+  }
+
+  public void setDivisionLevel2(DivisionViewModel divisionLevel2) {
+    this.divisionLevel2 = divisionLevel2;
+  }
+
+  public void setDivisionLevel3(DivisionViewModel divisionLevel3) {
+    this.divisionLevel3 = divisionLevel3;
+  }
+
+  public DivisionViewModel getDivisionLevel1() {
+    return divisionLevel1;
+  }
+
+  public DivisionViewModel getDivisionLevel2() {
+    return divisionLevel2;
+  }
+
+  public DivisionViewModel getDivisionLevel3() {
+    return divisionLevel3;
+  }
+
 }

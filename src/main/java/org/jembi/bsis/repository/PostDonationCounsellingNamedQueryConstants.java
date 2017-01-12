@@ -27,4 +27,14 @@ public class PostDonationCounsellingNamedQueryConstants {
           "FROM PostDonationCounselling pdc " +
           "WHERE pdc.donation = :donation " +
           "AND pdc.isDeleted = :isDeleted ";
+  
+  public static final String NAME_FIND_POST_DONATION_COUNSELLINGS_FOR_EXPORT =
+      "PostDonationCounselling.findPostDonationCounsellingsForExport";
+  public static final String QUERY_FIND_POST_DONATION_COUNSELLINGS_FOR_EXPORT =
+      "SELECT NEW org.jembi.bsis.dto.PostDonationCounsellingExportDTO(pdc.donation.donationIdentificationNumber, "
+      + "pdc.modificationTracker.createdDate, pdc.modificationTracker.createdBy.username, "
+      + "pdc.modificationTracker.lastUpdated, pdc.modificationTracker.lastUpdatedBy.username, pdc.counsellingDate)"
+      + "FROM PostDonationCounselling pdc "
+      + "WHERE pdc.isDeleted = :deleted "
+      + "ORDER BY pdc.modificationTracker.createdDate ASC ";
 }

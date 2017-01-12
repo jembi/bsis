@@ -66,7 +66,7 @@ public class DonorUtils {
       birthDateToUse = birthDateInferred;
 
     if (birthDateToUse != null)
-      birthDatePart = CustomDateFormatter.getDateString(birthDateToUse);
+      birthDatePart = CustomDateFormatter.getDateTimeString(birthDateToUse);
 
     String md5Checksum = "";
     String hashComponents = firstName + middleName + lastName + birthDatePart;

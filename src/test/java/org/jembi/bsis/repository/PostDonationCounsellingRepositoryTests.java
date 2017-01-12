@@ -7,6 +7,8 @@ import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
+import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
+import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -16,17 +18,17 @@ import java.util.Set;
 
 import javax.persistence.NoResultException;
 
+import org.jembi.bsis.dto.PostDonationCounsellingExportDTO;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.repository.PostDonationCounsellingRepository;
-import org.jembi.bsis.suites.ContextDependentTestSuite;
+import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class PostDonationCounsellingRepositoryTests extends ContextDependentTestSuite {
+public class PostDonationCounsellingRepositoryTests extends SecurityContextDependentTestSuite {
 
   private static final Date NO_START_DATE = null;
   private static final Date NO_END_DATE = null;
@@ -415,5 +417,66 @@ public class PostDonationCounsellingRepositoryTests extends ContextDependentTest
         donation);
 
     assertThat(returnedCounselling, is(expectedCounselling));
+  }
+  
+  @Test
+  public void testFindPostDonationCounsellingsForExports_shouldReturnPostDonationCounsellingExportDTOsWithTheCorrectState() {
+    // Set up fixture
+    String donationIdentificationNumber = "1233219";
+    String createdByUsername = "created.by";
+    Date createdDate = new DateTime().minusDays(7).toDate();
+    Date counsellingDate = new Date();
+
+    // Expected
+    aPostDonationCounselling()
+        .withCreatedBy(aUser().withUsername(createdByUsername).build())
+        .withCreatedDate(createdDate)
+        .withDonation(aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
+        .withCounsellingDate(counsellingDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded by deleted
+    aPostDonationCounselling().thatIsDeleted().buildAndPersist(entityManager);
+
+    // Exercise SUT
+    List<PostDonationCounsellingExportDTO> returnedDTOs =
+        postDonationCounsellingRepository.findPostDonationCounsellingsForExport();
+    
+    // Verify
+    assertThat(returnedDTOs.size(), is(1));
+    
+    // Verify DTO state
+    PostDonationCounsellingExportDTO returnedDTO = returnedDTOs.get(0);
+    assertThat(returnedDTO.getDonationIdentificationNumber(), is(donationIdentificationNumber));
+    assertThat(returnedDTO.getCreatedBy(), is(createdByUsername));
+    assertThat(returnedDTO.getCreatedDate(), isSameDayAs(createdDate));
+    assertThat(returnedDTO.getLastUpdatedBy(), is(USERNAME));
+    assertThat(returnedDTO.getLastUpdated(), isSameDayAs(new Date()));
+    assertThat(returnedDTO.getCounsellingDate(), isSameDayAs(counsellingDate));
+  }
+
+  @Test
+  public void testFindPostDonationCounsellingsForExports_shouldReturnPostDonationCounsellingExportDTOsOrderedByCreatedDate() {
+    // Set up fixture
+    String firstDonationIdentificationNumber = "1233219";
+    String secondDonationIdentificationNumber = "99887765";
+    
+    aPostDonationCounselling()
+        .withDonation(aDonation().withDonationIdentificationNumber(secondDonationIdentificationNumber).build())
+        .withCreatedDate(new DateTime().minusDays(30).toDate())
+        .buildAndPersist(entityManager);
+    aPostDonationCounselling()
+        .withDonation(aDonation().withDonationIdentificationNumber(firstDonationIdentificationNumber).build())
+        .withCreatedDate(new DateTime().minusDays(91).toDate())
+        .buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    List<PostDonationCounsellingExportDTO> returnedDTOs =
+        postDonationCounsellingRepository.findPostDonationCounsellingsForExport();
+    
+    // Verify
+    assertThat(returnedDTOs.size(), is(2));
+    assertThat(returnedDTOs.get(0).getDonationIdentificationNumber(), is(firstDonationIdentificationNumber));
+    assertThat(returnedDTOs.get(1).getDonationIdentificationNumber(), is(secondDonationIdentificationNumber));
   }
 }

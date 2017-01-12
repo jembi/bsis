@@ -1,8 +1,13 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.ComponentTypeFullViewModelBuilder.aComponentTypeFullViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasSameStateAsComponentFullViewModel;
@@ -11,11 +16,10 @@ import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameS
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder;
-import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -64,27 +68,44 @@ public class ComponentFactoryTests {
     // set up data
     Donation donation = DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build();
     Location location = aLocation().build();
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().build();
+    Component parentComponent = aComponent().withId(2L).build();
+    
+    ComponentType componentType = aComponentType()
+        .withId(1L)
+        .withComponentTypeName("name")
+        .withComponentTypeCode("0000")
+        .build();
+    
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
+          .withId(componentType.getId())
+          .withComponentTypeName(componentType.getComponentTypeName())
+          .withComponentTypeCode(componentType.getComponentTypeCode())
+          .build();
+    
     Component component = aComponent()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
-            .withComponentType(componentType)
+        .withComponentType(componentType)
         .withLocation(location)
-        .withDonation(donation).build();
-    ComponentFullViewModel expectedViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel()
+        .withDonation(donation)
+        .withParentComponent(parentComponent)
+        .build();
+    
+    ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withComponentType(new ComponentTypeViewModel(componentType))
+        .withComponentType(componentTypeViewModel)
         .withLocation(new LocationFullViewModel(location))
         .withBloodAbo(donation.getBloodAbo())
         .withBloodRh(donation.getBloodRh())
+        .thatIsNotInitialComponent()
         .build();
 
     // setup mocks
     when(locationFactory.createFullViewModel(location)).thenReturn(new LocationFullViewModel(location));
-    when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
+    when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
 
     // run test
     ComponentFullViewModel convertedViewModel = componentFactory.createComponentFullViewModel(component);
@@ -129,32 +150,47 @@ public class ComponentFactoryTests {
   public void createManagementViewModel_oneComponent() {
     // set up data
     Date createdOn = new Date();
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().build();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(createdOn);
+    cal.add(Calendar.DAY_OF_YEAR, -1);
+    Date expiresOn = cal.getTime();
+    
+    ComponentType componentType = aComponentType().build();
     Component component = aComponent()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentCode("0011")
         .withComponentType(componentType)
         .withCreatedOn(createdOn)
+        .withExpiresOn(expiresOn)
         .withWeight(222)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
+    
+    ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
+        .withId(1L)
+        .build();
+    
     ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentCode("0011")
-        .withComponentType(new ComponentTypeFullViewModel(componentType))
+        .withComponentType(componentTypeFullViewModel)
         .withCreatedOn(createdOn)
+        .withExpiresOn(expiresOn)
         .withWeigth(222)
         .withPermission("canDiscard", true)
         .withPermission("canProcess", true)
         .withPermission("canRecordWeight", true)
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
-        .withExpiryStatus("")
+        .withExpiryStatus("Already expired")
+        .whichHasNoComponentBatch()
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
 
     // setup mocks
-    when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(new ComponentTypeFullViewModel(componentType));
+    when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(componentTypeFullViewModel);
     when(componentConstraintChecker.canDiscard(component)).thenReturn(true);
     when(componentConstraintChecker.canProcess(component)).thenReturn(true);
     when(componentConstraintChecker.canRecordWeight(component)).thenReturn(true);
@@ -172,26 +208,40 @@ public class ComponentFactoryTests {
   @Test
   public void createComponentViewModel_oneComponent() throws Exception {
     // set up data
+    Date createdOn = new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(createdOn);
+    cal.add(Calendar.DAY_OF_YEAR, -1);
+    Date expiresOn = cal.getTime();
+    
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber("1234567").build();
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().build();
-    Component component = aComponent().withId(1L)
+    ComponentType componentType = aComponentType().build();
+    Component component = aComponent()
+        .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(componentType)
         .withComponentCode("componentCode")
-        .withCreatedOn(new Date())
+        .withCreatedOn(createdOn)
+        .withExpiresOn(expiresOn)
         .withDonation(donation)
         .build();
+    
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
+        .withId(1L)
+        .build();
+    
     ComponentViewModel expectedViewModel = aComponentViewModel().withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withComponentType(new ComponentTypeViewModel(componentType))
+        .withComponentType(componentTypeViewModel)
         .withComponentCode("componentCode")
-        .withCreatedOn(new Date())
+        .withCreatedOn(createdOn)
+        .withExpiresOn(expiresOn)
         .withDonationIdentificationNumber("1234567")
-        .withExpiryStatus("")
+        .withExpiryStatus("Already expired")
         .build();
 
     // setup mocks
-    when(componentTypeFactory.createViewModel(componentType)).thenReturn(new ComponentTypeViewModel(componentType));
+    when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
 
     // run test
     ComponentViewModel convertedViewModel = componentFactory.createComponentViewModel(component);
@@ -214,5 +264,29 @@ public class ComponentFactoryTests {
     // do asserts
     Assert.assertNotNull("View models created", viewModels);
     Assert.assertEquals("Correct number of view models created", 2, viewModels.size());
+  }
+  
+  @Test
+  public void createComponentFullViewModelWithNullParentComponent_shouldSetIntialComponent() {
+    // set up data
+    
+    Component component = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withParentComponent(null)
+        .build();
+    
+    ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
+        .withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .thatIsInitialComponent()
+        .build();
+
+    // run test
+    ComponentFullViewModel returnedViewModel = componentFactory.createComponentFullViewModel(component);
+  
+    assertThat(returnedViewModel, is(hasSameStateAsComponentFullViewModel(expectedViewModel)));
   }
 }

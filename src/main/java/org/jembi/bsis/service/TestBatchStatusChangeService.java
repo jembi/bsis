@@ -1,15 +1,15 @@
 package org.jembi.bsis.service;
 
 import org.apache.log4j.Logger;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donordeferral.DeferralReasonType;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,6 +86,7 @@ public class TestBatchStatusChangeService {
     bloodTestsService.updateDonationWithTestResults(donation, bloodTestingRuleResult);
     donation = donationRepository.updateDonation(donation);
 
+    // Handle the situation where the Donors and/or Donation are unsafe
     if (donation.getTTIStatus() == TTIStatus.TTI_UNSAFE) {
       LOGGER.info("Handling donation with unsafe TTI status: " + donation);
       componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donation.getDonor());
@@ -108,10 +109,16 @@ public class TestBatchStatusChangeService {
     } else if (donation.getBloodTypingMatchStatus().equals(BloodTypingMatchStatus.NO_TYPE_DETERMINED)) {
       LOGGER.info("Handling donation with NO_TYPE_DETERMINED bloodTypingMatchStatus: " + donation);
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
-
-    } else {
-      componentCRUDService.updateComponentStatusesForDonation(donation);
     }
+    
+    // Handle the situation where only Components containing plasma should be discarded
+    if (componentStatusCalculator.shouldComponentsBeDiscardedForTestResultsIfContainsPlasma(donation.getBloodTestResults())) {
+      LOGGER.info("Handling donation with components that contains plasma: " + donation);
+      componentCRUDService.markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(donation);
+    }
+
+    // Re-evaluate all donation's components statuses and update where necessary
+    componentCRUDService.updateComponentStatusesForDonation(donation);
 
   }
 

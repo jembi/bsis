@@ -9,6 +9,7 @@ import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 public class CustomDateFormatter {
   
@@ -29,17 +30,17 @@ public class CustomDateFormatter {
 
   public static Date getDateFromString(String dateString) throws ParseException {
     Date date = null;
-
-    if (!isDateEmpty(dateString))
-      date = new DateTime(dateString).toDate();
-
+    if (!isDateEmpty(dateString)) {
+      date = new LocalDate(dateString).toDate();
+    }
     return date;
   }
 
   public static Date getDateTimeFromString(String dateTimeString) throws ParseException {
     Date date = null;
-    if (!isDateEmpty(dateTimeString))
+    if (!isDateEmpty(dateTimeString)) {
       date = new DateTime(dateTimeString).toDate();
+    }
     return date;
   }
 
@@ -88,24 +89,28 @@ public class CustomDateFormatter {
   }
 
   public static String getDateString(Date date) {
-    if (date == null)
+    if (date == null) {
       return "";
-    else
-      return getISO8601StringForDate(date);
+    } else {
+      LocalDate localDate = new LocalDate(date);
+      return localDate.toString();
+    }
   }
 
   public static String getDateTimeString(Date date) {
-    if (date == null)
+    if (date == null) {
       return "";
-    else
+    } else {
       return getISO8601StringForDate(date);
+    }
   }
 
   public static String getTimeString(Date date) {
-    if (date == null)
+    if (date == null) {
       return "";
-    else
+    } else {
       return getISO8601StringForDate(date);
+    }
   }
 
   public static String getDatePattern() {
@@ -117,11 +122,11 @@ public class CustomDateFormatter {
   }
 
   public static String format(Date date) {
-    return getDateString(date);
+    return getDateTimeString(date);
   }
 
   public static Date parse(String dateStr) throws ParseException {
-    return getDateFromString(dateStr);
+    return getDateTimeFromString(dateStr);
   }
 
   private static String getISO8601StringForDate(Date date) {

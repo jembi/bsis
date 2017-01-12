@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
+import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
 
 public class BloodTestingRuleResultSetMatcher extends TypeSafeMatcher<BloodTestingRuleResultSet> {
 
@@ -19,7 +19,9 @@ public class BloodTestingRuleResultSetMatcher extends TypeSafeMatcher<BloodTesti
     description.appendText("A BloodTestingRuleResultSet with the following state:")
         .appendText("\nTtiStatus: ").appendValue(expected.getTtiStatus())
         .appendText("\nBloodTypingStatus: ").appendValue(expected.getBloodTypingStatus())
-        .appendText("\nBloodTypingMatchStatus: ").appendValue(expected.getBloodTypingMatchStatus());
+        .appendText("\nBloodTypingMatchStatus: ").appendValue(expected.getBloodTypingMatchStatus())
+        .appendText("\nPendingAboTestsIds: ").appendValue(expected.getPendingAboTestsIds())
+        .appendText("\nPendingRhTestsIds: ").appendValue(expected.getPendingRhTestsIds());
     
     if (!expected.getBloodAboChanges().isEmpty()) {
       description.appendText("\nABO: ").appendValue(expected.getBloodAboChanges().iterator().next());
@@ -28,6 +30,7 @@ public class BloodTestingRuleResultSetMatcher extends TypeSafeMatcher<BloodTesti
     if (!expected.getBloodRhChanges().isEmpty()) {
       description.appendText("\nRh: ").appendValue(expected.getBloodRhChanges().iterator().next());
     }
+
   }
 
   @Override
@@ -41,6 +44,8 @@ public class BloodTestingRuleResultSetMatcher extends TypeSafeMatcher<BloodTesti
     return Objects.equals(actual.getTtiStatus(), expected.getTtiStatus())
         && Objects.equals(actual.getBloodTypingStatus(), expected.getBloodTypingStatus())
         && Objects.equals(actual.getBloodTypingMatchStatus(), expected.getBloodTypingMatchStatus())
+        && Objects.equals(actual.getPendingAboTestsIds(), expected.getPendingAboTestsIds())
+        && Objects.equals(actual.getPendingRhTestsIds(), expected.getPendingRhTestsIds())
         && Objects.equals(actualAbo, expectedAbo)
         && Objects.equals(actualRh, expectedRh);
   }

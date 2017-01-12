@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -18,6 +19,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.jembi.bsis.dto.DonorExportDTO;
 import org.jembi.bsis.dto.DuplicateDonorDTO;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.model.address.AddressType;
@@ -324,13 +326,21 @@ public class DonorRepository {
         .getResultList();
   }
 
-  public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenue(Long venueId) throws NoResultException {
-    return em.createNamedQuery(DonorNamedQueryConstants.NAME_MOBILE_CLINIC_LOOKUP, MobileClinicDonorDTO.class)
-        .setParameter("venueId", venueId)
+  public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenues(Set<Long> venueIds) throws NoResultException {
+    boolean includeAllVenues = venueIds == null || venueIds.isEmpty();
+
+    // using empty list as a parameter causes a bad SQL Grammar exception. If the list is empty we have to
+    // override the parameter to null.
+    if (venueIds != null && venueIds.isEmpty()) {
+      venueIds = null;
+    }
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_MOBILE_CLINIC_DONORS_BY_VENUES, MobileClinicDonorDTO.class)
         .setParameter("isDeleted", false)
         .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
+        .setParameter("venueIds", venueIds)
+        .setParameter("includeAllVenues", includeAllVenues)
         .getResultList();
-  }
+}
   
   public boolean verifyDonorExists(Long id) {
     Long count = em.createNamedQuery(DonorNamedQueryConstants.NAME_COUNT_DONOR_WITH_ID, Long.class)
@@ -342,5 +352,11 @@ public class DonorRepository {
       return true;
     }
     return false;
+  }
+  
+  public List<DonorExportDTO> findDonorsForExport() {
+    return em.createNamedQuery(DonorNamedQueryConstants.NAME_FIND_DONORS_FOR_EXPORT, DonorExportDTO.class)
+        .setParameter("deleted", false)
+        .getResultList();
   }
 }

@@ -285,14 +285,6 @@ public class DonationBackingForm {
     donation.setBloodPressureDiastolic(bloodPressureDiastolic);
   }
 
-  public String getExtraBloodTypeInformation() {
-    return donation.getExtraBloodTypeInformation();
-  }
-
-  public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
-    donation.setExtraBloodTypeInformation(extraBloodTypeInformation);
-  }
-
   @JsonIgnore
   public String getTTIStatus() {
     if (donation.getTTIStatus() != null)

@@ -5,5 +5,6 @@ public enum EnumDataType {
   TEXT,
   INTEGER,
   DECIMAL,
-  BOOLEAN
+  BOOLEAN,
+  PASSWORD
 }

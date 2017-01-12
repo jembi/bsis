@@ -1,5 +1,6 @@
 package org.jembi.bsis.helpers.builders;
 
+import org.jembi.bsis.backingform.DivisionBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 
 public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingForm> {
@@ -14,6 +15,7 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
   private boolean deleted;
   private String notes;
   private boolean testingSite;
+  private DivisionBackingForm divisionLevel3;
 
   public LocationBackingFormBuilder withId(long id) {
     this.id = id;
@@ -64,6 +66,11 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
     testingSite = true;
     return this;
   }
+  
+  public LocationBackingFormBuilder withDivisionLevel3(DivisionBackingForm divisionLevel3) {
+    this.divisionLevel3 = divisionLevel3;
+    return this;
+  }
 
   @Override
   public LocationBackingForm build() {
@@ -78,6 +85,7 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
     location.setIsDistributionSite(distributionSite);
     location.setIsDeleted(deleted);
     location.setIsTestingSite(testingSite);
+    location.setDivisionLevel3(divisionLevel3);
     return location;
   }
 

@@ -25,62 +25,69 @@
     <ComponentType canBeIssued="true" id="14" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - Paediatric - CPDA"
-                   componentTypeCode="2101"/>
+                   componentTypeCode="2101" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA" componentTypeCode="0011"
-                   pediComponentType_id="14"/>
+                   pediComponentType_id="14" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="2" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Double Pack - CPDA"
-                   componentTypeCode="0012"/>
+                   componentTypeCode="0012" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="3" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Triple Pack - CPDA"
-                   componentTypeCode="0013"/>
+                   componentTypeCode="0013" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="4" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Whole Blood Quad Pack - CPDA" componentTypeCode="0014"/>
+                   componentTypeName="Whole Blood Quad Pack - CPDA"
+                   componentTypeCode="0014" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="5" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Apheresis" componentTypeCode="0021"/>
+                   componentTypeName="Apheresis" componentTypeCode="0021"
+                   containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="6" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Whole Blood - CPDA" componentTypeCode="1001"/>
+                   componentTypeName="Whole Blood - CPDA" componentTypeCode="1001"
+                   containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="7" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Poor Platelets - CPDA"
-                   componentTypeCode="1005"/>
+                   componentTypeCode="1005" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="8" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Packed Red Cells - CPDA" componentTypeCode="2001"/>
+                   componentTypeName="Packed Red Cells - CPDA" componentTypeCode="2001"
+                   containsPlasma="false"/>
     <ComponentType canBeIssued="true" id="9" description="" expiresAfter="42"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Packed Red Cells - SAGM" componentTypeCode="2011"/>
+                   componentTypeName="Packed Red Cells - SAGM" componentTypeCode="2011"
+                   containsPlasma="false"/>
     <ComponentType canBeIssued="true" id="10" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Fresh Frozen Plasma - Whole Blood"
-                   componentTypeCode="3001"/>
+                   componentTypeCode="3001" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="11" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Frozen Plasma - Whole Blood" componentTypeCode="3002"/>
+                   componentTypeName="Frozen Plasma - Whole Blood" componentTypeCode="3002"
+                   containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="12" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Whole Blood"
-                   componentTypeCode="4001"/>
+                   componentTypeCode="4001" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="13" description="" expiresAfter="1"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Whole Blood - 24H"
-                   componentTypeCode="4011"/>
+                   componentTypeCode="4011" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="15" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Fresh Frozen Plasma - Apheresis"
-                   componentTypeCode="3011"/>
+                   componentTypeCode="3011" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="16" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Apheresis"
-                   componentTypeCode="4021"/>
+                   componentTypeCode="4021" containsPlasma="true"/>
     <ComponentType canBeIssued="true" id="17" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="true"
-                   componentTypeName="Ignore me" componentTypeCode="911"/>
+                   componentTypeName="Ignore me" componentTypeCode="911"
+                   containsPlasma="true"/>
 </dataset>

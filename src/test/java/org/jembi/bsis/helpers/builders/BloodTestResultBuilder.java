@@ -1,16 +1,27 @@
 package org.jembi.bsis.helpers.builders;
 
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+
+import java.util.Date;
+
+import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
+import org.jembi.bsis.helpers.persisters.BloodTestResultPersister;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.user.User;
 
 public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResult> {
 
   private Long id;
   private String result;
-  private BloodTest bloodTest;
-  private Donation donation;
+  private BloodTest bloodTest = aBloodTest().build();
+  private Donation donation = aDonation().build();
   private boolean reEntryRequired;
+  private boolean isDeleted = false;
+  private Date createdDate;
+  private User createdBy;
 
   public BloodTestResultBuilder withId(Long id) {
     this.id = id;
@@ -37,6 +48,26 @@ public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResul
     return this;
   }
 
+  public BloodTestResultBuilder withIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
+    return this;
+  }
+  
+  public BloodTestResultBuilder thatIsDeleted() {
+    isDeleted = true;
+    return this;
+  }
+  
+  public BloodTestResultBuilder withCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+    return this;
+  }
+  
+  public BloodTestResultBuilder withCreatedBy(User createdBy) {
+    this.createdBy = createdBy;
+    return this;
+  }
+
   @Override
   public BloodTestResult build() {
     BloodTestResult bloodTestResult = new BloodTestResult();
@@ -45,7 +76,15 @@ public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResul
     bloodTestResult.setBloodTest(bloodTest);
     bloodTestResult.setDonation(donation);
     bloodTestResult.setReEntryRequired(reEntryRequired);
+    bloodTestResult.setIsDeleted(isDeleted);
+    bloodTestResult.setCreatedDate(createdDate);
+    bloodTestResult.setCreatedBy(createdBy);
     return bloodTestResult;
+  }
+
+  @Override
+  public AbstractEntityPersister<BloodTestResult> getPersister() {
+    return new BloodTestResultPersister();
   }
 
   public static BloodTestResultBuilder aBloodTestResult() {

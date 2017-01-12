@@ -11,9 +11,12 @@ import javax.transaction.Transactional;
 import org.jembi.bsis.backingform.TestResultsBackingForm;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
+import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
+import org.jembi.bsis.repository.BloodTestRepository;
+import org.jembi.bsis.repository.BloodTestResultRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
@@ -28,17 +31,23 @@ import org.springframework.stereotype.Service;
 public class BloodTestsService {
 
   @Autowired
-  BloodTestingRepository bloodTestingRepository;
+  private BloodTestRepository bloodTestRepository;
+
+  @Autowired
+  private BloodTestResultRepository bloodTestResultRepository;
+
+  @Autowired
+  private BloodTestingRepository bloodTestingRepository;
 
   @Autowired
   private DonationRepository donationRepository;
 
   @Autowired
   private BloodTestingRuleEngine ruleEngine;
-  
+
   @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
-  
+
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
 
@@ -62,16 +71,18 @@ public class BloodTestsService {
    */
   public void saveBloodTests(List<TestResultsBackingForm> forms, boolean reEntry) {
 
-    for (TestResultsBackingForm form:forms) {
+    for (TestResultsBackingForm form : forms) {
 
       // Get donation
-      Donation donation = donationRepository.findDonationByDonationIdentificationNumber(form.getDonationIdentificationNumber());
+      Donation donation =
+          donationRepository.findDonationByDonationIdentificationNumber(form.getDonationIdentificationNumber());
 
       // Get testResults from form
       Map<Long, String> bloodTestResults = form.getTestResults();
 
       // Apply reEntry system config
-      if (!reEntry && !generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true)) {
+      if (!reEntry
+          && !generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true)) {
         // This is not re-entry, but re-entry is not required, so just set reEntry to true
         // The result of this is that no blood test results will be marked as requiring re-entry
         reEntry = true;
@@ -102,14 +113,15 @@ public class BloodTestsService {
 
   /**
    * Updates the specified Donation given the results from the BloodTests. Updates include blood
-   * grouping, extra information, TTI status and blood typing statuses.
+   * grouping, TTI status and blood typing statuses.
    *
-   * @param donation   Donation on which the tests were run
+   * @param donation Donation on which the tests were run
    * @param ruleResult BloodTestingRuleResult containing the results from the tests
    * @return boolean, true if the Donation was updated
    */
   public boolean updateDonationWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
-    // FIXME: this method should be in this service but it has too many references in BloodTestingRepository
+    // FIXME: this method should be in this service but it has too many references in
+    // BloodTestingRepository
     return bloodTestingRepository.updateDonationWithTestResults(donation, ruleResult);
   }
 
@@ -120,28 +132,41 @@ public class BloodTestsService {
   public Map<String, Object> getBloodTestShortNames() {
     List<String> basicTtiTestNames = new ArrayList<String>();
     List<String> repeatTtiTestNames = new ArrayList<String>();
+    List<String> confirmatoryTtiTestNames = new ArrayList<String>();
     List<String> basicBloodTypingTestNames = new ArrayList<String>();
     List<String> repeatBloodTypingTestNames = new ArrayList<String>();
 
     Map<String, Object> map = new HashMap<String, Object>();
 
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
+    for (BloodTest rawBloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)) {
       basicTtiTestNames.add(rawBloodTest.getTestNameShort());
     }
     map.put("basicTtiTestNames", basicTtiTestNames);
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
+    for (BloodTest rawBloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)) {
       repeatTtiTestNames.add(rawBloodTest.getTestNameShort());
     }
     map.put("repeatTtiTestNames", repeatTtiTestNames);
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
+    for (BloodTest rawBloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)) {
+      confirmatoryTtiTestNames.add(rawBloodTest.getTestNameShort());
+    }
+    map.put("confirmatoryTtiTestNames", confirmatoryTtiTestNames);
+    for (BloodTest rawBloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)) {
       basicBloodTypingTestNames.add(rawBloodTest.getTestNameShort());
     }
     map.put("basicBloodTypingTestNames", basicBloodTypingTestNames);
-    for (BloodTest rawBloodTest : bloodTestingRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
+    for (BloodTest rawBloodTest : bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)) {
       repeatBloodTypingTestNames.add(rawBloodTest.getTestNameShort());
     }
     map.put("repeatBloodTypingTestNames", repeatBloodTypingTestNames);
 
     return map;
+  }
+
+  public void setTestOutcomesAsDeleted(Donation donation) {
+    List<BloodTestResult> testOutcomes = bloodTestResultRepository.getTestOutcomes(donation);
+    for (BloodTestResult testOutcome : testOutcomes) {
+      testOutcome.setIsDeleted(true);
+      bloodTestResultRepository.save(testOutcome);
+    }
   }
 }

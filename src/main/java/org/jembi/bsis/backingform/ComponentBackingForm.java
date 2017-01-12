@@ -144,4 +144,14 @@ public class ComponentBackingForm {
     // Ignore
   }
 
+  @JsonIgnore
+  public void setHasComponentBatch(boolean hasComponentBatch) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setIsInitialComponent(boolean isInitialComponent) {
+    // Ignore
+  }
+
 }

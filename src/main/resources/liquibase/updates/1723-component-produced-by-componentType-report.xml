@@ -1,0 +1,17 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/1723-component-produced-by-componentType-report.xml">
+
+	<changeSet id="20161006-1020" author="lauravignoli">
+      <!-- Delete permission roles associated to unused permission 39: Reporting - Discards -->
+      <delete tableName="Permission_Role">
+        <where>permissions_id = 39</where>
+      </delete>
+       <!-- Delete permission 39: Reporting - Discards -->
+      <delete tableName="Permission">
+        <where>id = 39</where>
+      </delete>
+	</changeSet>
+</databaseChangeLog>

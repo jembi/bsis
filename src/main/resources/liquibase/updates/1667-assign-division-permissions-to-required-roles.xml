@@ -1,0 +1,43 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+	logicalFilePath="./src/main/resources/liquibase/updates/1667-assign-division-permissions-to-required-roles.xml">
+
+	<changeSet id="20160915-1320" author="tumijacob">
+		<comment>Assign permissions Add, Edit, View and Void division to superuser</comment>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="111"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="112"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="113"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="114"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
+		<comment>Assign permissions Add, Edit, View and Void division to admin user</comment>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="111"></column>
+			<column name="roles_id" value="2"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="112"></column>
+			<column name="roles_id" value="2"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="113"></column>
+			<column name="roles_id" value="2"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="114"></column>
+			<column name="roles_id" value="2"></column>
+		</insert>
+	</changeSet>
+</databaseChangeLog>

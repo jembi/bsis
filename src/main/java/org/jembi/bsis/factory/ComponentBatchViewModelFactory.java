@@ -1,14 +1,15 @@
 package org.jembi.bsis.factory;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.viewmodel.ComponentBatchFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentBatchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ComponentBatchViewModelFactory {
@@ -53,7 +54,13 @@ public class ComponentBatchViewModelFactory {
     }
     viewModel.setCollectionDate(componentBatch.getCollectionDate());
     viewModel.setNumberOfBoxes(componentBatch.getBloodTransportBoxes().size());
-    viewModel.setNumberOfComponents(componentBatch.getComponents().size());
+    int count = 0;
+    for (Component component : componentBatch.getComponents()) {
+      if (component.getParentComponent() == null) {
+        count ++;
+      }
+    }
+    viewModel.setNumberOfInitialComponents(count);
     return viewModel;
   }
 

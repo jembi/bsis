@@ -27,6 +27,11 @@ public class ComponentConstraintChecker {
       ComponentStatus.EXPIRED);
   
   public boolean canDiscard(Component component) {
+    // There must be a componentBatch attached to the component
+    if (!component.hasComponentBatch()){
+      return false;
+    }
+    
     // Check component status is allowed to discard
     return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
   }
@@ -37,6 +42,11 @@ public class ComponentConstraintChecker {
   }
 
   public boolean canRecordWeight(Component component) {
+    // There must be a componentBatch attached to the component
+    if (!component.hasComponentBatch()){
+      return false;
+    }
+    
     // Only initial components can record weight
     if (component.getParentComponent() != null) {
       return false;
@@ -46,6 +56,11 @@ public class ComponentConstraintChecker {
   }
 
   public boolean canProcess(Component component) {
+    // There must be a componentBatch attached to the component
+    if (!component.hasComponentBatch()){
+      return false;
+    }
+    
     // If it's an initial component, check that weight is valid
     if (component.getParentComponent() == null) {
       if (!isWeightValid(component)) {
@@ -67,14 +82,13 @@ public class ComponentConstraintChecker {
       return false;
     }
 
-    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber(parentComponent.getDonationIdentificationNumber());
+    // Get child components
+    List<Component> components = componentRepository.findChildComponents(parentComponent);
     for (Component component : components) {
-      // check that status is correct and it hasn't been labelled (not in stock) for all child components
-      if (component.getId() != parentComponent.getId()) {
-        if (!(CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus())
-            && component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK))) {
-          return false;
-        }
+      // Check that status is correct and it hasn't been labelled (not in stock)
+      if (!(CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus())
+          && component.getInventoryStatus().equals(InventoryStatus.NOT_IN_STOCK))) {
+        return false;
       }
     }
 
@@ -91,5 +105,4 @@ public class ComponentConstraintChecker {
     }
     return false;
   }
-
 }

@@ -1,0 +1,29 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/1446-data-export.xml">
+
+  <changeSet id="20160913-2036" author="timler">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0"> 
+        <![CDATA[
+        SELECT count(*) FROM Permission where name = 'Data Export';
+        ]]>
+      </sqlCheck>
+    </preConditions>
+    <comment>Add Data Export permission</comment>
+    <insert tableName="Permission">
+      <column name="id">115</column>
+      <column name="name">Data Export</column>
+    </insert>
+    <insert tableName="Permission_Role">
+      <column name="permissions_id" value="115"></column>
+      <column name="roles_id" value="1"></column><!-- Super User -->
+    </insert>
+    <insert tableName="Permission_Role">
+      <column name="permissions_id" value="115"></column>
+      <column name="roles_id" value="2"></column><!-- Admin -->
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

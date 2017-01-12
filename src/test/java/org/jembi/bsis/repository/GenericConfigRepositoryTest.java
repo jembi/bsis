@@ -7,9 +7,7 @@ import java.util.Map;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.repository.GenericConfigRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,7 +36,7 @@ public class GenericConfigRepositoryTest extends DBUnitContextDependentTestSuite
   public void testGetConfigProperties() throws Exception {
     Map<String, String> all = genericConfigRepository.getConfigProperties("labsetup");
     Assert.assertNotNull("There are GenericConfigs", all);
-    Assert.assertEquals("There are 22 labsetup GenericConfig", 22, all.size());
+    Assert.assertEquals("There are 18 labsetup GenericConfig", 18, all.size());
     Assert.assertTrue("The labsetup GenericConfig contains crossmatchProcedure",
         all.keySet().contains("crossmatchProcedure"));
   }
@@ -64,13 +62,6 @@ public class GenericConfigRepositoryTest extends DBUnitContextDependentTestSuite
   }
 
   @Test
-  public void testGetCurrentBloodTypingContext() throws Exception {
-    BloodTestContext context = genericConfigRepository.getCurrentBloodTypingContext();
-    Assert.assertNotNull("BloodTestContext was found", context);
-    Assert.assertEquals(BloodTestContext.RECORD_BLOOD_TYPING_TESTS, context);
-  }
-
-  @Test
   public void testUpdate() throws Exception {
     Map<String, String> all = genericConfigRepository.getConfigProperties("labsetup");
     Assert.assertNotNull("There are GenericConfigs", all);
@@ -83,16 +74,4 @@ public class GenericConfigRepositoryTest extends DBUnitContextDependentTestSuite
     Assert.assertEquals("recordUsage is false", "false", updatedValue);
   }
 
-  @Test
-  public void testUpdateWorksheetProperties() throws Exception {
-    Map<String, String> all = genericConfigRepository.getConfigProperties("donationsWorksheet");
-    Assert.assertNotNull("There are GenericConfigs", all);
-    String value = all.get("rowHeight");
-    value = "40";
-    all.put("rowHeight", value);
-    genericConfigRepository.updateWorksheetProperties(all);
-    Map<String, String> allSaved = genericConfigRepository.getConfigProperties("donationsWorksheet");
-    String updatedValue = allSaved.get("rowHeight");
-    Assert.assertEquals("recordUsage is 40", "40", updatedValue);
-  }
 }

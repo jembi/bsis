@@ -17,6 +17,15 @@ public class LocationNamedQueryConstants {
       + "AND l.isDeleted = :isDeleted "
       + "ORDER BY l.name ASC";
   
+  public static final String NAME_FIND_MOBILE_VENUES = "Location.findMobileVenues";
+  public static final String QUERY_FIND_MOBILE_VENUES =
+      "SELECT l "
+      + "FROM Location l "
+      + "WHERE l.isVenue = :isVenue "
+      + "AND l.isDeleted = :isDeleted "
+      + "AND l.isMobileSite = :isMobileSite "
+      + "ORDER BY l.name ASC";
+  
   public static final String NAME_FIND_PROCESSING_SITES = "Location.findProcessingSites";
   public static final String QUERY_FIND_PROCESSING_SITES =
       "SELECT l "

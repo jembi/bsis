@@ -96,8 +96,8 @@ public class PermissionConstants {
   public static final String DONATIONS_REPORTING = "Reporting - Donations";
   public static final String REQUESTS_REPORTING = "Reporting - Requests";
   public static final String TTI_REPORTING = "Reporting - TTI Testing";
-  public static final String COMPONENTS_ISSUED_REPORTING = "Reporting - Components";
-  public static final String COMPONENTS_DISCARDED_REPORTING = "Reporting - Discards";
+  public static final String COMPONENTS_REPORTING = "Reporting - Components";
+  public static final String DONORS_REPORTING = "Reporting - Donors";
 
   // Admin and Super-User Permissions
   public static final String MANAGE_USERS = "Manage Users";
@@ -108,7 +108,7 @@ public class PermissionConstants {
   public static final String MANAGE_COMPONENT_TYPES = "Manage Component Types";
   public static final String MANAGE_COMPONENT_COMBINATIONS = "Manage Component Combinations";
   public static final String MANAGE_CROSS_MATCH_TYPES = "Manage Cross Match Types";
-  public static final String MANAGE_BLOOD_TYPING_RULES = "Manage Blood Typing Rules";
+  public static final String MANAGE_BLOOD_TESTING_RULES = "Manage Blood Testing Rules";
   public static final String MANAGE_PACK_TYPES = "Manage Pack Types";
   public static final String MANAGE_DISCARD_REASONS = "Manage Discard Reasons";
   public static final String MANAGE_DEFERRAL_REASONS = "Manage Deferral Reasons";
@@ -119,7 +119,6 @@ public class PermissionConstants {
   public static final String MANAGE_FORMS = "Manage Forms";
   public static final String MANAGE_BACKUP_DATA = "Manage Backup Data";
   public static final String MANAGE_BLOOD_TESTS = "Manage Blood Tests";
-  public static final String MANAGE_TIPS = "Manage Tips";
   public static final String MANAGE_REQUESTS = "Manage Requests";
   public static final String MANAGE_GENERAL_CONFIGS = "Manage General Configs";
 
@@ -127,6 +126,7 @@ public class PermissionConstants {
   public static final String VIEW_DONOR_INFORMATION = "View Donor Information";
   public static final String VIEW_DONATION_INFORMATION = "View Donation Information";
   public static final String VIEW_MOBILE_CLINIC_INFORMATION = "View Mobile Clinic Information";
+  public static final String VIEW_MOBILE_CLINIC_EXPORT = "View Mobile Clinic Export";
   public static final String VIEW_COMPONENT_INFORMATION = "View Component Information";
   public static final String VIEW_TESTING_INFORMATION = "View Testing Information";
   public static final String VIEW_BLOOD_BANK_INFORMATION = "View Blood Bank Information";
@@ -149,9 +149,12 @@ public class PermissionConstants {
   public static final String VOID_POST_DONATION_COUNSELLING = "Void Post Donation Counselling";
 
   // Adverse Event Permissions
-  public static final String ADD_ADVERSE_EVENT_TYPES = "Add Adverse Event Types";
-  public static final String EDIT_ADVERSE_EVENT_TYPES = "Edit Adverse Event Types";
-  public static final String VIEW_ADVERSE_EVENT_TYPES = "View Adverse Event Types";
-  public static final String VOID_ADVERSE_EVENT_TYPES = "Void Adverse Event Types";
+  public static final String MANAGE_ADVERSE_EVENTS = "Manage Adverse Events";
+  
+  // Location Divisions
+  public static final String MANAGE_DIVISIONS = "Manage Divisions";
+  
+  // Data Export
+  public static final String DATA_EXPORT = "Data Export";
 
 }

@@ -4,12 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DeferralReasonBuilder.aDeferralReason;
 
+import java.util.List;
+
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DeferralReasonType;
-import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,27 @@ public class DeferralReasonRepositoryTests extends ContextDependentTestSuite {
     DeferralReason returnedDeferralReason = deferralReasonRepository.findDeferralReasonByType(type);
 
     assertThat(returnedDeferralReason, is(expectedDeferralReason));
+  }
+  
+  @Test
+  public void testGetAllDeferralReasons_shouldAllNotDeletedEntities() {
+    // Excluded by deleted flag
+    aDeferralReason()
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+    
+    DeferralReason notDeletedDeferralReason = aDeferralReason()
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+
+    DeferralReason expectedDeferralReason = aDeferralReason()
+        .withId(notDeletedDeferralReason.getId())
+        .build();
+
+    List<DeferralReason> returnedDeferralReasons = deferralReasonRepository.getAllDeferralReasons();
+
+    assertThat(returnedDeferralReasons.size(), is(1));
+    assertThat(returnedDeferralReasons.get(0), is(expectedDeferralReason));
   }
   
   @Test

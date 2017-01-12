@@ -1,6 +1,13 @@
 package org.jembi.bsis.repository;
 
 public class DeferralReasonNamedQueryConstants {
+  
+  public static final String NAME_FIND_ALL_DEFERRAL_REASONS =
+      "DeferralReason.findAllDeferralReasons";
+  public static final String QUERY_FIND_ALL_DEFERRAL_REASONS =
+      "SELECT dr " +
+          "FROM DeferralReason dr " +
+          "WHERE dr.isDeleted = :deleted ";
 
   public static final String NAME_FIND_DEFERRAL_REASON_BY_TYPE =
       "DeferralReason.findDeferralReasonByType";

@@ -1,0 +1,16 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/1343-units-issued-report.xml">
+
+  <changeSet id="20160808-1648" author="lauravignoli">
+  <comment>Delete Tips references as it's no longer used</comment>
+    <dropTable tableName="Tips"/>
+    <delete tableName="Permission_Role">
+      <where>permissions_id=82</where><!-- Manage Tips permission-roles -->
+    </delete>
+    <delete tableName="Permission">
+      <where>id=82</where><!-- Manage Tips permission -->
+    </delete>
+  </changeSet>
+</databaseChangeLog>

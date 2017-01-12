@@ -46,5 +46,37 @@ public class DonationNamedQueryConstants {
           + "WHERE d.donor.id = :donorId "
           + "AND d.isDeleted = :deleted "
           + "ORDER BY dueToDonate DESC ";
+  
+  public static final String NAME_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE =
+      "Donation.findLastDonationsByDonorVenueAndDonationDate";
+  public static final String QUERY_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE =
+      "SELECT DISTINCT d "
+      + "FROM Donation d "
+      + "LEFT JOIN FETCH d.bloodTestResults "
+      + "WHERE d.donationDate BETWEEN :startDate AND :endDate "
+      // Only look at the last donation for each donor
+      + "AND d.donationDate = d.donor.dateOfLastDonation "
+      + "AND d.donor.venue = :venue "
+      + "AND d.isDeleted = :deleted ";
+  
+  public static final String NAME_FIND_DONATIONS_FOR_EXPORT =
+      "Donations.findDonationsForExport";
+  /*
+   * N.B. It would be preferable to return only the adverse event type name and adverse event comment, but that doesn't
+   * seem to be possible. We need to use the full adverse event because accessing the adverse event type name via
+   * d.adverseEvent.type.name in the query causes donations without adverse events to be excluded.
+   */
+  public static final String QUERY_FIND_DONATIONS_FOR_EXPORT =
+      "SELECT NEW org.jembi.bsis.dto.DonationExportDTO(d.donor.donorNumber, d.donationIdentificationNumber, "
+      + "d.modificationTracker.createdDate, d.modificationTracker.createdBy.username, d.modificationTracker.lastUpdated, "
+      + "d.modificationTracker.lastUpdatedBy.username, d.packType.packType, d.donationDate, d.bloodTypingStatus, "
+      + "d.bloodTypingMatchStatus, d.ttiStatus, d.bleedStartTime, d.bleedEndTime, d.donorWeight, "
+      + "d.bloodPressureSystolic, d.bloodPressureDiastolic, d.donorPulse, d.haemoglobinCount, d.haemoglobinLevel, "
+      + "d.adverseEvent, d.bloodAbo, d.bloodRh, d.released, d.ineligibleDonor, d.notes) "
+      + "FROM Donation d "
+      // Make sure that donations without adverse events are returned
+      + "LEFT JOIN d.adverseEvent "
+      + "WHERE d.isDeleted = :deleted "
+      + "ORDER BY d.modificationTracker.createdDate ASC ";
 
 }

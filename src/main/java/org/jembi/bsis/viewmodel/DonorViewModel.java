@@ -81,7 +81,7 @@ public class DonorViewModel {
   public String getDateOfFirstDonation() {
     Date dateOfFirstDonation = donor.getDateOfFirstDonation();
     if (dateOfFirstDonation != null) {
-      return CustomDateFormatter.getDateString(dateOfFirstDonation);
+      return CustomDateFormatter.getDateTimeString(dateOfFirstDonation);
     } else {
       return "";
     }
@@ -139,7 +139,7 @@ public class DonorViewModel {
 
   public String getDateOfLastDonation() {
     Date dateOfLastDonation = donor.getDateOfLastDonation();
-    return CustomDateFormatter.getDateString(dateOfLastDonation);
+    return CustomDateFormatter.getDateTimeString(dateOfLastDonation);
   }
 
   public DonorStatus getDonorStatus() {

@@ -1,5 +1,15 @@
 package org.jembi.bsis.factory;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationViewModelBuilder.aComponentTypeCombinationViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentTypeSearchViewModelBuilder.aComponentTypeSearchViewModel;
+import static org.jembi.bsis.helpers.matchers.ComponentTypeSearchViewModelMatcher.hasSameStateAsComponentTypeSearchViewModel;
+import static org.mockito.Mockito.when;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,6 +17,7 @@ import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
+import org.jembi.bsis.viewmodel.ComponentTypeCombinationViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeSearchViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
@@ -14,6 +25,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -21,10 +33,12 @@ public class ComponentTypeFactoryTests {
 
   @InjectMocks
   private ComponentTypeFactory componentTypeFactory;
+  @Mock
+  private ComponentTypeCombinationFactory componentTypeCombinationFactory;
 
   @Test
   public void testSingleFullComponentType_shouldReturnExpectedViewModel() {
-    ComponentTypeCombination producedComponentTypeCombination = new ComponentTypeCombination();
+    ComponentTypeCombination producedComponentTypeCombination = aComponentTypeCombination().withId(1L).build();
     ComponentType entity = ComponentTypeBuilder.aComponentType()
         .withId(1L)
         .withComponentTypeName("name")
@@ -40,6 +54,11 @@ public class ComponentTypeFactoryTests {
         .withCanBeIssued(false)
         .build();
 
+    ComponentTypeCombinationViewModel combinationViewModel = aComponentTypeCombinationViewModel().withId(1L).build();
+
+    when(componentTypeCombinationFactory.createViewModels(Arrays.asList(producedComponentTypeCombination)))
+        .thenReturn(Arrays.asList(combinationViewModel));
+
     ComponentTypeFullViewModel viewModel = componentTypeFactory.createFullViewModel(entity);
     
     Assert.assertNotNull("View Model was created", viewModel);
@@ -53,10 +72,24 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", Integer.valueOf(0), viewModel.getLowStorageTemperature());
     Assert.assertEquals("View Model correct", "preparationInfo", viewModel.getPreparationInfo());
     Assert.assertNotNull("View Model correct", viewModel.getProducedComponentTypeCombinations());
-    Assert.assertEquals("View Model correct", 1, viewModel.getProducedComponentTypeCombinations().size());
+    Assert.assertEquals("View Model correct",  1, viewModel.getProducedComponentTypeCombinations().size());
     Assert.assertEquals("View Model correct", "transportInfo", viewModel.getTransportInfo());
     Assert.assertEquals("View Model correct", "storageInfo", viewModel.getStorageInfo());
     Assert.assertEquals("View Model correct", false, viewModel.getCanBeIssued());
+  }
+
+  @Test
+  public void testCreateFullViewModelWithNewComponentType_shouldReturnExpected() {
+    ComponentType entity = ComponentTypeBuilder.aComponentType()
+        .withId(1L)
+        .withComponentTypeName("name")
+        .withComponentTypeCode("0001")
+        .build();
+
+    ComponentTypeFullViewModel viewModel = componentTypeFactory.createFullViewModel(entity);
+    
+    Assert.assertNotNull("View Model was created", viewModel);
+    Assert.assertNull("No produced components",  viewModel.getProducedComponentTypeCombinations());
   }
   
   @Test
@@ -126,4 +159,32 @@ public class ComponentTypeFactoryTests {
     Assert.assertEquals("View Model correct", Long.valueOf(1), viewModels.get(0).getId());
     Assert.assertEquals("View Model correct", Long.valueOf(2), viewModels.get(1).getId());
   }
+  
+  @Test
+  public void testComponentTypeSearchViewModelWithContainsPlasma_shouldReturnExpectedViewModel() {
+    ComponentType componentType = aComponentType()
+        .withId(1L)
+        .withComponentTypeCode("0000")
+        .withComponentTypeName("name")
+        .withDescription("description")
+        .thatContainsPlasma()
+        .build();
+    
+    ComponentTypeSearchViewModel expectedViewModel = aComponentTypeSearchViewModel()
+        .withId(1L)
+        .withComponentTypeCode("0000")
+        .withComponentTypeName("name")
+        .withDescription("description")
+        .thatContainsPlasma()
+        .build();
+    
+    // run test
+    ComponentTypeSearchViewModel convertedViewModel = componentTypeFactory.createSearchViewModel(componentType);
+
+    // do asserts
+    assertThat(convertedViewModel, is(notNullValue()));
+    assertThat("Correct view model", convertedViewModel, hasSameStateAsComponentTypeSearchViewModel(expectedViewModel));
+    
+  }
+
 }

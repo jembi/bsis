@@ -1,0 +1,22 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/1841-update-child-components.xml">
+
+  <changeSet id="20161020-1548" author="jmuzinda">
+    <comment>Update all components with a parent and the parent having a batch while child location is null to parent location</comment>
+    <sql>
+      UPDATE Component c
+      LEFT JOIN Component parent_c ON c.parentComponent_id = parent_c.id
+      LEFT JOIN Component parent_of_parent_c ON parent_c.parentComponent_id = parent_of_parent_c.id
+      SET c.componentBatch_id = 
+        CASE
+          WHEN parent_of_parent_c.componentBatch_id IS NOT NULL THEN parent_of_parent_c.componentBatch_id
+          WHEN parent_c.componentBatch_id IS NOT NULL THEN parent_c.componentBatch_id
+          ELSE null
+        END
+      WHERE c.componentBatch_id is null;
+    </sql>
+  </changeSet>
+</databaseChangeLog>

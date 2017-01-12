@@ -15,7 +15,7 @@ public class ComponentBatchViewModel {
   private Location location;
   private Date collectionDate;
   private DonationBatchViewModel donationBatch;
-  private int numberOfComponents;
+  private int numberOfInitialComponents;
   private int numberOfBoxes;
   
   public ComponentBatchViewModel() {
@@ -72,12 +72,12 @@ public class ComponentBatchViewModel {
     this.donationBatch = donationBatch;
   }
 
-  public int getNumberOfComponents() {
-    return numberOfComponents;
+  public int getNumberOfInitialComponents() {
+    return numberOfInitialComponents;
   }
 
-  public void setNumberOfComponents(int numberOfComponents) {
-    this.numberOfComponents = numberOfComponents;
+  public void setNumberOfInitialComponents(int numberOfInitialComponents) {
+    this.numberOfInitialComponents = numberOfInitialComponents;
   }
 
   public int getNumberOfBoxes() {

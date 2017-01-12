@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
+import org.jembi.bsis.model.donation.TTIStatus;
 
 public class BloodTestingRuleResult {
 
@@ -20,21 +20,23 @@ public class BloodTestingRuleResult {
 
   private String bloodRh;
 
-  private Set<String> extraInformation;
+  private List<Long> pendingBloodTypingTestsIds;
 
-  private List<String> pendingBloodTypingTestsIds;
+  private List<Long> pendingConfirmatoryTTITestsIds;
 
-  private List<String> pendingTTITestsIds;
+  private List<Long> pendingRepeatTTITestsIds;
 
-  private Map<String, String> availableTestResults;
+  private List<Long> pendingRepeatAndConfirmatoryTtiTestsIds;
 
-  private Map<String, BloodTestResultViewModel> recentTestResults;
+  private Map<Long, String> availableTestResults;
+
+  private Map<Long, BloodTestResultViewModel> recentTestResults;
 
   private BloodTypingStatus bloodTypingStatus;
 
   private BloodTypingMatchStatus bloodTypingMatchStatus;
 
-  private Map<String, String> storedTestResults;
+  private Map<Long, String> storedTestResults;
 
   // Read about Bean Naming convention in Java
   // http://stackoverflow.com/a/5599478/161628
@@ -92,27 +94,19 @@ public class BloodTestingRuleResult {
     this.bloodRh = bloodRh;
   }
 
-  public Set<String> getExtraInformation() {
-    return extraInformation;
-  }
-
-  public void setExtraInformation(Set<String> extraInformation) {
-    this.extraInformation = extraInformation;
-  }
-
-  public List<String> getPendingBloodTypingTestsIds() {
+  public List<Long> getPendingBloodTypingTestsIds() {
     return pendingBloodTypingTestsIds;
   }
 
-  public void setPendingBloodTypingTestsIds(List<String> pendingBloodTypingTestsIds) {
+  public void setPendingBloodTypingTestsIds(List<Long> pendingBloodTypingTestsIds) {
     this.pendingBloodTypingTestsIds = pendingBloodTypingTestsIds;
   }
 
-  public Map<String, String> getAvailableTestResults() {
+  public Map<Long, String> getAvailableTestResults() {
     return availableTestResults;
   }
 
-  public void setAvailableTestResults(Map<String, String> availableTestResults) {
+  public void setAvailableTestResults(Map<Long, String> availableTestResults) {
     this.availableTestResults = availableTestResults;
   }
 
@@ -132,11 +126,11 @@ public class BloodTestingRuleResult {
     this.bloodTypingMatchStatus = bloodTypingMatchStatus;
   }
 
-  public Map<String, String> getStoredTestResults() {
+  public Map<Long, String> getStoredTestResults() {
     return storedTestResults;
   }
 
-  public void setStoredTestResults(Map<String, String> storedTestResults) {
+  public void setStoredTestResults(Map<Long, String> storedTestResults) {
     this.storedTestResults = storedTestResults;
   }
 
@@ -156,12 +150,32 @@ public class BloodTestingRuleResult {
     this.ttiStatus = ttiStatus;
   }
 
-  public List<String> getPendingTTITestsIds() {
-    return pendingTTITestsIds;
+  public List<Long> getPendingConfirmatoryTTITestsIds() {
+    return pendingConfirmatoryTTITestsIds;
   }
 
-  public void setPendingTTITestsIds(List<String> pendingTTITestsIds) {
-    this.pendingTTITestsIds = pendingTTITestsIds;
+  public void setPendingConfirmatoryTTITestsIds(List<Long> pendingConfirmatoryTTITestsIds) {
+    this.pendingConfirmatoryTTITestsIds = pendingConfirmatoryTTITestsIds;
+  }
+
+  public List<Long> getPendingRepeatTTITestsIds() {
+    return pendingRepeatTTITestsIds;
+  }
+
+  public void setPendingRepeatTTITestsIds(List<Long> pendingRepeatTTITestsIds) {
+    this.pendingRepeatTTITestsIds = pendingRepeatTTITestsIds;
+  }
+
+  public List<Long> getPendingRepeatAndConfirmatoryTtiTestsIds() {
+    return pendingRepeatAndConfirmatoryTtiTestsIds;
+  }
+
+  public void addPendingRepeatAndConfirmatoryTtiTestsIds(Long pendingRepeatAndConfirmatoryTtiTestsIds) {
+    this.pendingRepeatAndConfirmatoryTtiTestsIds.add(pendingRepeatAndConfirmatoryTtiTestsIds);
+  }
+
+  public void setPendingRepeatAndConfirmatoryTtiTestsIds(List<Long> pendingRepeatAndConfirmatoryTtiTestsIds) {
+    this.pendingRepeatAndConfirmatoryTtiTestsIds = pendingRepeatAndConfirmatoryTtiTestsIds;
   }
 
   public boolean getAboUninterpretable() {
@@ -188,11 +202,11 @@ public class BloodTestingRuleResult {
     this.ttiUninterpretable = ttiUninterpretable;
   }
 
-  public Map<String, BloodTestResultViewModel> getRecentTestResults() {
+  public Map<Long, BloodTestResultViewModel> getRecentTestResults() {
     return recentTestResults;
   }
 
-  public void setRecentTestResults(Map<String, BloodTestResultViewModel> recentTestResults) {
+  public void setRecentTestResults(Map<Long, BloodTestResultViewModel> recentTestResults) {
     this.recentTestResults = recentTestResults;
   }
 

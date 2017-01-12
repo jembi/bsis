@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
+import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
 import org.jembi.bsis.service.BloodTestResultConstraintChecker;
 import org.jembi.bsis.service.DonationConstraintChecker;
 import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
@@ -26,21 +26,26 @@ public class BloodTestingRuleResultViewModelFactory {
   private DonationConstraintChecker donationConstraintChecker;
 
   @Autowired
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
+
+  @Autowired
+  private BloodTestResultFactory bloodTestResultFactory;
 
   public BloodTestingRuleResult createBloodTestResultViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet) {
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
 
     // the blood donation
     Donation donation = bloodTestingRuleResultSet.getDonation();
-    ruleResult.setDonation(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation));
+    ruleResult.setDonation(donationFactory.createDonationViewModelWithoutPermissions(donation));
 
     // pending tests
-    List<String> pendingBloodTypingTestsIds = new ArrayList<String>();
+    List<Long> pendingBloodTypingTestsIds = new ArrayList<>();
     pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingAboTestsIds());
     pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingRhTestsIds());
     ruleResult.setPendingBloodTypingTestsIds(pendingBloodTypingTestsIds);
-    ruleResult.setPendingTTITestsIds(bloodTestingRuleResultSet.getPendingTtiTestsIds());
+    ruleResult.setPendingConfirmatoryTTITestsIds(bloodTestingRuleResultSet.getPendingConfirmatoryTtiTestsIds());
+    ruleResult.setPendingRepeatTTITestsIds(bloodTestingRuleResultSet.getPendingRepeatTtiTestsIds());
+    ruleResult.setPendingRepeatAndConfirmatoryTtiTestsIds(bloodTestingRuleResultSet.getPendingRepeatAndConfirmatoryTtiTestsIds());
 
     // blood typing results
     ruleResult.setBloodTypingMatchStatus(bloodTestingRuleResultSet.getBloodTypingMatchStatus());
@@ -68,7 +73,6 @@ public class BloodTestingRuleResultViewModelFactory {
       bloodRh = bloodTestingRuleResultSet.getBloodRhChanges().iterator().next();
     }
     ruleResult.setBloodRh(bloodRh);
-    ruleResult.setExtraInformation(bloodTestingRuleResultSet.getExtraInformation());
 
     // TTI test information
     ruleResult.setTTIStatus(bloodTestingRuleResultSet.getTtiStatus());
@@ -82,9 +86,9 @@ public class BloodTestingRuleResultViewModelFactory {
 
     // test data in various formats
     ruleResult.setStoredTestResults(bloodTestingRuleResultSet.getStoredTestResults());
-    Map<String, BloodTestResultViewModel> recentTestResultsViewModel = new HashMap<String, BloodTestResultViewModel>();
+    Map<Long, BloodTestResultViewModel> recentTestResultsViewModel = new HashMap<>();
     for (Long testId : bloodTestingRuleResultSet.getRecentTestResults().keySet()) {
-      recentTestResultsViewModel.put(testId.toString(), createBloodTestResultViewModel(bloodTestingRuleResultSet, bloodTestingRuleResultSet.getRecentTestResults().get(testId), isDonationReleased));
+      recentTestResultsViewModel.put(testId, createBloodTestResultViewModel(bloodTestingRuleResultSet, bloodTestingRuleResultSet.getRecentTestResults().get(testId), isDonationReleased));
     }
     ruleResult.setRecentTestResults(recentTestResultsViewModel);
     ruleResult.setAvailableTestResults(bloodTestingRuleResultSet.getAvailableTestResults());
@@ -93,7 +97,7 @@ public class BloodTestingRuleResultViewModelFactory {
   }
 
   public BloodTestResultViewModel createBloodTestResultViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet, BloodTestResult bloodTestResult, boolean isDonationReleased) {
-    BloodTestResultViewModel bloodTestResultViewModel = new BloodTestResultViewModel(bloodTestResult);
+    BloodTestResultViewModel bloodTestResultViewModel = bloodTestResultFactory.createBloodTestResultViewModel(bloodTestResult);
     Map<String, Boolean> permissions = new HashMap<String, Boolean>();
     permissions.put("canEdit", bloodTestResultConstraintChecker.canEdit(bloodTestingRuleResultSet, bloodTestResult, isDonationReleased));
     bloodTestResultViewModel.setPermissions(permissions);

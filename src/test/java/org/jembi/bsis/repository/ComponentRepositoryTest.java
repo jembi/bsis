@@ -3,7 +3,6 @@ package org.jembi.bsis.repository;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +10,6 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
-import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -114,30 +112,5 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
     componentRepository.update(componentToUpdate);
     Component updatedComponent = componentRepository.findComponent(2l);
     Assert.assertEquals("Component has been updated", "junit123", updatedComponent.getComponentCode());
-  }
-
-  @Test
-  public void testAddComponent() throws Exception {
-    Component newComponent = new Component();
-    Donation newDonation = new Donation();
-    Component existingComponent = componentRepository.findComponent(1l);
-    newComponent.setId(existingComponent.getId());
-    newComponent.copy(existingComponent);
-    newComponent.setStatus(ComponentStatus.QUARANTINED);
-    newComponent.setId(null); // don't want to override, just save time with a copy
-    newDonation.setId(existingComponent.getDonation().getId());
-    newDonation.copy(existingComponent.getDonation());
-    newDonation.setId(null); // don't want to override, just save time with a copy
-    newDonation.setDonationIdentificationNumber("7654321");
-    Calendar today = Calendar.getInstance();
-    newDonation.setCreatedDate(today.getTime());
-    newDonation.setBleedEndTime(today.getTime());
-    today.add(Calendar.MINUTE, -15);
-    newDonation.setBleedStartTime(today.getTime());
-    donationRepository.addDonation(newDonation);
-    newComponent.setDonation(newDonation);
-    componentRepository.save(newComponent);
-    List<Component> components = componentRepository.findComponentsByDonationIdentificationNumber("7654321");
-    Assert.assertEquals("A new component was added", 1, components.size());
   }
 }

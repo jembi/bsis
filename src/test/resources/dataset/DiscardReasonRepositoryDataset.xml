@@ -23,4 +23,9 @@
                                  statusChangeReason="Did not crossmatch with patient sample"/>
     <ComponentStatusChangeReason id="11" category="SPLIT"
                                  isDeleted="false" statusChangeReason="Split"/>
+    <ComponentStatusChangeReason id="12" category="DISCARDED"
+                                 isDeleted="true" statusChangeReason="Deleted reason 1"/>
+    <ComponentStatusChangeReason id="13" category="DISCARDED"
+                                 isDeleted="true" statusChangeReason="Deleted reason 2"/>
+                                  
 </dataset>

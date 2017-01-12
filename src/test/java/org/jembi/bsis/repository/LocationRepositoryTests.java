@@ -209,4 +209,27 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Assert.assertFalse("Verify locations", locations.contains(location3));
     Assert.assertFalse("Verify locations", locations.contains(location5));
   }
+  
+  @Test
+  public void testGetMobileVenues_verifyCorrectLocationsReturned() {
+    Location location1 = aVenue().withName("test1").thatIsMobileSite().buildAndPersist(entityManager); // match
+    Location location2 = aDistributionSite().withName("test2").buildAndPersist(entityManager);
+    Location location3 = aProcessingSite().withName("test3").buildAndPersist(entityManager);
+    Location location4 = aVenue().withName("test4").buildAndPersist(entityManager); 
+    Location location5 = aVenue().withName("test5").thatIsMobileSite().buildAndPersist(entityManager); // match
+    Location location6 = aTestingSite().withName("test6").buildAndPersist(entityManager);
+   
+    List<Location> locations = locationRepository.getMobileVenues();
+    
+    // Verify locations returned
+    Assert.assertEquals("Verify locations returned", 2, locations.size());
+
+    // Verify right locations were returned
+    Assert.assertTrue("Verify locations", locations.contains(location1));
+    Assert.assertFalse("Verify locations", locations.contains(location4));
+    Assert.assertFalse("Verify locations", locations.contains(location2));
+    Assert.assertFalse("Verify locations", locations.contains(location3));
+    Assert.assertTrue("Verify locations", locations.contains(location5));
+    Assert.assertFalse("Verify locations", locations.contains(location6));
+  }
 }

@@ -1,0 +1,14 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/330-view-bloodTests-overview.xml">
+  
+  <changeSet id="20161027-1409" author="timler">
+    <comment>Make BloodTest isDeleted and isActive not nullable and provide suitable defaults</comment>
+    <addNotNullConstraint tableName="BloodTest" columnName="isDeleted" columnDataType="TINYINT(1)" defaultNullValue="0" />
+    <addDefaultValue tableName="BloodTest" columnName="isDeleted" columnDataType="TINYINT(1)" defaultValue="0" />
+    <addNotNullConstraint tableName="BloodTest" columnName="isActive" columnDataType="TINYINT(1)" defaultNullValue="1" />
+    <addDefaultValue tableName="BloodTest" columnName="isActive" columnDataType="TINYINT(1)" defaultValue="1" />
+  </changeSet>
+
+</databaseChangeLog>

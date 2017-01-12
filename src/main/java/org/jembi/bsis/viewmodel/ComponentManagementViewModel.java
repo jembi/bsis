@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,12 +14,31 @@ public class ComponentManagementViewModel extends BaseViewModel {
 
   private ComponentTypeViewModel componentType;
   private Date createdOn;
+  private Date expiresOn;
   private ComponentStatus status;
   private String expiryStatus;
   private String componentCode;
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
   private PackTypeFullViewModel packType;
+  private boolean hasComponentBatch;
+  private InventoryStatus inventoryStatus;
+
+  public boolean getHasComponentBatch () {
+    return hasComponentBatch;
+  }
+
+  public void setHasComponentBatch (boolean hasComponentBatch) {
+    this.hasComponentBatch = hasComponentBatch;
+  }
+
+  public InventoryStatus getInventoryStatus () {
+    return inventoryStatus;
+  }
+
+  public void setInventoryStatus (InventoryStatus inventoryStatus) {
+    this.inventoryStatus = inventoryStatus;
+  }
 
   public ComponentTypeViewModel getComponentType() {
     return componentType;
@@ -37,6 +57,15 @@ public class ComponentManagementViewModel extends BaseViewModel {
     this.createdOn = createdOn;
   }
 
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getExpiresOn() {
+    return expiresOn;
+  }
+
+  public void setExpiresOn(Date expiresOn) {
+    this.expiresOn = expiresOn;
+  }
+  
   public ComponentStatus getStatus() {
     return status;
   }

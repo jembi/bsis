@@ -2,9 +2,7 @@ package org.jembi.bsis.suites;
 
 import java.sql.SQLException;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.dbunit.database.DatabaseConfig;
@@ -28,20 +26,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "file:**/applicationContextTest.xml")
-@Transactional
-@WebAppConfiguration
 /**
  * Super class for DBUnit tests that handles loading of the dataset into the database and loading a user into the 
  * Spring Security Context.
  */
-public abstract class DBUnitContextDependentTestSuite {
+public abstract class DBUnitContextDependentTestSuite extends ContextDependentTestSuite {
 
   protected User loggedInUser;
-
-  @PersistenceContext
-  protected EntityManager entityManager;
 
   @Autowired
   protected UserRepository userRepository;

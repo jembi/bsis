@@ -9,8 +9,10 @@ import java.util.Map;
 import javax.persistence.NoResultException;
 
 import org.apache.log4j.Logger;
+import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
@@ -22,9 +24,12 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
+import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +58,92 @@ public class ComponentCRUDService {
 
   @Autowired
   private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
+
+  @Autowired
+  private GeneralConfigAccessorService generalConfigAccessorService;
+
+  @Autowired
+  private ComponentTypeCombinationRepository componentTypeCombinationRepository;
+  
+  @Autowired
+  private DonationBatchRepository donationBatchRepository;
+
+  public Component createInitialComponent(Donation donation) {
+
+    // Create initial component only if the countAsDonation is true and the config option is enabled
+    if (!donation.getPackType().getCountAsDonation() ||
+        !generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)) {
+      return null;
+    }
+
+    ComponentType componentType = donation.getPackType().getComponentType();
+
+    Component component = new Component();
+    component.setIsDeleted(false);
+    component.setComponentType(componentType);
+    component.setComponentCode(componentType.getComponentTypeCode());
+    component.setDonation(donation);
+    component.setStatus(ComponentStatus.QUARANTINED);
+
+    // set new component creation date to match donation date and bleedStartTime if specified
+    component.setCreatedOn(calculateCreatedOn(donation.getDonationDate(), donation.getBleedStartTime()));
+    component.setCreatedDate(donation.getCreatedDate());
+    component.setCreatedBy(donation.getCreatedBy());
+
+    // set new component expiresOn date to be 'expiresAfter' days after the createdOn date
+    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), componentType.getExpiresAfter()));
+
+    // set the component venue and component batch (if already created for the donation batch)
+    ComponentBatch componentBatch = donationBatchRepository.findComponentBatchByDonationbatchId(
+        donation.getDonationBatch().getId());
+        
+    if (componentBatch == null) {
+      // Set the location to the venue of the donation batch
+      component.setLocation(donation.getDonationBatch().getVenue());
+    } else {
+      // Assign the component to the component batch
+      component.setComponentBatch(componentBatch);
+      // Set the location to the processing site of the component batch
+      component.setLocation(componentBatch.getLocation());
+    }
+
+    componentRepository.save(component);
+    return component;
+  }
+
+  /**
+   * Change the specified Component's PackType and update. Note: this will change the Component's
+   * type, the Component's code and the expiresOn date
+   * 
+   * @param newPackType PackType Donation's updated PackType
+   * @param component Component to update
+   * @return Component that has been updated
+   */
+  public Component updateComponentWithNewPackType(Component component, PackType newPackType) {
+    ComponentType newComponentType = newPackType.getComponentType();
+
+    component.setComponentType(newComponentType);
+    component.setComponentCode(newComponentType.getComponentTypeCode());
+    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), newComponentType.getExpiresAfter()));
+
+    componentRepository.update(component);
+    return component;
+  }
+
+  private Date calculateCreatedOn(Date donationDate, Date bleedStartTime) {
+    Date createdOn = donationDate; // default to donationDate
+    if (bleedStartTime != null) {
+      createdOn = dateGeneratorService.generateDateTime(donationDate, bleedStartTime);
+    }
+    return createdOn;
+  }
+
+  private Date calculateExpiresOn(Date createdOn, Integer expiresAfter) {
+    Calendar expiresOn = Calendar.getInstance();
+    expiresOn.setTime(createdOn); // defaults to the createdOn date
+    expiresOn.add(Calendar.DATE, expiresAfter);
+    return expiresOn.getTime();
+  }
 
   /**
    * Change the status of components belonging to the donor from AVAILABLE to UNSAFE.
@@ -102,9 +193,11 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component processComponent(String parentComponentId, ComponentTypeCombination componentTypeCombination) {
+  public Component processComponent(String parentComponentId, long componentTypeCombinationId) {
 
     Component parentComponent = componentRepository.findComponentById(Long.valueOf(parentComponentId));
+    ComponentTypeCombination componentTypeCombination =
+        componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId);
     
     if (!componentConstraintChecker.canProcess(parentComponent)) {
       throw new IllegalStateException("Component " + parentComponentId + " cannot be processed.");
@@ -163,6 +256,7 @@ public class ComponentCRUDService {
           component.setStatus(ComponentStatus.QUARANTINED);
           component.setCreatedOn(donation.getDonationDate());
           component.setLocation(parentComponent.getLocation());
+          component.setComponentBatch(parentComponent.getComponentBatch());
 
           Calendar cal = Calendar.getInstance();
           Date createdOn = cal.getTime();
@@ -183,7 +277,7 @@ public class ComponentCRUDService {
           addComponent(component);
           
           if (parentStatus == ComponentStatus.UNSAFE) {
-            markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+            markChildComponentsAsUnsafeWhereApplicable(component);
           }
         }
       }
@@ -193,6 +287,53 @@ public class ComponentCRUDService {
     parentComponent.setStatus(ComponentStatus.PROCESSED);
 
     return updateComponent(parentComponent);
+  }
+
+  /**
+   * Mark child components as unsafe where applicable.
+   * 
+   * Loop through the initial component status changes, and only avoid marking the component as
+   * unsafe for the status change where the status change reason type is
+   * TEST_RESULTS_CONTAINS_PLASMA and the component doesn't contain plasma.
+   * 
+   * For all other status change reason types, mark the component as unsafe with reason type
+   * UNSAFE_PARENT.
+   *
+   * @param component the component
+   */
+  private void markChildComponentsAsUnsafeWhereApplicable(Component component) {
+    Component initialComponent = component.getParentComponent();
+    // If the component was processed more than once, get the initial component as the parent of the parent
+    while (initialComponent.getParentComponent() != null) {
+      initialComponent = initialComponent.getParentComponent();
+    }
+    
+    boolean markComponentAsUnsafe = false;
+    if (initialComponent.getStatusChanges() != null) {
+      for (ComponentStatusChange statusChange : initialComponent.getStatusChanges()) {
+        
+        if (statusChange.getIsDeleted()) {
+          // skip deleted status change reasons
+          continue;
+        }
+        
+        if (!component.getComponentType().getContainsPlasma()
+            && statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE
+            && statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA) {
+          // skip because the component doesn't contain plasma and the unsafe reason only applies to
+          // components that do contain plasma
+          continue;
+        }
+        
+        if (statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE) {
+          markComponentAsUnsafe = true;
+          break;
+        }
+      }
+    }
+    if (markComponentAsUnsafe) {
+      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+    }
   }
 
   public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
@@ -290,6 +431,11 @@ public class ComponentCRUDService {
       // mark all child components as deleted
       child.setIsDeleted(true);
       componentRepository.update(child);
+    }
+
+    // Add component back into inventory if it has previously been removed
+    if (parentComponent.getInventoryStatus() == InventoryStatus.REMOVED) {
+      parentComponent.setInventoryStatus(InventoryStatus.IN_STOCK);
     }
 
     // FIXME: Create component status change for when processing a component
@@ -398,7 +544,7 @@ public class ComponentCRUDService {
    * - when un-processing: Doesn't exist yet
    *
    * @param component the component
-   * @param rollbackCategory the rollback category
+   * @param rollBackCategory the rollback category
    * @return the component
    */
   private Component rollBackComponentStatus(Component component, ComponentStatusChangeReasonCategory rollBackCategory) {
@@ -440,6 +586,26 @@ public class ComponentCRUDService {
   private Component updateComponent(Component component) {
     componentStatusCalculator.updateComponentStatus(component);
     return componentRepository.update(component);
+  }
+
+  /**
+   * Change the status of components linked to the donation from AVAILABLE to UNSAFE only If they contains Plasma.
+   */
+  public void markComponentsBelongingToDonationAsUnsafeIfContainsPlasma(Donation donation) {
+
+    LOGGER.info("Marking components containing plasma as unsafe for donation: " + donation);
+
+    for (Component component : donation.getComponents()) {
+
+      if (component.getIsDeleted()) {
+        // Skip deleted components
+        continue;
+      }
+
+      if (component.getComponentType().getContainsPlasma()) {
+        markComponentAsUnsafe(component, ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA);
+      }
+    }
   }
 
 }

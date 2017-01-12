@@ -1,6 +1,6 @@
 package org.jembi.bsis.backingform;
 
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 
 public class BloodTypingResolutionBackingForm {
   

@@ -26,49 +26,50 @@
                lastUpdated="2015-08-11 09:06:27.0" lastUpdatedBy_id="1"/>
 
     <DonationBatch id="1" batchNumber="B0215000000"
-                   isDeleted="false" createdDate="2015-02-02 03:41:09.0"
+                   isDeleted="false" createdDate="2015-02-02 03:41:09.0" donationBatchDate="2015-02-02 03:41:09.0"
                    lastUpdated="2015-02-02 03:42:55.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="1"
                    venue_id="1" backEntry="false" componentBatch_id="1" />
     <DonationBatch id="2" batchNumber="B0215000001"
-                   isDeleted="false" createdDate="2015-02-02 03:43:00.0"
+                   isDeleted="false" createdDate="2015-02-02 03:43:00.0" donationBatchDate="2015-02-02 03:43:00.0"
                    lastUpdated="2015-04-24 04:42:09.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="2"
                    venue_id="2" backEntry="false"/>
     <DonationBatch id="3" batchNumber="B0615000000"
-                   isDeleted="false" createdDate="2015-06-26 03:19:33.0"
+                   isDeleted="false" createdDate="2015-06-26 03:19:33.0" donationBatchDate="2015-06-26 03:19:33.0"
                    lastUpdated="2015-06-26 03:19:33.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="1"
                    backEntry="false"/>
     <DonationBatch id="4" batchNumber="B0715000000"
-                   isDeleted="true" createdDate="2015-07-27 04:19:33.0"
+                   isDeleted="true" createdDate="2015-07-27 04:19:33.0" donationBatchDate="2015-07-27 04:19:33.0"
                    lastUpdated="2015-07-26 04:19:33.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1"
                    backEntry="false"/>
     <DonationBatch id="5" batchNumber="B0215000005"
-                   isDeleted="false" createdDate="2015-03-01 22:00:00.0"
+                   isDeleted="false" createdDate="2015-03-01 22:00:00.0" donationBatchDate="2015-03-01 22:00:00.0"
                    lastUpdated="2015-06-26 03:19:33.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="1"
                    backEntry="false"/>
-    <!-- <DonationBatch id="5" batchNumber="B061500023"
-       isDeleted="false" createdDate="2015-03-01 22:00:00.0" lastUpdated="2015-06-26 03:19:33.0"
-       createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3" backEntry="false" />-->
     <DonationBatch id="6" batchNumber="B0615000024"
-                   isDeleted="false" createdDate="2015-03-04 22:00:00.0"
+                   isDeleted="false" createdDate="2015-03-04 22:00:00.0" donationBatchDate="2015-03-04 22:00:00.0"
                    lastUpdated="2015-06-26 03:19:33.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3"
                    backEntry="false"/>
     <DonationBatch id="7" batchNumber="B0615000025"
-                   isDeleted="false" createdDate="2015-02-28 03:19:33.0"
+                   isDeleted="false" createdDate="2015-02-28 03:19:33.0" donationBatchDate="2015-02-28 03:19:33.0"
                    lastUpdated="2015-06-26 03:19:33.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3"
                    backEntry="false"/>
     <DonationBatch id="8" batchNumber="B0615000026"
-                   isDeleted="false" createdDate="2015-03-05 03:19:33.0"
+                   isDeleted="false" createdDate="2015-03-05 03:19:33.0" donationBatchDate="2015-03-05 03:19:33.0"
                    lastUpdated="2015-06-26 03:19:33.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3"
                    backEntry="false"/>
-
+    <DonationBatch id="9" batchNumber="B0615000027"
+                   isDeleted="false" createdDate="2016-03-04 22:00:00.0" donationBatchDate="2015-03-04 22:00:00.0"
+                   lastUpdated="2015-06-26 03:19:33.0"
+                   createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="3"
+                   backEntry="true"/>
     <Contact id="1"/>
     <Contact id="2"/>
     <Contact id="3"/>
@@ -109,61 +110,82 @@
     <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
-                   componentTypeCode="0011"/>
+                   componentTypeCode="0011" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="2" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Double Pack - CPDA"
-                   componentTypeCode="0012"/>
+                   componentTypeCode="0012" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="3" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Triple Pack - CPDA"
-                   componentTypeCode="0013"/>
+                   componentTypeCode="0013" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="4" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Whole Blood Quad Pack - CPDA" componentTypeCode="0014"/>
+                   componentTypeName="Whole Blood Quad Pack - CPDA"
+                   componentTypeCode="0014" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="5" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Apheresis" componentTypeCode="0021"/>
+                   componentTypeName="Apheresis" componentTypeCode="0021" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="6" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Whole Blood - CPDA" componentTypeCode="1001"/>
+                   componentTypeName="Whole Blood - CPDA"
+                   componentTypeCode="1001" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="7" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Poor Platelets - CPDA"
-                   componentTypeCode="1005"/>
+                   componentTypeCode="1005" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="8" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Packed Red Cells - CPDA" componentTypeCode="2001"/>
+                   componentTypeName="Packed Red Cells - CPDA"
+                   componentTypeCode="2001" containsPlasma="false"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="9" description="" expiresAfter="42"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Packed Red Cells - SAGM" componentTypeCode="2011"/>
+                   componentTypeName="Packed Red Cells - SAGM"
+                   componentTypeCode="2011" containsPlasma="false"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="10" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Fresh Frozen Plasma - Whole Blood"
-                   componentTypeCode="3001"/>
+                   componentTypeCode="3001" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="11" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
-                   componentTypeName="Frozen Plasma - Whole Blood" componentTypeCode="3002"/>
+                   componentTypeName="Frozen Plasma - Whole Blood"
+                   componentTypeCode="3002" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="12" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Whole Blood"
-                   componentTypeCode="4001"/>
+                   componentTypeCode="4001" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="13" description="" expiresAfter="1"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Whole Blood - 24H"
-                   componentTypeCode="4011"/>
+                   componentTypeCode="4011" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="14" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - Paediatric - CPDA"
-                   componentTypeCode="2101"/>
+                   componentTypeCode="2101" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="15" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Fresh Frozen Plasma - Apheresis"
-                   componentTypeCode="3011"/>
+                   componentTypeCode="3011" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <ComponentType canBeIssued="true" id="16" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Apheresis"
-                   componentTypeCode="4021"/>
+                   componentTypeCode="4021" containsPlasma="true"
+                   createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <PackType id="1" packType="Single" isDeleted="false" testSampleProduced="true"
               componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>
     <PackType id="2" packType="Double" isDeleted="false" testSampleProduced="true"
@@ -184,7 +206,7 @@
     <Donation id="1" bloodAbo="O" bloodPressureSystolic="110"
               bloodRh="+" bloodTypingStatus="COMPLETE" donationDate="2015-02-02 00:00:00.0"
               donationIdentificationNumber="1234567" donorWeight="80.00"
-              extraBloodTypeInformation="" haemoglobinCount="15.70" isDeleted="0"
+              haemoglobinCount="15.70" isDeleted="0"
               createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-06 02:09:30.0"
               ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="1"
               donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
@@ -193,7 +215,7 @@
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
     <Donation id="2" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212129"
-              extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-18 07:53:57.0"
+              isDeleted="0" createdDate="2015-02-18 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
               packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
@@ -209,7 +231,7 @@
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
     <Donation id="4" bloodAbo="A" bloodRh="-" bloodTypingStatus="COMPLETE"
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212130"
-              extraBloodTypeInformation="" isDeleted="0" createdDate="2015-02-18 07:53:57.0"
+              isDeleted="0" createdDate="2015-02-18 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
               packType_id="1" donationBatch_id="2" donationType_id="1" donor_id="2"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"

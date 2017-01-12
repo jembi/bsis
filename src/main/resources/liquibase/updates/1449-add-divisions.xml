@@ -1,0 +1,39 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/1449-add-divisions.xml">
+
+  <changeSet id="20160824-1624" author="lauravignoli">
+    <insert tableName="FormField">
+      <column name="form" value="Division"></column>
+      <column name="field" value="name"></column>
+      <column name="defaultDisplayName" value="Name"></column>
+      <column name="defaultValue" value=""></column>
+      <column name="maxLength" value="0"></column>
+      <column name="hidden" value="0"></column>
+      <column name="isHidable" value="0"></column>
+      <column name="isRequired" value="1"></column>
+      <column name="canBeOptional" value="0"></column>
+      <column name="autoGenerate" value="0"></column>
+      <column name="isAutoGeneratable" value="0"></column>
+      <column name="useCurrentTime" value="0"></column>
+      <column name="isTimeField" value="0"></column>
+    </insert>
+    <insert tableName="FormField">
+      <column name="form" value="Division"></column>
+      <column name="field" value="level"></column>
+      <column name="defaultDisplayName" value="Level"></column>
+      <column name="defaultValue" value=""></column>
+      <column name="maxLength" value="0"></column>
+      <column name="hidden" value="0"></column>
+      <column name="isHidable" value="0"></column>
+      <column name="isRequired" value="1"></column>
+      <column name="canBeOptional" value="0"></column>
+      <column name="autoGenerate" value="0"></column>
+      <column name="isAutoGeneratable" value="0"></column>
+      <column name="useCurrentTime" value="0"></column>
+      <column name="isTimeField" value="0"></column>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donor.Donor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,11 @@ public class LabellingConstraintChecker {
   private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
   
   public boolean canPrintPackLabel(Component component) {
+    // Check that component has been received before printing label
+    if (!component.hasComponentBatch()) {
+      return false;
+    }
+
     if (!component.getComponentType().getCanBeIssued()) {
       return false;
     }
@@ -56,7 +61,7 @@ public class LabellingConstraintChecker {
     }
     
     // Check that the donor is not deferred
-    if (donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor)) {
+    if (donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())) {
       throw new IllegalStateException("Can't label component " + component.getId() + ": Donor " + donor.getId()
           + " is currently deferred");
     }
@@ -65,7 +70,11 @@ public class LabellingConstraintChecker {
   }
   
   public boolean canPrintDiscardLabel(Component component) {
-    
+    // Check if component has been received before printing discard label
+    if (!component.hasComponentBatch()) {
+      return false;
+    }
+
     // Check that the status belongs to the canPrintDiscardLabelStatuses list
     List<ComponentStatus> canPrintDiscardLabelStatuses = Arrays.asList(
         ComponentStatus.EXPIRED,
@@ -83,5 +92,4 @@ public class LabellingConstraintChecker {
     return true;
 
   }
-
 }

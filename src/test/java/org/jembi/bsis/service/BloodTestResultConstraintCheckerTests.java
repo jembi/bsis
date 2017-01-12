@@ -9,16 +9,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
+import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
-import org.jembi.bsis.service.BloodTestResultConstraintChecker;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -42,7 +42,7 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         new ArrayList<BloodTestingRule>());
     bloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS);
     bloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -61,7 +61,7 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         new ArrayList<BloodTestingRule>());
     bloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_MATCH);
     bloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -81,15 +81,15 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         generateTestBloodTestingRules());
     bloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
     bloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
-    List<String> pendingTestIds = new ArrayList<String>();
-    pendingTestIds.add("123");
+    List<Long> pendingTestIds = new ArrayList<>();
+    pendingTestIds.add(123L);
     bloodTestingRuleResultSet.setPendingAboTestsIds(pendingTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("2");
+    rule1.setBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withId(2L).build());
     rule1.setPendingTestsIds("123");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -110,15 +110,15 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         new ArrayList<BloodTestingRule>());
     bloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
     bloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
-    List<String> pendingTestIds = new ArrayList<String>();
-    pendingTestIds.add("123");
+    List<Long> pendingTestIds = new ArrayList<>();
+    pendingTestIds.add(123L);
     bloodTestingRuleResultSet.setPendingAboTestsIds(pendingTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(bloodTest);
     rule1.setPendingTestsIds("123");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -139,15 +139,15 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         generateTestBloodTestingRules());
     bloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
     bloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
-    List<String> pendingTestIds = new ArrayList<String>();
-    pendingTestIds.add("3");
+    List<Long> pendingTestIds = new ArrayList<>();
+    pendingTestIds.add(3L);
     bloodTestingRuleResultSet.setPendingRhTestsIds(pendingTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("2");
+    rule1.setBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withId(2L).build());
     rule1.setPendingTestsIds("3");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -168,15 +168,15 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         new ArrayList<BloodTestingRule>());
     bloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
     bloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
-    List<String> pendingTestIds = new ArrayList<String>();
-    pendingTestIds.add("123");
+    List<Long> pendingTestIds = new ArrayList<>();
+    pendingTestIds.add(123L);
     bloodTestingRuleResultSet.setPendingRhTestsIds(pendingTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(bloodTest);
     rule1.setPendingTestsIds("123");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -196,7 +196,7 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         new ArrayList<BloodTestingRule>());
     bloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_MATCH);
     bloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
@@ -215,7 +215,7 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         new ArrayList<BloodTestingRule>());
     bloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
     bloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -234,7 +234,7 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         new ArrayList<BloodTestingRule>());
     bloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
     bloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -253,13 +253,13 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         generateTestBloodTestingRules());
     bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
-    List<String> pendingTtiTestIds = new ArrayList<String>();
-    bloodTestingRuleResultSet.setPendingTtiTestsIds(pendingTtiTestIds);
+    List<Long> pendingTtiTestIds = new ArrayList<>();
+    bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(1L).build());
     rule1.setPendingTestsIds("2");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -281,17 +281,17 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     bloodTestResult.setResult("OUTCOME");
-    Map<String, String> availableTestResults = new HashMap<String, String>();
-    availableTestResults.put("1", "RESULT");
+    Map<Long, String> availableTestResults = new HashMap<Long, String>();
+    availableTestResults.put(1L, "RESULT");
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), availableTestResults, new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), availableTestResults, new HashMap<Long, BloodTestResult>(),
         new ArrayList<BloodTestingRule>());
     bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
-    List<String> pendingTtiTestIds = new ArrayList<String>();
-    pendingTtiTestIds.add("2");
-    bloodTestingRuleResultSet.setPendingTtiTestsIds(pendingTtiTestIds);
+    List<Long> pendingTtiTestIds = new ArrayList<>();
+    pendingTtiTestIds.add(2L);
+    bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(bloodTest);
     rule1.setPendingTestsIds("2");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -312,21 +312,21 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     bloodTestResult.setResult("OUTCOME");
-    Map<String, String> availableTestResults = new HashMap<String, String>();
-    availableTestResults.put("1", "RESULT");
-    availableTestResults.put("2", "RESULT");
+    Map<Long, String> availableTestResults = new HashMap<>();
+    availableTestResults.put(1L, "RESULT");
+    availableTestResults.put(2L, "RESULT");
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), availableTestResults, new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), availableTestResults, new HashMap<Long, BloodTestResult>(),
         generateTestBloodTestingRules());
     bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
-    List<String> pendingTtiTestIds = new ArrayList<String>();
-    pendingTtiTestIds.add("3");
-    bloodTestingRuleResultSet.setPendingTtiTestsIds(pendingTtiTestIds);
+    List<Long> pendingTtiTestIds = new ArrayList<>();
+    pendingTtiTestIds.add(3L);
+    bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(bloodTest);
     rule1.setPendingTestsIds("2");
     BloodTestingRule rule2 = new BloodTestingRule();
-    rule2.setBloodTestsIds("2");
+    rule2.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(2L).build());
     rule2.setPendingTestsIds("3");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -348,21 +348,21 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     bloodTestResult.setResult("OUTCOME");
-    Map<String, String> availableTestResults = new HashMap<String, String>();
-    availableTestResults.put("1", "RESULT");
-    availableTestResults.put("3", "RESULT");
+    Map<Long, String> availableTestResults = new HashMap<>();
+    availableTestResults.put(1L, "RESULT");
+    availableTestResults.put(3L, "RESULT");
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), availableTestResults, new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), availableTestResults, new HashMap<Long, BloodTestResult>(),
         generateTestBloodTestingRules());
     bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
-    List<String> pendingTtiTestIds = new ArrayList<String>();
-    pendingTtiTestIds.add("2");
-    bloodTestingRuleResultSet.setPendingTtiTestsIds(pendingTtiTestIds);
+    List<Long> pendingTtiTestIds = new ArrayList<>();
+    pendingTtiTestIds.add(2L);
+    bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(bloodTest);
     rule1.setPendingTestsIds("2");
     BloodTestingRule rule2 = new BloodTestingRule();
-    rule2.setBloodTestsIds("2");
+    rule2.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(2L).build());
     rule2.setPendingTestsIds("3");
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
@@ -383,7 +383,7 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         new ArrayList<BloodTestingRule>());
     bloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
     bloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
@@ -403,7 +403,7 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<Long, BloodTestResult>(),
+        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         new ArrayList<BloodTestingRule>());
 
     boolean canEdit = bloodTestResultConstraintChecker.canEdit(bloodTestingRuleResultSet, bloodTestResult, DONATION_NOT_RELEASED);
@@ -413,16 +413,16 @@ public class BloodTestResultConstraintCheckerTests {
 
   private List<BloodTestingRule> generateTestBloodTestingRules() {
     BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTestsIds("1");
+    rule1.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(1L).build());
     rule1.setPendingTestsIds("");
     BloodTestingRule rule2 = new BloodTestingRule();
-    rule2.setBloodTestsIds("2");
+    rule2.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(2L).build());
     rule2.setPendingTestsIds("3");
     BloodTestingRule rule3 = new BloodTestingRule();
-    rule3.setBloodTestsIds("3");
+    rule3.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(3L).build());
     rule3.setPendingTestsIds("4");
     BloodTestingRule rule4 = new BloodTestingRule();
-    rule4.setBloodTestsIds("4");
+    rule4.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(4L).build());
     rule4.setPendingTestsIds("");
     List<BloodTestingRule> bloodTestingRules = new ArrayList<BloodTestingRule>();
     bloodTestingRules.add(rule1);

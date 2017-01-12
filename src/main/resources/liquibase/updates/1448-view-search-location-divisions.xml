@@ -1,0 +1,88 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/1448-view-search-location-divisions.xml">
+
+  <changeSet id="20160818-1015" author="rowanpi">
+
+    <createTable tableName="Division">
+      <column name="id" type="BIGINT(20)" autoIncrement="true">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="createdDate" type="TIMESTAMP">
+        <constraints nullable="false" />
+      </column>
+      <column name="createdBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_Division_createdBy" references="User(id)" />
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_Division_lastUpdatedBy" references="User(id)" />
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false" unique="true" uniqueConstraintName="uq_divisionName" />
+      </column>
+      <column name="level" type="INT">
+        <constraints nullable="false" />
+      </column>
+      <column name="parent_id" type="BIGINT(20)">
+        <constraints nullable="true" foreignKeyName="fk_Division_parent"
+          references="Division(id)" />
+      </column>
+    </createTable>
+ 
+    <createTable tableName="Division_AUD">
+      <column name="id" type="BIGINT(20)" autoIncrement="true">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="REV" type="INT(11)">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="REVTYPE" type="TINYINT(4)"/>
+      <column name="createdDate" type="TIMESTAMP"/>
+      <column name="createdBy_id" type="BIGINT(20)"/>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)"/>
+      <column name="name" type="VARCHAR(255)"/>
+      <column name="level" type="INT"/>
+      <column name="parent_id" type="BIGINT(20)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="20160818-1018" author="bausmeier">
+    <insert tableName="Permission">
+      <column name="name">Add Divisions</column>
+    </insert>
+    <insert tableName="Permission">
+      <column name="name">Edit Divisions</column>
+    </insert>
+    <insert tableName="Permission">
+      <column name="name">View Divisions</column>
+    </insert>
+    <insert tableName="Permission">
+      <column name="name">Void Divisions</column>
+    </insert>
+  </changeSet>
+  
+  <changeSet id="20160818-1440" author="bausmeier">
+    <insert tableName="GeneralConfig">
+      <column name="name">ui.division.level1.displayName</column>
+      <column name="description">Division level 1 display name</column>
+      <column name="value">First-level</column>
+      <column name="dataType_id">1</column>
+    </insert>
+    <insert tableName="GeneralConfig">
+      <column name="name">ui.division.level2.displayName</column>
+      <column name="description">Division level 2 display name</column>
+      <column name="value">Second-level</column>
+      <column name="dataType_id">1</column>
+    </insert>
+    <insert tableName="GeneralConfig">
+      <column name="name">ui.division.level3.displayName</column>
+      <column name="description">Division level 3 display name</column>
+      <column name="value">Third-level</column>
+      <column name="dataType_id">1</column>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

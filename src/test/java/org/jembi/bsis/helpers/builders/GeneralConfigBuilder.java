@@ -11,6 +11,7 @@ public class GeneralConfigBuilder extends AbstractEntityBuilder<GeneralConfig> {
   private DataType dataType;
   private String value;
   private String name;
+  private String description;
 
   public GeneralConfigBuilder withId(Long id) {
     this.id = id;
@@ -31,6 +32,11 @@ public class GeneralConfigBuilder extends AbstractEntityBuilder<GeneralConfig> {
     this.name = name;
     return this;
   }
+  
+  public GeneralConfigBuilder withDescription(String description) {
+    this.description = description;
+    return this;
+  }
 
   @Override
   public AbstractEntityPersister<GeneralConfig> getPersister() {
@@ -44,6 +50,7 @@ public class GeneralConfigBuilder extends AbstractEntityBuilder<GeneralConfig> {
     generalConfig.setDataType(dataType);
     generalConfig.setValue(value);
     generalConfig.setName(name);
+    generalConfig.setDescription(description);
     return generalConfig;
   }
 

@@ -1,17 +1,18 @@
 package org.jembi.bsis.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.NoResultException;
 
-import org.jembi.bsis.backingform.AdverseEventBackingForm;
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.backingform.BloodTypingResolutionsBackingForm;
-import org.jembi.bsis.backingform.DonationBackingForm;
-import org.jembi.bsis.model.adverseevent.AdverseEvent;
-import org.jembi.bsis.model.adverseevent.AdverseEventType;
+import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.packtype.PackType;
@@ -19,8 +20,6 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
-import org.jembi.bsis.repository.PackTypeRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +39,6 @@ public class DonationCRUDService {
   @Autowired
   private ComponentCRUDService componentCRUDService;
   @Autowired
-  private PackTypeRepository packTypeRepository;
-  @Autowired
   private DonorConstraintChecker donorConstraintChecker;
   @Autowired
   private DonorService donorService;
@@ -49,6 +46,8 @@ public class DonationCRUDService {
   private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
   @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
+  @Autowired
+  private BloodTestsService bloodTestsService;
 
   public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
 
@@ -81,18 +80,20 @@ public class DonationCRUDService {
     donorService.setDonorDueToDonate(donor);
   }
 
-  public Donation createDonation(DonationBackingForm donationBackingForm) {
-
-    Donation donation = donationBackingForm.getDonation();
-    PackType packType = packTypeRepository.getPackTypeById(donation.getPackType().getId());
+  public Donation createDonation(Donation donation) {
+  
+    donation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    donation.setTTIStatus(TTIStatus.NOT_DONE);
+    donation.setIsDeleted(false);
 
     boolean discardComponents = false;
 
-    if (packType.getCountAsDonation() &&
-        !donorConstraintChecker.isDonorEligibleToDonate(donationBackingForm.getDonor().getId())) {
+    if (donation.getPackType().getCountAsDonation() &&
+        !donorConstraintChecker.isDonorEligibleToDonate(donation.getDonor().getId())) {
 
       DonationBatch donationBatch = donationBatchRepository.findDonationBatchByBatchNumber(
-          donationBackingForm.getDonationBatchNumber());
+          donation.getDonationBatchNumber());
 
       if (!donationBatch.isBackEntry()) {
         throw new IllegalArgumentException("Do not bleed donor");
@@ -103,89 +104,116 @@ public class DonationCRUDService {
       donation.setIneligibleDonor(true);
     }
 
-    updateAdverseEventForDonation(donation, donationBackingForm.getAdverseEvent());
-    donationRepository.addDonation(donation);
+    Component component = componentCRUDService.createInitialComponent(donation);
+    donation.addComponent(component);
+    donationRepository.saveDonation(donation);
 
     if (discardComponents) {
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
       //Also flag for counselling
       postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
     }
-
+    
+    // update donor
+    updateDonorFields(donation);
     return donation;
   }
 
-  public Donation updateDonation(long donationId, DonationBackingForm donationBackingForm) {
-    Donation donation = donationRepository.findDonationById(donationId);
+  public Donation updateDonation(Donation updatedDonation) {
+    Donation existingDonation = donationRepository.findDonationById(updatedDonation.getId());
+    
+    // Check if pack type has been updated
+    boolean packTypeUpdated = !Objects.equals(existingDonation.getPackType(), updatedDonation.getPackType());
 
-    // Check if pack type or bleed times have been updated
-    boolean packTypeUpdated = !Objects.equals(donation.getPackType(), donationBackingForm.getPackType());
-    boolean donationFieldsUpdated = packTypeUpdated ||
-        donation.getBleedStartTime().getTime() != donationBackingForm.getBleedStartTime().getTime() ||
-        donation.getBleedEndTime().getTime() != donationBackingForm.getBleedEndTime().getTime();
+    // Check if bleed times have been updated
+    boolean bleedTimesUpdated = existingDonation.getBleedStartTime().getTime() != updatedDonation.getBleedStartTime().getTime()
+            || existingDonation.getBleedEndTime().getTime() != updatedDonation.getBleedEndTime().getTime();
 
-    if (donationFieldsUpdated && !donationConstraintChecker.canUpdateDonationFields(donationId)) {
-      throw new IllegalArgumentException("Cannot update donation fields");
+    if (bleedTimesUpdated && !donationConstraintChecker.canEditBleedTimes(updatedDonation.getId())) {
+      throw new IllegalArgumentException("Cannot edit bleed times");
     }
 
+    // See if donation should be released (in the case of pack type being updated and a new initial component created)
+    boolean releaseDonation = false;
+
     if (packTypeUpdated) {
-      PackType packType = packTypeRepository.getPackTypeById(donationBackingForm.getPackType().getId());
 
-      if (packType.getCountAsDonation() && donorConstraintChecker.isDonorDeferred(donation.getDonor().getId())) {
+      // Check if the packType can be updated for this donation
+      if (!donationConstraintChecker.canEditPackType(existingDonation)) {
+        throw new IllegalArgumentException("Cannot edit pack type");
+      }
 
-        DonationBatch donationBatch = donation.getDonationBatch();
+      // Check if the packType can be edited to newPackType
+      PackType newPackType = updatedDonation.getPackType();
+      if (!donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)) {
+        throw new IllegalArgumentException("Cannot edit to this new pack type");
+      }
 
+      // Check that if the donor is deferred, the packType can't be updated to one that produces
+      // components (doesn't apply to back entry)
+      if (newPackType.getCountAsDonation() && 
+          donorConstraintChecker.isDonorDeferred(existingDonation.getDonor().getId())) {
+        DonationBatch donationBatch = existingDonation.getDonationBatch();
         if (!donationBatch.isBackEntry()) {
           throw new IllegalArgumentException("Cannot set pack type that produces components");
         }
       }
-
-      donation.setPackType(packType);
+      
+      // Set new pack type
+      existingDonation.setPackType(newPackType);
+      
+      // If the new packType does not count as donation, delete initial component
+      if (!newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {
+          existingDonation.getComponents().get(0).setIsDeleted(true);
+      }
+     
+      // If the new packType count as donation, update initial component
+      if (newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {    
+        componentCRUDService.updateComponentWithNewPackType(existingDonation.getComponents().get(0), newPackType);  
+      }
+      
+      // If the new PackType count as donation and there is no initial component then create it
+      if (newPackType.getCountAsDonation() && existingDonation.getComponents().isEmpty()) {
+        Component component = componentCRUDService.createInitialComponent(existingDonation);
+        existingDonation.getComponents().add(component);
+        // ensure that the Donation is released, so that the new initial component is made available (or not)
+        releaseDonation = existingDonation.getDonationBatch().getTestBatch() != null
+                && TestBatchStatus.hasBeenReleased(existingDonation.getDonationBatch().getTestBatch().getStatus());
+      }
+      
+      // If the new pack type doesn't produce test samples, delete test outcomes and clear statuses
+      if (!newPackType.getTestSampleProduced()) {
+        bloodTestsService.setTestOutcomesAsDeleted(existingDonation);
+        existingDonation.setTTIStatus(TTIStatus.NOT_DONE);
+        existingDonation.setBloodAbo(null);
+        existingDonation.setBloodRh(null);
+        existingDonation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+        existingDonation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+      }
     }
 
-    donation.setDonorPulse(donationBackingForm.getDonorPulse());
-    donation.setHaemoglobinCount(donationBackingForm.getHaemoglobinCount());
-    donation.setHaemoglobinLevel(donationBackingForm.getHaemoglobinLevel());
-    donation.setBloodPressureSystolic(donationBackingForm.getBloodPressureSystolic());
-    donation.setBloodPressureDiastolic(donationBackingForm.getBloodPressureDiastolic());
-    donation.setDonorWeight(donationBackingForm.getDonorWeight());
-    donation.setNotes(donationBackingForm.getNotes());
-    donation.setBleedStartTime(donationBackingForm.getBleedStartTime());
-    donation.setBleedEndTime(donationBackingForm.getBleedEndTime());
+    existingDonation.setDonorPulse(updatedDonation.getDonorPulse());
+    existingDonation.setHaemoglobinCount(updatedDonation.getHaemoglobinCount());
+    existingDonation.setHaemoglobinLevel(updatedDonation.getHaemoglobinLevel());
+    existingDonation.setBloodPressureSystolic(updatedDonation.getBloodPressureSystolic());
+    existingDonation.setBloodPressureDiastolic(updatedDonation.getBloodPressureDiastolic());
+    existingDonation.setDonorWeight(updatedDonation.getDonorWeight());
+    existingDonation.setNotes(updatedDonation.getNotes());
+    existingDonation.setBleedStartTime(updatedDonation.getBleedStartTime());
+    existingDonation.setBleedEndTime(updatedDonation.getBleedEndTime());
+    existingDonation.setAdverseEvent(updatedDonation.getAdverseEvent());
 
-    updateAdverseEventForDonation(donation, donationBackingForm.getAdverseEvent());
-
-    donation = donationRepository.updateDonation(donation);
+    Donation donation = donationRepository.updateDonation(existingDonation);
 
     if (packTypeUpdated) {
-      donorService.setDonorDueToDonate(donation.getDonor());
+      donorService.setDonorDueToDonate(existingDonation.getDonor());
+    }
+
+    if (releaseDonation) {
+      testBatchStatusChangeService.handleRelease(donation);
     }
 
     return donation;
-  }
-
-  private void updateAdverseEventForDonation(Donation donation, AdverseEventBackingForm adverseEventBackingForm) {
-    if (adverseEventBackingForm == null || adverseEventBackingForm.getType() == null) {
-      // Delete the adverse event
-      donation.setAdverseEvent(null);
-      return;
-    }
-
-    // Get the existing adverse event or create a new one
-    AdverseEvent adverseEvent = donation.getAdverseEvent();
-    if (adverseEvent == null) {
-      adverseEvent = new AdverseEvent();
-    }
-
-    // Create an adverse event type with the correct id
-    AdverseEventType adverseEventType = new AdverseEventType();
-    adverseEventType.setId(adverseEventBackingForm.getType().getId());
-
-    // Update the fields
-    adverseEvent.setType(adverseEventType);
-    adverseEvent.setComment(adverseEventBackingForm.getComment());
-
-    donation.setAdverseEvent(adverseEvent);
   }
   
   public void updateDonationsBloodTypingResolutions(BloodTypingResolutionsBackingForm backingForm) {
@@ -212,4 +240,31 @@ public class DonationCRUDService {
     }
   }
 
+  private Donor updateDonorFields(Donation donation) {
+    Donor donor = donation.getDonor();
+
+    // set date of first donation
+    if (donation.getDonor().getDateOfFirstDonation() == null) {
+      donor.setDateOfFirstDonation(donation.getDonationDate());
+    }
+    // set dueToDonate
+    PackType packType = donation.getPackType();
+    int periodBetweenDays = packType.getPeriodBetweenDonations();
+    Calendar dueToDonateDate = Calendar.getInstance();
+    dueToDonateDate.setTime(donation.getDonationDate());
+    dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
+
+    if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
+      donor.setDueToDonate(dueToDonateDate.getTime());
+    }
+
+    // set dateOfLastDonation
+    Date dateOfLastDonation = donor.getDateOfLastDonation();
+    if (dateOfLastDonation == null || donation.getDonationDate().after(dateOfLastDonation)) {
+      donor.setDateOfLastDonation(donation.getDonationDate());
+    }
+
+    donorRepository.saveDonor(donor);
+    return donor;
+  }
 }

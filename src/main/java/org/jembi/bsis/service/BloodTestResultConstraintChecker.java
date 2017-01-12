@@ -6,11 +6,11 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRuleResultSet;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
+import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRuleResultSet;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -63,15 +63,15 @@ public class BloodTestResultConstraintChecker {
     return isResultConfirmed(
         bloodTestingRuleResultSet.getBloodTestingRules(),
         bloodTestingRuleResultSet.getAvailableTestResults(), 
-        String.valueOf(bloodTestResult.getBloodTest().getId()));
+        bloodTestResult.getBloodTest().getId());
   }
 
-  private boolean isResultConfirmed(List<BloodTestingRule> rules, Map<String, String> availableTestResults, String bloodTestId) {
+  private boolean isResultConfirmed(List<BloodTestingRule> rules, Map<Long, String> availableTestResults, Long bloodTestId) {
     for (BloodTestingRule rule : rules) {
-      if (rule.getBloodTestsIds().contains(bloodTestId)) {
+      if (rule.getBloodTest().getId().equals(bloodTestId)) {
         // go through the pending tests and check if there are any results
         // if there is a result for a confirmation then this result cannot be edited
-        for (String pendingTestId : rule.getPendingTestsIds()) {
+        for (Long pendingTestId : rule.getPendingTestsIdsSet()) {
           String testResult = availableTestResults.get(pendingTestId);
           if (StringUtils.isBlank(testResult)) {
             // no result for this pending test, check if it has any pending tests

@@ -23,15 +23,8 @@ public class ComponentTypeControllerService {
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
   
-  public List<ComponentTypeSearchViewModel> getComponentTypes(boolean includeDeleted) {
-    List<ComponentType> componentTypes;
-
-    if (includeDeleted) {
-      componentTypes = componentTypeRepository.getAllComponentTypesIncludeDeleted();
-    } else {
-      componentTypes = componentTypeRepository.getAllComponentTypes();
-    }
-
+  public List<ComponentTypeSearchViewModel> getComponentTypes() {
+    List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypesIncludeDeleted();
     return componentTypeFactory.createSearchViewModels(componentTypes);
   }
   

@@ -27,5 +27,10 @@ public class DonationBatchQueryConstants {
           "WHERE d.components is not empty " +
           "AND db.componentBatch is null " +
           "AND db.isDeleted = false ";
-
+  public static final String NAME_FIND_COMPONENTBATCH_BY_DONATIONBATCH_ID =
+      "DonationBatch.findComponentBatchByDonationbatchId";
+  public static final String QUERY_FIND_COMPONENTBATCH_BY_DONATIONBATCH_ID =
+       "SELECT db.componentBatch " +
+           "FROM DonationBatch db " +
+           "WHERE db.id = :donationBatchId ";
 }

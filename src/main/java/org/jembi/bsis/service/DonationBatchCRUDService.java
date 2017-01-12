@@ -1,7 +1,5 @@
 package org.jembi.bsis.service;
 
-import javax.persistence.NoResultException;
-
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -10,6 +8,8 @@ import org.jembi.bsis.repository.DonationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.NoResultException;
 
 @Transactional
 @Service
@@ -45,15 +45,15 @@ public class DonationBatchCRUDService {
 
     // if the created date or venue has changed, update the donations
     for (Donation donation : existingDonationBatch.getDonations()) {
-      if (donation.getDonationDate().getTime() != donationBatch.getCreatedDate().getTime()) {
-        donation.setDonationDate(dateService.generateDateTime(donationBatch.getCreatedDate(), donation.getDonationDate()));
+      if (donation.getDonationDate().getTime() != donationBatch.getDonationBatchDate().getTime()) {
+        donation.setDonationDate(dateService.generateDateTime(donationBatch.getDonationBatchDate(), donation.getDonationDate()));
       }
       if (donation.getVenue().getId() != donationBatch.getVenue().getId()) {
         donation.setVenue(donationBatch.getVenue());
       }
       if (donation.getComponents() != null) {
         for (Component component : donation.getComponents()) {
-          component.setCreatedOn(dateService.generateDateTime(donationBatch.getCreatedDate(),
+          component.setCreatedOn(dateService.generateDateTime(donationBatch.getDonationBatchDate(),
               component.getCreatedOn()));
         }
       }
@@ -63,7 +63,7 @@ public class DonationBatchCRUDService {
     // update the updateable fields
     existingDonationBatch.setIsClosed(donationBatch.getIsClosed());
     existingDonationBatch.setVenue(donationBatch.getVenue());
-    existingDonationBatch.setCreatedDate(donationBatch.getCreatedDate());
+    existingDonationBatch.setDonationBatchDate(donationBatch.getDonationBatchDate());
 
     // persist the changes
     DonationBatch updatedDonationBatch = donationBatchRepository.updateDonationBatch(existingDonationBatch);

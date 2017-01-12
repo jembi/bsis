@@ -1,0 +1,33 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/1060-change-email-properties-at-runtime.xml">
+
+  <changeSet id="20160831-1731" author="lauravignoli">
+    <insert tableName="GeneralConfig">
+      <column name="name">smtp.host</column>
+      <column name="description">Smtp host</column>
+      <column name="value">smtp.gmail.com</column>
+      <column name="dataType_id">1</column>
+    </insert>
+    <insert tableName="GeneralConfig">
+      <column name="name">smtp.port</column>
+      <column name="description">Smtp port</column>
+      <column name="value">25</column>
+      <column name="dataType_id">2</column>
+    </insert>
+    <insert tableName="GeneralConfig">
+      <column name="name">smtp.auth.username</column>
+      <column name="description">Smtp username</column>
+      <column name="value"></column>
+      <column name="dataType_id">1</column>
+    </insert>
+    <insert tableName="GeneralConfig">
+      <column name="name">smtp.auth.password</column>
+      <column name="description">Smtp password</column>
+      <column name="value"></column>
+      <column name="dataType_id">5</column>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

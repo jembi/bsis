@@ -2,29 +2,51 @@ package org.jembi.bsis.model.bloodtesting;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseEntity;
-import org.jembi.bsis.model.worksheet.WorksheetType;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.repository.constant.BloodTestNamedQueryConstants;
 
 @Entity
 @Audited
-public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
+@NamedQueries({
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_CATEGORY,
+      query = BloodTestNamedQueryConstants.QUERY_GET_BLOOD_TESTS_BY_CATEGORY),
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_TYPE,
+      query = BloodTestNamedQueryConstants.QUERY_GET_BLOOD_TESTS_BY_TYPE),
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS,
+      query = BloodTestNamedQueryConstants.QUERY_GET_BLOOD_TESTS),
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_FIND_BLOOD_TEST_BY_ID,
+      query = BloodTestNamedQueryConstants.QUERY_FIND_BLOOD_TEST_BY_ID),
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_VERIFY_UNIQUE_BLOOD_TEST,
+      query = BloodTestNamedQueryConstants.QUERY_VERIFY_UNIQUE_BLOOD_TEST),
+  @NamedQuery(
+      name = BloodTestNamedQueryConstants.NAME_VERIFY_BLOOD_TEST_WITH_ID_EXISTS,
+      query = BloodTestNamedQueryConstants.QUERY_VERIFY_BLOOD_TEST_WITH_ID_EXISTS)
+  
+})
+public class BloodTest extends BaseModificationTrackerEntity implements Comparable<BloodTest> {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length = 25)
+  @Column(length = 25, nullable = false)
   private String testNameShort;
 
-  @Column(length = 40)
+  @Column(length = 40, unique = true, nullable = false)
   private String testName;
 
   /**
@@ -52,24 +74,14 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
   @Column(length = 30)
   private BloodTestCategory category;
 
-  @Enumerated(EnumType.STRING)
-  @Column(length = 30)
-  private BloodTestContext context;
+  @Column(nullable = false)
+  private Boolean isActive = Boolean.TRUE;
 
-  /**
-   * List cannot be used here.
-   */
-  @ManyToMany
-  private Set<WorksheetType> worksheetTypes;
-
-  /**
-   * TODO: not sure if this is useful.
-   */
-  private Boolean isEmptyAllowed;
-
-  private Boolean isActive;
-
-  private Boolean isDeleted;
+  @Column(nullable = false)
+  private Boolean isDeleted = Boolean.FALSE;
+  
+  @Column(nullable = false)
+  private boolean flagComponentsContainingPlasmaForDiscard = false;
 
   /**
    * Whether or not to flag associated components for discard when a test has a positive outcome.
@@ -90,16 +102,16 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
   }
 
   /**
-   * Get the valid results for this test as a list. The list cannot be modified since changes to the
+   * Get the valid results for this test as a set. The Set cannot be modified since changes to the
    * valid results must be done by updating the {@link #validResults} string.
    *
-   * @return An immutable list of valid results.
+   * @return An immutable set of valid results.
    */
-  public List<String> getValidResultsList() {
+  public Set<String> getValidResultsSet() {
     if (validResults == null || validResults.isEmpty()) {
-      return Collections.emptyList();
+      return Collections.emptySet();
     }
-    return Collections.unmodifiableList(Arrays.asList(validResults.split(",")));
+    return Collections.unmodifiableSet(new LinkedHashSet<String>(Arrays.asList(validResults.split(","))));
   }
 
   public String getNegativeResults() {
@@ -108,6 +120,14 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
 
   public Boolean getIsActive() {
     return isActive;
+  }
+
+  public boolean getFlagComponentsContainingPlasmaForDiscard() {
+    return flagComponentsContainingPlasmaForDiscard;
+  }
+
+  public void setFlagComponentsContainingPlasmaForDiscard(boolean flagComponentsContainingPlasmaForDiscard) {
+    this.flagComponentsContainingPlasmaForDiscard = flagComponentsContainingPlasmaForDiscard;
   }
 
   public void setTestNameShort(String testNameShort) {
@@ -154,14 +174,6 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
     this.bloodTestType = bloodTypingTestType;
   }
 
-  public Boolean getIsEmptyAllowed() {
-    return isEmptyAllowed;
-  }
-
-  public void setIsEmptyAllowed(Boolean isEmptyAllowed) {
-    this.isEmptyAllowed = isEmptyAllowed;
-  }
-
   public BloodTestCategory getCategory() {
     return category;
   }
@@ -169,23 +181,6 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
   public void setCategory(BloodTestCategory category) {
     this.category = category;
   }
-
-  public Set<WorksheetType> getWorksheetTypes() {
-    return worksheetTypes;
-  }
-
-  public void setWorksheetTypes(Set<WorksheetType> worksheetTypes) {
-    this.worksheetTypes = worksheetTypes;
-  }
-
-  public BloodTestContext getContext() {
-    return context;
-  }
-
-  public void setContext(BloodTestContext context) {
-    this.context = context;
-  }
-
 
   public Boolean getIsDeleted() {
     return isDeleted;
@@ -206,5 +201,25 @@ public class BloodTest extends BaseEntity implements Comparable<BloodTest> {
 
   public void setFlagComponentsForDiscard(boolean flagComponentsForDiscard) {
     this.flagComponentsForDiscard = flagComponentsForDiscard;
+  }
+
+  /**
+   * @return An immutable set of negative results from the comma separated list.
+   */
+  public Set<String> getNegativeResultsSet() {
+    if (negativeResults == null || negativeResults.isEmpty()) {
+      return Collections.emptySet();
+    }
+    return Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(negativeResults.split(","))));
+  }
+
+  /**
+   * @return An immutable set of positive results from the comma separated list.
+   */
+  public Set<String> getPositiveResultsSet() {
+    if (positiveResults == null || positiveResults.isEmpty()) {
+      return Collections.emptySet();
+    }
+    return Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(positiveResults.split(","))));
   }
 }

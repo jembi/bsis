@@ -9,7 +9,7 @@ import static org.jembi.bsis.helpers.builders.PostDonationCounsellingViewModelBu
 import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingViewModelMatcher.hasSameStateAsPostDonationCounsellingViewModel;
 import static org.mockito.Mockito.when;
 
-import org.jembi.bsis.factory.DonationViewModelFactory;
+import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.factory.PostDonationCounsellingViewModelFactory;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
@@ -31,7 +31,7 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
   @Mock
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
   @Mock
-  private DonationViewModelFactory donationViewModelFactory;
+  private DonationFactory donationFactory;
 
   @Test
   public void testCreatePostDonationCounsellingViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
@@ -57,7 +57,7 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
         .build();
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(1);
-    when(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
+    when(donationFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
 
     PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingViewModelFactory
         .createPostDonationCounsellingViewModel(postDonationCounselling);
@@ -90,7 +90,7 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
         .build();
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(0);
-    when(donationViewModelFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
+    when(donationFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
 
     PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingViewModelFactory
         .createPostDonationCounsellingViewModel(postDonationCounselling);

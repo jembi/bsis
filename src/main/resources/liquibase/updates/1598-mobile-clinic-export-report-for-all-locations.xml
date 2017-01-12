@@ -1,0 +1,32 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+	logicalFilePath="./src/main/resources/liquibase/updates/1598-mobile-clinic-export-report-for-all-locations.xml">
+
+	<changeSet id="20160920-0940" author="micnice">
+		<comment>Add permissions "View Mobile Clinic Export"</comment>
+		<insert tableName="Permission">
+			<column name="id" value="116"></column>
+			<column name="name" value="View Mobile Clinic Export"></column>
+		</insert>
+	</changeSet>
+	<changeSet id="20160920-1113" author="micnice">
+		<comment>Mapping View Mobile Clinic Export Permissions with Roles</comment>
+		<!-- Superuer -->
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="116"></column>
+			<column name="roles_id" value="1"></column>
+		</insert>
+		<!-- Admin -->
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="116"></column>
+			<column name="roles_id" value="2"></column>
+		</insert>
+		<!-- Donor Clinic Supervisor -->
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="116"></column>
+			<column name="roles_id" value="3"></column>
+		</insert>
+	</changeSet>
+</databaseChangeLog>

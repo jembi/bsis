@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.persisters;
 import static org.jembi.bsis.helpers.persisters.EntityPersisterFactory.aDeferralReasonPersister;
 import static org.jembi.bsis.helpers.persisters.EntityPersisterFactory.aDonorPersister;
 import static org.jembi.bsis.helpers.persisters.EntityPersisterFactory.aLocationPersister;
+import static org.jembi.bsis.helpers.persisters.EntityPersisterFactory.aUserPersister;
 
 import javax.persistence.EntityManager;
 
@@ -20,6 +21,9 @@ public class DonorDeferralPersister extends AbstractEntityPersister<DonorDeferra
     }
     if (donorDeferral.getVenue() != null) {
       aLocationPersister().deepPersist(donorDeferral.getVenue(), entityManager);
+    }
+    if (donorDeferral.getCreatedBy() != null) {
+      aUserPersister().deepPersist(donorDeferral.getCreatedBy(), entityManager);
     }
     return persist(donorDeferral, entityManager);
   }

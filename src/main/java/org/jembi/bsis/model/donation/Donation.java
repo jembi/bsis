@@ -2,10 +2,9 @@ package org.jembi.bsis.model.donation;
 
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -23,6 +21,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Index;
+import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -30,7 +29,6 @@ import org.hibernate.validator.constraints.Range;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donationtype.DonationType;
@@ -38,10 +36,7 @@ import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.model.worksheet.Worksheet;
 import org.jembi.bsis.repository.DonationNamedQueryConstants;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -51,6 +46,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  *
  * @author iamrohitbanga
  */
+@SuppressWarnings("deprecation")
 @NamedQueries({
     @NamedQuery(name = DonationNamedQueryConstants.NAME_COUNT_DONATIONS_FOR_DONOR,
         query = DonationNamedQueryConstants.QUERY_COUNT_DONATION_FOR_DONOR),
@@ -61,7 +57,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE,
         query = DonationNamedQueryConstants.QUERY_FIND_COLLECTED_DONATION_VALUE_OBJECTS_FOR_DATE_RANGE),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR,
-        query = DonationNamedQueryConstants.QUERY_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR)
+        query = DonationNamedQueryConstants.QUERY_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE,
+        query = DonationNamedQueryConstants.QUERY_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATIONS_FOR_EXPORT,
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATIONS_FOR_EXPORT)
 })
 @Entity
 @Audited
@@ -87,9 +87,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   @Column(length = 50)
   private String bloodRh;
 
-  @Column(length = 150)
-  private String extraBloodTypeInformation;
-
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy = "donation")
@@ -113,11 +110,8 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
    * List of components created from this donation.
    */
   @OneToMany(mappedBy = "donation")
-  private List<Component> components;
-
-  @NotAudited
-  @ManyToMany(mappedBy = "donations")
-  private Set<Worksheet> worksheets;
+  @Where(clause = "isDeleted = 0")
+  private List<Component> components = new ArrayList<>();
 
   @Range(min = 0, max = 30)
   private BigDecimal haemoglobinCount;
@@ -189,7 +183,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
 
   public Donation() {
     super();
-    worksheets = new HashSet<Worksheet>();
   }
 
   public Donation(Donation donation) {
@@ -199,13 +192,11 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.donor = donation.getDonor();
     this.bloodAbo = donation.getBloodAbo();
     this.bloodRh = donation.getBloodRh();
-    this.extraBloodTypeInformation = donation.getExtraBloodTypeInformation();
     this.bloodTestResults = donation.getBloodTestResults();
     this.donationDate = donation.getDonationDate();
     this.donationType = donation.getDonationType();
     this.packType = donation.getPackType();
     this.components = donation.getComponents();
-    this.worksheets = donation.getWorksheets();
     this.haemoglobinCount = donation.getHaemoglobinCount();
     this.haemoglobinLevel = donation.getHaemoglobinLevel();
     this.bloodPressureSystolic = donation.getBloodPressureSystolic();
@@ -303,13 +294,15 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   public void setComponents(List<Component> components) {
     this.components = components;
   }
-
-  public Set<Worksheet> getWorksheets() {
-    return worksheets;
-  }
-
-  public void setWorksheets(Set<Worksheet> worksheets) {
-    this.worksheets = worksheets;
+  
+  public void addComponent(Component component) {
+    if (component == null) {
+      return;
+    }
+    if (components == null) {
+      components = new ArrayList<>();
+    }
+    components.add(component);
   }
 
   /**
@@ -447,14 +440,6 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
 
   public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
     this.bloodPressureDiastolic = bloodPressureDiastolic;
-  }
-
-  public String getExtraBloodTypeInformation() {
-    return extraBloodTypeInformation;
-  }
-
-  public void setExtraBloodTypeInformation(String extraBloodTypeInformation) {
-    this.extraBloodTypeInformation = extraBloodTypeInformation;
   }
 
   public Integer getDonorPulse() {

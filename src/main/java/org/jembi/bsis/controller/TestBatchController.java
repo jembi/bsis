@@ -10,8 +10,8 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.backingform.validator.TestBatchBackingFormValidator;
 import org.jembi.bsis.controllerservice.TestBatchControllerService;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.DonationSummaryViewModel;
@@ -111,7 +111,6 @@ public class TestBatchController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donations", donationSummaryViewModels);
     map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatchCreatedDate));
-    map.put("numberOfDonations", donationSummaryViewModels.size());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 }

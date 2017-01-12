@@ -1,6 +1,7 @@
 package org.jembi.bsis.model.componenttype;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,10 +16,11 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.repository.ComponentTypeQueryConstants;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -31,19 +33,21 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
   @NamedQuery(name = ComponentTypeQueryConstants.NAME_FIND_COMPONENT_TYPE_BY_CODE,
       query = ComponentTypeQueryConstants.QUERY_FIND_COMPONENT_TYPE_BY_CODE),
   @NamedQuery(name = ComponentTypeQueryConstants.NAME_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED,
-      query = ComponentTypeQueryConstants.QUERY_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED)
+      query = ComponentTypeQueryConstants.QUERY_GET_COMPONENT_TYPES_THAT_CAN_BE_ISSUED),
+  @NamedQuery(name = ComponentTypeQueryConstants.NAME_VERIFY_UNIQUE_COMPONENT_TYPE_NAME,
+      query = ComponentTypeQueryConstants.QUERY_VERIFY_UNIQUE_COMPONENT_TYPE_NAME),    
 })
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class ComponentType extends BaseEntity {
+public class ComponentType extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
-  @Column(length = 50, nullable = false)
+  @Column(length = 50, nullable = false, unique = true)
   private String componentTypeName;
 
-  @Column(length = 30, nullable = false)
+  @Column(length = 30, nullable = false, unique = true)
   private String componentTypeCode;
 
   @Column(nullable = false)
@@ -56,13 +60,15 @@ public class ComponentType extends BaseEntity {
   @NotAudited
   @ManyToMany(mappedBy = "componentTypes", fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
+  @Where(clause = "isDeleted = 0")
   private List<ComponentTypeCombination> componentTypeCombinations;
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
-  private List<ComponentTypeCombination> producedComponentTypeCombinations;
+  @Where(clause = "isDeleted = 0")
+  private Set<ComponentTypeCombination> producedComponentTypeCombinations;
 
   /**
    * TODO: Not used for now. Some component types like Cryoprecipitate may not require blood group
@@ -97,6 +103,8 @@ public class ComponentType extends BaseEntity {
   private String storageInfo;
 
   private boolean canBeIssued = true;
+
+  private boolean containsPlasma = true;
 
   public Boolean getIsDeleted() {
     return isDeleted;
@@ -179,11 +187,11 @@ public class ComponentType extends BaseEntity {
     this.componentTypeCombinations = componentTypeCombinations;
   }
 
-  public List<ComponentTypeCombination> getProducedComponentTypeCombinations() {
+  public Set<ComponentTypeCombination> getProducedComponentTypeCombinations() {
     return producedComponentTypeCombinations;
   }
 
-  public void setProducedComponentTypeCombinations(List<ComponentTypeCombination> producedComponentTypeCombinations) {
+  public void setProducedComponentTypeCombinations(Set<ComponentTypeCombination> producedComponentTypeCombinations) {
     this.producedComponentTypeCombinations = producedComponentTypeCombinations;
   }
 
@@ -259,6 +267,14 @@ public class ComponentType extends BaseEntity {
     this.canBeIssued = canBeIssued;
   }
 
+  public boolean getContainsPlasma() {
+    return containsPlasma;
+  }
+
+  public void setContainsPlasma(boolean containsPlasma) {
+    this.containsPlasma = containsPlasma;
+  }
+
   public void copy(ComponentType componentType) {
     this.componentTypeName = componentType.getComponentTypeName();
     this.componentTypeCode = componentType.getComponentTypeCode();
@@ -277,6 +293,7 @@ public class ComponentType extends BaseEntity {
     this.storageInfo = componentType.getStorageInfo();
     this.canBeIssued = componentType.getCanBeIssued();
     this.isDeleted = componentType.getIsDeleted();
+    this.containsPlasma = componentType.getContainsPlasma();
   }
 
 

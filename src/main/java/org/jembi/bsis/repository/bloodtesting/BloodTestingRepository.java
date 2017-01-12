@@ -1,38 +1,26 @@
 package org.jembi.bsis.repository.bloodtesting;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.jembi.bsis.dto.BloodTestResultDTO;
-import org.jembi.bsis.dto.BloodTestTotalDTO;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
-import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.BloodTestContext;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.repository.BloodTestResultNamedQueryConstants;
+import org.jembi.bsis.model.donation.TTIStatus;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.service.BloodTestingRuleEngine;
@@ -58,30 +46,10 @@ public class BloodTestingRepository {
   private DonationBatchRepository donationBatchRepository;
 
   @Autowired
+  private BloodTestRepository bloodTestRepository;
+
+  @Autowired
   private BloodTestingRuleEngine ruleEngine;
-
-  public List<BloodTest> getBloodTypingTests() {
-    String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("isActive", true);
-    query.setParameter("category", BloodTestCategory.BLOODTYPING);
-    List<BloodTest> bloodTests = query.getResultList();
-    return bloodTests;
-  }
-
-  public List<BloodTest> getBloodTestsOfType(BloodTestType type) {
-    return getBloodTestsOfTypes(Arrays.asList(type));
-  }
-
-  private List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
-    String queryStr = "SELECT b FROM BloodTest b WHERE "
-        + "b.bloodTestType IN (:types) AND " + "b.isActive=:isActive";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("types", types);
-    query.setParameter("isActive", true);
-    List<BloodTest> bloodTests = query.getResultList();
-    return bloodTests;
-  }
 
   /**
    * Save the BloodTestingRuleResult and update the Donation blood ABO/Rh and blood typing statuses
@@ -115,7 +83,7 @@ public class BloodTestingRepository {
 
     if (btResult == null) {
       btResult = new BloodTestResult();
-      BloodTest bloodTest = findBloodTestById(testId);
+      BloodTest bloodTest = bloodTestRepository.findBloodTestById(testId);
       btResult.setBloodTest(bloodTest);
       // not updating the inverse relation which means the
       // donation.getBloodTypingResults() will not
@@ -134,31 +102,13 @@ public class BloodTestingRepository {
         btResult.setReEntryRequired(!reEntry);
       } else {
         // only clear the re-entry required flag if the update is a re-entry
-        if (btResult.getReEntryRequired() && reEntry) { 
+        if (btResult.getReEntryRequired() && reEntry) {
           btResult.setReEntryRequired(false);
         }
       }
     }
     em.persist(btResult);
     return btResult;
-  }
-
-  public List<BloodTest> findActiveBloodTests() {
-
-    return em.createQuery(
-        "SELECT b " +
-            "FROM BloodTest b " +
-            "WHERE b.isActive = :isActive ",
-            BloodTest.class)
-        .setParameter("isActive", true)
-        .getResultList();
-  }
-
-  public List<BloodTest> getAllBloodTestsIncludeInactive() {
-    String queryStr = "SELECT b FROM BloodTest b";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    List<BloodTest> bloodTests = query.getResultList();
-    return bloodTests;
   }
 
   public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(
@@ -186,16 +136,15 @@ public class BloodTestingRepository {
   }
 
   public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatchesByBloodTestType(List<Long> donationBatchIds,
-      BloodTestType bloodTestType) {
+                                                                                         BloodTestType bloodTestType) {
 
     List<BloodTestingRuleResult> bloodTestingRuleResults = getAllTestsStatusForDonationBatches(donationBatchIds);
     List<BloodTestingRuleResult> filteredRuleResults = new ArrayList<BloodTestingRuleResult>();
     for (BloodTestingRuleResult result : bloodTestingRuleResults) {
-      Map<String, BloodTestResultViewModel> modelMap = result.getRecentTestResults();
-      Map<String, BloodTestResultViewModel> filteredModelMap = new HashMap<String, BloodTestResultViewModel>();
-      for (String key : modelMap.keySet()) {
-        BloodTestResultViewModel model = modelMap.get(key);
-        if (model.getTestResult().getBloodTest().getBloodTestType().equals(bloodTestType)) {
+      Map<Long, BloodTestResultViewModel> filteredModelMap = new HashMap<>();
+      for (Long key : result.getRecentTestResults().keySet()) {
+        BloodTestResultViewModel model = result.getRecentTestResults().get(key);
+        if (model.getBloodTest().getBloodTestType().equals(bloodTestType)) {
           filteredModelMap.put(key, model);
         }
       }
@@ -215,22 +164,14 @@ public class BloodTestingRepository {
         new HashMap<Long, String>());
   }
 
-  public List<BloodTest> getTTITests() {
-    String queryStr = "SELECT b FROM BloodTest b WHERE b.isActive=:isActive AND b.category=:category";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("isActive", true);
-    query.setParameter("category", BloodTestCategory.TTI);
-    List<BloodTest> bloodTests = query.getResultList();
-    return bloodTests;
-  }
-
   public Map<Long, BloodTestResult> getRecentTestResultsForDonation(
       Long donationId) {
     String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId";
+        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted";
     TypedQuery<BloodTestResult> query = em.createQuery(queryStr,
         BloodTestResult.class);
     query.setParameter("donationId", donationId);
+    query.setParameter("testOutcomeDeleted", false);
     List<BloodTestResult> bloodTestResults = query.getResultList();
     Map<Long, BloodTestResult> recentBloodTestResults = new HashMap<Long, BloodTestResult>();
     for (BloodTestResult bt : bloodTestResults) {
@@ -248,188 +189,9 @@ public class BloodTestingRepository {
     return recentBloodTestResults;
   }
 
-  private BloodTest findBloodTestById(Long bloodTestId) {
-    String queryStr = "SELECT bt FROM BloodTest bt WHERE "
-        + "bt.id=:bloodTestId";
-    TypedQuery<BloodTest> query = em.createQuery(queryStr, BloodTest.class);
-    query.setParameter("bloodTestId", bloodTestId);
-    return query.getSingleResult();
-  }
-
-  public void activateTests(BloodTestContext context) {
-    String queryStr = "UPDATE BloodTest set isActive=:isActive WHERE context=:context";
-    Query query = em.createQuery(queryStr);
-    query.setParameter("isActive", true);
-    query.setParameter("context", context);
-    query.executeUpdate();
-    queryStr = "UPDATE BloodTestingRule set isActive=:isActive WHERE context=:context";
-    query = em.createQuery(queryStr);
-    query.setParameter("isActive", true);
-    query.setParameter("context", context);
-    query.executeUpdate();
-  }
-
-  public void deactivateTests(BloodTestContext context) {
-    String queryStr = "UPDATE BloodTest set isActive=:isActive WHERE context=:context";
-    Query query = em.createQuery(queryStr);
-    query.setParameter("isActive", false);
-    query.setParameter("context", context);
-    query.executeUpdate();
-    queryStr = "UPDATE BloodTestingRule set isActive=:isActive WHERE context=:context";
-    query = em.createQuery(queryStr);
-    query.setParameter("isActive", false);
-    query.setParameter("context", context);
-    query.executeUpdate();
-  }
-  
-  public List<BloodTestResultDTO> findTTIPrevalenceReportIndicators(Date startDate, Date endDate) {
-    return em.createNamedQuery(
-        BloodTestResultNamedQueryConstants.NAME_FIND_BLOOD_TEST_RESULT_VALUE_OBJECTS_FOR_DATE_RANGE,
-        BloodTestResultDTO.class)
-        .setParameter("startDate", startDate)
-        .setParameter("endDate", endDate)
-        .setParameter("deleted", false)
-        .setParameter("released", true)
-        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
-        .getResultList();
-  }
-  
-  public List<BloodTestTotalDTO> findTTIPrevalenceReportTotalUnitsTested(Date startDate, Date endDate) {
-    return em.createNamedQuery(
-        BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_UNITS_TESTED_FOR_DATE_RANGE,
-        BloodTestTotalDTO.class)
-        .setParameter("startDate", startDate)
-        .setParameter("endDate", endDate)
-        .setParameter("deleted", false)
-        .setParameter("released", true)
-        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
-        .getResultList();
-  }
-  
-  public List<BloodTestTotalDTO> findTTIPrevalenceReportTotalUnsafeUnitsTested(Date startDate, Date endDate) {
-    return em.createNamedQuery(
-        BloodTestResultNamedQueryConstants.NAME_FIND_TOTAL_TTI_UNSAFE_UNITS_TESTED_FOR_DATE_RANGE,
-        BloodTestTotalDTO.class)
-        .setParameter("startDate", startDate)
-        .setParameter("endDate", endDate)
-        .setParameter("deleted", false)
-        .setParameter("released", true)
-        .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
-        .setParameter("ttiStatus", TTIStatus.TTI_UNSAFE)
-        .getResultList();
-  }
-
-  public Map<String, Map<Long, Long>> findNumberOfPositiveTests(
-      List<String> ttiTests, Date donationDateFrom,
-      Date donationDateTo, String aggregationCriteria,
-      List<String> venues) throws ParseException {
-    TypedQuery<Object[]> query = em
-        .createQuery(
-            "SELECT count(t), d.donationDate, t.bloodTest.testNameShort FROM BloodTestResult t join t.bloodTest bt join t.donation d WHERE "
-                + "bt.id IN (:ttiTestIds) AND "
-                + "t.result != :positiveResult AND "
-                + "d.venue.id IN (:venueIds) AND "
-                + "d.donationDate BETWEEN :donationDateFrom AND :donationDateTo "
-                + "GROUP BY bt.testNameShort, d.donationDate",
-            Object[].class);
-
-    List<Long> venueIds = new ArrayList<Long>();
-    if (venues != null) {
-      for (String venue : venues) {
-        venueIds.add(Long.parseLong(venue));
-      }
-    } else {
-      venueIds.add((long) -1);
-    }
-
-    List<Long> ttiTestIds = new ArrayList<Long>();
-    if (ttiTests != null) {
-      for (String ttiTest : ttiTests) {
-        ttiTestIds.add(Long.parseLong(ttiTest));
-      }
-    } else {
-      ttiTestIds.add(-1l);
-    }
-
-    query.setParameter("venueIds", venueIds);
-    query.setParameter("ttiTestIds", ttiTestIds);
-    query.setParameter("positiveResult", "+");
-
-    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long, Long>>();
-    TypedQuery<BloodTest> bloodTestQuery = em.createQuery(
-        "SELECT t FROM BloodTest t WHERE t.id IN :ttiTestIds",
-        BloodTest.class);
-    bloodTestQuery.setParameter("ttiTestIds", ttiTestIds);
-    for (BloodTest bt : bloodTestQuery.getResultList()) {
-      resultMap.put(bt.getTestNameShort(), new HashMap<Long, Long>());
-    }
-
-    query.setParameter("donationDateFrom", donationDateFrom);
-    query.setParameter("donationDateTo", donationDateTo);
-
-    // decide date format based on aggregation criteria
-    DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    int incrementBy = Calendar.DAY_OF_YEAR;
-    if (aggregationCriteria.equals("monthly")) {
-      incrementBy = Calendar.MONTH;
-      resultDateFormat = new SimpleDateFormat("01/MM/yyyy");
-    } else if (aggregationCriteria.equals("yearly")) {
-      incrementBy = Calendar.YEAR;
-      resultDateFormat = new SimpleDateFormat("01/01/yyyy");
-    }
-
-    List<Object[]> resultList = query.getResultList();
-
-    Calendar gcal = new GregorianCalendar();
-    Date lowerDate = resultDateFormat.parse(resultDateFormat
-        .format(donationDateFrom));
-    Date upperDate = resultDateFormat.parse(resultDateFormat
-        .format(donationDateTo));
-
-    // initialize the counter map storing (date, count) for each blood test
-    // counts should be set to 0
-    for (String bloodTestName : resultMap.keySet()) {
-      Map<Long, Long> m = resultMap.get(bloodTestName);
-      gcal.setTime(lowerDate);
-      while (gcal.getTime().before(upperDate)
-          || gcal.getTime().equals(upperDate)) {
-        m.put(gcal.getTime().getTime(), (long) 0);
-        gcal.add(incrementBy, 1);
-      }
-    }
-
-    for (Object[] result : resultList) {
-      Date d = (Date) result[1];
-      Date formattedDate = resultDateFormat.parse(resultDateFormat
-          .format(d));
-      Long utcTime = formattedDate.getTime();
-      Map<Long, Long> m = resultMap.get(result[2]);
-      if (m.containsKey(utcTime)) {
-        Long newVal = m.get(utcTime) + (Long) result[0];
-        m.put(utcTime, newVal);
-      } else {
-        m.put(utcTime, (Long) result[0]);
-      }
-
-    }
-    return resultMap;
-  }
-
-  /**
-   * Retrieve a full list of the active Blood Testing Rules.
-   *
-   * @return List<BloodTestingRule> list of rules, should not be null although this is not guaranteed
-   */
-  public List<BloodTestingRule> getActiveBloodTestingRules() {
-    String queryStr = "SELECT r FROM BloodTestingRule r WHERE isActive=:isActive";
-    TypedQuery<BloodTestingRule> query = em.createQuery(queryStr, BloodTestingRule.class);
-    query.setParameter("isActive", true);
-    return query.getResultList();
-  }
-
   /**
    * Compare two strings and check that they are either both empty, or they are equal.
-   * 
+   *
    * @param first First string
    * @param second First string
    * @return true if they are empty or equal, otherwise false.
@@ -450,9 +212,6 @@ public class BloodTestingRepository {
   public boolean updateDonationWithTestResults(Donation donation, BloodTestingRuleResult ruleResult) {
     boolean donationUpdated = false;
 
-    String oldExtraInformation = donation.getExtraBloodTypeInformation();
-    String newExtraInformation = addNewExtraInformation(oldExtraInformation, ruleResult.getExtraInformation());
-
     String oldBloodAbo = donation.getBloodAbo();
     String newBloodAbo = ruleResult.getBloodAbo();
 
@@ -468,11 +227,10 @@ public class BloodTestingRepository {
     BloodTypingMatchStatus oldBloodTypingMatchStatus = donation.getBloodTypingMatchStatus();
     BloodTypingMatchStatus newBloodTypingMatchStatus = ruleResult.getBloodTypingMatchStatus();
 
-    if (!bothEmptyOrEquals(newExtraInformation, oldExtraInformation) || !bothEmptyOrEquals(newBloodAbo, oldBloodAbo)
+    if (!bothEmptyOrEquals(newBloodAbo, oldBloodAbo)
         || !bothEmptyOrEquals(newBloodRh, oldBloodRh) || !Objects.equals(newTtiStatus, oldTtiStatus)
         || !Objects.equals(newBloodTypingStatus, oldBloodTypingStatus)
         || !Objects.equals(oldBloodTypingMatchStatus, newBloodTypingMatchStatus)) {
-      donation.setExtraBloodTypeInformation(newExtraInformation);
       donation.setBloodAbo(newBloodAbo);
       donation.setBloodRh(newBloodRh);
       donation.setTTIStatus(ruleResult.getTTIStatus());
@@ -492,19 +250,4 @@ public class BloodTestingRepository {
     return donationUpdated;
   }
 
-  /**
-   * FIXME: this method also belongs in the BloodTestsService (see above updateDonationWithTestResults)
-   */
-  private String addNewExtraInformation(String donationExtraInformation, Set<String> extraInformationNewSet) {
-    String newExtraInformation;
-    Set<String> oldExtraInformationSet = new HashSet<String>();
-    if (StringUtils.isNotBlank(donationExtraInformation)) {
-      oldExtraInformationSet.addAll(Arrays.asList(donationExtraInformation.split(",")));
-      extraInformationNewSet.removeAll(oldExtraInformationSet); // remove duplicates
-      newExtraInformation = donationExtraInformation + StringUtils.join(extraInformationNewSet, ",");
-    } else {
-      newExtraInformation = StringUtils.join(extraInformationNewSet, ",");
-    }
-    return newExtraInformation;
-  }
 }

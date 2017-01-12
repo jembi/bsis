@@ -7,7 +7,7 @@ import static org.jembi.bsis.helpers.builders.BloodTypingResolutionsBackingFormB
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.backingform.BloodTypingResolutionsBackingForm;
 import org.jembi.bsis.backingform.validator.BloodTypingResolutionsBackingFormValidator;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

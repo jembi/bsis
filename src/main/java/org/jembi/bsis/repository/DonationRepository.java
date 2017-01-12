@@ -17,25 +17,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.dto.CollectedDonationDTO;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
-import org.jembi.bsis.model.component.Component;
-import org.jembi.bsis.model.component.ComponentStatus;
-import org.jembi.bsis.model.componentbatch.ComponentBatch;
-import org.jembi.bsis.model.componenttype.ComponentType;
+import org.jembi.bsis.dto.DonationExportDTO;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
-import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
-import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -50,10 +42,7 @@ public class DonationRepository {
   private EntityManager em;
 
   @Autowired
-  private BloodTestingRepository bloodTypingRepository;
-
-  @Autowired
-  private GeneralConfigAccessorService generalConfigAccessorService;
+  private BloodTestingRepository bloodTestingRepository;
 
   public void saveDonation(Donation donation) {
     em.persist(donation);
@@ -196,115 +185,6 @@ public class DonationRepository {
     return resultMap;
   }
 
-  public Donation addDonation(Donation donation) throws PersistenceException {
-    donation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
-    donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    donation.setTTIStatus(TTIStatus.NOT_DONE);
-    donation.setIsDeleted(false);
-
-    em.persist(donation);
-    em.flush();
-    em.refresh(donation);
-    updateDonorFields(donation);
-    em.flush();
-    em.refresh(donation.getDonor());
-
-    // Create initial component only if the countAsDonation is true and the config option is enabled
-    if (donation.getPackType().getCountAsDonation() &&
-        generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)) {
-      createInitialComponent(donation);
-    }
-
-    return donation;
-  }
-
-  private void createInitialComponent(Donation donation) {
-
-    ComponentType componentType = donation.getPackType().getComponentType();
-
-    Component component = new Component();
-    component.setIsDeleted(false);
-    component.setComponentCode(componentType.getComponentTypeCode());
-    component.setDonation(donation);
-    component.setStatus(ComponentStatus.QUARANTINED);
-    component.setCreatedDate(donation.getCreatedDate());
-
-    // set new component creation date to match donation date 
-    component.setCreatedOn(donation.getDonationDate());
-    // if bleed time is provided, update component creation time to match bleed start time 
-    if (donation.getBleedStartTime() != null) {
-      Calendar donationDate = Calendar.getInstance();
-      donationDate.setTime(donation.getDonationDate());
-      Calendar bleedTime = Calendar.getInstance();
-      bleedTime.setTime(donation.getBleedStartTime());
-      donationDate.set(Calendar.HOUR_OF_DAY, bleedTime.get(Calendar.HOUR_OF_DAY));
-      donationDate.set(Calendar.MINUTE, bleedTime.get(Calendar.MINUTE));
-      donationDate.set(Calendar.SECOND, bleedTime.get(Calendar.SECOND));
-      donationDate.set(Calendar.MILLISECOND, bleedTime.get(Calendar.MILLISECOND));
-      component.setCreatedOn(donationDate.getTime());
-    }
-    component.setCreatedBy(donation.getCreatedBy());
-
-    // set cal to donationDate Date 
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(donation.getDonationDate());
-
-    // second calendar to store bleedStartTime 
-    Calendar bleedStartTime = Calendar.getInstance();
-    bleedStartTime.setTime(donation.getBleedStartTime());
-
-    // update cal to set time to bleedStartTime
-    cal.set(Calendar.HOUR_OF_DAY, bleedStartTime.get(Calendar.HOUR_OF_DAY));
-    cal.set(Calendar.MINUTE, bleedStartTime.get(Calendar.MINUTE));
-    cal.set(Calendar.SECOND, bleedStartTime.get(Calendar.SECOND));
-
-    // update cal with initial component expiry period
-    cal.add(Calendar.DATE, componentType.getExpiresAfter());
-    Date expiresOn = cal.getTime();
-
-    ComponentBatch componentBatch = donation.getDonationBatch().getComponentBatch();
-    if (componentBatch == null) {
-      // Set the location to the venue of the donation batch
-      component.setLocation(donation.getDonationBatch().getVenue());
-    } else {
-      // Assign the component to the component batch
-      component.setComponentBatch(componentBatch);
-      // Set the location to the processing site of the component batch
-      component.setLocation(componentBatch.getLocation());
-    }
-
-    component.setExpiresOn(expiresOn);
-    component.setComponentType(componentType);
-    em.persist(component);
-    em.refresh(component);
-
-  }
-
-  private void updateDonorFields(Donation donation) {
-    Donor donor = donation.getDonor();
-
-    //set date of first donation
-    if (donation.getDonor().getDateOfFirstDonation() == null) {
-      donor.setDateOfFirstDonation(donation.getDonationDate());
-    }
-    //set dueToDonate
-    PackType packType = donation.getPackType();
-    int periodBetweenDays = packType.getPeriodBetweenDonations();
-    Calendar dueToDonateDate = Calendar.getInstance();
-    dueToDonateDate.setTime(donation.getDonationDate());
-    dueToDonateDate.add(Calendar.DAY_OF_YEAR, periodBetweenDays);
-
-    if (donor.getDueToDonate() == null || dueToDonateDate.getTime().after(donor.getDueToDonate())) {
-      donor.setDueToDonate(dueToDonateDate.getTime());
-    }
-
-    // set dateOfLastDonation
-    Date dateOfLastDonation = donor.getDateOfLastDonation();
-    if (dateOfLastDonation == null || donation.getDonationDate().after(dateOfLastDonation)) {
-      donor.setDateOfLastDonation(donation.getDonationDate());
-    }
-  }
-
   public Donation findDonationByDonationIdentificationNumber(
       String donationIdentificationNumber) throws NoResultException, NonUniqueResultException {
     String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted";
@@ -423,10 +303,26 @@ public class DonationRepository {
       Donation c = iter.next();
       BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();
       if (bloodTypingStatus != null && !bloodTypingStatus.equals(BloodTypingStatus.NOT_DONE)) {
-        statusMap.put(c.getId(), bloodTypingRepository.getAllTestsStatusForDonation(c.getId()));
+        statusMap.put(c.getId(), bloodTestingRepository.getAllTestsStatusForDonation(c.getId()));
       }
     }
     return statusMap;
+  }
+  
+  public List<Donation> findLastDonationsByDonorVenueAndDonationDate(Location donorVenue, Date startDate, Date endDate) {
+    return em.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE,
+        Donation.class)
+        .setParameter("venue", donorVenue)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("deleted", false)
+        .getResultList();
+  }
+  
+  public List<DonationExportDTO> findDonationsForExport() {
+    return em.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_DONATIONS_FOR_EXPORT, DonationExportDTO.class)
+        .setParameter("deleted", false)
+        .getResultList();
   }
 
 }

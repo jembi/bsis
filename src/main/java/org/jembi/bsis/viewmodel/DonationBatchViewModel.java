@@ -1,27 +1,35 @@
 package org.jembi.bsis.viewmodel;
 
-import java.util.Date;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Date;
 
 public class DonationBatchViewModel {
 
   private Long id;
   private String batchNumber;
   private String notes;
-  private Date createdDate;
   private Date lastUpdatedDate;
   private String createdByUsername;
   private String lastUpdatedByUsername;
+  private Date donationBatchDate;
   private Boolean closed;
   private LocationFullViewModel venue;
   private boolean backEntry;
   private Integer numDonations;
-  private String status;
 
   public DonationBatchViewModel() {
+  }
+
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getDonationBatchDate() {
+    return donationBatchDate;
+  }
+
+  public void setDonationBatchDate(Date donationBatchDate) {
+    this.donationBatchDate = donationBatchDate;
   }
 
   public Long getId() {
@@ -55,15 +63,6 @@ public class DonationBatchViewModel {
 
   public void setUpdatedDate(Date lastUpdatedDate) {
     this.lastUpdatedDate = lastUpdatedDate;
-  }
-
-  @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getCreatedDate() {
-    return createdDate;
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
   }
 
   public String getCreatedBy() {

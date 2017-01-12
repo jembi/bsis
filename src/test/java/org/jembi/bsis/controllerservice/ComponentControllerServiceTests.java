@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,7 +30,6 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
@@ -227,10 +228,12 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     );
     RecordComponentBackingForm form = new RecordComponentBackingForm();
     form.setParentComponentId("1");
-    form.setComponentTypeCombination(new ComponentTypeCombination());
+    form.setComponentTypeCombination(aComponentTypeCombination().withId(1L).build());
     
     // setup mocks   
-    Mockito.when(componentCRUDService.processComponent(form.getParentComponentId(), form.getComponentTypeCombination())).thenReturn(components.get(0));
+    Mockito.when(
+        componentCRUDService.processComponent(form.getParentComponentId(), form.getComponentTypeCombination().getId()))
+        .thenReturn(components.get(0));
     Mockito.when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
     Mockito.when(componentFactory.createManagementViewModels(components)).thenReturn(componentViewModels);
     
@@ -238,7 +241,8 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     componentControllerService.processComponent(form);
     
     // verify
-    Mockito.verify(componentCRUDService).processComponent(form.getParentComponentId(), form.getComponentTypeCombination());
+    Mockito.verify(componentCRUDService).processComponent(form.getParentComponentId(),
+        form.getComponentTypeCombination().getId());
     Mockito.verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
     Mockito.verify(componentFactory).createManagementViewModels(components);
   }
@@ -251,8 +255,8 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
         ComponentTypeBuilder.aComponentType().withId(2L).build()
     );
     List<ComponentTypeViewModel> componentTypeViewModels = Arrays.asList(
-        new ComponentTypeViewModel(componentTypes.get(0)),
-        new ComponentTypeViewModel(componentTypes.get(1))
+        aComponentTypeViewModel().withId(1L).build(),
+        aComponentTypeViewModel().withId(2L).build()
     );
     
     // setup mocks

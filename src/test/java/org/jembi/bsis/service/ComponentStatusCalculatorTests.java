@@ -21,19 +21,19 @@ import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.model.bloodtesting.TTIStatus;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonType;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingMatchStatus;
-import org.jembi.bsis.repository.bloodtesting.BloodTypingStatus;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -46,7 +46,64 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   private ComponentStatusCalculator componentStatusCalculator;
   @Mock
   private DonationRepository donationRepository;
+  
+  @Test
+  public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithPositiveResult_shouldReturnTrue(){
+    List<BloodTestResult> bloodTestResults = Arrays.asList(
+        aBloodTestResult()
+            .withId(9L)
+            .withResult("POS")
+            .withBloodTest(aBloodTest()
+                .withFlagComponentsForDiscard(false)
+                .thatShouldFlagComponentsContainingPlasmaForDiscard()
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
+    );
+    
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResultsIfContainsPlasma(bloodTestResults);
+    
+    assertThat(result, is(true));
+  }
+  
+  @Test
+  public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithNegativeResult_shouldReturnFalse(){
+    List<BloodTestResult> bloodTestResults = Arrays.asList(
+        aBloodTestResult()
+            .withId(9L)
+            .withResult("NEG")
+            .withBloodTest(aBloodTest()
+                .withFlagComponentsForDiscard(false)
+                .thatShouldFlagComponentsContainingPlasmaForDiscard()
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
+    );
+    
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResultsIfContainsPlasma(bloodTestResults);
+    
+    assertThat(result, is(false));
+  }  
 
+  @Test
+  public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithAllBloodTestResultsNotContainingPlasma_shouldReturnFalse(){
+    List<BloodTestResult> bloodTestResults = Arrays.asList(
+        aBloodTestResult()
+            .withId(9L)
+            .withResult("POS")
+            .withBloodTest(aBloodTest()
+                .withFlagComponentsForDiscard(false)
+                .thatShouldNotFlagComponentsContainingPlasmaForDiscard()
+                .withPositiveResults("POS,+")
+                .build())
+            .build()
+    );
+    
+    boolean result = componentStatusCalculator.shouldComponentsBeDiscardedForTestResultsIfContainsPlasma(bloodTestResults);
+    
+    assertThat(result, is(false));
+  }
+  
   @Test
   public void testShouldComponentsBeDiscardedForTestResultsWithBloodTestNotFlaggedForDiscard_shouldReturnFalse() {
 

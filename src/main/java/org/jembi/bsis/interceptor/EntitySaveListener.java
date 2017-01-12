@@ -59,13 +59,14 @@ public class EntitySaveListener implements PersistEventListener, MergeEventListe
         User user = ((BsisUserDetails) principal).getUser();
         if (event.getObject() instanceof ModificationTracker && user != null) {
           ModificationTracker entity = (ModificationTracker) event.getObject();
+          Date currentDateTime = new Date();
           if (entity.getCreatedDate() == null) {
-            entity.setCreatedDate(new Date());
+            entity.setCreatedDate(currentDateTime);
           }
           if (entity.getCreatedBy() == null) {
             entity.setCreatedBy(user);
           }
-          entity.setLastUpdated(new Date());
+          entity.setLastUpdated(currentDateTime);
           entity.setLastUpdatedBy(user);
         }
       }

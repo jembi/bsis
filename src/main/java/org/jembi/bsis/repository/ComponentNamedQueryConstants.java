@@ -57,6 +57,52 @@ public class ComponentNamedQueryConstants {
   public static final String QUERY_FIND_CHILD_COMPONENTS =
       "SELECT c FROM Component c WHERE c.parentComponent=:parentComponent AND c.isDeleted = false";
 
+  public static final String NAME_FIND_COMPONENTS_FOR_EXPORT =
+      "Component.findComponentsForExport";
+  public static final String QUERY_FIND_COMPONENTS_FOR_EXPORT =
+      "SELECT DISTINCT NEW org.jembi.bsis.dto.ComponentExportDTO(c.id, c.donation.donationIdentificationNumber, "
+      + "c.componentCode, c.modificationTracker.createdDate, c.modificationTracker.createdBy.username, "
+      + "c.modificationTracker.lastUpdated, c.modificationTracker.lastUpdatedBy.username, "
+      + "c.parentComponent.componentCode, c.createdOn, c.status, c.location.name, c.issuedOn, c.inventoryStatus, "
+      + "c.discardedOn, r.statusChangeReason, c.expiresOn, c.notes) "
+      + "FROM Component c "
+      // Make sure that components without parents are returned
+      + "LEFT JOIN c.parentComponent "
+      // Join to status change to get status change reason
+      + "LEFT JOIN c.statusChanges AS sc "
+      + "WITH sc.isDeleted = :statusChangeDeleted "
+      // Join to status change reason to find discarded
+      + "LEFT JOIN sc.statusChangeReason AS r "
+      + "WITH r.category = :discarded "
+      + "WHERE c.isDeleted = :componentDeleted "
+      // Sort by created date then status change reason with nulls last so that discards come first
+      + "ORDER BY c.modificationTracker.createdDate ASC, r.statusChangeReason ASC NULLS LAST ";
 
-
+  public static final String NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE =
+      "Component.findDiscardedComponentsByVenue";
+  public static final String QUERY_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE =
+      "select DISTINCT new org.jembi.bsis.dto.DiscardedComponentDTO(s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, s.component.componentBatch.location, count(s.component)) " +
+      "from ComponentStatusChange AS s " +
+      "where s.component.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
+      "and (s.component.componentBatch.location.id = :processingSiteId OR :processingSiteId = NULL) " +
+      "and s.isDeleted = false " +
+      "and s.component.componentBatch IS NOT NULL " +
+      "and s.statusChangedOn BETWEEN :startDate AND :endDate " +
+      "group by s.component.componentBatch.location, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
+      "order by s.component.componentBatch.location, s.component.componentType.componentTypeName desc ";
+  
+  public static final String NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
+      "Component.findProducedComponentsByProcessingSite";
+  public static final String QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
+      "SELECT DISTINCT NEW org.jembi.bsis.dto.ComponentProductionDTO(c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh, cb.location, COUNT(c.id)) " 
+      + "FROM Component AS c "
+      // use processing site which is where the component was processed
+      + "LEFT JOIN c.componentBatch AS cb "
+      + "WHERE c.componentType.canBeIssued = TRUE AND c.createdOn BETWEEN :startDate AND :endDate "
+      + "AND c.isDeleted = :deleted "
+      + "AND c.status NOT IN :excludedStatuses "
+      //if processingSiteId is null, get all the sites otherwise fetch the provided processingSite
+      + "AND (cb.location.id = :processingSiteId OR :processingSiteId = NULL) "
+      + "GROUP BY cb.location, c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
+      + "ORDER BY cb.location, c.componentType.componentTypeName ASC";
 }

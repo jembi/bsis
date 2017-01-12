@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -36,13 +35,11 @@ public class ComponentTypeController {
     binder.setValidator(componentTypeBackingFormValidator);
   }
 
-  @RequestMapping(method = RequestMethod.GET)
+  @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_TYPES + "')")
-  public ResponseEntity<Map<String, Object>> getComponentTypes(
-      @RequestParam(required = false, defaultValue = "true") boolean includeDeleted) {
-
+  public ResponseEntity<Map<String, Object>> getComponentTypes() {
     Map<String, Object> map = new HashMap<>();
-    map.put("componentTypes", componentTypeControllerService.getComponentTypes(includeDeleted));
+    map.put("componentTypes", componentTypeControllerService.getComponentTypes());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 

@@ -3,20 +3,12 @@ package org.jembi.bsis.controller;
 
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.UserRepository;
+import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:**/bsis-servlet.xml"})
-@WebAppConfiguration
-@Transactional
-public class UserControllerTest {
+public class UserControllerTest extends ContextDependentTestSuite  {
 
   @Autowired
   public UserRepository userRepository;

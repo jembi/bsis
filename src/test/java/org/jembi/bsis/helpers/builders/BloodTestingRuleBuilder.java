@@ -1,28 +1,30 @@
 package org.jembi.bsis.helpers.builders;
 
-import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
-import org.jembi.bsis.model.bloodtesting.rules.BloodTestSubCategory;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
+
+import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
+import org.jembi.bsis.helpers.persisters.BloodTestingRulePersister;
+import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
-public class BloodTestingRuleBuilder extends AbstractBuilder<BloodTestingRule> {
-
+public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingRule> {
+  
   private Long id;
-  private String bloodTestsIds;
+  private BloodTest bloodTest = aBloodTest().build();
   private String pattern;
   private String newInformation;
   private DonationField donationFieldChanged;
   private String pendingTestsIds;
-  private BloodTestSubCategory subCategory;
-  private BloodTestCategory category;
+  private boolean isDeleted = false;
 
   public BloodTestingRuleBuilder withId(Long id) {
     this.id = id;
     return this;
   }
 
-  public BloodTestingRuleBuilder withBloodTestsIds(String bloodTestsIds) {
-    this.bloodTestsIds = bloodTestsIds;
+  public BloodTestingRuleBuilder withBloodTest(BloodTest bloodTest) {
+    this.bloodTest = bloodTest;
     return this;
   }
 
@@ -36,7 +38,7 @@ public class BloodTestingRuleBuilder extends AbstractBuilder<BloodTestingRule> {
     return this;
   }
 
-  public BloodTestingRuleBuilder withDonationFieldChange(DonationField donationFieldChanged) {
+  public BloodTestingRuleBuilder withDonationFieldChanged(DonationField donationFieldChanged) {
     this.donationFieldChanged = donationFieldChanged;
     return this;
   }
@@ -45,14 +47,14 @@ public class BloodTestingRuleBuilder extends AbstractBuilder<BloodTestingRule> {
     this.pendingTestsIds = pendingTestsIds;
     return this;
   }
-  
-  public BloodTestingRuleBuilder withCategory(BloodTestCategory category) {
-    this.category = category;
+
+  public BloodTestingRuleBuilder thatIsDeleted() {
+    this.isDeleted = true;
     return this;
   }
-  
-  public BloodTestingRuleBuilder withSubCategory(BloodTestSubCategory subCategory) {
-    this.subCategory = subCategory;
+
+  public BloodTestingRuleBuilder thatIsNotDeleted() {
+    this.isDeleted = false;
     return this;
   }
 
@@ -60,13 +62,12 @@ public class BloodTestingRuleBuilder extends AbstractBuilder<BloodTestingRule> {
   public BloodTestingRule build() {
     BloodTestingRule bloodTestingRule = new BloodTestingRule();
     bloodTestingRule.setId(id);
-    bloodTestingRule.setBloodTestsIds(bloodTestsIds);
+    bloodTestingRule.setBloodTest(bloodTest);
     bloodTestingRule.setPattern(pattern);
     bloodTestingRule.setNewInformation(newInformation);
     bloodTestingRule.setDonationFieldChanged(donationFieldChanged);
     bloodTestingRule.setPendingTestsIds(pendingTestsIds);
-    bloodTestingRule.setCategory(category);
-    bloodTestingRule.setSubCategory(subCategory);
+    bloodTestingRule.setIsDeleted(isDeleted);
     return bloodTestingRule;
   }
 
@@ -74,4 +75,8 @@ public class BloodTestingRuleBuilder extends AbstractBuilder<BloodTestingRule> {
     return new BloodTestingRuleBuilder();
   }
 
+  @Override
+  public AbstractEntityPersister<BloodTestingRule> getPersister() {
+    return new BloodTestingRulePersister();
+  }
 }

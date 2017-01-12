@@ -28,6 +28,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
@@ -48,6 +49,8 @@ public class BloodTestsServiceTests extends UnitTestSuite {
   private GeneralConfigAccessorService generalConfigAccessorService;
   @Mock
   private BloodTestingRuleEngine bloodTestingRuleEngine;
+  @Mock
+  private BloodTestRepository bloodTestRepository;
   @Mock
   private BloodTestingRepository bloodTestingRepository;
   
@@ -142,14 +145,34 @@ public class BloodTestsServiceTests extends UnitTestSuite {
         any(Date.class), eq(bloodTestingRuleResult), eq(true));
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testAddTestNamesToMap() {
 
-    BloodTest hiv =
-        BloodTestBuilder.aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI).withTestNameShort("HIV").build();
-    when(bloodTestingRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(hiv));
+    BloodTest hiv = BloodTestBuilder.aBloodTest()
+        .withBloodTestType(BloodTestType.BASIC_TTI).withTestNameShort("HIV").build();
+    BloodTest hivRepeat = BloodTestBuilder.aBloodTest()
+        .withBloodTestType(BloodTestType.REPEAT_TTI).withTestNameShort("HIV_REPEAT").build();
+    BloodTest hivConf = BloodTestBuilder.aBloodTest()
+        .withBloodTestType(BloodTestType.CONFIRMATORY_TTI).withTestNameShort("HIV_CONF").build();
+    BloodTest abo = BloodTestBuilder.aBloodTest()
+        .withBloodTestType(BloodTestType.BASIC_BLOODTYPING).withTestNameShort("ABO").build();
+    BloodTest aboRepeat = BloodTestBuilder.aBloodTest()
+        .withBloodTestType(BloodTestType.REPEAT_BLOODTYPING).withTestNameShort("ABO_REPEAT").build();
+    
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(hiv));
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_TTI)).thenReturn(Arrays.asList(hivRepeat));
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI)).thenReturn(Arrays.asList(hivConf));
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING)).thenReturn(Arrays.asList(abo));
+    when(bloodTestRepository.getBloodTestsOfType(BloodTestType.REPEAT_BLOODTYPING)).thenReturn(Arrays.asList(aboRepeat));
+    
     Map<String, Object> map = bloodTestsService.getBloodTestShortNames();
+    
     assertThat(((ArrayList<String>) map.get("basicTtiTestNames")), is(Arrays.asList("HIV")));
+    assertThat(((ArrayList<String>) map.get("repeatTtiTestNames")), is(Arrays.asList("HIV_REPEAT")));
+    assertThat(((ArrayList<String>) map.get("confirmatoryTtiTestNames")), is(Arrays.asList("HIV_CONF")));
+    assertThat(((ArrayList<String>) map.get("basicBloodTypingTestNames")), is(Arrays.asList("ABO")));
+    assertThat(((ArrayList<String>) map.get("repeatBloodTypingTestNames")), is(Arrays.asList("ABO_REPEAT")));
   }
 
 }

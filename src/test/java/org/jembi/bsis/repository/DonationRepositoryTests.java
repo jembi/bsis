@@ -2,39 +2,41 @@ package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.AdverseEventBuilder.anAdverseEvent;
+import static org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
 import static org.jembi.bsis.helpers.builders.CollectedDonationDTOBuilder.aCollectedDonationDTO;
-import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
-import static org.jembi.bsis.helpers.builders.DataTypeBuilder.aBooleanDataType;
-import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationTypeBuilder.aDonationType;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
-import static org.jembi.bsis.helpers.builders.GeneralConfigBuilder.aGeneralConfig;
-import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
+import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
+import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.dto.CollectedDonationDTO;
-import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.dto.DonationExportDTO;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
+import org.jembi.bsis.model.donation.HaemoglobinLevel;
+import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.util.Gender;
-import org.jembi.bsis.suites.ContextDependentTestSuite;
+import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class DonationRepositoryTests extends ContextDependentTestSuite {
+public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
 
   @Autowired
   private DonationRepository donationRepository;
@@ -174,73 +176,189 @@ public class DonationRepositoryTests extends ContextDependentTestSuite {
   }
   
   @Test
-  public void testAddDonationToDonationBatchWithoutComponentBatch_shouldSetComponentLocationToVenue() {
+  public void testFindLastDonationsByDonorVenueAndDonationDate_shouldReturnCorrectDonations() {
     // Set up fixture
-    insertConfigToCreateInitialComponents();
-    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).buildAndPersist(entityManager);
-    Location donationBatchVenue = aVenue().build();
-    DonationBatch donationBatchWithoutComponentBatch = aDonationBatch()
-        .withVenue(donationBatchVenue)
-        .withComponentBatch(null)
-        .buildAndPersist(entityManager);
-    Donor existingDonor = aDonor().buildAndPersist(entityManager);
     Location venue = aVenue().buildAndPersist(entityManager);
-    Donation donation = aDonation()
-        .withPackType(packTypeThatCountsAsDonation)
-        .withDonationBatch(donationBatchWithoutComponentBatch)
-        .withDonor(existingDonor)
-        .withDonationDate(new Date())
-        .withBleedStartTime(new Date())
-        .withBleedEndTime(new Date())
-        .withVenue(venue)
-        .build();
+    Date startDate = new DateTime().minusDays(90).toDate();
+    Date endDate = new DateTime().minusDays(60).toDate();
+    Date outOfRangeDate = new DateTime().minusDays(30).toDate();
     
-    // Call the method being tested
-    Donation addedDonation = donationRepository.addDonation(donation);
+    Donor donorWithLastDonationOnEndDate = aDonor().withDateOfLastDonation(endDate).withVenue(venue).build();
     
-    // Verify results
-    List<Component> components = addedDonation.getComponents();
-    assertThat(components.size(), is(1));
-    assertThat(components.get(0).getLocation(), is(donationBatchVenue));
+    // Excluded by last donation date
+    aDonation()
+        .withDonor(donorWithLastDonationOnEndDate)
+        .withDonationDate(startDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded by venue
+    aDonation()
+        .withDonor(aDonor().withDateOfLastDonation(startDate).withVenue(aVenue().build()).build())
+        .withDonationDate(startDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded by donation date
+    aDonation()
+        .withDonor(aDonor().withDateOfLastDonation(outOfRangeDate).withVenue(venue).build())
+        .withDonationDate(outOfRangeDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded by deleted flag
+    aDonation()
+        .thatIsDeleted()
+        .withDonor(aDonor().withDateOfLastDonation(endDate).withVenue(venue).build())
+        .withDonationDate(endDate)
+        .buildAndPersist(entityManager);
+    
+    List<Donation> expectedDonations = Arrays.asList(
+        aDonation()
+            .withDonor(aDonor().withDateOfLastDonation(startDate).withVenue(venue).build())
+            .withDonationDate(startDate)
+            .buildAndPersist(entityManager),
+        aDonation()
+            .withDonor(donorWithLastDonationOnEndDate)
+            .withDonationDate(endDate)
+            .buildAndPersist(entityManager)
+    );
+    
+    // Exercise SUT
+    List<Donation> returnedDonations = donationRepository.findLastDonationsByDonorVenueAndDonationDate(venue, startDate,
+        endDate);
+    
+    // Verify
+    assertThat(returnedDonations, is(expectedDonations));
   }
   
   @Test
-  public void testAddDonationToDonationBatchWithComponentBatch_shouldSetComponentLocationToProcessingSite() {
+  public void testFindDonationsForExport_shouldReturnDonationExportDTOsWithTheCorrectState() {
     // Set up fixture
-    insertConfigToCreateInitialComponents();
-    PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).buildAndPersist(entityManager);
-    Location componentBatchProcessingSite = aProcessingSite().build();
-    DonationBatch donationBatchWithComponentBatch = aDonationBatch()
-        .withComponentBatch(aComponentBatch().withLocation(componentBatchProcessingSite).build())
+    String donorNumber = "123321";
+    String donationIdentificationNumber = "4569871";
+    String createdByUsername = "created.by";
+    Date createdDate = new DateTime().minusDays(29).toDate();
+    String packType = "Blood";
+    Date donationDate = new DateTime().minusDays(30).toDate();
+    BloodTypingStatus bloodTypingStatus = BloodTypingStatus.NOT_DONE;
+    BloodTypingMatchStatus bloodTypingMatchStatus = BloodTypingMatchStatus.NOT_DONE;
+    TTIStatus ttiStatus = TTIStatus.NOT_DONE;
+    Date bleedStartTime = new DateTime().minusDays(30).plusMinutes(10).toDate();
+    Date bleedEndTime = new DateTime().minusDays(30).plusMinutes(20).toDate();
+    BigDecimal donorWeight = new BigDecimal(90);
+    int bloodPressureSystolic = 120;
+    int bloodPressureDiastolic = 80;
+    int donorPulse = 60;
+    BigDecimal haemoglobinCount = new BigDecimal(12);
+    HaemoglobinLevel haemoglobinLevel = HaemoglobinLevel.PASS;
+    String bloodAbo = "AB";
+    String bloodRh = "+";
+    boolean ineliligibleDonor = true;
+    String notes = "NOOOTES";
+    String adverseEventType = "Fainting";
+    String adverseEventComment = "Passed out";
+
+    // Expected donation
+    aDonation()
+        .withDonor(aDonor().withDonorNumber(donorNumber).build())
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withCreatedBy(aUser().withUsername(createdByUsername).build())
+        .withCreatedDate(createdDate)
+        .withPackType(aPackType().withPackType(packType).build())
+        .withDonationDate(donationDate)
+        .withBloodTypingStatus(bloodTypingStatus)
+        .withBloodTypingMatchStatus(bloodTypingMatchStatus)
+        .withTTIStatus(ttiStatus)
+        .withBleedStartTime(bleedStartTime)
+        .withBleedEndTime(bleedEndTime)
+        .withDonorWeight(donorWeight)
+        .withBloodPressureSystolic(bloodPressureSystolic)
+        .withBloodPressureDiastolic(bloodPressureDiastolic)
+        .withDonorPulse(donorPulse)
+        .withHaemoglobinCount(haemoglobinCount)
+        .withHaemoglobinLevel(haemoglobinLevel)
+        .withAdverseEvent(anAdverseEvent()
+            .withType(anAdverseEventType().withName(adverseEventType).build())
+            .withComment(adverseEventComment)
+            .build())
+        .withBloodAbo(bloodAbo)
+        .withBloodRh(bloodRh)
+        .thatIsReleased()
+        .withIneligibleDonor(ineliligibleDonor)
+        .withNotes(notes)
         .buildAndPersist(entityManager);
-    Donor existingDonor = aDonor().buildAndPersist(entityManager);
-    Location venue = aVenue().buildAndPersist(entityManager);
-    Donation donation = aDonation()
-        .withPackType(packTypeThatCountsAsDonation)
-        .withDonationBatch(donationBatchWithComponentBatch)
-        .withDonor(existingDonor)
-        .withDonationDate(new Date())
-        .withBleedStartTime(new Date())
-        .withBleedEndTime(new Date())
-        .withVenue(venue)
-        .build();
     
-    // Call the method being tested
-    Donation addedDonation = donationRepository.addDonation(donation);
+    // Excluded deleted donation
+    aDonation().thatIsDeleted().buildAndPersist(entityManager);
     
-    // Verify results
-    List<Component> components = addedDonation.getComponents();
-    assertThat(components.size(), is(1));
-    assertThat(components.get(0).getLocation(), is(componentBatchProcessingSite));
+    // Exercise SUT
+    List<DonationExportDTO> returnedDTOs = donationRepository.findDonationsForExport();
+    
+    // Verify
+    assertThat(returnedDTOs.size(), is(1));
+    
+    // Verify DTO state
+    DonationExportDTO returnedDTO = returnedDTOs.get(0);
+    assertThat(returnedDTO.getDonorNumber(), is(donorNumber));
+    assertThat(returnedDTO.getDonationIdentificationNumber(), is(donationIdentificationNumber));
+    assertThat(returnedDTO.getCreatedBy(), is(createdByUsername));
+    assertThat(returnedDTO.getCreatedDate(), isSameDayAs(createdDate));
+    assertThat(returnedDTO.getLastUpdatedBy(), is(USERNAME));
+    assertThat(returnedDTO.getLastUpdated(), isSameDayAs(new Date()));
+    assertThat(returnedDTO.getPackType(), is(packType));
+    assertThat(returnedDTO.getDonationDate(), isSameDayAs(donationDate));
+    assertThat(returnedDTO.getBloodTypingStatus(), is(bloodTypingStatus));
+    assertThat(returnedDTO.getBloodTypingMatchStatus(), is(bloodTypingMatchStatus));
+    assertThat(returnedDTO.getTtiStatus(), is(ttiStatus));
+    assertThat(returnedDTO.getBleedStartTime(), isSameDayAs(bleedStartTime));
+    assertThat(returnedDTO.getBleedEndTime(), isSameDayAs(bleedEndTime));
+    assertThat(returnedDTO.getDonorWeight().compareTo(donorWeight), is(0));
+    assertThat(returnedDTO.getBloodPressureSystolic(), is(bloodPressureSystolic));
+    assertThat(returnedDTO.getBloodPressureDiastolic(), is(bloodPressureDiastolic));
+    assertThat(returnedDTO.getDonorPulse(), is(donorPulse));
+    assertThat(returnedDTO.getHaemoglobinCount().compareTo(haemoglobinCount), is(0));
+    assertThat(returnedDTO.getHaemoglobinLevel(), is(haemoglobinLevel));
+    assertThat(returnedDTO.getAdverseEventType(), is(adverseEventType));
+    assertThat(returnedDTO.getAdverseEventComment(), is(adverseEventComment));
+    assertThat(returnedDTO.getBloodAbo(), is(bloodAbo));
+    assertThat(returnedDTO.getBloodRh(), is(bloodRh));
+    assertThat(returnedDTO.isReleased(), is(true));
+    assertThat(returnedDTO.isIneligbleDonor(), is(ineliligibleDonor));
+    assertThat(returnedDTO.getNotes(), is(notes));
   }
   
-  private void insertConfigToCreateInitialComponents() {
-    // General config to enable creation of initial components
-    aGeneralConfig()
-        .withName(GeneralConfigConstants.CREATE_INITIAL_COMPONENTS)
-        .withDataType(aBooleanDataType().build())
-        .withValue("true")
+  @Test
+  public void testFindDonationsForExportWithNoAdverseEvent_shouldReturnDonation() {
+    // Set up fixture
+    aDonation().withAdverseEvent(null).buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    List<DonationExportDTO> returnedDTOs = donationRepository.findDonationsForExport();
+    
+    // Verify
+    assertThat(returnedDTOs.size(), is(1));
+  }
+
+  @Test
+  public void testFindDonationsForExport_shouldReturnDonationExportDTOsOrderedByCreatedDate() {
+    // Set up fixture
+    String firstDonationIdentificationNumber = "1111111";
+    String secondDonationIdentificationNumber = "2222222";
+
+    aDonation()
+        .withCreatedDate(new DateTime().minusDays(3).toDate())
+        .withDonationIdentificationNumber(secondDonationIdentificationNumber)
         .buildAndPersist(entityManager);
+    aDonation()
+        .withCreatedDate(new DateTime().minusDays(7).toDate())
+        .withDonationIdentificationNumber(firstDonationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    List<DonationExportDTO> returnedDTOs = donationRepository.findDonationsForExport();
+    
+    // Verify
+    assertThat(returnedDTOs.size(), is(2));
+    assertThat(returnedDTOs.get(0).getDonationIdentificationNumber(), is(firstDonationIdentificationNumber));
+    assertThat(returnedDTOs.get(1).getDonationIdentificationNumber(), is(secondDonationIdentificationNumber));
   }
 
 }

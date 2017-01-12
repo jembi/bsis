@@ -20,6 +20,8 @@ public class DonorDeferralMatcher extends TypeSafeMatcher<DonorDeferral> {
         .appendText("\nDonor: ").appendValue(expected.getDeferredDonor())
         .appendText("\nDeferral reason: ").appendValue(expected.getDeferralReason())
         .appendText("\nDeferred until: ").appendValue(expected.getDeferredUntil())
+        .appendText("\nDeferral date: ").appendValue(expected.getDeferralDate())
+        .appendText("\nVenue: ").appendValue(expected.getVenue())
         .appendText("\nVoided: ").appendValue(expected.getIsVoided());
   }
 
@@ -28,6 +30,8 @@ public class DonorDeferralMatcher extends TypeSafeMatcher<DonorDeferral> {
     return Objects.equals(actual.getDeferredDonor(), expected.getDeferredDonor()) &&
         Objects.equals(actual.getDeferralReason(), expected.getDeferralReason()) &&
         Objects.equals(actual.getDeferredUntil(), expected.getDeferredUntil()) &&
+        Objects.equals(actual.getDeferralDate(), expected.getDeferralDate()) &&
+        Objects.equals(actual.getVenue(), expected.getVenue()) &&
         Objects.equals(actual.getIsVoided(), expected.getIsVoided());
   }
 
