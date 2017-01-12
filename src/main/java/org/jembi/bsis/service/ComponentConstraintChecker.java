@@ -99,7 +99,7 @@ public class ComponentConstraintChecker {
     if (component.getWeight() != null) {
       PackType packType = component.getDonation().getPackType();
       Integer weight = component.getWeight();
-      if (weight <= packType.getMaxWeight() && weight >= packType.getMinWeight()) {
+      if (weight <= packType.getMaxWeight() && weight >= packType.getLowVolumeWeight()) {
         return true;
       }
     }

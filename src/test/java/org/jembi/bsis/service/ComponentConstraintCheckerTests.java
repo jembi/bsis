@@ -289,7 +289,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(null)
         .withWeight(450)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(316).withMinWeight(400).withMaxWeight(500).build()).build())
         .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
         .build();
     boolean canProcess = componentConstraintChecker.canProcess(component);
@@ -303,7 +303,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(null)
         .withWeight(350)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(390).withMinWeight(400).withMaxWeight(500).build()).build())
         .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
         .build();
     boolean canProcess = componentConstraintChecker.canProcess(component);
@@ -317,7 +317,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(null)
         .withWeight(450)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(316).withMinWeight(400).withMaxWeight(500).build()).build())
         .withComponentType(aComponentType().build())
         .build();
     boolean canProcess = componentConstraintChecker.canProcess(component);
@@ -331,7 +331,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(null)
         .withWeight(450)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(316).withMinWeight(400).withMaxWeight(500).build()).build())
         .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
         .build();
     boolean canProcess = componentConstraintChecker.canProcess(component);
