@@ -24,9 +24,4 @@ public class ComponentBackingFormValidator extends BaseValidator<ComponentBackin
     return "Component";
   }
 
-  @Override
-  public boolean formHasBaseEntity() {
-    return false;
-  }
-
 }
