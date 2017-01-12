@@ -428,6 +428,7 @@ public class ComponentCRUDService {
     donationRepository.updateDonation(existingDonation);
 
     // update component createdOn
+    // note: existingComponent is the initial component because pre-processing is only done for the initial component
     Date newCreatedOn = dateGeneratorService.generateDateTime(existingComponent.getCreatedOn(), bleedStartTime);
     existingComponent.setCreatedOn(newCreatedOn);
     
