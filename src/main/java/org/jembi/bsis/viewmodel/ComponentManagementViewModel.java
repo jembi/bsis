@@ -134,6 +134,7 @@ public class ComponentManagementViewModel extends BaseViewModel {
     this.packType = packType;
   }
 
+  @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getDonationDateTime() {
     return donationDateTime;
   }

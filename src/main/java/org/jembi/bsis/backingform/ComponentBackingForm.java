@@ -159,4 +159,8 @@ public class ComponentBackingForm {
     // Ignore
   }
 
+  @JsonIgnore
+  public void setDonationDateTime(Date donationDateTime) {
+  // Ignore
+  }
 }
