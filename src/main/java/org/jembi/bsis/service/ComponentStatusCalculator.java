@@ -65,30 +65,45 @@ public class ComponentStatusCalculator {
   }
   
   /**
-   * Determines if the Component should be flagged for discard.
+   * Determines if the Component should be flagged for discard whether it contains
+   * plasma or not.
    * 
    * Reasons:
-   *  - initial component weight not between the PackType min and max weight
-   *  - do not discard if component does not contain plasma and is 
-   *  - below lowVolumeWeight and above minWeight
+   *  - initial component weight not between the PackType low volume and max weight
    * 
    * @param component
    * @return
    */
-  public boolean shouldComponentBeDiscardedForWeight(Component component) {
+  public boolean shouldComponentBeDiscardedForInvalidWeight (Component component) {
     if (component.getParentComponent() == null && component.getWeight() != null) {
       PackType packType = component.getDonation().getPackType();
-      if (packType.getMinWeight() == null || packType.getMaxWeight() == null) {
-        throw new IllegalStateException("PackType does not have a min and max weight specified: " + packType);
+      if (packType.getLowVolumeWeight() == null || packType.getMaxWeight() == null) {
+        throw new IllegalStateException("PackType does not have a low volume and max weight specified: " + packType);
       }
       Integer weight = component.getWeight();
-      if (packType.getLowVolumeWeight() != null) {
-        if (component.getComponentType().getContainsPlasma() && weight > packType.getLowVolumeWeight() 
-            && weight < packType.getMinWeight()) {
-          return true;
-        }
+      if (weight > packType.getMaxWeight() || weight <= packType.getLowVolumeWeight()) {
+        return true;
       }
-      if (weight > packType.getMaxWeight() || weight < packType.getMinWeight()) {
+    }
+    return false;
+  }
+
+  /**
+   * Determines if the component contains plasma and its weight is between lowVolumeWeight and max minWeight.
+   *
+   * @param component
+   * @return
+   */
+
+  public boolean shouldComponentBeDiscardedForLowWeight(Component component) {
+    if (component.getParentComponent() == null && component.getWeight() != null) {
+      PackType packType = component.getDonation().getPackType();
+      if (packType.getMinWeight() == null || packType.getLowVolumeWeight() == null) {
+        throw new IllegalStateException("PackType does not have a low volume and min weight specified: " + packType);
+      }
+      Integer weight = component.getWeight();
+      if (component.getComponentType().getContainsPlasma() && weight >= packType.getLowVolumeWeight()
+          && weight < packType.getMinWeight()) {
         return true;
       }
     }

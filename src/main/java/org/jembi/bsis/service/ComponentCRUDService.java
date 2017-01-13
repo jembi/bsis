@@ -427,8 +427,10 @@ public class ComponentCRUDService {
     existingComponent.setWeight(componentWeight);
 
     // check if the component should be discarded or re-evaluated
-    if (componentStatusCalculator.shouldComponentBeDiscardedForWeight(existingComponent)) {
+    if (componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(existingComponent)) {
       existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
+    } else if (componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(existingComponent)) {
+      existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT_CONTAINS_PLASMA);
     } else if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
       // need to rollback
       rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.UNSAFE);

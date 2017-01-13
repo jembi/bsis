@@ -1081,13 +1081,54 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testPreProcessComponentWithInvalidWeight_shouldDiscardComponent() throws Exception {
+  public void testPreProcessComponentWithWeightBetweenLowVolumeAndMinWeight_shouldDiscardComponent() throws Exception {
     // set up data
     long componentId = 1L;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     Date bleedStartTime = sdf.parse("2016-01-01 13:00");
     Date bleedEndTime = sdf.parse("2016-01-01 13:16");
-    Donation donation = aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build();
+    Donation donation = aDonation().withPackType(aPackType().withLowVolumeWeight(316).withMinWeight(400).withMaxWeight(500).build()).build();
+    Component oldComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withDonation(donation)
+        .build();
+    Component unsafeComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withComponentStatusChange(aComponentStatusChange()
+            .withId(1L)
+            .withStatusChangeReason(aComponentStatusChangeReason().withId(27L).build())
+            .build())
+        .withDonation(donation)
+        .build();
+
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
+    when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(oldComponent)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(oldComponent)).thenReturn(true);
+    doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
+        argThat(hasSameStateAsComponent(oldComponent)), eq(ComponentStatusChangeReasonType.INVALID_WEIGHT_CONTAINS_PLASMA));
+    when(componentStatusCalculator.updateComponentStatus(unsafeComponent)).thenReturn(false);
+    when(componentRepository.update(unsafeComponent)).thenReturn(unsafeComponent);
+
+    // SUT
+    Component updatedComponent = componentCRUDService.preProcessComponent(componentId, 320, bleedStartTime, bleedEndTime);
+
+    // check
+    verify(componentCRUDService).markComponentAsUnsafe(oldComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT_CONTAINS_PLASMA);
+    assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
+  }
+
+  @Test
+  public void testPreProcessComponentWithInvalidLowWeight_shouldDiscardComponent() throws Exception {
+    // set up data
+    long componentId = 1L;
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    Date bleedStartTime = sdf.parse("2016-01-01 13:00");
+    Date bleedEndTime = sdf.parse("2016-01-01 13:16");
+    Donation donation = aDonation().withPackType(aPackType().withLowVolumeWeight(350).withMinWeight(400).withMaxWeight(500).build()).build();
     Component oldComponent = aComponent()
         .withId(componentId)
         .withStatus(ComponentStatus.QUARANTINED)
@@ -1106,7 +1147,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
     when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(true);
-    when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(oldComponent)).thenReturn(true);
     doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(oldComponent)), eq(ComponentStatusChangeReasonType.INVALID_WEIGHT));
     when(componentStatusCalculator.updateComponentStatus(unsafeComponent)).thenReturn(false);
@@ -1119,14 +1160,55 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentCRUDService).markComponentAsUnsafe(oldComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
     assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
   }
+
+  @Test
+  public void testPreProcessComponentWithInvalidHighWeight_shouldDiscardComponent() throws Exception {
+    // set up data
+    long componentId = 1L;
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    Date bleedStartTime = sdf.parse("2016-01-01 13:00");
+    Date bleedEndTime = sdf.parse("2016-01-01 13:16");
+    Donation donation = aDonation().withPackType(aPackType().withLowVolumeWeight(350).withMinWeight(400).withMaxWeight(500).build()).build();
+    Component oldComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withDonation(donation)
+        .build();
+    Component unsafeComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withComponentStatusChange(aComponentStatusChange()
+            .withId(1L)
+            .withStatusChangeReason(aComponentStatusChangeReason().withId(27L).build())
+            .build())
+        .withDonation(donation)
+        .build();
+
+    // mocks
+    when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
+    when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(true);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(oldComponent)).thenReturn(true);
+    doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
+        argThat(hasSameStateAsComponent(oldComponent)), eq(ComponentStatusChangeReasonType.INVALID_WEIGHT));
+    when(componentStatusCalculator.updateComponentStatus(unsafeComponent)).thenReturn(false);
+    when(componentRepository.update(unsafeComponent)).thenReturn(unsafeComponent);
+
+    // SUT
+    Component updatedComponent = componentCRUDService.preProcessComponent(componentId, 700, bleedStartTime, bleedEndTime);
+
+    // check
+    verify(componentCRUDService).markComponentAsUnsafe(oldComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
+    assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
+  }
   
   @Test
-  public void testPreProcessComponentWeight_shouldNotDiscardComponent() throws Exception {
+  public void testPreProcessComponentWithValidWeight_shouldNotDiscardComponent() throws Exception {
     // set up data
     Long componentId = Long.valueOf(1);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     Date bleedStartTime = sdf.parse("2016-01-01 13:00");
     Date bleedEndTime = sdf.parse("2016-01-01 13:16");
+    Donation donation = aDonation().withPackType(aPackType().withLowVolumeWeight(316).withMinWeight(400).withMaxWeight(500).build()).build();
     Component oldComponent = aComponent()
         .withId(componentId)
         .withStatus(ComponentStatus.QUARANTINED)
@@ -1135,7 +1217,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
     when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(true);
-    when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(oldComponent)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(oldComponent)).thenReturn(false);
     when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(false);
     when(componentRepository.update(oldComponent)).thenReturn(oldComponent);
     
@@ -1168,7 +1251,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // mocks
     when(componentRepository.findComponentById(componentId)).thenReturn(oldComponent);
     when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(true);
-    when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(oldComponent)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(oldComponent)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(oldComponent)).thenReturn(false);
     when(componentStatusCalculator.updateComponentStatus(oldComponent)).thenReturn(true);
     when(componentRepository.update(reEvaluatedcomponent)).thenReturn(reEvaluatedcomponent);
     
@@ -1791,7 +1875,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     when(componentRepository.findComponentById(componentId)).thenReturn(component);
     when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
-    when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(component)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(component)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(component)).thenReturn(false);
     when(componentRepository.update(component)).thenReturn(component);
     
     // Exercise SUT
@@ -1823,7 +1908,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     when(componentRepository.findComponentById(componentId)).thenReturn(component);
     when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
-    when(componentStatusCalculator.shouldComponentBeDiscardedForWeight(component)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(component)).thenReturn(false);
+    when(componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(component)).thenReturn(false);
     when(componentRepository.update(component)).thenReturn(component);
     
     // Exercise SUT
