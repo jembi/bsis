@@ -97,7 +97,7 @@ public class ComponentCRUDService {
     component.setCreatedBy(donation.getCreatedBy());
 
     // set new component expiresOn date to be 'expiresAfter' days after the createdOn date
-    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), componentType.getExpiresAfter()));
+    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), componentType.getExpiresAfter(), componentType.getExpiresAfterUnits()));
 
     // set the component venue and component batch (if already created for the donation batch)
     ComponentBatch componentBatch = donationBatchRepository.findComponentBatchByDonationbatchId(
@@ -130,7 +130,7 @@ public class ComponentCRUDService {
 
     component.setComponentType(newComponentType);
     component.setComponentCode(newComponentType.getComponentTypeCode());
-    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), newComponentType.getExpiresAfter()));
+    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), newComponentType.getExpiresAfter(), newComponentType.getExpiresAfterUnits()));
 
     componentRepository.update(component);
     return component;
@@ -144,11 +144,18 @@ public class ComponentCRUDService {
     return createdOn;
   }
 
-  private Date calculateExpiresOn(Date createdOn, Integer expiresAfter) {
-    Calendar expiresOn = Calendar.getInstance();
-    expiresOn.setTime(createdOn); // defaults to the createdOn date
-    expiresOn.add(Calendar.DATE, expiresAfter);
-    return expiresOn.getTime();
+  private Date calculateExpiresOn(Date createdOn, Integer expiresAfter, ComponentTypeTimeUnits expiresAfterUnits) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(createdOn);
+
+    // set component expiry date
+    if (expiresAfterUnits == ComponentTypeTimeUnits.DAYS)
+      cal.add(Calendar.DAY_OF_YEAR, expiresAfter);
+    else if (expiresAfterUnits == ComponentTypeTimeUnits.HOURS)
+      cal.add(Calendar.HOUR, expiresAfter);
+    else if (expiresAfterUnits== ComponentTypeTimeUnits.YEARS)
+      cal.add(Calendar.YEAR, expiresAfter);
+    return cal.getTime();
   }
 
   /**
@@ -629,19 +636,7 @@ public class ComponentCRUDService {
           .withDate(new LocalDate(parentComponent.getDonation().getDonationDate()))
           .withTime(new LocalTime(parentComponent.getDonation().getBleedStartTime()));
 
-      Calendar cal = Calendar.getInstance();
-      cal.setTime(donationBleedDateTime.toDate());
-
-      // set component expiry date
-      if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.DAYS)
-        cal.add(Calendar.DAY_OF_YEAR, pt.getExpiresAfter());
-      else if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.HOURS)
-        cal.add(Calendar.HOUR, pt.getExpiresAfter());
-      else if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.YEARS)
-        cal.add(Calendar.YEAR, pt.getExpiresAfter());
-
-      Date expiresOn = cal.getTime();
-      component.setExpiresOn(expiresOn);
+      component.setExpiresOn(calculateExpiresOn(donationBleedDateTime.toDate(), pt.getExpiresAfter(), pt.getExpiresAfterUnits()));
 
       addComponent(component);
 

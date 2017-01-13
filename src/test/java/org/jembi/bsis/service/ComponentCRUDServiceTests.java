@@ -486,7 +486,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withParentComponent(expectedParentComponent)
         .withStatus(ComponentStatus.QUARANTINED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withCreatedOn(donation.getDonationDate())
+        .withCreatedOn(processedOn)
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
         .withComponentBatch(componentBatch)
@@ -498,7 +498,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withParentComponent(expectedParentComponent)
         .withStatus(ComponentStatus.QUARANTINED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withCreatedOn(donation.getDonationDate())
+        .withCreatedOn(processedOn)
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
         .withComponentBatch(componentBatch)
@@ -513,7 +513,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withParentComponent(expectedParentComponent)
         .withStatus(ComponentStatus.QUARANTINED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withCreatedOn(donation.getDonationDate())
+        .withCreatedOn(processedOn)
         .withExpiresOn(expiryCal2.getTime())
         .withLocation(location)
         .withComponentBatch(componentBatch)
@@ -528,7 +528,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withParentComponent(expectedParentComponent)
         .withStatus(ComponentStatus.QUARANTINED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withCreatedOn(donation.getDonationDate())
+        .withCreatedOn(processedOn)
         .withExpiresOn(expiryCal3.getTime())
         .withLocation(location)
         .withComponentBatch(componentBatch)
@@ -602,7 +602,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withParentComponent(expectedParentComponent)
         .withStatus(ComponentStatus.QUARANTINED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withCreatedOn(donation.getDonationDate())
+        .withCreatedOn(processedOn)
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
         .build();
@@ -678,7 +678,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withParentComponent(expectedParentComponent)
         .withStatus(ComponentStatus.QUARANTINED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withCreatedOn(donation.getDonationDate())
+        .withCreatedOn(processedOn)
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
         .build();
@@ -689,7 +689,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withParentComponent(expectedParentComponent)
         .withStatus(ComponentStatus.UNSAFE)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withCreatedOn(donation.getDonationDate())
+        .withCreatedOn(processedOn)
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
         .withComponentStatusChange(aComponentStatusChange()
@@ -756,6 +756,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withComponentTypes(Arrays.asList(componentTypeThatContainsPlasma, componentTypeThatDoesntContainsPlasma))
         .build();
     Long parentComponentId = Long.valueOf(1);
+    Date processedOn = new Date();
     Component parentComponent = aComponent().withId(parentComponentId)
         .withDonation(donation)
         .withCreatedOn(donationDate)
@@ -776,6 +777,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withComponentStatusChange(statusChange)
         .withComponentType(componentTypeThatContainsPlasma)
         .withComponentCode("0001")
+        .withProcessedOn(processedOn)
         .build();
     Calendar expiryCal1 = Calendar.getInstance();
     expiryCal1.setTime(donationDate);
@@ -786,7 +788,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withParentComponent(expectedParentComponent)
         .withStatus(ComponentStatus.QUARANTINED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withCreatedOn(donation.getDonationDate())
+        .withCreatedOn(processedOn)
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
         .withComponentCode("0002")
@@ -797,7 +799,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withParentComponent(expectedParentComponent)
         .withStatus(ComponentStatus.QUARANTINED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withCreatedOn(donation.getDonationDate())
+        .withCreatedOn(processedOn)
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
         .withComponentCode("0001")
