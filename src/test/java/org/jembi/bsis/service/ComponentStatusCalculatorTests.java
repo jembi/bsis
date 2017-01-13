@@ -330,6 +330,44 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // verify
     assertThat("component shouldn't be discarded", discarded, is(false));
   }
+
+  @Test
+  public void testShouldComponentBeDiscardedForInvalidWeightChildComponent_shouldReturnFalse() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withParentComponent(aComponent().build())
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMaxWeight(500).build()).build())
+        .build();
+
+    // set up mocks
+
+    // SUT
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(component);
+
+    // verify
+    assertThat("component shouldn't be discarded", discarded, is(false));
+  }
+
+  @Test
+  public void testShouldComponentBeDiscardedForLowWeightChildComponent_shouldReturnFalse() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withParentComponent(aComponent().build())
+        .withWeight(420)
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMaxWeight(500).build()).build())
+        .build();
+
+    // set up mocks
+
+    // SUT
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(component);
+
+    // verify
+    assertThat("component shouldn't be discarded", discarded, is(false));
+  }
   
   @Test(expected=java.lang.IllegalStateException.class)
   public void testShouldComponentBeDiscardedForInvalidWeightNoLowVolumeAndMaxWeight_shouldThrowAnException() throws Exception {
