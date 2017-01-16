@@ -1109,7 +1109,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(oldComponent)).thenReturn(false);
     when(componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(oldComponent)).thenReturn(true);
     doReturn(unsafeComponent).when(componentCRUDService).markComponentAsUnsafe(
-        argThat(hasSameStateAsComponent(oldComponent)), eq(ComponentStatusChangeReasonType.INVALID_WEIGHT_CONTAINS_PLASMA));
+        argThat(hasSameStateAsComponent(oldComponent)), eq(ComponentStatusChangeReasonType.LOW_WEIGHT));
     when(componentStatusCalculator.updateComponentStatus(unsafeComponent)).thenReturn(false);
     when(componentRepository.update(unsafeComponent)).thenReturn(unsafeComponent);
 
@@ -1117,7 +1117,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Component updatedComponent = componentCRUDService.preProcessComponent(componentId, 320, bleedStartTime, bleedEndTime);
 
     // check
-    verify(componentCRUDService).markComponentAsUnsafe(oldComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT_CONTAINS_PLASMA);
+    verify(componentCRUDService).markComponentAsUnsafe(oldComponent, ComponentStatusChangeReasonType.LOW_WEIGHT);
     assertThat("Component was flagged for discard", updatedComponent.getStatus(), is(ComponentStatus.UNSAFE));
   }
 
