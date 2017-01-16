@@ -330,7 +330,8 @@ public class ComponentCRUDService {
         
         if (!component.getComponentType().getContainsPlasma()
             && statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE
-            && statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA) {
+            && (statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA
+            || statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.LOW_WEIGHT)) {
           // skip because the component doesn't contain plasma and the unsafe reason only applies to
           // components that do contain plasma
           continue;

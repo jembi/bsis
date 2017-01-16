@@ -816,6 +816,114 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     verify(componentCRUDService, times(0)).markComponentAsUnsafe(argThat(hasSameStateAsComponent(expectedComponentThatDoesntContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
 
   }
+
+  /**
+   * Test process unsafe component with unsafe status change LW should create unsafe child
+   * components where applicable, which means unsafe only if they contain plasma.
+   *
+   * LW: LOW_WEIGHT.
+   */
+  @Test
+  public void testProcessUnsafeComponentWithUnsafeStatusChangeLW_shouldCreateUnsafeChildComponentsWhereApplicable() {
+    // set up data
+    Location location = LocationBuilder.aLocation().build();
+    Date donationDate = new Date();
+    Donation donation = aDonation().withId(1L)
+        .withDonationIdentificationNumber("1234567")
+        .withDonationDate(donationDate)
+        .build();
+    ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
+        .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.LOW_WEIGHT).build();
+    ComponentStatusChange statusChange = aComponentStatusChange()
+        .withId(1L)
+        .withStatusChangedOn(new Date())
+        .withStatusChangeReason(statusChangeReason)
+        .build();
+    ComponentType componentTypeThatContainsPlasma = aComponentType()
+        .withId(1L)
+        .thatContainsPlasma()
+        .withExpiresAfter(90)
+        .withComponentTypeCode("0001")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .build();
+    ComponentType componentTypeThatDoesntContainsPlasma = aComponentType().withId(2L)
+        .withExpiresAfter(90)
+        .withComponentTypeCode("0002")
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .build();
+    ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
+        .withCombinationName("Combination")
+        .withComponentTypes(Arrays.asList(componentTypeThatContainsPlasma, componentTypeThatDoesntContainsPlasma))
+        .build();
+    Long parentComponentId = Long.valueOf(1);
+    Component parentComponent = aComponent().withId(parentComponentId)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.UNSAFE)
+        .withLocation(location)
+        .withComponentStatusChange(statusChange)
+        .withComponentType(componentTypeThatContainsPlasma)
+        .withComponentCode("0001")
+        .build();
+    Component expectedParentComponent = aComponent().withId(parentComponentId)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withLocation(location)
+        .withComponentStatusChange(statusChange)
+        .withComponentType(componentTypeThatContainsPlasma)
+        .withComponentCode("0001")
+        .build();
+    Calendar expiryCal1 = Calendar.getInstance();
+    expiryCal1.setTime(donationDate);
+    expiryCal1.add(Calendar.DAY_OF_YEAR, 90);
+    Component expectedComponentThatDoesntContainsPlasma = aComponent()
+        .withComponentType(componentTypeThatDoesntContainsPlasma)
+        .withDonation(donation)
+        .withParentComponent(expectedParentComponent)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withExpiresOn(expiryCal1.getTime())
+        .withLocation(location)
+        .withComponentCode("0002")
+        .build();
+    Component expectedComponentThatContainsPlasma = aComponent()
+        .withComponentType(componentTypeThatContainsPlasma)
+        .withDonation(donation)
+        .withParentComponent(expectedParentComponent)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withExpiresOn(expiryCal1.getTime())
+        .withLocation(location)
+        .withComponentCode("0001")
+        .build();
+    Component mockedComponent = aComponent().build();
+
+    // set up mocks
+    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeThatContainsPlasma);
+    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentTypeThatDoesntContainsPlasma);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
+    doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(
+        argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
+
+    // SUT
+    parentComponent = componentCRUDService.processComponent("1", componentTypeCombination.getId());
+
+    // verify that both components are created
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)));
+    verify(componentRepository).save(argThat(hasSameStateAsComponent(expectedComponentThatDoesntContainsPlasma)));
+    // verify that only the component that contains plasma is marked as unsafe
+    verify(componentCRUDService, times(1)).markComponentAsUnsafe(argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
+    verify(componentCRUDService, times(0)).markComponentAsUnsafe(argThat(hasSameStateAsComponent(expectedComponentThatDoesntContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
+
+  }
   
   /**
    * Test chain process unsafe component into component that doesn't contain plasma, should not mark
