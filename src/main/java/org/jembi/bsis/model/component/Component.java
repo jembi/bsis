@@ -244,6 +244,16 @@ public class Component extends BaseModificationTrackerEntity {
     this.subdivisionCode = subdivisionCode;
   }
 
+  /**
+   * Determines if this component is the initial component for a donation
+   * (which means that it has no parent)
+   *
+   * @return true if this component is the root component for this donation, false otherwise
+   */
+  public boolean isInitialComponent() {
+    return parentComponent == null;
+  }
+
   public Component getParentComponent() {
     return parentComponent;
   }

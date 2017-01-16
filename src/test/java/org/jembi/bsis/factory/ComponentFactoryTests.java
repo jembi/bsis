@@ -156,14 +156,19 @@ public class ComponentFactoryTests {
     cal.add(Calendar.DAY_OF_YEAR, -1);
     Date expiresOn = cal.getTime();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    Component initialComponent = aComponent()
+        .withId(1L)
+        .withCreatedOn(createdOn)
+        .build();
     Donation donation = DonationBuilder.aDonation()
         .withDonationIdentificationNumber("1234567")
         .withBleedStartTime(sdf.parse("2016-01-01 13:00"))
         .withBleedEndTime(sdf.parse("2016-01-01 13:17"))
+        .withComponent(initialComponent)
         .build();
     ComponentType componentType = aComponentType().build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(2L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentCode("0011")
         .withComponentType(componentType)
@@ -175,11 +180,11 @@ public class ComponentFactoryTests {
         .build();
     
     ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
-        .withId(1L)
+        .withId(2L)
         .build();
     
     ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
-        .withId(1L)
+        .withId(2L)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentCode("0011")
         .withComponentType(componentTypeFullViewModel)
@@ -197,6 +202,7 @@ public class ComponentFactoryTests {
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withBleedStartTime(donation.getBleedStartTime())
         .withBleedEndTime(donation.getBleedEndTime())
+        .withDonationDateTime(createdOn)
         .build();
 
     // setup mocks

@@ -22,8 +22,14 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   private Map<String, Boolean> permissions = new HashMap<>();
   private boolean hasComponentBatch = false;
   private InventoryStatus inventoryStatus;
+  private Date donationDateTime;
   private Date bleedStartTime;
   private Date bleedEndTime;
+
+  public ComponentManagementViewModelBuilder withDonationDateTime(Date donationDateTime) {
+    this.donationDateTime = donationDateTime;
+    return this;
+  }
 
   public ComponentManagementViewModelBuilder withBleedStartTime(Date bleedStartTime) {
     this.bleedStartTime = bleedStartTime;
@@ -109,6 +115,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     viewModel.setPermissions(permissions);
     viewModel.setHasComponentBatch(hasComponentBatch);
     viewModel.setInventoryStatus(inventoryStatus);
+    viewModel.setDonationDateTime(donationDateTime);
     viewModel.setBleedStartTime(bleedStartTime);
     viewModel.setBleedEndTime(bleedEndTime);
     return viewModel;

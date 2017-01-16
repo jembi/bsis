@@ -23,40 +23,41 @@ public class ComponentManagementViewModel extends BaseViewModel {
   private PackTypeFullViewModel packType;
   private boolean hasComponentBatch;
   private InventoryStatus inventoryStatus;
+  private Date donationDateTime;
   private Date bleedStartTime;
   private Date bleedEndTime;
 
   @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getBleedStartTime () {
+  public Date getBleedStartTime() {
     return bleedStartTime;
   }
 
-  public void setBleedStartTime (Date bleedStartTime) {
+  public void setBleedStartTime(Date bleedStartTime) {
     this.bleedStartTime = bleedStartTime;
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getBleedEndTime () {
+  public Date getBleedEndTime() {
     return bleedEndTime;
   }
 
-  public void setBleedEndTime (Date bleedEndTime) {
+  public void setBleedEndTime(Date bleedEndTime) {
     this.bleedEndTime = bleedEndTime;
   }
 
-  public boolean getHasComponentBatch () {
+  public boolean getHasComponentBatch() {
     return hasComponentBatch;
   }
 
-  public void setHasComponentBatch (boolean hasComponentBatch) {
+  public void setHasComponentBatch(boolean hasComponentBatch) {
     this.hasComponentBatch = hasComponentBatch;
   }
 
-  public InventoryStatus getInventoryStatus () {
+  public InventoryStatus getInventoryStatus() {
     return inventoryStatus;
   }
 
-  public void setInventoryStatus (InventoryStatus inventoryStatus) {
+  public void setInventoryStatus(InventoryStatus inventoryStatus) {
     this.inventoryStatus = inventoryStatus;
   }
 
@@ -133,4 +134,12 @@ public class ComponentManagementViewModel extends BaseViewModel {
     this.packType = packType;
   }
 
+  @JsonSerialize(using = DateTimeSerialiser.class)
+  public Date getDonationDateTime() {
+    return donationDateTime;
+  }
+
+  public void setDonationDateTime(Date donationDateTime) {
+    this.donationDateTime = donationDateTime;
+  }
 }
