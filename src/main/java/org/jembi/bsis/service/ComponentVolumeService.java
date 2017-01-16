@@ -29,23 +29,24 @@ public class ComponentVolumeService {
   }
   
   private String logWarningMessage(Component component) {
-    StringBuilder message = new StringBuilder(); 
-    if (component.getWeight() == null ) {
+    StringBuilder message = new StringBuilder();
+    if (component.getWeight() == null) {
       message.append("The weight of component with id '" + component.getId() + "' component is not set");
-      if (component.getComponentType().getGravity() != null ) {
+      if (component.getComponentType().getGravity() != null) {
         message.append(".");
-      }  
-    }   
-    
-    if(component.getComponentType().getGravity() == null) {
-      if (component.getWeight() == null ) {
+      }
+    }
+
+    if (component.getComponentType().getGravity() == null) {
+      if (component.getWeight() == null) {
         message.append(" and the ");
       } else {
         message.append("The ");
       }
-      message.append("gravity of component Type with name '" + component.getComponentType().getComponentTypeName() + "' is not set");
+      message.append("gravity of component Type with name '" + component.getComponentType().getComponentTypeName()
+          + "' is not set");
     }
-    
+
     LOGGER.warn(message);
     return message.toString();
   }
