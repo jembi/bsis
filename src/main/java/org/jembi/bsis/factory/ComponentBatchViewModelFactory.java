@@ -56,7 +56,7 @@ public class ComponentBatchViewModelFactory {
     viewModel.setNumberOfBoxes(componentBatch.getBloodTransportBoxes().size());
     int count = 0;
     for (Component component : componentBatch.getComponents()) {
-      if (component.getParentComponent() == null) {
+      if (component.isInitialComponent()) {
         count ++;
       }
     }

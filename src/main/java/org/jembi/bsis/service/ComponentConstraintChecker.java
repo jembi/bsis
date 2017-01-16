@@ -47,7 +47,7 @@ public class ComponentConstraintChecker {
     }
     
     // Only initial components can record weight
-    if (component.getParentComponent() != null) {
+    if (!component.isInitialComponent()) {
       return false;
     }
     // Check component status is allowed to record weight

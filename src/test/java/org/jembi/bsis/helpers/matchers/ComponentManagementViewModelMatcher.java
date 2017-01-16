@@ -32,7 +32,8 @@ public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<Compone
         .appendText("\nHas component batch: ").appendValue(expected.getHasComponentBatch())
         .appendText("\nInventory Status: ").appendValue(expected.getInventoryStatus())
         .appendText("\nBleed Start Time: ").appendValue(expected.getBleedStartTime())
-        .appendText("\nBleed End Time: ").appendValue(expected.getBleedEndTime());
+        .appendText("\nBleed End Time: ").appendValue(expected.getBleedEndTime())
+        .appendText("\nDonation datetime: ").appendValue(expected.getDonationDateTime());
   }
 
   @Override
@@ -50,7 +51,8 @@ public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<Compone
         Objects.equals(actual.getHasComponentBatch(), expected.getHasComponentBatch()) &&
         Objects.equals(actual.getInventoryStatus(), expected.getInventoryStatus()) &&
         Objects.equals(actual.getBleedStartTime(), expected.getBleedStartTime()) &&
-        Objects.equals(actual.getBleedEndTime(), expected.getBleedEndTime());
+        Objects.equals(actual.getBleedEndTime(), expected.getBleedEndTime()) &&
+        Objects.equals(actual.getDonationDateTime(), expected.getDonationDateTime());
   }
 
   public static ComponentManagementViewModelMatcher hasSameStateAsComponentManagementViewModel(ComponentManagementViewModel expected) {

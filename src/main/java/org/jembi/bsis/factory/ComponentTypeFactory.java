@@ -84,6 +84,8 @@ public class ComponentTypeFactory {
     componentTypeViewModel.setComponentTypeName(componentType.getComponentTypeName());
     componentTypeViewModel.setComponentTypeCode(componentType.getComponentTypeCode());
     componentTypeViewModel.setDescription(componentType.getDescription());
+    componentTypeViewModel.setMaxBleedTime(componentType.getMaxBleedTime());
+    componentTypeViewModel.setMaxTimeSinceDonation(componentType.getMaxTimeSinceDonation());
   }
 
   private void populateComponentTypeSearchViewModelFields(

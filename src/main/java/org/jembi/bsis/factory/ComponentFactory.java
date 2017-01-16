@@ -57,6 +57,7 @@ public class ComponentFactory {
     viewModel.setInventoryStatus(component.getInventoryStatus());
     viewModel.setBleedStartTime(component.getDonation().getBleedStartTime());
     viewModel.setBleedEndTime(component.getDonation().getBleedEndTime());
+    viewModel.setDonationDateTime(component.getDonation().getInitialComponent().getCreatedOn());
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();
@@ -109,7 +110,7 @@ public class ComponentFactory {
     viewModel.setLocation(locationFactory.createFullViewModel(component.getLocation()));
     viewModel.setNotes(component.getNotes());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
-    viewModel.setIsInitialComponent(component.getParentComponent() == null);
+    viewModel.setIsInitialComponent(component.isInitialComponent());
     return viewModel;
   }
 

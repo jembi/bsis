@@ -5,6 +5,8 @@ public class ComponentTypeViewModel extends BaseViewModel {
   private String componentTypeName;
   private String componentTypeCode;
   private String description;
+  private Integer maxBleedTime;
+  private Integer maxTimeSinceDonation;
   
   public String getComponentTypeName() {
     return componentTypeName;
@@ -29,4 +31,21 @@ public class ComponentTypeViewModel extends BaseViewModel {
   public void setDescription(String description) {
     this.description = description;
   }
+
+  public Integer getMaxBleedTime() {
+    return maxBleedTime;
+  }
+
+  public void setMaxBleedTime(Integer maxBleedTime) {
+    this.maxBleedTime = maxBleedTime;
+  }
+
+  public Integer getMaxTimeSinceDonation() {
+    return maxTimeSinceDonation;
+  }
+
+  public void setMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
+    this.maxTimeSinceDonation = maxTimeSinceDonation;
+  }
+
 }

@@ -74,8 +74,8 @@ public class ComponentStatusCalculator {
    * @param component
    * @return
    */
-  public boolean shouldComponentBeDiscardedForInvalidWeight (Component component) {
-    if (component.getParentComponent() == null && component.getWeight() != null) {
+  public boolean shouldComponentBeDiscardedForInvalidWeight(Component component) {
+    if (component.isInitialComponent() && component.getWeight() != null) {
       PackType packType = component.getDonation().getPackType();
       if (packType.getLowVolumeWeight() == null || packType.getMaxWeight() == null) {
         throw new IllegalStateException("PackType does not have a low volume and max weight specified: " + packType);
