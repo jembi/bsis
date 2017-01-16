@@ -2,7 +2,9 @@ package org.jembi.bsis.controllerservice;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -16,8 +18,10 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
+import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
+import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.service.ComponentCRUDService;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
@@ -52,6 +56,9 @@ public class ComponentControllerService {
 
   @Autowired
   private ComponentStatusChangeReasonFactory componentStatusChangeReasonFactory;
+
+  @Autowired
+  private ComponentTypeCombinationRepository componentTypeCombinationRepository;
 
   public ComponentFullViewModel findComponentById(Long id) {
     Component component = componentRepository.findComponentById(id);
@@ -135,6 +142,15 @@ public class ComponentControllerService {
       componentViewModels.add(componentFactory.createManagementViewModel(undiscardedComponent));
     }
     return componentViewModels;
+  }
+
+  public Map<Long, List<ComponentTypeViewModel>> getProducedComponentTypesByCombinationId() {
+    Map<Long, List<ComponentTypeViewModel>> map = new HashMap<Long, List<ComponentTypeViewModel>>();
+    for (ComponentTypeCombination combination : componentTypeCombinationRepository
+        .getAllComponentTypeCombinations(false)) {
+      map.put(combination.getId(), componentTypeFactory.createViewModels(combination.getComponentTypes()));
+    }
+    return map;
   }
   
 }

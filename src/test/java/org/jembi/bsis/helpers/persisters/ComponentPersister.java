@@ -25,7 +25,7 @@ public class ComponentPersister extends AbstractEntityPersister<Component> {
       aUserPersister().deepPersist(component.getCreatedBy(), entityManager);
     }
     
-    if (component.getParentComponent() != null) {
+    if (!component.isInitialComponent()) {
       deepPersist(component.getParentComponent(), entityManager);
     }
     

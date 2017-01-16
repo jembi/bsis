@@ -119,6 +119,8 @@ public class ComponentController {
     map.put("returnReasons", componentControllerService.getReturnReasons());
     map.put("discardReasons", componentControllerService.getDiscardReasons());
     map.put("recordComponentForm", new RecordComponentBackingForm());
+    map.put("producedComponentTypesByCombinationId",
+        componentControllerService.getProducedComponentTypesByCombinationId());
     return map;
   }
 

@@ -177,4 +177,8 @@ public class ComponentPreProcessingBackingForm {
     // Ignore
   }
 
+  @JsonIgnore
+  public void setDonationDateTime(Date donationDateTime) {
+  // Ignore
+  }
 }
