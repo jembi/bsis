@@ -30,11 +30,11 @@ public class ComponentVolumeService {
   
   private void logWarningMessage(Component component) {
     if (component.getWeight() == null) {
-      LOGGER.warn("The weight of component with id '" + component.getId() + "' component is not set");
+      LOGGER.warn("The weight of component with id '" + component.getId() + "' is not set.");
     }
     if (component.getComponentType().getGravity() == null) {
-      LOGGER.warn("The gravity of component Type with name '" + component.getComponentType().getComponentTypeName()
-          + "' is not set");
+      LOGGER.warn("The gravity of the component type with name '" + component.getComponentType().getComponentTypeName()
+          + "' is not configured.");
     }
   }
 }
