@@ -8,7 +8,7 @@ import org.junit.Test;
 public class ComponentStatusChangeReasonTypeTests {
 
   @Test
-  public void testCanBeRolledBackWithInvalidWeight_returnTrue() throws Exception {
+  public void testCanBeRolledBackWithInvalidWeight_shouldReturnTrue() throws Exception {
     ComponentStatusChangeReasonType status = ComponentStatusChangeReasonType.INVALID_WEIGHT;
     
     boolean result = ComponentStatusChangeReasonType.canBeRolledBack(status);
@@ -17,7 +17,7 @@ public class ComponentStatusChangeReasonTypeTests {
   }
   
   @Test
-  public void testCanBeRolledBackWithTestResults_returnFalse() throws Exception {
+  public void testCanBeRolledBackWithTestResults_shouldReturnFalse() throws Exception {
     ComponentStatusChangeReasonType status = ComponentStatusChangeReasonType.TEST_RESULTS;
     
     boolean result = ComponentStatusChangeReasonType.canBeRolledBack(status);
@@ -26,7 +26,7 @@ public class ComponentStatusChangeReasonTypeTests {
   }
   
   @Test
-  public void testCanBeRolledBackWithTestResultsContainsPlasma_returnFalse() throws Exception {
+  public void testCanBeRolledBackWithTestResultsContainsPlasma_shouldReturnFalse() throws Exception {
     ComponentStatusChangeReasonType status = ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA;
     
     boolean result = ComponentStatusChangeReasonType.canBeRolledBack(status);
@@ -35,7 +35,7 @@ public class ComponentStatusChangeReasonTypeTests {
   }
   
   @Test
-  public void testCanBeRolledBackWithUnsafeParent_returnFalse() throws Exception {
+  public void testCanBeRolledBackWithUnsafeParent_shouldReturnFalse() throws Exception {
     ComponentStatusChangeReasonType status = ComponentStatusChangeReasonType.UNSAFE_PARENT;
     
     boolean result = ComponentStatusChangeReasonType.canBeRolledBack(status);
@@ -44,7 +44,7 @@ public class ComponentStatusChangeReasonTypeTests {
   }
   
   @Test
-  public void testCanBeRolledBackWithLowWeight_returnTrue() throws Exception {
+  public void testCanBeRolledBackWithLowWeight_shouldReturnTrue() throws Exception {
     ComponentStatusChangeReasonType status = ComponentStatusChangeReasonType.LOW_WEIGHT;
     
     boolean result = ComponentStatusChangeReasonType.canBeRolledBack(status);
@@ -53,7 +53,7 @@ public class ComponentStatusChangeReasonTypeTests {
   }
   
   @Test
-  public void testCanBeRolledBackWithNull_returnTrue() throws Exception {
+  public void testCanBeRolledBackWithNull_shouldReturnTrue() throws Exception {
     ComponentStatusChangeReasonType status = null;
     
     boolean result = ComponentStatusChangeReasonType.canBeRolledBack(status);
