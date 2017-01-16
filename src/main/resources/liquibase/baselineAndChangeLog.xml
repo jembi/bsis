@@ -75,4 +75,5 @@
   <include file="liquibase/updates/1888-update-packlabel-incorporate-check-digit.xml"/>
   <include file="liquibase/updates/1801-set-maximum-bleed-times-and-maximum-time.xml"/>
   <include file="liquibase/updates/1907-add-update-gravity-for-componenttypes.xml"/>
+  <include file="liquibase/updates/1799-add-component-status-change-reason-low-weight.xml"/>
 </databaseChangeLog>
