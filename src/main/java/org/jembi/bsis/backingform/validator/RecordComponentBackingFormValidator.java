@@ -26,6 +26,11 @@ public class RecordComponentBackingFormValidator extends BaseValidator<RecordCom
       errors.rejectValue("processedOn", "errors.required", "This is required");
     } else if (!form.getProcessedOn().before(new Date())) {
       errors.rejectValue("processedOn", "errors.invalid", "Cannot be a future date");
+    } else if (form.getParentComponentId() != null) {
+      Date createdOn = componentRepository.findComponentById(form.getParentComponentId()).getCreatedOn();
+      if (form.getProcessedOn().before(createdOn)) {
+        errors.rejectValue("processedOn", "errors.invalid", "Cannot be before parentComponent.createdOn");
+      }
     }
 
     // Validate parentComponentId
