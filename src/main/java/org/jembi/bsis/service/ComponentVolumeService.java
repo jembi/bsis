@@ -1,12 +1,10 @@
 package org.jembi.bsis.service;
 
-import org.apache.log4j.Logger;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.jembi.bsis.model.component.Component;
 import org.springframework.stereotype.Service;
 
@@ -22,26 +20,33 @@ public class ComponentVolumeService {
    * @return Integer volume (rounded up), can return null if weight or gravity is not specified
    */
   public Integer calculateVolume(Component component) {
-    String message = getWarningMessage(component);
-    if (StringUtils.isNotBlank(message)) {
-      if (LOGGER.isInfoEnabled()) {
-        LOGGER.info("Component with id '" + component.getId() + "' has the following properties not configured correctly: " + message);
-      }
+    if (component.getWeight() == null || component.getComponentType().getGravity() == null) {
+      logWarningMessage(component);
       return null;
     }
     return BigDecimal.valueOf((Double.valueOf(component.getWeight()) / component.getComponentType().getGravity()))
         .round(new MathContext(2, RoundingMode.HALF_UP)).intValue();
   }
   
-  private String getWarningMessage(Component component) {
-    String warningMessage = "";
-    if (component.getWeight() == null) {
-      warningMessage +="weight not set";
+  private String logWarningMessage(Component component) {
+    StringBuilder message = new StringBuilder(); 
+    if (component.getWeight() == null ) {
+      message.append("The weight of component with id '" + component.getId() + "' component is not set");
+      if (component.getComponentType().getGravity() != null ) {
+        message.append(".");
+      }  
+    }   
+    
+    if(component.getComponentType().getGravity() == null) {
+      if (component.getWeight() == null ) {
+        message.append(" and the ");
+      } else {
+        message.append("The ");
+      }
+      message.append("gravity of component Type with name '" + component.getComponentType().getComponentTypeName() + "' is not set");
     }
-    if (component.getComponentType().getGravity() == null) {
-      String gravityWarningMessage = "gravity not set";
-      warningMessage += (StringUtils.isBlank(warningMessage) ? gravityWarningMessage : " and " + gravityWarningMessage);
-    }
-    return warningMessage;
+    
+    LOGGER.warn(message);
+    return message.toString();
   }
 }

@@ -1,17 +1,16 @@
 package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;  
-import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-
 public class ComponentVolumeServiceTests extends UnitTestSuite {
   
   @InjectMocks
@@ -79,5 +78,5 @@ public class ComponentVolumeServiceTests extends UnitTestSuite {
     // Verify
     Integer volume = componentVolumeService.calculateVolume(component);
     assertThat(volume, is(nullValue()));
-  }
+  } 
 }
