@@ -77,33 +77,31 @@ public class ComponentStatusCalculator {
   public boolean shouldComponentBeDiscardedForInvalidWeight(Component component) {
     if (component.isInitialComponent() && component.getWeight() != null) {
       PackType packType = component.getDonation().getPackType();
-      if (packType.getLowVolumeWeight() == null || packType.getMaxWeight() == null) {
-        throw new IllegalStateException("PackType does not have a low volume and max weight specified: " + packType);
+      if (packType.getMinWeight() == null || packType.getMaxWeight() == null) {
+        throw new IllegalStateException("PackType does not have a min and max weight specified: " + packType);
       }
       Integer weight = component.getWeight();
-      if (weight > packType.getMaxWeight() || weight <= packType.getLowVolumeWeight()) {
+      if (packType.getLowVolumeWeight() == null
+          && (weight > packType.getMaxWeight() || weight < packType.getMinWeight())) {
+        return true;
+      } else if (weight > packType.getMaxWeight() || weight <= packType.getLowVolumeWeight()) {
         return true;
       }
     }
     return false;
   }
-
   /**
    * Determines if the component contains plasma and its weight is between lowVolumeWeight and max minWeight.
    *
    * @param component
    * @return
    */
-
   public boolean shouldComponentBeDiscardedForLowWeight(Component component) {
     if (component.getParentComponent() == null && component.getWeight() != null) {
       PackType packType = component.getDonation().getPackType();
-      if (packType.getMinWeight() == null || packType.getLowVolumeWeight() == null) {
-        throw new IllegalStateException("PackType does not have a low volume and min weight specified: " + packType);
-      }
       Integer weight = component.getWeight();
-      if (component.getComponentType().getContainsPlasma() && weight >= packType.getLowVolumeWeight()
-          && weight < packType.getMinWeight()) {
+      if (packType.getLowVolumeWeight() != null && component.getComponentType().getContainsPlasma()
+          && weight >= packType.getLowVolumeWeight() && weight < packType.getMinWeight()) {
         return true;
       }
     }

@@ -168,14 +168,28 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Component component = aComponent()
         .withId(1L)
         .withWeight(320)
-        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(350).withMaxWeight(500).build()).build())
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(350).withMinWeight(400).withMaxWeight(500).build()).build())
         .build();
-    
-    // set up mocks
     
     // SUT
     boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(component);
     
+    // verify
+    assertThat("component should be discarded", discarded, is(true));
+  }
+
+  @Test
+  public void testShouldComponentBeDiscardedForInvalidWeightLowWeightNoLowVolume_shouldReturnTrue() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(499)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(500).withMaxWeight(500).build()).build())
+        .build();
+
+    // SUT
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(component);
+
     // verify
     assertThat("component should be discarded", discarded, is(true));
   }
@@ -186,10 +200,8 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Component component = aComponent()
         .withId(1L)
         .withWeight(520)
-        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMaxWeight(500).build()).build())
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMinWeight(420).withMaxWeight(500).build()).build())
         .build();
-    
-    // set up mocks
     
     // SUT
     boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(component);
@@ -319,10 +331,8 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Component component = aComponent()
         .withId(1L)
         .withWeight(420)
-        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMaxWeight(500).build()).build())
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMinWeight(410).withMaxWeight(500).build()).build())
         .build();
-    
-    // set up mocks
     
     // SUT
     boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(component);
@@ -341,8 +351,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMaxWeight(500).build()).build())
         .build();
 
-    // set up mocks
-
     // SUT
     boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(component);
 
@@ -360,8 +368,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMaxWeight(500).build()).build())
         .build();
 
-    // set up mocks
-
     // SUT
     boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(component);
 
@@ -370,41 +376,22 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   }
   
   @Test(expected=java.lang.IllegalStateException.class)
-  public void testShouldComponentBeDiscardedForInvalidWeightNoLowVolumeAndMaxWeight_shouldThrowAnException() throws Exception {
+  public void testShouldComponentBeDiscardedForInvalidWeightNoLowMinAndMaxWeight_shouldThrowAnException() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
         .withWeight(420)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).build()).build())
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).build()).build())
         .build();
-    
-    // set up mocks
     
     // SUT
     componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(component);
-  }
-
-  @Test(expected=java.lang.IllegalStateException.class)
-  public void testShouldComponentBeDiscardedForLowWeightNoLowVolumeNoMinWeight_shouldThrowAnException() throws Exception {
-    // set up data
-    Component component = aComponent()
-        .withId(1L)
-        .withWeight(420)
-        .withDonation(aDonation().withPackType(aPackType().withMaxWeight(500).build()).build())
-        .build();
-    
-    // set up mocks
-    
-    // SUT
-    componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(component);
   }
 
   @Test
   public void testUpdateComponentStatusProcessed_shouldNotChange() throws Exception {
     // set up data
     Component component = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    
-    // set up mocks
     
     // SUT
     componentStatusCalculator.updateComponentStatus(component);
@@ -418,8 +405,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up data
     Component component = aComponent().withId(1L).withStatus(ComponentStatus.DISCARDED).build();
     
-    // set up mocks
-    
     // SUT
     componentStatusCalculator.updateComponentStatus(component);
     
@@ -431,8 +416,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testUpdateComponentStatusIssued_shouldNotChange() throws Exception {
     // set up data
     Component component = aComponent().withId(1L).withStatus(ComponentStatus.ISSUED).build();
-    
-    // set up mocks
     
     // SUT
     componentStatusCalculator.updateComponentStatus(component);
@@ -446,8 +429,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up data
     Component component = aComponent().withId(1L).withStatus(ComponentStatus.USED).build();
     
-    // set up mocks
-    
     // SUT
     componentStatusCalculator.updateComponentStatus(component);
     
@@ -459,8 +440,6 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testUpdateComponentStatusSplit_shouldNotChange() throws Exception {
     // set up data
     Component component = aComponent().withId(1L).withStatus(ComponentStatus.SPLIT).build();
-    
-    // set up mocks
     
     // SUT
     componentStatusCalculator.updateComponentStatus(component);
