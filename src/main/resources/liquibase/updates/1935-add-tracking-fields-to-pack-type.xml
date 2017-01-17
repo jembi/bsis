@@ -1,8 +1,8 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-  xsi:schemaPackType="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-  <changeSet id="20170117-1533" author="jmuzinda">
+  <changeSet id="20170117-1543" author="jmuzinda">
     <!-- Add tracking fields to PackType -->
     <addColumn tableName="PackType">
       <column name="createdDate" type="TIMESTAMP" />
@@ -16,7 +16,7 @@
     </addColumn>
   </changeSet>
 
-  <changeSet id="20170117-1534" author="jmuzinda">
+  <changeSet id="20170117-1544" author="jmuzinda">
     <!-- Add tracking fields to PackType_AUD -->
     <addColumn tableName="PackType_AUD">
       <column name="createdDate" type="TIMESTAMP" />
@@ -28,7 +28,7 @@
     </addColumn>
   </changeSet>
 
-  <changeSet id="20170117-1535" author="jmuzinda">
+  <changeSet id="20170117-1545" author="jmuzinda">
     <comment>Update tracking fields</comment>
     <update tableName="PackType">
       <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
@@ -44,11 +44,11 @@
     </update>
   </changeSet>
   
-  <changeSet id="20170117-1536" author="jmuzinda">
+  <changeSet id="20170117-1546" author="jmuzinda">
     <comment>Make tracking columns on PackType not nullable</comment>
-    <addNotNullConstraint tableName="PackType" columnName="createdDate" columnDataType="TIMESTAMP" />
-    <addNotNullConstraint tableName="PackType" columnName="createdBy_id" columnDataType="BIGINT(20)" />
-    <addNotNullConstraint tableName="PackType" columnName="lastUpdated" columnDataType="TIMESTAMP" />
-    <addNotNullConstraint tableName="PackType" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="Location" columnName="createdDate" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="Location" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="Location" columnName="lastUpdated" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="Location" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
   </changeSet>
 </databaseChangeLog>
