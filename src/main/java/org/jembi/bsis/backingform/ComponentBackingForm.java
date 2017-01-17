@@ -161,6 +161,11 @@ public class ComponentBackingForm {
 
   @JsonIgnore
   public void setDonationDateTime(Date donationDateTime) {
-  // Ignore
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setParentComponentId(Long parentComponentId) {
+    // Ignore
   }
 }
