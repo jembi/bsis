@@ -83,4 +83,5 @@
   <include file="liquibase/updates/1935-add-tracking-fields-to-user.xml"/>
   <include file="liquibase/updates/1935-add-tracking-fields-to-pack-type.xml"/>
   <include file="liquibase/updates/1935-add-tracking-fields-to-adverse-event.xml"/>
+  <include file="liquibase/updates/1935-add-tracking-fields-to-role.xml"/>
 </databaseChangeLog>
