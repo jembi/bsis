@@ -25,7 +25,6 @@ public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<Compone
         .appendText("\nCreated on: ").appendValue(expected.getCreatedOn())
         .appendText("\nExpires on: ").appendValue(expected.getExpiresOn())
         .appendText("\nExpiry status: ").appendValue(expected.getExpiryStatus())
-        .appendText("\nCreatedOn: ").appendValue(expected.getCreatedOn())
         .appendText("\nWeight: ").appendValue(expected.getWeight())
         .appendText("\nPermissions: ").appendValue(expected.getPermissions())
         .appendText("\nPack type: ").appendValue(expected.getPackType())
