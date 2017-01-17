@@ -184,7 +184,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Component component = aComponent()
         .withId(1L)
         .withWeight(499)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(500).withMaxWeight(500).build()).build())
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(500).withMaxWeight(550).build()).build())
         .build();
 
     // SUT

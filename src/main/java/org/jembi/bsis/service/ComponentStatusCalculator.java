@@ -84,7 +84,8 @@ public class ComponentStatusCalculator {
       if (packType.getLowVolumeWeight() == null
           && (weight > packType.getMaxWeight() || weight < packType.getMinWeight())) {
         return true;
-      } else if (weight > packType.getMaxWeight() || weight <= packType.getLowVolumeWeight()) {
+      } else if (packType.getLowVolumeWeight() != null
+          && weight > packType.getMaxWeight() || weight <= packType.getLowVolumeWeight()) {
         return true;
       }
     }
