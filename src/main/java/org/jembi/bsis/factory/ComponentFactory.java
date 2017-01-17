@@ -58,6 +58,9 @@ public class ComponentFactory {
     viewModel.setBleedStartTime(component.getDonation().getBleedStartTime());
     viewModel.setBleedEndTime(component.getDonation().getBleedEndTime());
     viewModel.setDonationDateTime(component.getDonation().getInitialComponent().getCreatedOn());
+    if (component.getParentComponent() != null) {
+      viewModel.setParentComponentId(component.getParentComponent().getId());
+    }
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();

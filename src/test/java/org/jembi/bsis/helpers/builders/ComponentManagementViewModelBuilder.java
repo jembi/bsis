@@ -25,6 +25,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   private Date donationDateTime;
   private Date bleedStartTime;
   private Date bleedEndTime;
+  private Long parentComponentId;
 
   public ComponentManagementViewModelBuilder withDonationDateTime(Date donationDateTime) {
     this.donationDateTime = donationDateTime;
@@ -101,6 +102,12 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     return this;
   }
 
+
+  public ComponentManagementViewModelBuilder withParentComponentId(Long parentComponentId) {
+    this.parentComponentId = parentComponentId;
+    return this;
+  }
+
   @Override
   public ComponentManagementViewModel build() {
     ComponentManagementViewModel viewModel = new ComponentManagementViewModel();
@@ -118,6 +125,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     viewModel.setDonationDateTime(donationDateTime);
     viewModel.setBleedStartTime(bleedStartTime);
     viewModel.setBleedEndTime(bleedEndTime);
+    viewModel.setParentComponentId(parentComponentId);
     return viewModel;
   }
   

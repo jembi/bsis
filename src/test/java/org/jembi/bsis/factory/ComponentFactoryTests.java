@@ -135,13 +135,40 @@ public class ComponentFactoryTests {
   @Test
   public void createComponentFullViewModels_nullCollection() throws Exception {
     // set up data
-    ArrayList<Component> components = new ArrayList<>();
-    components.add(aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).build());
-    components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).build());
-    
+
     // run test
     List<ComponentFullViewModel> viewModels = componentFactory.createComponentFullViewModels(null);
-    
+
+    // do asserts
+    Assert.assertNotNull("View models created", viewModels);
+    Assert.assertTrue("No view models", viewModels.isEmpty());
+  }
+
+  @Test
+  public void createComponentManagementViewModels_returnsCollection() throws Exception {
+    // set up data
+    ArrayList<Component> components = new ArrayList<>();
+    Donation donation = DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build();
+    components.add(aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).withDonation(donation).build());
+    components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
+    donation.addComponent(components.get(0));
+    donation.addComponent(components.get(1));
+
+    // run test
+    List<ComponentManagementViewModel> viewModels = componentFactory.createManagementViewModels(components);
+
+    // do asserts
+    Assert.assertNotNull("View models created", viewModels);
+    Assert.assertEquals("Correct number of view models created", 2, viewModels.size());
+  }
+
+  @Test
+  public void createComponentManagementViewModelsWithNull_returnsNullCollection() throws Exception {
+    // set up data
+
+    // run test
+    List<ComponentManagementViewModel> viewModels = componentFactory.createManagementViewModels(null);
+
     // do asserts
     Assert.assertNotNull("View models created", viewModels);
     Assert.assertTrue("No view models", viewModels.isEmpty());
@@ -153,7 +180,9 @@ public class ComponentFactoryTests {
     Date createdOn = new Date();
     Calendar cal = Calendar.getInstance();
     cal.setTime(createdOn);
-    cal.add(Calendar.DAY_OF_YEAR, -1);
+    cal.add(Calendar.DAY_OF_YEAR, 1);
+    Date processedOn = cal.getTime();
+    cal.add(Calendar.DAY_OF_YEAR, -2);
     Date expiresOn = cal.getTime();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     Component initialComponent = aComponent()
@@ -172,11 +201,12 @@ public class ComponentFactoryTests {
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentCode("0011")
         .withComponentType(componentType)
-        .withCreatedOn(createdOn)
+        .withCreatedOn(processedOn)
         .withExpiresOn(expiresOn)
         .withWeight(222)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withDonation(donation)
+        .withParentComponent(initialComponent)
         .build();
     
     ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
@@ -188,7 +218,7 @@ public class ComponentFactoryTests {
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentCode("0011")
         .withComponentType(componentTypeFullViewModel)
-        .withCreatedOn(createdOn)
+        .withCreatedOn(processedOn)
         .withExpiresOn(expiresOn)
         .withWeigth(222)
         .withPermission("canDiscard", true)
@@ -203,6 +233,7 @@ public class ComponentFactoryTests {
         .withBleedStartTime(donation.getBleedStartTime())
         .withBleedEndTime(donation.getBleedEndTime())
         .withDonationDateTime(createdOn)
+        .withParentComponentId(initialComponent.getId())
         .build();
 
     // setup mocks
@@ -216,6 +247,132 @@ public class ComponentFactoryTests {
 
     // run test
     ComponentManagementViewModel convertedViewModel = componentFactory.createManagementViewModel(component);
+
+    // do asserts
+    Assert.assertNotNull("View model created", convertedViewModel);
+    assertThat("Created correctly", convertedViewModel, hasSameStateAsComponentManagementViewModel(expectedViewModel));
+  }
+
+  @Test
+  public void createManagementViewModelWithExpiryDateInTheFuture_returnsCorrectViewModel() throws Exception {
+    // set up data
+    Date createdOn = new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(createdOn);
+    cal.add(Calendar.DAY_OF_YEAR, 1);
+    Date processedOn = cal.getTime();
+    cal.add(Calendar.DAY_OF_YEAR, 200);
+    Date expiresOn = cal.getTime();
+    Component initialComponent = aComponent().withId(1L).build();
+    Donation donation = DonationBuilder.aDonation()
+        .withComponent(initialComponent)
+        .build();
+    ComponentType componentType = aComponentType().build();
+    Component component = aComponent()
+        .withId(2L)
+        .withComponentType(componentType)
+        .withCreatedOn(processedOn)
+        .withExpiresOn(expiresOn)
+        .withDonation(donation)
+        .withParentComponent(initialComponent)
+        .build();
+
+    ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
+        .withId(2L)
+        .build();
+
+    ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
+        .withId(2L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withComponentCode(null)
+        .withComponentType(componentTypeFullViewModel)
+        .withCreatedOn(processedOn)
+        .withExpiresOn(expiresOn)
+        .withWeigth(null)
+        .withPermission("canDiscard", true)
+        .withPermission("canProcess", true)
+        .withPermission("canPreProcess", true)
+        .withPermission("canUnprocess", true)
+        .withPermission("canUndiscard", true)
+        .withPermission("canRecordChildComponentWeight", true)
+        .withExpiryStatus("200 days to expire")
+        .whichHasNoComponentBatch()
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withBleedStartTime(null)
+        .withBleedEndTime(null)
+        .withDonationDateTime(null)
+        .withParentComponentId(1L)
+        .build();
+
+    // setup mocks
+    when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(componentTypeFullViewModel);
+    when(componentConstraintChecker.canDiscard(component)).thenReturn(true);
+    when(componentConstraintChecker.canProcess(component)).thenReturn(true);
+    when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
+    when(componentConstraintChecker.canUnprocess(component)).thenReturn(true);
+    when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
+    when(componentConstraintChecker.canRecordChildComponentWeight(component)).thenReturn(true);
+
+    // run test
+    ComponentManagementViewModel convertedViewModel = componentFactory.createManagementViewModel(component);
+
+    // do asserts
+    Assert.assertNotNull("View model created", convertedViewModel);
+    assertThat("Created correctly", convertedViewModel, hasSameStateAsComponentManagementViewModel(expectedViewModel));
+  }
+
+  @Test
+  public void createManagementViewModelForInitialComponent_viewModelWithNullParentComponentIdReturned() throws Exception {
+    // set up data
+    ComponentType componentType = aComponentType()
+        .withId(1L)
+        .build();
+    Donation donation = DonationBuilder.aDonation().build();
+    Component initialComponent = aComponent()
+        .withId(1L)
+        .withComponentType(componentType)
+        .withDonation(donation)
+        .build();
+    donation.addComponent(initialComponent);
+
+    ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
+        .withId(1L)
+        .build();
+
+    ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
+        .withId(1L)
+        .withStatus(ComponentStatus.QUARANTINED)
+        .withComponentCode(null)
+        .withComponentType(componentTypeFullViewModel)
+        .withCreatedOn(null)
+        .withExpiresOn(null)
+        .withWeigth(null)
+        .withPermission("canDiscard", true)
+        .withPermission("canProcess", true)
+        .withPermission("canPreProcess", true)
+        .withPermission("canUnprocess", true)
+        .withPermission("canUndiscard", true)
+        .withPermission("canRecordChildComponentWeight", true)
+        .withExpiryStatus("")
+        .whichHasNoComponentBatch()
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withBleedStartTime(null)
+        .withBleedEndTime(null)
+        .withDonationDateTime(null)
+        .withParentComponentId(null)
+        .build();
+
+    // setup mocks
+    when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(componentTypeFullViewModel);
+    when(componentConstraintChecker.canDiscard(initialComponent)).thenReturn(true);
+    when(componentConstraintChecker.canProcess(initialComponent)).thenReturn(true);
+    when(componentConstraintChecker.canPreProcess(initialComponent)).thenReturn(true);
+    when(componentConstraintChecker.canUnprocess(initialComponent)).thenReturn(true);
+    when(componentConstraintChecker.canUndiscard(initialComponent)).thenReturn(true);
+    when(componentConstraintChecker.canRecordChildComponentWeight(initialComponent)).thenReturn(true);
+
+    // run test
+    ComponentManagementViewModel convertedViewModel = componentFactory.createManagementViewModel(initialComponent);
 
     // do asserts
     Assert.assertNotNull("View model created", convertedViewModel);
