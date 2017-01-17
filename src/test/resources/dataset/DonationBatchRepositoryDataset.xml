@@ -187,21 +187,21 @@
                    componentTypeCode="4021" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="1" lastUpdatedBy_id="1" />
     <PackType id="1" packType="Single" isDeleted="false" testSampleProduced="true"
-              componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>
+              componentType_id="1" countAsDonation="true" periodBetweenDonations="90" createdDate="2017-01-15"/>
     <PackType id="2" packType="Double" isDeleted="false" testSampleProduced="true"
-              componentType_id="2" countAsDonation="true" periodBetweenDonations="90"/>
+              componentType_id="2" countAsDonation="true" periodBetweenDonations="90" createdDate="2017-01-15"/>
     <PackType id="3" packType="Triple" isDeleted="false" testSampleProduced="true"
-              componentType_id="3" countAsDonation="true" periodBetweenDonations="90"/>
+              componentType_id="3" countAsDonation="true" periodBetweenDonations="90" createdDate="2017-01-15"/>
     <PackType id="4" packType="Quad" isDeleted="false" testSampleProduced="true"
-              componentType_id="4" countAsDonation="true" periodBetweenDonations="90"/>
+              componentType_id="4" countAsDonation="true" periodBetweenDonations="90" createdDate="2017-01-15"/>
     <PackType id="5" packType="Apheresis" isDeleted="false" testSampleProduced="true"
-              componentType_id="5" countAsDonation="true" periodBetweenDonations="30"/>
+              componentType_id="5" countAsDonation="true" periodBetweenDonations="30" createdDate="2017-01-15"/>
     <PackType id="6" packType="Dry Pack" isDeleted="false" testSampleProduced="true"
-              countAsDonation="false" periodBetweenDonations="0"/>
+              countAsDonation="false" periodBetweenDonations="0" createdDate="2017-01-15"/>
     <PackType id="7" packType="Test Only" isDeleted="false" testSampleProduced="true"
-              countAsDonation="false" periodBetweenDonations="0"/>
+              countAsDonation="false" periodBetweenDonations="0" createdDate="2017-01-15"/>
     <PackType id="8" packType="Did Not Bleed" testSampleProduced="true"
-              isDeleted="false" countAsDonation="false" periodBetweenDonations="0"/>
+              isDeleted="false" countAsDonation="false" periodBetweenDonations="0" createdDate="2017-01-15"/>
 
     <Donation id="1" bloodAbo="O" bloodPressureSystolic="110"
               bloodRh="+" bloodTypingStatus="COMPLETE" donationDate="2015-02-02 00:00:00.0"
