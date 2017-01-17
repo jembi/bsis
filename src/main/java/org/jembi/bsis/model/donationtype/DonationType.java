@@ -4,11 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 
 @Entity
 @Audited
-public class DonationType extends BaseEntity {
+public class DonationType extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

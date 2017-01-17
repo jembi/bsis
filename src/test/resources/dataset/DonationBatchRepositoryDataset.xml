@@ -103,9 +103,9 @@
            preferredLanguage_id="1" title="Mr" addressId="3" contactId="3"
            dueToDonate="2015-05-03"/>
 
-    <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
-    <DonationType id="2" donationType="Family" isDeleted="false"/>
-    <DonationType id="3" donationType="Autologous" isDeleted="false"/>
+    <DonationType id="1" donationType="Voluntary" isDeleted="false" createdDate="2017-01-15"/>
+    <DonationType id="2" donationType="Family" isDeleted="false" createdDate="2017-01-16"/>
+    <DonationType id="3" donationType="Autologous" isDeleted="false" createdDate="2017-01-17"/>
     <DonationType id="4" donationType="Other" isDeleted="false"/>
     <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
