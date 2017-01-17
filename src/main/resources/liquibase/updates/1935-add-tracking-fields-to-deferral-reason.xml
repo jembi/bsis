@@ -46,9 +46,9 @@
   
   <changeSet id="20170117-1432" author="jmuzinda">
     <comment>Make tracking columns on DeferralReason not nullable</comment>
-    <addNotNullConstraint tableName="User" columnName="createdDate" columnDataType="TIMESTAMP" />
-    <addNotNullConstraint tableName="User" columnName="createdBy_id" columnDataType="BIGINT(20)" />
-    <addNotNullConstraint tableName="User" columnName="lastUpdated" columnDataType="TIMESTAMP" />
-    <addNotNullConstraint tableName="User" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="DeferralReason" columnName="createdDate" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="DeferralReason" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="DeferralReason" columnName="lastUpdated" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="DeferralReason" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
   </changeSet>
 </databaseChangeLog>
