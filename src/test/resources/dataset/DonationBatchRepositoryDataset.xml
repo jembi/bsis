@@ -4,13 +4,13 @@
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
 
     <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
-              isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
+              isMobileSite="false" isUsageSite="false" name="Maseru" notes="" createdDate="2017-01-15"/>
     <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="true"
-              isMobileSite="false" isUsageSite="false" name="Leribe" notes=""/>
+              isMobileSite="false" isUsageSite="false" name="Leribe" notes="" createdDate="2017-01-15"/>
     <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="3" isDeleted="false" isVenue="true"
-              isMobileSite="false" isUsageSite="false" name="Mohale" notes=""/>
+              isMobileSite="false" isUsageSite="false" name="Mohale" notes="" createdDate="2017-01-15"/>
     <Location isTestingSite="1" isDistributionSite="0" isProcessingSite="0" id="4" isDeleted="false" isVenue="false"
-              isMobileSite="false" isUsageSite="false" name="Testing" notes=""/>
+              isMobileSite="false" isUsageSite="false" name="Testing" notes="" createdDate="2017-01-15"/>
 
     <TestBatch id="1" batchNumber="TB0215" isDeleted="false" location_id="4"
                createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0"

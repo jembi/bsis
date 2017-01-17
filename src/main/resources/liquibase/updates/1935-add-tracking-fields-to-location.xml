@@ -1,0 +1,54 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170117-1107" author="jmuzinda">
+    <!-- Add tracking fields to Location -->
+    <addColumn tableName="Location">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_Location_createdBy" references="User(id)" />    
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_Location_lastUpdatedBy" references="User(id)" />       
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20170117-1108" author="jmuzinda">
+    <!-- Add tracking fields to Location_AUD -->
+    <addColumn tableName="Location_AUD">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)">
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20170117-1109" author="jmuzinda">
+    <comment>Update tracking fields</comment>
+    <update tableName="Location">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+    <update tableName="Location_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+  </changeSet>
+  
+  <changeSet id="20170117-1110" author="jmuzinda">
+    <comment>Make tracking columns on Location not nullable</comment>
+    <addNotNullConstraint tableName="Location" columnName="createdDate" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="Location" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="Location" columnName="lastUpdated" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="Location" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
+  </changeSet>
+</databaseChangeLog>
