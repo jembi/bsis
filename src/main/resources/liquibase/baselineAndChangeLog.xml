@@ -80,4 +80,5 @@
   <include file="liquibase/updates/1935-add-tracking-fields-to-deferral-reason.xml"/>
   <include file="liquibase/updates/1935-add-tracking-fields-to-donation-type.xml"/>
   <include file="liquibase/updates/1935-add-tracking-fields-to-location.xml"/>
+  <include file="liquibase/updates/1935-add-tracking-fields-to-user.xml"/>
 </databaseChangeLog>

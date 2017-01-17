@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
     <user id="1" emailId="admin" firstName="admin" isactive="1"
-          isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
+          isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin" createdDate="2017-01-15"/>
 
     <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Maseru" notes="" createdDate="2017-01-15"/>
