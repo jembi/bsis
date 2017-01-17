@@ -46,9 +46,9 @@
   
   <changeSet id="20170117-1448" author="jmuzinda">
     <comment>Make tracking columns on DonationType not nullable</comment>
-    <addNotNullConstraint tableName="User" columnName="createdDate" columnDataType="TIMESTAMP" />
-    <addNotNullConstraint tableName="User" columnName="createdBy_id" columnDataType="BIGINT(20)" />
-    <addNotNullConstraint tableName="User" columnName="lastUpdated" columnDataType="TIMESTAMP" />
-    <addNotNullConstraint tableName="User" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="DonationType" columnName="createdDate" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="DonationType" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="DonationType" columnName="lastUpdated" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="DonationType" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
   </changeSet>
 </databaseChangeLog>
