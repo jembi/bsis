@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -318,6 +319,7 @@ public class ComponentFactoryTests {
 
     // do asserts
     Assert.assertNotNull("View model created", convertedViewModel);
+    System.out.println("Returned view model: " + ToStringBuilder.reflectionToString(convertedViewModel));
     assertThat("Created correctly", convertedViewModel, hasSameStateAsComponentManagementViewModel(expectedViewModel));
   }
 
