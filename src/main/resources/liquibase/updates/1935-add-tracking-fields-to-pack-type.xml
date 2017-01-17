@@ -46,9 +46,9 @@
   
   <changeSet id="20170117-1546" author="jmuzinda">
     <comment>Make tracking columns on PackType not nullable</comment>
-    <addNotNullConstraint tableName="Location" columnName="createdDate" columnDataType="TIMESTAMP" />
-    <addNotNullConstraint tableName="Location" columnName="createdBy_id" columnDataType="BIGINT(20)" />
-    <addNotNullConstraint tableName="Location" columnName="lastUpdated" columnDataType="TIMESTAMP" />
-    <addNotNullConstraint tableName="Location" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="PackType" columnName="createdDate" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="PackType" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="PackType" columnName="lastUpdated" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="PackType" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
   </changeSet>
 </databaseChangeLog>
