@@ -712,5 +712,82 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
     
     assertThat(canUndiscard, is(false));
   }
+  
+  @Test
+  public void testCanRecordChildComponentWeight_shouldReturnTrue() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withParentComponent(aComponent().withWeight(450).withStatus(ComponentStatus.PROCESSED).build())
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .build();
+    boolean canRecordChildComponentWeight = componentConstraintChecker.canRecordChildComponentWeight(component);
+    assertThat(canRecordChildComponentWeight, is(true));
+  }
+  
+  @Test
+  public void testCanRecordChildComponentWeightThatIsNotAChild_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withParentComponent(null)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .build();
+    boolean canRecordChildComponentWeight = componentConstraintChecker.canRecordChildComponentWeight(component);
+    assertThat(canRecordChildComponentWeight, is(false));
+  }
+  
+  @Test
+  public void testCanRecordChildComponentWeightWithParentWithNoWeight_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withParentComponent(aComponent().withWeight(null).withStatus(ComponentStatus.PROCESSED).build())
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .build();
+    boolean canRecordChildComponentWeight = componentConstraintChecker.canRecordChildComponentWeight(component);
+    assertThat(canRecordChildComponentWeight, is(false));
+  }
+  
+  @Test
+  public void testCanRecordChildComponentWeightWithNonProcessedParent_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withParentComponent(aComponent().withWeight(null).withStatus(ComponentStatus.AVAILABLE).build())
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .build();
+    boolean canRecordChildComponentWeight = componentConstraintChecker.canRecordChildComponentWeight(component);
+    assertThat(canRecordChildComponentWeight, is(false));
+  }
+  
+  @Test
+  public void testCanRecordChildComponentWeightThatIsInStock_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withParentComponent(aComponent().withWeight(450).withStatus(ComponentStatus.PROCESSED).build())
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .build();
+    boolean canRecordChildComponentWeight = componentConstraintChecker.canRecordChildComponentWeight(component);
+    assertThat(canRecordChildComponentWeight, is(false));
+  }
+
+  @Test
+  public void testCanRecordChildComponentThatIsDiscarded_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.DISCARDED)
+        .withParentComponent(aComponent().withWeight(450).withStatus(ComponentStatus.PROCESSED).build())
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .build();
+    boolean canRecordChildComponentWeight = componentConstraintChecker.canRecordChildComponentWeight(component);
+    assertThat(canRecordChildComponentWeight, is(false));
+  }
+
+  @Test
+  public void testCanRecordChildComponentThatIsProcessed_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.PROCESSED)
+        .withParentComponent(aComponent().withWeight(450).withStatus(ComponentStatus.PROCESSED).build())
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .build();
+    boolean canRecordChildComponentWeight = componentConstraintChecker.canRecordChildComponentWeight(component);
+    assertThat(canRecordChildComponentWeight, is(false));
+  }
 
 }

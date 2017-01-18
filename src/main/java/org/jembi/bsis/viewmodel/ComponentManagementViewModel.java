@@ -26,6 +26,7 @@ public class ComponentManagementViewModel extends BaseViewModel {
   private Date donationDateTime;
   private Date bleedStartTime;
   private Date bleedEndTime;
+  private Long parentComponentId;
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getBleedStartTime() {
@@ -141,5 +142,13 @@ public class ComponentManagementViewModel extends BaseViewModel {
 
   public void setDonationDateTime(Date donationDateTime) {
     this.donationDateTime = donationDateTime;
+  }
+
+  public Long getParentComponentId() {
+    return parentComponentId;
+  }
+
+  public void setParentComponentId(Long parentComponentId) {
+    this.parentComponentId = parentComponentId;
   }
 }
