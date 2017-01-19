@@ -417,16 +417,58 @@ public class ComponentCRUDService {
     existingComponent.setWeight(componentWeight);
 
     // check if the component should be discarded or re-evaluated
+    boolean enabledOldStatusChange = false;
     if (componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(existingComponent)) {
-      existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
+
+      //Check if already unsafe
+      enabledOldStatusChange = checkAlreadyUnsafeForReasonToRollBack(existingComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
+
+      // create new status change
+      if(!enabledOldStatusChange){
+        existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
+      }
     } else if (componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(existingComponent)) {
-      existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.LOW_WEIGHT);
+
+      //Check if already unsafe
+      enabledOldStatusChange =checkAlreadyUnsafeForReasonToRollBack(existingComponent, ComponentStatusChangeReasonType.LOW_WEIGHT);
+
+      // create new status change
+      if(!enabledOldStatusChange){
+        existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.LOW_WEIGHT);
+      }
     } else if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
       // need to rollback
       rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.UNSAFE);
     }
 
     return updateComponent(existingComponent);
+  }
+
+  /**
+   * Check if component is already maked unsafe to roll back if canBeRolledBack
+   *
+   * Determine if already marked unsafe for same reason as we want to mark for
+   * and reenable
+   * @param component
+   * @param reasonType
+   * @return
+   */
+  private boolean checkAlreadyUnsafeForReasonToRollBack(Component component, ComponentStatusChangeReasonType reasonType){
+    if(component.getStatus().equals(ComponentStatus.UNSAFE)) {
+
+      // rollback all status changes that can be rolled back
+      rollBackComponentStatus(component, ComponentStatusChangeReasonCategory.UNSAFE);
+
+      //Check if there is existing status change for
+      //Enable if it exist and skip creating a new one
+      for (ComponentStatusChange s: component.getStatusChanges()) {
+        if (s.getStatusChangeReason().getType().equals(reasonType) && s.getIsDeleted()) {
+          s.setIsDeleted(false);
+          return true;
+        }
+      }
+    }
+    return false;
   }
   
   public Component findComponentById(Long id) {
