@@ -174,7 +174,8 @@ public class DonationRepository {
 
   public Donation findDonationByDonationIdentificationNumberIncludeDeleted(
       String donationIdentificationNumber) {
-    String queryString = "SELECT c FROM Donation c WHERE c.donationIdentificationNumber = :donationIdentificationNumber";
+    String queryString = "SELECT c FROM Donation c WHERE "
+        + "c.donationIdentificationNumber = :donationIdentificationNumber OR CONCAT(c.donationIdentificationNumber, c.flagCharacters) = :donationIdentificationNumber";
     TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
     Donation c = null;
