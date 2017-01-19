@@ -19,7 +19,6 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.dto.CollectedDonationDTO;
 import org.jembi.bsis.dto.DonationExportDTO;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
@@ -184,23 +183,6 @@ public class DonationRepository {
     } catch (Exception ex) {
     }
     return c;
-  }
-
-  public List<Donation> verifyDonationIdentificationNumbers(List<String> donationIdentificationNumbers) {
-    List<Donation> donations = new ArrayList<Donation>();
-    for (String donationIdentificationNumber : donationIdentificationNumbers) {
-      if (StringUtils.isBlank(donationIdentificationNumber))
-        continue;
-      Donation donation = new Donation();
-      donation.setDonationIdentificationNumber(donationIdentificationNumber);
-      donation = findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-      if (donation != null) {
-        donations.add(donation);
-      } else {
-        donations.add(null);
-      }
-    }
-    return donations;
   }
 
   public int countDonationsForDonor(Donor donor) {
