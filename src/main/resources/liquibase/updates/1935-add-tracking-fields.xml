@@ -79,7 +79,7 @@
   </changeSet>
 
   <changeSet id="20170117-1032" author="jmuzinda">
-    <comment>Update tracking fields</comment>
+    <comment>Update User tracking fields</comment>
     <update tableName="User">
       <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
       <column name="createdBy_id" valueNumeric="1" />
