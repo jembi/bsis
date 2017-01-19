@@ -372,5 +372,55 @@
       </column>
     </createTable>
   </changeSet>
+  
+  <changeSet id="20170119-1030" author="jmuzinda">
+    <!-- Add tracking fields to GeneralConfig -->
+    <addColumn tableName="GeneralConfig">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_GeneralConfig_createdBy" references="User(id)" />    
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_GeneralConfig_lastUpdatedBy" references="User(id)" />       
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20170119-1032" author="jmuzinda">
+    <!-- Add tracking fields to GeneralConfig_AUD -->
+    <addColumn tableName="GeneralConfig_AUD">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)">
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20170119-1056" author="jmuzinda">
+    <comment>Update GeneralConfig and GeneralConfig_AUD tracking fields</comment>
+    <update tableName="GeneralConfig">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+    <update tableName="GeneralConfig_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+  </changeSet>
+  
+  <changeSet id="20170119-1604" author="jmuzinda">
+    <comment>Make tracking columns on GeneralConfig not nullable</comment>
+    <addNotNullConstraint tableName="GeneralConfig" columnName="createdDate" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="GeneralConfig" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="GeneralConfig" columnName="lastUpdated" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="GeneralConfig" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
+  </changeSet>
     
 </databaseChangeLog>
