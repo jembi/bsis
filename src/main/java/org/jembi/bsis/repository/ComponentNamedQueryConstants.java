@@ -22,13 +22,15 @@ public class ComponentNamedQueryConstants {
   public static final String QUERY_FIND_COMPONENTS_BY_DIN =
       "SELECT DISTINCT c FROM Component c " + 
           "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
+          "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber " +
           "AND c.isDeleted = :isDeleted";
 
   public static final String NAME_FIND_COMPONENTS_BY_DIN_AND_STATUS =
       "Component.findComponentsByDINAndStatus";
   public static final String QUERY_FIND_COMPONENTS_BY_DIN_AND_STATUS =
       "SELECT DISTINCT c FROM Component c " + 
-          "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
+          "WHERE (c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
+          "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) " +
           "AND c.status = :status " +
           "AND c.isDeleted = :isDeleted";
   
@@ -37,7 +39,8 @@ public class ComponentNamedQueryConstants {
   public static final String QUERY_FIND_COMPONENT_BY_CODE_AND_DIN =
       "SELECT c "
       + "FROM Component c "
-      + "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber "
+      + "WHERE (c.donation.donationIdentificationNumber = :donationIdentificationNumber "
+      + "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) " 
       + "AND c.componentCode = :componentCode AND c.isDeleted = false ";
   
   public static final String NAME_FIND_COMPONENT_BY_CODE_AND_DIN_IN_STOCK =

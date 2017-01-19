@@ -16,6 +16,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.jembi.bsis.helpers.matchers.ComponentProductionDTOMatcher.hasSameStateAsComponentProductionDTO;
 import static org.jembi.bsis.helpers.matchers.DiscardedComponentDTOMatcher.hasSameStateAsDiscardedComponentDTO;
+import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
 
 import java.util.Arrays;
@@ -845,5 +846,275 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     assertThat(returnedDtos.get(2), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(2)));
     assertThat(returnedDtos.get(3), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(3)));
     assertThat(returnedDtos.get(4), hasSameStateAsComponentProductionDTO(expectedComponentProductionDTO.get(4)));
+  }
+  
+  @Test
+  public void testFindComponentByDINWithoutFlagCharaters_shouldReturnMatchingComponent() {
+    
+    String donationIdentificationNumber = "0000001";
+    
+    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Expected
+     List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .buildAndPersist(entityManager)
+    );
+     
+    // Excluded by donation identification number
+    aComponent()
+        .withDonation(aDonation().withDonationIdentificationNumber("0000002").build())
+        .buildAndPersist(entityManager);
+    
+    // Test
+    List<Component> returnedComponent = componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    
+    // Verify
+    assertThat(returnedComponent, is(expectedComponents));
+    assertThat(returnedComponent.get(0), hasSameStateAsComponent(returnedComponent.get(0)));
+  }
+  
+  @Test
+  public void testFindComponentByDINWihFlagCharaters_shouldReturnMatchingComponent() {
+    
+    String dinWithflagCharacters = "0000001";
+    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
+        .withDonationIdentificationNumber(dinWithflagCharacters)
+        .buildAndPersist(entityManager);
+    
+    // Expected
+     List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .buildAndPersist(entityManager)
+    );
+     
+    // Excluded by donation identification number
+    aComponent()
+        .withDonation(aDonation().withDonationIdentificationNumber("0000002B*").build())
+        .buildAndPersist(entityManager);
+    
+    // Test
+    List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumber(dinWithflagCharacters);
+    
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+    assertThat(returnedComponents.get(0), is(hasSameStateAsComponent(returnedComponents.get(0))));
+  }
+  
+  @Test
+  public void testFindComponentsByDonationIdentificationNumberThatContainsFlagCharatersWithStatus_shouldReturnCorrectComponents() {
+    // Set up fixture
+    String donationIdentificationNumber = "1234567";
+    String flagCharaters = "1b";
+    String scannedDIN = donationIdentificationNumber + flagCharaters;
+    Donation donation = aDonation().withDonationIdentificationNumber(scannedDIN).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+    // Excluded by isDeleted
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(donation)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by status
+    aComponent()
+        .withStatus(ComponentStatus.EXPIRED)
+        .withDonation(donation)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by donation
+    aComponent()
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(aDonation().build())
+        .buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumberAndStatus(
+        scannedDIN, ComponentStatus.DISCARDED);
+    
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+    assertThat(returnedComponents.get(0), is(hasSameStateAsComponent(returnedComponents.get(0))));
+    assertThat(returnedComponents.get(1), is(hasSameStateAsComponent(returnedComponents.get(1))));
+  }
+  
+  @Test
+  public void testFindComponentByCodeAndDINWithoutFlagCharacters_shouldReturnMatchingComponent() {
+    
+    String componentCode = "0011-01";
+    String donationIdentificationNumber = "0000001";
+    
+    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by component code
+    aComponent()
+        .withComponentCode("0011-02")
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by donation identification number
+    aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(aDonation().withDonationIdentificationNumber("1000007").build())
+        .buildAndPersist(entityManager);
+    
+    // Expected
+    Component expectedComponent = aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Test
+    Component returnedComponent = componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);;
+    
+    // Verify
+    assertThat(returnedComponent, is(expectedComponent));
+    assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
+  }
+  
+  @Test
+  public void testFindComponentsByDINWihFlagCharatersAndType_shouldReturnMatchingComponent() {
+    
+    String dinWithFlagCharacters = "0000001B2";
+    
+    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
+        .withDonationIdentificationNumber(dinWithFlagCharacters)
+        .buildAndPersist(entityManager);
+    
+    // Expected
+     List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .buildAndPersist(entityManager)
+    );
+     
+    // Excluded by donation identification number
+    aComponent()
+        .withDonation(aDonation().withDonationIdentificationNumber("0000002C1").build())
+        .buildAndPersist(entityManager);
+    
+    // Test
+    List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumber(dinWithFlagCharacters);
+    
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+    assertThat(returnedComponents.get(0), is(hasSameStateAsComponent(returnedComponents.get(0))));
+  }
+  
+  @Test
+  public void testFindComponentsByDINWithoutFlagCharactersAndType_shouldReturnMatchingComponent() {
+    
+    String donationIdentificationNumber = "0000001";
+    
+    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    ComponentType componentType = aComponentType().withComponentTypeName("Name1").buildAndPersist(entityManager);
+
+    // Excluded by component name
+    aComponent()
+        .withComponentType(aComponentType().withComponentTypeName("Name2").buildAndPersist(entityManager))
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by donation identification number
+    aComponent()
+        .withComponentType(componentType)
+        .withDonation(aDonation().withDonationIdentificationNumber("1000007").build())
+        .buildAndPersist(entityManager);
+    
+    // Expected
+    List<Component> expectedComponent = Arrays.asList(
+        aComponent()
+            .withComponentType(componentType)
+            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .buildAndPersist(entityManager), 
+        aComponent()
+            .withComponentType(componentType)
+            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .buildAndPersist(entityManager)
+      );
+    
+    // Test
+    List<Component> returnedComponents = componentRepository.findComponentsByDINAndType(donationIdentificationNumber, 
+                                                                                            componentType.getId());
+    
+    // Verify
+    assertThat(returnedComponents, is(expectedComponent));
+    assertThat(returnedComponents.get(0), hasSameStateAsComponent(expectedComponent.get(0)));
+    assertThat(returnedComponents.get(1), hasSameStateAsComponent(expectedComponent.get(1)));
+  }
+  
+  @Test
+  public void testFindComponentsByDINWithFlagCharactersAndType_shouldReturnMatchingComponent() {
+    
+    String dinWithFlagCharacters = "00000022B";
+    
+    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
+        .withDonationIdentificationNumber(dinWithFlagCharacters)
+        .buildAndPersist(entityManager);
+    
+    ComponentType componentType = aComponentType().withComponentTypeName("Name1").buildAndPersist(entityManager);
+
+    // Excluded by component name
+    aComponent()
+        .withComponentType(aComponentType().withComponentTypeName("Name2").buildAndPersist(entityManager))
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .buildAndPersist(entityManager);
+    
+    // Excluded by donation identification number
+    aComponent()
+        .withComponentType(componentType)
+        .withDonation(aDonation().withDonationIdentificationNumber("1000007B3").build())
+        .buildAndPersist(entityManager);
+    
+    // Expected
+    List<Component> expectedComponent = Arrays.asList(
+        aComponent()
+            .withComponentType(componentType)
+            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .buildAndPersist(entityManager), 
+        aComponent()
+            .withComponentType(componentType)
+            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .buildAndPersist(entityManager)
+      );
+    
+    // Test
+    List<Component> returnedComponents = componentRepository.findComponentsByDINAndType(dinWithFlagCharacters, 
+                                                                                            componentType.getId());
+    
+    // Verify
+    assertThat(returnedComponents, is(expectedComponent));
+    assertThat(returnedComponents.get(0), hasSameStateAsComponent(expectedComponent.get(0)));
+    assertThat(returnedComponents.get(1), hasSameStateAsComponent(expectedComponent.get(1)));
   }
 }
