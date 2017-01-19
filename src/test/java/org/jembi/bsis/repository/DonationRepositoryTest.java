@@ -27,12 +27,6 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
   @Autowired
   DonationRepository donationRepository;
 
-  @Autowired
-  private ComponentRepository componentRepository;
-
-  @Autowired
-  private DonationBatchRepository donationBatchRepository;
-
   @Override
   protected IDataSet getDataSet() throws Exception {
     File file = new File("src/test/resources/dataset/DonationRepositoryDataset.xml");
@@ -161,16 +155,6 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     Map<Long, Long> abPlusResults = results.get("AB+");
     Long abPlus2015Results = abPlusResults.get(formattedDate.getTime());
     Assert.assertEquals("1 AB+ donations in 2015", new Long(1), abPlus2015Results);
-  }
-
-  @Test
-  @Ignore("findAnyDonationMatching has a bug in the HSQL, so this test fails")
-  public void testFindAnyDonationMatchingDIN() throws Exception {
-    List<Donation> donations = donationRepository.findAnyDonationMatching("1234567", null, null, null, null, null);
-    Assert.assertNotNull("List is not null", donations);
-    Assert.assertNotNull("1 Donation matches", donations.size());
-    Donation donation = donations.get(0);
-    Assert.assertEquals("Donation has a matching DIN", "1234567", donation.getDonationIdentificationNumber());
   }
 
   @Test

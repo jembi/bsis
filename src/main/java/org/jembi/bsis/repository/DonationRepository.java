@@ -80,32 +80,6 @@ public class DonationRepository {
     return donations;
   }
 
-  public List<Donation> findAnyDonationMatching(String donationIdentificationNumber,
-                                                String sampleNumber, String shippingNumber, String donationDateFrom,
-                                                String donationDateTo, List<String> centers) {
-
-    TypedQuery<Donation> query = em.createQuery(
-        "SELECT c FROM Donation c JOIN c.center center WHERE "
-            + "(c.donationIdentificationNumber = :donationIdentificationNumber OR "
-            + "c.sampleNumber = :sampleNumber OR "
-            + "c.shippingNumber = :shippingNumber OR "
-            + "center.id IN (:centers)) AND ("
-            + "c.donationDate BETWEEN :donationDateFrom AND "
-            + ":donationDateTo" + ") AND " + "(c.isDeleted= :isDeleted)",
-        Donation.class);
-
-    query.setParameter("isDeleted", Boolean.FALSE);
-    String donationNo = ((donationIdentificationNumber == null) ? "" : donationIdentificationNumber);
-    query.setParameter("donationIdentificationNumber", donationNo);
-    query.setParameter("sampleNumber", sampleNumber);
-    query.setParameter("shippingNumber", shippingNumber);
-
-    query.setParameter("centers", centers);
-
-    List<Donation> resultList = query.getResultList();
-    return resultList;
-  }
-
   public Map<String, Map<Long, Long>> findNumberOfDonations(Date donationDateFrom,
                                                             Date donationDateTo, String aggregationCriteria,
                                                             List<String> venues, List<String> bloodGroups) throws ParseException {
