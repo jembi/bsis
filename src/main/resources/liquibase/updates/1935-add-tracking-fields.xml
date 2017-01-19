@@ -352,4 +352,25 @@
     <addNotNullConstraint tableName="Role" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
   </changeSet>
   
+  <changeSet id="20170119-0901" author="jmuzinda">
+    <comment>Create GeneralConfig_AUD table</comment>
+    <createTable tableName="GeneralConfig_AUD">
+      <column name="id" type="BIGINT(20)" autoIncrement="true">
+        <constraints primaryKey="true" />    
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false" />    
+      </column>
+      <column name="value" type="text">
+        <constraints nullable="false" />    
+      </column>
+      <column name="description" type="text">
+        <constraints nullable="false" />    
+      </column>
+      <column name="dataType_id" type="BIGINT(20)">
+        <constraints nullable="false" />    
+      </column>
+    </createTable>
+  </changeSet>
+    
 </databaseChangeLog>

@@ -5,9 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.jembi.bsis.model.BaseEntity;
 
 @Entity
+@Audited
 public class GeneralConfig extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
@@ -19,6 +22,7 @@ public class GeneralConfig extends BaseEntity {
   private String description;
 
   @ManyToOne(fetch = FetchType.EAGER)
+  @NotAudited
   private DataType dataType;
 
   public String getName() {
