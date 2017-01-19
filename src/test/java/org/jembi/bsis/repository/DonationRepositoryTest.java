@@ -48,20 +48,6 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testVerifyDonationIdentificationNumber() throws Exception {
-    Donation donation = donationRepository.verifyDonationIdentificationNumber("1234567");
-    Assert.assertNotNull("There is a donation with DIN 1234567", donation);
-    Assert.assertEquals("The donation has a DIN of 1234567", "1234567", donation.getDonationIdentificationNumber());
-  }
-
-  @Test
-  @Ignore("This test fails because a javax.persistence.NoResultException is thrown. I believe this is a bug as the method wants to return null")
-  public void testVerifyDonationIdentificationNumberUnknown() throws Exception {
-    Donation donation = donationRepository.verifyDonationIdentificationNumber("999999999");
-    Assert.assertNull("There is no donation with DIN 999999999", donation);
-  }
-
-  @Test
   @Ignore("This test will fail - see above test")
   public void testVerifyDonationIdentificationNumbers() throws Exception {
     // this test will fail as soon as one of the DINs in the list is unknown - it will throw an

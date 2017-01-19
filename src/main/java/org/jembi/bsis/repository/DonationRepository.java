@@ -186,17 +186,6 @@ public class DonationRepository {
     return c;
   }
 
-  public Donation verifyDonationIdentificationNumber(String donationIdentificationNumber) {
-    Donation donation = new Donation();
-    donation.setDonationIdentificationNumber(donationIdentificationNumber);
-    donation = findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    if (donation != null) {
-      return donation;
-    } else {
-      return null;
-    }
-  }
-
   public List<Donation> verifyDonationIdentificationNumbers(List<String> donationIdentificationNumbers) {
     List<Donation> donations = new ArrayList<Donation>();
     for (String donationIdentificationNumber : donationIdentificationNumbers) {
