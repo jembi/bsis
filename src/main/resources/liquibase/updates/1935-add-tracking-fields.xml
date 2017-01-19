@@ -301,4 +301,55 @@
     <addNotNullConstraint tableName="PackType" columnName="lastUpdated" columnDataType="TIMESTAMP" />
     <addNotNullConstraint tableName="PackType" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
   </changeSet>
+  
+  <changeSet id="20170117-1601" author="jmuzinda">
+    <!-- Add tracking fields to Role -->
+    <addColumn tableName="Role">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_Role_createdBy" references="User(id)" />    
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_Role_lastUpdatedBy" references="User(id)" />       
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20170117-1602" author="jmuzinda">
+    <!-- Add tracking fields to Role_AUD -->
+    <addColumn tableName="Role_AUD">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)">
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20170117-1603" author="jmuzinda">
+    <comment>Update Role tracking fields</comment>
+    <update tableName="Role">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+    <update tableName="Location_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+  </changeSet>
+  
+  <changeSet id="20170117-1604" author="jmuzinda">
+    <comment>Make tracking columns on Role not nullable</comment>
+    <addNotNullConstraint tableName="Role" columnName="createdDate" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="Role" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="Role" columnName="lastUpdated" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="Role" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
+  </changeSet>
+  
 </databaseChangeLog>
