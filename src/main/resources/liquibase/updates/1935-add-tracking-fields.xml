@@ -336,7 +336,7 @@
       <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
       <column name="lastUpdatedBy_id" valueNumeric="1" />
     </update>
-    <update tableName="Location_AUD">
+    <update tableName="Role_AUD">
       <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
       <column name="createdBy_id" valueNumeric="1" />
       <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
