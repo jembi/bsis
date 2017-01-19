@@ -161,7 +161,10 @@ public class DonationRepository {
 
   public Donation findDonationByDonationIdentificationNumber(
       String donationIdentificationNumber) throws NoResultException, NonUniqueResultException {
-    String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted";
+    String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor "
+        + "WHERE (c.donationIdentificationNumber = :donationIdentificationNumber OR "
+        + "CONCAT(c.donationIdentificationNumber, c.flagCharacters) = :donationIdentificationNumber) AND "
+        + "c.isDeleted = :isDeleted";
     TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
