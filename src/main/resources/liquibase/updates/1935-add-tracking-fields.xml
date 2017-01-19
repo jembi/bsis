@@ -29,7 +29,7 @@
   </changeSet>
 
   <changeSet id="20170117-1431" author="jmuzinda">
-    <comment>Update tracking fields</comment>
+    <comment>Update DeferralReason tracking fields</comment>
     <update tableName="DeferralReason">
       <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
       <column name="createdBy_id" valueNumeric="1" />
