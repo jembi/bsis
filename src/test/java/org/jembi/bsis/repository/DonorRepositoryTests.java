@@ -335,7 +335,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
       Assert.assertEquals("MobileClinicDonor in correct venue", venue1, d.getVenue());
     }
   }
-
+  
   @Test
   public void testFindDonorByDonorNumberWithExistingDonor_shouldReturnDonor() {
     // Set up
@@ -383,6 +383,27 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
 
     // Test
     Donor returnedDonor = donorRepository.findDonorByDonationIdentificationNumber(donationIdentificationNumber);
+
+    // Verify
+    assertThat(returnedDonor, is(expectedDonor));
+  }
+  
+  @Test
+  public void testFindDonorByDonationIdentificationNumberWithFlagCharactersForExistingDonor_shouldReturnDonor() {
+    // Set up
+    String dinWithFlagCharacters = "0000001B*";
+    Donor expectedDonor = aDonor().buildAndPersist(entityManager);
+    aDonation()
+        .withDonationIdentificationNumber(dinWithFlagCharacters)
+        .withDonor(expectedDonor)
+        .buildAndPersist(entityManager);
+    aDonation()
+        .withDonationIdentificationNumber("5687411C1")
+        .withDonor(aDonor().build())
+        .buildAndPersist(entityManager);
+
+    // Test
+    Donor returnedDonor = donorRepository.findDonorByDonationIdentificationNumber(dinWithFlagCharacters);
 
     // Verify
     assertThat(returnedDonor, is(expectedDonor));
