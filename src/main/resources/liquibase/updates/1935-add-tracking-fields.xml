@@ -51,4 +51,54 @@
     <addNotNullConstraint tableName="DeferralReason" columnName="lastUpdated" columnDataType="TIMESTAMP" />
     <addNotNullConstraint tableName="DeferralReason" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
   </changeSet>
+  
+  <changeSet id="20170117-1026" author="jmuzinda">
+    <!-- Add tracking fields to User -->
+    <addColumn tableName="User">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_User_createdBy" references="User(id)" />    
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_User_lastUpdatedBy" references="User(id)" />       
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20170117-1031" author="jmuzinda">
+    <!-- Add tracking fields to User_AUD -->
+    <addColumn tableName="User_AUD">
+      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdBy_id" type="BIGINT(20)">
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20170117-1032" author="jmuzinda">
+    <comment>Update tracking fields</comment>
+    <update tableName="User">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+    <update tableName="User_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" valueNumeric="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" valueNumeric="1" />
+    </update>
+  </changeSet>
+  
+  <changeSet id="20170117-1033" author="jmuzinda">
+    <comment>Make tracking columns on User not nullable</comment>
+    <addNotNullConstraint tableName="User" columnName="createdDate" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="User" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="User" columnName="lastUpdated" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="User" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
+  </changeSet>
 </databaseChangeLog>
