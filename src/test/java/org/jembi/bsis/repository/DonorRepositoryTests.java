@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+import static org.jembi.bsis.helpers.matchers.DonorMatcher.hasSameStateAsDonor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -391,14 +392,18 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
   @Test
   public void testFindDonorByDonationIdentificationNumberWithFlagCharactersForExistingDonor_shouldReturnDonor() {
     // Set up
-    String dinWithFlagCharacters = "0000001B*";
+    String dinWithFlagCharacters = "0000001B1";
     Donor expectedDonor = aDonor().buildAndPersist(entityManager);
     aDonation()
-        .withDonationIdentificationNumber(dinWithFlagCharacters)
+        .withDonationIdentificationNumber("0000001")
+        .withFlagCharacters("B1")
         .withDonor(expectedDonor)
         .buildAndPersist(entityManager);
+    
+    //Excluded donation by DIN
     aDonation()
-        .withDonationIdentificationNumber("5687411C1")
+        .withDonationIdentificationNumber("5687411")
+        .withFlagCharacters("C1")
         .withDonor(aDonor().build())
         .buildAndPersist(entityManager);
 
@@ -406,7 +411,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
     Donor returnedDonor = donorRepository.findDonorByDonationIdentificationNumber(dinWithFlagCharacters);
 
     // Verify
-    assertThat(returnedDonor, is(expectedDonor));
+    assertThat(returnedDonor, is(hasSameStateAsDonor(expectedDonor)));
   }
 
   @Test(expected = NoResultException.class)
