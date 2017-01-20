@@ -160,30 +160,27 @@ public class DonationRepository {
 
   public Donation findDonationByDonationIdentificationNumber(
       String donationIdentificationNumber) throws NoResultException, NonUniqueResultException {
-    String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor "
-        + "WHERE (c.donationIdentificationNumber = :donationIdentificationNumber OR "
-        + "CONCAT(c.donationIdentificationNumber, c.flagCharacters) = :donationIdentificationNumber) AND "
-        + "c.isDeleted = :isDeleted";
-    TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
-    Donation c = null;
-    c = query.getSingleResult();
-    return c;
+
+    Donation donation = em.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER, Donation.class) 
+        .setParameter("isDeleted", Boolean.FALSE)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .getSingleResult();
+
+    return donation;
   }
 
   public Donation findDonationByDonationIdentificationNumberIncludeDeleted(
       String donationIdentificationNumber) {
-    String queryString = "SELECT c FROM Donation c WHERE "
-        + "c.donationIdentificationNumber = :donationIdentificationNumber OR CONCAT(c.donationIdentificationNumber, c.flagCharacters) = :donationIdentificationNumber";
-    TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
-    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
-    Donation c = null;
+    Donation donation = null; 
+
     try {
-      c = query.getSingleResult();
-    } catch (Exception ex) {
+      donation = em.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED, Donation.class) 
+          .setParameter("donationIdentificationNumber", donationIdentificationNumber) 
+          .getSingleResult(); 
+    } catch(NoResultException e) {
+
     }
-    return c;
+    return donation;
   }
 
   public int countDonationsForDonor(Donor donor) {

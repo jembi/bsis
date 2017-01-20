@@ -61,7 +61,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE,
         query = DonationNamedQueryConstants.QUERY_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATIONS_FOR_EXPORT,
-        query = DonationNamedQueryConstants.QUERY_FIND_DONATIONS_FOR_EXPORT)
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATIONS_FOR_EXPORT),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED,
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER,
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER)
 })
 @Entity
 @Audited
