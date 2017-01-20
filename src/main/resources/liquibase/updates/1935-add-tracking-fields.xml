@@ -307,11 +307,11 @@
     <addColumn tableName="Role">
       <column name="createdDate" type="TIMESTAMP" />
       <column name="createdBy_id" type="BIGINT(20)">
-        <constraints foreignKeyName="fk_Role_createdBy" references="User(id)" />    
+        <constraints foreignKeyName="fk_Role_createdBy" references="User(id)" />
       </column>
       <column name="lastUpdated" type="TIMESTAMP" />
       <column name="lastUpdatedBy_id" type="BIGINT(20)">
-        <constraints foreignKeyName="fk_Role_lastUpdatedBy" references="User(id)" />       
+        <constraints foreignKeyName="fk_Role_lastUpdatedBy" references="User(id)" />
       </column>
     </addColumn>
   </changeSet>
