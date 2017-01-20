@@ -7,11 +7,11 @@
     <addColumn tableName="DeferralReason">
       <column name="createdDate" type="TIMESTAMP" />
       <column name="createdBy_id" type="BIGINT(20)">
-        <constraints foreignKeyName="fk_DeferralReason_createdBy" references="User(id)" />    
+        <constraints foreignKeyName="fk_DeferralReason_createdBy" references="User(id)" />  
       </column>
       <column name="lastUpdated" type="TIMESTAMP" />
       <column name="lastUpdatedBy_id" type="BIGINT(20)">
-        <constraints foreignKeyName="fk_DeferralReason_lastUpdatedBy" references="User(id)" />       
+        <constraints foreignKeyName="fk_DeferralReason_lastUpdatedBy" references="User(id)" />
       </column>
     </addColumn>
   </changeSet>
