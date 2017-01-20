@@ -48,7 +48,8 @@ public class ComponentNamedQueryConstants {
   public static final String QUERY_FIND_COMPONENT_BY_CODE_AND_DIN_IN_STOCK =
       "SELECT c "
       + "FROM Component c "
-      + "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber "
+      + "WHERE (c.donation.donationIdentificationNumber = :donationIdentificationNumber "
+      + "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) "
       + "AND c.componentCode = :componentCode "
       + "AND c.inventoryStatus = 'IN_STOCK' AND c.isDeleted = false ";
 

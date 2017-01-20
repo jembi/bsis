@@ -419,6 +419,40 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     assertThat(returnedComponent, is(expectedComponent));
   }
 
+  @Test
+  public void testFindComponentByCodeAndDinWithFlagCharactersInStock_shouldReturnMatchingComponent() {
+
+    String componentCode = "0011-01";
+    String donationIdentificationNumber = "0000002";
+    String flagCharacters = "12";
+
+    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withFlagCharacters(flagCharacters)
+        .buildAndPersist(entityManager);
+
+    // Excluded by donation identification number
+    aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(aDonation().withDonationIdentificationNumber("1000007").build())
+        .buildAndPersist(entityManager);
+
+    // Expected
+    Component expectedComponent = aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .buildAndPersist(entityManager);
+
+    // Test
+    Component returnedComponent = inventoryRepository.findComponentByCodeAndDINInStock(componentCode,
+        donationIdentificationNumber + flagCharacters);
+
+    // Verify
+    assertThat(returnedComponent, is(expectedComponent));
+  }
+
   @Test(expected = NoResultException.class)
   public void testFindNonExistentComponentByCodeAndDINInStock_shoulThrow() {
     // Test
