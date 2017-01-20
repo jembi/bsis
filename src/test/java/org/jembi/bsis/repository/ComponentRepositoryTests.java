@@ -849,21 +849,15 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   }
   
   @Test
-  public void testFindComponentByDINWithoutFlagCharaters_shouldReturnMatchingComponent() {
+  public void testFindComponentsByDonationIdentificationNumberWithoutFlagCharaters_shouldReturnMatchingComponent() {
     
     String donationIdentificationNumber = "0000001";
-    
-    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
-        .withDonationIdentificationNumber(donationIdentificationNumber)
-        .buildAndPersist(entityManager);
     
     // Expected
      List<Component> expectedComponents = Arrays.asList(
         aComponent()
-            .withDonation(donationWithExpectedDonationIdentificationNumber)
-            .buildAndPersist(entityManager),
-        aComponent()
-            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .withDonation(aDonation()
+                .withDonationIdentificationNumber(donationIdentificationNumber).build())
             .buildAndPersist(entityManager)
     );
      
@@ -876,39 +870,34 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     List<Component> returnedComponent = componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
     
     // Verify
-    assertThat(returnedComponent, is(expectedComponents));
-    assertThat(returnedComponent.get(0), hasSameStateAsComponent(returnedComponent.get(0)));
+    assertThat(returnedComponent.size(), is(expectedComponents.size()));
+    assertThat(returnedComponent.get(0), hasSameStateAsComponent(expectedComponents.get(0)));
   }
   
   @Test
-  public void testFindComponentByDINWihFlagCharaters_shouldReturnMatchingComponent() {
+  public void testFindComponentsByDonationIdentificationNumberWihFlagCharaters_shouldReturnMatchingComponent() {
     
-    String dinWithflagCharacters = "0000001";
-    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
-        .withDonationIdentificationNumber(dinWithflagCharacters)
-        .buildAndPersist(entityManager);
+    String dinWithflagCharacters = "000000129";
     
     // Expected
      List<Component> expectedComponents = Arrays.asList(
         aComponent()
-            .withDonation(donationWithExpectedDonationIdentificationNumber)
-            .buildAndPersist(entityManager),
-        aComponent()
-            .withDonation(donationWithExpectedDonationIdentificationNumber)
+            .withDonation(aDonation()
+                .withDonationIdentificationNumber("0000001").withFlagCharacters("29").build())        
             .buildAndPersist(entityManager)
     );
      
     // Excluded by donation identification number
     aComponent()
-        .withDonation(aDonation().withDonationIdentificationNumber("0000002B*").build())
+        .withDonation(aDonation().withDonationIdentificationNumber("0000002").withFlagCharacters("36").build())
         .buildAndPersist(entityManager);
     
     // Test
     List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumber(dinWithflagCharacters);
     
     // Verify
-    assertThat(returnedComponents, is(expectedComponents));
-    assertThat(returnedComponents.get(0), is(hasSameStateAsComponent(returnedComponents.get(0))));
+    assertThat(returnedComponents.size(), is(expectedComponents.size()));
+    assertThat(returnedComponents.get(0), is(hasSameStateAsComponent(expectedComponents.get(0))));
   }
   
   @Test
