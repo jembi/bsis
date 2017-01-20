@@ -336,7 +336,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
       Assert.assertEquals("MobileClinicDonor in correct venue", venue1, d.getVenue());
     }
   }
-  
+
   @Test
   public void testFindDonorByDonorNumberWithExistingDonor_shouldReturnDonor() {
     // Set up
