@@ -901,56 +901,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   }
   
   @Test
-  public void testFindComponentsByDonationIdentificationNumberThatContainsFlagCharatersWithStatus_shouldReturnCorrectComponents() {
-    // Set up fixture
-    String donationIdentificationNumber = "1234567";
-    String flagCharaters = "1b";
-    String scannedDIN = donationIdentificationNumber + flagCharaters;
-    Donation donation = aDonation().withDonationIdentificationNumber(scannedDIN).build();
-    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
-    List<Component> expectedComponents = Arrays.asList(
-        aComponent()
-            .withStatus(ComponentStatus.DISCARDED)
-            .withDonation(donation)
-            .withParentComponent(initialComponent)
-            .buildAndPersist(entityManager),
-        aComponent()
-            .withStatus(ComponentStatus.DISCARDED)
-            .withDonation(donation)
-            .withParentComponent(initialComponent)
-            .buildAndPersist(entityManager)
-    );
-    // Excluded by isDeleted
-    aComponent()
-        .withIsDeleted(true)
-        .withStatus(ComponentStatus.DISCARDED)
-        .withDonation(donation)
-        .withParentComponent(initialComponent)
-        .buildAndPersist(entityManager);
-    // Excluded by status
-    aComponent()
-        .withStatus(ComponentStatus.EXPIRED)
-        .withDonation(donation)
-        .withParentComponent(initialComponent)
-        .buildAndPersist(entityManager);
-    // Excluded by donation
-    aComponent()
-        .withStatus(ComponentStatus.DISCARDED)
-        .withDonation(aDonation().build())
-        .buildAndPersist(entityManager);
-    
-    // Exercise SUT
-    List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumberAndStatus(
-        scannedDIN, ComponentStatus.DISCARDED);
-    
-    // Verify
-    assertThat(returnedComponents, is(expectedComponents));
-    assertThat(returnedComponents.get(0), is(hasSameStateAsComponent(returnedComponents.get(0))));
-    assertThat(returnedComponents.get(1), is(hasSameStateAsComponent(returnedComponents.get(1))));
-  }
-  
-  @Test
-  public void testFindComponentByCodeAndDINWithoutFlagCharacters_shouldReturnMatchingComponent() {
+  public void testFindComponentsByDonationIdentificationNumberAndStatusWithoutFlagCharaters_shouldReturnCorrectComponents() {
     
     String componentCode = "0011-01";
     String donationIdentificationNumber = "0000001";
@@ -981,8 +932,33 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     Component returnedComponent = componentRepository.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);;
     
     // Verify
-    assertThat(returnedComponent, is(expectedComponent));
     assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
+  }
+  
+  @Test
+  public void testFindComponentsByDonationIdentificationNumberAndStatusWithFlagCharaters_shouldReturnCorrectComponents() {
+    // Set up fixture
+    String dinWithFlagCharacters = "12345671B";
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("1234567")
+        .withFlagCharacters("1B")
+        .build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+    
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumberAndStatus(
+        dinWithFlagCharacters, ComponentStatus.DISCARDED);
+    
+    // Verify
+    assertThat(returnedComponents.size(), is(expectedComponents.size()));
+    assertThat(returnedComponents.get(0), is(hasSameStateAsComponent(expectedComponents.get(0))));
   }
   
   @Test
