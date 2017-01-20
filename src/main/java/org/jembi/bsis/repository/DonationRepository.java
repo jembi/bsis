@@ -19,6 +19,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.log4j.Logger;
 import org.jembi.bsis.dto.CollectedDonationDTO;
 import org.jembi.bsis.dto.DonationExportDTO;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
@@ -36,6 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class DonationRepository {
+
+  private static final Logger LOGGER = Logger.getLogger(DonationRepository.class);
 
   @PersistenceContext
   private EntityManager em;
@@ -178,7 +181,7 @@ public class DonationRepository {
           .setParameter("donationIdentificationNumber", donationIdentificationNumber) 
           .getSingleResult(); 
     } catch(NoResultException e) {
-
+      LOGGER.debug("No donation found for DIN '" + donationIdentificationNumber + "'");
     }
     return donation;
   }
