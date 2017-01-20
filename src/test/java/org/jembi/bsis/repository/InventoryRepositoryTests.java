@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
+import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -420,16 +421,11 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
   }
 
   @Test
-  public void testFindComponentByCodeAndDinWithFlagCharactersInStock_shouldReturnMatchingComponent() {
+  public void testFindComponentByCodeAndDINInStockWithFlagCharacters_shouldReturnMatchingComponent() {
 
     String componentCode = "0011-01";
     String donationIdentificationNumber = "0000002";
     String flagCharacters = "12";
-
-    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
-        .withDonationIdentificationNumber(donationIdentificationNumber)
-        .withFlagCharacters(flagCharacters)
-        .buildAndPersist(entityManager);
 
     // Excluded by donation identification number
     aComponent()
@@ -440,7 +436,10 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     // Expected
     Component expectedComponent = aComponent()
         .withComponentCode(componentCode)
-        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .withDonation(aDonation()
+            .withDonationIdentificationNumber(donationIdentificationNumber)
+            .withFlagCharacters(flagCharacters)
+            .build())
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withStatus(ComponentStatus.AVAILABLE)
         .buildAndPersist(entityManager);
@@ -450,7 +449,7 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         donationIdentificationNumber + flagCharacters);
 
     // Verify
-    assertThat(returnedComponent, is(expectedComponent));
+    assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
   }
 
   @Test(expected = NoResultException.class)
