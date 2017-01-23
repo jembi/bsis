@@ -102,41 +102,39 @@
     <addNotNullConstraint tableName="User" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
   </changeSet>
   
-  <changeSet id="20170117-1548" author="jmuzinda">
-    <!-- Add tracking fields to AdverseEvent -->
-    <addColumn tableName="AdverseEvent">
+  <changeSet id="20170123-1247" author="timler">
+    <!-- Add tracking fields to AdverseEventType -->
+    <addColumn tableName="AdverseEventType">
       <column name="createdDate" type="TIMESTAMP" />
       <column name="createdBy_id" type="BIGINT(20)">
-        <constraints foreignKeyName="fk_AdverseEvent_createdBy" references="User(id)" />
+        <constraints foreignKeyName="fk_AdverseEventType_createdBy" references="User(id)" />
       </column>
       <column name="lastUpdated" type="TIMESTAMP" />
       <column name="lastUpdatedBy_id" type="BIGINT(20)">
-        <constraints foreignKeyName="fk_AdverseEvent_lastUpdatedBy" references="User(id)" />
+        <constraints foreignKeyName="fk_AdverseEventType_lastUpdatedBy" references="User(id)" />
       </column>
     </addColumn>
   </changeSet>
 
-  <changeSet id="20170117-1549" author="jmuzinda">
-    <!-- Add tracking fields to AdverseEvent_AUD -->
-    <addColumn tableName="AdverseEvent_AUD">
+  <changeSet id="20170123-1248" author="timler">
+    <!-- Add tracking fields to AdverseEventType_AUD -->
+    <addColumn tableName="AdverseEventType_AUD">
       <column name="createdDate" type="TIMESTAMP" />
-      <column name="createdBy_id" type="BIGINT(20)">
-      </column>
+      <column name="createdBy_id" type="BIGINT(20)" />
       <column name="lastUpdated" type="TIMESTAMP" />
-      <column name="lastUpdatedBy_id" type="BIGINT(20)">
-      </column>
+      <column name="lastUpdatedBy_id" type="BIGINT(20)"/>
     </addColumn>
   </changeSet>
 
-  <changeSet id="20170117-1550" author="jmuzinda">
-    <comment>Update AdverseEvent tracking fields</comment>
-    <update tableName="AdverseEvent">
+  <changeSet id="20170123-1249" author="timler">
+    <comment>Update AdverseEventType tracking fields</comment>
+    <update tableName="AdverseEventType">
       <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
       <column name="createdBy_id" valueNumeric="1" />
       <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
       <column name="lastUpdatedBy_id" valueNumeric="1" />
     </update>
-    <update tableName="AdverseEvent_AUD">
+    <update tableName="AdverseEventType_AUD">
       <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
       <column name="createdBy_id" valueNumeric="1" />
       <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
@@ -144,12 +142,12 @@
     </update>
   </changeSet>
   
-  <changeSet id="20170117-1551" author="jmuzinda">
-    <comment>Make tracking columns on AdverseEvent not nullable</comment>
-    <addNotNullConstraint tableName="AdverseEvent" columnName="createdDate" columnDataType="TIMESTAMP" />
-    <addNotNullConstraint tableName="AdverseEvent" columnName="createdBy_id" columnDataType="BIGINT(20)" />
-    <addNotNullConstraint tableName="AdverseEvent" columnName="lastUpdated" columnDataType="TIMESTAMP" />
-    <addNotNullConstraint tableName="AdverseEvent" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
+  <changeSet id="20170123-1250" author="timler">
+    <comment>Make tracking columns on AdverseEventType not nullable</comment>
+    <addNotNullConstraint tableName="AdverseEventType" columnName="createdDate" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="AdverseEventType" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="AdverseEventType" columnName="lastUpdated" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="AdverseEventType" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
   </changeSet>
   
   <changeSet id="20170117-1445" author="jmuzinda">

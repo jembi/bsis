@@ -7,7 +7,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.repository.constant.AdverseEventTypeNamedQueryConstants;
 
 /**
@@ -23,7 +23,7 @@ import org.jembi.bsis.repository.constant.AdverseEventTypeNamedQueryConstants;
 })
 @Entity
 @Audited
-public class AdverseEventType extends BaseEntity {
+public class AdverseEventType extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 
