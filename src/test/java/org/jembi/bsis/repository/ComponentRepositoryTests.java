@@ -897,7 +897,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     
     // Verify
     assertThat(returnedComponents.size(), is(expectedComponents.size()));
-    assertThat(returnedComponents.get(0), is(hasSameStateAsComponent(expectedComponents.get(0))));
+    assertThat(returnedComponents.get(0), hasSameStateAsComponent(expectedComponents.get(0)));
   }
   
   @Test
@@ -941,7 +941,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     
     // Verify
     assertThat(returnedComponents.size(), is(expectedComponents.size()));
-    assertThat(returnedComponents.get(0), is(hasSameStateAsComponent(expectedComponents.get(0))));
+    assertThat(returnedComponents.get(0), hasSameStateAsComponent(expectedComponents.get(0)));
   }
     
   @Test
