@@ -245,7 +245,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testremoveComponentFromStock_shouldReturnComponentREMOVED() {
+  public void testRemoveComponentFromStock_shouldReturnComponentREMOVED() {
     Location location = aLocation().withId(1L).build();
     Donation donation = aDonation().withId(1L).build();
 
