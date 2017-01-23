@@ -901,31 +901,17 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   }
   
   @Test
-  public void testFindComponentsByDonationIdentificationNumberAndStatusWithoutFlagCharaters_shouldReturnCorrectComponents() {
+  public void testFindComponentByCodeAndDINWithoutFlagCharaters_shouldReturnMatchingComponent() {
     
     String componentCode = "0011-01";
     String donationIdentificationNumber = "0000001";
-    
-    Donation donationWithExpectedDonationIdentificationNumber = aDonation()
-        .withDonationIdentificationNumber(donationIdentificationNumber)
-        .buildAndPersist(entityManager);
-    
-    // Excluded by component code
-    aComponent()
-        .withComponentCode("0011-02")
-        .withDonation(donationWithExpectedDonationIdentificationNumber)
-        .buildAndPersist(entityManager);
-    
-    // Excluded by donation identification number
-    aComponent()
-        .withComponentCode(componentCode)
-        .withDonation(aDonation().withDonationIdentificationNumber("1000007").build())
-        .buildAndPersist(entityManager);
-    
+   
     // Expected
     Component expectedComponent = aComponent()
         .withComponentCode(componentCode)
-        .withDonation(donationWithExpectedDonationIdentificationNumber)
+        .withDonation(aDonation()
+            .withDonationIdentificationNumber(donationIdentificationNumber)
+            .build())
         .buildAndPersist(entityManager);
     
     // Test
@@ -939,16 +925,13 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   public void testFindComponentsByDonationIdentificationNumberAndStatusWithFlagCharaters_shouldReturnCorrectComponents() {
     // Set up fixture
     String dinWithFlagCharacters = "12345671B";
-    Donation donation = aDonation()
-        .withDonationIdentificationNumber("1234567")
-        .withFlagCharacters("1B")
-        .build();
-    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
     List<Component> expectedComponents = Arrays.asList(
         aComponent()
             .withStatus(ComponentStatus.DISCARDED)
-            .withDonation(donation)
-            .withParentComponent(initialComponent)
+            .withDonation(aDonation()
+                .withDonationIdentificationNumber("1234567")
+                .withFlagCharacters("1B")
+                .build())
             .buildAndPersist(entityManager)
     );
     
