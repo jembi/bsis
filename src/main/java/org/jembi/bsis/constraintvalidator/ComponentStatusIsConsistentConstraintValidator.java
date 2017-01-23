@@ -32,7 +32,8 @@ public class ComponentStatusIsConsistentConstraintValidator implements Constrain
   private static final List<ComponentStatus> REMOVED_COMPATIBLE_STATUSES = Arrays.asList(
       ComponentStatus.PROCESSED,
       ComponentStatus.ISSUED,
-      ComponentStatus.DISCARDED);
+      ComponentStatus.DISCARDED,
+      ComponentStatus.AVAILABLE);
 
   @Override
   public void initialize(ComponentStatusIsConsistent constraint) {
