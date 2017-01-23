@@ -337,10 +337,10 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component removeComponentFromStock (Component component) {
-    LOGGER.info("Removing component "+ component.getId() + " from stock");
+  public Component removeComponentFromStock(Component component) {
+    LOGGER.info("Removing component " + component.getId() + " from stock");
 
-    component.setInventoryStatus(InventoryStatus.NOT_IN_STOCK);
+    component.setInventoryStatus(InventoryStatus.REMOVED);
     return componentRepository.update(component);
   }
 
