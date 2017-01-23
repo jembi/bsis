@@ -367,9 +367,8 @@
       <column name="description" type="text">
         <constraints nullable="false" />
       </column>
-      <column name="dataType_id" type="BIGINT(20)">
-        <constraints nullable="false" />
-      </column>
+      <column name="REV" type="INT(11)" />
+      <column name="REVTYPE" type="TINYINT(4)" />
     </createTable>
   </changeSet>
   
