@@ -271,11 +271,11 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withExpiresOn(expiresOn)
         .build();
 
-    Component componentNotInStock = aComponent()
+    Component componentRemoved = aComponent()
         .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withInventoryStatus(InventoryStatus.REMOVED)
         .withDonation(donation)
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
@@ -286,7 +286,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentNotInStock);
+    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentRemoved);
 
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -339,11 +339,11 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withExpiresOn(expiresOn)
         .build();
 
-    Component componentNotInStock = aComponent()
+    Component componentRemoved = aComponent()
         .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withInventoryStatus(InventoryStatus.REMOVED)
         .withDonation(donation)
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
@@ -354,7 +354,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentNotInStock);
+    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentRemoved);
     
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -411,7 +411,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withInventoryStatus(InventoryStatus.REMOVED)
         .withDonation(donation)
         .withComponentType(componentType)
         .withLocation(component.getLocation())
