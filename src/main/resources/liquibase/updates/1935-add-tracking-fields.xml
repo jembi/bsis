@@ -358,17 +358,14 @@
       <column name="id" type="BIGINT(20)" autoIncrement="true">
         <constraints primaryKey="true" />
       </column>
-      <column name="name" type="VARCHAR(255)">
-        <constraints nullable="false" />
+      <column name="REV" type="INT(11)">      
+        <constraints primaryKey="true" />
       </column>
-      <column name="value" type="text">
-        <constraints nullable="false" />
-      </column>
-      <column name="description" type="text">
-        <constraints nullable="false" />
-      </column>
-      <column name="REV" type="INT(11)" />
       <column name="REVTYPE" type="TINYINT(4)" />
+      <column name="name" type="VARCHAR(255)" />
+      <column name="value" type="text" />
+      <column name="description" type="text" />
+      <column name="dataType_id" type="BIGINT(20)" />
     </createTable>
   </changeSet>
   

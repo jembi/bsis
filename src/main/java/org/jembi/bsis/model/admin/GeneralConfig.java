@@ -6,11 +6,11 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 
 @Entity
-@Audited
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class GeneralConfig extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
@@ -22,7 +22,6 @@ public class GeneralConfig extends BaseModificationTrackerEntity {
   private String description;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @NotAudited
   private DataType dataType;
 
   public String getName() {
