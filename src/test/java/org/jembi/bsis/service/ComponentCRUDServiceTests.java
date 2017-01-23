@@ -268,7 +268,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         hasSameStateAsComponent(expectedNotInStockComponent)))).thenReturn(expectedNotInStockComponent);
 
     // Exercise SUT
-    Component notInstockComponent = componentCRUDService.updateComponentToNotInStock(component);
+    Component notInstockComponent = componentCRUDService.removeComponentFromStock(component);
 
     // Verify
     assertThat(notInstockComponent, hasSameStateAsComponent(expectedNotInStockComponent));

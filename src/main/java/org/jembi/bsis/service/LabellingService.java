@@ -59,7 +59,7 @@ public class LabellingService {
     // If current status is IN_STOCK, update inventory status to NOT_IN_STOCK for this component
     // The component will be put in stock upon successful verification of packLabel
     if (component.getInventoryStatus().equals(InventoryStatus.IN_STOCK)) {
-      componentCRUDService.updateComponentToNotInStock(component);
+      componentCRUDService.removeComponentFromStock(component);
     }
 
     // Set up date formats

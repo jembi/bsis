@@ -286,7 +286,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentNotInStock);
+    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentNotInStock);
 
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -354,7 +354,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentNotInStock);
+    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentNotInStock);
     
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -423,13 +423,13 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)))).thenReturn(labelledComponent);
+    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(labelledComponent);
 
     // run test
     labellingService.printPackLabel(componentId);
     
     // check outcome
-    verify(componentCRUDService).updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)));
+    verify(componentCRUDService).removeComponentFromStock(argThat(hasSameStateAsComponent(component)));
   }
   
   @Test(expected = IllegalArgumentException.class)
