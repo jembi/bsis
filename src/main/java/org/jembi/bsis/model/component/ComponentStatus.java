@@ -1,5 +1,9 @@
 package org.jembi.bsis.model.component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public enum ComponentStatus {
 
   QUARANTINED, AVAILABLE, EXPIRED, ISSUED, SPLIT, USED, UNSAFE, DISCARDED, PROCESSED;
@@ -12,5 +16,15 @@ public enum ComponentStatus {
     }
 
     return false;
+  }
+
+  /**
+   * Returns only list of component statuses related to components (as opposed to e.g. inventory status)
+   * AVAILABLE, QUARANTINED, UNSAFE
+   *
+   * @return
+   */
+  public static List<ComponentStatus> getComponentRelatedStatuses() {
+    return  new ArrayList<>(Arrays.asList(AVAILABLE, QUARANTINED, UNSAFE));
   }
 }
