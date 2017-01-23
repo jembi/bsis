@@ -77,4 +77,5 @@
   <include file="liquibase/updates/1801-set-maximum-bleed-times-and-maximum-time.xml"/>
   <include file="liquibase/updates/1800-flag-components-exceeding-max-times-unsafe.xml"/>
   <include file="liquibase/updates/1907-add-update-gravity-for-componenttypes.xml"/>
+  <include file="liquibase/updates/2372-change-donationDate-to-date.xml"/>
 </databaseChangeLog>
