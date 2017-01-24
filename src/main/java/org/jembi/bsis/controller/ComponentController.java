@@ -132,6 +132,7 @@ public class ComponentController {
     map.put("producedComponentTypesByCombinationId",
         componentControllerService.getProducedComponentTypesByCombinationId());
     map.put("componentStatuses", componentControllerService.getComponentStatuses());
+    map.put("locations", componentControllerService.getLocations());
     return map;
   }
 

@@ -16,6 +16,7 @@ import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
@@ -25,12 +26,14 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.ComponentCRUDService;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.DiscardReasonViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +64,12 @@ public class ComponentControllerService {
 
   @Autowired
   private ComponentTypeCombinationRepository componentTypeCombinationRepository;
+
+  @Autowired
+  private LocationRepository locationRepository;
+
+  @Autowired
+  private LocationFactory locationFactory;
 
   public ComponentFullViewModel findComponentById(Long id) {
     Component component = componentRepository.findComponentById(id);
@@ -163,5 +172,9 @@ public class ComponentControllerService {
 
   public List<ComponentStatus> getComponentStatuses() {
     return Arrays.asList(ComponentStatus.values());
+  }
+
+  public List<LocationViewModel> getLocations() {
+    return locationFactory.createViewModels(locationRepository.getAllLocations());
   }
 }
