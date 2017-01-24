@@ -18,7 +18,6 @@ import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.UserViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,52 +56,38 @@ public class UserController {
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
   public Map<String, Object> configureUsersFormGenerator(HttpServletRequest request) {
-
     Map<String, Object> map = new HashMap<String, Object>();
-    addAllUsersToModel(map);
+    map.put("users", userRepository.getAllUsers());
     map.put("roles", roleRepository.getAllRoles());
     return map;
   }
 
-  @RequestMapping(value = "/roles", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-  public ResponseEntity getRoles() {
-    UserBackingForm form = new UserBackingForm();
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("roles", roleRepository.getAllRoles());
-    return new ResponseEntity(map, HttpStatus.OK);
-  }
-
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-  public ResponseEntity getUserDetails(@PathVariable Long id) {
+  public Map<String, Object> getUserDetails(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     User user = userRepository.findUserById(id);
     map.put("user", new UserViewModel(user));
-    return new ResponseEntity(map, HttpStatus.OK);
+    return map;
   }
 
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-  public ResponseEntity
-  addUser(@Valid @RequestBody UserBackingForm form) {
-
+  @ResponseStatus(HttpStatus.CREATED)
+  public UserViewModel addUser(@Valid @RequestBody UserBackingForm form) {
     User user = form.getUser();
     String hashedPassword = getHashedPassword(user.getPassword());
     user.setPassword(hashedPassword);
     user.setIsDeleted(false);
     user.setIsActive(true);
     user = userRepository.addUser(user);
-    return new ResponseEntity(new UserViewModel(user), HttpStatus.CREATED);
+    return new UserViewModel(user);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-  public ResponseEntity updateUser(
-      @Valid @RequestBody UserBackingForm form,
-      @PathVariable Long id) {
-
+  public User updateUser(@Valid @RequestBody UserBackingForm form, @PathVariable Long id) {
     form.setIsDeleted(false);
     User user = form.getUser();
     user.setId(id);
@@ -114,16 +99,13 @@ public class UserController {
     }
     user.setIsActive(true);
     userRepository.updateUser(user, modifyPassword);
-
-    return new ResponseEntity(user, HttpStatus.OK);
+    return user;
   }
 
 
   @RequestMapping(method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED + "')")
-  public ResponseEntity<UserViewModel> updateLoginUserInfo(
-      @Valid @RequestBody UserBackingForm form) {
-
+  public UserViewModel updateLoginUserInfo(@Valid @RequestBody UserBackingForm form) {
     User user = form.getUser();
     user.setId(getLoginUser().getId());
     boolean modifyPassword = form.isModifyPassword();
@@ -133,15 +115,14 @@ public class UserController {
       user.setPasswordReset(false);
     }
     userRepository.updateBasicUserInfo(user, modifyPassword);
-    return new ResponseEntity<UserViewModel>(new UserViewModel(user), HttpStatus.OK);
+    return new UserViewModel(user);
   }
 
 
   @RequestMapping(value = "/login-user-details", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED + "' )")
-  public ResponseEntity getUserDetails() {
-    User user = getLoginUser();
-    return new ResponseEntity(new UserViewModel(user), HttpStatus.OK);
+  public UserViewModel getUserDetails() {
+    return new UserViewModel(getLoginUser());
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -149,11 +130,6 @@ public class UserController {
   @ResponseStatus(value = HttpStatus.NO_CONTENT)
   public void deleteUser(@PathVariable Long id) {
     userCRUDService.deleteUser(id);
-  }
-
-  private void addAllUsersToModel(Map<String, Object> m) {
-    List<UserViewModel> users = userRepository.getAllUsers();
-    m.put("users", users);
   }
 
   public String userRole(Long id) {
