@@ -245,7 +245,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testupdateComponentToNotInStock_shouldReturnComponentNOT_INSTOCK() {
+  public void testRemoveComponentFromStock_shouldReturnComponentREMOVED() {
     Location location = aLocation().withId(1L).build();
     Donation donation = aDonation().withId(1L).build();
 
@@ -256,23 +256,23 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
 
-    Component expectedNotInStockComponent = aComponent()
+    Component expectedRemovedComponent = aComponent()
         .withId(1L)
         .withDonation(donation)
         .withLocation(location)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withInventoryStatus(InventoryStatus.REMOVED)
         .build();
 
     when(componentRepository.findComponentById(1L)).thenReturn(component);
     when(componentRepository.update(argThat(
-        hasSameStateAsComponent(expectedNotInStockComponent)))).thenReturn(expectedNotInStockComponent);
+        hasSameStateAsComponent(expectedRemovedComponent)))).thenReturn(expectedRemovedComponent);
 
     // Exercise SUT
-    Component notInstockComponent = componentCRUDService.updateComponentToNotInStock(component);
+    Component removedComponent = componentCRUDService.removeComponentFromStock(component);
 
     // Verify
-    assertThat(notInstockComponent, hasSameStateAsComponent(expectedNotInStockComponent));
-    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedNotInStockComponent)));
+    assertThat(removedComponent, hasSameStateAsComponent(expectedRemovedComponent));
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedRemovedComponent)));
   }
 
   @Test
