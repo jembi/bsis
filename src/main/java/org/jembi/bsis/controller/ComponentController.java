@@ -131,6 +131,7 @@ public class ComponentController {
     map.put("recordComponentForm", new RecordComponentBackingForm());
     map.put("producedComponentTypesByCombinationId",
         componentControllerService.getProducedComponentTypesByCombinationId());
+    map.put("componentStatuses", componentControllerService.getComponentStatuses());
     return map;
   }
 

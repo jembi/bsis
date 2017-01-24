@@ -1,6 +1,7 @@
 package org.jembi.bsis.controllerservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -160,4 +161,7 @@ public class ComponentControllerService {
     return componentFactory.createManagementViewModel(component);
   }
 
+  public List<ComponentStatus> getComponentStatuses() {
+    return Arrays.asList(ComponentStatus.values());
+  }
 }
