@@ -93,7 +93,7 @@ public class UserController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
-  public User updateUser(@Valid @RequestBody UserBackingForm form, @PathVariable Long id) {
+  public UserViewModel updateUser(@Valid @RequestBody UserBackingForm form, @PathVariable Long id) {
     form.setIsDeleted(false);
     User user = form.getUser();
     user.setId(id);
@@ -105,7 +105,7 @@ public class UserController {
     }
     user.setIsActive(true);
     userRepository.updateUser(user, modifyPassword);
-    return user;
+    return userFactory.createViewModel(user);
   }
 
 
