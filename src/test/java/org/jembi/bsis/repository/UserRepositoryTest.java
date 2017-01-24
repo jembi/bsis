@@ -8,7 +8,6 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
-import org.jembi.bsis.viewmodel.UserViewModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,7 +24,7 @@ public class UserRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testGetAllUsers() throws Exception {
-    List<UserViewModel> all = userRepository.getAllUsers();
+    List<User> all = userRepository.getAllUsers();
     Assert.assertNotNull("There are Users defined", all);
     Assert.assertEquals("There are 16 Users", 16, all.size());
   }

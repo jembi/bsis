@@ -9,11 +9,11 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.RoleBackingForm;
 import org.jembi.bsis.backingform.validator.RoleBackingFormValidator;
+import org.jembi.bsis.factory.RoleFactory;
 import org.jembi.bsis.model.user.Permission;
 import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.repository.RoleRepository;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.RoleViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +36,9 @@ public class RoleController {
   @Autowired
   private RoleBackingFormValidator roleBackingFormValidator;
 
+  @Autowired
+  private RoleFactory roleFactory;
+
   public RoleController() {
   }
 
@@ -47,9 +50,8 @@ public class RoleController {
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
   public Map<String, Object> configureRolesFormGenerator(HttpServletRequest request) {
-
     Map<String, Object> map = new HashMap<String, Object>();
-    addAllRolesToModel(map);
+    map.put("roles", roleFactory.createViewModels(roleRepository.getAllRoles()));
     return map;
   }
 
@@ -69,7 +71,7 @@ public class RoleController {
     Role updatedRole = null;
     form.setId(id);
     updatedRole = roleRepository.updateRole(form.getRole());
-    return new ResponseEntity(new RoleViewModel(updatedRole), HttpStatus.OK);
+    return new ResponseEntity(roleFactory.createViewModel(updatedRole), HttpStatus.OK);
 
   }
 
@@ -78,7 +80,7 @@ public class RoleController {
   public ResponseEntity getRoleBydId(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     Role role = roleRepository.findRoleDetailById(id);
-    map.put("role", new RoleViewModel(role));
+    map.put("role", roleFactory.createViewModel(role));
     return new ResponseEntity(map, HttpStatus.OK);
 
   }
@@ -93,7 +95,7 @@ public class RoleController {
     role.setDescription(form.getDescription());
     role.setPermissions(form.getPermissions());
     role = roleRepository.addRole(role);
-    return new ResponseEntity(new RoleViewModel(role), HttpStatus.CREATED);
+    return new ResponseEntity(roleFactory.createViewModel(role), HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -103,11 +105,6 @@ public class RoleController {
     roleRepository.deleteRole(id);
     return new ResponseEntity<Role>(HttpStatus.NO_CONTENT);
 
-  }
-
-  private void addAllRolesToModel(Map<String, Object> map) {
-    List<RoleViewModel> roles = roleRepository.getAllRoles();
-    map.put("roles", roles);
   }
 
   private void addAllPermissionsToModel(Map<String, Object> map) {

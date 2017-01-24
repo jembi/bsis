@@ -1,7 +1,6 @@
 package org.jembi.bsis.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +8,8 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.UserBackingForm;
 import org.jembi.bsis.backingform.validator.UserBackingFormValidator;
-import org.jembi.bsis.model.user.Role;
+import org.jembi.bsis.factory.RoleFactory;
+import org.jembi.bsis.factory.UserFactory;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.RoleRepository;
 import org.jembi.bsis.repository.UserRepository;
@@ -48,6 +48,12 @@ public class UserController {
   @Autowired
   private UserCRUDService userCRUDService;
 
+  @Autowired
+  private UserFactory userFactory;
+
+  @Autowired
+  private RoleFactory roleFactory;
+
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(userBackingFormValidator);
@@ -57,8 +63,8 @@ public class UserController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
   public Map<String, Object> configureUsersFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("users", userRepository.getAllUsers());
-    map.put("roles", roleRepository.getAllRoles());
+    map.put("users", userFactory.createViewModels(userRepository.getAllUsers()));
+    map.put("roles", roleFactory.createViewModels(roleRepository.getAllRoles()));
     return map;
   }
 
@@ -67,7 +73,7 @@ public class UserController {
   public Map<String, Object> getUserDetails(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<String, Object>();
     User user = userRepository.findUserById(id);
-    map.put("user", new UserViewModel(user));
+    map.put("user", userFactory.createViewModel(user));
     return map;
   }
 
@@ -82,7 +88,7 @@ public class UserController {
     user.setIsDeleted(false);
     user.setIsActive(true);
     user = userRepository.addUser(user);
-    return new UserViewModel(user);
+    return userFactory.createViewModel(user);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
@@ -115,7 +121,7 @@ public class UserController {
       user.setPasswordReset(false);
     }
     userRepository.updateBasicUserInfo(user, modifyPassword);
-    return new UserViewModel(user);
+    return userFactory.createViewModel(user);
   }
 
 
@@ -130,19 +136,6 @@ public class UserController {
   @ResponseStatus(value = HttpStatus.NO_CONTENT)
   public void deleteUser(@PathVariable Long id) {
     userCRUDService.deleteUser(id);
-  }
-
-  public String userRole(Long id) {
-    String userRole = "";
-    User user = userRepository.findUserById(id);
-    List<Role> roles = user.getRoles();
-    if (roles != null && roles.size() > 0) {
-      for (Role r : roles) {
-        userRole = userRole + " " + r.getId();
-      }
-
-    }
-    return userRole;
   }
 
   private User getLoginUser() {

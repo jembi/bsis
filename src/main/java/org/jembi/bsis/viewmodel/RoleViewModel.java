@@ -1,7 +1,5 @@
 package org.jembi.bsis.viewmodel;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.jembi.bsis.model.user.Permission;

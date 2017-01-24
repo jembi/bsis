@@ -1,6 +1,5 @@
 package org.jembi.bsis.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,7 +10,6 @@ import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.model.user.Permission;
 import org.jembi.bsis.model.user.Role;
-import org.jembi.bsis.viewmodel.RoleViewModel;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,14 +21,10 @@ public class RoleRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public List<RoleViewModel> getAllRoles() {
+  public List<Role> getAllRoles() {
     TypedQuery<Role> query = em.createQuery("FROM Role", Role.class);
     List<Role> roles = query.getResultList();
-    List<RoleViewModel> roleViewModels = new ArrayList<RoleViewModel>();
-    for (Role role : roles) {
-      roleViewModels.add(new RoleViewModel(role));
-    }
-    return roleViewModels;
+    return roles;
   }
 
   public Role findRoleByName(String name) {

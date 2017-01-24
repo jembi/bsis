@@ -11,10 +11,7 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.user.Permission;
 import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.repository.RoleRepository;
-import org.jembi.bsis.repository.UserRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
-import org.jembi.bsis.viewmodel.RoleViewModel;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -46,7 +43,7 @@ public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testGetRoles() throws Exception {
-    List<RoleViewModel> all = roleRepository.getAllRoles();
+    List<Role> all = roleRepository.getAllRoles();
     Assert.assertNotNull("There are Roles", all);
     Assert.assertEquals("There are 3 Roles", 3, all.size());
   }
@@ -134,7 +131,7 @@ public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
     one.setUsers(new ArrayList<User>());
     roleRepository.updateRole(one); // clear out foreign key references
     roleRepository.deleteRole(1l);
-    List<RoleViewModel> all = roleRepository.getAllRoles();
+    List<Role> all = roleRepository.getAllRoles();
     Assert.assertNotNull("Role was permanently deleted", all);
     Assert.assertEquals("Role was permanently deleted", 2, all);
   }
