@@ -13,6 +13,7 @@ public class ComponentViewModel extends BaseViewModel {
   private Date createdOn;
   private Date expiresOn;
   private String donationIdentificationNumber;
+  private String donationFlagCharacters;
   private ComponentStatus status;
   private String expiryStatus;
   private String componentCode;
@@ -49,6 +50,14 @@ public class ComponentViewModel extends BaseViewModel {
 
   public void setDonationIdentificationNumber(String donationIdentificationNumber) {
     this.donationIdentificationNumber = donationIdentificationNumber;
+  }
+
+  public String getDonationFlagCharacters() {
+    return donationFlagCharacters;
+  }
+
+  public void setDonationFlagCharacters(String donationFlagCharacters) {
+    this.donationFlagCharacters = donationFlagCharacters;
   }
 
   public ComponentStatus getStatus() {
