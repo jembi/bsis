@@ -416,12 +416,13 @@ public class ComponentCRUDService {
     // it's OK to update the weight
     existingComponent.setWeight(componentWeight);
 
-    // roll back, and then re-evaluate.
+    // roll back Component Status if unsafe. Note that only statuses that can be rolled back will
+    // and should be e.g. for reasons of invalid weight or low weight.
     if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
       rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.UNSAFE);
     }
 
-    // check if the component should be discarded or re-evaluated
+    // Mark the component as unsafe if necessary.
     if (componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(existingComponent)) {
       existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
     } else if (componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(existingComponent)) {
