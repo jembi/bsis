@@ -11,6 +11,7 @@ import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DiscardedComponentDTOBuilder.aDiscardedComponentDTO;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
@@ -118,21 +119,21 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   }
   
   @Test
-  public void testFindComponentsByDonationIdentificationNumberAndStatus_shouldReturnCorrectComponents() {
+  public void testFindComponentsByDonationIdentificationNumberStatusAndLocation_shouldReturnCorrectComponents() {
     // Set up fixture
     String donationIdentificationNumber = "2255448";
     Donation donation = aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build();
-    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    Location location = aLocation().buildAndPersist(entityManager);
     List<Component> expectedComponents = Arrays.asList(
         aComponent()
             .withStatus(ComponentStatus.DISCARDED)
             .withDonation(donation)
-            .withParentComponent(initialComponent)
+            .withLocation(location)
             .buildAndPersist(entityManager),
         aComponent()
             .withStatus(ComponentStatus.DISCARDED)
             .withDonation(donation)
-            .withParentComponent(initialComponent)
+            .withLocation(location)
             .buildAndPersist(entityManager)
     );
     // Excluded by isDeleted
@@ -140,24 +141,74 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withIsDeleted(true)
         .withStatus(ComponentStatus.DISCARDED)
         .withDonation(donation)
-        .withParentComponent(initialComponent)
+        .withLocation(location)
         .buildAndPersist(entityManager);
     // Excluded by status
     aComponent()
         .withStatus(ComponentStatus.EXPIRED)
         .withDonation(donation)
-        .withParentComponent(initialComponent)
+        .withLocation(location)
         .buildAndPersist(entityManager);
     // Excluded by donation
     aComponent()
         .withStatus(ComponentStatus.DISCARDED)
         .withDonation(aDonation().build())
+        .withLocation(location)
         .buildAndPersist(entityManager);
-    
+
     // Exercise SUT
-    List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumberAndStatus(
-        donationIdentificationNumber, ComponentStatus.DISCARDED);
-    
+    List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumberAndStatusAndLocation(
+        donationIdentificationNumber, ComponentStatus.DISCARDED, location);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+  @Test
+  public void testFindComponentsByDonationIdentificationNumberStatusAndLocationWithNullLocation_shouldReturnCorrectComponents() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Donation donation = aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    Location location = aLocation().buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withLocation(aLocation().build())
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withLocation(aLocation().build())
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+
+    // Excluded for Status
+    aComponent()
+        .withStatus(ComponentStatus.EXPIRED)
+        .withDonation(aDonation().build())
+        .withLocation(aLocation().build())
+        .buildAndPersist(entityManager);
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumberAndStatusAndLocation(
+        donationIdentificationNumber, ComponentStatus.DISCARDED, null);
+
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
   }

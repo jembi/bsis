@@ -22,6 +22,7 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
@@ -93,10 +94,10 @@ public class ComponentControllerService {
     return componentFactory.createComponentViewModels(results);
   }
   
-  public List<ComponentViewModel> findComponentsByDonationIdentificationNumberAndStatus(
-      String donationIdentificationNumber, ComponentStatus status) {
-    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumberAndStatus(
-        donationIdentificationNumber, status);
+  public List<ComponentViewModel> findComponentsByDonationIdentificationNumberStatusAndLocation (
+      String donationIdentificationNumber, ComponentStatus status, Location location) {
+    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumberAndStatusAndLocation(
+        donationIdentificationNumber, status, location);
     return componentFactory.createComponentViewModels(results);
   }
 
