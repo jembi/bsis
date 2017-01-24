@@ -168,7 +168,12 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Component component = aComponent()
         .withId(1L)
         .withWeight(320)
-        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(350).withMinWeight(400).withMaxWeight(500).build()).build())
+        .withDonation(aDonation()
+            .withPackType(aPackType()
+                .withLowVolumeWeight(350)
+                .withMinWeight(400)
+                .withMaxWeight(500).build())
+            .build())
         .build();
     
     // SUT
@@ -179,12 +184,17 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testShouldComponentBeDiscardedForInvalidWeightLowWeightNoLowVolume_shouldReturnTrue() throws Exception {
+  public void testShouldComponentBeDiscardedForInvalidWeightHasLowWeightNoLowVolume_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
         .withWeight(499)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(500).withMaxWeight(550).build()).build())
+        .withDonation(aDonation()
+            .withPackType(aPackType()
+                .withMinWeight(500)
+                .withMaxWeight(550)
+                .build())
+            .build())
         .build();
 
     // SUT
@@ -192,6 +202,48 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
 
     // verify
     assertThat("component should be discarded", discarded, is(true));
+  }
+   
+  @Test
+  public void testShouldComponentBeDiscardedForInvalidWeightHasInvalidWeightNoLowVolume_shouldReturnTrue() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(570)
+        .withDonation(aDonation()
+            .withPackType(aPackType()
+                .withMinWeight(500)
+                .withMaxWeight(550)
+                .build())
+            .build())
+        .build();
+
+    // SUT
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(component);
+
+    // verify
+    assertThat("component should be discarded", discarded, is(true));
+  }
+
+  @Test
+  public void testShouldComponentBeDiscardedForInvalidWeightHasValidWeightNoLowVolume_shouldReturnFalse() throws Exception {
+    // set up data
+    Component component = aComponent()
+        .withId(1L)
+        .withWeight(520)
+        .withDonation(aDonation()
+            .withPackType(aPackType()
+                .withMinWeight(500)
+                .withMaxWeight(550)
+                .build())
+            .build())
+        .build();
+
+    // SUT
+    boolean discarded = componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(component);
+
+    // verify
+    assertThat("component should be discarded", discarded, is(false));
   }
   
   @Test
