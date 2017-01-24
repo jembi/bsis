@@ -175,6 +175,6 @@ public class ComponentControllerService {
   }
 
   public List<LocationViewModel> getLocations() {
-    return locationFactory.createViewModels(locationRepository.getAllLocations());
+    return locationFactory.createViewModels(locationRepository.getAllLocations(false));
   }
 }

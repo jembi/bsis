@@ -1275,7 +1275,7 @@ public class DataImportService {
 
   private Map<String, Location> buildLocationCache () {
     Map<String, Location>  locationCache = new HashMap<>();
-    List<Location> locations = locationRepository.getAllLocations();
+    List<Location> locations = locationRepository.getAllLocations(true);
     for (Location location : locations) {
       locationCache.put(location.getName(), location);
     }
