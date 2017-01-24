@@ -78,4 +78,5 @@
   <include file="liquibase/updates/1800-flag-components-exceeding-max-times-unsafe.xml"/>
   <include file="liquibase/updates/1907-add-update-gravity-for-componenttypes.xml"/>
   <include file="liquibase/updates/1799-add-component-status-change-reason-low-weight.xml"/>
+  <include file="liquibase/updates/2372-change-donationDate-to-date.xml"/>
 </databaseChangeLog>

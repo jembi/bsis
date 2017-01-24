@@ -25,6 +25,8 @@ public class LabellingService {
   private GeneralConfigAccessorService generalConfigAccessorService;
   @Autowired 
   private CheckCharacterService checkCharacterService;
+  @Autowired
+  private ComponentVolumeService componentVolumeService;
   
   public boolean verifyPackLabel(long componentId, String prePrintedDIN, String packLabelDIN) {
     Component component = componentCRUDService.findComponentById(componentId);
@@ -54,10 +56,10 @@ public class LabellingService {
       throw new IllegalArgumentException("Pack Label can't be printed");
     }
 
-    // If current status is IN_STOCK, update inventory status to NOT_IN_STOCK for this component
+    // If current status is IN_STOCK, update inventory status to REMOVED for this component
     // The component will be put in stock upon successful verification of packLabel
     if (component.getInventoryStatus().equals(InventoryStatus.IN_STOCK)) {
-      componentCRUDService.updateComponentToNotInStock(component);
+      componentCRUDService.removeComponentFromStock(component);
     }
 
     // Set up date formats
@@ -111,6 +113,13 @@ public class LabellingService {
       highTitre = "^FT505,409^A0N,36,36,C^FR^FDHIGH TITRE^FS";
     }
 
+    // Generate element for component volume
+    String volumeText = "";
+    Integer volume = componentVolumeService.calculateVolume(component);
+    if (volume != null) {
+      volumeText = "Volume: " + volume + "ml";
+    }
+
     // Get configured service info values
     String serviceInfoLine1 = generalConfigAccessorService.getGeneralConfigValueByName(
         GeneralConfigConstants.SERVICE_INFO_LINE_1);
@@ -128,22 +137,23 @@ public class LabellingService {
         "^LS0" +
         dinZPL +
         "^BY3,3,80^FT445,147^BCN,,Y,N^FD" + donation.getBloodAbo() + donation.getBloodRh() + "^FS" +
-        "^FT62,208^A0N,17,38^FDCollected On^FS" +
+        "^FT64,208^A0N,17,38^FDCollected On^FS" +
         "^FT64,331^A0N,23,36^FD" + dateFormat.format(donation.getDonationDate()) + "^FS" +
         "^FT505,304^A0N,152,148^FB166,1,0,C^FD" + donation.getBloodAbo() + "^FS" +
         bloodRh +
-        "^FT65,414^A0N,20,14^FD" + serviceInfoLine2 + "^FS" +
-        "^FT65,387^A0N,20,14^FD" + serviceInfoLine1 + "^FS" +
-        "^BY3,3,77^FT65,535^BCN,,Y,N^FD" + component.getComponentCode() + "^FS" +
+        "^FT64,414^A0N,20,14^FD" + serviceInfoLine2 + "^FS" +
+        "^FT64,387^A0N,20,14^FD" + serviceInfoLine1 + "^FS" +
+        "^BY3,3,77^FT64,535^BCN,,Y,N^FD" + component.getComponentCode() + "^FS" +
         "^FT64,616^A0N,43,16^FD" + componentType.getComponentTypeName() + "^FS" +
-        "^BY2,3,84^FT62,305^BCN,,N,N^FD" + isoDateFormat.format(donation.getDonationDate()) + "^FS" +
+        "^BY2,3,84^FT64,305^BCN,,N,N^FD" + isoDateFormat.format(donation.getDonationDate()) + "^FS" +
         highTitre +
-        "^FT450,439^A0N,17,38^FDExpires On^FS" +
-        "^BY2,3,82^FT451,535^BCN,,N,N^FD" + isoDateFormat.format(component.getExpiresOn()) + "^FS" +
-        "^FT452,565^A0N,23,31^FD" + dateTimeFormat.format(component.getExpiresOn()) + "^FS" +
-        "^FT66,661^A0N,23,14^FD" + componentType.getPreparationInfo() + "^FS" +
-        "^FT66,697^A0N,23,14^FD" + componentType.getStorageInfo() + "^FS" +
-        "^FT66,734^A0N,23,14^FD" + componentType.getTransportInfo() + "^FS" +
+        "^FT445,439^A0N,17,38^FDExpires On^FS" +
+        "^BY2,3,82^FT445,535^BCN,,N,N^FD" + isoDateFormat.format(component.getExpiresOn()) + "^FS" +
+        "^FT445,565^A0N,23,31^FD" + dateTimeFormat.format(component.getExpiresOn()) + "^FS" +
+        "^FT64,655^A0N,23,14^FD" + volumeText + "^FS" +
+        "^FT64,681^A0N,23,14^FD" + componentType.getPreparationInfo() + "^FS" +
+        "^FT64,707^A0N,23,14^FD" + componentType.getStorageInfo() + "^FS" +
+        "^FT64,733^A0N,23,14^FD" + componentType.getTransportInfo() + "^FS" +
         "^PQ1,0,1,Y^XZ";
 
     return labelZPL;

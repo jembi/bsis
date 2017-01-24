@@ -6,12 +6,11 @@ import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
-import static org.hamcrest.Matchers.is;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,8 +51,12 @@ public class LabellingServiceTests extends UnitTestSuite {
   
   @Mock
   private GeneralConfigAccessorService generalConfigAccessorService;
+
   @Mock
   private CheckCharacterService checkCharacterService;
+
+  @Mock
+  private ComponentVolumeService componentVolumeService;
   
   @Test
   public void testVerifyPackLabelWithValidInputs_shouldReturnTrue() {
@@ -268,11 +271,11 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withExpiresOn(expiresOn)
         .build();
 
-    Component componentNotInStock = aComponent()
+    Component componentRemoved = aComponent()
         .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withInventoryStatus(InventoryStatus.REMOVED)
         .withDonation(donation)
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
@@ -283,7 +286,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentNotInStock);
+    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentRemoved);
 
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -336,11 +339,11 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withExpiresOn(expiresOn)
         .build();
 
-    Component componentNotInStock = aComponent()
+    Component componentRemoved = aComponent()
         .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withInventoryStatus(InventoryStatus.REMOVED)
         .withDonation(donation)
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
@@ -351,7 +354,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentNotInStock);
+    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentRemoved);
     
     // run test
     String label = labellingService.printPackLabel(componentId);
@@ -408,7 +411,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withInventoryStatus(InventoryStatus.REMOVED)
         .withDonation(donation)
         .withComponentType(componentType)
         .withLocation(component.getLocation())
@@ -420,13 +423,13 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
-    when(componentCRUDService.updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)))).thenReturn(labelledComponent);
+    when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(labelledComponent);
 
     // run test
     labellingService.printPackLabel(componentId);
     
     // check outcome
-    verify(componentCRUDService).updateComponentToNotInStock(argThat(hasSameStateAsComponent(component)));
+    verify(componentCRUDService).removeComponentFromStock(argThat(hasSameStateAsComponent(component)));
   }
   
   @Test(expected = IllegalArgumentException.class)
@@ -510,6 +513,74 @@ public class LabellingServiceTests extends UnitTestSuite {
 
     // check outcome
     assertThat(label, !label.contains("HIGH TITRE"));
+  }
+
+  @Test
+  public void testPrintPackLabelThatShouldContainVolume_shouldReturnZPLWithVolumeText() {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("1234567")
+        .withBloodRh("+")
+        .withDonationDate(new Date())
+        .build();
+    ComponentType componentType = aComponentType()
+        .withGravity(1.03)
+        .build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(new Date())
+        .withWeight(100)
+        .build();
+
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
+    when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(true);
+    when(componentVolumeService.calculateVolume(component)).thenReturn(327);
+
+    // run test
+    String label = labellingService.printPackLabel(1L);
+
+    // check outcome
+    assertThat(label, label.contains("Volume: 327ml"));
+  }
+
+  @Test
+  public void testPrintPackLabelForComponentWithoutWeight_shouldReturnZPLWithVolumeText() {
+    // set up data
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("1234567")
+        .withBloodRh("+")
+        .withDonationDate(new Date())
+        .build();
+    ComponentType componentType = aComponentType()
+        .withGravity(1.03)
+        .build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withExpiresOn(new Date())
+        .withWeight(null)
+        .build();
+
+    // set up mocks
+    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
+    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
+    when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(true);
+    when(componentVolumeService.calculateVolume(component)).thenReturn(null);
+
+    // run test
+    String label = labellingService.printPackLabel(1L);
+
+    // check outcome
+    assertThat(label.contains("Volume"), is(false));
   }
 
   @Test

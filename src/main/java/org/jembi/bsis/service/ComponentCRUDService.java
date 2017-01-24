@@ -338,10 +338,10 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component updateComponentToNotInStock(Component component) {
-    LOGGER.info("Removing component "+ component.getId() + " from stock");
+  public Component removeComponentFromStock(Component component) {
+    LOGGER.info("Removing component " + component.getId() + " from stock");
 
-    component.setInventoryStatus(InventoryStatus.NOT_IN_STOCK);
+    component.setInventoryStatus(InventoryStatus.REMOVED);
     return componentRepository.update(component);
   }
 
@@ -428,6 +428,25 @@ public class ComponentCRUDService {
     } else if (componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(existingComponent)) {
       existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.LOW_WEIGHT);
     }
+
+    return updateComponent(existingComponent);
+  }
+
+  public Component recordChildComponentWeight(long componentId, Integer componentWeight) {
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    
+    // check if the weight is being updated
+    if (existingComponent.getWeight() != null && existingComponent.getWeight() == componentWeight) {
+      return existingComponent;
+    }
+
+    // check if it is possible to update the weight of the child component
+    if (!componentConstraintChecker.canRecordChildComponentWeight(existingComponent)) {
+      throw new IllegalStateException("The weight of child component " + componentId 
+          + " cannot be updated");
+    }
+    // it's OK to update the weight
+    existingComponent.setWeight(componentWeight);
 
     return updateComponent(existingComponent);
   }

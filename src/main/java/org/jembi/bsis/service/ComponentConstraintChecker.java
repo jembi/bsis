@@ -69,6 +69,31 @@ public class ComponentConstraintChecker {
     return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
   }
 
+  public boolean canRecordChildComponentWeight(Component component) {
+    // Check that is a child component
+    if (component.getParentComponent() == null) {
+      return false;
+    }
+
+    // Check that parent's weight has been recorded
+    if (component.getParentComponent().getWeight() == null) {
+      return false;
+    }
+
+    // Check that parent's status is processed
+    if (!component.getParentComponent().getStatus().equals(ComponentStatus.PROCESSED)) {
+      return false;
+    }
+
+    // Check that is not in stock
+    if (component.getInventoryStatus().equals(InventoryStatus.IN_STOCK)) {
+      return false;
+    }
+
+    // Check component status is allowed to process
+    return CAN_DISCARD_OR_PROCESS_OR_RECORD_WEIGHT_STATUSES.contains(component.getStatus());
+  }
+
   public boolean canUnprocess(Component parentComponent) {
 
     if (!parentComponent.getStatus().equals(ComponentStatus.PROCESSED)) {
