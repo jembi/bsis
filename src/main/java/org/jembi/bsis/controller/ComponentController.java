@@ -21,7 +21,6 @@ import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidato
 import org.jembi.bsis.backingform.validator.RecordComponentBackingFormValidator;
 import org.jembi.bsis.controllerservice.ComponentControllerService;
 import org.jembi.bsis.model.component.ComponentStatus;
-import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,7 +145,7 @@ public class ComponentController {
       @RequestParam(value = "status", required = false) ComponentStatus status,
       @RequestParam(value = "donationDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateFrom,
       @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo,
-      @RequestParam(value = "location", required = false) Location location) {
+      @RequestParam(value = "locationId", required = false) Long locationId) {
 
     List<ComponentViewModel> components;
     
@@ -154,7 +153,7 @@ public class ComponentController {
       components = componentControllerService.findAnyComponent(componentTypeIds, status, donationDateFrom, donationDateTo);
     } else if (status != null) {
       components = componentControllerService.findComponentsByDonationIdentificationNumberStatusAndLocation(
-          donationIdentificationNumber, status, location);
+          donationIdentificationNumber, status, locationId);
     } else {
       components = componentControllerService.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
     }

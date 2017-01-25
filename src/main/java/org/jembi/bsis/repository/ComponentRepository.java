@@ -18,7 +18,6 @@ import org.jembi.bsis.dto.DiscardedComponentDTO;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
-import org.jembi.bsis.model.location.Location;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,12 +76,12 @@ public class ComponentRepository extends AbstractRepository<Component> {
   }
 
   public List<Component> findComponentsByDonationIdentificationNumberAndStatusAndLocation (String donationIdentificationNumber,
-      ComponentStatus status, Location location) {
+      ComponentStatus status, Long locationId) {
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_AND_LOCATION_COMPONENTS_BY_DIN_AND_STATUS_AND_LOCATION, Component.class)
         .setParameter("isDeleted", Boolean.FALSE)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
         .setParameter("status", status)
-        .setParameter("location", location)
+        .setParameter("locationId", locationId)
         .getResultList();
   }
 

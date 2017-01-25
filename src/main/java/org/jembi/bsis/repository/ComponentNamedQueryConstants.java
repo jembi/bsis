@@ -31,7 +31,7 @@ public class ComponentNamedQueryConstants {
           "WHERE c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
           "AND c.isDeleted = :isDeleted " +
           "AND c.status = :status " +
-          "AND (:location = null OR c.location = :location)";
+          "AND (:locationId = null OR c.location.id = :locationId)";
   
   public static final String NAME_FIND_COMPONENT_BY_CODE_AND_DIN =
       "Component.findComponentByCodeAndDIN";
