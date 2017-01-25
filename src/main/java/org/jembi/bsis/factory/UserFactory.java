@@ -5,13 +5,19 @@ import java.util.List;
 
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.viewmodel.UserViewModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserFactory {
 
+  @Autowired
+  private RoleFactory roleFactory;
+
   public UserViewModel createViewModel(User user) {
-    return new UserViewModel(user);
+    UserViewModel viewModel = new UserViewModel(user);
+    viewModel.setRoles(roleFactory.createViewModels(user.getRoles()));
+    return viewModel;
   }
 
   public List<UserViewModel> createViewModels(List<User> users) {

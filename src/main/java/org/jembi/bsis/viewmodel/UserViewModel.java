@@ -1,14 +1,13 @@
 package org.jembi.bsis.viewmodel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.model.user.User;
 
 public class UserViewModel {
 
   private User user;
+  private List<RoleViewModel> roles;
 
   public UserViewModel() {
   }
@@ -51,11 +50,11 @@ public class UserViewModel {
   }
 
   public List<RoleViewModel> getRoles() {
-    List<RoleViewModel> roleViewModels = new ArrayList<RoleViewModel>();
-    for (Role role : user.getRoles()) {
-      roleViewModels.add(new RoleViewModel(role));
-    }
-    return roleViewModels;
+    return roles;
+  }
+
+  public void setRoles(List<RoleViewModel> roles) {
+    this.roles = roles;
   }
 
   @Override

@@ -22,6 +22,7 @@ public class UserViewModelMatcher extends TypeSafeMatcher<UserViewModel> {
         .appendText("\nEmail: ").appendValue(expected.getEmailId())
         .appendText("\nFirst name: ").appendValue(expected.getFirstName())
         .appendText("\nLast name: ").appendValue(expected.getLastName())
+        .appendText("\nRoles: ").appendValue(expected.getRoles())
         .appendText("\nIs admin: ").appendValue(expected.getIsAdmin())
         .appendText("\nIs password reset: ").appendValue(expected.isPasswordReset())
         ;
@@ -34,6 +35,7 @@ public class UserViewModelMatcher extends TypeSafeMatcher<UserViewModel> {
         && Objects.equals(actual.getEmailId(), expected.getEmailId())
         && Objects.equals(actual.getFirstName(), expected.getFirstName())
         && Objects.equals(actual.getLastName(), expected.getLastName())
+        && Objects.equals(actual.getRoles(), expected.getRoles())
         && Objects.equals(actual.getIsAdmin(), expected.getIsAdmin())
         && Objects.equals(actual.isPasswordReset(), expected.isPasswordReset());
   }

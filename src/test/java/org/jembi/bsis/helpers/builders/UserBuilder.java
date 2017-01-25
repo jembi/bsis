@@ -1,5 +1,9 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.model.user.User;
 
 public class UserBuilder extends AbstractEntityBuilder<User> {
@@ -12,6 +16,7 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
   private String lastName = "User";
   // Password = "password", rounds = 4
   private String password = "$2a$04$iA45ovNGD4hhA1puc/a8J.FN8WCMzKft1vdBAgw6o7oe7KBpVVkRS";
+  private List<Role> roles;
   private Boolean isDeleted;
 
   public UserBuilder withId(Long id) {
@@ -44,6 +49,19 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
     return this;
   }
 
+  public UserBuilder withRoles(List<Role> roles) {
+    this.roles = roles;
+    return this;
+  }
+
+  public UserBuilder withRole(Role role) {
+    if (this.roles == null) {
+      this.roles = new ArrayList<>();
+    }
+    this.roles.add(role);
+    return this;
+  }
+
   public UserBuilder thatIsDeleted() {
     isDeleted = true;
     return this;
@@ -65,6 +83,7 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
     user.setLastName(lastName);
     user.setPassword(password);
     user.setIsDeleted(isDeleted);
+    user.setRoles(roles);
     return user;
   }
 

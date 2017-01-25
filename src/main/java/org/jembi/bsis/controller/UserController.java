@@ -128,7 +128,7 @@ public class UserController {
   @RequestMapping(value = "/login-user-details", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED + "' )")
   public UserViewModel getUserDetails() {
-    return new UserViewModel(getLoginUser());
+    return userFactory.createViewModel(getLoginUser());
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
