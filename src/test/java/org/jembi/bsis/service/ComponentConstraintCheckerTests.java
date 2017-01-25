@@ -119,15 +119,6 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   }
   
   @Test
-  public void testCanDiscardWithSplitComponent_shouldReturnFalse() {
-    Component component = aComponent()
-        .withComponentBatch(aComponentBatch().build())
-        .build();
-    boolean canDiscard = componentConstraintChecker.canDiscard(component);
-    assertThat(canDiscard, is(false));
-  }
-
-  @Test
   public void testCanProcessWithQuarantinedComponent_shouldReturnTrue() {
     Component component = aComponent()
         .withStatus(ComponentStatus.QUARANTINED)
@@ -242,20 +233,6 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   public void testCanProcessWithProcessedComponent_shouldReturnFalse() {
     Component component = aComponent()
         .withStatus(ComponentStatus.PROCESSED)
-        .withComponentBatch(aComponentBatch().build())
-        .withParentComponent(aComponent().build())
-        .withComponentType(aComponentType()
-            .withProducedComponentTypeCombination(aComponentTypeCombination()
-                .build())
-            .build())
-        .build();
-    boolean canProcess = componentConstraintChecker.canProcess(component);
-    assertThat(canProcess, is(false));
-  }
-
-  @Test
-  public void testCanProcessWithSplitComponent_shouldReturnFalse() {
-    Component component = aComponent()
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(aComponent().build())
         .withComponentType(aComponentType()
@@ -419,15 +396,6 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   public void testCanPreProcessComponentWithProcessedComponent_shouldReturnFalse() {
     Component component = aComponent()
         .withStatus(ComponentStatus.PROCESSED)
-        .withComponentBatch(aComponentBatch().build())
-        .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(false));
-  }
-
-  @Test
-  public void testCanPreProcessComponentWithSplitComponent_shouldReturnFalse() {
-    Component component = aComponent()
         .withComponentBatch(aComponentBatch().build())
         .build();
     boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
