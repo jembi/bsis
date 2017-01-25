@@ -1,25 +1,23 @@
 package org.jembi.bsis.viewmodel;
 
-import org.jembi.bsis.model.donationtype.DonationType;
-
 public class DonationTypeViewModel extends BaseViewModel {
 
-  private DonationType donationType;
-
-  public DonationTypeViewModel(DonationType donationType) {
-    this.donationType = donationType;
-  }
-
-  @Override
-  public Long getId() {
-    return donationType.getId();
-  }
+  private String type;
+  private Boolean isDeleted;
 
   public String getType() {
-    return donationType.getDonationType();
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
   }
 
   public Boolean getIsDeleted() {
-    return donationType.getIsDeleted();
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

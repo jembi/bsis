@@ -12,7 +12,6 @@ import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.service.DonationConstraintChecker;
 import org.jembi.bsis.service.DonorConstraintChecker;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
-import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +33,8 @@ public class DonationFactory {
   private DonorRepository donorRepository;
   @Autowired
   private PackTypeRepository packTypeRepository;
+  @Autowired
+  private DonationTypeFactory donationTypeFactory;
 
   public Donation createEntity(DonationBackingForm form) {
     Donation donation = form.getDonation();
@@ -82,8 +83,7 @@ public class DonationFactory {
     donationViewModel.setId(donation.getId());
     donationViewModel.setDonationDate(donation.getDonationDate());
     donationViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
-    // FIXME: Use donation type factory when it exists
-    donationViewModel.setDonationType(new DonationTypeViewModel(donation.getDonationType()));
+    donationViewModel.setDonationType(donationTypeFactory.createDonationTypeViewModel(donation.getDonationType()));
     donationViewModel.setPackType(packTypeFactory.createFullViewModel(donation.getPackType()));
     donationViewModel.setNotes(donation.getNotes());
     donationViewModel.setDonorNumber(donation.getDonorNumber());

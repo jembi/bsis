@@ -1,6 +1,7 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.jembi.bsis.helpers.builders.DonationTypeViewModelBuilder.aDonationTypeViewModel;
 import static org.jembi.bsis.helpers.builders.AdverseEventBackingFormBuilder.anAdverseEventBackingForm;
 import static org.jembi.bsis.helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static org.jembi.bsis.helpers.builders.AdverseEventViewModelBuilder.anAdverseEventViewModel;
@@ -77,6 +78,8 @@ public class DonationFactoryTests {
   private PackTypeRepository packTypeRepository;
   @Mock
   private DonorRepository donorRepository;
+  @Mock
+  private DonationTypeFactory donationTypeFactory;
 
   @Test
   public void testCreateEntity_shouldReturnCorrectEntity() {
@@ -170,6 +173,7 @@ public class DonationFactoryTests {
         .build();
 
     AdverseEventViewModel adverseEventViewModel = anAdverseEventViewModel().withId(irrelevantAdverseEventId).build();
+    DonationTypeViewModel donationTypeViewModel = aDonationTypeViewModel().withId(23L).build();
 
     DonationViewModel expectedDonationViewModel = aDonationViewModel()
         .withId(IRRELEVANT_DONATION_ID)
@@ -182,7 +186,7 @@ public class DonationFactoryTests {
             .withPackType(packTypeFullViewModel)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withDonationDate(donationDate)
-        .withDonationType(new DonationTypeViewModel(donationType))
+        .withDonationType(donationTypeViewModel)
         .withNotes(notes)
         .withDonorNumber(donorNumber)
         .withTTIStatus(ttiStatus)
@@ -210,6 +214,7 @@ public class DonationFactoryTests {
     when(adverseEventFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
     when(locationFactory.createFullViewModel(venue)).thenReturn(new LocationFullViewModel(venue));
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
+    when(donationTypeFactory.createDonationTypeViewModel(donationType)).thenReturn(donationTypeViewModel);
 
     DonationViewModel returnedDonationViewModel = donationFactory.createDonationViewModelWithPermissions(
         donation);
@@ -241,6 +246,7 @@ public class DonationFactoryTests {
     List<Donation> donations = Arrays.asList(new Donation[]{donation1, donation2});
 
     AdverseEventViewModel adverseEventViewModel = anAdverseEventViewModel().withId(irrelevantAdverseEventId).build();
+    DonationTypeViewModel donationTypeViewModel = aDonationTypeViewModel().withId(23L).build();
 
     DonationViewModel expectedDonation1ViewModel = aDonationViewModel()
         .withId(IRRELEVANT_DONATION_ID)
@@ -251,7 +257,7 @@ public class DonationFactoryTests {
         .withPermission("isBackEntry", true)
         .withAdverseEvent(adverseEventViewModel)
         .withPackType(packTypeFullViewModel)
-        .withDonationType(new DonationTypeViewModel(donationType))
+        .withDonationType(donationTypeViewModel)
         .build();
     DonationViewModel expectedDonation2ViewModel = aDonationViewModel()
         .withId(ANOTHER_IRRELEVANT_DONATION_ID)
@@ -261,7 +267,7 @@ public class DonationFactoryTests {
         .withPermission("canDonate", false)
         .withPermission("isBackEntry", false)
         .withPackType(packTypeFullViewModel)
-        .withDonationType(new DonationTypeViewModel(donationType))
+        .withDonationType(donationTypeViewModel)
         .build();
 
     when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(true);
@@ -276,6 +282,7 @@ public class DonationFactoryTests {
     when(donorConstraintChecker.isDonorEligibleToDonate(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donorConstraintChecker.isDonorDeferred(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
+    when(donationTypeFactory.createDonationTypeViewModel(donationType)).thenReturn(donationTypeViewModel);
 
     List<DonationViewModel> returnedDonationViewModels = donationFactory.createDonationViewModelsWithPermissions(donations);
 

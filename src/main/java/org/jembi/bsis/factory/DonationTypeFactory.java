@@ -19,7 +19,10 @@ public class DonationTypeFactory {
   }
   
   public DonationTypeViewModel createDonationTypeViewModel(DonationType donationType) {
-    DonationTypeViewModel viewModel = new DonationTypeViewModel(donationType);
+    DonationTypeViewModel viewModel = new DonationTypeViewModel();
+    viewModel.setId(donationType.getId());
+    viewModel.setType(donationType.getDonationType());
+    viewModel.setIsDeleted(donationType.getIsDeleted());
     return viewModel;
   }
 
