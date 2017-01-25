@@ -27,23 +27,23 @@ public class DonationTypeControllerService {
   DonationTypeFactory donationTypeFactory;
 
   public DonationTypeViewModel getDonationType(Long id) {
-    return donationTypeFactory.createDonationTypeViewModel(donationTypeRepository.getDonationTypeById(id));
+    return donationTypeFactory.createViewModel(donationTypeRepository.getDonationTypeById(id));
   }
 
   public List<DonationTypeViewModel> getAllDonationTypes() {
-    return donationTypeFactory.createDonationTypeViewModels(donationTypeRepository.getAllDonationTypes(true));
+    return donationTypeFactory.createViewModels(donationTypeRepository.getAllDonationTypes(true));
   }
 
   public DonationTypeViewModel updateDonationType(Long id, DonationTypeBackingForm backingForm) {
     DonationType donationType = backingForm.getDonationType();
     donationType.setId(id);
     donationTypeCRUDService.updateDonationType(donationType);
-    return donationTypeFactory.createDonationTypeViewModel(donationType);
+    return donationTypeFactory.createViewModel(donationType);
   }
 
   public DonationTypeViewModel createDonationType(DonationTypeBackingForm backingForm) {
     DonationType donationType = backingForm.getDonationType();
     donationTypeRepository.save(donationType);
-    return donationTypeFactory.createDonationTypeViewModel(donationType);
+    return donationTypeFactory.createViewModel(donationType);
   }
 }

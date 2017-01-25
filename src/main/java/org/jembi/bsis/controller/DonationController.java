@@ -206,7 +206,7 @@ public class DonationController {
   private void addEditSelectorOptions(Map<String, Object> m) {
     m.put("venues", locationFactory.createViewModels(locationRepository.getVenues()));
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
-    m.put("donationTypes", donationTypeFactory.createDonationTypeViewModels(donationTypes));
+    m.put("donationTypes", donationTypeFactory.createViewModels(donationTypes));
     m.put("packTypes", packTypeFactory.createFullViewModels(packTypeRepository.getAllEnabledPackTypes()));
     List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
     for (HaemoglobinLevel value : HaemoglobinLevel.values()) {

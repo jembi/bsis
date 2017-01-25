@@ -214,7 +214,7 @@ public class DonationFactoryTests {
     when(adverseEventFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
     when(locationFactory.createFullViewModel(venue)).thenReturn(new LocationFullViewModel(venue));
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
-    when(donationTypeFactory.createDonationTypeViewModel(donationType)).thenReturn(donationTypeViewModel);
+    when(donationTypeFactory.createViewModel(donationType)).thenReturn(donationTypeViewModel);
 
     DonationViewModel returnedDonationViewModel = donationFactory.createDonationViewModelWithPermissions(
         donation);
@@ -282,7 +282,7 @@ public class DonationFactoryTests {
     when(donorConstraintChecker.isDonorEligibleToDonate(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donorConstraintChecker.isDonorDeferred(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
-    when(donationTypeFactory.createDonationTypeViewModel(donationType)).thenReturn(donationTypeViewModel);
+    when(donationTypeFactory.createViewModel(donationType)).thenReturn(donationTypeViewModel);
 
     List<DonationViewModel> returnedDonationViewModels = donationFactory.createDonationViewModelsWithPermissions(donations);
 

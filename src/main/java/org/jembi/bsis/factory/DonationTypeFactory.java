@@ -10,15 +10,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class DonationTypeFactory {
   
-  public List<DonationTypeViewModel> createDonationTypeViewModels(List<DonationType> donationTypes) {
+  public List<DonationTypeViewModel> createViewModels(List<DonationType> donationTypes) {
     List<DonationTypeViewModel> viewModels = new ArrayList<>();
-    for (DonationType donationType : donationTypes) {
-      viewModels.add(createDonationTypeViewModel(donationType));
+    if (donationTypes != null) {
+      for (DonationType donationType : donationTypes) {
+        viewModels.add(createViewModel(donationType));
+      }
     }
     return viewModels;
   }
   
-  public DonationTypeViewModel createDonationTypeViewModel(DonationType donationType) {
+  public DonationTypeViewModel createViewModel(DonationType donationType) {
     DonationTypeViewModel viewModel = new DonationTypeViewModel();
     viewModel.setId(donationType.getId());
     viewModel.setType(donationType.getDonationType());

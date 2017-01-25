@@ -83,7 +83,7 @@ public class DonationFactory {
     donationViewModel.setId(donation.getId());
     donationViewModel.setDonationDate(donation.getDonationDate());
     donationViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
-    donationViewModel.setDonationType(donationTypeFactory.createDonationTypeViewModel(donation.getDonationType()));
+    donationViewModel.setDonationType(donationTypeFactory.createViewModel(donation.getDonationType()));
     donationViewModel.setPackType(packTypeFactory.createFullViewModel(donation.getPackType()));
     donationViewModel.setNotes(donation.getNotes());
     donationViewModel.setDonorNumber(donation.getDonorNumber());

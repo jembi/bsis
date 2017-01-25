@@ -2,6 +2,7 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.jembi.bsis.helpers.builders.DonationTypeBuilder.aDonationType;
 import static org.jembi.bsis.helpers.builders.DonationTypeViewModelBuilder.aDonationTypeViewModel;
 import static org.jembi.bsis.helpers.matchers.DonationTypeViewModelMatcher.hasSameStateAsDonationTypeViewModel;
@@ -36,13 +37,19 @@ public class DonationTypeFactoryTests extends UnitTestSuite {
         .build();
     
     // Exercise SUT
-    DonationTypeViewModel returnedViewModel = donationTypeFactory.createDonationTypeViewModel(donationType);
+    DonationTypeViewModel returnedViewModel = donationTypeFactory.createViewModel(donationType);
     
     // Verify
     assertThat(returnedViewModel, hasSameStateAsDonationTypeViewModel(donationTypeViewModel));
   }
 
-  
+  @Test
+  public void testCreateViewModelsWithNull_shouldReturnEmptyList() {
+    List<DonationTypeViewModel> returnedViewModels = donationTypeFactory.createViewModels(null);
+    assertThat(returnedViewModels, is(notNullValue()));
+    assertThat(returnedViewModels.size(), is(0));
+  }
+
   @Test
   public void testCreateViewModels_shouldReturnExpectedViewModels() {
     List<DonationType> donationTypes = Arrays.asList(
@@ -50,7 +57,7 @@ public class DonationTypeFactoryTests extends UnitTestSuite {
         aDonationType().build(),
         aDonationType().build());
     
-    List<DonationTypeViewModel> returnedViewModels = donationTypeFactory.createDonationTypeViewModels(donationTypes);
+    List<DonationTypeViewModel> returnedViewModels = donationTypeFactory.createViewModels(donationTypes);
     
     assertThat(returnedViewModels.size(), is(3));
   }
