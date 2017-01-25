@@ -111,7 +111,6 @@ public class ComponentFactory {
     viewModel.setExpiresOn(component.getExpiresOn());
     viewModel.setInventoryStatus(component.getInventoryStatus());
     viewModel.setIssuedOn(component.getIssuedOn());
-    viewModel.setLocation(locationFactory.createFullViewModel(component.getLocation()));
     viewModel.setNotes(component.getNotes());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
     viewModel.setIsInitialComponent(component.isInitialComponent());
@@ -126,6 +125,7 @@ public class ComponentFactory {
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
     viewModel.setExpiryStatus(getExpiryStatus(component));
     viewModel.setId(component.getId());
+    viewModel.setLocation(locationFactory.createFullViewModel(component.getLocation()));
     viewModel.setStatus(component.getStatus());
     return viewModel;
   }

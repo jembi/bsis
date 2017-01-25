@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class ComponentFullViewModel extends ComponentViewModel {
 
-  private LocationFullViewModel location;
   private String notes;
   private PackTypeFullViewModel packType;
   private Date createdDate;
@@ -19,14 +18,6 @@ public class ComponentFullViewModel extends ComponentViewModel {
   private String bloodRh;
   private InventoryStatus inventoryStatus;
   private boolean isInitialComponent;
-
-  public LocationFullViewModel getLocation() {
-    return location;
-  }
-
-  public void setLocation(LocationFullViewModel location) {
-    this.location = location;
-  }
 
   public String getNotes() {
     return notes;

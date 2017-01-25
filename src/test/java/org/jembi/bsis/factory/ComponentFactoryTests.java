@@ -394,6 +394,7 @@ public class ComponentFactoryTests {
 
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber("1234567").build();
     ComponentType componentType = aComponentType().build();
+    Location location = aLocation().build();
     Component component = aComponent()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
@@ -402,11 +403,14 @@ public class ComponentFactoryTests {
         .withCreatedOn(createdOn)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
+        .withLocation(location)
         .build();
     
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .withId(1L)
         .build();
+
+    LocationFullViewModel locationFullViewModel = new LocationFullViewModel(location);
     
     ComponentViewModel expectedViewModel = aComponentViewModel().withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
@@ -416,10 +420,12 @@ public class ComponentFactoryTests {
         .withExpiresOn(expiresOn)
         .withDonationIdentificationNumber("1234567")
         .withExpiryStatus("Already expired")
+        .withLocation(locationFullViewModel)
         .build();
 
     // setup mocks
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
+    when(locationFactory.createFullViewModel(location)).thenReturn(locationFullViewModel);
 
     // run test
     ComponentViewModel convertedViewModel = componentFactory.createComponentViewModel(component);
