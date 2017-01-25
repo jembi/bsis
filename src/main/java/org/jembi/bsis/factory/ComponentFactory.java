@@ -124,6 +124,7 @@ public class ComponentFactory {
     viewModel.setCreatedOn(component.getCreatedOn());
     viewModel.setExpiresOn(component.getExpiresOn());
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
+    viewModel.setDonationFlagCharacters(component.getDonation().getFlagCharacters());
     viewModel.setExpiryStatus(getExpiryStatus(component));
     viewModel.setId(component.getId());
     viewModel.setStatus(component.getStatus());

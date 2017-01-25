@@ -110,6 +110,11 @@ public class ComponentBackingForm {
   }
 
   @JsonIgnore
+  public void setDonationFlagCharacters(String donationFlagCharacters) {
+    // Ignore
+  }
+
+  @JsonIgnore
   public void setPackType(PackType packType) {
     // Ignore
   }

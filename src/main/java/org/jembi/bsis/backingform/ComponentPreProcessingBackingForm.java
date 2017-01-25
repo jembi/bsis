@@ -128,6 +128,11 @@ public class ComponentPreProcessingBackingForm {
   }
 
   @JsonIgnore
+  public void setDonationFlagCharacters(String donationFlagCharacters) {
+    // Ignore
+  }
+
+  @JsonIgnore
   public void setPackType(PackType packType) {
     // Ignore
   }

@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
+import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -417,6 +418,38 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     
     // Verify
     assertThat(returnedComponent, is(expectedComponent));
+  }
+
+  @Test
+  public void testFindComponentByCodeAndDINInStockWithFlagCharacters_shouldReturnMatchingComponent() {
+
+    String componentCode = "0011-01";
+    String donationIdentificationNumber = "0000002";
+    String flagCharacters = "12";
+
+    // Excluded by donation identification number
+    aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(aDonation().withDonationIdentificationNumber("1000007").build())
+        .buildAndPersist(entityManager);
+
+    // Expected
+    Component expectedComponent = aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(aDonation()
+            .withDonationIdentificationNumber(donationIdentificationNumber)
+            .withFlagCharacters(flagCharacters)
+            .build())
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .buildAndPersist(entityManager);
+
+    // Test
+    Component returnedComponent = inventoryRepository.findComponentByCodeAndDINInStock(componentCode,
+        donationIdentificationNumber + flagCharacters);
+
+    // Verify
+    assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
   }
 
   @Test(expected = NoResultException.class)

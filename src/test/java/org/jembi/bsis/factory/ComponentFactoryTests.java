@@ -2,6 +2,7 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
@@ -22,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -69,7 +69,7 @@ public class ComponentFactoryTests {
   @Test
   public void createComponentFullViewModel_oneComponent() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build();
+    Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
     Location location = aLocation().build();
     Component parentComponent = aComponent().withId(2L).build();
     
@@ -122,7 +122,7 @@ public class ComponentFactoryTests {
   public void createComponentFullViewModels_componentList() throws Exception {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
-    Donation donation = DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build();
+    Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
     components.add(aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).withDonation(donation).build());
     components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
     
@@ -150,7 +150,7 @@ public class ComponentFactoryTests {
   public void createComponentManagementViewModels_returnsCollection() throws Exception {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
-    Donation donation = DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build();
+    Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
     components.add(aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).withDonation(donation).build());
     components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
     donation.addComponent(components.get(0));
@@ -191,7 +191,7 @@ public class ComponentFactoryTests {
         .withId(1L)
         .withCreatedOn(createdOn)
         .build();
-    Donation donation = DonationBuilder.aDonation()
+    Donation donation = aDonation()
         .withDonationIdentificationNumber("1234567")
         .withBleedStartTime(sdf.parse("2016-01-01 13:00"))
         .withBleedEndTime(sdf.parse("2016-01-01 13:17"))
@@ -267,7 +267,7 @@ public class ComponentFactoryTests {
     cal.add(Calendar.DAY_OF_YEAR, 200);
     Date expiresOn = cal.getTime();
     Component initialComponent = aComponent().withId(1L).build();
-    Donation donation = DonationBuilder.aDonation()
+    Donation donation = aDonation()
         .withComponent(initialComponent)
         .build();
     ComponentType componentType = aComponentType().build();
@@ -331,7 +331,7 @@ public class ComponentFactoryTests {
     ComponentType componentType = aComponentType()
         .withId(1L)
         .build();
-    Donation donation = DonationBuilder.aDonation().build();
+    Donation donation = aDonation().build();
     Component initialComponent = aComponent()
         .withId(1L)
         .withComponentType(componentType)
@@ -392,7 +392,10 @@ public class ComponentFactoryTests {
     cal.add(Calendar.DAY_OF_YEAR, -1);
     Date expiresOn = cal.getTime();
 
-    Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber("1234567").build();
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber("1234567")
+        .withFlagCharacters("09")
+        .build();
     ComponentType componentType = aComponentType().build();
     Component component = aComponent()
         .withId(1L)
@@ -415,6 +418,7 @@ public class ComponentFactoryTests {
         .withCreatedOn(createdOn)
         .withExpiresOn(expiresOn)
         .withDonationIdentificationNumber("1234567")
+        .withDonationFlagCharacters("09")
         .withExpiryStatus("Already expired")
         .build();
 
