@@ -91,6 +91,7 @@ public class ComponentStatusCalculator {
     }
     return false;
   }
+
   /**
    * Determines if the component contains plasma and its weight is between lowVolumeWeight and max minWeight.
    *
@@ -98,7 +99,7 @@ public class ComponentStatusCalculator {
    * @return
    */
   public boolean shouldComponentBeDiscardedForLowWeight(Component component) {
-    if (component.getParentComponent() == null && component.getWeight() != null) {
+    if (component.isInitialComponent() && component.getWeight() != null) {
       PackType packType = component.getDonation().getPackType();
       Integer weight = component.getWeight();
       if (packType.getLowVolumeWeight() != null && component.getComponentType().getContainsPlasma()
