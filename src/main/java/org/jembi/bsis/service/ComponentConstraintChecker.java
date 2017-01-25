@@ -6,7 +6,6 @@ import java.util.List;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
-import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,13 +59,7 @@ public class ComponentConstraintChecker {
     if (!component.hasComponentBatch()){
       return false;
     }
-    
-    // If it's an initial component, check that weight is valid
-    if (component.isInitialComponent()) {
-      if (!isWeightValid(component)) {
-        return false;
-      }
-    }
+
     // There must be component type combinations for that component type to be able to process it
     if (component.getComponentType().getProducedComponentTypeCombinations() == null
         || component.getComponentType().getProducedComponentTypeCombinations().size() == 0) {
@@ -118,16 +111,5 @@ public class ComponentConstraintChecker {
     }
 
     return true;
-  }
-
-  private boolean isWeightValid(Component component) {
-    if (component.getWeight() != null) {
-      PackType packType = component.getDonation().getPackType();
-      Integer weight = component.getWeight();
-      if (weight <= packType.getMaxWeight() && weight >= packType.getMinWeight()) {
-        return true;
-      }
-    }
-    return false;
   }
 }

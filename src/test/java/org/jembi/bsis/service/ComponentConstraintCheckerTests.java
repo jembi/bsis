@@ -268,47 +268,6 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
     boolean canProcess = componentConstraintChecker.canProcess(component);
     assertThat(canProcess, is(false));
   }
-
-  @Test
-  public void testCanProcessWithNoWeightForInitialComponent_shouldReturnFalse() {
-    Component component = aComponent()
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withComponentBatch(aComponentBatch().build())
-        .withParentComponent(null)
-        .withWeight(null)
-        .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
-        .build();
-    boolean canProcess = componentConstraintChecker.canProcess(component);
-    assertThat(canProcess, is(false));
-  }
-
-  @Test
-  public void testCanProcessWithValidWeightForInitialComponent_shouldReturnTrue() {
-    Component component = aComponent()
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withComponentBatch(aComponentBatch().build())
-        .withParentComponent(null)
-        .withWeight(450)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
-        .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
-        .build();
-    boolean canProcess = componentConstraintChecker.canProcess(component);
-    assertThat(canProcess, is(true));
-  }
-
-  @Test
-  public void testCanProcessWithInvalidWeightForInitialComponent_shouldReturnFalse() {
-    Component component = aComponent()
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withComponentBatch(aComponentBatch().build())
-        .withParentComponent(null)
-        .withWeight(350)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
-        .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
-        .build();
-    boolean canProcess = componentConstraintChecker.canProcess(component);
-    assertThat(canProcess, is(false));
-  }
   
   @Test
   public void testCanProcessWithNoCombinations_shouldReturnFalse() {
@@ -317,7 +276,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(null)
         .withWeight(450)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(316).withMinWeight(400).withMaxWeight(500).build()).build())
         .withComponentType(aComponentType().build())
         .build();
     boolean canProcess = componentConstraintChecker.canProcess(component);
@@ -331,7 +290,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
         .withComponentBatch(aComponentBatch().build())
         .withParentComponent(null)
         .withWeight(450)
-        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(316).withMinWeight(400).withMaxWeight(500).build()).build())
         .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
         .build();
     boolean canProcess = componentConstraintChecker.canProcess(component);
