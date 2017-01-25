@@ -474,13 +474,12 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   }
   
   @Test
-  public void testShouldComponentBeDiscardedForLowWeightHasNoPlasmaWeightMoreThanLowWeightLessThanMinWeight_shouldReturnFalse()
-      throws Exception {
+  public void testShouldComponentBeDiscardedForLowWeightHasNoPlasmaWeightMoreThanLowWeightLessThanMinWeight_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(1L)
-        .withParentComponent(aComponent().build())
-        .withWeight(460)
+        .withComponentType(aComponentType().thatDoesntContainsPlasma().build())
+        .withWeight(440)
         .withDonation(aDonation()
             .withPackType(aPackType()
                 .withLowVolumeWeight(400)
