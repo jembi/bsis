@@ -91,7 +91,7 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
     ComponentStatus status = ComponentStatus.QUARANTINED;
     List<Long> componentTypeIds = new ArrayList<Long>();
     componentTypeIds.add(1l);
-    List<Component> all = componentRepository.findAnyComponent(componentTypeIds, status, null, null);
+    List<Component> all = componentRepository.findAnyComponent(componentTypeIds, status, null, null, null);
     Assert.assertNotNull("There aren't matching components", all);
     Assert.assertTrue("There should be 0 components", all.isEmpty());
   }
@@ -100,7 +100,7 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testFindAnyComponentBetweenDates() throws Exception {
     Date start = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-10");
     Date end = new SimpleDateFormat("yyyy-MM-dd").parse("2015-08-12");
-    List<Component> all = componentRepository.findAnyComponent(null, null, start, end);
+    List<Component> all = componentRepository.findAnyComponent(null, null, start, end, null);
     Assert.assertNotNull("There are matching components", all);
     Assert.assertEquals("There should be 7 components", 7, all.size());
   }

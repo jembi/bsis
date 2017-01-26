@@ -150,7 +150,7 @@ public class ComponentController {
     List<ComponentViewModel> components;
     
     if (StringUtils.isBlank(donationIdentificationNumber)) {
-      components = componentControllerService.findAnyComponent(componentTypeIds, status, donationDateFrom, donationDateTo);
+      components = componentControllerService.findAnyComponent(componentTypeIds, status, donationDateFrom, donationDateTo, locationId);
     } else if (status != null) {
       components = componentControllerService.findComponentsByDonationIdentificationNumberAndStatus(
           donationIdentificationNumber, status);
