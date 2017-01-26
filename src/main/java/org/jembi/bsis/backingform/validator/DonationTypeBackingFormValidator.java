@@ -16,7 +16,7 @@ public class DonationTypeBackingFormValidator extends BaseValidator<DonationType
 
   @Override
   public void validateForm(DonationTypeBackingForm form, Errors errors) {
-    if (isDuplicateDonationType(form.getDonationType())) {
+    if (isDuplicateDonationType(form)) {
       errors.rejectValue("type", "400",
           "Donation type already exists.");
     }
@@ -27,14 +27,13 @@ public class DonationTypeBackingFormValidator extends BaseValidator<DonationType
     return "donationType";
   }
 
-  private boolean isDuplicateDonationType(DonationType donationType) {
-    String type = donationType.getDonationType();
-    if (StringUtils.isBlank(type)) {
+  private boolean isDuplicateDonationType(DonationTypeBackingForm form) {
+    if (StringUtils.isBlank(form.getDonationType())) {
       return false;
     }
 
-    DonationType existingDonationType = donationTypeRepository.getDonationType(type);
-    if (existingDonationType != null && !existingDonationType.getId().equals(donationType.getId())) {
+    DonationType existingDonationType = donationTypeRepository.getDonationType(form.getDonationType());
+    if (existingDonationType != null && !existingDonationType.getId().equals(form.getId())) {
       return true;
     }
 

@@ -1,48 +1,34 @@
 
 package org.jembi.bsis.backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.validation.Valid;
-
-import org.jembi.bsis.model.donationtype.DonationType;
-
-
 public class DonationTypeBackingForm {
 
-  @Valid
-  @JsonIgnore
-  private DonationType donationType;
+  private Long id;
+  private String donationType;
+  private Boolean isDeleted = false;
 
-  public DonationTypeBackingForm() {
-    donationType = new DonationType();
-  }
-
-  public DonationType getDonationType() {
+  public String getDonationType() {
     return donationType;
   }
 
-  public String getType() {
-    return donationType.getDonationType();
-  }
-
   public Long getId() {
-    return donationType.getId();
+    return id;
   }
 
-  public void setDonationType(DonationType donationType) {
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setDonationType(String donationType) {
     this.donationType = donationType;
   }
 
   public void setId(Long id) {
-    donationType.setId(id);
-  }
-
-  public void setType(String donationTypeStr) {
-    donationType.setDonationType(donationTypeStr);
+    this.id = id;
   }
 
   public void setIsDeleted(Boolean isDeleted) {
-    donationType.setIsDeleted(isDeleted);
+    this.isDeleted = isDeleted;
   }
+
 }

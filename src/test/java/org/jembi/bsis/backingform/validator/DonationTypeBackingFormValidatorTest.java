@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform.validator;
 
 import static org.mockito.Mockito.when;
+import static org.jembi.bsis.helpers.builders.DonationTypeBackingFormBuilder.aDonationTypeBackingForm;
 
 import java.util.HashMap;
 
@@ -32,12 +33,7 @@ public class DonationTypeBackingFormValidatorTest {
   @Test
   public void testValid() throws Exception {
     // set up data
-    DonationType donationType = DonationTypeBuilder.aDonationType()
-        .withName("DONATIONTYPE")
-        .build();
-
-    DonationTypeBackingForm form = new DonationTypeBackingForm();
-    form.setDonationType(donationType);
+    DonationTypeBackingForm form = aDonationTypeBackingForm().withDonationType("DONATIONTYPE").build();
 
     // set up mocks
     when(donationTypeRepository.getDonationType("DONATIONTYPE")).thenReturn(null);
@@ -58,8 +54,7 @@ public class DonationTypeBackingFormValidatorTest {
         .withName("DONATIONTYPE")
         .build();
 
-    DonationTypeBackingForm form = new DonationTypeBackingForm();
-    form.setDonationType(donationType);
+    DonationTypeBackingForm form = aDonationTypeBackingForm().withId(1l).withDonationType("DONATIONTYPE").build();
 
     // set up mocks
     when(donationTypeRepository.getDonationType("DONATIONTYPE")).thenReturn(donationType);
@@ -75,13 +70,7 @@ public class DonationTypeBackingFormValidatorTest {
   @Test
   public void testValidBlankType() throws Exception {
     // set up data
-    DonationType donationType = DonationTypeBuilder.aDonationType()
-        .withId(1l)
-        .withName("")
-        .build();
-
-    DonationTypeBackingForm form = new DonationTypeBackingForm();
-    form.setDonationType(donationType);
+    DonationTypeBackingForm form = aDonationTypeBackingForm().withId(1l).withDonationType("DONATIONTYPE").build();
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationType");
@@ -94,17 +83,11 @@ public class DonationTypeBackingFormValidatorTest {
   @Test
   public void testInvalidDuplicate() throws Exception {
     // set up data
-    DonationType donationType = DonationTypeBuilder.aDonationType()
-        .withId(1l)
-        .withName("DONATIONTYPE")
-        .build();
-
     DonationType duplicate = DonationTypeBuilder.aDonationType()
         .withId(2l)
         .build();
 
-    DonationTypeBackingForm form = new DonationTypeBackingForm();
-    form.setDonationType(donationType);
+    DonationTypeBackingForm form = aDonationTypeBackingForm().withId(1l).withDonationType("DONATIONTYPE").build();
 
     // set up mocks
     when(donationTypeRepository.getDonationType("DONATIONTYPE")).thenReturn(duplicate);

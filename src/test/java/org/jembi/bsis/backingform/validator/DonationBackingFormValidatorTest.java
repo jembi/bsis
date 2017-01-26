@@ -708,7 +708,7 @@ public class DonationBackingFormValidatorTest {
   private DonationBackingForm createBasicBackingForm() throws Exception {
     Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
     PackType packType = PackTypeBuilder.aPackType().withId(1L).withPackType("Single").build();
-    DonationTypeBackingForm donationType = aDonationTypeBackingForm().withId(1L).withType("Voluntary").build();
+    DonationTypeBackingForm donationType = aDonationTypeBackingForm().withId(1L).withDonationType("Voluntary").build();
 
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()
         .withBatchNumber("DB123")

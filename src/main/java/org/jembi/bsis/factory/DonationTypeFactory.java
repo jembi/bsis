@@ -3,6 +3,7 @@ package org.jembi.bsis.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jembi.bsis.backingform.DonationTypeBackingForm;
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,13 @@ public class DonationTypeFactory {
     viewModel.setType(donationType.getDonationType());
     viewModel.setIsDeleted(donationType.getIsDeleted());
     return viewModel;
+  }
+
+  public DonationType createEntity(DonationTypeBackingForm form) {
+    DonationType donationType = new DonationType();
+    donationType.setId(form.getId());
+    donationType.setDonationType(form.getDonationType());
+    return donationType;
   }
 
 }

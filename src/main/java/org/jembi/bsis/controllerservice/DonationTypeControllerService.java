@@ -35,14 +35,14 @@ public class DonationTypeControllerService {
   }
 
   public DonationTypeViewModel updateDonationType(Long id, DonationTypeBackingForm backingForm) {
-    DonationType donationType = backingForm.getDonationType();
+    DonationType donationType = donationTypeFactory.createEntity(backingForm);
     donationType.setId(id);
     donationTypeCRUDService.updateDonationType(donationType);
     return donationTypeFactory.createViewModel(donationType);
   }
 
   public DonationTypeViewModel createDonationType(DonationTypeBackingForm backingForm) {
-    DonationType donationType = backingForm.getDonationType();
+    DonationType donationType = donationTypeFactory.createEntity(backingForm);
     donationTypeRepository.save(donationType);
     return donationTypeFactory.createViewModel(donationType);
   }

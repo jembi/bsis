@@ -5,23 +5,23 @@ import org.jembi.bsis.backingform.DonationTypeBackingForm;
 public class DonationTypeBackingFormBuilder extends AbstractBuilder<DonationTypeBackingForm> {
 
   private Long id;
-  private String type;
+  private String donationType;
 
   public DonationTypeBackingFormBuilder withId(Long id) {
     this.id = id;
     return this;
   }
 
-  public DonationTypeBackingFormBuilder withType(String type) {
-    this.type = type;
+  public DonationTypeBackingFormBuilder withDonationType(String donationType) {
+    this.donationType = donationType;
     return this;
   }
-
+  
   @Override
   public DonationTypeBackingForm build() {
     DonationTypeBackingForm backingForm = new DonationTypeBackingForm();
     backingForm.setId(id);
-    backingForm.setType(type);
+    backingForm.setDonationType(donationType);
     return backingForm;
   }
   
