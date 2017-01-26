@@ -125,7 +125,7 @@ public class ComponentFactory {
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
     viewModel.setExpiryStatus(getExpiryStatus(component));
     viewModel.setId(component.getId());
-    viewModel.setLocation(locationFactory.createFullViewModel(component.getLocation()));
+    viewModel.setLocation(locationFactory.createViewModel(component.getLocation()));
     viewModel.setStatus(component.getStatus());
     return viewModel;
   }
