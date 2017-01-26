@@ -75,13 +75,12 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .getResultList();
   }
 
-  public List<Component> findComponentsByDonationIdentificationNumberAndStatusAndLocation (String donationIdentificationNumber,
-      ComponentStatus status, Long locationId) {
-    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_AND_LOCATION_COMPONENTS_BY_DIN_AND_STATUS_AND_LOCATION, Component.class)
+  public List<Component> findComponentsByDonationIdentificationNumberAndStatus(String donationIdentificationNumber,
+      ComponentStatus status) {
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN_AND_STATUS, Component.class)
         .setParameter("isDeleted", Boolean.FALSE)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
         .setParameter("status", status)
-        .setParameter("locationId", locationId)
         .getResultList();
   }
 

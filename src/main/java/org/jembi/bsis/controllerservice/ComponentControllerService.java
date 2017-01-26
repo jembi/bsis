@@ -92,11 +92,11 @@ public class ComponentControllerService {
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(donationNumber);
     return componentFactory.createComponentViewModels(results);
   }
-  
-  public List<ComponentViewModel> findComponentsByDonationIdentificationNumberStatusAndLocation (
-      String donationIdentificationNumber, ComponentStatus status, Long locationId) {
-    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumberAndStatusAndLocation(
-        donationIdentificationNumber, status, locationId);
+
+  public List<ComponentViewModel> findComponentsByDonationIdentificationNumberAndStatus(
+      String donationIdentificationNumber, ComponentStatus status) {
+    List<Component> results = componentRepository.findComponentsByDonationIdentificationNumberAndStatus(
+        donationIdentificationNumber, status);
     return componentFactory.createComponentViewModels(results);
   }
 

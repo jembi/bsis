@@ -152,8 +152,8 @@ public class ComponentController {
     if (StringUtils.isBlank(donationIdentificationNumber)) {
       components = componentControllerService.findAnyComponent(componentTypeIds, status, donationDateFrom, donationDateTo);
     } else if (status != null) {
-      components = componentControllerService.findComponentsByDonationIdentificationNumberStatusAndLocation(
-          donationIdentificationNumber, status, locationId);
+      components = componentControllerService.findComponentsByDonationIdentificationNumberAndStatus(
+          donationIdentificationNumber, status);
     } else {
       components = componentControllerService.findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
     }

@@ -8,7 +8,6 @@ import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilde
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBackingFormBuilder.aComponentTypeCombinationBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
-import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +31,6 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
@@ -160,31 +158,29 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testFindComponentsByDonationIdentificationNumberStatusAndLocation_shouldCallRepositoryAndFactory() throws Exception {
+  public void testFindComponentsByDonationIdentificationNumberAndStatus_shouldCallRepositoryAndFactory() throws Exception {
     // setup data
     String donationIdentificationNumber = "1234567";
     ComponentStatus status = ComponentStatus.DISCARDED;
-    Location location = aLocation().withId(1L).build();
     List<Component> components = Arrays.asList(
-        aComponent().withId(1L).withStatus(status).withLocation(location).build(),
-        aComponent().withId(2L).withStatus(status).withLocation(location).build()
+        aComponent().withId(1L).withStatus(status).build(),
+        aComponent().withId(2L).withStatus(status).build()
     );
-    List<ComponentViewModel> expectedViewModels = Arrays.asList(
+    List<ComponentViewModel> componentViewModels = Arrays.asList(
         aComponentViewModel().withId(1L).withStatus(status).build(),
         aComponentViewModel().withId(2L).withStatus(status).build()
     );
     
     // setup mocks
-    when(componentRepository.findComponentsByDonationIdentificationNumberAndStatusAndLocation(donationIdentificationNumber, status, 1L))
+    when(componentRepository.findComponentsByDonationIdentificationNumberAndStatus(donationIdentificationNumber, status))
         .thenReturn(components);
-    when(componentFactory.createComponentViewModels(components)).thenReturn(expectedViewModels);
+    when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
-    List<ComponentViewModel> returnedViewModels = componentControllerService.findComponentsByDonationIdentificationNumberStatusAndLocation(
-        donationIdentificationNumber, status, 1L);
-    
+    List<ComponentViewModel> returnedViewModels = componentControllerService.findComponentsByDonationIdentificationNumberAndStatus(
+        donationIdentificationNumber, status);
     // verify
-    assertThat(returnedViewModels, is(expectedViewModels));
+    assertThat(returnedViewModels, is(componentViewModels));
   }
   
   @Test
