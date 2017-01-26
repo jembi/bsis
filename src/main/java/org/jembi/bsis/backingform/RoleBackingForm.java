@@ -1,82 +1,44 @@
 package org.jembi.bsis.backingform;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.List;
 import java.util.Set;
-
-import javax.validation.Valid;
-
-import org.jembi.bsis.model.user.Permission;
-import org.jembi.bsis.model.user.Role;
-import org.jembi.bsis.model.user.User;
 
 public class RoleBackingForm {
 
-  @Valid
-  @JsonIgnore
-  private Role role;
-
-  public RoleBackingForm() {
-    setRole(new Role());
-  }
-
-  public RoleBackingForm(Role role) {
-    this.setRole(role);
-  }
-
-  public boolean equals(Object obj) {
-    return role.equals(obj);
+  private Long id;
+  private String name;
+  private String description;
+  private Set<PermissionBackingForm> permissions;
+  
+  public String getDescription() {
+    return description;
   }
 
   public Long getId() {
-    return role.getId();
+    return id;
+  }
+
+  public Set<PermissionBackingForm> getPermissions() {
+    return permissions;
   }
 
   public String getName() {
-    return role.getName();
-  }
-
-  @JsonIgnore
-  public List<User> getUsers() {
-    return role.getUsers();
-  }
-
-  public Set<Permission> getPermissions() {
-    return role.getPermissions();
-  }
-
-  public String getDescription() {
-    return role.getDescription();
-  }
-
-  public Role getRole() {
-    return role;
-  }
-
-  public void setRole(Role role) {
-    this.role = role;
-  }
-
-  public void setId(Long id) {
-    role.setId(id);
-  }
-
-  public void setName(String name) {
-    role.setName(name);
-  }
-
-  public void setUsers(List<User> users) {
-    role.setUsers(users);
-  }
-
-  public void setPermissions(Set<Permission> permissions) {
-    role.setPermissions(permissions);
+    return name;
   }
 
   public void setDescription(String description) {
-    role.setDescription(description);
+    this.description = description;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setPermissions(Set<PermissionBackingForm> permissions) {
+    this.permissions = permissions;
   }
 
 }

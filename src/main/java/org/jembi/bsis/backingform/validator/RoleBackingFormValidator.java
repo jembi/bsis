@@ -17,7 +17,7 @@ public class RoleBackingFormValidator extends BaseValidator<RoleBackingForm> {
   @Override
   public void validateForm(RoleBackingForm form, Errors errors) {
 
-    if (isDuplicateRoleName(form.getRole())) {
+    if (isDuplicateRoleName(form)) {
       errors.rejectValue("role.name", "roleName.nonunique",
           "Role name already exists.");
     }
@@ -35,14 +35,14 @@ public class RoleBackingFormValidator extends BaseValidator<RoleBackingForm> {
     return "Role";
   }
 
-  private boolean isDuplicateRoleName(Role role) {
-    String roleName = role.getName();
+  private boolean isDuplicateRoleName(RoleBackingForm form) {
+    String roleName = form.getName();
     if (StringUtils.isBlank(roleName)) {
       return false;
     }
 
     Role existingRole = roleRepository.findRoleByName(roleName);
-    if (existingRole != null && !existingRole.getId().equals(role.getId())) {
+    if (existingRole != null && !existingRole.getId().equals(form.getId())) {
       return true;
     }
 

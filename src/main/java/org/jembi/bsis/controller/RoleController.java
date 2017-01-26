@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.RoleBackingForm;
 import org.jembi.bsis.backingform.validator.RoleBackingFormValidator;
+import org.jembi.bsis.factory.PermissionFactory;
 import org.jembi.bsis.factory.RoleFactory;
 import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.repository.RoleRepository;
@@ -38,6 +39,9 @@ public class RoleController {
   @Autowired
   private RoleFactory roleFactory;
 
+  @Autowired
+  private PermissionFactory permissionFactory;
+
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(roleBackingFormValidator);
@@ -63,7 +67,7 @@ public class RoleController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
   public RoleViewModel updateRole(@Valid @RequestBody RoleBackingForm form, @PathVariable Long id) {
     form.setId(id);
-    Role updatedRole = roleRepository.updateRole(form.getRole());
+    Role updatedRole = roleRepository.updateRole(roleFactory.createEntity(form));
     return roleFactory.createViewModel(updatedRole);
 
   }
@@ -84,7 +88,7 @@ public class RoleController {
     Role role = new Role();
     role.setName(form.getName());
     role.setDescription(form.getDescription());
-    role.setPermissions(form.getPermissions());
+    role.setPermissions(permissionFactory.createEntities(form.getPermissions()));
     role = roleRepository.addRole(role);
     return roleFactory.createViewModel(role);
   }

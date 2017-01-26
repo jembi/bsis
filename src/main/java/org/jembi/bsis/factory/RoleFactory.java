@@ -3,6 +3,7 @@ package org.jembi.bsis.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jembi.bsis.backingform.RoleBackingForm;
 import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.viewmodel.RoleViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,13 @@ public class RoleFactory {
       }
     }
     return roleViewModels;
+  }
+
+  public Role createEntity(RoleBackingForm form) {
+    Role role = new Role();
+    role.setId(form.getId());
+    role.setName(form.getName());
+    role.setDescription(form.getDescription());
+    return role;
   }
 }

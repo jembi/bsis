@@ -1,14 +1,15 @@
 package org.jembi.bsis.factory;
 
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.jembi.bsis.helpers.builders.PermissionBuilder.aPermission;
 import static org.jembi.bsis.helpers.builders.PermissionViewModelBuilder.aPermissionViewModel;
+import static org.jembi.bsis.helpers.builders.RoleBackingFormBuilder.aRoleBackingForm;
 import static org.jembi.bsis.helpers.builders.RoleBuilder.aRole;
 import static org.jembi.bsis.helpers.builders.RoleViewModelBuilder.aRoleViewModel;
 import static org.jembi.bsis.helpers.matchers.RoleViewModelMatcher.hasSameStateAsRoleViewModel;
+import static org.jembi.bsis.helpers.matchers.RoleMatcher.hasSameStateAsRole;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jembi.bsis.backingform.RoleBackingForm;
 import org.jembi.bsis.model.user.Permission;
 import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.suites.UnitTestSuite;
@@ -82,4 +84,27 @@ public class RoleFactoryTests extends UnitTestSuite {
     
     assertThat(returnedViewModels.size(), is(3));
   }
+
+  @Test
+  public void testCreateEntity_shouldReturnExpectedEntity() {
+    // Set up fixture
+    RoleBackingForm form = aRoleBackingForm()
+        .withId(1L)
+        .withName("role")
+        .withDescription("role description")
+        .build();
+
+    Role expectedRole = aRole()
+        .withId(1L)
+        .withName("role")
+        .withDescription("role description")
+        .build();
+
+    // Exercise SUT
+    Role returnedRole = roleFactory.createEntity(form);
+
+    // Verify
+    assertThat(returnedRole, hasSameStateAsRole(expectedRole));
+  }
+
 }
