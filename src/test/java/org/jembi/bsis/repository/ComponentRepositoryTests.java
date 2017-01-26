@@ -158,7 +158,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findComponentsByDonationIdentificationNumberAndStatusAndLocation(
-        donationIdentificationNumber, ComponentStatus.DISCARDED, location);
+        donationIdentificationNumber, ComponentStatus.DISCARDED, location.getId());
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -212,6 +212,8 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
   }
+
+
   
   @Test
   public void testFindComponentsForExport_shouldReturnComponentExportDTOsWithTheCorrectState() {

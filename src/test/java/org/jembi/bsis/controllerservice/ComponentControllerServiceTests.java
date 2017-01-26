@@ -175,13 +175,13 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     );
     
     // setup mocks
-    when(componentRepository.findComponentsByDonationIdentificationNumberAndStatusAndLocation(donationIdentificationNumber, status, location))
+    when(componentRepository.findComponentsByDonationIdentificationNumberAndStatusAndLocation(donationIdentificationNumber, status, 1L))
         .thenReturn(components);
     when(componentFactory.createComponentViewModels(components)).thenReturn(expectedViewModels);
     
     // SUT
     List<ComponentViewModel> returnedViewModels = componentControllerService.findComponentsByDonationIdentificationNumberStatusAndLocation(
-        donationIdentificationNumber, status, location);
+        donationIdentificationNumber, status, 1L);
     
     // verify
     assertThat(returnedViewModels, is(expectedViewModels));
