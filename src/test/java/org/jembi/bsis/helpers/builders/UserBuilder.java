@@ -11,6 +11,7 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
   private String emailId;
   private String username = "default.username";
   private boolean passwordReset;
+  private boolean isAdmin;
   private Long id;
   private String firstName = "Default";
   private String lastName = "User";
@@ -36,6 +37,16 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
 
   public UserBuilder withPasswordReset() {
     passwordReset = true;
+    return this;
+  }
+
+  public UserBuilder thatIsAdmin() {
+    isAdmin = true;
+    return this;
+  }
+
+  public UserBuilder thatIsNotAdmin() {
+    isAdmin = false;
     return this;
   }
 
@@ -79,6 +90,7 @@ public class UserBuilder extends AbstractEntityBuilder<User> {
     user.setEmailId(emailId);
     user.setUsername(username);
     user.setPasswordReset(passwordReset);
+    user.setIsAdmin(isAdmin);
     user.setFirstName(firstName);
     user.setLastName(lastName);
     user.setPassword(password);

@@ -2,51 +2,63 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.List;
 
-import org.jembi.bsis.model.user.User;
+public class UserViewModel extends BaseViewModel {
 
-public class UserViewModel {
+  private String username;
+  private String firstName;
+  private String lastName;
+  private Boolean isAdmin;
+  private String emailId;
+  private Boolean passwordReset;
 
-  private User user;
   private List<RoleViewModel> roles;
 
-  public UserViewModel() {
-  }
-
-  public UserViewModel(User user) {
-    this.user = user;
-  }
-
-  public Long getId() {
-    return user.getId();
-  }
-
   public String getUsername() {
-    return user.getUsername();
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   public String getFirstName() {
-    return user.getFirstName();
+    return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
   }
 
   public String getLastName() {
-    return user.getLastName();
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
   }
 
   public Boolean getIsAdmin() {
-    return user.getIsAdmin();
+    return isAdmin;
   }
 
-  public String getEmailId() {
-    return user.getEmailId();
+  public void setIsAdmin(Boolean isAdmin) {
+    this.isAdmin = isAdmin;
   }
 
   public Boolean isPasswordReset() {
-    return user.isPasswordReset();
+    return passwordReset;
   }
 
-  @Override
-  public String toString() {
-    return user.getUsername();
+  public void setPasswordReset(Boolean isPasswordReset) {
+    this.passwordReset = isPasswordReset;
+  }
+
+  public String getEmailId() {
+    return emailId;
+  }
+
+  public void setEmailId(String emailId) {
+    this.emailId = emailId;
   }
 
   public List<RoleViewModel> getRoles() {
@@ -55,24 +67,5 @@ public class UserViewModel {
 
   public void setRoles(List<RoleViewModel> roles) {
     this.roles = roles;
-  }
-
-  @Override
-  public boolean equals(Object other) {
-    if (other == this) {
-      return true;
-    }
-
-    if (!(other instanceof UserViewModel)) {
-      return false;
-    }
-
-    UserViewModel userViewModel = (UserViewModel) other;
-
-    if (user == null) {
-      return userViewModel.user == null;
-    }
-
-    return user.equals(userViewModel.user);
   }
 }

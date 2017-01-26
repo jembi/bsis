@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.RoleBuilder.aRole;
 import static org.jembi.bsis.helpers.builders.RoleViewModelBuilder.aRoleViewModel;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
+import static org.jembi.bsis.helpers.builders.UserViewModelBuilder.aUserViewModel;
 import static org.jembi.bsis.helpers.matchers.UserViewModelMatcher.hasSameStateAsUserViewModel;
 import static org.mockito.Mockito.when;
 
@@ -32,10 +33,12 @@ public class UserFactoryTests extends UnitTestSuite {
     // Set up fixture
     User user = aUser()
         .withId(1L)
+        .withUsername("test")
         .withEmailId("test@test.com")
         .withFirstName("Tester")
         .withLastName("Test")
         .withPasswordReset()
+        .thatIsAdmin()
         .thatIsNotDeleted()
         .withRole(aRole().withId(1L).withName("Superuser").build())
         .withRole(aRole().withId(1L).withName("Admin").build())
@@ -45,7 +48,17 @@ public class UserFactoryTests extends UnitTestSuite {
         aRoleViewModel().withId(1L).withName("Superuser").build(),
         aRoleViewModel().withId(2L).withName("Admin").build()
         );
-    UserViewModel expectedViewModel = new UserViewModel(user);
+    UserViewModel expectedViewModel = aUserViewModel()
+        .withId(1L)
+        .withUsername("test")
+        .withEmailId("test@test.com")
+        .withFirstName("Tester")
+        .withLastName("Test")
+        .withPasswordReset()
+        .withRoles(roleViewModels)
+        .thatIsAdmin()
+        .build();
+
     expectedViewModel.setRoles(roleViewModels);
 
     // Set up mocks

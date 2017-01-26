@@ -15,6 +15,9 @@ public class AuditRevisionViewModelFactory {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private UserFactory userFactory;
+
   public void setUserRepository(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
@@ -27,7 +30,7 @@ public class AuditRevisionViewModelFactory {
       viewModel.setId(auditRevision.getId());
       viewModel.setRevisionDate(auditRevision.getRevisionDate());
       if (auditRevision.getUsername() != null) {
-        viewModel.setUser(userRepository.findUser(auditRevision.getUsername()));
+        viewModel.setUser(userFactory.createViewModel(userRepository.findUser(auditRevision.getUsername())));
       }
       viewModel.setEntityModifications(auditRevision.getEntityModifications());
       viewModels.add(viewModel);

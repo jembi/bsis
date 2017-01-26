@@ -15,7 +15,14 @@ public class UserFactory {
   private RoleFactory roleFactory;
 
   public UserViewModel createViewModel(User user) {
-    UserViewModel viewModel = new UserViewModel(user);
+    UserViewModel viewModel = new UserViewModel();
+    viewModel.setId(user.getId());
+    viewModel.setUsername(user.getUsername());
+    viewModel.setEmailId(user.getEmailId());
+    viewModel.setFirstName(user.getFirstName());
+    viewModel.setLastName(user.getLastName());
+    viewModel.setIsAdmin(user.getIsAdmin());
+    viewModel.setPasswordReset(user.isPasswordReset());
     viewModel.setRoles(roleFactory.createViewModels(user.getRoles()));
     return viewModel;
   }
