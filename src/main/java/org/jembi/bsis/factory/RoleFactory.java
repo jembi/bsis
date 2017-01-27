@@ -39,6 +39,7 @@ public class RoleFactory {
     role.setId(form.getId());
     role.setName(form.getName());
     role.setDescription(form.getDescription());
+    role.setPermissions(permissionFactory.createEntities(form.getPermissions()));
     return role;
   }
 
