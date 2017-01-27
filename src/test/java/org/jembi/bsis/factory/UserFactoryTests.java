@@ -2,17 +2,24 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.RoleBackingFormBuilder.aRoleBackingForm;
 import static org.jembi.bsis.helpers.builders.RoleBuilder.aRole;
 import static org.jembi.bsis.helpers.builders.RoleViewModelBuilder.aRoleViewModel;
+import static org.jembi.bsis.helpers.builders.UserBackingFormBuilder.aUserBackingForm;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.jembi.bsis.helpers.builders.UserViewModelBuilder.aUserViewModel;
 import static org.jembi.bsis.helpers.matchers.UserViewModelMatcher.hasSameStateAsUserViewModel;
+import static org.jembi.bsis.helpers.matchers.UserMatcher.hasSameStateAsUser;
+
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import org.jembi.bsis.backingform.UserBackingForm;
+import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.RoleViewModel;
@@ -83,5 +90,49 @@ public class UserFactoryTests extends UnitTestSuite {
     List<UserViewModel> returnedViewModels = userFactory.createViewModels(users);
     
     assertThat(returnedViewModels.size(), is(3));
+  }
+
+  @Test
+  public void testCreateEntity_shouldReturnExpectedEntity() {
+    // Set up fixtures
+    Date lastLogin = new Date();
+    UserBackingForm form = aUserBackingForm()
+        .withId(1L)
+        .withUsername("username")
+        .withPassword("password")
+        .withFirstName("firstName")
+        .withLastName("lastName")
+        .withEmailId("emailId")
+        .thatIsStaff()
+        .thatIsActive()
+        .thatIsAdmin()
+        .thatIsNotDeleted()
+        .withNotes("notes")
+        .withLastLogin(lastLogin)
+        .thatIsPasswordReset()
+        .withRole(aRoleBackingForm().build())
+        .build();
+
+    User expectedUser = aUser()
+        .withId(1L)
+        .withUsername("username")
+        .withPassword("password")
+        .withFirstName("firstName")
+        .withLastName("lastName")
+        .withEmailId("emailId")
+        .thatIsStaff()
+        .thatIsAdmin()
+        .thatIsNotDeleted()
+        .withNotes("notes")
+        .withLastLogin(lastLogin)
+        .withPasswordReset()
+        .withRole(new Role())
+        .build();
+
+    // Exercise SUT
+    User returnedUser = userFactory.createEntity(form);
+
+    // Verify
+    assertThat(returnedUser, hasSameStateAsUser(expectedUser));
   }
 }

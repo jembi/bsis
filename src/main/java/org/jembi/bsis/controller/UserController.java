@@ -82,7 +82,7 @@ public class UserController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
   @ResponseStatus(HttpStatus.CREATED)
   public UserViewModel addUser(@Valid @RequestBody UserBackingForm form) {
-    User user = form.getUser();
+    User user = userFactory.createEntity(form);
     String hashedPassword = getHashedPassword(user.getPassword());
     user.setPassword(hashedPassword);
     user.setIsDeleted(false);
@@ -95,7 +95,7 @@ public class UserController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_USERS + "')")
   public UserViewModel updateUser(@Valid @RequestBody UserBackingForm form, @PathVariable Long id) {
     form.setIsDeleted(false);
-    User user = form.getUser();
+    User user = userFactory.createEntity(form);
     user.setId(id);
     boolean modifyPassword = form.isModifyPassword();
     if (modifyPassword) {
@@ -112,7 +112,7 @@ public class UserController {
   @RequestMapping(method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.AUTHENTICATED + "')")
   public UserViewModel updateLoginUserInfo(@Valid @RequestBody UserBackingForm form) {
-    User user = form.getUser();
+    User user = userFactory.createEntity(form);
     user.setId(getLoginUser().getId());
     boolean modifyPassword = form.isModifyPassword();
     if (modifyPassword) {

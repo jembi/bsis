@@ -3,6 +3,7 @@ package org.jembi.bsis.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jembi.bsis.backingform.UserBackingForm;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.viewmodel.UserViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,25 @@ public class UserFactory {
       }
     }
     return userViewModels;
+  }
+
+  public User createEntity(UserBackingForm form) {
+    User user = new User();
+
+    user.setId(form.getId());
+    user.setUsername(form.getUsername());
+    user.setPassword(form.getPassword());
+    user.setFirstName(form.getFirstName());
+    user.setLastName(form.getLastName());
+    user.setEmailId(form.getEmailId());
+    user.setIsStaff(form.getIsStaff());
+    user.setIsActive(form.getIsActive());
+    user.setIsAdmin(form.getIsAdmin());
+    user.setIsDeleted(form.getIsDeleted());
+    user.setNotes(form.getNotes());
+    user.setLastLogin(form.getLastLogin());
+    user.setPasswordReset(form.isPasswordReset());
+    user.setRoles(roleFactory.createEntities(form.getRoles()));
+    return user;
   }
 }

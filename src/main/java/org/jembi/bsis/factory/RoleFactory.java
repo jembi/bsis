@@ -41,4 +41,12 @@ public class RoleFactory {
     role.setDescription(form.getDescription());
     return role;
   }
+
+  public List<Role> createEntities(List<RoleBackingForm> forms) {
+    List<Role> roles = new ArrayList<>();
+    for(RoleBackingForm form: forms) {
+      roles.add(createEntity(form));
+    }
+    return roles;
+  }
 }

@@ -77,9 +77,9 @@ public class UserBackingFormValidator extends BaseValidator<UserBackingForm> {
   private void checkUserName(UserBackingForm form, Errors errors) {
 
     boolean flag = false;
-    String userName = form.getUser().getUsername();
+    String userName = form.getUsername();
 
-    if (isDuplicateUserName(form.getUser())) {
+    if (isDuplicateUserName(form)) {
       errors.rejectValue("user.username", "userName.nonunique", "Username already exists.");
     }
 
@@ -126,14 +126,14 @@ public class UserBackingFormValidator extends BaseValidator<UserBackingForm> {
     return false;
   }
 
-  private boolean isDuplicateUserName(User user) {
-    String userName = user.getUsername();
+  private boolean isDuplicateUserName(UserBackingForm form) {
+    String userName = form.getUsername();
     if (StringUtils.isBlank(userName)) {
       return false;
     }
 
     User existingUser = userRepository.findUser(userName);
-    if (existingUser != null && !existingUser.getId().equals(user.getId())) {
+    if (existingUser != null && !existingUser.getId().equals(form.getId())) {
       return true;
     }
 

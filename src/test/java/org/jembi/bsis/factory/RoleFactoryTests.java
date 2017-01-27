@@ -107,4 +107,22 @@ public class RoleFactoryTests extends UnitTestSuite {
     assertThat(returnedRole, hasSameStateAsRole(expectedRole));
   }
 
+  @Test
+  public void testCreateEntities_shouldReturnExpectedEntities() {
+    // Set up fixture
+    List<RoleBackingForm> forms = Arrays.asList(
+        aRoleBackingForm()
+          .withId(1L)
+          .build(),
+        aRoleBackingForm()
+          .withId(2L)
+          .build()
+        );
+
+    // Exercise SUT
+    List<Role> returnedRoles = roleFactory.createEntities(forms);
+
+    // Verify
+    assertThat(returnedRoles.size(), is(2));
+  }
 }

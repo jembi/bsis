@@ -1,14 +1,14 @@
 package org.jembi.bsis.backingform.validator;
 
+import static org.jembi.bsis.helpers.builders.RoleBackingFormBuilder.aRoleBackingForm;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
+import org.jembi.bsis.backingform.RoleBackingForm;
 import org.jembi.bsis.backingform.UserBackingForm;
-import org.jembi.bsis.backingform.validator.UserBackingFormValidator;
 import org.jembi.bsis.helpers.builders.UserBuilder;
-import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.FormFieldRepository;
 import org.jembi.bsis.repository.UserRepository;
@@ -37,7 +37,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setUsername(USERNAME);
     form.setPassword("password");
     form.setConfirmPassword("password");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
@@ -60,7 +60,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setUsername("a");
     form.setPassword("password");
     form.setConfirmPassword("password");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
@@ -83,7 +83,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setUsername("adminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadmin");
     form.setPassword("password");
     form.setConfirmPassword("password");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
@@ -106,7 +106,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setUsername("adm%n");
     form.setPassword("password");
     form.setConfirmPassword("password");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
@@ -129,7 +129,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setUsername(USERNAME);
     form.setPassword("password");
     form.setConfirmPassword("password");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
@@ -151,7 +151,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setUsername(USERNAME);
     form.setPassword("password");
     form.setConfirmPassword("password");
-    form.setRoles(Arrays.asList(new Role[]{}));
+    form.setRoles(Arrays.asList(new RoleBackingForm[]{}));
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
@@ -174,7 +174,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setUsername(USERNAME);
     form.setPassword("password1");
     form.setConfirmPassword("password2");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
@@ -197,7 +197,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setUsername(USERNAME);
     form.setPassword("");
     form.setConfirmPassword("password2");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
@@ -220,7 +220,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setUsername(USERNAME);
     form.setPassword("password1");
     form.setConfirmPassword("");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
@@ -242,7 +242,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     UserBackingForm form = new UserBackingForm();
     form.setId(USER_ID);
     form.setUsername(USERNAME);
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("user")).thenReturn(Arrays.asList(new String[]{}));
@@ -265,7 +265,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setCurrentPassword("password");
     form.setPassword("newPassword");
     form.setConfirmPassword("newPassword");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
     form.setModifyPassword(true);
 
     User anotherAdminUser = UserBuilder.aUser()
@@ -296,7 +296,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setCurrentPassword("oldpassword");
     form.setPassword("newPassword");
     form.setConfirmPassword("newPassword");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
     form.setModifyPassword(true);
 
     User anotherAdminUser = UserBuilder.aUser()
@@ -328,7 +328,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setCurrentPassword(null);
     form.setPassword("newPassword");
     form.setConfirmPassword("newPassword");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
     form.setModifyPassword(true);
 
     User anotherAdminUser = UserBuilder.aUser()
@@ -360,7 +360,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setCurrentPassword("password");
     form.setPassword("newPassword1");
     form.setConfirmPassword("newPassword2");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
     form.setModifyPassword(true);
 
     User anotherAdminUser = UserBuilder.aUser()
@@ -391,7 +391,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setUsername("datacapturer");
     form.setPassword("newPassword");
     form.setConfirmPassword("newPassword");
-    form.setRoles(Arrays.asList(new Role[]{new Role()}));
+    form.setRoles(Arrays.asList(aRoleBackingForm().build()));
     form.setModifyPassword(true);
 
     // set up security
