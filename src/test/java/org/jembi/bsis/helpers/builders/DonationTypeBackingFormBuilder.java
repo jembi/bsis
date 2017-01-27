@@ -21,7 +21,7 @@ public class DonationTypeBackingFormBuilder extends AbstractBuilder<DonationType
   public DonationTypeBackingForm build() {
     DonationTypeBackingForm backingForm = new DonationTypeBackingForm();
     backingForm.setId(id);
-    backingForm.setDonationType(donationType);
+    backingForm.setType(donationType);
     return backingForm;
   }
   

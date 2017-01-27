@@ -4,11 +4,11 @@ package org.jembi.bsis.backingform;
 public class DonationTypeBackingForm {
 
   private Long id;
-  private String donationType;
+  private String type;
   private Boolean isDeleted = false;
 
-  public String getDonationType() {
-    return donationType;
+  public String getType() {
+    return type;
   }
 
   public Long getId() {
@@ -19,8 +19,8 @@ public class DonationTypeBackingForm {
     return isDeleted;
   }
 
-  public void setDonationType(String donationType) {
-    this.donationType = donationType;
+  public void setType(String donationType) {
+    this.type = donationType;
   }
 
   public void setId(Long id) {

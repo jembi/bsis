@@ -32,7 +32,7 @@ public class DonationTypeFactory {
   public DonationType createEntity(DonationTypeBackingForm form) {
     DonationType donationType = new DonationType();
     donationType.setId(form.getId());
-    donationType.setDonationType(form.getDonationType());
+    donationType.setDonationType(form.getType());
     return donationType;
   }
 

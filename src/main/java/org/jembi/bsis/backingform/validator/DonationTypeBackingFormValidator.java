@@ -28,11 +28,11 @@ public class DonationTypeBackingFormValidator extends BaseValidator<DonationType
   }
 
   private boolean isDuplicateDonationType(DonationTypeBackingForm form) {
-    if (StringUtils.isBlank(form.getDonationType())) {
+    if (StringUtils.isBlank(form.getType())) {
       return false;
     }
 
-    DonationType existingDonationType = donationTypeRepository.getDonationType(form.getDonationType());
+    DonationType existingDonationType = donationTypeRepository.getDonationType(form.getType());
     if (existingDonationType != null && !existingDonationType.getId().equals(form.getId())) {
       return true;
     }

@@ -734,7 +734,7 @@ public class DataImportService {
             DonationTypeBackingForm donationTypeBackingForm = new DonationTypeBackingForm();
             DonationType donationType = donationTypeCache.get(cell.getStringCellValue());
             donationTypeBackingForm.setId(donationType.getId());
-            donationTypeBackingForm.setDonationType(donationType.getDonationType());
+            donationTypeBackingForm.setType(donationType.getDonationType());
             donationBackingForm.setDonationType(donationTypeBackingForm);
             break;
 
