@@ -98,7 +98,6 @@ public class ComponentStatusCalculator {
    *  - ComponentStatus.DISCARDED, 
    *   - ComponentStatus.ISSUED,
    *   - ComponentStatus.USED,  
-   *   - ComponentStatus.SPLIT, 
    *   - ComponentStatus.PROCESSED
    *   
    * Also if a Component with an existing status of UNSAFE will never
