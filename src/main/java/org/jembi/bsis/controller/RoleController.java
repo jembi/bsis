@@ -41,6 +41,7 @@ public class RoleController {
 
   @Autowired
   private PermissionFactory permissionFactory;
+  
 
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
@@ -59,7 +60,7 @@ public class RoleController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
   public Map<String, Object> editRoleFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("permissions", roleRepository.getAllPermissionsByName());
+    map.put("permissions", permissionFactory.createViewModels(roleRepository.getAllPermissionsByName()));
     return map;
   }
 
