@@ -211,12 +211,16 @@ public class DonorController {
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR + "')")
   public Map<String, Object> addDonorFormGenerator(HttpServletRequest request) {
-
     Map<String, Object> map = new HashMap<String, Object>();
-    DonorBackingForm form = new DonorBackingForm();
-
-    map.put("addDonorForm", form);
-    addEditSelectorOptions(map);
+    map.put("addDonorForm", new DonorBackingForm());
+    map.put("venues", locationFactory.createFullViewModels(locationRepository.getVenues()));
+    // FIXME: preferredContactMethods, languages, idTypes and addressTypes are lists containing entities.
+    // Only ViewModels should be returned because they are designed to only return the required information/
+    // Returning entities can cause issues when the entities contain tracking fields. See BSIS-2469
+    map.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
+    map.put("languages", donorRepository.getAllLanguages());
+    map.put("idTypes", donorRepository.getAllIdTypes());
+    map.put("addressTypes", donorRepository.getAllAddressTypes());
     return map;
   }
 
@@ -436,15 +440,6 @@ public class DonorController {
         .findPostDonationCounsellingForDonor(donorId);
     return postDonationCounsellingViewModelFactory
         .createPostDonationCounsellingViewModel(postDonationCounselling);
-  }
-
-  private void addEditSelectorOptions(Map<String, Object> m) {
-    List<Location> venues = locationRepository.getVenues();
-    m.put("venues", locationFactory.createFullViewModels(venues));
-    m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
-    m.put("languages", donorRepository.getAllLanguages());
-    m.put("idTypes", donorRepository.getAllIdTypes());
-    m.put("addressTypes", donorRepository.getAllAddressTypes());
   }
 
   private int getNumberOfDonations(List<Donation> donations) {
