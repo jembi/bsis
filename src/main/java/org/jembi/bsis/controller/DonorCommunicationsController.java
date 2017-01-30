@@ -61,14 +61,11 @@ public class DonorCommunicationsController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
   public
   @ResponseBody
-  Map<String, Object> donorCommunicationsFormGenerator(
-      HttpServletRequest request) {
-
+  Map<String, Object> donorCommunicationsFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
-
-    // to ensure custom field names are displayed in the form
     map.put("donorFields", formFieldAccessorService.getFormFieldsForForm("donor"));
-    addEditSelectorOptions(map);
+    map.put("venues", locationRepository.getVenues());
+    map.put("bloodGroups", BloodGroup.getBloodgroups());
     return map;
   }
 
@@ -99,11 +96,6 @@ public class DonorCommunicationsController {
     map.put("donors", donorViewModelFactory.createDonorViewModels(results));
 
     return map;
-  }
-
-  private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("venues", locationRepository.getVenues());
-    m.put("bloodGroups", BloodGroup.getBloodgroups());
   }
 
   private List<Location> setLocations(List<String> locations) {
