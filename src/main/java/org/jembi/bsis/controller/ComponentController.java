@@ -116,7 +116,6 @@ public class ComponentController {
   public Map<String, Object> getFindComponentForm() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", componentControllerService.getComponentTypes());
-    map.put("returnReasons", componentControllerService.getReturnReasons());
     map.put("discardReasons", componentControllerService.getDiscardReasons());
     map.put("recordComponentForm", new RecordComponentBackingForm());
     map.put("producedComponentTypesByCombinationId",
