@@ -31,27 +31,24 @@ public class ComponentRepository extends AbstractRepository<Component> {
   public List<Component> findAnyComponent(List<Long> componentTypes, ComponentStatus status,
       Date donationDateFrom, Date donationDateTo, Long locationId) {
 
+    boolean includeComponentTypes = true, includeStatus = true;
     if (status == null) {
-      return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_ANY_COMPONENT, Component.class)
-          .setParameter("isDeleted", Boolean.FALSE)
-          .setParameter("status", null)
-          .setParameter("locationId", locationId)
-          .setParameter("componentTypeIds", componentTypes)
-          .setParameter("donationDateFrom", donationDateFrom)
-          .setParameter("donationDateTo", donationDateTo)
-          .setParameter("includeStatus", false)
-          .getResultList();
-    } else {
-      return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_ANY_COMPONENT, Component.class)
+      includeStatus = false;
+    }
+    if (componentTypes == null) {
+      includeComponentTypes = false;
+    }
+
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_ANY_COMPONENT, Component.class)
           .setParameter("isDeleted", Boolean.FALSE)
           .setParameter("status", status)
           .setParameter("locationId", locationId)
           .setParameter("componentTypeIds", componentTypes)
           .setParameter("donationDateFrom", donationDateFrom)
           .setParameter("donationDateTo", donationDateTo)
-          .setParameter("includeStatus", true)
+          .setParameter("includeStatus", includeStatus)
+          .setParameter("includeComponentTypes", includeComponentTypes)
           .getResultList();
-    }
   }
 
   public List<Component> findComponentsByDonationIdentificationNumber(String donationIdentificationNumber) {
