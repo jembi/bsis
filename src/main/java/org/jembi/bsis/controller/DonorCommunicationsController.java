@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.jembi.bsis.factory.DonorViewModelFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.util.BloodGroup;
@@ -45,6 +46,9 @@ public class DonorCommunicationsController {
 
   @Autowired
   private LocationRepository locationRepository;
+
+  @Autowired
+  private LocationFactory locationFactory;
   
   @Autowired
   private DonorViewModelFactory donorViewModelFactory;
@@ -64,7 +68,7 @@ public class DonorCommunicationsController {
   Map<String, Object> donorCommunicationsFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donorFields", formFieldAccessorService.getFormFieldsForForm("donor"));
-    map.put("venues", locationRepository.getVenues());
+    map.put("venues", locationFactory.createViewModels(locationRepository.getVenues()));
     map.put("bloodGroups", BloodGroup.getBloodgroups());
     return map;
   }
