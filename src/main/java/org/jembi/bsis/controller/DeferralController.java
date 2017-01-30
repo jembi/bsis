@@ -11,7 +11,6 @@ import org.jembi.bsis.backingform.validator.DeferralBackingFormValidator;
 import org.jembi.bsis.controllerservice.DeferralControllerService;
 import org.jembi.bsis.factory.DonorDeferralFactory;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
-import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.service.DonorDeferralCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.DonorDeferralViewModel;
@@ -31,9 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("deferrals")
 public class DeferralController {
-
-  @Autowired
-  private DonorRepository donorRepository;
 
   @Autowired
   private DonorDeferralCRUDService donorDeferralCRUDService;
@@ -57,7 +53,7 @@ public class DeferralController {
   public Map<String, Object> deferDonorFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("deferralReasons", donorRepository.getDeferralReasons());
+    map.put("deferralReasons", deferralControllerService.getDeferralReasons());
     map.put("venues", deferralControllerService.getVenues());
     return map;
   }
