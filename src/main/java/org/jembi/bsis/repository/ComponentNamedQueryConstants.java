@@ -36,7 +36,7 @@ public class ComponentNamedQueryConstants {
   public static final String QUERY_FIND_ANY_COMPONENT =
       "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation " +
       "WHERE c.isDeleted= :isDeleted " +
-      "AND ((:componentTypeIds) = null OR c.componentType.id IN (:componentTypeIds)) " +
+      "AND ((:componentTypeIds) is null OR c.componentType.id IN (:componentTypeIds)) " +
       "AND (:donationDateFrom = null OR c.donation.donationDate >= :donationDateFrom) " +
       "AND (:donationDateTo = null OR c.donation.donationDate <= :donationDateTo) " +
       "AND (:locationId = null OR c.location.id = :locationId) " +
