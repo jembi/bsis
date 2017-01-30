@@ -305,10 +305,7 @@ public class DonorController {
   @RequestMapping(value = "{id}/deferrals", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
   public Map<String, Object> viewDonorDeferrals(@PathVariable("id") Long donorId) {
-
-    Donor donor = donorRepository.findDonorById(donorId);
     List<DonorDeferral> donorDeferrals = donorRepository.getDonorDeferrals(donorId);
-
     Map<String, Object> map = new HashMap<>();
     map.put("allDonorDeferrals", donorDeferralFactory.createDonorDeferralViewModels(donorDeferrals));
     map.put("isDonorCurrentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donorId));
