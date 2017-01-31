@@ -11,6 +11,7 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeFullViewModelBuilder.
 import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasSameStateAsComponentFullViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentManagementViewModelMatcher.hasSameStateAsComponentManagementViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameStateAsComponentViewModel;
@@ -36,7 +37,7 @@ import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
-import org.jembi.bsis.viewmodel.LocationFullViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -70,7 +71,8 @@ public class ComponentFactoryTests {
   public void createComponentFullViewModel_oneComponent() throws Exception {
     // set up data
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
-    Location location = aLocation().build();
+    Location location = aLocation().withId(1L).build();
+
     Component parentComponent = aComponent().withId(2L).build();
     
     ComponentType componentType = aComponentType()
@@ -84,6 +86,7 @@ public class ComponentFactoryTests {
           .withComponentTypeName(componentType.getComponentTypeName())
           .withComponentTypeCode(componentType.getComponentTypeCode())
           .build();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
     
     Component component = aComponent()
         .withId(1L)
@@ -100,14 +103,14 @@ public class ComponentFactoryTests {
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withComponentType(componentTypeViewModel)
-        .withLocation(new LocationFullViewModel(location))
+        .withLocation(locationViewModel)
         .withBloodAbo(donation.getBloodAbo())
         .withBloodRh(donation.getBloodRh())
         .thatIsNotInitialComponent()
         .build();
 
     // setup mocks
-    when(locationFactory.createFullViewModel(location)).thenReturn(new LocationFullViewModel(location));
+    when(locationFactory.createViewModel(location)).thenReturn(locationViewModel);
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
 
     // run test
@@ -397,6 +400,7 @@ public class ComponentFactoryTests {
         .withFlagCharacters("09")
         .build();
     ComponentType componentType = aComponentType().build();
+    Location location = aLocation().withId(1L).build();
     Component component = aComponent()
         .withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
@@ -405,11 +409,14 @@ public class ComponentFactoryTests {
         .withCreatedOn(createdOn)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
+        .withLocation(location)
         .build();
     
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .withId(1L)
         .build();
+
+    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
     
     ComponentViewModel expectedViewModel = aComponentViewModel().withId(1L)
         .withStatus(ComponentStatus.AVAILABLE)
@@ -420,10 +427,12 @@ public class ComponentFactoryTests {
         .withDonationIdentificationNumber("1234567")
         .withDonationFlagCharacters("09")
         .withExpiryStatus("Already expired")
+        .withLocation(locationViewModel)
         .build();
 
     // setup mocks
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
+    when(locationFactory.createViewModel(location)).thenReturn(locationViewModel);
 
     // run test
     ComponentViewModel convertedViewModel = componentFactory.createComponentViewModel(component);

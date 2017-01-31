@@ -131,6 +131,8 @@ public class ComponentController {
     map.put("recordComponentForm", new RecordComponentBackingForm());
     map.put("producedComponentTypesByCombinationId",
         componentControllerService.getProducedComponentTypesByCombinationId());
+    map.put("componentStatuses", componentControllerService.getComponentStatuses());
+    map.put("locations", componentControllerService.getLocations());
     return map;
   }
 
@@ -139,15 +141,16 @@ public class ComponentController {
   public Map<String, Object> findComponentPagination(HttpServletRequest request,
       @RequestParam(value = "componentNumber", required = false, defaultValue = "") String componentNumber,
       @RequestParam(value = "donationIdentificationNumber", required = false, defaultValue = "") String donationIdentificationNumber,
-      @RequestParam(value = "componentTypes", required = false, defaultValue = "") List<Long> componentTypeIds,
+      @RequestParam(value = "componentTypes", required = false) List<Long> componentTypeIds,
       @RequestParam(value = "status", required = false) ComponentStatus status,
       @RequestParam(value = "donationDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateFrom,
-      @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo) {
+      @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo,
+      @RequestParam(value = "locationId", required = false) Long locationId) {
 
     List<ComponentViewModel> components;
     
     if (StringUtils.isBlank(donationIdentificationNumber)) {
-      components = componentControllerService.findAnyComponent(componentTypeIds, status, donationDateFrom, donationDateTo);
+      components = componentControllerService.findAnyComponent(componentTypeIds, status, donationDateFrom, donationDateTo, locationId);
     } else if (status != null) {
       components = componentControllerService.findComponentsByDonationIdentificationNumberAndStatus(
           donationIdentificationNumber, status);

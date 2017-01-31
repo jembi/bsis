@@ -27,7 +27,7 @@ public class ComponentViewModelMatcher extends TypeSafeMatcher<ComponentViewMode
         .appendText("\ndonationIdentificationNumber: ").appendValue(expected.getDonationIdentificationNumber())
         .appendText("\ndonationFlagCharacters: ").appendValue(expected.getDonationFlagCharacters())
         .appendText("\nexpiryStatus: ").appendValue(expected.getExpiryStatus())
-        ;
+        .appendText("\nLocation: ").appendValue(expected.getLocation());
   }
 
   @Override
@@ -41,7 +41,8 @@ public class ComponentViewModelMatcher extends TypeSafeMatcher<ComponentViewMode
         (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn()) || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
         Objects.equals(actual.getDonationFlagCharacters(), expected.getDonationFlagCharacters()) &&
-        Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus());
+        Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus()) &&
+        Objects.equals(actual.getLocation(), expected.getLocation());
   }
 
   public static ComponentViewModelMatcher hasSameStateAsComponentViewModel(ComponentViewModel expected) {

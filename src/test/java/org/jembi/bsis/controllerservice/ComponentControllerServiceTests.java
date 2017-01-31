@@ -179,7 +179,6 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // SUT
     List<ComponentViewModel> returnedViewModels = componentControllerService.findComponentsByDonationIdentificationNumberAndStatus(
         donationIdentificationNumber, status);
-    
     // verify
     assertThat(returnedViewModels, is(componentViewModels));
   }
@@ -201,15 +200,15 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     );
     
     // setup mocks
-    Mockito.when(componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo)).thenReturn(components);
+    Mockito.when(componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, null)).thenReturn(components);
     Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
-    componentControllerService.findAnyComponent(componentTypeIds, status, dateFrom, dateTo);
+    componentControllerService.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, null);
     
     // verify
     Mockito.verify(componentRepository).findAnyComponent(componentTypeIds, status, dateFrom,
-        dateTo);
+        dateTo, null);
     Mockito.verify(componentFactory).createComponentViewModels(components);
   }
   

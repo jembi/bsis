@@ -119,16 +119,6 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   }
   
   @Test
-  public void testCanDiscardWithSplitComponent_shouldReturnFalse() {
-    Component component = aComponent()
-        .withStatus(ComponentStatus.SPLIT)
-        .withComponentBatch(aComponentBatch().build())
-        .build();
-    boolean canDiscard = componentConstraintChecker.canDiscard(component);
-    assertThat(canDiscard, is(false));
-  }
-
-  @Test
   public void testCanProcessWithQuarantinedComponent_shouldReturnTrue() {
     Component component = aComponent()
         .withStatus(ComponentStatus.QUARANTINED)
@@ -255,20 +245,46 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanProcessWithSplitComponent_shouldReturnFalse() {
+  public void testCanProcessWithNoWeightForInitialComponent_shouldReturnTrue() {
     Component component = aComponent()
-        .withStatus(ComponentStatus.SPLIT)
+        .withStatus(ComponentStatus.AVAILABLE)
         .withComponentBatch(aComponentBatch().build())
-        .withParentComponent(aComponent().build())
-        .withComponentType(aComponentType()
-            .withProducedComponentTypeCombination(aComponentTypeCombination()
-                .build())
-            .build())
+        .withParentComponent(null)
+        .withWeight(null)
+        .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
         .build();
     boolean canProcess = componentConstraintChecker.canProcess(component);
-    assertThat(canProcess, is(false));
+    assertThat(canProcess, is(true));
   }
-  
+
+  @Test
+  public void testCanProcessWithValidWeightForInitialComponent_shouldReturnTrue() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withComponentBatch(aComponentBatch().build())
+        .withParentComponent(null)
+        .withWeight(450)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
+        .build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(true));
+  }
+
+  @Test
+  public void testCanProcessWithInvalidWeightForInitialComponent_shouldReturnTrue() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withComponentBatch(aComponentBatch().build())
+        .withParentComponent(null)
+        .withWeight(350)
+        .withDonation(aDonation().withPackType(aPackType().withMinWeight(400).withMaxWeight(500).build()).build())
+        .withComponentType(aComponentType().withProducedComponentTypeCombination(aComponentTypeCombination().build()).build())
+        .build();
+    boolean canProcess = componentConstraintChecker.canProcess(component);
+    assertThat(canProcess, is(true));
+  }
+
   @Test
   public void testCanProcessWithNoCombinations_shouldReturnFalse() {
     Component component = aComponent()
@@ -387,16 +403,6 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanPreProcessComponentWithSplitComponent_shouldReturnFalse() {
-    Component component = aComponent()
-        .withStatus(ComponentStatus.SPLIT)
-        .withComponentBatch(aComponentBatch().build())
-        .build();
-    boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
-    assertThat(canPreProcess, is(false));
-  }
-
-  @Test
   public void testCanRecordWeigthWithInitialComponent_shouldReturnTrue() {
     Component component = aComponent()
         .withStatus(ComponentStatus.AVAILABLE)
@@ -463,13 +469,6 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanUnprocessWithDiscardedComponent_shouldReturnFalse() {
     Component component = aComponent().withStatus(ComponentStatus.DISCARDED).build();
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
-    assertThat(canUnprocess, is(false));
-  }
-
-  @Test
-  public void testCanUnprocessWithSplitComponent_shouldReturnFalse() {
-    Component component = aComponent().withStatus(ComponentStatus.SPLIT).build();
     boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
     assertThat(canUnprocess, is(false));
   }
@@ -550,17 +549,6 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
     boolean canUnprocess = componentConstraintChecker.canUnprocess(parentComponent);
     assertThat(canUnprocess, is(false));
   }
-
-  @Test
-  public void testCanUnprocessWithSplitChildComponent_shouldReturnFalse() {
-    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child = aComponent().withId(2L).withStatus(ComponentStatus.SPLIT).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
-
-    when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child));
-
-    boolean canUnprocess = componentConstraintChecker.canUnprocess(parentComponent);
-    assertThat(canUnprocess, is(false));
-  }
   
   @Test
   public void testCanUnprocessWithWrongLabelledChildComponent_shouldReturnFalse() {
@@ -635,16 +623,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
     
     assertThat(canUndiscard, is(false));
   }
-  
-  @Test
-  public void testCanUndiscardComponentWithSplitStatus_shouldReturnFalse() {
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.SPLIT).build();
-    
-    boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
-    
-    assertThat(canUndiscard, is(false));
-  }
-  
+ 
   @Test
   public void testCanUndiscardComponentWithUsedStatus_shouldReturnFalse() {
     Component component = aComponent().withId(1L).withStatus(ComponentStatus.USED).build();

@@ -578,19 +578,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // verify
     assertThat("status is not changed", component.getStatus(), is(ComponentStatus.USED));
   }
-  
-  @Test
-  public void testUpdateComponentStatusSplit_shouldNotChange() throws Exception {
-    // set up data
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.SPLIT).build();
-    
-    // SUT
-    componentStatusCalculator.updateComponentStatus(component);
-    
-    // verify
-    assertThat("status is not changed", component.getStatus(), is(ComponentStatus.SPLIT));
-  }
-  
+
   @Test
   public void testUpdateComponentStatusWithNoInitialStatus_shouldChangeStatusToQuarantined() throws Exception {
     // set up data

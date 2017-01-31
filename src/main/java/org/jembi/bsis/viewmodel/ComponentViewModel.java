@@ -17,6 +17,15 @@ public class ComponentViewModel extends BaseViewModel {
   private ComponentStatus status;
   private String expiryStatus;
   private String componentCode;
+  private LocationViewModel location;
+
+  public LocationViewModel getLocation () {
+    return location;
+  }
+
+  public void setLocation (LocationViewModel location) {
+    this.location = location;
+  }
 
   public ComponentTypeViewModel getComponentType() {
     return componentType;

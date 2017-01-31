@@ -1768,11 +1768,6 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test
-  public void testMarkSplitComponentAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus() {
-    testMarkComponentsAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus(ComponentStatus.SPLIT);
-  }
-  
-  @Test
   public void testMarkProcessedComponentAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus() {
     testMarkComponentsAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus(ComponentStatus.PROCESSED);
   }

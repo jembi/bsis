@@ -11,6 +11,7 @@ import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DiscardedComponentDTOBuilder.aDiscardedComponentDTO;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
@@ -117,6 +118,264 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     Assert.assertTrue("contains child2", children.contains(child2));
 
   }
+
+  @Test
+  public void testFindAnyComponent_shouldReturnCorrectRecords() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Date donationDateFrom = new DateTime().minusDays(7).toDate();
+    Date donationDateTo = new DateTime().plusDays(2).toDate();
+    Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    Location location = aLocation().build();
+    ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    ComponentType secondComponentType = aComponentType().withComponentTypeCode("test2").buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withComponentType(secondComponentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+
+    // Excluded by isDeleted
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(donation)
+        .withLocation(location)
+        .withComponentType(componentType)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+
+    // Excluded by status
+    aComponent()
+        .withStatus(ComponentStatus.EXPIRED)
+        .withDonation(donation)
+        .withLocation(location)
+        .withComponentType(componentType)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+
+    // Excluded by donationDate
+    aComponent()
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(aDonation().withDonationDate(new DateTime().minusDays(20).toDate()).build())
+        .withLocation(location)
+        .withComponentType(componentType)
+        .buildAndPersist(entityManager);
+
+    // Excluded by Location
+    aComponent()
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withLocation(aLocation().build())
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+
+    // Excluded by ComponentType
+    aComponent()
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(donation)
+        .withComponentType(aComponentType().build())
+        .withLocation(location)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+
+    List<Long> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findAnyComponent(componentTypes, ComponentStatus.DISCARDED, donationDateFrom, donationDateTo, location.getId());
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+  @Test
+  public void testFindAnyComponentWithNullLocation_shouldReturnCorrectRecords() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Date donationDateFrom = new DateTime().minusDays(7).toDate();
+    Date donationDateTo = new DateTime().plusDays(2).toDate();
+    Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    ComponentType secondComponentType = aComponentType().withComponentTypeCode("test2").buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(aLocation().build())
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withComponentType(secondComponentType)
+            .withLocation(aLocation().build())
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+    List<Long> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findAnyComponent(componentTypes, ComponentStatus.DISCARDED, donationDateFrom, donationDateTo, null);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+  @Test
+  public void testFindAnyComponentWithNullStatus_shouldReturnCorrectRecords() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Date donationDateFrom = new DateTime().minusDays(7).toDate();
+    Date donationDateTo = new DateTime().plusDays(2).toDate();
+    Location location = aLocation().build();
+    Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    ComponentType secondComponentType = aComponentType().withComponentTypeCode("test2").buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.EXPIRED)
+            .withDonation(donation)
+            .withComponentType(secondComponentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+    List<Long> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findAnyComponent(componentTypes, null, donationDateFrom, donationDateTo, location.getId());
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+  @Test
+  public void testFindAnyComponentWithNullDonationDateFrom_shouldReturnCorrectRecords() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Date donationDateTo = new DateTime().plusDays(2).toDate();
+    Location location = aLocation().build();
+    Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    ComponentType secondComponentType = aComponentType().withComponentTypeCode("test2").buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(aDonation().withDonationDate(new Date()).build())
+            .withComponentType(secondComponentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+    List<Long> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findAnyComponent(componentTypes, ComponentStatus.DISCARDED, null, donationDateTo, null);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+  @Test
+  public void testFindAnyComponentWithNullDonationDateTo_shouldReturnCorrectRecords() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Date donationDateFrom = new DateTime().minusDays(7).toDate();
+    Location location = aLocation().build();
+    Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    ComponentType secondComponentType = aComponentType().withComponentTypeCode("test2").buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withComponentType(secondComponentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+    List<Long> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findAnyComponent(componentTypes, ComponentStatus.DISCARDED, donationDateFrom, null, location.getId());
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+  @Test
+  public void testFindAnyComponentWithNullComponentTypeIds_shouldReturnCorrectRecords() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Date donationDateFrom = new DateTime().minusDays(7).toDate();
+    Date donationDateTo = new DateTime().plusDays(2).toDate();
+    Location location = aLocation().build();
+    Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    ComponentType secondComponentType = aComponentType().withComponentTypeCode("test2").buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.DISCARDED)
+            .withDonation(donation)
+            .withComponentType(secondComponentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findAnyComponent(null, ComponentStatus.DISCARDED, donationDateFrom, donationDateTo, location.getId());
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
   
   @Test
   public void testFindComponentsByDonationIdentificationNumberAndStatus_shouldReturnCorrectComponents() {
@@ -162,7 +421,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
   }
-  
+
   @Test
   public void testFindComponentsForExport_shouldReturnComponentExportDTOsWithTheCorrectState() {
     // Set up fixture
@@ -325,7 +584,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withComponentTypeName("type1")
         .thatCanBeIssued()
         .buildAndPersist(entityManager);
-    
+
     ComponentBatch componentBatch = aComponentBatch()
         .withLocation(processingSite1)
         .buildAndPersist(entityManager);
@@ -335,7 +594,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withBloodAbo(expectedBloodAbo)
         .withBloodRh(expectedBloodRh)
         .buildAndPersist(entityManager);
-    
+
     // Expected components
     aComponent()
         .withComponentType(componentType)

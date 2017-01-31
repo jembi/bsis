@@ -1,6 +1,7 @@
 package org.jembi.bsis.controllerservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
@@ -24,12 +26,14 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.ComponentCRUDService;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.DiscardReasonViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +65,12 @@ public class ComponentControllerService {
   @Autowired
   private ComponentTypeCombinationRepository componentTypeCombinationRepository;
 
+  @Autowired
+  private LocationRepository locationRepository;
+
+  @Autowired
+  private LocationFactory locationFactory;
+
   public ComponentFullViewModel findComponentById(Long id) {
     Component component = componentRepository.findComponentById(id);
     ComponentFullViewModel componentFullViewModel = componentFactory.createComponentFullViewModel(component);
@@ -82,7 +92,7 @@ public class ComponentControllerService {
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(donationNumber);
     return componentFactory.createComponentViewModels(results);
   }
-  
+
   public List<ComponentViewModel> findComponentsByDonationIdentificationNumberAndStatus(
       String donationIdentificationNumber, ComponentStatus status) {
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumberAndStatus(
@@ -91,8 +101,8 @@ public class ComponentControllerService {
   }
 
   public List<ComponentViewModel> findAnyComponent(List<Long> componentTypeIds,
-      ComponentStatus status, Date dateFrom, Date dateTo) {
-    List<Component> results = componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo);
+      ComponentStatus status, Date dateFrom, Date dateTo, Long locationId) {
+    List<Component> results = componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, locationId);
     List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
     return components;
   }
@@ -160,4 +170,11 @@ public class ComponentControllerService {
     return componentFactory.createManagementViewModel(component);
   }
 
+  public List<ComponentStatus> getComponentStatuses() {
+    return Arrays.asList(ComponentStatus.values());
+  }
+
+  public List<LocationViewModel> getLocations() {
+    return locationFactory.createViewModels(locationRepository.getAllLocations(false));
+  }
 }

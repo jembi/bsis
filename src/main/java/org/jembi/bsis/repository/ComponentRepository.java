@@ -29,43 +29,26 @@ public class ComponentRepository extends AbstractRepository<Component> {
   private EntityManager em;
 
   public List<Component> findAnyComponent(List<Long> componentTypes, ComponentStatus status,
-      Date donationDateFrom, Date donationDateTo) {
-    TypedQuery<Component> query;
-    String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
-        "c.isDeleted= :isDeleted ";
+      Date donationDateFrom, Date donationDateTo, Long locationId) {
 
-    if (status != null) {
-      queryStr += "AND c.status = :status ";
+    boolean includeComponentTypes = true, includeStatus = true;
+    if (status == null) {
+      includeStatus = false;
     }
-    if (componentTypes != null && !componentTypes.isEmpty()) {
-      queryStr += "AND c.componentType.id IN (:componentTypeIds) ";
-    }
-    if (donationDateFrom != null) {
-      queryStr += "AND c.donation.donationDate >= :donationDateFrom ";
-    }
-    if (donationDateTo != null) {
-      queryStr += "AND c.donation.donationDate <= :donationDateTo ";
+    if (componentTypes == null) {
+      includeComponentTypes = false;
     }
 
-    queryStr += " ORDER BY c.id ASC";
-
-    query = em.createQuery(queryStr, Component.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-
-    if (status != null) {
-      query.setParameter("status", status);
-    }
-    if (componentTypes != null && !componentTypes.isEmpty()) {
-      query.setParameter("componentTypeIds", componentTypes);
-    }
-    if (donationDateFrom != null) {
-      query.setParameter("donationDateFrom", donationDateFrom);
-    }
-    if (donationDateTo != null) {
-      query.setParameter("donationDateTo", donationDateTo);
-    }
-
-    return query.getResultList();
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_ANY_COMPONENT, Component.class)
+          .setParameter("isDeleted", Boolean.FALSE)
+          .setParameter("status", status)
+          .setParameter("locationId", locationId)
+          .setParameter("componentTypeIds", componentTypes)
+          .setParameter("donationDateFrom", donationDateFrom)
+          .setParameter("donationDateTo", donationDateTo)
+          .setParameter("includeStatus", includeStatus)
+          .setParameter("includeComponentTypes", includeComponentTypes)
+          .getResultList();
   }
 
   public List<Component> findComponentsByDonationIdentificationNumber(String donationIdentificationNumber) {

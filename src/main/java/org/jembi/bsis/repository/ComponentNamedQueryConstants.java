@@ -7,32 +7,43 @@ public class ComponentNamedQueryConstants {
       "Component.countChangedComponentsForDonation";
   public static final String QUERY_COUNT_CHANGED_COMPONENTS_FOR_DONATION =
       "SELECT COUNT(c) " +
-          "FROM Component c " +
-          "WHERE c.donation.id = :donationId " +
-          "AND c.isDeleted = :deleted " +
-          // Has a parent component
-          "AND (c.parentComponent IS NOT NULL " +
-          // Has a status other than the initial status
-          " OR c.status != :initialStatus " +
-          // Has status changes
-          " OR c.statusChanges IS NOT EMPTY) ";
+      "FROM Component c " +
+      "WHERE c.donation.id = :donationId " +
+      "AND c.isDeleted = :deleted " +
+      // Has a parent component
+      "AND (c.parentComponent IS NOT NULL " +
+      // Has a status other than the initial status
+      " OR c.status != :initialStatus " +
+      // Has status changes
+      " OR c.statusChanges IS NOT EMPTY) ";
 
   public static final String NAME_FIND_COMPONENTS_BY_DIN =
       "Component.findComponentsByDIN";
   public static final String QUERY_FIND_COMPONENTS_BY_DIN =
       "SELECT DISTINCT c FROM Component c " + 
-          "WHERE (c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
-          "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) " +
-          "AND c.isDeleted = :isDeleted";
+      "WHERE (c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
+      "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) " +
+      "AND c.isDeleted = :isDeleted";
 
   public static final String NAME_FIND_COMPONENTS_BY_DIN_AND_STATUS =
       "Component.findComponentsByDINAndStatus";
   public static final String QUERY_FIND_COMPONENTS_BY_DIN_AND_STATUS =
       "SELECT DISTINCT c FROM Component c " + 
-          "WHERE (c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
-          "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) " +
-          "AND c.status = :status " +
-          "AND c.isDeleted = :isDeleted";
+      "WHERE (c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
+      "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) " +
+      "AND c.status = :status " +
+      "AND c.isDeleted = :isDeleted";
+
+  public static final String NAME_FIND_ANY_COMPONENT = "Component.findAnyComponent";
+  public static final String QUERY_FIND_ANY_COMPONENT =
+      "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation " +
+      "WHERE c.isDeleted= :isDeleted " +
+      "AND (:includeComponentTypes = false OR c.componentType.id IN (:componentTypeIds)) " +
+      "AND (:donationDateFrom = null OR c.donation.donationDate >= :donationDateFrom) " +
+      "AND (:donationDateTo = null OR c.donation.donationDate <= :donationDateTo) " +
+      "AND (:locationId = null OR c.location.id = :locationId) " +
+      "AND (:includeStatus = false OR c.status = :status) " +
+      "ORDER BY c.id ASC";
   
   public static final String NAME_FIND_COMPONENT_BY_CODE_AND_DIN =
       "Component.findComponentByCodeAndDIN";

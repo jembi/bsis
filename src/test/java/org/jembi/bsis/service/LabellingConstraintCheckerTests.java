@@ -353,24 +353,6 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanPrintDiscardLabelWithSplitComponent_shouldReturnFalse() {
-    // Set up
-    Component component = aComponent()
-        .withId(1L)
-        .withStatus(ComponentStatus.SPLIT)
-        .withComponentBatch(aComponentBatch()
-            .withId(1L)
-            .build())
-        .build();
-
-    // Exercise SUT
-    boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);
-
-    // Verify
-    assertThat(canPrintDiscardLabel, is(false));
-  }
-
-  @Test
   public void testCanPrintDiscardLabelWithUsedComponent_shouldReturnFalse() {
     // Set up
     Component component = aComponent()

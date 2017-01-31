@@ -5,6 +5,7 @@ import java.util.Date;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 
 public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewModel> {
 
@@ -17,6 +18,7 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
   private ComponentStatus status;
   private String expiryStatus;
   private String componentCode;
+  private LocationViewModel location;
 
   public ComponentViewModelBuilder withId(Long id) {
     this.id = id;
@@ -63,6 +65,11 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
     return this;
   }
 
+  public ComponentViewModelBuilder withLocation(LocationViewModel location){
+    this.location = location;
+    return this;
+  }
+
   @Override
   public ComponentViewModel build() {
     ComponentViewModel viewModel = new ComponentViewModel();
@@ -75,6 +82,7 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
     viewModel.setDonationFlagCharacters(donationFlagCharacters);
     viewModel.setComponentCode(componentCode);
     viewModel.setExpiryStatus(expiryStatus);
+    viewModel.setLocation(location);
     return viewModel;
   }
   
