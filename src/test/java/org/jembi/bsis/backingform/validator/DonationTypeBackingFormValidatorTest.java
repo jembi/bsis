@@ -70,7 +70,7 @@ public class DonationTypeBackingFormValidatorTest {
   @Test
   public void testValidBlankType() throws Exception {
     // set up data
-    DonationTypeBackingForm form = aDonationTypeBackingForm().withId(1l).withDonationType("DONATIONTYPE").build();
+    DonationTypeBackingForm form = aDonationTypeBackingForm().withId(1l).withDonationType("").build();
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationType");
