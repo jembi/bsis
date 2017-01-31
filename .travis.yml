@@ -7,7 +7,7 @@ before_install:
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t 60bc59b1-74af-468a-b386-7cc209586d00 || echo "Codecov did not collect coverage reports"
 
-script: mvn -Dsurefire.useFile=false clean install && mvn liquibase:update
+script: mvn -Dsurefire.useFile=false clean install && mvn liquibase:update && mvn clean compile assembly:single
 
 sudo: false
 
@@ -15,7 +15,9 @@ deploy:
   provider: releases
   api_key: 
     secure: "obWrELIxkp/UCaKub2ZUt2Na84gvvtpJlE5DFLGYUYv1Wy2IHmp/Jd/b2fgPXre+t7gMlGVnM6Fh44C6rUxhpE4ALgsnWUYfyAKXPTgbfUWCFWGRd9wtBAMQzqyUKow+Y+Ssnvks0KvJWusX0igp5VtB4f5qMr1uc9J04iZdaESzmUIXQ/69UrQRPtgm7O3mJnvOHYWmE/S8N5iPd9nhz0dv0WWKiHYRhTP+6etbijS3poXLd2z9ympx+Zoi+kompv6qxRW11Z7g/RTHsFQ7nHnp404ABfuqKPG7ruBEe5zYPY/lX7tZALJdzR1InEXBP20EBaigahpqFYfMq90Ie3qP5UsoRKvv2cj/CatUm93nvt5KuM7+ui7zOom+lANvKxwF2A2k4R6zLehaSjI90VUSR4Xh6zygCO5WvVn/tdxRFM9MDqrVjOYea60gFZECeRQP0EO2aj8LsCGpUk4V5Hsy3vMBrhTXf8I4CfHCbB2+dHbqloZuczrw+PJAs7n1nBZCPMAzU8P/VV4Q8CH8vdVwiHJkWv1tAtkfQOU8eeh5tskxPgpKYldCanT8W3y9DZhTIYFO+VuIix2LpcwRJZkw5r1dM7kOZa6yrkFmQ2Z+vTeDYEYQ0/M+BQJIyD+kTzM5CqWomBCPuCJuP+v4+zyd5joI/+DSGjwuxskFF/I="
-  file: "target/bsis.war"
+  file:
+    - "target/bsis.war"
+    - "target/bsis-importer.jar"
   skip_cleanup: true
   on:
     tags: true
