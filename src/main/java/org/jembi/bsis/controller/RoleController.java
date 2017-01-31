@@ -86,10 +86,7 @@ public class RoleController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
   @ResponseStatus(HttpStatus.CREATED)
   public RoleViewModel addRole(@Valid @RequestBody RoleBackingForm form) {
-    Role role = new Role();
-    role.setName(form.getName());
-    role.setDescription(form.getDescription());
-    role.setPermissions(permissionFactory.createEntities(form.getPermissions()));
+    Role role = roleFactory.createEntity(form);
     role = roleRepository.addRole(role);
     return roleFactory.createViewModel(role);
   }
