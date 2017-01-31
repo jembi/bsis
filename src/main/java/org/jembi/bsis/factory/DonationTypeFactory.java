@@ -33,6 +33,7 @@ public class DonationTypeFactory {
     DonationType donationType = new DonationType();
     donationType.setId(form.getId());
     donationType.setDonationType(form.getType());
+    donationType.setIsDeleted(form.getIsDeleted());
     return donationType;
   }
 

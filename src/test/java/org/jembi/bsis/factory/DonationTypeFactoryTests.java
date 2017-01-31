@@ -71,11 +71,13 @@ public class DonationTypeFactoryTests extends UnitTestSuite {
     DonationTypeBackingForm form = aDonationTypeBackingForm()
         .withId(1L)
         .withDonationType("type")
+        .thatIsNotDeleted()
         .build();
 
     DonationType expectedDonationType = aDonationType()
         .withId(1L)
         .withName("type")
+        .thatIsNotDeleted()
         .build();
 
     // Exercise SUT

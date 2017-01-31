@@ -6,9 +6,20 @@ public class DonationTypeBackingFormBuilder extends AbstractBuilder<DonationType
 
   private Long id;
   private String donationType;
+  private boolean isDeleted = false;
 
   public DonationTypeBackingFormBuilder withId(Long id) {
     this.id = id;
+    return this;
+  }
+
+  public DonationTypeBackingFormBuilder thatIsDeleted() {
+    this.isDeleted = true;
+    return this;
+  }
+
+  public DonationTypeBackingFormBuilder thatIsNotDeleted() {
+    this.isDeleted = false;
     return this;
   }
 
@@ -22,6 +33,7 @@ public class DonationTypeBackingFormBuilder extends AbstractBuilder<DonationType
     DonationTypeBackingForm backingForm = new DonationTypeBackingForm();
     backingForm.setId(id);
     backingForm.setType(donationType);
+    backingForm.setIsDeleted(isDeleted);
     return backingForm;
   }
   
