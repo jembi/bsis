@@ -58,6 +58,9 @@ public class ComponentFactory {
     viewModel.setBleedStartTime(component.getDonation().getBleedStartTime());
     viewModel.setBleedEndTime(component.getDonation().getBleedEndTime());
     viewModel.setDonationDateTime(component.getDonation().getInitialComponent().getCreatedOn());
+    if (component.getParentComponent() != null) {
+      viewModel.setParentComponentId(component.getParentComponent().getId());
+    }
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();
@@ -66,6 +69,7 @@ public class ComponentFactory {
     permissions.put("canPreProcess", componentConstraintChecker.canPreProcess(component));
     permissions.put("canUnprocess", componentConstraintChecker.canUnprocess(component));
     permissions.put("canUndiscard", componentConstraintChecker.canUndiscard(component));
+    permissions.put("canRecordChildComponentWeight", componentConstraintChecker.canRecordChildComponentWeight(component));
     viewModel.setPermissions(permissions);
 
     return viewModel;
@@ -120,6 +124,7 @@ public class ComponentFactory {
     viewModel.setCreatedOn(component.getCreatedOn());
     viewModel.setExpiresOn(component.getExpiresOn());
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
+    viewModel.setDonationFlagCharacters(component.getDonation().getFlagCharacters());
     viewModel.setExpiryStatus(getExpiryStatus(component));
     viewModel.setId(component.getId());
     viewModel.setStatus(component.getStatus());

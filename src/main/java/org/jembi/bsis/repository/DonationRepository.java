@@ -19,7 +19,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.jembi.bsis.dto.CollectedDonationDTO;
 import org.jembi.bsis.dto.DonationExportDTO;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
@@ -37,6 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class DonationRepository {
+
+  private static final Logger LOGGER = Logger.getLogger(DonationRepository.class);
 
   @PersistenceContext
   private EntityManager em;
@@ -78,32 +80,6 @@ public class DonationRepository {
       return new ArrayList<Donation>();
     }
     return donations;
-  }
-
-  public List<Donation> findAnyDonationMatching(String donationIdentificationNumber,
-                                                String sampleNumber, String shippingNumber, String donationDateFrom,
-                                                String donationDateTo, List<String> centers) {
-
-    TypedQuery<Donation> query = em.createQuery(
-        "SELECT c FROM Donation c JOIN c.center center WHERE "
-            + "(c.donationIdentificationNumber = :donationIdentificationNumber OR "
-            + "c.sampleNumber = :sampleNumber OR "
-            + "c.shippingNumber = :shippingNumber OR "
-            + "center.id IN (:centers)) AND ("
-            + "c.donationDate BETWEEN :donationDateFrom AND "
-            + ":donationDateTo" + ") AND " + "(c.isDeleted= :isDeleted)",
-        Donation.class);
-
-    query.setParameter("isDeleted", Boolean.FALSE);
-    String donationNo = ((donationIdentificationNumber == null) ? "" : donationIdentificationNumber);
-    query.setParameter("donationIdentificationNumber", donationNo);
-    query.setParameter("sampleNumber", sampleNumber);
-    query.setParameter("shippingNumber", shippingNumber);
-
-    query.setParameter("centers", centers);
-
-    List<Donation> resultList = query.getResultList();
-    return resultList;
   }
 
   public Map<String, Map<Long, Long>> findNumberOfDonations(Date donationDateFrom,
@@ -187,54 +163,27 @@ public class DonationRepository {
 
   public Donation findDonationByDonationIdentificationNumber(
       String donationIdentificationNumber) throws NoResultException, NonUniqueResultException {
-    String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.donationIdentificationNumber = :donationIdentificationNumber and c.isDeleted = :isDeleted";
-    TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
-    Donation c = null;
-    c = query.getSingleResult();
-    return c;
+
+    Donation donation = em.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER, Donation.class) 
+        .setParameter("isDeleted", Boolean.FALSE)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .getSingleResult();
+
+    return donation;
   }
 
   public Donation findDonationByDonationIdentificationNumberIncludeDeleted(
       String donationIdentificationNumber) {
-    String queryString = "SELECT c FROM Donation c WHERE c.donationIdentificationNumber = :donationIdentificationNumber";
-    TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
-    query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
-    Donation c = null;
+    Donation donation = null; 
+
     try {
-      c = query.getSingleResult();
-    } catch (Exception ex) {
+      donation = em.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED, Donation.class) 
+          .setParameter("donationIdentificationNumber", donationIdentificationNumber) 
+          .getSingleResult(); 
+    } catch(NoResultException e) {
+      LOGGER.debug("No donation found for DIN '" + donationIdentificationNumber + "'");
     }
-    return c;
-  }
-
-  public Donation verifyDonationIdentificationNumber(String donationIdentificationNumber) {
-    Donation donation = new Donation();
-    donation.setDonationIdentificationNumber(donationIdentificationNumber);
-    donation = findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    if (donation != null) {
-      return donation;
-    } else {
-      return null;
-    }
-  }
-
-  public List<Donation> verifyDonationIdentificationNumbers(List<String> donationIdentificationNumbers) {
-    List<Donation> donations = new ArrayList<Donation>();
-    for (String donationIdentificationNumber : donationIdentificationNumbers) {
-      if (StringUtils.isBlank(donationIdentificationNumber))
-        continue;
-      Donation donation = new Donation();
-      donation.setDonationIdentificationNumber(donationIdentificationNumber);
-      donation = findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-      if (donation != null) {
-        donations.add(donation);
-      } else {
-        donations.add(null);
-      }
-    }
-    return donations;
+    return donation;
   }
 
   public int countDonationsForDonor(Donor donor) {

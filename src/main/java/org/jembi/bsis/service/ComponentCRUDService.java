@@ -304,7 +304,8 @@ public class ComponentCRUDService {
 
         if (!component.getComponentType().getContainsPlasma()
             && statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE
-            && statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA) {
+            && (statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA
+            || statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.LOW_WEIGHT)) {
           // skip because the component doesn't contain plasma and the unsafe reason only applies to
           // components that do contain plasma
           continue;
@@ -337,10 +338,10 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component updateComponentToNotInStock (Component component) {
-    LOGGER.info("Removing component "+ component.getId() + " from stock");
+  public Component removeComponentFromStock(Component component) {
+    LOGGER.info("Removing component " + component.getId() + " from stock");
 
-    component.setInventoryStatus(InventoryStatus.NOT_IN_STOCK);
+    component.setInventoryStatus(InventoryStatus.REMOVED);
     return componentRepository.update(component);
   }
 
@@ -415,13 +416,37 @@ public class ComponentCRUDService {
     // it's OK to update the weight
     existingComponent.setWeight(componentWeight);
 
-    // check if the component should be discarded or re-evaluated
-    if (componentStatusCalculator.shouldComponentBeDiscardedForWeight(existingComponent)) {
-      existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
-    } else if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
-      // need to rollback
+    // roll back Component Status if unsafe. Note that only statuses that can be rolled back will
+    // and should be e.g. for reasons of invalid weight or low weight.
+    if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
       rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.UNSAFE);
     }
+
+    // Mark the component as unsafe if necessary.
+    if (componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(existingComponent)) {
+      existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
+    } else if (componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(existingComponent)) {
+      existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.LOW_WEIGHT);
+    }
+
+    return updateComponent(existingComponent);
+  }
+
+  public Component recordChildComponentWeight(long componentId, Integer componentWeight) {
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    
+    // check if the weight is being updated
+    if (existingComponent.getWeight() != null && existingComponent.getWeight() == componentWeight) {
+      return existingComponent;
+    }
+
+    // check if it is possible to update the weight of the child component
+    if (!componentConstraintChecker.canRecordChildComponentWeight(existingComponent)) {
+      throw new IllegalStateException("The weight of child component " + componentId 
+          + " cannot be updated");
+    }
+    // it's OK to update the weight
+    existingComponent.setWeight(componentWeight);
 
     return updateComponent(existingComponent);
   }

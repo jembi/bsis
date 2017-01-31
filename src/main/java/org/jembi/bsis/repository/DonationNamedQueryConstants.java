@@ -59,6 +59,21 @@ public class DonationNamedQueryConstants {
       + "AND d.donor.venue = :venue "
       + "AND d.isDeleted = :deleted ";
   
+  public static final String NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED = 
+      "Donation.findDonationByDonationIdentificationNumberIncludeDeleted";
+  public static final String QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED = 
+      "SELECT c FROM Donation c WHERE "
+      + "c.donationIdentificationNumber = :donationIdentificationNumber OR "
+      + "CONCAT(c.donationIdentificationNumber, c.flagCharacters) = :donationIdentificationNumber";
+
+  public static final String NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER = 
+      "Donation.findDonationByDonationIdentificationNumber";
+  public static final String QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER = 
+      "SELECT c FROM Donation c LEFT JOIN FETCH c.donor "
+      + "WHERE (c.donationIdentificationNumber = :donationIdentificationNumber OR "
+      + "CONCAT(c.donationIdentificationNumber, c.flagCharacters) = :donationIdentificationNumber) AND "
+      + "c.isDeleted = :isDeleted";
+
   public static final String NAME_FIND_DONATIONS_FOR_EXPORT =
       "Donations.findDonationsForExport";
   /*

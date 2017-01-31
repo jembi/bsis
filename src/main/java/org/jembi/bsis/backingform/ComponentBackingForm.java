@@ -110,6 +110,11 @@ public class ComponentBackingForm {
   }
 
   @JsonIgnore
+  public void setDonationFlagCharacters(String donationFlagCharacters) {
+    // Ignore
+  }
+
+  @JsonIgnore
   public void setPackType(PackType packType) {
     // Ignore
   }
@@ -161,6 +166,11 @@ public class ComponentBackingForm {
 
   @JsonIgnore
   public void setDonationDateTime(Date donationDateTime) {
-  // Ignore
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setParentComponentId(Long parentComponentId) {
+    // Ignore
   }
 }
