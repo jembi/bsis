@@ -6,8 +6,8 @@ import static org.jembi.bsis.helpers.builders.AuditRevisionBuilder.anAuditRevisi
 import static org.jembi.bsis.helpers.builders.AuditRevisionViewModelBuilder.anAuditRevisionViewModel;
 import static org.jembi.bsis.helpers.builders.EntityModificationBuilder.anEntityModification;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
+import static org.jembi.bsis.helpers.builders.UserViewModelBuilder.aUserViewModel;
 import static org.jembi.bsis.helpers.matchers.AuditRevisionViewModelMatcher.hasSameStateAsAuditRevisionViewModel;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -19,27 +19,31 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.hibernate.envers.RevisionType;
-import org.jembi.bsis.factory.AuditRevisionViewModelFactory;
 import org.jembi.bsis.model.audit.AuditRevision;
 import org.jembi.bsis.model.audit.EntityModification;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.UserRepository;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.AuditRevisionViewModel;
+import org.jembi.bsis.viewmodel.UserViewModel;
 import org.joda.time.DateTime;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
-public class AuditRevisionViewModelFactoryTests {
+public class AuditRevisionViewModelFactoryTests extends UnitTestSuite {
 
+  @InjectMocks
   private AuditRevisionViewModelFactory auditRevisionViewModelFactory;
+  @Mock
   private UserRepository userRepository;
+  @Mock
+  private UserFactory userFactory;
 
   @Test
   public void testCreateAuditRevisionViewModels_shouldCreateAuditRevisionViewModelWithTheCorrectState() {
-    // Set up fixture
-    setUpFixture();
-
     String irrelevantUsername = "irrelevant.username";
     int irrelevantAuditRevisionId = 78;
     Date irrelevantRevisionDate = new DateTime().minusDays(7).toDate();
@@ -69,14 +73,20 @@ public class AuditRevisionViewModelFactoryTests {
         .withUsername(irrelevantUsername)
         .build();
 
+    UserViewModel auditRevisionUserViewModel = aUserViewModel()
+        .withId(56L)
+        .withUsername(irrelevantUsername)
+        .build();
+
     AuditRevisionViewModel expectedViewModel = anAuditRevisionViewModel()
         .withId(irrelevantAuditRevisionId)
         .withRevisionDate(irrelevantRevisionDate)
-        .withUser(auditRevisionUser)
+        .withUser(auditRevisionUserViewModel)
         .withEntityModifications(new HashSet<>(entityModifications))
         .build();
 
     when(userRepository.findUser(irrelevantUsername)).thenReturn(auditRevisionUser);
+    when(userFactory.createViewModel(auditRevisionUser)).thenReturn(auditRevisionUserViewModel);
 
     // Exercise SUT
     List<AuditRevisionViewModel> returnedViewModels = auditRevisionViewModelFactory
@@ -92,9 +102,6 @@ public class AuditRevisionViewModelFactoryTests {
 
   @Test
   public void testCreateAuditRevisionViewModelsWithAuditRevisionWithNoUsername_shouldCreateAuditRevisionViewModelWithNoUser() {
-    // Set up fixture
-    setUpFixture();
-
     int irrelevantAuditRevisionId = 3;
     Date irrelevantRevisionDate = new DateTime().minusDays(4).toDate();
 
@@ -118,12 +125,4 @@ public class AuditRevisionViewModelFactoryTests {
     assertThat(returnedViewModels.size(), is(1));
     assertThat(returnedViewModels.get(0), hasSameStateAsAuditRevisionViewModel(expectedViewModel));
   }
-
-  private void setUpFixture() {
-    userRepository = mock(UserRepository.class);
-
-    auditRevisionViewModelFactory = new AuditRevisionViewModelFactory();
-    auditRevisionViewModelFactory.setUserRepository(userRepository);
-  }
-
 }

@@ -2,7 +2,9 @@ package org.jembi.bsis.repository;
 
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.springframework.stereotype.Repository;
@@ -10,14 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class DonationTypeRepository {
-
-  @PersistenceContext
-  private EntityManager em;
+public class DonationTypeRepository extends AbstractRepository<DonationType> {
 
   public DonationType getDonationType(String donationType) {
     TypedQuery<DonationType> query;
-    query = em.createQuery("SELECT dt from DonationType dt where " +
+    query = entityManager.createQuery("SELECT dt from DonationType dt where " +
         "dt.donationType=:donationType", DonationType.class);
     query.setParameter("donationType", donationType);
 
@@ -39,34 +38,19 @@ public class DonationTypeRepository {
   public List<DonationType> getAllDonationTypes(Boolean includeDeleted) {
     TypedQuery<DonationType> query;
     if (includeDeleted) {
-      query = em.createQuery("SELECT dt from DonationType dt", DonationType.class);
+      query = entityManager.createQuery("SELECT dt from DonationType dt", DonationType.class);
     } else {
-      query = em.createQuery("SELECT dt from DonationType dt where dt.isDeleted=:isDeleted", DonationType.class);
+      query = entityManager.createQuery("SELECT dt from DonationType dt where dt.isDeleted=:isDeleted", DonationType.class);
       query.setParameter("isDeleted", false);
     }
     return query.getResultList();
   }
 
-  public DonationType getDonationTypeById(Long donorTypeId) {
+  public DonationType getDonationTypeById(Long donationTypeId) throws NoResultException {
     TypedQuery<DonationType> query;
-    query = em.createQuery("SELECT d from DonationType d " +
+    query = entityManager.createQuery("SELECT d from DonationType d " +
         "where d.id=:id", DonationType.class);
-    query.setParameter("id", donorTypeId);
-    if (query.getResultList().size() == 0)
-      return null;
+    query.setParameter("id", donationTypeId);
     return query.getSingleResult();
   }
-
-  public DonationType saveDonationType(DonationType donationType) {
-    em.persist(donationType);
-    em.flush();
-    return donationType;
-  }
-
-  public DonationType updateDonationType(DonationType donationType) {
-    em.merge(donationType);
-    em.flush();
-    return donationType;
-  }
-
 }

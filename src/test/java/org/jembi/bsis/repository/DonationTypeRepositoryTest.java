@@ -6,8 +6,6 @@ import java.util.List;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.donationtype.DonationType;
-import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.repository.DonationTypeRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,11 +23,6 @@ public class DonationTypeRepositoryTest extends DBUnitContextDependentTestSuite 
   protected IDataSet getDataSet() throws Exception {
     File file = new File("src/test/resources/dataset/DonationTypeRepositoryDataset.xml");
     return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
-  }
-
-  @Override
-  protected User getLoggedInUser() throws Exception {
-    return null;
   }
 
   @Test
@@ -71,7 +64,7 @@ public class DonationTypeRepositoryTest extends DBUnitContextDependentTestSuite 
     DonationType two = donationTypeRepository.getDonationTypeById(1l);
     Assert.assertNotNull("There is a donationType named 'Voluntary'", two);
     two.setIsDeleted(true);
-    donationTypeRepository.updateDonationType(two);
+    donationTypeRepository.update(two);
     DonationType savedTwo = donationTypeRepository.getDonationTypeById(1l);
     Assert.assertTrue("donation type is deleted", savedTwo.getIsDeleted());
   }
@@ -81,7 +74,7 @@ public class DonationTypeRepositoryTest extends DBUnitContextDependentTestSuite 
     DonationType toBeSaved = new DonationType();
     toBeSaved.setDonationType("Junit");
 
-    donationTypeRepository.saveDonationType(toBeSaved);
+    donationTypeRepository.save(toBeSaved);
 
     DonationType saved = donationTypeRepository.getDonationType("Junit");
     Assert.assertNotNull("There is a donationType named 'Junit'", saved);

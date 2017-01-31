@@ -3,9 +3,12 @@ package org.jembi.bsis.controllerservice;
 import java.util.List;
 
 import org.jembi.bsis.factory.DonationFactory;
+import org.jembi.bsis.factory.DonorDeferralFactory;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonorDeferralViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +21,19 @@ public class DonorControllerService {
   private DonorRepository donorRepository;
   @Autowired
   private DonationFactory donationFactory;
+  @Autowired
+  private DonorDeferralFactory donorDeferralFactory;
   
   public List<DonationViewModel> findDonationsForDonor(long donorId) {
     Donor donor = donorRepository.findDonorById(donorId);
     return donationFactory.createDonationViewModelsWithPermissions(donor.getDonations());
   }
 
+  public DonorDeferralViewModel getLastDeferral(long donorId) {
+    DonorDeferral lastDonorDeferral = donorRepository.getLastDonorDeferral(donorId);
+    if (lastDonorDeferral != null) {
+      return donorDeferralFactory.createDonorDeferralViewModel(lastDonorDeferral);
+    }
+    return null;
+  }
 }

@@ -12,7 +12,6 @@ import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.viewmodel.UserViewModel;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,16 +69,12 @@ public class UserRepository extends AbstractRepository<User> {
     return null;
   }
 
-  public List<UserViewModel> getAllUsers() {
+  public List<User> getAllUsers() {
     TypedQuery<User> query = em
         .createQuery("SELECT u FROM User u where u.isDeleted= :isDeleted", User.class);
     query.setParameter("isDeleted", Boolean.FALSE);
     List<User> users = query.getResultList();
-    List<UserViewModel> userViewModels = new ArrayList<UserViewModel>();
-    for (User user : users) {
-      userViewModels.add(new UserViewModel(user));
-    }
-    return userViewModels;
+    return users;
   }
 
   public void updateLastLogin(User user) {

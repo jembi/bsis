@@ -126,7 +126,6 @@ public class ComponentController {
   public Map<String, Object> getFindComponentForm() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", componentControllerService.getComponentTypes());
-    map.put("returnReasons", componentControllerService.getReturnReasons());
     map.put("discardReasons", componentControllerService.getDiscardReasons());
     map.put("recordComponentForm", new RecordComponentBackingForm());
     map.put("producedComponentTypesByCombinationId",
@@ -139,7 +138,6 @@ public class ComponentController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
   public Map<String, Object> findComponentPagination(HttpServletRequest request,
-      @RequestParam(value = "componentNumber", required = false, defaultValue = "") String componentNumber,
       @RequestParam(value = "donationIdentificationNumber", required = false, defaultValue = "") String donationIdentificationNumber,
       @RequestParam(value = "componentTypes", required = false) List<Long> componentTypeIds,
       @RequestParam(value = "status", required = false) ComponentStatus status,

@@ -8,7 +8,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.repository.DeferralReasonNamedQueryConstants;
 
 @NamedQueries({
@@ -22,7 +22,7 @@ import org.jembi.bsis.repository.DeferralReasonNamedQueryConstants;
 })
 @Entity
 @Audited
-public class DeferralReason extends BaseEntity {
+public class DeferralReason extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 203754154113421034L;
 
