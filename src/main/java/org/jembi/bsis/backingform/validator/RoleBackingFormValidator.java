@@ -18,12 +18,12 @@ public class RoleBackingFormValidator extends BaseValidator<RoleBackingForm> {
   public void validateForm(RoleBackingForm form, Errors errors) {
 
     if (isDuplicateRoleName(form)) {
-      errors.rejectValue("role.name", "roleName.nonunique",
+      errors.rejectValue("name", "roleName.nonunique",
           "Role name already exists.");
     }
 
     if (form.getPermissions().isEmpty()) {
-      errors.rejectValue("Role.permissions", "permissions.empty",
+      errors.rejectValue("permissions", "permissions.empty",
           "Role must have one or more permissions");
     }
 
