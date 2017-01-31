@@ -50,7 +50,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: duplicate username", errors.getFieldError("user.username"));
+    Assert.assertNotNull("Error: duplicate username", errors.getFieldError("username"));
   }
 
   @Test
@@ -73,7 +73,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: username too short", errors.getFieldError("user.username"));
+    Assert.assertNotNull("Error: username too short", errors.getFieldError("username"));
   }
 
   @Test
@@ -96,7 +96,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: username too long", errors.getFieldError("user.username"));
+    Assert.assertNotNull("Error: username too long", errors.getFieldError("username"));
   }
 
   @Test
@@ -119,7 +119,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: username contains %", errors.getFieldError("user.username"));
+    Assert.assertNotNull("Error: username contains %", errors.getFieldError("username"));
   }
 
   @Test
@@ -164,7 +164,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("Errors", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: no roles defined", errors.getFieldError("user.roles"));
+    Assert.assertNotNull("Error: no roles defined", errors.getFieldError("roles"));
   }
 
   @Test
@@ -187,7 +187,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("Errors", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: passwords don't match", errors.getFieldError("user.password"));
+    Assert.assertNotNull("Error: passwords don't match", errors.getFieldError("password"));
   }
 
   @Test
@@ -210,7 +210,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("Errors", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: passwords cannot be empty", errors.getFieldError("user.password"));
+    Assert.assertNotNull("Error: passwords cannot be empty", errors.getFieldError("password"));
   }
 
   @Test
@@ -233,7 +233,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("Errors", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: passwords cannot be empty", errors.getFieldError("user.password"));
+    Assert.assertNotNull("Error: passwords cannot be empty", errors.getFieldError("password"));
   }
 
   @Test
@@ -316,7 +316,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("Errors", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: current password doesn't match", errors.getFieldError("user.password"));
+    Assert.assertNotNull("Error: current password doesn't match", errors.getFieldError("password"));
   }
 
   @Test
@@ -348,7 +348,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("Errors", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: current password doesn't match", errors.getFieldError("user.password"));
+    Assert.assertNotNull("Error: current password doesn't match", errors.getFieldError("password"));
   }
 
   @Test
@@ -380,7 +380,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("Errors", 1, errors.getErrorCount());
-    Assert.assertNotNull("Error: new password doesn't match", errors.getFieldError("user.password"));
+    Assert.assertNotNull("Error: new password doesn't match", errors.getFieldError("password"));
   }
 
   @Test
