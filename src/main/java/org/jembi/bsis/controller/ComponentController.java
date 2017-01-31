@@ -126,7 +126,6 @@ public class ComponentController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
   public Map<String, Object> findComponentPagination(HttpServletRequest request,
-      @RequestParam(value = "componentNumber", required = false, defaultValue = "") String componentNumber,
       @RequestParam(value = "donationIdentificationNumber", required = false, defaultValue = "") String donationIdentificationNumber,
       @RequestParam(value = "componentTypes", required = false, defaultValue = "") List<Long> componentTypeIds,
       @RequestParam(value = "status", required = false) ComponentStatus status,
