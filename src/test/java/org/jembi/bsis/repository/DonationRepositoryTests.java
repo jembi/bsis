@@ -176,6 +176,42 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
   }
   
   @Test
+  public void testFindDonationByDonationIdentificationNumberWithFlagCharacters_shouldReturnCorrectDonation() {
+    // Set up fixture
+    String dinWithFlagCharacters = "123456725";
+
+    aDonation()
+      .withDonationIdentificationNumber("1234567")
+      .withFlagCharacters("25")
+      .buildAndPersist(entityManager);
+
+    // Exercise SUT
+    Donation returnedDonation = donationRepository.findDonationByDonationIdentificationNumber(dinWithFlagCharacters);
+
+    // Verify
+    assertThat(returnedDonation.getDonationIdentificationNumber(), is("1234567"));
+    assertThat(returnedDonation.getFlagCharacters(), is("25"));
+  }
+
+  @Test
+  public void testFindDonationByDonationIdentificationNumberIncludeDeletedWithFlagCharacters_shouldReturnCorrectDonation() {
+    // Set up fixture
+    String dinWithFlagCharacters = "123456725";
+
+    aDonation()
+      .withDonationIdentificationNumber("1234567")
+      .withFlagCharacters("25")
+      .buildAndPersist(entityManager);
+
+    // Exercise SUT
+    Donation returnedDonation = donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted(dinWithFlagCharacters);
+
+    // Verify
+    assertThat(returnedDonation.getDonationIdentificationNumber(), is("1234567"));
+    assertThat(returnedDonation.getFlagCharacters(), is("25"));
+  }
+
+  @Test
   public void testFindLastDonationsByDonorVenueAndDonationDate_shouldReturnCorrectDonations() {
     // Set up fixture
     Location venue = aVenue().buildAndPersist(entityManager);

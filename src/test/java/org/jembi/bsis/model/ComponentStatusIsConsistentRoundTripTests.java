@@ -41,11 +41,6 @@ public class ComponentStatusIsConsistentRoundTripTests extends ContextDependentT
   }
   
   @Test(expected = ConstraintViolationException.class)
-  public void testPersistComponentRemovedAvailable_shouldThrow() {
-    aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.AVAILABLE).buildAndPersist(entityManager);
-  }
-  
-  @Test(expected = ConstraintViolationException.class)
   public void testPersistComponentRemovedExpired_shouldThrow() {
     aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.EXPIRED).buildAndPersist(entityManager);
   }

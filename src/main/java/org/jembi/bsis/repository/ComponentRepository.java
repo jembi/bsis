@@ -94,7 +94,8 @@ public class ComponentRepository extends AbstractRepository<Component> {
 
   public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, long componentTypeId) {
     String queryStr = "SELECT c from Component c WHERE " +
-        "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
+        "(c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
+        "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) AND " +
         "c.componentType.id = :componentTypeId AND c.isDeleted = false";
     TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);

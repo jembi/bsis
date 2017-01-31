@@ -14,6 +14,7 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
   private Date createdOn;
   private Date expiresOn;
   private String donationIdentificationNumber;
+  private String donationFlagCharacters;
   private ComponentStatus status;
   private String expiryStatus;
   private String componentCode;
@@ -36,6 +37,11 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
 
   public ComponentViewModelBuilder withDonationIdentificationNumber(String donationIdentificationNumber) {
     this.donationIdentificationNumber = donationIdentificationNumber;
+    return this;
+  }
+
+  public ComponentViewModelBuilder withDonationFlagCharacters(String donationFlagCharacters) {
+    this.donationFlagCharacters = donationFlagCharacters;
     return this;
   }
 
@@ -73,6 +79,7 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
     viewModel.setCreatedOn(createdOn);
     viewModel.setExpiresOn(expiresOn);
     viewModel.setDonationIdentificationNumber(donationIdentificationNumber);
+    viewModel.setDonationFlagCharacters(donationFlagCharacters);
     viewModel.setComponentCode(componentCode);
     viewModel.setExpiryStatus(expiryStatus);
     viewModel.setLocation(location);
