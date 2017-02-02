@@ -9,9 +9,7 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.controllerservice.PostDonationCounsellingControllerService;
-import org.jembi.bsis.factory.PostDonationCounsellingFactory;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
-import org.jembi.bsis.service.PostDonationCounsellingCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
@@ -26,12 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/postdonationcounsellings")
 public class PostDonationCounsellingController {
-
-  @Autowired
-  private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
-
-  @Autowired
-  private PostDonationCounsellingFactory postDonationCounsellingFactory;
   
   @Autowired
   private PostDonationCounsellingControllerService postDonationCounsellingControllerService;
