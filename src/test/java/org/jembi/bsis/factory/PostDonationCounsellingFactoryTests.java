@@ -113,6 +113,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withCounsellingDate(counsellingDate)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
+        .withNotes("notes")
         .build();
 
     PostDonationCounselling expectedEntity = aPostDonationCounselling()
@@ -121,6 +122,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
         .withDonation(null) // donation is not mapped in the form, so must be null
+        .withNotes("notes")
         .build();
 
     PostDonationCounselling returnedEntity = postDonationCounsellingFactory.createEntity(form);
