@@ -441,6 +441,18 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
       .buildAndPersist(entityManager);
     donorRepository.findDonorByDonationIdentificationNumber(din);
   }
+  
+  @Test(expected = NoResultException.class)
+  public void testFindDonorByDeletedDonationDonationIdentificationNumber_shouldThrowNoResultException() {
+    String din = "0000001";
+    Donor donor = aDonor().buildAndPersist(entityManager);
+    aDonation()
+      .withDonationIdentificationNumber(din)
+      .withDonor(donor)
+      .thatIsDeleted()
+      .buildAndPersist(entityManager);
+    donorRepository.findDonorByDonationIdentificationNumber(din);
+  }
 
   @Test
   public void testVerifyDonorExists() {
