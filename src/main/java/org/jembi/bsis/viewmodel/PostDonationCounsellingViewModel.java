@@ -1,48 +1,69 @@
 package org.jembi.bsis.viewmodel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import java.util.Date;
 import java.util.Map;
 
-import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.utils.DateTimeSerialiser;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class PostDonationCounsellingViewModel {
 
-  private PostDonationCounselling postDonationCounselling;
+  private long id;
+
+  private boolean flaggedForCounselling;
+
+  private CounsellingStatusViewModel counsellingStatus;
+
+  private Date counsellingDate;
 
   private Map<String, Boolean> permissions;
 
   private DonationViewModel donation;
 
-  public PostDonationCounsellingViewModel(PostDonationCounselling postDonationCounselling) {
-    this.postDonationCounselling = postDonationCounselling;
-  }
+  private DonorViewModel donor;
+
+  private String notes;
 
   public long getId() {
-    return postDonationCounselling.getId();
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
   }
 
   public boolean isFlaggedForCounselling() {
-    return postDonationCounselling.isFlaggedForCounselling();
+    return flaggedForCounselling;
+  }
+
+  public void setFlaggedForCounselling(boolean flaggedForCounselling) {
+    this.flaggedForCounselling = flaggedForCounselling;
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getCounsellingDate() {
-    return postDonationCounselling.getCounsellingDate();
+    return counsellingDate;
+  }
+
+  public void setCounsellingDate(Date counsellingDate) {
+    this.counsellingDate = counsellingDate;
   }
 
   public CounsellingStatusViewModel getCounsellingStatus() {
-    if (postDonationCounselling.getCounsellingStatus() == null) {
-      return null;
-    }
-    return new CounsellingStatusViewModel(postDonationCounselling.getCounsellingStatus());
+    return counsellingStatus;
+  }
+
+  public void setCounsellingStatus(CounsellingStatusViewModel counsellingStatus) {
+    this.counsellingStatus = counsellingStatus;
   }
 
   public String getNotes() {
-    return postDonationCounselling.getDonation().getNotes();
+    return notes;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
   }
 
   public void setDonation(DonationViewModel donation) {
@@ -54,7 +75,11 @@ public class PostDonationCounsellingViewModel {
   }
 
   public DonorViewModel getDonor() {
-    return new DonorViewModel(postDonationCounselling.getDonation().getDonor());
+    return donor;
+  }
+
+  public void setDonor(DonorViewModel donor) {
+    this.donor = donor;
   }
 
   public Map<String, Boolean> getPermissions() {
@@ -65,8 +90,4 @@ public class PostDonationCounsellingViewModel {
     this.permissions = permissions;
   }
 
-  @JsonIgnore
-  public PostDonationCounselling getPostDonationCounselling() {
-    return postDonationCounselling;
-  }
 }

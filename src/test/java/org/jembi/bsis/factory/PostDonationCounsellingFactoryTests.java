@@ -38,13 +38,14 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
 
     boolean canRemoveStatus = true;
-    long donorId = 1L;
+    long donorId = 21L;
     long donationId = 87L;
+    long postDonationCounsellingId = 32L;
     
     Donation donation = aDonation().withId(donationId).withDonor(aDonor().withId(donorId).build()).build();
 
     PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
-        .withId(donorId)
+        .withId(postDonationCounsellingId)
         .withDonation(donation)
         .thatIsFlaggedForCounselling()
         .build();
@@ -52,9 +53,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     DonationViewModel expectedDonationViewModel = aDonationViewModel().withId(donationId).build();
 
     PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
+        .withId(postDonationCounsellingId)
         .withDonation(expectedDonationViewModel)
         .withPermission("canRemoveStatus", canRemoveStatus)
-        .withPostDonationCounselling(postDonationCounselling)
+        .thatIsFlaggedForCounselling()
         .build();
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(1);
@@ -71,13 +73,14 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsFalse() {
 
     boolean canRemoveStatus = false;
-    long donorId = 1L;
+    long donorId = 21L;
     long donationId = 87L;
+    long postDonationCounsellingId = 32L;
     
     Donation donation = aDonation().withId(donationId).withDonor(aDonor().withId(donorId).build()).build();
 
     PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
-        .withId(donorId)
+        .withId(postDonationCounsellingId)
         .withDonation(donation)
         .thatIsFlaggedForCounselling()
         .build();
@@ -85,9 +88,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     DonationViewModel expectedDonationViewModel = aDonationViewModel().withId(donationId).build();
 
     PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
+        .withId(postDonationCounsellingId)
         .withDonation(expectedDonationViewModel)
         .withPermission("canRemoveStatus", canRemoveStatus)
-        .withPostDonationCounselling(postDonationCounselling)
+        .thatIsFlaggedForCounselling()
         .build();
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(0);
