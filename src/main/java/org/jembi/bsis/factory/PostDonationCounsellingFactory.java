@@ -1,14 +1,15 @@
 package org.jembi.bsis.factory;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class PostDonationCounsellingFactory {
@@ -32,5 +33,14 @@ public class PostDonationCounsellingFactory {
     permissions.put("canRemoveStatus", canRemoveStatus);
     viewModel.setPermissions(permissions);
     return viewModel;
+  }
+
+  public PostDonationCounselling createEntity(PostDonationCounsellingBackingForm form) {
+    PostDonationCounselling entity = new PostDonationCounselling();
+    entity.setId(form.getId());
+    entity.setCounsellingStatus(form.getCounsellingStatus());
+    entity.setCounsellingDate(form.getCounsellingDate());
+    entity.setFlaggedForCounselling(form.getFlaggedForCounselling());
+    return entity;
   }
 }
