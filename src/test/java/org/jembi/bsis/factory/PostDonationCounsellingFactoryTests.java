@@ -9,8 +9,6 @@ import static org.jembi.bsis.helpers.builders.PostDonationCounsellingViewModelBu
 import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingViewModelMatcher.hasSameStateAsPostDonationCounsellingViewModel;
 import static org.mockito.Mockito.when;
 
-import org.jembi.bsis.factory.DonationFactory;
-import org.jembi.bsis.factory.PostDonationCounsellingViewModelFactory;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
@@ -18,23 +16,20 @@ import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.junit.Test;
-
 import org.mockito.InjectMocks;
-
 import org.mockito.Mock;
 
-
-public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite {
+public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
   @InjectMocks
-  private PostDonationCounsellingViewModelFactory postDonationCounsellingViewModelFactory;
+  private PostDonationCounsellingFactory postDonationCounsellingFactory;
   @Mock
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
   @Mock
   private DonationFactory donationFactory;
 
   @Test
-  public void testCreatePostDonationCounsellingViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
+  public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
 
     boolean canRemoveStatus = true;
     long donorId = 1L;
@@ -59,15 +54,15 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(1);
     when(donationFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
 
-    PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingViewModelFactory
-        .createPostDonationCounsellingViewModel(postDonationCounselling);
+    PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingFactory
+        .createViewModel(postDonationCounselling);
 
     assertThat(returnedPostDonationCounsellingViewModel, hasSameStateAsPostDonationCounsellingViewModel(expectedPostDonationCounsellingViewModel));
 
   }
 
   @Test
-  public void testCreatePostDonationCounsellingViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsFalse() {
+  public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsFalse() {
 
     boolean canRemoveStatus = false;
     long donorId = 1L;
@@ -92,8 +87,8 @@ public class PostDonationCounsellingViewModelFactoryTests extends UnitTestSuite 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(0);
     when(donationFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
 
-    PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingViewModelFactory
-        .createPostDonationCounsellingViewModel(postDonationCounselling);
+    PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingFactory
+        .createViewModel(postDonationCounselling);
 
     assertThat(returnedPostDonationCounsellingViewModel, hasSameStateAsPostDonationCounsellingViewModel(expectedPostDonationCounsellingViewModel));
 

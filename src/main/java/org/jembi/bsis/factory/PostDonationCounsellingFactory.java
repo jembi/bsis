@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class PostDonationCounsellingViewModelFactory {
+public class PostDonationCounsellingFactory {
 
   @Autowired
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
   @Autowired
   private DonationFactory donationFactory;
 
-  public PostDonationCounsellingViewModel createPostDonationCounsellingViewModel(
+  public PostDonationCounsellingViewModel createViewModel(
       PostDonationCounselling postDonationCounselling) {
 
     PostDonationCounsellingViewModel viewModel = new PostDonationCounsellingViewModel(postDonationCounselling);
