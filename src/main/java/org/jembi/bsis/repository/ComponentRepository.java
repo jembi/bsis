@@ -1,5 +1,6 @@
 package org.jembi.bsis.repository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -18,6 +19,8 @@ import org.jembi.bsis.dto.DiscardedComponentDTO;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
+import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.util.BloodGroup;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -169,6 +172,35 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .setParameter("endDate", endDate)
         .setParameter("excludedStatuses", Arrays.asList(ComponentStatus.PROCESSED))
         .setParameter("deleted",false)
+        .getResultList();
+  }
+
+  public List<Component> findAvailableComponentsReadyForLabelling(Long componentTypeId, Long processingSiteId, List<BloodGroup> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
+    boolean includeBloodGroups = true;
+    List<String> negativeBloodAbos = new ArrayList<>();
+    List<String> positiveBloodAbos = new ArrayList<>();
+    if(bloodGroups == null || bloodGroups.isEmpty()) {
+      includeBloodGroups = false;
+    } else {
+      for (BloodGroup bloodGroup : bloodGroups) {
+        if (bloodGroup.getBloodRh() == "-") {
+          negativeBloodAbos.add(bloodGroup.getBloodAbo());
+        } else {
+          positiveBloodAbos.add(bloodGroup.getBloodAbo());
+        }
+      }
+    }
+
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_AVAILABLE_COMPONENTS_FOR_LABELLING, Component.class)
+        .setParameter("processingSiteId", processingSiteId)
+        .setParameter("componentTypeId", componentTypeId)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("includeBloodGroups", includeBloodGroups)
+        .setParameter("inventoryStatus",inventoryStatus)
+        .setParameter("negativeBloodAbos", negativeBloodAbos)
+        .setParameter("positiveBloodAbos", positiveBloodAbos)
+        .setParameter("isDeleted", false)
         .getResultList();
   }
 }

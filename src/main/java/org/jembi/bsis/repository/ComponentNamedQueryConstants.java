@@ -34,6 +34,21 @@ public class ComponentNamedQueryConstants {
       "AND c.status = :status " +
       "AND c.isDeleted = :isDeleted";
 
+  public static final String NAME_FIND_AVAILABLE_COMPONENTS_FOR_LABELLING =
+      "Component.findAvailableComponentsForLabelling";
+  public static final String QUERY_FIND_AVAILABLE_COMPONENTS_FOR_LABELLING =
+      "SELECT DISTINCT c FROM Component c " +
+      "WHERE c.status = 'AVAILABLE' " +
+      "AND (:componentTypeId is null OR c.componentType.id = :componentTypeId) " +
+      "AND (:processingSiteId is null OR c.location.id = :processingSiteId) " +
+      "AND (:startDate is null OR c.createdOn >= :startDate) " +
+      "AND (:endDate is null OR c.createdOn <= :endDate) " +
+      "AND (:includeBloodGroups = false OR ((c.donation.bloodAbo IN (:negativeBloodAbos) AND c.donation.bloodRh = '-') " +
+          "OR (c.donation.bloodAbo IN (:positiveBloodAbos) AND c.donation.bloodRh = '+'))) " +
+      "AND c.isDeleted = :isDeleted " +
+      "AND c.inventoryStatus = :inventoryStatus " +
+      "ORDER BY c.id ASC";
+
   public static final String NAME_FIND_ANY_COMPONENT = "Component.findAnyComponent";
   public static final String QUERY_FIND_ANY_COMPONENT =
       "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation " +
