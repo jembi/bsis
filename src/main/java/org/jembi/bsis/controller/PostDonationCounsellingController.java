@@ -1,6 +1,9 @@
 package org.jembi.bsis.controller;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -8,7 +11,6 @@ import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.controllerservice.PostDonationCounsellingControllerService;
 import org.jembi.bsis.factory.PostDonationCounsellingFactory;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
-import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.service.PostDonationCounsellingCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
@@ -40,20 +42,7 @@ public class PostDonationCounsellingController {
       @Valid @RequestBody PostDonationCounsellingBackingForm backingForm,
       @PathVariable Long id) {
 
-    if (backingForm.getFlaggedForCounselling()) {
-      //This is when you wish to clear the current status and re flag for counselling
-      PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService
-          .flagForCounselling(backingForm.getId());
-
-      return postDonationCounsellingFactory
-          .createViewModel(postDonationCounselling);
-    }
-
-    PostDonationCounselling postDonationCounselling = postDonationCounsellingCRUDService.updatePostDonationCounselling(
-        backingForm.getId(), backingForm.getCounsellingStatus(), backingForm.getCounsellingDate(),
-        backingForm.getNotes());
-
-    return postDonationCounsellingFactory.createViewModel(postDonationCounselling);
+    return postDonationCounsellingControllerService.update(backingForm);
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)

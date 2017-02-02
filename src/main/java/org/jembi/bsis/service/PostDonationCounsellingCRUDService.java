@@ -1,9 +1,6 @@
 package org.jembi.bsis.service;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
-import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
@@ -51,23 +48,25 @@ public class PostDonationCounsellingCRUDService {
     return postDonationCounselling;
   }
 
-  public PostDonationCounselling updatePostDonationCounselling(long id, CounsellingStatus counsellingStatus,
-                                                               Date counsellingDate, String notes) {
+  public PostDonationCounselling updatePostDonationCounselling(PostDonationCounselling postDonationCounselling) {
 
-    PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
-
-    if (postDonationCounselling == null) {
-      throw new IllegalArgumentException("Post donation counselling not found for id: " + id);
+    if (postDonationCounselling.isFlaggedForCounselling()) {
+      // This is when you wish to clear the current status and re flag for counselling
+      return flagForCounselling(postDonationCounselling.getId());
     }
 
-    postDonationCounselling.setFlaggedForCounselling(Boolean.FALSE);
-    postDonationCounselling.setCounsellingStatus(counsellingStatus);
-    postDonationCounselling.setCounsellingDate(counsellingDate);
-    postDonationCounselling.getDonation().setNotes(notes);
-    postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
-    postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
-    postDonationCounselling.setIsDeleted(Boolean.FALSE);
-    return postDonationCounsellingRepository.update(postDonationCounselling);
+    PostDonationCounselling existingPostDonationCounselling = postDonationCounsellingRepository
+        .findById(postDonationCounselling.getId());
+
+    if (existingPostDonationCounselling == null) {
+      throw new IllegalArgumentException("Post donation counselling not found for id: " + postDonationCounselling.getId());
+    }
+
+    existingPostDonationCounselling.setFlaggedForCounselling(Boolean.FALSE);
+    existingPostDonationCounselling.setCounsellingStatus(postDonationCounselling.getCounsellingStatus());
+    existingPostDonationCounselling.setCounsellingDate(postDonationCounselling.getCounsellingDate());
+
+    return postDonationCounsellingRepository.update(existingPostDonationCounselling);
   }
 
   public PostDonationCounselling flagForCounselling(long id) {
@@ -77,8 +76,6 @@ public class PostDonationCounsellingCRUDService {
     postDonationCounselling.setCounsellingStatus(null);
     postDonationCounselling.getDonation().setNotes(null);
     postDonationCounselling.setIsDeleted(Boolean.FALSE);
-    postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
-    postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
     return postDonationCounsellingRepository.update(postDonationCounselling);
   }
 }
