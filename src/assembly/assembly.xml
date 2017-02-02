@@ -2,7 +2,7 @@
  xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
- <id>bin</id>
+ <id>importer</id>
  <formats>
   <format>jar</format>
  </formats>
@@ -42,12 +42,22 @@
      <exclude>META-INF/spring.handlers</exclude>
      <exclude>META-INF/spring.schemas</exclude>
      <exclude>META-INF/services/org.hibernate.integrator.spi.Integrator</exclude>
+     <exclude>org/jembi/bsis/service/VersionService*</exclude>
+     <exclude>org/jembi/bsis/controller/**</exclude>
+     <exclude>org/jembi/bsis/controllerservice/**</exclude>
     </excludes>
    </unpackOptions>
   </dependencySet>
   <dependencySet>
    <unpack>true</unpack>
    <scope>provided</scope>
+   <unpackOptions>
+    <excludes>
+     <exclude>org/jembi/bsis/service/VersionService*</exclude>
+     <exclude>org/jembi/bsis/controller/**</exclude>
+     <exclude>org/jembi/bsis/controllerservice/**</exclude>
+    </excludes>
+   </unpackOptions>
   </dependencySet>
  </dependencySets>
 </assembly>
