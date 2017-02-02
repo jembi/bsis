@@ -78,7 +78,6 @@ public class DonorRepository {
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
         .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
         .setParameter("isDeleted", Boolean.FALSE)
-        .setParameter("donationIsDeleted", Boolean.FALSE)
         .getSingleResult();
   }
 
