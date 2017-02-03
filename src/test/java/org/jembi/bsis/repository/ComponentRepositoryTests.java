@@ -1253,7 +1253,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void testFindAvailableComponentsReadyForLabelling_shouldReturnCorrectRecords() {
+  public void testFindSafeComponents_shouldReturnCorrectRecords() {
     // Set up fixture
     String donationIdentificationNumber = "2255448";
     Date startDate = new DateTime().minusDays(7).toDate();
@@ -1367,7 +1367,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     List<BloodGroup> bloodGroups = Arrays.asList(new BloodGroup("O", "+"), new BloodGroup("AB", "-"));
 
     // Exercise SUT
-    List<Component> returnedComponents = componentRepository.findAvailableComponentsReadyForLabelling(
+    List<Component> returnedComponents = componentRepository.findSafeComponents(
         componentType.getId(), location.getId(), bloodGroups, startDate, endDate, inventoryStatus);
 
     // Verify
@@ -1375,7 +1375,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void testFindAvailableComponentsReadyForLabellingWithNullProcessingSite_shouldReturnCorrectRecords() {
+  public void testFindSafeComponentsWithNullProcessingSite_shouldReturnCorrectRecords() {
     // Set up fixture
     String donationIdentificationNumber = "2255448";
     Date startDate = new DateTime().minusDays(7).toDate();
@@ -1410,7 +1410,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     List<BloodGroup> bloodGroups = Arrays.asList(new BloodGroup("O", "+"), new BloodGroup("AB", "-"));
 
     // Exercise SUT
-    List<Component> returnedComponents = componentRepository.findAvailableComponentsReadyForLabelling(
+    List<Component> returnedComponents = componentRepository.findSafeComponents(
         componentType.getId(), null, bloodGroups, startDate, endDate, inventoryStatus);
 
     // Verify
@@ -1418,7 +1418,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void testFindAvailableComponentsReadyForLabellingWithNullComponentType_shouldReturnCorrectRecords() {
+  public void testFindSafeComponentsWithNullComponentType_shouldReturnCorrectRecords() {
     // Set up fixture
     String donationIdentificationNumber = "2255448";
     Date startDate = new DateTime().minusDays(7).toDate();
@@ -1453,7 +1453,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     List<BloodGroup> bloodGroups = Arrays.asList(new BloodGroup("O", "+"), new BloodGroup("AB", "-"));
 
     // Exercise SUT
-    List<Component> returnedComponents = componentRepository.findAvailableComponentsReadyForLabelling(
+    List<Component> returnedComponents = componentRepository.findSafeComponents(
         null, location.getId(), bloodGroups, startDate, endDate, inventoryStatus);
 
     // Verify
@@ -1461,7 +1461,48 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void testFindAvailableComponentsReadyForLabellingWithNoDateRange_shouldReturnCorrectRecords() {
+  public void testFindSafeComponentsWithNullBloodGroops_shouldReturnCorrectRecords() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().plusDays(2).toDate();
+    Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).withBloodAbo("O").withBloodRh("+").build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    Location location = aLocation().build();
+    ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    InventoryStatus inventoryStatus = InventoryStatus.IN_STOCK;
+    ComponentStatus availableStatus = ComponentStatus.AVAILABLE;
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withDonation(aDonation().withBloodAbo("B").withBloodRh("-").build())
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .withInventoryStatus(inventoryStatus)
+            .withStatus(availableStatus)
+            .withCreatedOn(new Date())
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withInventoryStatus(inventoryStatus)
+            .withStatus(availableStatus)
+            .withCreatedOn(new Date())
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findSafeComponents(
+        componentType.getId(), location.getId(), null, startDate, endDate, inventoryStatus);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+  @Test
+  public void testFindSafeComponentsWithNoDateRange_shouldReturnCorrectRecords() {
     // Set up fixture
     String donationIdentificationNumber = "2255448";
     Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).withBloodAbo("O").withBloodRh("+").build();
@@ -1494,7 +1535,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     List<BloodGroup> bloodGroups = Arrays.asList(new BloodGroup("O", "+"), new BloodGroup("AB", "-"));
 
     // Exercise SUT
-    List<Component> returnedComponents = componentRepository.findAvailableComponentsReadyForLabelling(
+    List<Component> returnedComponents = componentRepository.findSafeComponents(
         componentType.getId(), location.getId(), bloodGroups, null, null, inventoryStatus);
 
     // Verify
