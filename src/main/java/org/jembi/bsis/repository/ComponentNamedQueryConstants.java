@@ -34,17 +34,17 @@ public class ComponentNamedQueryConstants {
       "AND c.status = :status " +
       "AND c.isDeleted = :isDeleted";
 
-  public static final String NAME_FIND_AVAILABLE_COMPONENTS_FOR_LABELLING =
+  public static final String NAME_FIND_SAFE_COMPONENTS =
       "Component.findAvailableComponentsForLabelling";
-  public static final String QUERY_FIND_AVAILABLE_COMPONENTS_FOR_LABELLING =
+  public static final String QUERY_FIND_SAFE_COMPONENTS =
       "SELECT DISTINCT c FROM Component c " +
       "WHERE c.status = 'AVAILABLE' " +
       "AND (:componentTypeId is null OR c.componentType.id = :componentTypeId) " +
-      "AND (:processingSiteId is null OR c.location.id = :processingSiteId) " +
+      "AND (:locationId is null OR c.location.id = :locationId) " +
       "AND (:startDate is null OR c.createdOn >= :startDate) " +
       "AND (:endDate is null OR c.createdOn <= :endDate) " +
-      "AND (:includeBloodGroups = false OR ((c.donation.bloodAbo IN (:negativeBloodAbos) AND c.donation.bloodRh = '-') " +
-          "OR (c.donation.bloodAbo IN (:positiveBloodAbos) AND c.donation.bloodRh = '+'))) " +
+      "AND (:includeBloodGroups = false OR (:includeNegativeAbos = false OR (c.donation.bloodAbo IN (:negativeBloodAbos) AND c.donation.bloodRh = '-')) " +
+          "OR (:includePositiveAbos = false OR (c.donation.bloodAbo IN (:positiveBloodAbos) AND c.donation.bloodRh = '+'))) " +
       "AND c.isDeleted = :isDeleted " +
       "AND c.inventoryStatus = :inventoryStatus " +
       "ORDER BY c.id ASC";

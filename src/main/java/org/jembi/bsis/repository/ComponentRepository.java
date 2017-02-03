@@ -175,8 +175,10 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .getResultList();
   }
 
-  public List<Component> findAvailableComponentsReadyForLabelling(Long componentTypeId, Long processingSiteId, List<BloodGroup> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
-    boolean includeBloodGroups = true;
+  public List<Component> findSafeComponents(Long componentTypeId, Long locationId,
+      List<BloodGroup> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
+    boolean includeBloodGroups = true, includePositiveAbos = true, includeNegativeAbos = true;
+
     List<String> negativeBloodAbos = new ArrayList<>();
     List<String> positiveBloodAbos = new ArrayList<>();
     if(bloodGroups == null || bloodGroups.isEmpty()) {
@@ -190,14 +192,24 @@ public class ComponentRepository extends AbstractRepository<Component> {
         }
       }
     }
+    if (negativeBloodAbos == null || negativeBloodAbos.isEmpty()) {
+      includeNegativeAbos = false;
+      negativeBloodAbos = null;
+    }
+    if (positiveBloodAbos == null || positiveBloodAbos.isEmpty()) {
+      includePositiveAbos = false;
+      positiveBloodAbos = null;
+    }
 
-    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_AVAILABLE_COMPONENTS_FOR_LABELLING, Component.class)
-        .setParameter("processingSiteId", processingSiteId)
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SAFE_COMPONENTS, Component.class)
+        .setParameter("locationId", locationId)
         .setParameter("componentTypeId", componentTypeId)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("includeBloodGroups", includeBloodGroups)
         .setParameter("inventoryStatus",inventoryStatus)
+        .setParameter("includeNegativeAbos", includeNegativeAbos)
+        .setParameter("includePositiveAbos", includePositiveAbos)
         .setParameter("negativeBloodAbos", negativeBloodAbos)
         .setParameter("positiveBloodAbos", positiveBloodAbos)
         .setParameter("isDeleted", false)
