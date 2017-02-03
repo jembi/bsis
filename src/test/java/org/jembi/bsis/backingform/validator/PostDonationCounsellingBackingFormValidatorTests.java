@@ -33,7 +33,6 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
     
-    
     // Run test
     validator.validateForm(form, errors);
 
