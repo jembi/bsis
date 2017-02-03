@@ -42,6 +42,7 @@ import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -1249,5 +1250,254 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     // Verify
     assertThat(returnedComponents.size(), is(expectedComponent.size()));
     assertThat(returnedComponents.get(0), hasSameStateAsComponent(expectedComponent.get(0)));
+  }
+
+  @Test
+  public void testFindAvailableComponentsReadyForLabelling_shouldReturnCorrectRecords() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().plusDays(2).toDate();
+    Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).withBloodAbo("O").withBloodRh("+").build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    Location location = aLocation().build();
+    ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    InventoryStatus inventoryStatus = InventoryStatus.IN_STOCK;
+    ComponentStatus availableStatus = ComponentStatus.AVAILABLE;
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .withInventoryStatus(inventoryStatus)
+            .withStatus(availableStatus)
+            .withCreatedOn(new Date())
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withInventoryStatus(inventoryStatus)
+            .withStatus(availableStatus)
+            .withCreatedOn(new Date())
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+
+    // Excluded by isDeleted
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(availableStatus)
+        .withDonation(donation)
+        .withLocation(location)
+        .withComponentType(componentType)
+        .withParentComponent(initialComponent)
+        .withInventoryStatus(inventoryStatus)
+        .withStatus(availableStatus)
+        .withCreatedOn(new Date())
+        .buildAndPersist(entityManager);
+
+    // Excluded by status
+    aComponent()
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withLocation(location)
+        .withInventoryStatus(inventoryStatus)
+        .withStatus(ComponentStatus.EXPIRED)
+        .withCreatedOn(new Date())
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+
+    // Excluded by createdOn date
+    aComponent()
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withLocation(location)
+        .withInventoryStatus(inventoryStatus)
+        .withStatus(availableStatus)
+        .withCreatedOn(new DateTime().minusDays(30).toDate())
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+
+    // Excluded by Location
+    aComponent()
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withLocation(aLocation().build())
+        .withInventoryStatus(inventoryStatus)
+        .withStatus(availableStatus)
+        .withCreatedOn(new Date())
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+
+    // Excluded by ComponentType
+    aComponent()
+        .withDonation(donation)
+        .withComponentType(aComponentType().build())
+        .withLocation(location)
+        .withInventoryStatus(inventoryStatus)
+        .withStatus(availableStatus)
+        .withCreatedOn(new Date())
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+
+    // Excluded by InventotyStatus
+    aComponent()
+        .withDonation(donation)
+        .withComponentType(componentType)
+        .withLocation(location)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(availableStatus)
+        .withCreatedOn(new Date())
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+
+    // Excluded for blood group
+    aComponent()
+        .withDonation(aDonation().withBloodAbo("B").withBloodRh("-").build())
+        .withComponentType(componentType)
+        .withLocation(location)
+        .withInventoryStatus(inventoryStatus)
+        .withStatus(availableStatus)
+        .withCreatedOn(new Date())
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+
+    List<BloodGroup> bloodGroups = Arrays.asList(new BloodGroup("O", "+"), new BloodGroup("AB", "-"));
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findAvailableComponentsReadyForLabelling(
+        componentType.getId(), location.getId(), bloodGroups, startDate, endDate, inventoryStatus);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+  @Test
+  public void testFindAvailableComponentsReadyForLabellingWithNullProcessingSite_shouldReturnCorrectRecords() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().plusDays(2).toDate();
+    Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).withBloodAbo("O").withBloodRh("+").build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    Location location = aLocation().build();
+    ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    InventoryStatus inventoryStatus = InventoryStatus.IN_STOCK;
+    ComponentStatus availableStatus = ComponentStatus.AVAILABLE;
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .withInventoryStatus(inventoryStatus)
+            .withStatus(availableStatus)
+            .withCreatedOn(new Date())
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(aLocation().build())
+            .withInventoryStatus(inventoryStatus)
+            .withStatus(availableStatus)
+            .withCreatedOn(new Date())
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+
+    List<BloodGroup> bloodGroups = Arrays.asList(new BloodGroup("O", "+"), new BloodGroup("AB", "-"));
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findAvailableComponentsReadyForLabelling(
+        componentType.getId(), null, bloodGroups, startDate, endDate, inventoryStatus);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+  @Test
+  public void testFindAvailableComponentsReadyForLabellingWithNullComponentType_shouldReturnCorrectRecords() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Date startDate = new DateTime().minusDays(7).toDate();
+    Date endDate = new DateTime().plusDays(2).toDate();
+    Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).withBloodAbo("O").withBloodRh("+").build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    Location location = aLocation().build();
+    ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    InventoryStatus inventoryStatus = InventoryStatus.IN_STOCK;
+    ComponentStatus availableStatus = ComponentStatus.AVAILABLE;
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withDonation(donation)
+            .withComponentType(aComponentType().build())
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .withInventoryStatus(inventoryStatus)
+            .withStatus(availableStatus)
+            .withCreatedOn(new Date())
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withInventoryStatus(inventoryStatus)
+            .withStatus(availableStatus)
+            .withCreatedOn(new Date())
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+
+    List<BloodGroup> bloodGroups = Arrays.asList(new BloodGroup("O", "+"), new BloodGroup("AB", "-"));
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findAvailableComponentsReadyForLabelling(
+        null, location.getId(), bloodGroups, startDate, endDate, inventoryStatus);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+  @Test
+  public void testFindAvailableComponentsReadyForLabellingWithNoDateRange_shouldReturnCorrectRecords() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    Donation donation = aDonation().withDonationDate(new Date()).withDonationIdentificationNumber(donationIdentificationNumber).withBloodAbo("O").withBloodRh("+").build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    Location location = aLocation().build();
+    ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    InventoryStatus inventoryStatus = InventoryStatus.IN_STOCK;
+    ComponentStatus availableStatus = ComponentStatus.AVAILABLE;
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withParentComponent(initialComponent)
+            .withInventoryStatus(inventoryStatus)
+            .withStatus(availableStatus)
+            .withCreatedOn(new DateTime().minusDays(50).toDate())
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withDonation(donation)
+            .withComponentType(componentType)
+            .withLocation(location)
+            .withInventoryStatus(inventoryStatus)
+            .withStatus(availableStatus)
+            .withCreatedOn(new Date())
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+
+    List<BloodGroup> bloodGroups = Arrays.asList(new BloodGroup("O", "+"), new BloodGroup("AB", "-"));
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findAvailableComponentsReadyForLabelling(
+        componentType.getId(), location.getId(), bloodGroups, null, null, inventoryStatus);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
   }
 }
