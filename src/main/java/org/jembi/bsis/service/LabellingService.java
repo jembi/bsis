@@ -41,9 +41,8 @@ public class LabellingService {
     List<Component> components = new ArrayList<>();
     // Check if din is present
     if (StringUtils.isNotEmpty(din)) {
-      // TODO: when findSafeComponentByDINAndCode is ready, find that component and add it to the
-      // list
-      components = componentRepository.findComponentsByDonationIdentificationNumber(din);
+      components = componentRepository.findComponentsByDINAndComponentCodeAndStatus(din, componentCode,
+          ComponentStatus.AVAILABLE);
     } else {
       List<BloodGroup> bloodGroupsList = BloodGroup.toBloodGroups(bloodGroups);
       components = componentRepository.findSafeComponents(componentTypeId, locationId, bloodGroupsList, startDate, endDate,

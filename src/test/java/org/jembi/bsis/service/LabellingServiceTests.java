@@ -14,7 +14,6 @@ import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -762,21 +761,6 @@ public class LabellingServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testFindSafeComponentWithNullDin_shouldDoFindSafeComponentsByDINAndCodeSearch() {
-
-    // TODO: Update test to use findSafeComponentByDINAndCode when it's ready
-
-    // set up data
-    Component component = aComponent().build();
-    // set up mocks
-    when(componentRepository.findComponentsByDonationIdentificationNumber("1000000")).thenReturn(Arrays.asList(component));
-    // run test
-    labellingService.findSafeComponents("1000000", "1234", null, null, null, null, null, null);
-    // verify
-    verify(componentRepository).findComponentsByDonationIdentificationNumber("1000000");
-  }
-
-  @Test
   public void testFindSafeComponentWithNullDin_shouldDoFindSafeComponentsSearch() {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("a+");
@@ -789,6 +773,20 @@ public class LabellingServiceTests extends UnitTestSuite {
     labellingService.findSafeComponents(null, null, 1L, 1L, bloodGroups, null, null, null);
     // verify
     verify(componentRepository).findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null);
+  }
+
+  @Test
+  public void testFindSafeComponentWithDinAndComponentCode_shouldDoFindComponentsByDINAndComponentCodeAndStatus() {
+    String din = "123467";
+    String componentCode = "1234";
+    // set up mocks
+    when(componentRepository.findComponentsByDINAndComponentCodeAndStatus(din, componentCode, ComponentStatus.AVAILABLE))
+        .thenReturn(null);
+    // run test
+    labellingService.findSafeComponents(din, componentCode, null, null, null, null, null, null);
+    // verify
+    verify(componentRepository).findComponentsByDINAndComponentCodeAndStatus(din, componentCode,
+        ComponentStatus.AVAILABLE);
   }
 
 }
