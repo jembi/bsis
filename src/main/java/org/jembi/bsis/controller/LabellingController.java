@@ -1,9 +1,12 @@
 package org.jembi.bsis.controller;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jembi.bsis.controllerservice.LabellingControllerService;
+import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +41,22 @@ public class LabellingController {
     componentMap.put("donationNumber", din);
     componentMap.put("components", labellingControllerService.getComponentsForLabelling(din, componentTypeId));
     return new ResponseEntity<>(componentMap, HttpStatus.OK);
+  }
+  
+  @RequestMapping(value = "/components", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
+  public Map<String, Object> findSafeComponents(@RequestParam(required = false) String din, 
+      @RequestParam(required = false) String componentCode, 
+      @RequestParam(required = false) Long componentTypeId, 
+      @RequestParam(required = false) Long locationId,
+      @RequestParam(required = false) List<String> bloodGroups, 
+      @RequestParam(required = false) Date startDate, 
+      @RequestParam(required = false) Date endDate, 
+      @RequestParam(required = false, defaultValue = "NOT_IN_STOCK") InventoryStatus inventoryStatus) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("components", labellingControllerService.findSafeComponents(din, componentCode, componentTypeId, locationId,
+        bloodGroups, startDate, endDate, inventoryStatus));
+    return map;
   }
 
   @RequestMapping(value = "/print/packlabel/{componentId}", method = RequestMethod.GET)
