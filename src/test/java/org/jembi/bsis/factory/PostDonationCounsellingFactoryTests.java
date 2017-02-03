@@ -48,6 +48,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withId(postDonationCounsellingId)
         .withDonation(donation)
         .thatIsFlaggedForCounselling()
+        .withNotes("notes")
         .build();
     
     DonationViewModel expectedDonationViewModel = aDonationViewModel().withId(donationId).build();
@@ -57,6 +58,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withDonation(expectedDonationViewModel)
         .withPermission("canRemoveStatus", canRemoveStatus)
         .thatIsFlaggedForCounselling()
+        .withNotes("notes")
         .build();
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(1);

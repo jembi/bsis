@@ -35,8 +35,7 @@ public class PostDonationCounsellingFactory {
     }
     viewModel.setDonor(new DonorViewModel(postDonationCounselling.getDonation().getDonor()));
     viewModel.setFlaggedForCounselling(postDonationCounselling.isFlaggedForCounselling());
-    viewModel.setNotes(donationViewModel.getNotes()); // this will be updated when notes are added
-    // to the PostDonationCounselling entity
+    viewModel.setNotes(postDonationCounselling.getNotes());
 
     // Populate permissions
     boolean canRemoveStatus = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(
