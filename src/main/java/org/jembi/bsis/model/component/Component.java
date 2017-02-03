@@ -66,7 +66,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE,
         query = ComponentNamedQueryConstants.QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_AVAILABLE_COMPONENTS_FOR_LABELLING,
-        query = ComponentNamedQueryConstants.QUERY_FIND_AVAILABLE_COMPONENTS_FOR_LABELLING)
+        query = ComponentNamedQueryConstants.QUERY_FIND_AVAILABLE_COMPONENTS_FOR_LABELLING),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS,
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS)
 })
 @Entity
 @Audited

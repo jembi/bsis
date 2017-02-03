@@ -15,9 +15,9 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
+import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.jembi.bsis.helpers.matchers.ComponentProductionDTOMatcher.hasSameStateAsComponentProductionDTO;
 import static org.jembi.bsis.helpers.matchers.DiscardedComponentDTOMatcher.hasSameStateAsDiscardedComponentDTO;
-import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
 
 import java.util.Arrays;
@@ -1250,4 +1250,259 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     assertThat(returnedComponents.size(), is(expectedComponent.size()));
     assertThat(returnedComponents.get(0), hasSameStateAsComponent(expectedComponent.get(0)));
   }
+
+  @Test
+  public void testFindComponentsByDINAndComponentCodeAndStatus_shouldReturnCorrectComponents() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    String componentCode = "1234";
+    Donation donation = aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.AVAILABLE)
+            .withDonation(donation)
+            .withComponentCode(componentCode)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.AVAILABLE)
+            .withDonation(donation)
+            .withComponentCode(componentCode)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager)
+    );
+    // Excluded by componentCode
+    aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withParentComponent(initialComponent)
+        .withComponentCode("2222")
+        .buildAndPersist(entityManager);
+    // Excluded by isDeleted
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withComponentCode(componentCode)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by status
+    aComponent()
+        .withStatus(ComponentStatus.EXPIRED)
+        .withDonation(donation)
+        .withComponentCode(componentCode)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by donation
+    aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(aDonation().build())
+        .withComponentCode(componentCode)
+        .buildAndPersist(entityManager);
+    
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findComponentsByDINAndComponentCodeAndStatus(
+        donationIdentificationNumber, componentCode, ComponentStatus.AVAILABLE);
+    
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+
+  @Test 
+  public void testFindComponentsByDINWithFlagCharatersAndComponentCodeAndStatus_shouldReturnCorrectComponents() { 
+    // Set up fixture 
+    String dinWithFlagCharacters = "12345671B";
+    String componentCode = "1234";
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+          .withStatus(ComponentStatus.DISCARDED)
+          .withDonation(aDonation()
+              .withDonationIdentificationNumber("1234567")
+              .withFlagCharacters("1B")
+              .build())
+          .withComponentCode(componentCode)
+          .buildAndPersist(entityManager));
+
+    // Exercise SUT 
+    List<Component> returnedComponents = componentRepository
+        .findComponentsByDINAndComponentCodeAndStatus(dinWithFlagCharacters, componentCode, ComponentStatus.DISCARDED);
+
+    // Verify assertThat(returnedComponents.size(), is(expectedComponents.size()));
+    assertThat(returnedComponents.get(0), hasSameStateAsComponent(expectedComponents.get(0))); 
+  }
+
+  @Test
+  public void testFindComponentsByDINAndComponentCodeAndStatusWithComponentCodeNull_shouldReturnCorrectComponents() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    String componentCode = "1234";
+    Donation donation = aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.AVAILABLE)
+            .withDonation(donation)
+            .withComponentCode(componentCode)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.AVAILABLE)
+            .withDonation(donation)
+            .withComponentCode(componentCode)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.AVAILABLE)
+            .withDonation(donation)
+            .withParentComponent(initialComponent)
+            .withComponentCode("2222")
+            .buildAndPersist(entityManager)
+    );
+    // Excluded by isDeleted
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withComponentCode(componentCode)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by status
+    aComponent()
+        .withStatus(ComponentStatus.EXPIRED)
+        .withDonation(donation)
+        .withComponentCode(componentCode)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by donation
+    aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(aDonation().build())
+        .withComponentCode(componentCode)
+        .buildAndPersist(entityManager);
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findComponentsByDINAndComponentCodeAndStatus(
+        donationIdentificationNumber, null, ComponentStatus.AVAILABLE);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
+  @Test
+  public void testFindComponentsByDINAndComponentCodeAndStatusWithStatusNull_shouldReturnCorrectComponents() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    String componentCode = "1234";
+    Donation donation = aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.PROCESSED)
+            .withDonation(donation)
+            .withComponentCode(componentCode)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.AVAILABLE)
+            .withDonation(donation)
+            .withComponentCode(componentCode)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.EXPIRED)
+            .withDonation(donation)
+            .withParentComponent(initialComponent)
+            .withComponentCode(componentCode)
+            .buildAndPersist(entityManager)
+    );
+    // Excluded by componentCode
+    aComponent()
+      .withStatus(ComponentStatus.AVAILABLE)
+      .withDonation(donation)
+      .withParentComponent(initialComponent)
+      .withComponentCode("2222")
+      .buildAndPersist(entityManager);
+    // Excluded by isDeleted
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withComponentCode(componentCode)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by donation
+    aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(aDonation().build())
+        .withComponentCode(componentCode)
+        .buildAndPersist(entityManager);
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findComponentsByDINAndComponentCodeAndStatus(
+        donationIdentificationNumber, componentCode, null);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+  
+  @Test
+  public void testFindComponentsByDINAndComponentCodeAndStatusWithCodeAndStatusNull_shouldReturnCorrectComponents() {
+    // Set up fixture
+    String donationIdentificationNumber = "2255448";
+    String componentCode = "1234";
+    Donation donation = aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build();
+    Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
+    List<Component> expectedComponents = Arrays.asList(
+        initialComponent, // the initial component matches the query as well because bot the status
+                          // and component code is null
+        aComponent()
+            .withStatus(ComponentStatus.PROCESSED)
+            .withDonation(donation)
+            .withComponentCode(componentCode)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.AVAILABLE)
+            .withDonation(donation)
+            .withComponentCode(componentCode)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.EXPIRED)
+            .withDonation(donation)
+            .withParentComponent(initialComponent)
+            .withComponentCode(componentCode)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.AVAILABLE)
+            .withDonation(donation)
+            .withParentComponent(initialComponent)
+            .withComponentCode("2222")
+            .buildAndPersist(entityManager)
+    );
+    // Excluded by isDeleted
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withComponentCode(componentCode)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
+    // Excluded by donation
+    aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(aDonation().build())
+        .withComponentCode(componentCode)
+        .buildAndPersist(entityManager);
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findComponentsByDINAndComponentCodeAndStatus(
+        donationIdentificationNumber, null, null);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  }
+
 }

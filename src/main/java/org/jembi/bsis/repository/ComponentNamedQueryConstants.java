@@ -120,7 +120,7 @@ public class ComponentNamedQueryConstants {
       "and s.statusChangedOn BETWEEN :startDate AND :endDate " +
       "group by s.component.componentBatch.location, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
       "order by s.component.componentBatch.location, s.component.componentType.componentTypeName desc ";
-  
+
   public static final String NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
       "Component.findProducedComponentsByProcessingSite";
   public static final String QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
@@ -135,4 +135,15 @@ public class ComponentNamedQueryConstants {
       + "AND (cb.location.id = :processingSiteId OR :processingSiteId = NULL) "
       + "GROUP BY cb.location, c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
       + "ORDER BY cb.location, c.componentType.componentTypeName ASC";
+
+  public static final String NAME_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS =
+      "Component.findComponentsByDINAndComponentCodeAndStatus";
+  public static final String QUERY_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS =
+      "SELECT DISTINCT c FROM Component c "
+      + "WHERE (c.donation.donationIdentificationNumber = :donationIdentificationNumber "
+      + "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) "
+      + "AND (:includeAllComponentTypes = TRUE OR c.componentCode = :componentCode) " 
+      + "AND (:includeAllComponentStatuses = TRUE OR c.status = :status) "
+      + "AND c.isDeleted = :isDeleted";
+
 }

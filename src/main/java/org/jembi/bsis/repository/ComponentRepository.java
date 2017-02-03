@@ -203,4 +203,38 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .setParameter("isDeleted", false)
         .getResultList();
   }
+
+  /**
+   * Finds Components by DIN, Component Code and Status. If ComponentCode and/or Status is null it
+   * is not used in the filter criteria.
+   * 
+   * @param donationIdentificationNumber
+   * @param componentCode
+   * @param status
+   * @return
+   */
+  public List<Component> findComponentsByDINAndComponentCodeAndStatus(String donationIdentificationNumber,
+      String componentCode, ComponentStatus status) {
+
+    boolean includeAllComponentTypes = false;
+    boolean includeAllComponentStatuses = false;
+
+    if (componentCode == null) {
+      includeAllComponentTypes = true;
+    }
+
+    if (status == null) {
+      includeAllComponentStatuses = true;
+    }
+
+    return em
+        .createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS, Component.class)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .setParameter("includeAllComponentTypes", includeAllComponentTypes)
+        .setParameter("componentCode", componentCode)
+        .setParameter("status", status)
+        .setParameter("includeAllComponentStatuses", includeAllComponentStatuses)
+        .setParameter("isDeleted", Boolean.FALSE)
+        .getResultList();
+  }
 }
