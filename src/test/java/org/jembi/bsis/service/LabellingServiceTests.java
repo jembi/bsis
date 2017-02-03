@@ -771,7 +771,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentRepository.findComponentsByDonationIdentificationNumber("1000000")).thenReturn(Arrays.asList(component));
     // run test
-    labellingService.findSafeComponents("1000000", "1234", null, null, null, null, null);
+    labellingService.findSafeComponents("1000000", "1234", null, null, null, null, null, null);
     // verify
     verify(componentRepository).findComponentsByDonationIdentificationNumber("1000000");
   }
@@ -783,11 +783,12 @@ public class LabellingServiceTests extends UnitTestSuite {
     bloodGroups.add("a-");
     
     // set up mocks
-    when(componentRepository.findSafeComponents(null, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null)).thenReturn(null);
+    when(componentRepository.findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null))
+        .thenReturn(null);
     // run test
-    labellingService.findSafeComponents(null, null, 1L, bloodGroups, null, null, null);
+    labellingService.findSafeComponents(null, null, 1L, 1L, bloodGroups, null, null, null);
     // verify
-    verify(componentRepository).findSafeComponents(null, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null);
+    verify(componentRepository).findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null);
   }
 
 }

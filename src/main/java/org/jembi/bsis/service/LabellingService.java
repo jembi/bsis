@@ -36,7 +36,7 @@ public class LabellingService {
   @Autowired
   private ComponentRepository componentRepository;
   
-  public List<Component> findSafeComponents(String din, String componentCode, Long locationId,
+  public List<Component> findSafeComponents(String din, String componentCode, Long componentTypeId, Long locationId,
       List<String> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
     List<Component> components = new ArrayList<>();
     // Check if din is present
@@ -46,7 +46,7 @@ public class LabellingService {
       components = componentRepository.findComponentsByDonationIdentificationNumber(din);
     } else {
       List<BloodGroup> bloodGroupsList = BloodGroup.toBloodGroups(bloodGroups);
-      components = componentRepository.findSafeComponents(null, locationId, bloodGroupsList, startDate, endDate,
+      components = componentRepository.findSafeComponents(componentTypeId, locationId, bloodGroupsList, startDate, endDate,
           inventoryStatus);
     }
     return components;
