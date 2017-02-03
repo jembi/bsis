@@ -2,7 +2,11 @@ package org.jembi.bsis.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -11,6 +15,8 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.util.BloodAbo;
+import org.jembi.bsis.model.util.BloodGroup;
+import org.jembi.bsis.repository.ComponentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +33,25 @@ public class LabellingService {
   private CheckCharacterService checkCharacterService;
   @Autowired
   private ComponentVolumeService componentVolumeService;
+  @Autowired
+  private ComponentRepository componentRepository;
   
+  public List<Component> findSafeComponents(String din, String componentCode, Long locationId,
+      List<String> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
+    List<Component> components = new ArrayList<>();
+    // Check if din is present
+    if (StringUtils.isNotEmpty(din)) {
+      // TODO: when findSafeComponentByDINAndCode is ready, find that component and add it to the
+      // list
+      components = componentRepository.findComponentsByDonationIdentificationNumber(din);
+    } else {
+      List<BloodGroup> bloodGroupsList = BloodGroup.toBloodGroups(bloodGroups);
+      components = componentRepository.findSafeComponents(null, locationId, bloodGroupsList, startDate, endDate,
+          inventoryStatus);
+    }
+    return components;
+  }
+
   public boolean verifyPackLabel(long componentId, String prePrintedDIN, String packLabelDIN) {
     Component component = componentCRUDService.findComponentById(componentId);
     if (!component.getStatus().equals(ComponentStatus.AVAILABLE)) {
