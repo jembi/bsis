@@ -182,6 +182,7 @@ public class Donor extends BaseModificationTrackerEntity {
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy = "deferredDonor")
+  @Where(clause = "isVoided = 0")
   private List<DonorDeferral> deferrals;
 
   @NotAudited
