@@ -1588,7 +1588,8 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     List<Component> returnedComponents = componentRepository
         .findComponentsByDINAndComponentCodeAndStatus(dinWithFlagCharacters, componentCode, ComponentStatus.DISCARDED);
 
-    // Verify assertThat(returnedComponents.size(), is(expectedComponents.size()));
+    // Verify
+    assertThat(returnedComponents.size(), is(expectedComponents.size()));
     assertThat(returnedComponents.get(0), hasSameStateAsComponent(expectedComponents.get(0)));
   }
 
@@ -1688,7 +1689,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     Donation donation = aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build();
     Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
     List<Component> expectedComponents = Arrays.asList(
-        initialComponent, // the initial component matches the query as well because bot the status
+        initialComponent, // the initial component matches the query as well because both the status
                           // and component code is null
         aComponent().withStatus(ComponentStatus.PROCESSED).withDonation(donation).withComponentCode(componentCode)
             .withParentComponent(initialComponent).buildAndPersist(entityManager),
