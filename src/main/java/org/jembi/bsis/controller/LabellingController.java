@@ -52,7 +52,7 @@ public class LabellingController {
       @RequestParam(required = false) List<String> bloodGroups, 
       @RequestParam(required = false) Date startDate, 
       @RequestParam(required = false) Date endDate, 
-      @RequestParam(required = false, defaultValue = "NOT_IN_STOCK") InventoryStatus inventoryStatus) {
+      @RequestParam(required = false) InventoryStatus inventoryStatus) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("components", labellingControllerService.findSafeComponents(din, componentCode, componentTypeId, locationId,
         bloodGroups, startDate, endDate, inventoryStatus));
