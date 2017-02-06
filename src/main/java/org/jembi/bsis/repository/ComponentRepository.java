@@ -228,11 +228,11 @@ public class ComponentRepository extends AbstractRepository<Component> {
   public List<Component> findComponentsByDINAndComponentCodeAndStatus(String donationIdentificationNumber,
       String componentCode, ComponentStatus status) {
 
-    boolean includeAllComponentTypes = false;
+    boolean includeAllComponentCodes = false;
     boolean includeAllComponentStatuses = false;
 
     if (componentCode == null) {
-      includeAllComponentTypes = true;
+      includeAllComponentCodes = true;
     }
 
     if (status == null) {
@@ -242,10 +242,10 @@ public class ComponentRepository extends AbstractRepository<Component> {
     return em
         .createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS, Component.class)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
-        .setParameter("includeAllComponentTypes", includeAllComponentTypes)
+        .setParameter("includeAllComponentCodes", includeAllComponentCodes)
         .setParameter("componentCode", componentCode)
-        .setParameter("status", status)
         .setParameter("includeAllComponentStatuses", includeAllComponentStatuses)
+        .setParameter("status", status)
         .setParameter("isDeleted", Boolean.FALSE)
         .getResultList();
   }
