@@ -10,7 +10,14 @@ public class PostDonationCounsellingBackingFormValidator extends BaseValidator<P
   @Override
   public void validateForm(PostDonationCounsellingBackingForm form, Errors errors) {
     
-    if (!form.getFlaggedForCounselling()) {
+    if (form.getFlaggedForCounselling()) {
+      if (form.getCounsellingDate() != null) {
+        errors.rejectValue("counsellingDate", "errors.invalid", "Counselling Date should be empty");
+      }
+      if (form.getCounsellingStatus() != null) {
+        errors.rejectValue("counsellingStatus", "errors.invalid", "Counselling Status should be empty");
+      }
+    } else {
       if (form.getCounsellingDate() == null) {
         errors.rejectValue("counsellingDate", "errors.required", "Counselling Date is required");
       }
@@ -18,7 +25,7 @@ public class PostDonationCounsellingBackingFormValidator extends BaseValidator<P
         errors.rejectValue("counsellingStatus", "errors.required", "Counselling Status is required");
       }
     }
-    if (form.getCounsellingStatus() != null && form.getFlaggedForCounselling()) {
+    if ((form.getCounsellingStatus() != null || form.getCounsellingDate() != null) && form.getFlaggedForCounselling()) {
       errors.rejectValue("flaggedForCounselling", "errors.invalid", "Flagged For Counselling must be unselected");
     }
   }

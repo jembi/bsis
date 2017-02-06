@@ -21,7 +21,27 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
   private PostDonationCounsellingBackingFormValidator validator;
   
   @Test
-  public void testValidateValidForm_shouldntGetErrors() throws ParseException {
+  public void testValidateValidFormThatIsFlaggedForCounselling_shouldntGetErrors() throws ParseException {
+    // Set up data
+    PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
+        .aPostDonationCounsellingBackingForm()
+        .withCounsellingDate(null)
+        .withCounsellingStatus(null)
+        .thatIsFlaggedForCounselling()
+        .build();
+    
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
+    
+    // Run test
+    validator.validateForm(form, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(0));
+  }
+  
+  
+  @Test
+  public void testValidateValidFormThatIsNotFlaggedForCounselling_shouldntGetErrors() throws ParseException {
     // Set up data
     SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
     PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
@@ -41,7 +61,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
   }
   
   @Test
-  public void testValidateInValidForm_shouldntReturnTwoErrors() {
+  public void testValidateInValidFormThatIsNotFlaggedForCounselling_shouldReturnTwoErrors() {
     // Set up data
     PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
         .aPostDonationCounsellingBackingForm()
@@ -62,7 +82,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
   }
   
   @Test
-  public void testValidateInValidForm_shouldntReturnOneError() {
+  public void testValidateInValidFormThatIsFlaggedForCounsellingWithNotNullCounsellingStatus_shouldReturnOneError() {
     // Set up data
     PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
         .aPostDonationCounsellingBackingForm()
@@ -77,8 +97,30 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
     validator.validateForm(form, errors);
 
     // Verify
-    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getErrorCount(), is(2));
     assertThat(errors.getFieldError("flaggedForCounselling").getCode(), is("errors.invalid"));
+    assertThat(errors.getFieldError("counsellingStatus").getCode(), is("errors.invalid"));
   }
   
+  @Test
+  public void testValidateInValidFormThatIsFlaggedForCounsellingWithNotNullCounsellingDate_shouldReturnTwoErrors() throws ParseException {
+    // Set up data
+    SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+    PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
+        .aPostDonationCounsellingBackingForm()
+        .withCounsellingDate(fmt.parse("01/02/2017"))
+        .withCounsellingStatus(null)
+        .thatIsFlaggedForCounselling()
+        .build();
+    
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
+    
+    // Run test
+    validator.validateForm(form, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(2));
+    assertThat(errors.getFieldError("flaggedForCounselling").getCode(), is("errors.invalid"));
+    assertThat(errors.getFieldError("counsellingDate").getCode(), is("errors.invalid"));
+  }  
 }
