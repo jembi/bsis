@@ -1554,18 +1554,35 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
             .withComponentCode(componentCode)
             .withParentComponent(initialComponent)
             .buildAndPersist(entityManager));
+
     // Excluded by componentCode
-    aComponent().withStatus(ComponentStatus.AVAILABLE).withDonation(donation).withParentComponent(initialComponent)
-        .withComponentCode("2222").buildAndPersist(entityManager);
+    aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withParentComponent(initialComponent)
+        .withComponentCode("2222")
+        .buildAndPersist(entityManager);
     // Excluded by isDeleted
-    aComponent().withIsDeleted(true).withStatus(ComponentStatus.AVAILABLE).withDonation(donation)
-        .withComponentCode(componentCode).withParentComponent(initialComponent).buildAndPersist(entityManager);
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withComponentCode(componentCode)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
     // Excluded by status
-    aComponent().withStatus(ComponentStatus.EXPIRED).withDonation(donation).withComponentCode(componentCode)
-        .withParentComponent(initialComponent).buildAndPersist(entityManager);
+    aComponent()
+        .withStatus(ComponentStatus.EXPIRED)
+        .withDonation(donation)
+        .withComponentCode(componentCode)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
     // Excluded by donation
-    aComponent().withStatus(ComponentStatus.AVAILABLE).withDonation(aDonation().build())
-        .withComponentCode(componentCode).buildAndPersist(entityManager);
+    aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(aDonation().build())
+        .withComponentCode(componentCode)
+        .buildAndPersist(entityManager);
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findComponentsByDINAndComponentCodeAndStatus(
@@ -1580,8 +1597,13 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     // Set up fixture
     String dinWithFlagCharacters = "12345671B";
     String componentCode = "1234";
-    List<Component> expectedComponents = Arrays.asList(aComponent().withStatus(ComponentStatus.DISCARDED)
-        .withDonation(aDonation().withDonationIdentificationNumber("1234567").withFlagCharacters("1B").build())
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(aDonation()
+            .withDonationIdentificationNumber("1234567")
+            .withFlagCharacters("1B")
+            .build())
         .withComponentCode(componentCode).buildAndPersist(entityManager));
 
     // Exercise SUT
@@ -1600,8 +1622,12 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     String componentCode = "1234";
     Donation donation = aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build();
     Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
-    List<Component> expectedComponents = Arrays.asList(aComponent().withStatus(ComponentStatus.AVAILABLE)
-        .withDonation(donation).withComponentCode(componentCode).withParentComponent(initialComponent)
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withStatus(ComponentStatus.AVAILABLE)
+            .withDonation(donation)
+            .withComponentCode(componentCode)
+            .withParentComponent(initialComponent)
             .buildAndPersist(entityManager),
         aComponent()
             .withStatus(ComponentStatus.AVAILABLE)
@@ -1625,8 +1651,12 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withParentComponent(initialComponent)
         .buildAndPersist(entityManager);
     // Excluded by status
-    aComponent().withStatus(ComponentStatus.EXPIRED).withDonation(donation).withComponentCode(componentCode)
-        .withParentComponent(initialComponent).buildAndPersist(entityManager);
+    aComponent()
+        .withStatus(ComponentStatus.EXPIRED)
+        .withDonation(donation)
+        .withComponentCode(componentCode)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
     // Excluded by donation
     aComponent()
         .withStatus(ComponentStatus.AVAILABLE)
@@ -1651,9 +1681,15 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     Component initialComponent = aComponent().withDonation(donation).buildAndPersist(entityManager);
     List<Component> expectedComponents = Arrays.asList(
         aComponent()
-            .withStatus(ComponentStatus.PROCESSED).withDonation(donation).withComponentCode(componentCode)
-            .withParentComponent(initialComponent).buildAndPersist(entityManager),
-        aComponent().withStatus(ComponentStatus.AVAILABLE).withDonation(donation).withComponentCode(componentCode)
+            .withStatus(ComponentStatus.PROCESSED)
+            .withDonation(donation)
+            .withComponentCode(componentCode)
+            .withParentComponent(initialComponent)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withStatus(ComponentStatus.AVAILABLE)
+            .withDonation(donation)
+            .withComponentCode(componentCode)
             .withParentComponent(initialComponent)
             .buildAndPersist(entityManager),
         aComponent()
@@ -1664,14 +1700,26 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
             .buildAndPersist(entityManager)
     );
     // Excluded by componentCode
-    aComponent().withStatus(ComponentStatus.AVAILABLE).withDonation(donation).withParentComponent(initialComponent)
-        .withComponentCode("2222").buildAndPersist(entityManager);
+    aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withParentComponent(initialComponent)
+        .withComponentCode("2222")
+        .buildAndPersist(entityManager);
     // Excluded by isDeleted
-    aComponent().withIsDeleted(true).withStatus(ComponentStatus.AVAILABLE).withDonation(donation)
-        .withComponentCode(componentCode).withParentComponent(initialComponent).buildAndPersist(entityManager);
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withComponentCode(componentCode)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
     // Excluded by donation
-    aComponent().withStatus(ComponentStatus.AVAILABLE).withDonation(aDonation().build())
-        .withComponentCode(componentCode).buildAndPersist(entityManager);
+    aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(aDonation().build())
+        .withComponentCode(componentCode)
+        .buildAndPersist(entityManager);
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository
@@ -1709,11 +1757,19 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
             .buildAndPersist(entityManager)
     );
     // Excluded by isDeleted
-    aComponent().withIsDeleted(true).withStatus(ComponentStatus.AVAILABLE).withDonation(donation)
-        .withComponentCode(componentCode).withParentComponent(initialComponent).buildAndPersist(entityManager);
+    aComponent()
+        .withIsDeleted(true)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withComponentCode(componentCode)
+        .withParentComponent(initialComponent)
+        .buildAndPersist(entityManager);
     // Excluded by donation
-    aComponent().withStatus(ComponentStatus.AVAILABLE).withDonation(aDonation().build())
-        .withComponentCode(componentCode).buildAndPersist(entityManager);
+    aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(aDonation().build())
+        .withComponentCode(componentCode)
+        .buildAndPersist(entityManager);
 
     // Exercise SUT
     List<Component> returnedComponents =
