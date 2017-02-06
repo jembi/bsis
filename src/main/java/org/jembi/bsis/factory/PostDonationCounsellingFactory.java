@@ -20,6 +20,8 @@ public class PostDonationCounsellingFactory {
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
   @Autowired
   private DonationFactory donationFactory;
+  @Autowired
+  private DonorViewModelFactory donorFactory;
 
   public PostDonationCounsellingViewModel createViewModel(PostDonationCounselling postDonationCounselling) {
 
@@ -33,7 +35,8 @@ public class PostDonationCounsellingFactory {
     if (postDonationCounselling.getCounsellingStatus() != null) {
       viewModel.setCounsellingStatus(new CounsellingStatusViewModel(postDonationCounselling.getCounsellingStatus()));
     }
-    viewModel.setDonor(new DonorViewModel(postDonationCounselling.getDonation().getDonor()));
+    DonorViewModel donorViewModel = donorFactory.createDonorViewModel(postDonationCounselling.getDonation().getDonor());
+    viewModel.setDonor(donorViewModel);
     viewModel.setFlaggedForCounselling(postDonationCounselling.isFlaggedForCounselling());
     viewModel.setNotes(postDonationCounselling.getNotes());
 

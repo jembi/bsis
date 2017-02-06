@@ -44,6 +44,20 @@ public class DonorViewModelFactoryTests {
   private DonorConstraintChecker donorConstraintChecker;
 
   @Test
+  public void testCreateDonorViewModel_shouldReturnViewModelWithCorrectDonor() {
+
+    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+
+    DonorViewModel expectedDonorViewModel = aDonorViewModel()
+        .withDonor(donor)
+        .build();
+
+    DonorViewModel returnedDonorViewModel = donorViewModelFactory.createDonorViewModel(donor);
+
+    assertThat(returnedDonorViewModel, hasSameStateAsDonorViewModel(expectedDonorViewModel));
+  }
+
+  @Test
   public void testCreateDonorViewModelWithPermissions_shouldReturnViewModelWithCorrectDonorAndPermissions() {
 
     boolean irrelevantCanDeletePermission = true;

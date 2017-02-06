@@ -3,11 +3,12 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
+import static org.jembi.bsis.helpers.builders.DonorViewModelBuilder.aDonorViewModel;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingBackingFormBuilder.aPostDonationCounsellingBackingForm;
-import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingMatcher.hasSameStateAsPostDonationCounselling;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingViewModelBuilder.aPostDonationCounsellingViewModel;
+import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingMatcher.hasSameStateAsPostDonationCounselling;
 import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingViewModelMatcher.hasSameStateAsPostDonationCounsellingViewModel;
 import static org.mockito.Mockito.when;
 
@@ -17,9 +18,11 @@ import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonorViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -33,6 +36,8 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
   @Mock
   private DonationFactory donationFactory;
+  @Mock
+  private DonorViewModelFactory donorFactory;
 
   @Test
   public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
@@ -42,7 +47,8 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     long donationId = 87L;
     long postDonationCounsellingId = 32L;
     
-    Donation donation = aDonation().withId(donationId).withDonor(aDonor().withId(donorId).build()).build();
+    Donor donor = aDonor().withId(donorId).build();
+    Donation donation = aDonation().withId(donationId).withDonor(donor).build();
 
     PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
         .withId(postDonationCounsellingId)
@@ -51,11 +57,13 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withNotes("notes")
         .build();
     
+    DonorViewModel expectedDonorViewModel = aDonorViewModel().withDonor(donor).build();
     DonationViewModel expectedDonationViewModel = aDonationViewModel().withId(donationId).build();
 
     PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
         .withId(postDonationCounsellingId)
         .withDonation(expectedDonationViewModel)
+        .withDonor(expectedDonorViewModel)
         .withPermission("canRemoveStatus", canRemoveStatus)
         .thatIsFlaggedForCounselling()
         .withNotes("notes")
@@ -63,6 +71,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(1);
     when(donationFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
+    when(donorFactory.createDonorViewModel(donor)).thenReturn(expectedDonorViewModel);
 
     PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingFactory
         .createViewModel(postDonationCounselling);
@@ -79,7 +88,8 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     long donationId = 87L;
     long postDonationCounsellingId = 32L;
     
-    Donation donation = aDonation().withId(donationId).withDonor(aDonor().withId(donorId).build()).build();
+    Donor donor = aDonor().withId(donorId).build();
+    Donation donation = aDonation().withId(donationId).withDonor(donor).build();
 
     PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
         .withId(postDonationCounsellingId)
@@ -87,17 +97,20 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .thatIsFlaggedForCounselling()
         .build();
     
+    DonorViewModel expectedDonorViewModel = aDonorViewModel().withDonor(donor).build();
     DonationViewModel expectedDonationViewModel = aDonationViewModel().withId(donationId).build();
 
     PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
         .withId(postDonationCounsellingId)
         .withDonation(expectedDonationViewModel)
+        .withDonor(expectedDonorViewModel)
         .withPermission("canRemoveStatus", canRemoveStatus)
         .thatIsFlaggedForCounselling()
         .build();
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(0);
     when(donationFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
+    when(donorFactory.createDonorViewModel(donor)).thenReturn(expectedDonorViewModel);
 
     PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingFactory
         .createViewModel(postDonationCounselling);
