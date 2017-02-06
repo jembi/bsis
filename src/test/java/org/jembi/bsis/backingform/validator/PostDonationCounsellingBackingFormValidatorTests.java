@@ -21,7 +21,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
   private PostDonationCounsellingBackingFormValidator validator;
   
   @Test
-  public void testValidateValidFormThatIsFlaggedForCounselling_shouldntGetErrors() throws ParseException {
+  public void testValidateValidFormThatIsFlaggedForCounselling_shouldntGetErrors() {
     // Set up data
     PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
         .aPostDonationCounsellingBackingForm()
@@ -81,8 +81,50 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
     assertThat(errors.getFieldError("counsellingStatus").getCode(), is("errors.required"));
   }
   
+
   @Test
-  public void testValidateInValidFormThatIsFlaggedForCounsellingWithNotNullCounsellingStatus_shouldReturnOneError() {
+  public void testValidateInValidFormThatIsNotFlaggedForCounsellingWithNullCounsellingDate_shouldReturnOneError() {
+    // Set up data
+    PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
+        .aPostDonationCounsellingBackingForm()
+        .withCounsellingDate(null)
+        .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
+        .thatIsNotFlaggedForCounselling()
+        .build();
+    
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
+    
+    // Run test
+    validator.validateForm(form, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("counsellingDate").getCode(), is("errors.required"));
+  }
+  
+  @Test
+  public void testValidateInValidFormThatIsNotFlaggedForCounsellingWithNullCounsellingStatus_shouldReturnOneError() throws ParseException {
+    // Set up data
+    SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+    PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
+        .aPostDonationCounsellingBackingForm()
+        .withCounsellingDate(fmt.parse("05/02/2017"))
+        .withCounsellingStatus(null)
+        .thatIsNotFlaggedForCounselling()
+        .build();
+    
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
+    
+    // Run test
+    validator.validateForm(form, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("counsellingStatus").getCode(), is("errors.required"));
+  }
+  
+  @Test
+  public void testValidateInValidFormThatIsFlaggedForCounsellingWithNotNullCounsellingStatus_shouldReturnTwoErrors() {
     // Set up data
     PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
         .aPostDonationCounsellingBackingForm()
