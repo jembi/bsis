@@ -46,6 +46,7 @@ public class PostDonationCounsellingFactory {
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canRemoveStatus", canRemoveStatus);
     viewModel.setPermissions(permissions);
+
     return viewModel;
   }
 

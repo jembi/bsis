@@ -35,6 +35,11 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
     return this;
   }
 
+  public PostDonationCounsellingViewModelBuilder thatIsNotFlaggedForCounselling() {
+    this.flaggedForCounselling = false;
+    return this;
+  }
+
   public PostDonationCounsellingViewModelBuilder withCounsellingDate(Date counsellingDate) {
     this.counsellingDate = counsellingDate;
     return this;

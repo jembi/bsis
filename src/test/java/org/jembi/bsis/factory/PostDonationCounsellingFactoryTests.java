@@ -3,8 +3,8 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
-import static org.jembi.bsis.helpers.builders.DonorViewModelBuilder.aDonorViewModel;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
+import static org.jembi.bsis.helpers.builders.DonorViewModelBuilder.aDonorViewModel;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingBackingFormBuilder.aPostDonationCounsellingBackingForm;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingViewModelBuilder.aPostDonationCounsellingViewModel;
@@ -21,6 +21,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
@@ -117,6 +118,53 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
     assertThat(returnedPostDonationCounsellingViewModel, hasSameStateAsPostDonationCounsellingViewModel(expectedPostDonationCounsellingViewModel));
 
+  }
+
+  @Test
+  public void testCreateViewModelWithCounsellingStatus_shouldReturnCorrectViewModel() {
+
+    long donorId = 21L;
+    long donationId = 87L;
+    long postDonationCounsellingId = 32L;
+    Date counsellingDate = new Date();
+    CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
+    String notes = "Given counselling";
+
+    Donor donor = aDonor().withId(donorId).build();
+    Donation donation = aDonation().withId(donationId).withDonor(donor).build();
+
+    PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
+        .withId(postDonationCounsellingId)
+        .withDonation(donation)
+        .thatIsNotFlaggedForCounselling()
+        .withCounsellingStatus(counsellingStatus)
+        .withCounsellingDate(counsellingDate)
+        .withNotes(notes)
+        .build();
+
+    DonorViewModel expectedDonorViewModel = aDonorViewModel().withDonor(donor).build();
+    DonationViewModel expectedDonationViewModel = aDonationViewModel().withId(donationId).build();
+    CounsellingStatusViewModel expectedCounsellingStatus = new CounsellingStatusViewModel(counsellingStatus);
+
+    PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
+        .withId(postDonationCounsellingId)
+        .withDonation(expectedDonationViewModel)
+        .withDonor(expectedDonorViewModel)
+        .withPermission("canRemoveStatus", false)
+        .thatIsNotFlaggedForCounselling()
+        .withCounsellingStatusViewModel(expectedCounsellingStatus)
+        .withCounsellingDate(counsellingDate)
+        .withNotes(notes)
+        .build();
+
+    when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(0);
+    when(donationFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
+    when(donorFactory.createDonorViewModel(donor)).thenReturn(expectedDonorViewModel);
+
+    PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingFactory
+        .createViewModel(postDonationCounselling);
+
+    assertThat(returnedPostDonationCounsellingViewModel, hasSameStateAsPostDonationCounsellingViewModel(expectedPostDonationCounsellingViewModel));
   }
 
   @Test
