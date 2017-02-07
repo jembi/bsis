@@ -25,9 +25,6 @@ public class PostDonationCounsellingBackingFormValidator extends BaseValidator<P
         errors.rejectValue("counsellingStatus", "errors.required", "Counselling Status is required");
       }
     }
-    if ((form.getCounsellingStatus() != null || form.getCounsellingDate() != null) && form.getFlaggedForCounselling()) {
-      errors.rejectValue("flaggedForCounselling", "errors.invalid", "Flagged For Counselling must be unselected");
-    }
   }
 
   @Override
