@@ -1567,6 +1567,13 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
             .withParentComponent(initialComponent)
             .buildAndPersist(entityManager));
 
+    // Excluded by being an initial component
+    aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withParentComponent(null)
+        .withComponentCode(componentCode)
+        .buildAndPersist(entityManager);
     // Excluded by componentCode
     aComponent()
         .withStatus(ComponentStatus.AVAILABLE)
@@ -1598,7 +1605,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findComponentsByDINAndComponentCodeAndStatus(
-        donationIdentificationNumber, componentCode, ComponentStatus.AVAILABLE);
+        donationIdentificationNumber, componentCode, ComponentStatus.AVAILABLE, false);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1620,7 +1627,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository
-        .findComponentsByDINAndComponentCodeAndStatus(dinWithFlagCharacters, componentCode, ComponentStatus.DISCARDED);
+        .findComponentsByDINAndComponentCodeAndStatus(dinWithFlagCharacters, componentCode, ComponentStatus.DISCARDED, true);
 
     // Verify
     assertThat(returnedComponents.size(), is(expectedComponents.size()));
@@ -1678,7 +1685,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findComponentsByDINAndComponentCodeAndStatus(
-        donationIdentificationNumber, null, ComponentStatus.AVAILABLE);
+        donationIdentificationNumber, null, ComponentStatus.AVAILABLE, true);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1735,7 +1742,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository
-        .findComponentsByDINAndComponentCodeAndStatus(donationIdentificationNumber, componentCode, null);
+        .findComponentsByDINAndComponentCodeAndStatus(donationIdentificationNumber, componentCode, null, true);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1784,8 +1791,8 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .buildAndPersist(entityManager);
 
     // Exercise SUT
-    List<Component> returnedComponents =
-        componentRepository.findComponentsByDINAndComponentCodeAndStatus(donationIdentificationNumber, null, null);
+    List<Component> returnedComponents = componentRepository
+        .findComponentsByDINAndComponentCodeAndStatus(donationIdentificationNumber, null, null, true);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));

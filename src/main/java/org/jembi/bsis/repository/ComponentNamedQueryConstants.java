@@ -143,6 +143,7 @@ public class ComponentNamedQueryConstants {
       "SELECT DISTINCT c FROM Component c "
       + "WHERE (c.donation.donationIdentificationNumber = :donationIdentificationNumber "
       + "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) "
+      + "AND (:includeInitialComponents = true OR c.parentComponent is not null) "
       + "AND (:includeAllComponentCodes = TRUE OR c.componentCode = :componentCode) " 
       + "AND (:includeAllComponentStatuses = TRUE OR c.status = :status) "
       + "AND c.isDeleted = :isDeleted";

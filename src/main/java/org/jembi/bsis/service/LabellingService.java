@@ -39,13 +39,13 @@ public class LabellingService {
   public List<Component> findSafeComponentsToLabel(String din, String componentCode, Long componentTypeId, Long locationId,
       List<String> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
     List<Component> components = new ArrayList<>();
+    // Search for safe components excluding initial ones, as those can't be labelled
     // Check if din is present
     if (StringUtils.isNotEmpty(din)) {
       components = componentRepository.findComponentsByDINAndComponentCodeAndStatus(din, componentCode,
-          ComponentStatus.AVAILABLE);
+          ComponentStatus.AVAILABLE, false);
     } else {
       List<BloodGroup> bloodGroupsList = BloodGroup.toBloodGroups(bloodGroups);
-      // Search for safe components excluding initial ones, as those can't be labelled
       components = componentRepository.findSafeComponents(componentTypeId, locationId, bloodGroupsList, startDate, endDate,
           inventoryStatus, false);
     }

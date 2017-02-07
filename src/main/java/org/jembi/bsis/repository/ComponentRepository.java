@@ -227,7 +227,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
    * @return
    */
   public List<Component> findComponentsByDINAndComponentCodeAndStatus(String donationIdentificationNumber,
-      String componentCode, ComponentStatus status) {
+      String componentCode, ComponentStatus status, boolean includeInitialComponents) {
 
     boolean includeAllComponentCodes = false;
     boolean includeAllComponentStatuses = false;
@@ -248,6 +248,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .setParameter("includeAllComponentStatuses", includeAllComponentStatuses)
         .setParameter("status", status)
         .setParameter("isDeleted", Boolean.FALSE)
+        .setParameter("includeInitialComponents", includeInitialComponents)
         .getResultList();
   }
 }

@@ -781,13 +781,13 @@ public class LabellingServiceTests extends UnitTestSuite {
     String din = "123467";
     String componentCode = "1234";
     // set up mocks
-    when(componentRepository.findComponentsByDINAndComponentCodeAndStatus(din, componentCode, ComponentStatus.AVAILABLE))
-        .thenReturn(null);
+    when(componentRepository.findComponentsByDINAndComponentCodeAndStatus(din, componentCode, ComponentStatus.AVAILABLE,
+        false)).thenReturn(null);
     // run test
     labellingService.findSafeComponentsToLabel(din, componentCode, null, null, null, null, null, null);
     // verify
     verify(componentRepository).findComponentsByDINAndComponentCodeAndStatus(din, componentCode,
-        ComponentStatus.AVAILABLE);
+        ComponentStatus.AVAILABLE, false);
   }
 
 }
