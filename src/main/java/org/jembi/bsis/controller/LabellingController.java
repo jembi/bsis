@@ -9,6 +9,7 @@ import org.jembi.bsis.controllerservice.LabellingControllerService;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,8 +52,8 @@ public class LabellingController {
       @RequestParam(required = false) Long componentTypeId, 
       @RequestParam(required = false) Long locationId,
       @RequestParam(required = false) List<String> bloodGroups, 
-      @RequestParam(required = false) Date startDate, 
-      @RequestParam(required = false) Date endDate, 
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate, 
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate, 
       @RequestParam(required = false) InventoryStatus inventoryStatus) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("components", labellingControllerService.findSafeComponents(din, componentCode, componentTypeId, locationId,
