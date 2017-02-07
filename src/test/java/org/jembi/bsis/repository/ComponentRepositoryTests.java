@@ -1297,6 +1297,18 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withStatus(availableStatus)
         .withCreatedOn(new Date())
         .buildAndPersist(entityManager);
+    
+    // Excluded by being an initialComponent
+    aComponent()
+        .withParentComponent(null)
+        .withStatus(availableStatus)
+        .withDonation(donation)
+        .withLocation(location)
+        .withComponentType(componentType)   
+        .withInventoryStatus(inventoryStatus)
+        .withStatus(availableStatus)
+        .withCreatedOn(new Date())
+        .buildAndPersist(entityManager);
 
     // Excluded by status
     aComponent()
@@ -1367,8 +1379,8 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     List<BloodGroup> bloodGroups = Arrays.asList(new BloodGroup("O", "+"), new BloodGroup("AB", "-"));
 
     // Exercise SUT
-    List<Component> returnedComponents = componentRepository.findSafeComponents(
-        componentType.getId(), location.getId(), bloodGroups, startDate, endDate, inventoryStatus);
+    List<Component> returnedComponents = componentRepository.findSafeComponents(componentType.getId(), location.getId(),
+        bloodGroups, startDate, endDate, inventoryStatus, false);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1407,7 +1419,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findSafeComponents(componentType.getId(), null,
-        bloodGroups, startDate, endDate, inventoryStatus);
+        bloodGroups, startDate, endDate, inventoryStatus, true);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1449,8 +1461,8 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     List<BloodGroup> bloodGroups = Arrays.asList(new BloodGroup("O", "+"), new BloodGroup("AB", "-"));
 
     // Exercise SUT
-    List<Component> returnedComponents = componentRepository.findSafeComponents(
-        null, location.getId(), bloodGroups, startDate, endDate, inventoryStatus);
+    List<Component> returnedComponents = componentRepository.findSafeComponents(null, location.getId(), bloodGroups,
+        startDate, endDate, inventoryStatus, true);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1487,7 +1499,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findSafeComponents(componentType.getId(), location.getId(),
-        null, startDate, endDate, inventoryStatus);
+        null, startDate, endDate, inventoryStatus, true);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1527,8 +1539,8 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     List<BloodGroup> bloodGroups = Arrays.asList(new BloodGroup("O", "+"), new BloodGroup("AB", "-"));
 
     // Exercise SUT
-    List<Component> returnedComponents = componentRepository.findSafeComponents(
-        componentType.getId(), location.getId(), bloodGroups, null, null, inventoryStatus);
+    List<Component> returnedComponents = componentRepository.findSafeComponents(componentType.getId(), location.getId(),
+        bloodGroups, null, null, inventoryStatus, true);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));

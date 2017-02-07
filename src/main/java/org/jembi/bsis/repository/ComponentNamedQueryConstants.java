@@ -39,6 +39,7 @@ public class ComponentNamedQueryConstants {
   public static final String QUERY_FIND_SAFE_COMPONENTS =
       "SELECT DISTINCT c FROM Component c " +
       "WHERE c.status = 'AVAILABLE' " +
+      "AND (:includeInitialComponents = true OR c.parentComponent is not null) " +
       "AND (:componentTypeId is null OR c.componentType.id = :componentTypeId) " +
       "AND (:locationId is null OR c.location.id = :locationId) " +
       "AND (:startDate is null OR c.createdOn >= :startDate) " +

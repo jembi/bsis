@@ -175,8 +175,8 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .getResultList();
   }
 
-  public List<Component> findSafeComponents(Long componentTypeId, Long locationId,
-      List<BloodGroup> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
+  public List<Component> findSafeComponents(Long componentTypeId, Long locationId, List<BloodGroup> bloodGroups,
+      Date startDate, Date endDate, InventoryStatus inventoryStatus, boolean includeInitialComponents) {
     boolean includeBloodGroups = true, includePositiveAbos = true, includeNegativeAbos = true;
 
     List<String> negativeBloodAbos = new ArrayList<>();
@@ -213,6 +213,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .setParameter("negativeBloodAbos", negativeBloodAbos)
         .setParameter("positiveBloodAbos", positiveBloodAbos)
         .setParameter("isDeleted", false)
+        .setParameter("includeInitialComponents", includeInitialComponents)
         .getResultList();
   }
 

@@ -45,8 +45,9 @@ public class LabellingService {
           ComponentStatus.AVAILABLE);
     } else {
       List<BloodGroup> bloodGroupsList = BloodGroup.toBloodGroups(bloodGroups);
+      // Search for safe components excluding initial ones, as those can't be labelled
       components = componentRepository.findSafeComponents(componentTypeId, locationId, bloodGroupsList, startDate, endDate,
-          inventoryStatus);
+          inventoryStatus, false);
     }
     return components;
   }

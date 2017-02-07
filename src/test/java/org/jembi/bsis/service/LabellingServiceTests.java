@@ -767,12 +767,13 @@ public class LabellingServiceTests extends UnitTestSuite {
     bloodGroups.add("a-");
     
     // set up mocks
-    when(componentRepository.findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null))
+    when(componentRepository.findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null, false))
         .thenReturn(null);
     // run test
     labellingService.findSafeComponents(null, null, 1L, 1L, bloodGroups, null, null, null);
     // verify
-    verify(componentRepository).findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null);
+    verify(componentRepository).findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null,
+        false);
   }
 
   @Test
