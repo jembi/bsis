@@ -6,14 +6,17 @@ import java.util.List;
 import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.factory.LabellingFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.ComponentCRUDService;
 import org.jembi.bsis.service.LabellingService;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.LabellingViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +42,12 @@ public class LabellingControllerService {
 
   @Autowired
   private ComponentFactory componentFactory;
+
+  @Autowired
+  private LocationRepository locationRepository;
+
+  @Autowired
+  private LocationFactory locationFactory;
 
   public List<ComponentTypeViewModel> getComponentTypes() {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
@@ -67,4 +76,9 @@ public class LabellingControllerService {
         bloodGroups, startDate, endDate, inventoryStatus);
     return componentFactory.createComponentFullViewModels(components);
   }
+
+  public List<LocationViewModel> getLocations() {
+    return locationFactory.createViewModels(locationRepository.getAllLocations(false));
+  }
+
 }

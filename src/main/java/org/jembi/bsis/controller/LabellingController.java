@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.jembi.bsis.controllerservice.LabellingControllerService;
 import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,8 @@ public class LabellingController {
   public Map<String, Object> findComponentFormGenerator() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", labellingControllerService.getComponentTypes());
+    map.put("locations", labellingControllerService.getLocations());
+    map.put("bloodGroups", BloodGroup.getBloodgroups());
     return map;
   }
 
