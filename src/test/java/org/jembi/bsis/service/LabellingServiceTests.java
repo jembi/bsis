@@ -770,7 +770,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(componentRepository.findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null, false))
         .thenReturn(null);
     // run test
-    labellingService.findSafeComponents(null, null, 1L, 1L, bloodGroups, null, null, null);
+    labellingService.findSafeComponentsToLabel(null, null, 1L, 1L, bloodGroups, null, null, null);
     // verify
     verify(componentRepository).findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null,
         false);
@@ -784,7 +784,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(componentRepository.findComponentsByDINAndComponentCodeAndStatus(din, componentCode, ComponentStatus.AVAILABLE))
         .thenReturn(null);
     // run test
-    labellingService.findSafeComponents(din, componentCode, null, null, null, null, null, null);
+    labellingService.findSafeComponentsToLabel(din, componentCode, null, null, null, null, null, null);
     // verify
     verify(componentRepository).findComponentsByDINAndComponentCodeAndStatus(din, componentCode,
         ComponentStatus.AVAILABLE);

@@ -36,7 +36,7 @@ public class LabellingService {
   @Autowired
   private ComponentRepository componentRepository;
   
-  public List<Component> findSafeComponents(String din, String componentCode, Long componentTypeId, Long locationId,
+  public List<Component> findSafeComponentsToLabel(String din, String componentCode, Long componentTypeId, Long locationId,
       List<String> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
     List<Component> components = new ArrayList<>();
     // Check if din is present
