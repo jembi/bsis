@@ -47,7 +47,7 @@ public class LabellingController {
   
   @RequestMapping(value = "/components", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
-  public Map<String, Object> findSafeComponents(@RequestParam(required = false) String din, 
+  public Map<String, Object> findSafeComponents(@RequestParam(required = false) String donationIdentificationNumber, 
       @RequestParam(required = false) String componentCode, 
       @RequestParam(required = false) Long componentTypeId, 
       @RequestParam(required = false) Long locationId,
@@ -56,7 +56,7 @@ public class LabellingController {
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate, 
       @RequestParam(required = false) InventoryStatus inventoryStatus) {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("components", labellingControllerService.findSafeComponentsToLabel(din, componentCode, componentTypeId, locationId,
+    map.put("components", labellingControllerService.findSafeComponentsToLabel(donationIdentificationNumber, componentCode, componentTypeId, locationId,
         bloodGroups, startDate, endDate, inventoryStatus));
     return map;
   }
