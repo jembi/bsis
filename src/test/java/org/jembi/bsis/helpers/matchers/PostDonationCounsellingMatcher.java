@@ -25,6 +25,7 @@ public class PostDonationCounsellingMatcher extends TypeSafeMatcher<PostDonation
         .appendText("\nLast Updated By: ").appendValue(expected.getLastUpdatedBy())
         .appendText("\nLast Updated Date: ").appendValue(expected.getLastUpdated())
         .appendText("\nDonation: ").appendValue(expected.getDonation())
+        .appendText("\nNotes: ").appendValue(expected.getNotes())
         .appendText("\nCounselling date: ").appendValue(expected.getCounsellingDate())
         .appendText("\nCounselling status: ").appendValue(expected.getCounsellingStatus());
   }
@@ -41,6 +42,7 @@ public class PostDonationCounsellingMatcher extends TypeSafeMatcher<PostDonation
         Objects.equals(actual.getLastUpdated(), expected.getLastUpdated()) &&
         Objects.equals(actual.getDonation(), expected.getDonation()) &&
         Objects.equals(actual.getCounsellingDate(), expected.getCounsellingDate()) &&
+        Objects.equals(actual.getNotes(), expected.getNotes()) &&
         Objects.equals(actual.getCounsellingStatus(), expected.getCounsellingStatus());
   }
 

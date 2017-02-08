@@ -69,6 +69,17 @@ public class DonorViewModelFactory {
    * @param donor the donor
    * @return the donor view model
    */
+  public DonorViewModel createDonorViewModel(Donor donor) {
+    DonorViewModel donorViewModel = new DonorViewModel(donor);
+    return donorViewModel;
+  }
+
+  /**
+   * Creates a new DonorViewModel object with permissions.
+   *
+   * @param donor the donor
+   * @return the donor view model
+   */
   public DonorViewModel createDonorViewModelWithPermissions(Donor donor) {
     DonorViewModel donorViewModel = new DonorViewModel(donor);
 

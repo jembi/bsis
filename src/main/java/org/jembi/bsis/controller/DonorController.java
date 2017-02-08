@@ -21,7 +21,7 @@ import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.factory.DonorDeferralFactory;
 import org.jembi.bsis.factory.DonorViewModelFactory;
 import org.jembi.bsis.factory.LocationFactory;
-import org.jembi.bsis.factory.PostDonationCounsellingViewModelFactory;
+import org.jembi.bsis.factory.PostDonationCounsellingFactory;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
@@ -109,7 +109,7 @@ public class DonorController {
   private DuplicateDonorService duplicateDonorService;
 
   @Autowired
-  PostDonationCounsellingViewModelFactory postDonationCounsellingViewModelFactory;
+  PostDonationCounsellingFactory postDonationCounsellingFactory;
 
   @Autowired
   private DonorBackingFormValidator donorBackingFormValidator;
@@ -438,8 +438,8 @@ public class DonorController {
 
     PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
         .findPostDonationCounsellingForDonor(donorId);
-    return postDonationCounsellingViewModelFactory
-        .createPostDonationCounsellingViewModel(postDonationCounselling);
+    return postDonationCounsellingFactory
+        .createViewModel(postDonationCounselling);
   }
 
   private int getNumberOfDonations(List<Donation> donations) {

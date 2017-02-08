@@ -23,10 +23,16 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
   private User createdBy;
   private Date lastUpdated;
   private User lastUpdatedBy;
+  private String notes;
 
 
   public PostDonationCounsellingBuilder withId(Long id) {
     this.id = id;
+    return this;
+  }
+
+  public PostDonationCounsellingBuilder withNotes(String notes) {
+    this.notes = notes;
     return this;
   }
 
@@ -98,6 +104,7 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
     postDonationCounselling.setCreatedBy(createdBy);
     postDonationCounselling.setLastUpdated(lastUpdated);
     postDonationCounselling.setLastUpdatedBy(lastUpdatedBy);
+    postDonationCounselling.setNotes(notes);
     return postDonationCounselling;
   }
 
