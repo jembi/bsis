@@ -81,4 +81,5 @@
   <include file="liquibase/updates/1799-add-component-status-change-reason-low-weight.xml"/>
   <include file="liquibase/updates/2372-change-donationDate-to-date.xml"/>
   <include file="liquibase/updates/2219-add-donation-counselling-notes.xml"/>
+  <include file="liquibase/updates/2123-add-edit-location-with-type-referral.xml"/>
 </databaseChangeLog>
