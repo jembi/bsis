@@ -35,7 +35,7 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testGetAllLocations() throws Exception {
     List<Location> all = locationRepository.getAllLocations(true);
     Assert.assertNotNull("There are Locations", all);
-    Assert.assertEquals("There are 10 Locations", 10, all.size());
+    Assert.assertEquals("There are 11 Locations", 11, all.size());
   }
 
   @Test
@@ -139,5 +139,12 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
     List<Location> all = locationRepository.getTestingSites();
     Assert.assertNotNull("There are testing site Locations", all);
     Assert.assertEquals("There is 1 testing site", 1, all.size());
+  }
+  
+  @Test
+  public void testGetReferralSites() throws Exception {
+    List<Location> all = locationRepository.getReferralSites();
+    Assert.assertNotNull("There are Referral site Locations", all);
+    Assert.assertEquals("There is 1 Referral site", 1, all.size());
   }
 }
