@@ -10,7 +10,7 @@
       </column>
     </addColumn>
     <addColumn tableName="Location_AUD">
-      <column name="isReferralSite" type="TINYINT(1)"  defaultValue="0"/>
+      <column name="isReferralSite" type="TINYINT(1)" />
     </addColumn>
   </changeSet>
     
