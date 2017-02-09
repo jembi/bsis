@@ -321,11 +321,15 @@ public class DataImportService {
           case "isDeleted":
             locationBackingForm.setIsDeleted(cell.getBooleanCellValue());
             break;
-            
+          
+          case "isReferralSite":
+            locationBackingForm.setIsReferralSite(cell.getBooleanCellValue());
+             break;
+
           case "notes":
             locationBackingForm.setNotes(cell.getStringCellValue());
             break;
-            
+                     
           case "divisionLevel3":
             Division division = divisionCache.get(cell.getStringCellValue());
             if (division == null) {
