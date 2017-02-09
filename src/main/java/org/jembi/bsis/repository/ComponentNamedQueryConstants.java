@@ -34,6 +34,21 @@ public class ComponentNamedQueryConstants {
       "AND c.status = :status " +
       "AND c.isDeleted = :isDeleted";
 
+  public static final String NAME_FIND_SAFE_COMPONENTS =
+      "Component.findAvailableComponentsForLabelling";
+  public static final String QUERY_FIND_SAFE_COMPONENTS =
+      "SELECT DISTINCT c FROM Component c " +
+      "WHERE c.status = 'AVAILABLE' " +
+      "AND (:includeInitialComponents = true OR c.parentComponent is not null) " +
+      "AND (:componentTypeId is null OR c.componentType.id = :componentTypeId) " +
+      "AND (:locationId is null OR c.location.id = :locationId) " +
+      "AND (:startDate is null OR c.createdOn >= :startDate) " +
+      "AND (:endDate is null OR c.createdOn <= :endDate) " +
+      "AND (:includeBloodGroups = false OR CONCAT(c.donation.bloodAbo,c.donation.bloodRh) IN (:bloodGroups))"+
+      "AND c.isDeleted = :isDeleted " +
+      "AND c.inventoryStatus = :inventoryStatus " +
+      "ORDER BY c.id ASC";
+
   public static final String NAME_FIND_ANY_COMPONENT = "Component.findAnyComponent";
   public static final String QUERY_FIND_ANY_COMPONENT =
       "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation " +
@@ -105,7 +120,7 @@ public class ComponentNamedQueryConstants {
       "and s.statusChangedOn BETWEEN :startDate AND :endDate " +
       "group by s.component.componentBatch.location, s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason " +
       "order by s.component.componentBatch.location, s.component.componentType.componentTypeName desc ";
-  
+
   public static final String NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
       "Component.findProducedComponentsByProcessingSite";
   public static final String QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE =
@@ -120,4 +135,16 @@ public class ComponentNamedQueryConstants {
       + "AND (cb.location.id = :processingSiteId OR :processingSiteId = NULL) "
       + "GROUP BY cb.location, c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
       + "ORDER BY cb.location, c.componentType.componentTypeName ASC";
+
+  public static final String NAME_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS =
+      "Component.findComponentsByDINAndComponentCodeAndStatus";
+  public static final String QUERY_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS =
+      "SELECT DISTINCT c FROM Component c "
+      + "WHERE (c.donation.donationIdentificationNumber = :donationIdentificationNumber "
+      + "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) "
+      + "AND (:includeInitialComponents = true OR c.parentComponent is not null) "
+      + "AND (:includeAllComponentCodes = TRUE OR c.componentCode = :componentCode) " 
+      + "AND (:includeAllComponentStatuses = TRUE OR c.status = :status) "
+      + "AND c.isDeleted = :isDeleted";
+
 }

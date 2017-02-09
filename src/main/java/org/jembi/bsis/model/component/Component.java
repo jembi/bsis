@@ -64,7 +64,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_FOR_EXPORT,
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_FOR_EXPORT),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE,
-        query = ComponentNamedQueryConstants.QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE)
+        query = ComponentNamedQueryConstants.QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS,
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_SAFE_COMPONENTS,
+        query = ComponentNamedQueryConstants.QUERY_FIND_SAFE_COMPONENTS)
 })
 @Entity
 @Audited

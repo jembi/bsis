@@ -4,23 +4,18 @@ import org.apache.log4j.Logger;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
-import org.jembi.bsis.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-
 public class PostDonationCounsellingCRUDService {
 
   private static final Logger LOGGER = Logger.getLogger(PostDonationCounsellingCRUDService.class);
 
   @Autowired
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
-
-  @Autowired
-  private DateGeneratorService dateGeneratorService;
 
   public void setPostDonationCounsellingRepository(PostDonationCounsellingRepository postDonationCounsellingRepository) {
     this.postDonationCounsellingRepository = postDonationCounsellingRepository;
@@ -40,20 +35,11 @@ public class PostDonationCounsellingCRUDService {
     postDonationCounselling.setDonation(donation);
     postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
     postDonationCounselling.setIsDeleted(Boolean.FALSE);
-    postDonationCounselling.setCreatedBy(SecurityUtils.getCurrentUser());
-    postDonationCounselling.setCreatedDate(dateGeneratorService.generateDate());
-    postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
-    postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
     postDonationCounsellingRepository.save(postDonationCounselling);
     return postDonationCounselling;
   }
 
   public PostDonationCounselling updatePostDonationCounselling(PostDonationCounselling postDonationCounselling) {
-
-    if (postDonationCounselling.isFlaggedForCounselling()) {
-      // This is when you wish to clear the current status and re flag for counselling
-      return flagForCounselling(postDonationCounselling.getId());
-    }
 
     PostDonationCounselling existingPostDonationCounselling = postDonationCounsellingRepository
         .findById(postDonationCounselling.getId());
@@ -62,7 +48,7 @@ public class PostDonationCounsellingCRUDService {
       throw new IllegalArgumentException("Post donation counselling not found for id: " + postDonationCounselling.getId());
     }
 
-    existingPostDonationCounselling.setFlaggedForCounselling(Boolean.FALSE);
+    existingPostDonationCounselling.setFlaggedForCounselling(postDonationCounselling.isFlaggedForCounselling());
     existingPostDonationCounselling.setCounsellingStatus(postDonationCounselling.getCounsellingStatus());
     existingPostDonationCounselling.setCounsellingDate(postDonationCounselling.getCounsellingDate());
     existingPostDonationCounselling.setNotes(postDonationCounselling.getNotes());
@@ -70,13 +56,4 @@ public class PostDonationCounsellingCRUDService {
     return postDonationCounsellingRepository.update(existingPostDonationCounselling);
   }
 
-  public PostDonationCounselling flagForCounselling(long id) {
-    PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
-    postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
-    postDonationCounselling.setCounsellingDate(null);
-    postDonationCounselling.setCounsellingStatus(null);
-    postDonationCounselling.getDonation().setNotes(null);
-    postDonationCounselling.setIsDeleted(Boolean.FALSE);
-    return postDonationCounsellingRepository.update(postDonationCounselling);
-  }
 }

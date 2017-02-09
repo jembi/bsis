@@ -13,7 +13,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
@@ -24,6 +26,8 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.util.BloodAbo;
+import org.jembi.bsis.model.util.BloodGroup;
+import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -58,6 +62,9 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Mock
   private ComponentVolumeService componentVolumeService;
   
+  @Mock
+  private ComponentRepository componentRepository;
+
   @Test
   public void testVerifyPackLabelWithValidInputs_shouldReturnTrue() {
     // set up data
@@ -751,6 +758,36 @@ public class LabellingServiceTests extends UnitTestSuite {
     assertThat(label, label.contains(donationIdentificationNumber + flagCharacters));
     assertThat(label, label.contains("^FD34^FS"));  // assert that Label contains Flag Characters
     assertThat(label, label.contains("^FDY^FS"));   // assert that Label contains Check Character
+  }
+
+  @Test
+  public void testFindSafeComponentWithNullDin_shouldDoFindSafeComponentsSearch() {
+    List<String> bloodGroups = new ArrayList<>();
+    bloodGroups.add("a+");
+    bloodGroups.add("a-");
+    
+    // set up mocks
+    when(componentRepository.findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null, false))
+        .thenReturn(null);
+    // run test
+    labellingService.findSafeComponentsToLabel(null, null, 1L, 1L, bloodGroups, null, null, null);
+    // verify
+    verify(componentRepository).findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null,
+        false);
+  }
+
+  @Test
+  public void testFindSafeComponentWithDinAndComponentCode_shouldDoFindComponentsByDINAndComponentCodeAndStatus() {
+    String din = "123467";
+    String componentCode = "1234";
+    // set up mocks
+    when(componentRepository.findComponentsByDINAndComponentCodeAndStatus(din, componentCode, ComponentStatus.AVAILABLE,
+        false)).thenReturn(null);
+    // run test
+    labellingService.findSafeComponentsToLabel(din, componentCode, null, null, null, null, null, null);
+    // verify
+    verify(componentRepository).findComponentsByDINAndComponentCodeAndStatus(din, componentCode,
+        ComponentStatus.AVAILABLE, false);
   }
 
 }
