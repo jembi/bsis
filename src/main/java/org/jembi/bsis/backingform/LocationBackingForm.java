@@ -7,14 +7,14 @@ public class LocationBackingForm {
 
   private Long id;
   private String name;
-  private Boolean isVenue;
-  private Boolean isMobileSite;
-  private Boolean isProcessingSite;
-  private Boolean isDistributionSite;
-  private Boolean isTestingSite;
-  private Boolean isUsageSite;
+  private boolean isVenue;
+  private boolean isMobileSite;
+  private boolean isProcessingSite;
+  private boolean isDistributionSite;
+  private boolean isTestingSite;
+  private boolean isUsageSite;
   private boolean isReferralSite;
-  private Boolean isDeleted;
+  private boolean isDeleted;
   private String notes;
   private DivisionBackingForm divisionLevel3;
 
@@ -37,35 +37,35 @@ public class LocationBackingForm {
     this.name = name;
   }
 
-  public Boolean getIsUsageSite() {
+  public boolean getIsUsageSite() {
     return isUsageSite;
   }
 
-  public void setIsUsageSite(Boolean isUsageSite) {
+  public void setIsUsageSite(boolean isUsageSite) {
     this.isUsageSite = isUsageSite;
   }
 
-  public Boolean getIsMobileSite() {
+  public boolean getIsMobileSite() {
     return isMobileSite;
   }
 
-  public void setIsMobileSite(Boolean isMobileSite) {
+  public void setIsMobileSite(boolean isMobileSite) {
     this.isMobileSite = isMobileSite;
   }
 
-  public Boolean getIsVenue() {
+  public boolean getIsVenue() {
     return isVenue;
   }
 
-  public void setIsVenue(Boolean isVenue) {
+  public void setIsVenue(boolean isVenue) {
     this.isVenue = isVenue;
   }
 
-  public Boolean getIsDeleted() {
+  public boolean getIsDeleted() {
     return isDeleted;
   }
 
-  public void setIsDeleted(Boolean isDeleted) {
+  public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
 

@@ -120,4 +120,7 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
     return new LocationBackingFormBuilder().thatIsTestingSite();
   }
 
+  public static LocationBackingFormBuilder aReferralSiteBackingForm() {
+    return new LocationBackingFormBuilder().thatIsReferralSite();
+  }
 }
