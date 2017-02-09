@@ -50,11 +50,6 @@ public class PostDonationCounsellingCRUDService {
 
   public PostDonationCounselling updatePostDonationCounselling(PostDonationCounselling postDonationCounselling) {
 
-    if (postDonationCounselling.isFlaggedForCounselling()) {
-      // This is when you wish to clear the current status and re flag for counselling
-      return flagForCounselling(postDonationCounselling.getId());
-    }
-
     PostDonationCounselling existingPostDonationCounselling = postDonationCounsellingRepository
         .findById(postDonationCounselling.getId());
 
@@ -62,7 +57,7 @@ public class PostDonationCounsellingCRUDService {
       throw new IllegalArgumentException("Post donation counselling not found for id: " + postDonationCounselling.getId());
     }
 
-    existingPostDonationCounselling.setFlaggedForCounselling(Boolean.FALSE);
+    existingPostDonationCounselling.setFlaggedForCounselling(postDonationCounselling.isFlaggedForCounselling());
     existingPostDonationCounselling.setCounsellingStatus(postDonationCounselling.getCounsellingStatus());
     existingPostDonationCounselling.setCounsellingDate(postDonationCounselling.getCounsellingDate());
     existingPostDonationCounselling.setNotes(postDonationCounselling.getNotes());
@@ -70,13 +65,4 @@ public class PostDonationCounsellingCRUDService {
     return postDonationCounsellingRepository.update(existingPostDonationCounselling);
   }
 
-  public PostDonationCounselling flagForCounselling(long id) {
-    PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository.findById(id);
-    postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
-    postDonationCounselling.setCounsellingDate(null);
-    postDonationCounselling.setCounsellingStatus(null);
-    postDonationCounselling.getDonation().setNotes(null);
-    postDonationCounselling.setIsDeleted(Boolean.FALSE);
-    return postDonationCounsellingRepository.update(postDonationCounselling);
-  }
 }
