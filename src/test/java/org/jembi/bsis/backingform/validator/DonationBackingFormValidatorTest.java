@@ -112,7 +112,6 @@ public class DonationBackingFormValidatorTest {
     donationBackingFormValidator.validate(form, errors);
 
     // check asserts
-    System.out.println("errors="+errors);
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertEquals("DIN was generated", "DIN234", form.getDonationIdentificationNumber());
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
