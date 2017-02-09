@@ -5,10 +5,12 @@
   <changeSet id="20170208-1538" author="jmuzinda">
     <!-- Add isReferralSite field to Location and Location_AUD -->
     <addColumn tableName="Location">
-      <column name="isReferralSite" type="TINYINT"  defaultValue="0"/>
+      <column name="isReferralSite" type="TINYINT(1)"  defaultValue="0">
+      	<constraints nullable="0" />
+      </column>
     </addColumn>
     <addColumn tableName="Location_AUD">
-      <column name="isReferralSite" type="TINYINT"  defaultValue="0"/>
+      <column name="isReferralSite" type="TINYINT(1)"  defaultValue="0"/>
     </addColumn>
   </changeSet>
     
