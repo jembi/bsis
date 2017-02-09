@@ -177,28 +177,16 @@ public class ComponentRepository extends AbstractRepository<Component> {
 
   public List<Component> findSafeComponents(Long componentTypeId, Long locationId, List<BloodGroup> bloodGroups,
       Date startDate, Date endDate, InventoryStatus inventoryStatus, boolean includeInitialComponents) {
-    boolean includeBloodGroups = true, includePositiveAbos = true, includeNegativeAbos = true;
+    boolean includeBloodGroups = true;
+    List<String> stringBloodGroups = null;
 
-    List<String> negativeBloodAbos = new ArrayList<>();
-    List<String> positiveBloodAbos = new ArrayList<>();
     if(bloodGroups == null || bloodGroups.isEmpty()) {
       includeBloodGroups = false;
     } else {
-      for (BloodGroup bloodGroup : bloodGroups) {
-        if (bloodGroup.getBloodRh() == "-") {
-          negativeBloodAbos.add(bloodGroup.getBloodAbo());
-        } else {
-          positiveBloodAbos.add(bloodGroup.getBloodAbo());
-        }
+      stringBloodGroups = new ArrayList<>();
+      for(BloodGroup bloodGroup: bloodGroups) {
+        stringBloodGroups.add(bloodGroup.getBloodAbo()+bloodGroup.getBloodRh());
       }
-    }
-    if (negativeBloodAbos == null || negativeBloodAbos.isEmpty()) {
-      includeNegativeAbos = false;
-      negativeBloodAbos = null;
-    }
-    if (positiveBloodAbos == null || positiveBloodAbos.isEmpty()) {
-      includePositiveAbos = false;
-      positiveBloodAbos = null;
     }
 
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SAFE_COMPONENTS, Component.class)
@@ -207,11 +195,8 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("includeBloodGroups", includeBloodGroups)
+        .setParameter("bloodGroups", stringBloodGroups)
         .setParameter("inventoryStatus",inventoryStatus)
-        .setParameter("includeNegativeAbos", includeNegativeAbos)
-        .setParameter("includePositiveAbos", includePositiveAbos)
-        .setParameter("negativeBloodAbos", negativeBloodAbos)
-        .setParameter("positiveBloodAbos", positiveBloodAbos)
         .setParameter("isDeleted", false)
         .setParameter("includeInitialComponents", includeInitialComponents)
         .getResultList();

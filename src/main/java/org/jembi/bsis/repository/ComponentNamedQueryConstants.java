@@ -44,8 +44,7 @@ public class ComponentNamedQueryConstants {
       "AND (:locationId is null OR c.location.id = :locationId) " +
       "AND (:startDate is null OR c.createdOn >= :startDate) " +
       "AND (:endDate is null OR c.createdOn <= :endDate) " +
-      "AND (:includeBloodGroups = false OR (:includeNegativeAbos = false OR (c.donation.bloodAbo IN (:negativeBloodAbos) AND c.donation.bloodRh = '-')) " +
-          "OR (:includePositiveAbos = false OR (c.donation.bloodAbo IN (:positiveBloodAbos) AND c.donation.bloodRh = '+'))) " +
+      "AND (:includeBloodGroups = false OR CONCAT(c.donation.bloodAbo,c.donation.bloodRh) IN (:bloodGroups))"+
       "AND c.isDeleted = :isDeleted " +
       "AND c.inventoryStatus = :inventoryStatus " +
       "ORDER BY c.id ASC";
