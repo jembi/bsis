@@ -34,22 +34,15 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreatePostDonationCounselling_shouldPersistAndReturnAFlaggedPostDonationCounsellingForDonation() {
     Donation donation = aDonation().withId(23L).build();
-    Date counsellingDate = new Date();
 
     PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
         .withId(null)
         .thatIsFlaggedForCounselling()
         .thatIsNotDeleted()
         .withDonation(donation)
-        .withCreatedBy(loggedInUser)
-        .withCreatedDate(counsellingDate)
-        .withLastUpdated(counsellingDate)
-        .withLastUpdatedBy(loggedInUser)
         .withCounsellingStatus(null)
         .withCounsellingDate(null)
         .build();
-
-    when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
 
     when(postDonationCounsellingRepository.findPostDonationCounsellingForDonation(donation)).thenReturn(null);
 

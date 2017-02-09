@@ -4,23 +4,18 @@ import org.apache.log4j.Logger;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
-import org.jembi.bsis.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-
 public class PostDonationCounsellingCRUDService {
 
   private static final Logger LOGGER = Logger.getLogger(PostDonationCounsellingCRUDService.class);
 
   @Autowired
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
-
-  @Autowired
-  private DateGeneratorService dateGeneratorService;
 
   public void setPostDonationCounsellingRepository(PostDonationCounsellingRepository postDonationCounsellingRepository) {
     this.postDonationCounsellingRepository = postDonationCounsellingRepository;
@@ -40,10 +35,6 @@ public class PostDonationCounsellingCRUDService {
     postDonationCounselling.setDonation(donation);
     postDonationCounselling.setFlaggedForCounselling(Boolean.TRUE);
     postDonationCounselling.setIsDeleted(Boolean.FALSE);
-    postDonationCounselling.setCreatedBy(SecurityUtils.getCurrentUser());
-    postDonationCounselling.setCreatedDate(dateGeneratorService.generateDate());
-    postDonationCounselling.setLastUpdated(dateGeneratorService.generateDate());
-    postDonationCounselling.setLastUpdatedBy(SecurityUtils.getCurrentUser());
     postDonationCounsellingRepository.save(postDonationCounselling);
     return postDonationCounselling;
   }
