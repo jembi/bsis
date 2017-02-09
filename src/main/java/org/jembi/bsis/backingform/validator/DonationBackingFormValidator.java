@@ -182,7 +182,13 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     if (form.getDonation().getVenue() == null || form.getDonation().getVenue().getId() == null) {
       errors.rejectValue("donation.venue", "venue.empty", "Venue is required.");
     } else {
-      Location venue = locationRepository.getLocation(form.getDonation().getVenue().getId());
+      Location venue = null;
+      try {
+        venue = locationRepository.getLocation(form.getDonation().getVenue().getId());
+      } catch (NoResultException ex) {
+        LOGGER.warn("Could not find Venue with id '" + form.getDonation().getVenue().getId()
+            + "'. Error: " + ex.getMessage());
+      }
       if (venue == null) {
         errors.rejectValue("donation.venue", "venue.empty", "Venue is required.");
       } else if (venue.getIsVenue() == false) {
