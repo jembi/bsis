@@ -54,26 +54,9 @@ public class InventoryCRUDService {
       components.add(component);
     } else {
       components = inventoryRepository.findComponentsInStock(locationId, componentTypeId, dueToExpireBy,
-          setBloodGroups(bloodGroups));
+          BloodGroup.toBloodGroups(bloodGroups));
     }
     return components;
-  }
-
-  private List<BloodGroup> setBloodGroups(List<String> bloodGroups) {
-    if (bloodGroups == null) {
-      return null;
-    }
-    List<BloodGroup> bloodGroupsList = new ArrayList<BloodGroup>();
-    for (String bloodGroup : bloodGroups) {
-      BloodGroup bg = new BloodGroup(bloodGroup);
-
-      if (StringUtils.isEmpty(bg.getBloodAbo())) {
-        throw new IllegalArgumentException("Invalid bloodGroup.");
-      }
-
-      bloodGroupsList.add(bg);
-    }
-    return bloodGroupsList;
   }
 
 }
