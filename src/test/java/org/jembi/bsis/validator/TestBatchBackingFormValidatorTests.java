@@ -194,6 +194,6 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
     assertThat(errors.getErrorCount(), is(1));
     assertThat(errors.getFieldErrorCount(), is(1));
-    assertThat(errors.getFieldError("testBatch.location").getCode(), is("requiredField.error"));
+    assertThat(errors.getFieldError("location").getCode(), is("requiredField.error"));
   }
 }

@@ -2,17 +2,11 @@ package org.jembi.bsis.backingform;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.jembi.bsis.model.componentbatch.BloodTransportBox;
-import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentbatch.ComponentBatchStatus;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class ComponentBatchBackingForm {
@@ -26,35 +20,6 @@ public class ComponentBatchBackingForm {
 
   public ComponentBatchBackingForm() {
     super();
-  }
-  
-  @JsonIgnore
-  public ComponentBatch getComponentBatch() {
-    ComponentBatch componentBatch = new ComponentBatch();
-    
-    componentBatch.setId(getId());
-    componentBatch.setStatus(getStatus());
-    componentBatch.setDeliveryDate(getDeliveryDate());
-    
-    if (getLocation() != null) {
-      componentBatch.setLocation(getLocation().getLocation());
-    }
-    
-    Set<BloodTransportBox> boxes = new HashSet<>();
-    for (BloodTransportBoxBackingForm boxForm : getBloodTransportBoxes()) {
-      BloodTransportBox box = boxForm.getBloodTransportBox();
-      box.setComponentBatch(componentBatch);
-      boxes.add(box);
-    }
-    componentBatch.setBloodTransportBoxes(boxes);
-
-    if (getDonationBatch() != null) {
-      DonationBatch donationBatch = getDonationBatch().getDonationBatch();
-      componentBatch.setDonationBatch(donationBatch);
-      donationBatch.setComponentBatch(componentBatch);
-    }
-
-    return componentBatch;
   }
 
   public Long getId() {

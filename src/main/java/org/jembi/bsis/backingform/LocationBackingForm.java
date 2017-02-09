@@ -1,134 +1,111 @@
 
 package org.jembi.bsis.backingform;
 
-import javax.validation.Valid;
-
-import org.jembi.bsis.model.location.Division;
-import org.jembi.bsis.model.location.Location;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class LocationBackingForm {
 
-  @Valid
-  @JsonIgnore
-  private Location location;
+  private Long id;
+  private String name;
+  private Boolean isVenue;
+  private Boolean isMobileSite;
+  private Boolean isProcessingSite;
+  private Boolean isDistributionSite;
+  private Boolean isTestingSite;
+  private Boolean isUsageSite;
+  private Boolean isDeleted;
+  private String notes;
+  private DivisionBackingForm divisionLevel3;
 
   public LocationBackingForm() {
-    location = new Location();
-  }
-  
-  public LocationBackingForm(Location location) {
-    this.location = location;
-  }
-
-  public Location getLocation() {
-    return location;
-  }
-
-  public void setLocation(Location location) {
-    this.location = location;
   }
 
   public Long getId() {
-    return location.getId();
+    return id;
   }
 
   public void setId(Long id) {
-    location.setId(id);
+    this.id = id;
   }
 
   public String getName() {
-    return location.getName();
+    return name;
   }
 
   public void setName(String name) {
-    location.setName(name);
+    this.name = name;
   }
 
   public Boolean getIsUsageSite() {
-    return location.getIsUsageSite();
+    return isUsageSite;
   }
 
   public void setIsUsageSite(Boolean isUsageSite) {
-    location.setIsUsageSite(isUsageSite);
+    this.isUsageSite = isUsageSite;
   }
 
-  public Boolean getIsMobilesite() {
-    return location.getIsMobileSite();
+  public Boolean getIsMobileSite() {
+    return isMobileSite;
   }
 
   public void setIsMobileSite(Boolean isMobileSite) {
-    location.setIsMobileSite(isMobileSite);
+    this.isMobileSite = isMobileSite;
   }
 
   public Boolean getIsVenue() {
-    return location.getIsVenue();
+    return isVenue;
   }
 
   public void setIsVenue(Boolean isVenue) {
-    location.setIsVenue(isVenue);
+    this.isVenue = isVenue;
   }
 
   public Boolean getIsDeleted() {
-    return location.getIsDeleted();
+    return isDeleted;
   }
 
   public void setIsDeleted(Boolean isDeleted) {
-    location.setIsDeleted(isDeleted);
+    this.isDeleted = isDeleted;
   }
 
   public String getNotes() {
-    return location.getNotes();
+    return notes;
   }
 
   public void setNotes(String notes) {
-    location.setNotes(notes);
+    this.notes = notes;
   }
   
   public boolean getIsProcessingSite() {
-    return location.getIsProcessingSite();
+    return isProcessingSite;
   }
   
   public void setIsProcessingSite(boolean isProcessingSite) {
-    location.setIsProcessingSite(isProcessingSite);
+    this.isProcessingSite = isProcessingSite;
   }
   
   public boolean getIsDistributionSite() {
-    return location.getIsDistributionSite();
+    return isDistributionSite;
   }
   
   public void setIsDistributionSite(boolean isDistributionSite) {
-    location.setIsDistributionSite(isDistributionSite);
+    this.isDistributionSite = isDistributionSite;
   }
 
   public boolean getIsTestingSite() {
-    return location.getIsTestingSite();
+    return isTestingSite;
   }
   
   public void setIsTestingSite(boolean isTestingSite) {
-    location.setIsTestingSite(isTestingSite);
+    this.isTestingSite = isTestingSite;
   }
 
   public void setDivisionLevel3(DivisionBackingForm divisionLevel3) {
-    if (divisionLevel3 == null) {
-      return;
-    }
-
-    Division entity3 = new Division();
-    entity3.setId(divisionLevel3.getId());
-    location.setDivisionLevel3(entity3);
+    this.divisionLevel3 = divisionLevel3;
   }
   
   public DivisionBackingForm getDivisionLevel3() {
-    Division divisionLevel3 = location.getDivisionLevel3();
-
-    if (divisionLevel3 == null) {
-      return null;
-    }
-    DivisionBackingForm divisionForm = new DivisionBackingForm();
-    divisionForm.setId(divisionLevel3.getId());
-    return divisionForm;
+    return divisionLevel3;
   }
 
   @JsonIgnore

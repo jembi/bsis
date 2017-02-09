@@ -25,7 +25,7 @@ public class LocationBackingFormValidator extends BaseValidator<LocationBackingF
   public void validateForm(LocationBackingForm form, Errors errors) {
     if (StringUtils.isEmpty(form.getName())) {
       errors.rejectValue("name", "400", "Location name cannot be empty.");
-    } else if (isDuplicateLocationName(form.getLocation())) {
+    } else if (isDuplicateLocationName(form)) {
       errors.rejectValue("name", "400", "Location name already exists.");
     }
     if (!form.getIsUsageSite() && !form.getIsVenue() && !form.getIsProcessingSite() 
@@ -57,7 +57,7 @@ public class LocationBackingFormValidator extends BaseValidator<LocationBackingF
     }
   }
 
-  private boolean isDuplicateLocationName(Location location) {
+  private boolean isDuplicateLocationName(LocationBackingForm location) {
     Location existingLocation = locationRepository.findLocationByName(location.getName());
     if (existingLocation != null && !existingLocation.getId().equals(location.getId())) {
       return true;

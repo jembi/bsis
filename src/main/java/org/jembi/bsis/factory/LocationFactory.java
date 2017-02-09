@@ -64,7 +64,18 @@ public class LocationFactory {
   }
   
   public Location createEntity(LocationBackingForm backingForm) {
-    Location location = backingForm.getLocation();
+    Location location = new Location();
+
+    location.setId(backingForm.getId());
+    location.setName(backingForm.getName());
+    location.setIsVenue(backingForm.getIsVenue());
+    location.setIsMobileSite(backingForm.getIsMobileSite());
+    location.setIsProcessingSite(backingForm.getIsProcessingSite());
+    location.setIsDistributionSite(backingForm.getIsDistributionSite());
+    location.setIsTestingSite(backingForm.getIsTestingSite());
+    location.setIsUsageSite(backingForm.getIsUsageSite());
+    location.setIsDeleted(backingForm.getIsDeleted());
+    location.setNotes(backingForm.getNotes());
 
     // Populate division levels
     Division divisionLevel3 = divisionRepository.findDivisionById(backingForm.getDivisionLevel3().getId());
