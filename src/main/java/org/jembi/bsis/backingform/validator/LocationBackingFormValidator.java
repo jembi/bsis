@@ -29,9 +29,9 @@ public class LocationBackingFormValidator extends BaseValidator<LocationBackingF
       errors.rejectValue("name", "400", "Location name already exists.");
     }
     if (!form.getIsUsageSite() && !form.getIsVenue() && !form.getIsProcessingSite() 
-        && !form.getIsDistributionSite() && !form.getIsTestingSite()) {
+        && !form.getIsDistributionSite() && !form.getIsTestingSite() && !form.getIsReferralSite()) {
       errors.reject("400",
-          "Location must be a venue, or a processing, distribution, testing or usage site.");
+          "Location must be a venue, or a processing, distribution,testing, referral or usage site.");
     }
 
     validateDivisionLevel3(form.getDivisionLevel3(), errors);

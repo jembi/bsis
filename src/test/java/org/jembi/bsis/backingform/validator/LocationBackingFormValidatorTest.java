@@ -10,6 +10,7 @@ import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aProces
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aTestingSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aUsageSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aVenueBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aReferralSiteBackingForm;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
@@ -148,6 +149,29 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
 
     // set up mocks
     when(locationRepository.findLocationByName("USAGE")).thenReturn(null);
+    when(divisionRepository.findDivisionById(3L)).thenReturn(divisionLevel3);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
+    locationBackingFormValidator.validate(locationForm, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+  
+  @Test
+  public void testValidReferralSite() throws Exception {
+    // set up data
+    Division divisionLevel3 = aDivision().withId(3L).withLevel(3).build();
+
+    DivisionBackingForm divisionForm = aDivisionBackingForm().withId(3L).withLevel(3).build();
+    LocationBackingForm locationForm = aReferralSiteBackingForm()
+        .withName("REFERRAL")
+        .withDivisionLevel3(divisionForm)
+        .build();
+
+    // set up mocks
+    when(locationRepository.findLocationByName("REFERRAL")).thenReturn(null);
     when(divisionRepository.findDivisionById(3L)).thenReturn(divisionLevel3);
 
     // run test
