@@ -73,6 +73,7 @@ public class LocationFactory {
     location.setIsProcessingSite(backingForm.getIsProcessingSite());
     location.setIsDistributionSite(backingForm.getIsDistributionSite());
     location.setIsTestingSite(backingForm.getIsTestingSite());
+    location.setIsReferralSite(backingForm.getIsReferralSite());
     location.setIsUsageSite(backingForm.getIsUsageSite());
     location.setIsDeleted(backingForm.getIsDeleted());
     location.setNotes(backingForm.getNotes());

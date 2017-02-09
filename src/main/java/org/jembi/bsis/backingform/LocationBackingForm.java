@@ -13,6 +13,7 @@ public class LocationBackingForm {
   private Boolean isDistributionSite;
   private Boolean isTestingSite;
   private Boolean isUsageSite;
+  private boolean isReferralSite;
   private Boolean isDeleted;
   private String notes;
   private DivisionBackingForm divisionLevel3;
@@ -98,6 +99,14 @@ public class LocationBackingForm {
   
   public void setIsTestingSite(boolean isTestingSite) {
     this.isTestingSite = isTestingSite;
+  }
+
+  public boolean getIsReferralSite() {
+    return isReferralSite;
+  }
+
+  public void setIsReferralSite(boolean isReferralSite) {
+    this.isReferralSite = isReferralSite;
   }
 
   public void setDivisionLevel3(DivisionBackingForm divisionLevel3) {

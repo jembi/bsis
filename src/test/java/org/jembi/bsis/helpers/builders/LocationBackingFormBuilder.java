@@ -12,6 +12,7 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
   private boolean processingSite;
   private boolean mobileSite;
   private boolean distributionSite;
+  private boolean referralSite;
   private boolean deleted;
   private String notes;
   private boolean testingSite;
@@ -27,7 +28,7 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
     return this;
   }
 
-  private LocationBackingFormBuilder thatIsProcessingSite() {
+  public LocationBackingFormBuilder thatIsProcessingSite() {
     processingSite = true;
     return this;
   }
@@ -44,6 +45,11 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
 
   public LocationBackingFormBuilder thatIsDistributionSite() {
     distributionSite = true;
+    return this;
+  }
+
+  public LocationBackingFormBuilder thatIsReferralSite() {
+    referralSite = true;
     return this;
   }
 
@@ -85,6 +91,7 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
     location.setIsDistributionSite(distributionSite);
     location.setIsDeleted(deleted);
     location.setIsTestingSite(testingSite);
+    location.setIsReferralSite(referralSite);
     location.setDivisionLevel3(divisionLevel3);
     return location;
   }
