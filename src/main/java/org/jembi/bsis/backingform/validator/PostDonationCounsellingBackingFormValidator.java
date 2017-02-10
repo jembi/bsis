@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform.validator;
 
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
+import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
@@ -23,6 +24,10 @@ public class PostDonationCounsellingBackingFormValidator extends BaseValidator<P
       }
       if (form.getCounsellingStatus() == null) {
         errors.rejectValue("counsellingStatus", "errors.required", "Counselling Status is required");
+      } else {
+        if (form.getCounsellingStatus().equals(CounsellingStatus.RECEIVED_COUNSELLING) && form.isReferred() == null) {
+          errors.rejectValue("referred", "errors.invalid", "Referred is required");
+        }
       }
     }
   }

@@ -49,6 +49,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
         .withCounsellingDate(fmt.parse("01/02/2017"))
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
+        .thatIsNotReferred()
         .build();
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
@@ -90,6 +91,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
         .withCounsellingDate(null)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
+        .thatIsNotReferred()
         .build();
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
@@ -163,4 +165,26 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
     assertThat(errors.getErrorCount(), is(1));
     assertThat(errors.getFieldError("counsellingDate").getCode(), is("errors.invalid"));
   }  
+
+  @Test
+  public void testValidateInvalidFormWitStatusReceivedCounseillingAndReferredIsEmpty_shouldReturnOneError() throws ParseException {
+    // Set up data
+    SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+    PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
+        .aPostDonationCounsellingBackingForm()
+        .withCounsellingDate(fmt.parse("01/02/2017"))
+        .thatIsNotFlaggedForCounselling()
+        .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
+        .build();
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
+
+    // Run test
+    validator.validateForm(form, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("referred").getCode(), is("errors.invalid"));
+    assertThat(errors.getFieldError("referred").getDefaultMessage(), is("Referred is required"));
+  }
 }
