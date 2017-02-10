@@ -57,6 +57,7 @@ public class PostDonationCounsellingFactory {
     entity.setCounsellingDate(form.getCounsellingDate());
     entity.setFlaggedForCounselling(form.getFlaggedForCounselling());
     entity.setNotes(form.getNotes());
+    entity.setReferred(form.isReferred());
     return entity;
   }
 }
