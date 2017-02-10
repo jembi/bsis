@@ -4,9 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.Valid;
-
-import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
@@ -16,47 +13,40 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class TestBatchBackingForm {
 
-  @Valid
-  @JsonIgnore
-  private TestBatch testBatch;
+  private Long id;
+  private TestBatchStatus status;
+  private Date createdDate;
+  private Date lastUpdated;
 
+  private LocationBackingForm location;
   private List<Long> donationBatchIds = null;
 
   public TestBatchBackingForm() {
-    testBatch = new TestBatch();
-  }
-
-  public TestBatch getTestBatch() {
-    return testBatch;
-  }
-
-  public void setTestBatch(TestBatch testBatch) {
-    this.testBatch = testBatch;
   }
   
   public Long getId() {
-    return testBatch.getId();
+    return id;
   }
 
   public void setId(Long id) {
-    testBatch.setId(id);
+    this.id = id;
   }
   
   public TestBatchStatus getStatus() {
-    return testBatch.getStatus();
+    return status;
   }
 
-  public void setStatus(String status) {
-    testBatch.setStatus(TestBatchStatus.valueOf(status));
+  public void setStatus(TestBatchStatus status) {
+    this.status = status;
   }
   
   public Date getCreatedDate() {
-    return testBatch.getCreatedDate();
+    return createdDate;
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public void setCreatedDate(Date createdDate) {
-    testBatch.setCreatedDate(createdDate);
+    this.createdDate = createdDate;
   }
 
   public List<Long> getDonationBatchIds() {
@@ -74,18 +64,15 @@ public class TestBatchBackingForm {
 
   @JsonIgnore
   public Date getLastUpdated() {
-    return testBatch.getLastUpdated();
+    return lastUpdated;
   }
 
   public void setLocation(LocationBackingForm location) {
-    testBatch.setLocation(location.getLocation());
+    this.location = location;
   }
   
   public LocationBackingForm getLocation() {
-    if (testBatch.getLocation() == null) {
-      return null;
-    }
-    return new LocationBackingForm(testBatch.getLocation());
+    return location;
   }
 
   @JsonIgnore

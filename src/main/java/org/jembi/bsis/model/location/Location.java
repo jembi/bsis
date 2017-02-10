@@ -52,6 +52,8 @@ public class Location extends BaseModificationTrackerEntity {
   private boolean isDistributionSite = false;
 
   private boolean isTestingSite = false;
+  
+  private boolean isReferralSite = false;
 
   private Boolean isDeleted = Boolean.FALSE;
 
@@ -152,6 +154,15 @@ public class Location extends BaseModificationTrackerEntity {
 
   public void setIsTestingSite(boolean isTestingSite) {
     this.isTestingSite = isTestingSite;
+  }
+  
+
+  public boolean getIsReferralSite() {
+    return isReferralSite;
+  }
+
+  public void setIsReferralSite(boolean isReferralSite) {
+    this.isReferralSite = isReferralSite;
   }
 
   public Division getDivisionLevel1() {

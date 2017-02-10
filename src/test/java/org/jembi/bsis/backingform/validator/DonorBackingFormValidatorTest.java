@@ -1,5 +1,6 @@
 package org.jembi.bsis.backingform.validator;
 
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
 import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
@@ -9,10 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.jembi.bsis.backingform.DonorBackingForm;
-import org.jembi.bsis.backingform.LocationBackingForm;
-import org.jembi.bsis.backingform.validator.DonorBackingFormValidator;
 import org.jembi.bsis.helpers.builders.FormFieldBuilder;
-import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.admin.FormField;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
@@ -57,7 +55,7 @@ public class DonorBackingFormValidatorTest {
     donorForm.setFirstName("First");
     donorForm.setLastName("Last");
     donorForm.setGender(Gender.female);
-    donorForm.setVenue(new LocationBackingForm(LocationBuilder.aVenue().withId(1l).withName("Venue").build()));
+    donorForm.setVenue(aLocationBackingForm().withId(1l).withName("Venue").thatIsVenue().build());
     donorForm.setPreferredLanguage(preferredLanguage);
     return donorForm;
   }

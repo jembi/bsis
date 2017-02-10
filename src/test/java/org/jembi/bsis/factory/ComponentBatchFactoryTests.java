@@ -36,10 +36,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ComponentBatchViewModelFactoryTests {
+public class ComponentBatchFactoryTests {
 
   @InjectMocks
-  ComponentBatchViewModelFactory componentBatchViewModelFactory;
+  ComponentBatchFactory componentBatchFactory;
   @Mock
   BloodTransportBoxViewModelFactory bloodTransportBoxViewModelFactory;
   @Mock
@@ -99,7 +99,7 @@ public class ComponentBatchViewModelFactoryTests {
     
     // run test
     ComponentBatchFullViewModel viewModel =
-        componentBatchViewModelFactory.createComponentBatchFullViewModel(componentBatch);
+        componentBatchFactory.createComponentBatchFullViewModel(componentBatch);
     
     // do asserts
     Assert.assertNotNull("View model returned", viewModel);
@@ -120,7 +120,7 @@ public class ComponentBatchViewModelFactoryTests {
   public void testCreateComponentBatchViewModels_nullList() throws Exception {
     // run test
     List<ComponentBatchViewModel> viewModels =
-        componentBatchViewModelFactory.createComponentBatchViewModels(null);
+        componentBatchFactory.createComponentBatchViewModels(null);
     
     // do asserts
     Assert.assertNotNull("View models list returned", viewModels);
@@ -138,7 +138,7 @@ public class ComponentBatchViewModelFactoryTests {
     
     // run test
     List<ComponentBatchViewModel> viewModels =
-        componentBatchViewModelFactory.createComponentBatchViewModels(componentBatches);
+        componentBatchFactory.createComponentBatchViewModels(componentBatches);
     
     // do asserts
     Assert.assertNotNull("View models list returned", viewModels);

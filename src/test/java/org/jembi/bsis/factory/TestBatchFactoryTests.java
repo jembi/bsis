@@ -463,7 +463,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   public void testCreateEntity_shouldSetCorrectFields() {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(IRRELEVANT_ID);
-    backingForm.setStatus(TestBatchStatus.OPEN.toString());
+    backingForm.setStatus(TestBatchStatus.OPEN);
     backingForm.setCreatedDate(IRRELEVANT_CREATED_DATE);
     backingForm.setDonationBatchIds(Arrays.asList(1L, 2L));
     backingForm.setLocation(aTestingSiteBackingForm().withId(7L).build());

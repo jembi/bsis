@@ -15,6 +15,7 @@ import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.utils.DateTimeSerialiser;
@@ -39,10 +40,6 @@ public class DonationBackingForm {
 
   public DonationBackingForm(Donation donation) {
     this.donation = donation;
-  }
-
-  public void copy(Donation donation) {
-    donation.copy(donation);
   }
 
   public Donation getDonation() {
@@ -357,10 +354,11 @@ public class DonationBackingForm {
   public void setVenue(LocationBackingForm venue) {
     if (venue == null || venue.getId() == null) {
       donation.setVenue(null);
-    } else {
-      donation.setVenue(venue.getLocation());
+      } else {
+      Location location = new Location();
+      location.setId(venue.getId());
+      donation.setVenue(location);
     }
-
   }
 
   @JsonIgnore

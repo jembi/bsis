@@ -477,7 +477,9 @@ public class DataImportService {
 
           case "venue":
             Location venue = locationCache.get(cell.getStringCellValue());
-            donorBackingForm.setVenue(new LocationBackingForm(venue));
+            LocationBackingForm locationBackingForm = new LocationBackingForm();
+            locationBackingForm.setId(venue.getId());
+            donorBackingForm.setVenue(locationBackingForm);
             break;
 
           case "idType":
@@ -727,7 +729,9 @@ public class DataImportService {
 
           case "venue":
             venue = locationCache.get(cell.getStringCellValue());
-            donationBackingForm.setVenue(new LocationBackingForm(venue));
+            LocationBackingForm locationBackingForm = new LocationBackingForm();
+            locationBackingForm.setId(venue.getId());
+            donationBackingForm.setVenue(locationBackingForm);
             break;
 
           case "donationType":
@@ -985,6 +989,7 @@ public class DataImportService {
 
       deferralCount += 1;
 
+      Location venue = null;
       DeferralBackingForm deferralBackingForm = new DeferralBackingForm();
       BindException errors = new BindException(deferralBackingForm, "DeferralBackingForm");
 
@@ -999,7 +1004,10 @@ public class DataImportService {
             break;
 
           case "venue":
-            deferralBackingForm.setVenue(new LocationBackingForm(locationCache.get(cell.getStringCellValue())));
+            venue = locationCache.get(cell.getStringCellValue());
+            LocationBackingForm locationBackingForm = new LocationBackingForm();
+            locationBackingForm.setId(venue.getId());
+            deferralBackingForm.setVenue(locationBackingForm);
             break;
 
           case "deferralReason":
@@ -1054,7 +1062,7 @@ public class DataImportService {
       donorDeferral.setDeferralDate(deferralBackingForm.getDeferralDate());
       donorDeferral.setDeferralReason(deferralBackingForm.getDeferralReason().getDeferralReason());
       donorDeferral.setDeferredDonor(deferralBackingForm.getDeferredDonor().getDonor());
-      donorDeferral.setVenue(deferralBackingForm.getVenue().getLocation());
+      donorDeferral.setVenue(venue);
       donorDeferral.setDeferredUntil(deferralBackingForm.getDeferredUntil());
       donorDeferral.setDeferralReasonText(deferralBackingForm.getDeferralReasonText());
       donorDeferralRepository.save(donorDeferral);
