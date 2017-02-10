@@ -176,6 +176,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withCounsellingDate(counsellingDate)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
+        .thatIsNotReferred()
         .withNotes("notes")
         .build();
 
@@ -186,6 +187,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .thatIsNotFlaggedForCounselling()
         .withDonation(null) // donation is not mapped in the form, so must be null
         .withNotes("notes")
+        .thatIsNotReferred()
         .build();
 
     PostDonationCounselling returnedEntity = postDonationCounsellingFactory.createEntity(form);

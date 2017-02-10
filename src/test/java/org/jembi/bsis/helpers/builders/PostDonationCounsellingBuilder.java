@@ -24,6 +24,7 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
   private Date lastUpdated;
   private User lastUpdatedBy;
   private String notes;
+  private Boolean referred;
 
 
   public PostDonationCounsellingBuilder withId(Long id) {
@@ -90,6 +91,16 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
     this.counsellingDate = counsellingDate;
     return this;
   }
+  
+  public PostDonationCounsellingBuilder thatIsReferred() {
+    referred = Boolean.TRUE;
+    return this;
+  }
+
+  public PostDonationCounsellingBuilder thatIsNotReferred() {
+    referred = Boolean.FALSE;
+    return this;
+  }
 
   @Override
   public PostDonationCounselling build() {
@@ -105,6 +116,7 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
     postDonationCounselling.setLastUpdated(lastUpdated);
     postDonationCounselling.setLastUpdatedBy(lastUpdatedBy);
     postDonationCounselling.setNotes(notes);
+    postDonationCounselling.setReferred(referred);
     return postDonationCounselling;
   }
 
