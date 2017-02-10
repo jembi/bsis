@@ -68,6 +68,13 @@ public class LocationRepository extends AbstractRepository<Location>{
         .getResultList();
   }
 
+  public List<Location> getReferralSites() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_REFERRAL_SITES, Location.class)
+        .setParameter("isReferralSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
+
   public List<Location> getAllLocations(boolean includeDeleted) {
     return em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_LOCATIONS, Location.class)
         .setParameter("includeDeleted", includeDeleted)

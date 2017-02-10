@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aReferralSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
@@ -146,7 +147,28 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Assert.assertFalse("Verify locations", locations.contains(location3));
     Assert.assertFalse("Verify locations", locations.contains(location5));
   }
-  
+
+  @Test
+  public void testGetReferralSites_verifyCorrectLocationsReturned() {
+    Location location1 = aReferralSite().withName("test1").buildAndPersist(entityManager); // match
+    Location location2 = aDistributionSite().withName("test2").buildAndPersist(entityManager);
+    Location location3 = aProcessingSite().withName("test3").buildAndPersist(entityManager); 
+    Location location4 = aReferralSite().withName("test4").buildAndPersist(entityManager); // match
+    Location location5 = aUsageSite().withName("test5").buildAndPersist(entityManager);
+   
+    List<Location> locations = locationRepository.getReferralSites();
+    
+    // Verify locations returned
+    Assert.assertEquals("Verify locations returned", 2, locations.size());
+
+    // Verify right locations were returned
+    Assert.assertTrue("Verify locations", locations.contains(location1));
+    Assert.assertTrue("Verify locations", locations.contains(location4));
+    Assert.assertFalse("Verify locations", locations.contains(location2));
+    Assert.assertFalse("Verify locations", locations.contains(location3));
+    Assert.assertFalse("Verify locations", locations.contains(location5));
+  }
+
   @Test
   public void testFindUsageSites_verifyCorrectLocationsReturned() {
     Location location1 = aTestingSite().withName("test1").buildAndPersist(entityManager);
