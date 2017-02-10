@@ -11,7 +11,7 @@ public class PostDonationCounsellingBackingFormBuilder extends AbstractBuilder<P
   private Date counsellingDate;
   private CounsellingStatus counsellingStatus;
   private boolean flaggedForCounselling;
-  private boolean referred;
+  private Boolean referred;
   private String notes;
   
   public PostDonationCounsellingBackingFormBuilder withId(Long id) {
@@ -30,12 +30,12 @@ public class PostDonationCounsellingBackingFormBuilder extends AbstractBuilder<P
   }
 
   public PostDonationCounsellingBackingFormBuilder thatIsReferred() {
-    this.referred = true;
+    this.referred = Boolean.TRUE;
     return this;
   }
 
   public PostDonationCounsellingBackingFormBuilder thatIsNotReferred() {
-    this.referred = false;
+    this.referred = Boolean.FALSE;
     return this;
   }
 

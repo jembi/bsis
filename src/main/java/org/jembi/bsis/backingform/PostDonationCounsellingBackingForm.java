@@ -19,7 +19,7 @@ public class PostDonationCounsellingBackingForm {
   private Date counsellingDate;
   private String notes;
   private boolean flaggedForCounselling;
-  private boolean referred;
+  private Boolean referred;
 
   public long getId() {
     return id;
@@ -65,11 +65,11 @@ public class PostDonationCounsellingBackingForm {
     return flaggedForCounselling;
   }
 
-  public boolean isReferred() {
+  public Boolean isReferred() {
     return referred;
   }
 
-  public void setReferred(boolean referred) {
+  public void setReferred(Boolean referred) {
     this.referred = referred;
   }
 
