@@ -602,7 +602,7 @@ public class ComponentCRUDService {
    *        specified category (can be null if no ComponentStatusChanges should be deleted)
    * @return the component Component that has an updated status
    */
-  private Component rollBackComponentStatusChanges(Component component,
+  protected Component rollBackComponentStatusChanges(Component component,
       ComponentStatusChangeReasonCategory statusChangeReasonCategory,
       ComponentStatusChangeReasonType... statusChangeReasonTypes) {
     
