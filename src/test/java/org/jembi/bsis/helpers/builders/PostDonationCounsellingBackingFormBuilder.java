@@ -11,6 +11,7 @@ public class PostDonationCounsellingBackingFormBuilder extends AbstractBuilder<P
   private Date counsellingDate;
   private CounsellingStatus counsellingStatus;
   private boolean flaggedForCounselling;
+  private boolean referred;
   private String notes;
   
   public PostDonationCounsellingBackingFormBuilder withId(Long id) {
@@ -25,6 +26,16 @@ public class PostDonationCounsellingBackingFormBuilder extends AbstractBuilder<P
 
   public PostDonationCounsellingBackingFormBuilder withCounsellingStatus(CounsellingStatus counsellingStatus) {
     this.counsellingStatus = counsellingStatus;
+    return this;
+  }
+
+  public PostDonationCounsellingBackingFormBuilder thatIsReferred() {
+    this.referred = true;
+    return this;
+  }
+
+  public PostDonationCounsellingBackingFormBuilder thatIsNotReferred() {
+    this.referred = false;
     return this;
   }
 
@@ -51,6 +62,7 @@ public class PostDonationCounsellingBackingFormBuilder extends AbstractBuilder<P
     // cater for null counselling status values
     form.setCounsellingStatus(counsellingStatus != null ? counsellingStatus.getId() : null);
     form.setFlaggedForCounselling(flaggedForCounselling);
+    form.setReferred(referred);
     form.setNotes(notes);
     return form;
   }
