@@ -79,6 +79,7 @@ public class Location extends BaseModificationTrackerEntity {
     this.isProcessingSite = location.isProcessingSite;
     this.isDistributionSite = location.isDistributionSite;
     this.isTestingSite = location.isTestingSite;
+    this.isReferralSite = location.isReferralSite;
     this.isDeleted = location.isDeleted;
     this.notes = location.notes;
     this.divisionLevel1 = location.divisionLevel1;
