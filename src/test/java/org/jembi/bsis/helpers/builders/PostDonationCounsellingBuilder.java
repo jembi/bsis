@@ -91,6 +91,11 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
     this.counsellingDate = counsellingDate;
     return this;
   }
+
+  public PostDonationCounsellingBuilder withReferred(Boolean referred) {
+    this.referred = referred;
+    return this;
+  }
   
   public PostDonationCounsellingBuilder thatIsReferred() {
     referred = Boolean.TRUE;
