@@ -23,7 +23,6 @@ import java.util.List;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.helpers.builders.DivisionBuilder;
 import org.jembi.bsis.helpers.builders.DivisionViewModelBuilder;
-import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.DivisionRepository;
@@ -88,7 +87,7 @@ public class LocationFactoryTests extends UnitTestSuite {
     Division divisionLevel3 = DivisionBuilder.aDivision().withId(3l).build();
     Long venueId = 1L;
     String venueName = "location";
-    Location venue = LocationBuilder.aLocation().withId(venueId).withName(venueName).thatIsVenue()
+    Location venue = aLocation().withId(venueId).withName(venueName).thatIsVenue()
         .withDivisionLevel1(divisionLevel1)
         .withDivisionLevel2(divisionLevel2)
         .withDivisionLevel3(divisionLevel3)
@@ -119,8 +118,8 @@ public class LocationFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateLocationFullViewModels_shouldReturnViewModelWithTheCorrectState() {
     List<Location> locations = new ArrayList<Location>();
-    locations.add(LocationBuilder.aLocation().build());
-    locations.add(LocationBuilder.aLocation().build());
+    locations.add(aLocation().build());
+    locations.add(aLocation().build());
     List<LocationFullViewModel> venueViewModels = locationFactory.createFullViewModels(locations);
     Assert.assertNotNull("venue view models were created", venueViewModels);
     Assert.assertEquals("venue view models were created", 2, venueViewModels.size());
@@ -130,7 +129,7 @@ public class LocationFactoryTests extends UnitTestSuite {
   public void testCreateLocationViewModel_shouldReturnViewModelWithTheCorrectState() {
     Long id = 1L;
     String name = "location";
-    Location location = LocationBuilder.aLocation().withId(id).withName(name).thatIsDeleted().build();
+    Location location = aLocation().withId(id).withName(name).thatIsDeleted().build();
     LocationViewModel venueViewModel = locationFactory.createViewModel(location);
     Assert.assertNotNull("location view model was created", venueViewModel);
     Assert.assertEquals("isDeleted is true", true, venueViewModel.getIsDeleted());
@@ -141,8 +140,8 @@ public class LocationFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateLocationViewModels_shouldReturnViewModelWithTheCorrectState() {
     List<Location> locations = new ArrayList<Location>();
-    locations.add(LocationBuilder.aLocation().build());
-    locations.add(LocationBuilder.aLocation().build());
+    locations.add(aLocation().build());
+    locations.add(aLocation().build());
     List<LocationViewModel> locationViewModels = locationFactory.createViewModels(locations);
     Assert.assertNotNull("location view models were created", locationViewModels);
     Assert.assertEquals("there are 2 location view models", 2, locationViewModels.size());
@@ -238,7 +237,7 @@ public class LocationFactoryTests extends UnitTestSuite {
         .withName(divisionName)
         .build();  
     
-    Location location = LocationBuilder.aLocation()
+    Location location = aLocation()
         .withId(locationId)
         .withName(locationName)
         .withDivisionLevel3(divisionLevel3)
@@ -278,9 +277,9 @@ public class LocationFactoryTests extends UnitTestSuite {
     String locationName3 = "aLocation3";
     
     List<Location> locations = Arrays.asList(
-        LocationBuilder.aLocation().withId(1L).withName(locationName1).withDivisionLevel3(divisionLevel3).build(),
-        LocationBuilder.aLocation().withId(2L).withName(locationName2).withDivisionLevel3(divisionLevel3).build(),
-        LocationBuilder.aLocation().withId(3L).withName(locationName3).withDivisionLevel3(divisionLevel3).build()); 
+        aLocation().withId(1L).withName(locationName1).withDivisionLevel3(divisionLevel3).build(),
+        aLocation().withId(2L).withName(locationName2).withDivisionLevel3(divisionLevel3).build(),
+        aLocation().withId(3L).withName(locationName3).withDivisionLevel3(divisionLevel3).build());
     
     List<LocationManagementViewModel> expectedLocations = Arrays.asList(
         aLocationManagementViewModel().withId(1L).withName(locationName1).withDivisionLevel3(divisionLevel3ViewModel).build(),
