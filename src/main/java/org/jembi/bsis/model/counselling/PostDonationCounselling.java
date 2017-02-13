@@ -59,7 +59,7 @@ public class PostDonationCounselling extends BaseModificationTrackerEntity {
   private Boolean referred;
 
   @ManyToOne(optional = true)
-  private Location referralSite_id;
+  private Location referralSite;
 
   public PostDonationCounselling() {
     super();
@@ -119,13 +119,13 @@ public class PostDonationCounselling extends BaseModificationTrackerEntity {
 
   public void setReferred(Boolean referred) {
     this.referred = referred;
-  }  
-
-  public Location getReferralSite_id() {
-    return referralSite_id;
   }
 
-  public void setReferralSite_id(Location referralSite_id) {
-    this.referralSite_id = referralSite_id;
+  public Location getReferralSite() {
+    return referralSite;
   }
+
+  public void setReferralSite(Location referralSite) {
+    this.referralSite = referralSite;
+  }    
 }

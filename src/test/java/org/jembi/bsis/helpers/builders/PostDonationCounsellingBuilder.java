@@ -26,7 +26,7 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
   private User lastUpdatedBy;
   private String notes;
   private Boolean referred;
-  private Location referralSite_id;
+  private Location referralSite;
 
 
   public PostDonationCounsellingBuilder withId(Long id) {
@@ -104,8 +104,8 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
     return this;
   }
   
-  public PostDonationCounsellingBuilder withReferralSite_id(Location referralSite_id) {
-    this.referralSite_id = referralSite_id;
+  public PostDonationCounsellingBuilder withReferralSite(Location referralSite) {
+    this.referralSite = referralSite;
     return this;
   }
 
@@ -124,7 +124,7 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
     postDonationCounselling.setLastUpdatedBy(lastUpdatedBy);
     postDonationCounselling.setNotes(notes);
     postDonationCounselling.setReferred(referred);
-    postDonationCounselling.setReferralSite_id(referralSite_id);
+    postDonationCounselling.setReferralSite(referralSite);
     return postDonationCounselling;
   }
 
