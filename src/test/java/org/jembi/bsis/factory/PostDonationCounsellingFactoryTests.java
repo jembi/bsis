@@ -192,7 +192,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withCounsellingStatus(counsellingStatus)
         .withCounsellingDate(null)
         .withNotes(notes)
-        .withReferred(Boolean.FALSE)
+        .withReferred(null)
         .build();
 
     DonorViewModel expectedDonorViewModel = aDonorViewModel().withDonor(donor).build();
@@ -205,10 +205,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withDonor(expectedDonorViewModel)
         .withPermission("canRemoveStatus", false)
         .thatIsNotFlaggedForCounselling()
-        .withReferred(null)
         .withCounsellingStatusViewModel(expectedCounsellingStatus)
         .withCounsellingDate(null)
         .withNotes(notes)
+        .withReferred(null)
         .build();
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(0);
