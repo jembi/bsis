@@ -53,12 +53,7 @@ public class PostDonationCounsellingController {
       PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
   public Map<String, Object> getPostDonationCounsellingForm() {
     Map<String, Object> map = new HashMap<>();
-
-    List<CounsellingStatusViewModel> counsellingStatuses = new ArrayList<>();
-    for (CounsellingStatus counsellingStatus : CounsellingStatus.values()) {
-      counsellingStatuses.add(new CounsellingStatusViewModel(counsellingStatus));
-    }
-    map.put("counsellingStatuses", counsellingStatuses);
+    map.put("counsellingStatuses", postDonationCounsellingControllerService.getCounsellingStatuses());
     map.put("referralSites", postDonationCounsellingControllerService.getReferralSites());
 
     return map;
@@ -68,6 +63,7 @@ public class PostDonationCounsellingController {
   @PreAuthorize("hasAnyRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING + "')")
   public Map<String, Object> getPostDonationCounsellingSearchForm() {
     Map<String, Object> map = new HashMap<>();
+    map.put("counsellingStatuses", postDonationCounsellingControllerService.getCounsellingStatuses());
     map.put("venues", postDonationCounsellingControllerService.getVenues());
     return map;
   }

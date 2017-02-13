@@ -1,14 +1,17 @@
 package org.jembi.bsis.controllerservice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.PostDonationCounsellingFactory;
+import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.PostDonationCounsellingCRUDService;
+import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +48,13 @@ public class PostDonationCounsellingControllerService {
 
   public List<LocationViewModel> getReferralSites() {
     return locationFactory.createViewModels(locationRepository.getReferralSites());
+  }
+
+  public List<CounsellingStatusViewModel> getCounsellingStatuses() {
+    List<CounsellingStatusViewModel> counsellingStatuses = new ArrayList<>();
+    for (CounsellingStatus counsellingStatus : CounsellingStatus.values()) {
+      counsellingStatuses.add(new CounsellingStatusViewModel(counsellingStatus));
+    }
+    return counsellingStatuses;
   }
 }
