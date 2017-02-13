@@ -5,7 +5,7 @@
   <changeSet id="20170209-1144" author="jmuzinda">
     <addColumn tableName="PostDonationCounselling">
       <column name="referred" type="TINYINT(1)"  >
-      	<constraints nullable="1"/>
+      	<constraints nullable="true"/>
       </column>
     </addColumn>
     <addColumn tableName="PostDonationCounselling_AUD">
