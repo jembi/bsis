@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aReferralSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aReferralSite;
 
 import java.util.List;
 
@@ -206,7 +207,6 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     // Verify right locations were returned
     Assert.assertTrue("Verify locations", locations.contains(location5));
     Assert.assertFalse("Verify locations", locations.contains(location1));
-    Assert.assertFalse("Verify locations", locations.contains(location2));
     Assert.assertFalse("Verify locations", locations.contains(location3));
     Assert.assertFalse("Verify locations", locations.contains(location4));
   }

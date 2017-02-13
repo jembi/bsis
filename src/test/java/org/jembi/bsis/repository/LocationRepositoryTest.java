@@ -35,7 +35,7 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testGetAllLocations() throws Exception {
     List<Location> all = locationRepository.getAllLocations(true);
     Assert.assertNotNull("There are Locations", all);
-    Assert.assertEquals("There are 10 Locations", 10, all.size());
+    Assert.assertEquals("There are 11 Locations", 11, all.size());
   }
 
   @Test
@@ -76,11 +76,32 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testUpdateLocation() throws Exception {
-    Location one = locationRepository.findLocationByName("Maseru");
-    one.setIsMobileSite(true);
-    locationRepository.updateLocation(one);
-    Location savedOne = locationRepository.findLocationByName("Maseru");
-    Assert.assertTrue("The location is saved", savedOne.getIsMobileSite());
+    String locationName = "Maseru";
+    String locationNameUpdated = locationName + "Updated";
+    Location one = locationRepository.findLocationByName(locationName);
+
+    Location locationToUpdate = new Location();
+    locationToUpdate.setName(locationNameUpdated);
+    locationToUpdate.setId(one.getId());
+    locationToUpdate.setIsMobileSite(true);
+    locationToUpdate.setIsProcessingSite(true);
+    locationToUpdate.setIsReferralSite(true);
+    locationToUpdate.setIsTestingSite(true);
+    locationToUpdate.setIsDistributionSite(true);
+    locationToUpdate.setIsUsageSite(true);
+    locationToUpdate.setIsVenue(false);
+
+    locationRepository.updateLocation(locationToUpdate);
+    Location savedOne = locationRepository.findLocationByName(locationNameUpdated);
+
+    Assert.assertTrue("The location's IsMobilite is updated", savedOne.getIsMobileSite());
+    Assert.assertTrue("The location's IsProcessingSite is updated", savedOne.getIsProcessingSite());
+    Assert.assertTrue("The location's IsReferralSite is updated", savedOne.getIsReferralSite());
+    Assert.assertTrue("The location's IsTestingSite is updated", savedOne.getIsTestingSite());
+    Assert.assertTrue("The location's IsDistributionSite is updated", savedOne.getIsDistributionSite());
+    Assert.assertTrue("The location's IsUsageSite is updated", savedOne.getIsUsageSite());
+    Assert.assertFalse("The location's IsVenue is updated", savedOne.getIsVenue());
+    Assert.assertEquals("The location's Name is updated", locationNameUpdated, savedOne.getName());
   }
 
   @Test
@@ -139,5 +160,12 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
     List<Location> all = locationRepository.getTestingSites();
     Assert.assertNotNull("There are testing site Locations", all);
     Assert.assertEquals("There is 1 testing site", 1, all.size());
+  }
+  
+  @Test
+  public void testGetReferralSites() throws Exception {
+    List<Location> all = locationRepository.getReferralSites();
+    Assert.assertNotNull("There are Referral site Locations", all);
+    Assert.assertEquals("There is 1 Referral site", 1, all.size());
   }
 }

@@ -309,6 +309,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .thatIsProcessingSite()
         .thatIsDistributionSite()
         .thatIsTestingSite()
+        .thatIsReferralSite()
         .withDivisionLevel1(westernCapeDivision)
         .withDivisionLevel2(capeWinelandsDivision)
         .withDivisionLevel3(stellenboschDivision)
