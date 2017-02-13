@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aReferralSite;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingMatcher.hasSameStateAsPostDonationCounselling;
 import static org.mockito.Matchers.argThat;
@@ -15,6 +16,7 @@ import java.util.Date;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
@@ -95,6 +97,10 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
     Date counsellingDate = new Date();
     String notes = "some notes";
     
+    Location referralSite = aReferralSite()
+        .withName("ReferrealSite")
+        .build();
+    
     PostDonationCounselling updatedPostDonationCounselling = aPostDonationCounselling()
         .withId(postDonationCounsellingId)
         .withCounsellingDate(counsellingDate)
@@ -103,6 +109,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
         .withDonation(null)
         .withNotes(notes)
         .thatIsReferred()
+        .withReferralSite(referralSite)
         .build();
 
     PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
@@ -124,6 +131,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
         .withCounsellingStatus(counsellingStatus)
         .withCounsellingDate(counsellingDate)
         .thatIsReferred()
+        .withReferralSite(referralSite)
         .withDonation(aDonation()
             .withId(donationId)
             .build())
