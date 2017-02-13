@@ -29,13 +29,12 @@ public class PostDonationCounsellingBackingFormValidator extends BaseValidator<P
           errors.rejectValue("referred", "errors.invalid", "Referred is required");
         }
       }
-      if (form.isReferred() != null) {
-        if (form.isReferred() && (form.getReferralSite() == null)) {
+      if (form.isReferred() != null && form.isReferred()) {
+        if (form.getReferralSite() == null) {
           errors.rejectValue("referralSite", "errors.required", "Referral site is required");
-        } else {
-          if (form.isReferred() && !form.getReferralSite().getIsReferralSite()) {
-            errors.rejectValue("referralSite", "errors.invalid", "Location must be a referral site");
-          }
+        }
+        if (form.getReferralSite() !=null && !form.getReferralSite().getIsReferralSite()) {
+          errors.rejectValue("referralSite", "errors.invalid", "Location must be a referral site");
 
         }
       }
