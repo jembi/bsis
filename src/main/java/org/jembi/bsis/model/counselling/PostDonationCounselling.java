@@ -15,6 +15,7 @@ import javax.persistence.NamedQuery;
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.PostDonationCounsellingNamedQueryConstants;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -56,6 +57,9 @@ public class PostDonationCounselling extends BaseModificationTrackerEntity {
   private String notes;
   
   private Boolean referred;
+
+  @ManyToOne(optional = true)
+  private Location referralSite_id;
 
   public PostDonationCounselling() {
     super();
@@ -116,4 +120,12 @@ public class PostDonationCounselling extends BaseModificationTrackerEntity {
   public void setReferred(Boolean referred) {
     this.referred = referred;
   }  
+
+  public Location getReferralSite_id() {
+    return referralSite_id;
+  }
+
+  public void setReferralSite_id(Location referralSite_id) {
+    this.referralSite_id = referralSite_id;
+  }
 }
