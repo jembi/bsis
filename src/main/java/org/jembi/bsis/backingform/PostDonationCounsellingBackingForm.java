@@ -13,14 +13,13 @@ public class PostDonationCounsellingBackingForm {
 
   @NotNull
   private Long id;
-
   private CounsellingStatus counsellingStatus;
-
   private Date counsellingDate;
   private String notes;
   private boolean flaggedForCounselling;
   private Boolean referred;
-
+  private LocationBackingForm referralSite;
+  
   public long getId() {
     return id;
   }
@@ -72,5 +71,13 @@ public class PostDonationCounsellingBackingForm {
   public void setReferred(Boolean referred) {
     this.referred = referred;
   }
+   
+  public LocationBackingForm getReferralSite() {
+    return referralSite;
+  }
 
+  public void setReferralSite(LocationBackingForm referralSite) {
+    this.referralSite = referralSite;
+  }
 }
+

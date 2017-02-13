@@ -2,6 +2,7 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
 
+import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 
@@ -13,6 +14,7 @@ public class PostDonationCounsellingBackingFormBuilder extends AbstractBuilder<P
   private boolean flaggedForCounselling;
   private Boolean referred;
   private String notes;
+  private LocationBackingForm referralSite;
   
   public PostDonationCounsellingBackingFormBuilder withId(Long id) {
     this.id = id;
@@ -53,7 +55,12 @@ public class PostDonationCounsellingBackingFormBuilder extends AbstractBuilder<P
     this.notes = notes;
     return this;
   }
-
+  
+  public PostDonationCounsellingBackingFormBuilder withReferralSite(LocationBackingForm referralSite) {
+    this.referralSite = referralSite;
+    return this;
+  }
+  
   @Override
   public PostDonationCounsellingBackingForm build() {
     PostDonationCounsellingBackingForm form = new PostDonationCounsellingBackingForm();
@@ -64,6 +71,7 @@ public class PostDonationCounsellingBackingFormBuilder extends AbstractBuilder<P
     form.setFlaggedForCounselling(flaggedForCounselling);
     form.setReferred(referred);
     form.setNotes(notes);
+    form.setReferralSite(referralSite);
     return form;
   }
 
