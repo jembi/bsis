@@ -4,12 +4,12 @@
 
   <changeSet id="20170210-1452" author="jmuzinda">
   	<addColumn tableName="PostDonationCounselling">
-      <column name="referralSite" type="BIGINT(20)">
+      <column name="referralSite_id" type="BIGINT(20)">
       	<constraints foreignKeyName="fk_PostDonationCounselling_Location_referralSite_id" references="Location(id)" />
       </column>
     </addColumn>
     <addColumn tableName="PostDonationCounselling_AUD">
-      <column name="referralSite" type="BIGINT(20)" />
+      <column name="referralSite_id" type="BIGINT(20)" />
     </addColumn>
   </changeSet>
     
