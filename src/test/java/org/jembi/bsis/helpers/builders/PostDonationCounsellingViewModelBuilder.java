@@ -19,6 +19,7 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
   private String notes;
   private DonationViewModel donation;
   private Map<String, Boolean> permissions;
+  private boolean referred;
   
   public PostDonationCounsellingViewModelBuilder withId(long id) {
     this.id = id;
@@ -61,6 +62,16 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
     return this;
   }
 
+  public PostDonationCounsellingViewModelBuilder thatIsReferred() {
+    this.referred = true;
+    return this;
+  }
+
+  public PostDonationCounsellingViewModelBuilder thatIsNotReferred() {
+    this.referred = false;
+    return this;
+  }
+
   public PostDonationCounsellingViewModelBuilder withPermission(String key, boolean value) {
     if (permissions == null) {
       permissions = new HashMap<>();
@@ -82,6 +93,7 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
     viewModel.setCounsellingStatus(counsellingStatus);
     viewModel.setDonor(donor);
     viewModel.setNotes(notes);
+    viewModel.setReferred(referred);
     return viewModel;
   }
 
