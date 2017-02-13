@@ -13,6 +13,7 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
   private boolean mobileSite;
   private boolean distributionSite;
   private boolean testingSite;
+  private boolean referralSite;
   private boolean deleted;
   private String notes;
   private Division divisionLevel1;
@@ -51,6 +52,11 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
   
   public LocationBuilder thatIsTestingSite() {
     testingSite = true;
+    return this;
+  }
+  
+  public LocationBuilder thatIsReferralSite() {
+    referralSite = true;
     return this;
   }
 
@@ -97,6 +103,7 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
     location.setIsDistributionSite(distributionSite);
     location.setIsDeleted(deleted);
     location.setIsTestingSite(testingSite);
+    location.setIsReferralSite(referralSite);
     location.setDivisionLevel1(divisionLevel1);
     location.setDivisionLevel2(divisionLevel2);
     location.setDivisionLevel3(divisionLevel3);
@@ -125,5 +132,9 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
 
   public static LocationBuilder aTestingSite() {
     return new LocationBuilder().thatIsTestingSite();
+  }
+  
+  public static LocationBuilder aReferralSite() {
+    return new LocationBuilder().thatIsReferralSite();
   }
 }

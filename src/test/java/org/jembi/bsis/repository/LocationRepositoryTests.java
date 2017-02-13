@@ -6,6 +6,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aReferralSite;
 
 import java.util.List;
 
@@ -153,6 +154,27 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
     Location location2 = aDistributionSite().withName("test2").buildAndPersist(entityManager);
     Location location3 = aProcessingSite().withName("test3").buildAndPersist(entityManager); 
     Location location4 = aTestingSite().withName("test4").buildAndPersist(entityManager);
+    Location location5 = aUsageSite().withName("test5").buildAndPersist(entityManager); // match
+   
+    List<Location> locations = locationRepository.findLocations(null, false, LocationType.USAGE_SITE, true);
+    
+    // Verify locations returned
+    Assert.assertEquals("Verify locations returned", 1, locations.size());
+
+    // Verify right locations were returned
+    Assert.assertTrue("Verify locations", locations.contains(location5));
+    Assert.assertFalse("Verify locations", locations.contains(location1));
+    Assert.assertFalse("Verify locations", locations.contains(location2));
+    Assert.assertFalse("Verify locations", locations.contains(location3));
+    Assert.assertFalse("Verify locations", locations.contains(location4));
+  }
+  
+  @Test
+  public void testFindReferralSites_verifyCorrectLocationsReturned() {
+    Location location1 = aTestingSite().withName("test1").buildAndPersist(entityManager);
+    Location location2 = aDistributionSite().withName("test2").buildAndPersist(entityManager);
+    Location location3 = aProcessingSite().withName("test3").buildAndPersist(entityManager); 
+    Location location4 = aReferralSite().withName("test4").buildAndPersist(entityManager);
     Location location5 = aUsageSite().withName("test5").buildAndPersist(entityManager); // match
    
     List<Location> locations = locationRepository.findLocations(null, false, LocationType.USAGE_SITE, true);

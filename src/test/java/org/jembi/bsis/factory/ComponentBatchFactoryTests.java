@@ -1,10 +1,16 @@
 package org.jembi.bsis.factory;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.jembi.bsis.helpers.matchers.ComponentBatchMatcher.hasSameStateAsComponentBatch;
+import static org.jembi.bsis.helpers.builders.BloodTransportBoxBackingFormBuilder.aBloodTransportBoxBackingForm;
 import static org.jembi.bsis.helpers.builders.BloodTransportBoxBuilder.aBloodTransportBox;
+import static org.jembi.bsis.helpers.builders.ComponentBatchBackingFormBuilder.aComponentBatchBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.DonationBatchBackingFormBuilder.aDonationBatchBackingForm;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.mockito.Mockito.when;
@@ -14,6 +20,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.jembi.bsis.backingform.BloodTransportBoxBackingForm;
+import org.jembi.bsis.backingform.ComponentBatchBackingForm;
+import org.jembi.bsis.backingform.DonationBatchBackingForm;
+import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componentbatch.BloodTransportBox;
@@ -36,17 +46,112 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ComponentBatchViewModelFactoryTests {
+public class ComponentBatchFactoryTests {
 
   @InjectMocks
-  ComponentBatchViewModelFactory componentBatchViewModelFactory;
+  ComponentBatchFactory componentBatchFactory;
   @Mock
   BloodTransportBoxViewModelFactory bloodTransportBoxViewModelFactory;
   @Mock
   ComponentFactory componentFactory;
   @Mock
   DonationBatchViewModelFactory donationBatchViewModelFactory;
+
+  @Test
+  public void testCreateEntity_createOneComponentBatch() throws Exception {
+    Date deliveryDate = new Date();
+    LocationBackingForm locationForm = aLocationBackingForm().withId(1L).build();
+    DonationBatchBackingForm donationBatchBackingForm = aDonationBatchBackingForm().withId(1L).build();
+    BloodTransportBoxBackingForm bloodTransportBoxBackingForm = aBloodTransportBoxBackingForm().withId(1L).build();
+    ComponentBatchBackingForm form = aComponentBatchBackingForm()
+        .withId(1L)
+        .withStatus(ComponentBatchStatus.OPEN)
+        .withDeliveryDate(deliveryDate)
+        .withLocation(locationForm)
+        .withDonationBatch(donationBatchBackingForm)
+        .withBloodTransportBox(bloodTransportBoxBackingForm)
+        .build();
+
+    Location location = aLocation().withId(1L).build();
+    DonationBatch donationBatch = aDonationBatch().withId(1L).build();
+    BloodTransportBox bloodTransportBox = aBloodTransportBox().withId(1L).build();
+    ComponentBatch expectedComponentBatch = aComponentBatch()
+        .withId(1L)
+        .withStatus(ComponentBatchStatus.OPEN)
+        .withDeliveryDate(deliveryDate)
+        .withCollectionDate(null)
+        .withLocation(location)
+        .withDonationBatch(donationBatch)
+        .withBloodTransportBox(bloodTransportBox)
+        .build();
+
+    ComponentBatch componentBatch = componentBatchFactory.createEntity(form);
+
+    assertThat(componentBatch, hasSameStateAsComponentBatch(expectedComponentBatch));
+  }
+
+  @Test
+  public void testCreateEntityWithNoLocation_createOneComponentBatch() throws Exception {
+    Date deliveryDate = new Date();
+    DonationBatchBackingForm donationBatchBackingForm = aDonationBatchBackingForm().withId(1L).build();
+    BloodTransportBoxBackingForm bloodTransportBoxBackingForm = aBloodTransportBoxBackingForm().withId(1L).build();
+    ComponentBatchBackingForm form = aComponentBatchBackingForm()
+        .withId(1L)
+        .withStatus(ComponentBatchStatus.OPEN)
+        .withDeliveryDate(deliveryDate)
+        .withLocation(null)
+        .withDonationBatch(donationBatchBackingForm)
+        .withBloodTransportBox(bloodTransportBoxBackingForm)
+        .build();
+
+    DonationBatch donationBatch = aDonationBatch().withId(1L).build();
+    BloodTransportBox bloodTransportBox = aBloodTransportBox().withId(1L).build();
+    ComponentBatch expectedComponentBatch = aComponentBatch()
+        .withId(1L)
+        .withStatus(ComponentBatchStatus.OPEN)
+        .withDeliveryDate(deliveryDate)
+        .withCollectionDate(null)
+        .withLocation(null)
+        .withDonationBatch(donationBatch)
+        .withBloodTransportBox(bloodTransportBox)
+        .build();
+
+    ComponentBatch componentBatch = componentBatchFactory.createEntity(form);
+
+    assertThat(componentBatch, hasSameStateAsComponentBatch(expectedComponentBatch));
+  }
   
+  @Test
+  public void testCreateEntityWithNoDonationBatch_createOneComponentBatch() throws Exception {
+    Date deliveryDate = new Date();
+    LocationBackingForm locationForm = aLocationBackingForm().withId(1L).build();
+    BloodTransportBoxBackingForm bloodTransportBoxBackingForm = aBloodTransportBoxBackingForm().withId(1L).build();
+    ComponentBatchBackingForm form = aComponentBatchBackingForm()
+        .withId(1L)
+        .withStatus(ComponentBatchStatus.OPEN)
+        .withDeliveryDate(deliveryDate)
+        .withLocation(locationForm)
+        .withDonationBatch(null)
+        .withBloodTransportBox(bloodTransportBoxBackingForm)
+        .build();
+
+    Location location = aLocation().withId(1L).build();
+    BloodTransportBox bloodTransportBox = aBloodTransportBox().withId(1L).build();
+    ComponentBatch expectedComponentBatch = aComponentBatch()
+        .withId(1L)
+        .withStatus(ComponentBatchStatus.OPEN)
+        .withDeliveryDate(deliveryDate)
+        .withCollectionDate(null)
+        .withLocation(location)
+        .withDonationBatch(null)
+        .withBloodTransportBox(bloodTransportBox)
+        .build();
+
+    ComponentBatch componentBatch = componentBatchFactory.createEntity(form);
+
+    assertThat(componentBatch, hasSameStateAsComponentBatch(expectedComponentBatch));
+  }
+
   @Test
   public void testCreateComponentBatchViewModel_createOneComponentBatch() throws Exception {
     // set up data
@@ -99,7 +204,7 @@ public class ComponentBatchViewModelFactoryTests {
     
     // run test
     ComponentBatchFullViewModel viewModel =
-        componentBatchViewModelFactory.createComponentBatchFullViewModel(componentBatch);
+        componentBatchFactory.createComponentBatchFullViewModel(componentBatch);
     
     // do asserts
     Assert.assertNotNull("View model returned", viewModel);
@@ -120,7 +225,7 @@ public class ComponentBatchViewModelFactoryTests {
   public void testCreateComponentBatchViewModels_nullList() throws Exception {
     // run test
     List<ComponentBatchViewModel> viewModels =
-        componentBatchViewModelFactory.createComponentBatchViewModels(null);
+        componentBatchFactory.createComponentBatchViewModels(null);
     
     // do asserts
     Assert.assertNotNull("View models list returned", viewModels);
@@ -138,7 +243,7 @@ public class ComponentBatchViewModelFactoryTests {
     
     // run test
     List<ComponentBatchViewModel> viewModels =
-        componentBatchViewModelFactory.createComponentBatchViewModels(componentBatches);
+        componentBatchFactory.createComponentBatchViewModels(componentBatches);
     
     // do asserts
     Assert.assertNotNull("View models list returned", viewModels);

@@ -4,13 +4,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DivisionBackingFormBuilder.aDivisionBackingForm;
 import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aDistributionSiteBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aProcessingSiteBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aTestingSiteBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aUsageSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aVenueBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aReferralSiteBackingForm;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 
 import javax.persistence.NoResultException;
 
+import org.jembi.bsis.backingform.DivisionBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.location.Division;
@@ -41,14 +48,12 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   public void testValid() throws Exception {
     // set up data
     Division divisionLevel3 = aDivision().withId(3L).withLevel(3).build();
-    Location location = LocationBuilder.aLocation()
-        .withName("VENUE")
-        .thatIsVenue()
-        .withDivisionLevel3(divisionLevel3)
-        .build();
 
-    LocationBackingForm form = new LocationBackingForm();
-    form.setLocation(location);
+    DivisionBackingForm divisionForm = aDivisionBackingForm().withId(3L).withLevel(3).build();
+    LocationBackingForm locationForm = aVenueBackingForm()
+        .withName("VENUE")
+        .withDivisionLevel3(divisionForm)
+        .build();
 
     // set up mocks
     when(locationRepository.findLocationByName("VENUE")).thenReturn(null);
@@ -56,7 +61,7 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
-    locationBackingFormValidator.validate(form, errors);
+    locationBackingFormValidator.validate(locationForm, errors);
 
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
@@ -66,14 +71,12 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   public void testValidTestingSite() throws Exception {
     // set up data
     Division divisionLevel3 = aDivision().withId(3L).withLevel(3).build();
-    Location location = LocationBuilder.aLocation()
-        .withName("TESTING")
-        .thatIsTestingSite()
-        .withDivisionLevel3(divisionLevel3)
-        .build();
 
-    LocationBackingForm form = new LocationBackingForm();
-    form.setLocation(location);
+    DivisionBackingForm divisionForm = aDivisionBackingForm().withId(3L).withLevel(3).build();
+    LocationBackingForm locationForm = aTestingSiteBackingForm()
+        .withName("TESTING")
+        .withDivisionLevel3(divisionForm)
+        .build();
 
     // set up mocks
     when(locationRepository.findLocationByName("TESTING")).thenReturn(null);
@@ -81,7 +84,7 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
-    locationBackingFormValidator.validate(form, errors);
+    locationBackingFormValidator.validate(locationForm, errors);
 
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
@@ -91,14 +94,12 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   public void testValidProcessingSite() throws Exception {
     // set up data
     Division divisionLevel3 = aDivision().withId(3L).withLevel(3).build();
-    Location location = LocationBuilder.aLocation()
-        .withName("PROCESSING")
-        .thatIsProcessingSite()
-        .withDivisionLevel3(divisionLevel3)
-        .build();
 
-    LocationBackingForm form = new LocationBackingForm();
-    form.setLocation(location);
+    DivisionBackingForm divisionForm = aDivisionBackingForm().withId(3L).withLevel(3).build();
+    LocationBackingForm locationForm = aProcessingSiteBackingForm()
+        .withName("PROCESSING")
+        .withDivisionLevel3(divisionForm)
+        .build();
 
     // set up mocks
     when(locationRepository.findLocationByName("PROCESSING")).thenReturn(null);
@@ -106,7 +107,7 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
-    locationBackingFormValidator.validate(form, errors);
+    locationBackingFormValidator.validate(locationForm, errors);
 
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
@@ -116,14 +117,12 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   public void testValidDistributionSite() throws Exception {
     // set up data
     Division divisionLevel3 = aDivision().withId(3L).withLevel(3).build();
-    Location location = LocationBuilder.aLocation()
-        .withName("DISTRIBUTION")
-        .thatIsDistributionSite()
-        .withDivisionLevel3(divisionLevel3)
-        .build();
 
-    LocationBackingForm form = new LocationBackingForm();
-    form.setLocation(location);
+    DivisionBackingForm divisionForm = aDivisionBackingForm().withId(3L).withLevel(3).build();
+    LocationBackingForm locationForm = aDistributionSiteBackingForm()
+        .withName("DISTRIBUTION")
+        .withDivisionLevel3(divisionForm)
+        .build();
 
     // set up mocks
     when(locationRepository.findLocationByName("DISTRIBUTION")).thenReturn(null);
@@ -131,7 +130,7 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
-    locationBackingFormValidator.validate(form, errors);
+    locationBackingFormValidator.validate(locationForm, errors);
 
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
@@ -141,14 +140,12 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   public void testValidUsageSite() throws Exception {
     // set up data
     Division divisionLevel3 = aDivision().withId(3L).withLevel(3).build();
-    Location location = LocationBuilder.aLocation()
-        .withName("USAGE")
-        .thatIsDistributionSite()
-        .withDivisionLevel3(divisionLevel3)
-        .build();
 
-    LocationBackingForm form = new LocationBackingForm();
-    form.setLocation(location);
+    DivisionBackingForm divisionForm = aDivisionBackingForm().withId(3L).withLevel(3).build();
+    LocationBackingForm locationForm = aUsageSiteBackingForm()
+        .withName("USAGE")
+        .withDivisionLevel3(divisionForm)
+        .build();
 
     // set up mocks
     when(locationRepository.findLocationByName("USAGE")).thenReturn(null);
@@ -156,7 +153,30 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
-    locationBackingFormValidator.validate(form, errors);
+    locationBackingFormValidator.validate(locationForm, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+  
+  @Test
+  public void testValidReferralSite() throws Exception {
+    // set up data
+    Division divisionLevel3 = aDivision().withId(3L).withLevel(3).build();
+
+    DivisionBackingForm divisionForm = aDivisionBackingForm().withId(3L).withLevel(3).build();
+    LocationBackingForm locationForm = aReferralSiteBackingForm()
+        .withName("REFERRAL")
+        .withDivisionLevel3(divisionForm)
+        .build();
+
+    // set up mocks
+    when(locationRepository.findLocationByName("REFERRAL")).thenReturn(null);
+    when(divisionRepository.findDivisionById(3L)).thenReturn(divisionLevel3);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
+    locationBackingFormValidator.validate(locationForm, errors);
 
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
@@ -173,8 +193,13 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
         .withDivisionLevel3(divisionLevel3)
         .build();
 
-    LocationBackingForm form = new LocationBackingForm();
-    form.setLocation(location);
+    DivisionBackingForm divisionForm = aDivisionBackingForm().withId(3L).withLevel(3).build();
+    LocationBackingForm locationForm = aLocationBackingForm()
+        .withId(1L)
+        .withName("LOCATION")
+        .thatIsVenue()
+        .withDivisionLevel3(divisionForm)
+        .build();
 
     // set up mocks
     when(locationRepository.findLocationByName("LOCATION")).thenReturn(location);
@@ -182,7 +207,7 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
-    locationBackingFormValidator.validate(form, errors);
+    locationBackingFormValidator.validate(locationForm, errors);
 
     // check asserts
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
@@ -192,22 +217,21 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   public void testInvalidBlankName() throws Exception {
     // set up data
     Division divisionLevel3 = aDivision().withId(3L).withLevel(3).build();
-    Location location = LocationBuilder.aLocation()
-        .withId(1l)
+
+    DivisionBackingForm divisionForm = aDivisionBackingForm().withId(3L).withLevel(3).build();
+    LocationBackingForm locationForm = aLocationBackingForm()
+        .withId(1L)
         .withName("")
         .thatIsVenue()
-        .withDivisionLevel3(divisionLevel3)
+        .withDivisionLevel3(divisionForm)
         .build();
-
-    LocationBackingForm form = new LocationBackingForm();
-    form.setLocation(location);
 
     // Set up expectations
     when(divisionRepository.findDivisionById(3L)).thenReturn(divisionLevel3);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
-    locationBackingFormValidator.validate(form, errors);
+    locationBackingFormValidator.validate(locationForm, errors);
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
@@ -218,13 +242,6 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   public void testInvalidDuplicate() throws Exception {
     // set up data
     Division divisionLevel3 = aDivision().withId(3L).withLevel(3).build();
-    Location location = LocationBuilder.aLocation()
-        .withId(1l)
-        .withName("LOCATION")
-        .thatIsVenue()
-        .withDivisionLevel3(divisionLevel3)
-        .build();
-
     Location duplicate = LocationBuilder.aLocation()
         .withId(2l)
         .withName("LOCATION")
@@ -232,8 +249,13 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
         .withDivisionLevel3(divisionLevel3)
         .build();
 
-    LocationBackingForm form = new LocationBackingForm();
-    form.setLocation(location);
+    DivisionBackingForm divisionForm = aDivisionBackingForm().withId(3L).withLevel(3).build();
+    LocationBackingForm locationForm = aLocationBackingForm()
+        .withId(1L)
+        .withName("LOCATION")
+        .thatIsVenue()
+        .withDivisionLevel3(divisionForm)
+        .build();
 
     // set up mocks
     when(locationRepository.findLocationByName("LOCATION")).thenReturn(duplicate);
@@ -241,7 +263,7 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
-    locationBackingFormValidator.validate(form, errors);
+    locationBackingFormValidator.validate(locationForm, errors);
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
@@ -252,21 +274,20 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   public void testNoLocationTypesSpecified() throws Exception {
     // set up data
     Division divisionLevel3 = aDivision().withId(3L).withLevel(3).build();
-    Location location = LocationBuilder.aLocation()
-        .withId(1l)
-        .withName("LOCATION")
-        .withDivisionLevel3(divisionLevel3)
-        .build();
 
-    LocationBackingForm form = new LocationBackingForm();
-    form.setLocation(location);
+    DivisionBackingForm divisionForm = aDivisionBackingForm().withId(3L).withLevel(3).build();
+    LocationBackingForm locationForm = aLocationBackingForm()
+        .withId(1L)
+        .withName("LOCATION")
+        .withDivisionLevel3(divisionForm)
+        .build();
     
     // Set up expectations
     when(divisionRepository.findDivisionById(3L)).thenReturn(divisionLevel3);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "location");
-    locationBackingFormValidator.validate(form, errors);
+    locationBackingFormValidator.validate(locationForm, errors);
 
     // check asserts
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());

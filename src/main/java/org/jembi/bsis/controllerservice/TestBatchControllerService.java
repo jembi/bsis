@@ -72,7 +72,7 @@ public class TestBatchControllerService {
   }
   
   public TestBatchFullViewModel saveTestBatch(TestBatchBackingForm form) {
-    TestBatch testBatch = testBatchRepository.saveTestBatch(form.getTestBatch(), sequenceNumberRepository.getNextTestBatchNumber());
+    TestBatch testBatch = testBatchRepository.saveTestBatch(testBatchFactory.createEntity(form), sequenceNumberRepository.getNextTestBatchNumber());
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
     return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
   }

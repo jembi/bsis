@@ -1,18 +1,24 @@
 package org.jembi.bsis.factory;
 
+import org.jembi.bsis.backingform.BloodTransportBoxBackingForm;
+import org.jembi.bsis.backingform.ComponentBatchBackingForm;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.componentbatch.BloodTransportBox;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.viewmodel.ComponentBatchFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentBatchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
-public class ComponentBatchViewModelFactory {
+public class ComponentBatchFactory {
 
   @Autowired
   BloodTransportBoxViewModelFactory bloodTransportBoxViewModelFactory;
@@ -41,6 +47,36 @@ public class ComponentBatchViewModelFactory {
     ComponentBatchFullViewModel viewModel = new ComponentBatchFullViewModel();
     populateFullViewModel(componentBatch, viewModel);
     return viewModel;
+  }
+
+  public ComponentBatch createEntity(ComponentBatchBackingForm form) {
+    ComponentBatch componentBatch = new ComponentBatch();
+    
+    componentBatch.setId(form.getId());
+    componentBatch.setStatus(form.getStatus());
+    componentBatch.setDeliveryDate(form.getDeliveryDate());
+    
+    if (form.getLocation() != null) {
+      Location location = new Location();
+      location.setId(form.getLocation().getId());
+      componentBatch.setLocation(location);
+    }
+    
+    Set<BloodTransportBox> boxes = new HashSet<>();
+    for (BloodTransportBoxBackingForm boxForm : form.getBloodTransportBoxes()) {
+      BloodTransportBox box = boxForm.getBloodTransportBox();
+      box.setComponentBatch(componentBatch);
+      boxes.add(box);
+    }
+    componentBatch.setBloodTransportBoxes(boxes);
+
+    if (form.getDonationBatch() != null) {
+      DonationBatch donationBatch = form.getDonationBatch().getDonationBatch();
+      componentBatch.setDonationBatch(donationBatch);
+      donationBatch.setComponentBatch(componentBatch);
+    }
+
+    return componentBatch;
   }
   
   private ComponentBatchViewModel populateViewModel(ComponentBatch componentBatch, ComponentBatchViewModel viewModel) {
