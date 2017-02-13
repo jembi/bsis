@@ -39,6 +39,7 @@ public class PostDonationCounsellingFactory {
     viewModel.setDonor(donorViewModel);
     viewModel.setFlaggedForCounselling(postDonationCounselling.isFlaggedForCounselling());
     viewModel.setNotes(postDonationCounselling.getNotes());
+    viewModel.setReferred(postDonationCounselling.getReferred());
 
     // Populate permissions
     boolean canRemoveStatus = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(

@@ -55,6 +55,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withId(postDonationCounsellingId)
         .withDonation(donation)
         .thatIsFlaggedForCounselling()
+        .thatIsReferred()
         .withNotes("notes")
         .build();
     
@@ -67,6 +68,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withDonor(expectedDonorViewModel)
         .withPermission("canRemoveStatus", canRemoveStatus)
         .thatIsFlaggedForCounselling()
+        .thatIsReferred()
         .withNotes("notes")
         .build();
 
@@ -96,6 +98,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withId(postDonationCounsellingId)
         .withDonation(donation)
         .thatIsFlaggedForCounselling()
+        .thatIsNotReferred()
         .build();
     
     DonorViewModel expectedDonorViewModel = aDonorViewModel().withDonor(donor).build();
@@ -107,6 +110,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withDonor(expectedDonorViewModel)
         .withPermission("canRemoveStatus", canRemoveStatus)
         .thatIsFlaggedForCounselling()
+        .thatIsNotReferred()
         .build();
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(0);
@@ -139,6 +143,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .thatIsNotFlaggedForCounselling()
         .withCounsellingStatus(counsellingStatus)
         .withCounsellingDate(counsellingDate)
+        .thatIsNotReferred()
         .withNotes(notes)
         .build();
 
@@ -152,6 +157,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withDonor(expectedDonorViewModel)
         .withPermission("canRemoveStatus", false)
         .thatIsNotFlaggedForCounselling()
+        .thatIsNotReferred()
         .withCounsellingStatusViewModel(expectedCounsellingStatus)
         .withCounsellingDate(counsellingDate)
         .withNotes(notes)
