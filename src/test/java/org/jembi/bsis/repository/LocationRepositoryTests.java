@@ -149,6 +149,27 @@ public class LocationRepositoryTests extends ContextDependentTestSuite {
   }
 
   @Test
+  public void testFindReferralSites_verifyCorrectLocationsReturned() {
+    Location location1 = aReferralSite().withName("test1").buildAndPersist(entityManager); // match
+    Location location2 = aDistributionSite().withName("test2").buildAndPersist(entityManager);
+    Location location3 = aProcessingSite().withName("test3").buildAndPersist(entityManager); 
+    Location location4 = aReferralSite().withName("test4").buildAndPersist(entityManager); // match
+    Location location5 = aUsageSite().withName("test5").buildAndPersist(entityManager);
+
+    List<Location> locations = locationRepository.findLocations(null, true, LocationType.REFERRAL_SITE, true);
+
+    // Verify locations returned
+    Assert.assertEquals("Verify locations returned", 2, locations.size());
+
+    // Verify right locations were returned
+    Assert.assertTrue("Verify locations", locations.contains(location1));
+    Assert.assertTrue("Verify locations", locations.contains(location4));
+    Assert.assertFalse("Verify locations", locations.contains(location2));
+    Assert.assertFalse("Verify locations", locations.contains(location3));
+    Assert.assertFalse("Verify locations", locations.contains(location5));
+  }
+
+  @Test
   public void testGetReferralSites_verifyCorrectLocationsReturned() {
     Location location1 = aReferralSite().withName("test1").buildAndPersist(entityManager); // match
     Location location2 = aDistributionSite().withName("test2").buildAndPersist(entityManager);
