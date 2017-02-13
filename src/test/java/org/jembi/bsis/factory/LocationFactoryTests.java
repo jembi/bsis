@@ -8,6 +8,7 @@ import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aVenueBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aReferralSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.LocationManagementViewModelBuilder.aLocationManagementViewModel;
 import static org.jembi.bsis.helpers.matchers.DivisionViewModelMatcher.hasSameStateAsDivisionViewModel;
@@ -81,7 +82,7 @@ public class LocationFactoryTests extends UnitTestSuite {
   
   @Test
   public void testCreateLocationReferralSiteFullViewModel_shouldReturnViewModelWithTheCorrectState() {
-    Location referralSite = LocationBuilder.aReferralSite()
+    Location referralSite = aReferralSite()
         .withId(2L)
         .withName("Referral Site")
         .thatIsReferralSite()
