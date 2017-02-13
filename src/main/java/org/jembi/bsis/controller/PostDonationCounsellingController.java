@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.backingform.validator.PostDonationCounsellingBackingFormValidator;
+import org.jembi.bsis.controllerservice.LocationControllerService;
 import org.jembi.bsis.controllerservice.PostDonationCounsellingControllerService;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -58,6 +59,7 @@ public class PostDonationCounsellingController {
       counsellingStatuses.add(new CounsellingStatusViewModel(counsellingStatus));
     }
     map.put("counsellingStatuses", counsellingStatuses);
+    map.put("referralSites", postDonationCounsellingControllerService.getReferralSites());
 
     return map;
   }
