@@ -1,5 +1,6 @@
 package org.jembi.bsis.repository;
 
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -24,7 +25,6 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.backingform.DonorBackingForm;
-import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.dto.DuplicateDonorDTO;
 import org.jembi.bsis.model.address.Address;
 import org.jembi.bsis.model.address.AddressType;
@@ -38,7 +38,6 @@ import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.model.util.Gender;
-import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.viewmodel.DonorSummaryViewModel;
@@ -545,7 +544,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     user = new User();
     user.setId(userDbId);
     donorBackingForm.setHomeAddressDistrict("District");
-    donorBackingForm.setVenue(new LocationBackingForm(l));
+    donorBackingForm.setVenue(aLocationBackingForm().withId(1L).build());
     donorBackingForm.setIdNumber("1111");
     donorBackingForm.setNotes("Notes");
     donorBackingForm.setMobileNumber("9999999999");
@@ -590,7 +589,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     donorBackingForm.setHomeAddressCity("City_update");
     donorBackingForm.setHomeAddressCountry("country_update");
     donorBackingForm.setHomeAddressDistrict("District_update");
-    donorBackingForm.setVenue(new LocationBackingForm(l));
+    donorBackingForm.setVenue(aLocationBackingForm().withId(2L).build());
     donorBackingForm.setIdNumber("1212");
     donorBackingForm.setNotes("Notes_update");
     donorBackingForm.setMobileNumber("9878787878");

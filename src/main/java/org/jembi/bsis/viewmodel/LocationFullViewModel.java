@@ -53,6 +53,10 @@ public class LocationFullViewModel extends BaseViewModel {
   public boolean getIsTestingSite() {
     return location.getIsTestingSite();
   }
+  
+  public boolean getIsReferralSite() {
+    return location.getIsReferralSite();
+  }
 
   public void setDivisionLevel1(DivisionViewModel divisionLevel1) {
     this.divisionLevel1 = divisionLevel1;

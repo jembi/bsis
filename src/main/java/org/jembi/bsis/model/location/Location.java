@@ -30,7 +30,9 @@ import org.jembi.bsis.repository.LocationNamedQueryConstants;
   @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_DISTRIBUTION_SITES,
       query = LocationNamedQueryConstants.QUERY_FIND_DISTRIBUTION_SITES),
   @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_TESTING_SITES,
-      query = LocationNamedQueryConstants.QUERY_FIND_TESTING_SITES)
+      query = LocationNamedQueryConstants.QUERY_FIND_TESTING_SITES),
+  @NamedQuery(name = LocationNamedQueryConstants.NAME_FIND_REFERRAL_SITES,
+  query = LocationNamedQueryConstants.QUERY_FIND_REFERRAL_SITES)
 })
 @Entity
 @Audited
@@ -52,6 +54,8 @@ public class Location extends BaseModificationTrackerEntity {
   private boolean isDistributionSite = false;
 
   private boolean isTestingSite = false;
+  
+  private boolean isReferralSite = false;
 
   private Boolean isDeleted = Boolean.FALSE;
 
@@ -75,6 +79,7 @@ public class Location extends BaseModificationTrackerEntity {
     this.isProcessingSite = location.isProcessingSite;
     this.isDistributionSite = location.isDistributionSite;
     this.isTestingSite = location.isTestingSite;
+    this.isReferralSite = location.isReferralSite;
     this.isDeleted = location.isDeleted;
     this.notes = location.notes;
     this.divisionLevel1 = location.divisionLevel1;
@@ -152,6 +157,15 @@ public class Location extends BaseModificationTrackerEntity {
 
   public void setIsTestingSite(boolean isTestingSite) {
     this.isTestingSite = isTestingSite;
+  }
+  
+
+  public boolean getIsReferralSite() {
+    return isReferralSite;
+  }
+
+  public void setIsReferralSite(boolean isReferralSite) {
+    this.isReferralSite = isReferralSite;
   }
 
   public Division getDivisionLevel1() {

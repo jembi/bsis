@@ -59,4 +59,12 @@ public class LocationNamedQueryConstants {
       + "WHERE l.isTestingSite = :isTestingSite "
       + "AND l.isDeleted = :isDeleted "
       + "ORDER BY l.name ASC";
+  
+  public static final String NAME_FIND_REFERRAL_SITES = "Location.findReferralSites";
+  public static final String QUERY_FIND_REFERRAL_SITES =
+      "SELECT l "
+      + "FROM Location l "
+      + "WHERE l.isReferralSite = :isReferralSite "
+      + "AND l.isDeleted = :isDeleted "
+      + "ORDER BY l.name ASC";
 }

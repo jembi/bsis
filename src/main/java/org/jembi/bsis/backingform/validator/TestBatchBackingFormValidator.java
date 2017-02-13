@@ -1,20 +1,17 @@
 package org.jembi.bsis.backingform.validator;
 
+import java.util.List;
+
+import javax.persistence.NoResultException;
+
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.NoResultException;
 
 @Component
 public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackingForm> {
@@ -26,24 +23,19 @@ public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackin
 
   @Override
   public void validateForm(TestBatchBackingForm form, Errors errors) {
-    TestBatch testBatch = form.getTestBatch();
-    
     // Validate donation batches
     List<Long> donationBatchIds = form.getDonationBatchIds();
-    Set<DonationBatch> donationBatches = new HashSet<>();
     if (donationBatchIds != null && !donationBatchIds.isEmpty()) {
       for (Long donationBatchId : donationBatchIds) {
         DonationBatch db = donationBatchRepository.findDonationBatchById(donationBatchId);
         if (db.getTestBatch() != null) {
-          if (testBatch.getId() == null || !testBatch.getId().equals(db.getTestBatch().getId())) {
+          if (form.getId() == null || !form.getId().equals(db.getTestBatch().getId())) {
             errors.rejectValue("donationBatchIds", "errors.invalid", "Donation batch at " + db.getVenue().getName() +
                 " from " + db.getDonationBatchDate() + " is already in a test batch.");
           }
         }
-        donationBatches.add(db);
       }
     }
-    testBatch.setDonationBatches(donationBatches);
     
     // Validate location
     if (form.getLocation() != null) {
@@ -66,5 +58,10 @@ public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackin
   @Override
   public String getFormName() {
     return "testBatch";
+  }
+
+  @Override
+  protected boolean formHasBaseEntity() {
+    return false;
   }
 }
