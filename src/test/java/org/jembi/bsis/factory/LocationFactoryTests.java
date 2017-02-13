@@ -78,6 +78,19 @@ public class LocationFactoryTests extends UnitTestSuite {
 
     assertThat(allSiteLocationViewModel, hasSameStateAsLocationFullViewModel(expectedLocationFullViewModel));
   }
+  
+  @Test
+  public void testCreateLocationReferralSiteFullViewModel_shouldReturnViewModelWithTheCorrectState() {
+    Location referralSite = LocationBuilder.aReferralSite()
+        .withId(2L)
+        .withName("Referral Site")
+        .thatIsReferralSite()
+        .build();
+    LocationFullViewModel referralSiteFullViewModel = locationFactory.createFullViewModel(referralSite);
+    assertThat(referralSite.getId(), is(referralSiteFullViewModel.getId()));
+    assertThat(referralSite.getName(), is(referralSiteFullViewModel.getName()));
+    assertThat(referralSite.getIsReferralSite(), is(referralSiteFullViewModel.getIsReferralSite()));
+  }
 
   @Test
   public void testCreateLocationFullViewModelWithDivisions_shouldReturnViewModelWithTheCorrectState() {
