@@ -5,11 +5,13 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.jembi.bsis.helpers.builders.DivisionBackingFormBuilder.aDivisionBackingForm;
 import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
-import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aVenueBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aVenueBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.LocationManagementViewModelBuilder.aLocationManagementViewModel;
 import static org.jembi.bsis.helpers.matchers.DivisionViewModelMatcher.hasSameStateAsDivisionViewModel;
+import static org.jembi.bsis.helpers.matchers.LocationFullViewModelMatcher.hasSameStateAsLocationFullViewModel;
 import static org.jembi.bsis.helpers.matchers.LocationManagementViewModelMatcher.hasSameStateAsLocationManagementViewModel;
 import static org.jembi.bsis.helpers.matchers.LocationMatcher.hasSameStateAsLocation;
 import static org.mockito.Mockito.when;
@@ -48,12 +50,34 @@ public class LocationFactoryTests extends UnitTestSuite {
   public void testCreateLocationFullViewModel_shouldReturnViewModelWithTheCorrectState() {
     Long venueId = 1L;
     String venueName = "location";
-    Location venue = LocationBuilder.aLocation().withId(venueId).withName(venueName).thatIsVenue().build();
-    LocationFullViewModel venueViewModel = locationFactory.createFullViewModel(venue);
-    Assert.assertNotNull("venue view model was created", venueViewModel);
-    Assert.assertEquals("isVenue is correct", true, venueViewModel.getIsVenue());
-    Assert.assertEquals("name is correct", venueName, venueViewModel.getName());
-    Assert.assertEquals("id is correct", venueId, venueViewModel.getId());
+    Location allSiteLocation = aLocation()
+        .withId(venueId)
+        .withName(venueName)
+        .thatIsVenue()
+        .thatIsDistributionSite()
+        .thatIsMobileSite()
+        .thatIsProcessingSite()
+        .thatIsReferralSite()
+        .thatIsTestingSite()
+        .thatIsUsageSite()
+        .build();
+
+    Location expectedSiteLocation = aLocation()
+        .withId(venueId)
+        .withName(venueName)
+        .thatIsVenue()
+        .thatIsDistributionSite()
+        .thatIsMobileSite()
+        .thatIsProcessingSite()
+        .thatIsReferralSite()
+        .thatIsTestingSite()
+        .thatIsUsageSite()
+        .build();
+    LocationFullViewModel expectedLocationFullViewModel = new LocationFullViewModel(expectedSiteLocation);
+
+    LocationFullViewModel allSiteLocationViewModel = locationFactory.createFullViewModel(allSiteLocation);
+
+    assertThat(allSiteLocationViewModel, hasSameStateAsLocationFullViewModel(expectedLocationFullViewModel));
   }
 
   @Test
