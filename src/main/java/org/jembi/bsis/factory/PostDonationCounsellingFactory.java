@@ -39,6 +39,7 @@ public class PostDonationCounsellingFactory {
     viewModel.setDonor(donorViewModel);
     viewModel.setFlaggedForCounselling(postDonationCounselling.isFlaggedForCounselling());
     viewModel.setNotes(postDonationCounselling.getNotes());
+    viewModel.setReferred(postDonationCounselling.getReferred());
 
     // Populate permissions
     boolean canRemoveStatus = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(
@@ -57,6 +58,7 @@ public class PostDonationCounsellingFactory {
     entity.setCounsellingDate(form.getCounsellingDate());
     entity.setFlaggedForCounselling(form.getFlaggedForCounselling());
     entity.setNotes(form.getNotes());
+    entity.setReferred(form.isReferred());
     return entity;
   }
 }

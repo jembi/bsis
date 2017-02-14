@@ -54,6 +54,8 @@ public class PostDonationCounselling extends BaseModificationTrackerEntity {
   private boolean isDeleted;
 
   private String notes;
+  
+  private Boolean referred;
 
   public PostDonationCounselling() {
     super();
@@ -106,4 +108,12 @@ public class PostDonationCounselling extends BaseModificationTrackerEntity {
   public void setNotes(String notes) {
     this.notes = notes;
   }
+  
+  public Boolean getReferred() {
+    return referred;
+  }
+
+  public void setReferred(Boolean referred) {
+    this.referred = referred;
+  }  
 }

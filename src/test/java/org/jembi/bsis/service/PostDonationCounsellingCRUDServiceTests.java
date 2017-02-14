@@ -102,6 +102,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
         .thatIsNotFlaggedForCounselling()
         .withDonation(null)
         .withNotes(notes)
+        .thatIsReferred()
         .build();
 
     PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
@@ -110,6 +111,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
         .thatIsNotDeleted()
         .withCounsellingDate(existingCounsellingDate)
         .withCounsellingStatus(null)
+        .thatIsNotReferred()
         .withDonation(aDonation()
             .withId(donationId)
             .build())
@@ -121,6 +123,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
         .thatIsNotDeleted()
         .withCounsellingStatus(counsellingStatus)
         .withCounsellingDate(counsellingDate)
+        .thatIsReferred()
         .withDonation(aDonation()
             .withId(donationId)
             .build())

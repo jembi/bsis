@@ -25,6 +25,8 @@ public class PostDonationCounsellingViewModel {
 
   private String notes;
 
+  private Boolean referred;
+
   public long getId() {
     return id;
   }
@@ -88,6 +90,14 @@ public class PostDonationCounsellingViewModel {
 
   public void setPermissions(Map<String, Boolean> permissions) {
     this.permissions = permissions;
+  }
+
+  public Boolean isReferred() {
+    return referred;
+  }
+
+  public void setReferred(Boolean referred) {
+    this.referred = referred;
   }
 
 }
