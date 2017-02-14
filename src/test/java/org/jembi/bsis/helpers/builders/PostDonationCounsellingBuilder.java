@@ -9,6 +9,7 @@ import org.jembi.bsis.helpers.persisters.PostDonationCounsellingPersister;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.user.User;
 
 public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDonationCounselling> {
@@ -25,6 +26,7 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
   private User lastUpdatedBy;
   private String notes;
   private Boolean referred;
+  private Location referralSite;
 
 
   public PostDonationCounsellingBuilder withId(Long id) {
@@ -106,6 +108,11 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
     referred = Boolean.FALSE;
     return this;
   }
+  
+  public PostDonationCounsellingBuilder withReferralSite(Location referralSite) {
+    this.referralSite = referralSite;
+    return this;
+  }
 
   @Override
   public PostDonationCounselling build() {
@@ -122,6 +129,7 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
     postDonationCounselling.setLastUpdatedBy(lastUpdatedBy);
     postDonationCounselling.setNotes(notes);
     postDonationCounselling.setReferred(referred);
+    postDonationCounselling.setReferralSite(referralSite);
     return postDonationCounselling;
   }
 

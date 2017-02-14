@@ -83,4 +83,5 @@
   <include file="liquibase/updates/2219-add-donation-counselling-notes.xml"/>
   <include file="liquibase/updates/2123-add-edit-location-with-type-referral.xml"/>
   <include file="liquibase/updates/2121-add-referred-boolean-to-couselling.xml"/>
+  <include file="liquibase/updates/2122-record-referral-site-for-TTI-POS-donor.xml"/>
 </databaseChangeLog>

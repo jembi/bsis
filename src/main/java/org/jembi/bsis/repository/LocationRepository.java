@@ -67,7 +67,7 @@ public class LocationRepository extends AbstractRepository<Location>{
         .setParameter("isDeleted", false)
         .getResultList();
   }
-  
+
   public List<Location> getReferralSites() {
     return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_REFERRAL_SITES, Location.class)
         .setParameter("isReferralSite", true)
@@ -200,6 +200,7 @@ public class LocationRepository extends AbstractRepository<Location>{
           break;
         case REFERRAL_SITE:
           query.setParameter("isReferralSite", true);
+          break;
       }
     }
 

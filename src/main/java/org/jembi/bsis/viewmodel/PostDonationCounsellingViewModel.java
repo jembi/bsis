@@ -27,6 +27,8 @@ public class PostDonationCounsellingViewModel {
 
   private Boolean referred;
 
+  private LocationViewModel referralSite;
+
   public long getId() {
     return id;
   }
@@ -100,4 +102,11 @@ public class PostDonationCounsellingViewModel {
     this.referred = referred;
   }
 
+  public LocationViewModel getReferralSite() {
+    return referralSite;
+  }
+
+  public void setReferralSite(LocationViewModel referralSite) {
+    this.referralSite = referralSite;
+  }
 }

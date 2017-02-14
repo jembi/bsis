@@ -42,4 +42,8 @@ public class PostDonationCounsellingControllerService {
 
     return postDonationCounsellingFactory.createViewModel(updatedPostDonationCounselling);
   }
+
+  public List<LocationViewModel> getReferralSites() {
+    return locationFactory.createViewModels(locationRepository.getReferralSites());
+  }
 }
