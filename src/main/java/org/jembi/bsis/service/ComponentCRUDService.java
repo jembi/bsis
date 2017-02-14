@@ -385,8 +385,9 @@ public class ComponentCRUDService {
     if (existingComponent.getInventoryStatus() == InventoryStatus.REMOVED) {
       existingComponent.setInventoryStatus(InventoryStatus.IN_STOCK);
     }
-
-    return rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.DISCARDED);
+    // As the component is being undiscarded, the status change with category DISCARDED needs to be
+    // deleted for this component
+    return rollBackComponentStatusChanges(existingComponent, ComponentStatusChangeReasonCategory.DISCARDED);
   }
   
   public Component preProcessComponent(long componentId, Integer componentWeight, Date bleedStartTime, Date bleedEndTime) {
@@ -416,10 +417,12 @@ public class ComponentCRUDService {
     // it's OK to update the weight
     existingComponent.setWeight(componentWeight);
 
-    // roll back Component Status if unsafe. Note that only statuses that can be rolled back will
-    // and should be e.g. for reasons of invalid weight or low weight.
+    // the weight has been updated, so we need roll back unsafe component status changes with type
+    // INVALID_WEIGHT and LOW_WEIGHT, as new component status changes will be created where
+    // necessary, when marking the component as unsafe
     if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
-      rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.UNSAFE);
+      rollBackComponentStatusChanges(existingComponent, ComponentStatusChangeReasonCategory.UNSAFE,
+          ComponentStatusChangeReasonType.INVALID_WEIGHT, ComponentStatusChangeReasonType.LOW_WEIGHT);
     }
 
     // Mark the component as unsafe if necessary.
@@ -479,8 +482,10 @@ public class ComponentCRUDService {
     // Reset processedOn date
     parentComponent.setProcessedOn(null);
 
-    // FIXME: Create component status change for when processing a component
-    return rollBackComponentStatus(parentComponent, null);
+    // FIXME: Create component status change for when processing a component. Once this is done, the
+    // status change with category "PROCESSED" should be deleted when unprocessing a component. In
+    // the meantime we will call the method rollBackComponentStatusChanges with category null
+    return rollBackComponentStatusChanges(parentComponent, null);
   }
   
   public Component markComponentAsUnsafe(Component component, ComponentStatusChangeReasonType reasonType) {
@@ -577,18 +582,29 @@ public class ComponentCRUDService {
   }
 
   /**
-   * Roll back component status. This method is called whenever a component status needs to be
-   * rolled back:
+   * Roll back component status changes. This method is called whenever component status changes
+   * need to be deleted:
    * 
-   * - when un-discarding: rollbackCategory = DISCARDED 
-   * - when updating the weight: rollbackCategory = UNSAFE 
-   * - when un-processing: Doesn't exist yet
+   * - when un-discarding: roll back status changes with category = DISCARDED (no type to specify)
+   * 
+   * - when updating the weight: roll back status changes with category = UNSAFE with types
+   * INVALID_WEIGHT and LOW_WEIGHT
+   * 
+   * - when un-processing: No status changes are created when processing at the moment, so there's
+   * nothing to roll back
+   * 
+   * Note: only status changes with types that can be rolled back will be deleted.
    *
-   * @param component the component
-   * @param rollBackCategory the rollback category
-   * @return the component
+   * @param component Component for which status changes are being rolled back
+   * @param statusChangeReasonCategory, the status change category that is being deleted (can be
+   *        null if no ComponentStatusChanges should be deleted)
+   * @param statusChangeReasonTypes, the list of reason types that needs to be deleted for the
+   *        specified category (can be null if no ComponentStatusChanges should be deleted)
+   * @return the component Component that has an updated status
    */
-  private Component rollBackComponentStatus(Component component, ComponentStatusChangeReasonCategory rollBackCategory) {
+  protected Component rollBackComponentStatusChanges(Component component,
+      ComponentStatusChangeReasonCategory statusChangeReasonCategory,
+      ComponentStatusChangeReasonType... statusChangeReasonTypes) {
     
     ComponentStatus componentStatus = ComponentStatus.QUARANTINED;
 
@@ -602,16 +618,39 @@ public class ComponentCRUDService {
             componentStatus = ComponentStatus.UNSAFE;
           }
 
-          // Delete the status changes with reason category rollBackCategory, that can be rolled back
-          if (statusChange.getStatusChangeReason().getCategory().equals(rollBackCategory)
-              && ComponentStatusChangeReasonType.canBeRolledBack(statusChange.getStatusChangeReason().getType())) {
+          if (statusChangeReasonCategory == null) {
+            // mustn't delete any status changes
+            continue;
+          }
+
+          // Check if this statusChange can be deleted
+          ComponentStatusChangeReasonType statusChangeReasonType = statusChange.getStatusChangeReason().getType();
+          if (statusChange.getStatusChangeReason().getCategory().equals(statusChangeReasonCategory)
+              && statusChangeReasonType == null) {
+            // matches rollBackCategory because types are not used (e.g. DISCARDED)
             statusChange.setIsDeleted(true);
+          } else if (statusChange.getStatusChangeReason().getCategory().equals(statusChangeReasonCategory)
+              && ComponentStatusChangeReasonType.canBeRolledBack(statusChangeReasonType)) {
+            // rollBackCategory matches and this statusChange reason type is able to be rolled back
+            if (statusChangeReasonTypes == null || statusChangeReasonTypes.length == 0) {
+              // there are no reasonTypes to match, so just delete it
+              statusChange.setIsDeleted(true);
+            } else {
+              // only delete the status change if it matches a type in statusChangeReasonTypes
+              for (ComponentStatusChangeReasonType reasonType : statusChangeReasonTypes) {
+                if (reasonType.equals(statusChangeReasonType)) {
+                  statusChange.setIsDeleted(true);
+                  break;
+                }
+              }
+            }
           }
         }
       }
     }
 
-    LOGGER.info("Rolling back component status change: " + rollBackCategory + " for component id " + component.getId());
+    LOGGER.info("Rolling back component status changes with category: " + statusChangeReasonCategory
+        + " for component id " + component.getId());
 
     component.setStatus(componentStatus);
     return updateComponent(component);

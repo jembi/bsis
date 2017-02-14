@@ -125,7 +125,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCreateViewModelWithCounsellingStatus_shouldReturnCorrectViewModel() {
+  public void testCreateViewModelWithReviecedCounsellingStatus_shouldReturnCorrectViewModel() {
 
     long donorId = 21L;
     long donationId = 87L;
@@ -161,6 +161,54 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withCounsellingStatusViewModel(expectedCounsellingStatus)
         .withCounsellingDate(counsellingDate)
         .withNotes(notes)
+        .build();
+
+    when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(0);
+    when(donationFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
+    when(donorFactory.createDonorViewModel(donor)).thenReturn(expectedDonorViewModel);
+
+    PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingFactory
+        .createViewModel(postDonationCounselling);
+
+    assertThat(returnedPostDonationCounsellingViewModel, hasSameStateAsPostDonationCounsellingViewModel(expectedPostDonationCounsellingViewModel));
+  }
+
+  @Test
+  public void testCreateViewModelWithRefusedCounsellingStatus_shouldReturnCorrectViewModel() {
+
+    long donorId = 21L;
+    long donationId = 87L;
+    long postDonationCounsellingId = 32L;
+    CounsellingStatus counsellingStatus = CounsellingStatus.REFUSED_COUNSELLING;
+    String notes = "Did not have time to talk to us";
+
+    Donor donor = aDonor().withId(donorId).build();
+    Donation donation = aDonation().withId(donationId).withDonor(donor).build();
+
+    PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
+        .withId(postDonationCounsellingId)
+        .withDonation(donation)
+        .thatIsNotFlaggedForCounselling()
+        .withCounsellingStatus(counsellingStatus)
+        .withCounsellingDate(null)
+        .withNotes(notes)
+        .withReferred(null)
+        .build();
+
+    DonorViewModel expectedDonorViewModel = aDonorViewModel().withDonor(donor).build();
+    DonationViewModel expectedDonationViewModel = aDonationViewModel().withId(donationId).build();
+    CounsellingStatusViewModel expectedCounsellingStatus = new CounsellingStatusViewModel(counsellingStatus);
+
+    PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
+        .withId(postDonationCounsellingId)
+        .withDonation(expectedDonationViewModel)
+        .withDonor(expectedDonorViewModel)
+        .withPermission("canRemoveStatus", false)
+        .thatIsNotFlaggedForCounselling()
+        .withCounsellingStatusViewModel(expectedCounsellingStatus)
+        .withCounsellingDate(null)
+        .withNotes(notes)
+        .withReferred(null)
         .build();
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(0);
