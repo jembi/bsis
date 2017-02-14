@@ -5,6 +5,7 @@ import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.DonorViewModelBuilder.aDonorViewModel;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aReferralSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aReferralSite;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingBackingFormBuilder.aPostDonationCounsellingBackingForm;
@@ -16,12 +17,14 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
+import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
@@ -45,6 +48,8 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   private DonorViewModelFactory donorFactory;
   @Mock
   private LocationFactory locationFactory;
+  @Mock
+  private LocationRepository locationRepository;
 
   @Test
   public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
@@ -234,7 +239,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCreateEntity_shouldReturnEntityInCorrectState() {
+  public void testCreateEntityThatIsNotReferred_shouldReturnEntityInCorrectState() {
     Date counsellingDate = new Date();
 
     PostDonationCounsellingBackingForm form = aPostDonationCounsellingBackingForm()
@@ -255,6 +260,41 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withNotes("notes")
         .thatIsNotReferred()
         .build();
+
+    PostDonationCounselling returnedEntity = postDonationCounsellingFactory.createEntity(form);
+
+    assertThat(returnedEntity, hasSameStateAsPostDonationCounselling(expectedEntity));
+  }
+
+  @Test
+  public void testCreateEntityThatIsReferred_shouldReturnEntityInCorrectState() {
+    Date counsellingDate = new Date();
+    Long locationId = 1L;
+
+    LocationBackingForm referralSiteForm = aReferralSiteBackingForm().withId(locationId).withName("Care").build();
+    PostDonationCounsellingBackingForm form = aPostDonationCounsellingBackingForm()
+        .withId(1L)
+        .withCounsellingDate(counsellingDate)
+        .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
+        .thatIsNotFlaggedForCounselling()
+        .thatIsReferred()
+        .withReferralSite(referralSiteForm)
+        .withNotes("notes")
+        .build();
+
+    Location referralSite = aReferralSite().withId(locationId).withName("Care").build();
+    PostDonationCounselling expectedEntity = aPostDonationCounselling()
+        .withId(1L)
+        .withCounsellingDate(counsellingDate)
+        .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
+        .thatIsNotFlaggedForCounselling()
+        .withDonation(null) // donation is not mapped in the form, so must be null
+        .withNotes("notes")
+        .thatIsReferred()
+        .withReferralSite(referralSite)
+        .build();
+
+    when(locationRepository.getLocation(locationId)).thenReturn(referralSite);
 
     PostDonationCounselling returnedEntity = postDonationCounsellingFactory.createEntity(form);
 

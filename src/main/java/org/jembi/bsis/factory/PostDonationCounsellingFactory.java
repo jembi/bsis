@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
@@ -24,6 +25,8 @@ public class PostDonationCounsellingFactory {
   private DonorViewModelFactory donorFactory;
   @Autowired
   private LocationFactory locationFactory;
+  @Autowired
+  private LocationRepository locationRepository;
 
   public PostDonationCounsellingViewModel createViewModel(PostDonationCounselling postDonationCounselling) {
 
@@ -62,6 +65,9 @@ public class PostDonationCounsellingFactory {
     entity.setFlaggedForCounselling(form.getFlaggedForCounselling());
     entity.setNotes(form.getNotes());
     entity.setReferred(form.isReferred());
+    if (form.getReferralSite() != null) {
+      entity.setReferralSite(locationRepository.getLocation(form.getReferralSite().getId()));
+    }
     return entity;
   }
 }
