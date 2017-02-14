@@ -13,11 +13,15 @@ import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.backingform.validator.PostDonationCounsellingBackingFormValidator;
 import org.jembi.bsis.controllerservice.PostDonationCounsellingControllerService;
 import org.jembi.bsis.factory.DonationSummaryViewModelFactory;
+import org.jembi.bsis.factory.PostDonationCounsellingFactory;
+import org.jembi.bsis.model.counselling.CounsellingStatus;
+import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.utils.PermissionUtils;
 import org.jembi.bsis.viewmodel.DonationSummaryViewModel;
+import org.jembi.bsis.viewmodel.PostDonationCounsellingSummaryViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -44,6 +48,8 @@ public class PostDonationCounsellingController {
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
   @Autowired
   private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
+  @Autowired
+  private PostDonationCounsellingFactory postDonationCounsellingFactory;
   
   @InitBinder
   public void initBinder(WebDataBinder binder) {
@@ -81,11 +87,13 @@ public class PostDonationCounsellingController {
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
-  public List<DonationSummaryViewModel> getDonationSummaries(
+  public List<PostDonationCounsellingSummaryViewModel> getDonationSummaries(
       @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
-      @RequestParam(value = "venue", required = false) List<Long> venues) {
+      @RequestParam(value = "venue", required = false) List<Long> venues,
+      @RequestParam(value = "counsellingStatus", required = false) CounsellingStatus counsellingStatus,
+      @RequestParam(value = "referred", required = false) boolean referred) {
 
     if (flaggedForCounselling) {
 
@@ -93,9 +101,10 @@ public class PostDonationCounsellingController {
         throw new AccessDeniedException("You do not have permission to view post donation counselling donors.");
       }
 
-      List<Donation> donations = postDonationCounsellingRepository.findDonationsFlaggedForCounselling(
-          startDate, endDate, venues == null ? null : new HashSet<>(venues));
-      return donationSummaryViewModelFactory.createFullDonationSummaryViewModels(donations);
+      List<PostDonationCounselling> donations = postDonationCounsellingRepository.findPostDonationCounselling(
+          startDate, endDate, venues == null ? null : new HashSet<>(venues),counsellingStatus, 
+          referred, flaggedForCounselling);
+      return postDonationCounsellingFactory.createSummaryViewModels(donations);
     }
 
     // Just return an empty list for now. This could return the full list of donations if needed.
