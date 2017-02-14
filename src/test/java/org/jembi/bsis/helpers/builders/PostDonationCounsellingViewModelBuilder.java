@@ -7,6 +7,7 @@ import java.util.Map;
 import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 
 public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<PostDonationCounsellingViewModel> {
@@ -20,6 +21,7 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
   private DonationViewModel donation;
   private Map<String, Boolean> permissions;
   private Boolean referred;
+  private LocationViewModel referralSite;
   
   public PostDonationCounsellingViewModelBuilder withId(long id) {
     this.id = id;
@@ -76,6 +78,11 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
     this.referred = false;
     return this;
   }
+  
+  public PostDonationCounsellingViewModelBuilder withReferralSite(LocationViewModel referralSite) {
+    this.referralSite = referralSite;
+    return this;
+  }
 
   public PostDonationCounsellingViewModelBuilder withPermission(String key, boolean value) {
     if (permissions == null) {
@@ -99,6 +106,7 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
     viewModel.setDonor(donor);
     viewModel.setNotes(notes);
     viewModel.setReferred(referred);
+    viewModel.setReferralSite(referralSite);
     return viewModel;
   }
 

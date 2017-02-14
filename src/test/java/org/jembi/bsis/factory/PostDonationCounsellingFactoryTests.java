@@ -5,6 +5,8 @@ import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.DonorViewModelBuilder.aDonorViewModel;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aReferralSite;
+import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingBackingFormBuilder.aPostDonationCounsellingBackingForm;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingViewModelBuilder.aPostDonationCounsellingViewModel;
@@ -19,11 +21,13 @@ import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -39,6 +43,8 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   private DonationFactory donationFactory;
   @Mock
   private DonorViewModelFactory donorFactory;
+  @Mock
+  private LocationFactory locationFactory;
 
   @Test
   public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
@@ -47,20 +53,24 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     long donorId = 21L;
     long donationId = 87L;
     long postDonationCounsellingId = 32L;
+    long referralSiteId = 12L;
     
     Donor donor = aDonor().withId(donorId).build();
     Donation donation = aDonation().withId(donationId).withDonor(donor).build();
+    Location referralSite = aReferralSite().withId(referralSiteId).withName("Care").build();
 
     PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
         .withId(postDonationCounsellingId)
         .withDonation(donation)
         .thatIsFlaggedForCounselling()
         .thatIsReferred()
+        .withReferralSite(referralSite)
         .withNotes("notes")
         .build();
     
     DonorViewModel expectedDonorViewModel = aDonorViewModel().withDonor(donor).build();
     DonationViewModel expectedDonationViewModel = aDonationViewModel().withId(donationId).build();
+    LocationViewModel expectedReferralSiteViewModel = aLocationViewModel().withId(referralSiteId).build();
 
     PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
         .withId(postDonationCounsellingId)
@@ -69,12 +79,14 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withPermission("canRemoveStatus", canRemoveStatus)
         .thatIsFlaggedForCounselling()
         .thatIsReferred()
+        .withReferralSite(expectedReferralSiteViewModel)
         .withNotes("notes")
         .build();
 
     when(postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(donorId)).thenReturn(1);
     when(donationFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
     when(donorFactory.createDonorViewModel(donor)).thenReturn(expectedDonorViewModel);
+    when(locationFactory.createViewModel(referralSite)).thenReturn(expectedReferralSiteViewModel);
 
     PostDonationCounsellingViewModel returnedPostDonationCounsellingViewModel = postDonationCounsellingFactory
         .createViewModel(postDonationCounselling);
@@ -125,7 +137,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCreateViewModelWithReviecedCounsellingStatus_shouldReturnCorrectViewModel() {
+  public void testCreateViewModelWithReceivedCounsellingStatus_shouldReturnCorrectViewModel() {
 
     long donorId = 21L;
     long donationId = 87L;

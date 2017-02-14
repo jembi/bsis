@@ -22,6 +22,8 @@ public class PostDonationCounsellingFactory {
   private DonationFactory donationFactory;
   @Autowired
   private DonorViewModelFactory donorFactory;
+  @Autowired
+  private LocationFactory locationFactory;
 
   public PostDonationCounsellingViewModel createViewModel(PostDonationCounselling postDonationCounselling) {
 
@@ -40,6 +42,7 @@ public class PostDonationCounsellingFactory {
     viewModel.setFlaggedForCounselling(postDonationCounselling.isFlaggedForCounselling());
     viewModel.setNotes(postDonationCounselling.getNotes());
     viewModel.setReferred(postDonationCounselling.getReferred());
+    viewModel.setReferralSite(locationFactory.createViewModel(postDonationCounselling.getReferralSite()));
 
     // Populate permissions
     boolean canRemoveStatus = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(
