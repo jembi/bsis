@@ -2,18 +2,24 @@ package org.jembi.bsis.backingform.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.mockito.Mockito.when;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
-import org.jembi.bsis.helpers.builders.PostDonationCounsellingBackingFormBuilder;
 import org.jembi.bsis.helpers.builders.LocationBackingFormBuilder;
+import org.jembi.bsis.helpers.builders.PostDonationCounsellingBackingFormBuilder;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
+import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
@@ -21,7 +27,10 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
   
   @InjectMocks
   private PostDonationCounsellingBackingFormValidator validator;
-  
+
+  @Mock
+  private LocationRepository locationRepository;
+
   @Test
   public void testValidateValidFormThatIsFlaggedForCounselling_shouldntGetErrors() {
     // Set up data
@@ -217,10 +226,19 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
   @Test
   public void testValidateInvalidFormWithLocationThatIsNotReferralSite_shouldReturnOneError() throws ParseException {
     // Set up data
-    LocationBackingForm locationForm = LocationBackingFormBuilder.aProcessingSiteBackingForm()
-        .withName("Referral")
+    String locationName = "Not a Referral Site";
+    Long locationId = 1L;
+
+    Location location = aLocation()
+        .withId(locationId)
+        .withName(locationName)
         .build();
-    
+
+    LocationBackingForm locationForm = LocationBackingFormBuilder.aProcessingSiteBackingForm()
+        .withId(1L)
+        .withName(locationName)
+        .build();
+
     SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
     PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
         .aPostDonationCounsellingBackingForm()
@@ -231,8 +249,9 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
         .withReferralSite(locationForm)
         .build();
 
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
+    when(locationRepository.getLocation(1L)).thenReturn(location);
 
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
     // Run test
     validator.validateForm(form, errors);
 
