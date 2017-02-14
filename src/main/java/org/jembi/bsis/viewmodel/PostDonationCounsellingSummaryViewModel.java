@@ -2,6 +2,8 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
 
+import org.jembi.bsis.model.util.Gender;
+
 public class PostDonationCounsellingSummaryViewModel {
 
   private long id;
@@ -11,7 +13,7 @@ public class PostDonationCounsellingSummaryViewModel {
   private String donorNumber;
   private String firstName;
   private String lastName;
-  private String gender;
+  private Gender gender;
   private Date birthDate;
   private String bloodAbo;
   private String bloodRh;
@@ -75,11 +77,11 @@ public class PostDonationCounsellingSummaryViewModel {
     this.lastName = lastName;
   }
 
-  public String getGender() {
+  public Gender getGender() {
     return gender;
   }
 
-  public void setGender(String gender) {
+  public void setGender(Gender gender) {
     this.gender = gender;
   }
 

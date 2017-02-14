@@ -88,13 +88,14 @@ public class PostDonationCounsellingFactory {
     Donor donor = donation.getDonor();
 
     PostDonationCounsellingSummaryViewModel viewModel = new PostDonationCounsellingSummaryViewModel();
+    viewModel.setId(postDonationCounselling.getId());
     viewModel.setCounselled(counselled);
     viewModel.setReferred(postDonationCounselling.getReferred() == true ? "Y" : "N");
     viewModel.setCounsellingDate(postDonationCounselling.getCounsellingDate());
-    viewModel.setDonorNumber(donation.getDonorNumber());
+    viewModel.setDonorNumber(donor.getDonorNumber());
     viewModel.setFirstName(donor.getFirstName());
     viewModel.setLastName(donor.getLastName());
-    viewModel.setGender(donor.getGender().name());
+    viewModel.setGender(donor.getGender());
     viewModel.setBirthDate(donor.getBirthDate());
     viewModel.setBloodAbo(donation.getBloodAbo());
     viewModel.setBloodRh(donation.getBloodRh());
