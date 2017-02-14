@@ -1,6 +1,5 @@
 package org.jembi.bsis.controller;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,15 +11,12 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.backingform.validator.PostDonationCounsellingBackingFormValidator;
-import org.jembi.bsis.controllerservice.LocationControllerService;
 import org.jembi.bsis.controllerservice.PostDonationCounsellingControllerService;
 import org.jembi.bsis.factory.DonationSummaryViewModelFactory;
-import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.utils.PermissionUtils;
-import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.DonationSummaryViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +79,7 @@ public class PostDonationCounsellingController {
     return map;
   }
 
-  @RequestMapping(value = "/search", method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
   public List<DonationSummaryViewModel> getDonationSummaries(
       @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
