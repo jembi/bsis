@@ -84,7 +84,7 @@ public class PostDonationCounsellingController {
   }
 
   @RequestMapping(method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING_DONORS + "')")
   public List<PostDonationCounsellingSummaryViewModel> getDonationSummaries(
       @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
@@ -92,20 +92,8 @@ public class PostDonationCounsellingController {
       @RequestParam(value = "venue", required = false) List<Long> venues,
       @RequestParam(value = "counsellingStatus", required = false) CounsellingStatus counsellingStatus,
       @RequestParam(value = "referred", required = false) boolean referred) {
-
-    if (flaggedForCounselling) {
-
-      if (!PermissionUtils.loggedOnUserHasPermission(PermissionConstants.VIEW_POST_DONATION_COUNSELLING_DONORS)) {
-        throw new AccessDeniedException("You do not have permission to view post donation counselling donors.");
-      }
-
-      List<PostDonationCounselling> donations = postDonationCounsellingRepository.findPostDonationCounselling(
-          startDate, endDate, venues == null ? null : new HashSet<>(venues),counsellingStatus, 
-          referred, flaggedForCounselling);
-      return postDonationCounsellingFactory.createSummaryViewModels(donations);
-    }
-
-    // Just return an empty list for now. This could return the full list of donations if needed.
-    return Collections.emptyList();
+    
+      return postDonationCounsellingControllerService.getCounsellingSummaries(startDate, endDate, 
+          venues == null ? null : new HashSet<>(venues), counsellingStatus, referred, flaggedForCounselling);
   }
 }
