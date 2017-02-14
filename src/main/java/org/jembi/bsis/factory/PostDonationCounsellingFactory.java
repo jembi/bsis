@@ -45,7 +45,9 @@ public class PostDonationCounsellingFactory {
     viewModel.setFlaggedForCounselling(postDonationCounselling.isFlaggedForCounselling());
     viewModel.setNotes(postDonationCounselling.getNotes());
     viewModel.setReferred(postDonationCounselling.getReferred());
-    viewModel.setReferralSite(locationFactory.createViewModel(postDonationCounselling.getReferralSite()));
+    if (postDonationCounselling.getReferralSite() != null) {
+      viewModel.setReferralSite(locationFactory.createViewModel(postDonationCounselling.getReferralSite()));
+    }
 
     // Populate permissions
     boolean canRemoveStatus = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(
