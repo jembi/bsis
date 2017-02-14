@@ -53,6 +53,6 @@ public class PostDonationCounsellingNamedQueryConstants {
           "AND (:referred IS NULL OR pdc.referred = :referred) " +
           "AND (:venueIds IS NULL OR pdc.donation.venue.id IN :venueIds) " +
           "AND (:counsellingStatus IS NULL OR pdc.counsellingStatus = :counsellingStatus) " +
-          "AND (:startDate IS NULL OR pdc.donation.donationDate <= :startDate) " +
+          "AND (:startDate IS NULL OR pdc.donation.donationDate >= :startDate) " +
           "AND (:endDate IS NULL OR pdc.donation.donationDate <= :endDate)";
 }

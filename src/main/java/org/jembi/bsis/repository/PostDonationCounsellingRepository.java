@@ -20,7 +20,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
   }
 
   public List<PostDonationCounselling> findPostDonationCounselling(Date startDate, Date endDate, Set<Long> venueIds, 
-      CounsellingStatus counsellingStatus, boolean referred, boolean flaggedForCounselling) {
+      CounsellingStatus counsellingStatus, Boolean referred, boolean flaggedForCounselling) {
     
     return entityManager.createNamedQuery(
         PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING,
