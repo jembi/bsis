@@ -19,7 +19,7 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
   private String notes;
   private DonationViewModel donation;
   private Map<String, Boolean> permissions;
-  private boolean referred;
+  private Boolean referred;
   
   public PostDonationCounsellingViewModelBuilder withId(long id) {
     this.id = id;
@@ -59,6 +59,11 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
   public PostDonationCounsellingViewModelBuilder withCounsellingStatusViewModel(
       CounsellingStatusViewModel counsellingStatus) {
     this.counsellingStatus = counsellingStatus;
+    return this;
+  }
+
+  public PostDonationCounsellingViewModelBuilder withReferred(Boolean referred) {
+    this.referred = referred;
     return this;
   }
 
