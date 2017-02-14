@@ -5,25 +5,32 @@ import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.DonorViewModelBuilder.aDonorViewModel;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingBackingFormBuilder.aPostDonationCounsellingBackingForm;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingBuilder.aPostDonationCounselling;
+import static org.jembi.bsis.helpers.builders.PostDonationCounsellingSummaryViewModelBuilder.aPostDonationCounsellingSummaryViewModel;
 import static org.jembi.bsis.helpers.builders.PostDonationCounsellingViewModelBuilder.aPostDonationCounsellingViewModel;
 import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingMatcher.hasSameStateAsPostDonationCounselling;
+import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingSummaryViewModelMatcher.hasSameStateAsPostDonationCounsellingSummaryViewModel;
 import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingViewModelMatcher.hasSameStateAsPostDonationCounsellingViewModel;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
+import org.jembi.bsis.helpers.builders.LocationViewModelBuilder;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.PostDonationCounsellingSummaryViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -39,6 +46,8 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   private DonationFactory donationFactory;
   @Mock
   private DonorViewModelFactory donorFactory;
+  @Mock
+  private LocationFactory locationFactory;
 
   @Test
   public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
@@ -247,5 +256,63 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     PostDonationCounselling returnedEntity = postDonationCounsellingFactory.createEntity(form);
 
     assertThat(returnedEntity, hasSameStateAsPostDonationCounselling(expectedEntity));
+  }
+
+  @Test
+  public void testCreateSummaryViewModel_shouldReturnCorrectViewModel() {
+    Donor donor = aDonor()
+        .withId(1L)
+        .withDonorNumber("123456")
+        .withBirthDate(new Date())
+        .withGender(Gender.female)
+        .withFirstName("First")
+        .withLastName("Last")
+        .build();
+    Donation donation = aDonation()
+        .withId(1L)
+        .withDonor(donor)
+        .withDonationIdentificationNumber("9000000")
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .withDonationDate(new Date())
+        .withVenue(aLocation().withId(1L).build())
+        .build();
+
+    PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
+        .withId(1L)
+        .withDonation(donation)
+        .thatIsNotFlaggedForCounselling()
+        .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
+        .withCounsellingDate(new Date())
+        .withNotes("notes")
+        .withReferred(true)
+        .build();
+    
+    LocationViewModel venueViewModel = LocationViewModelBuilder.aLocationViewModel().withId(1L).build();
+    
+    PostDonationCounsellingSummaryViewModel expectedSummary = aPostDonationCounsellingSummaryViewModel()
+        .withId(1L)
+        .withBirthDate(donor.getBirthDate())
+        .withBloodAbo(donation.getBloodAbo())
+        .withbloodRh(donation.getBloodRh())
+        .withCounselled("Y")
+        .withReferred("Y")
+        .withDonorNumber(donor.getDonorNumber())
+        .withFirstName(donor.getFirstName())
+        .withLastName(donor.getLastName())
+        .withDonationDate(donation.getDonationDate())
+        .withDonationIdentificationNumber(donation.getDonationIdentificationNumber())
+        .withCounsellingDate(postDonationCounselling.getCounsellingDate())
+        .withVenue(venueViewModel)
+        .withGender(donor.getGender())
+        .build();
+    
+    when(locationFactory.createViewModel(donation.getVenue())).thenReturn(venueViewModel);
+    
+    PostDonationCounsellingSummaryViewModel summary =
+        postDonationCounsellingFactory.createSummaryViewModel(postDonationCounselling);
+
+    assertThat(summary, hasSameStateAsPostDonationCounsellingSummaryViewModel(expectedSummary));
+
   }
 }
