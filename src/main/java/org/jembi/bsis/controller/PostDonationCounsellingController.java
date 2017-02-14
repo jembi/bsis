@@ -1,6 +1,5 @@
 package org.jembi.bsis.controller;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,18 +11,12 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.backingform.validator.PostDonationCounsellingBackingFormValidator;
 import org.jembi.bsis.controllerservice.PostDonationCounsellingControllerService;
-import org.jembi.bsis.factory.DonationSummaryViewModelFactory;
-import org.jembi.bsis.factory.PostDonationCounsellingFactory;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
-import org.jembi.bsis.model.counselling.PostDonationCounselling;
-import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.utils.PermissionUtils;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingSummaryViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -42,12 +35,6 @@ public class PostDonationCounsellingController {
   private PostDonationCounsellingControllerService postDonationCounsellingControllerService;
   @Autowired
   private PostDonationCounsellingBackingFormValidator postDonationCounsellingBackingFormValidator;
-  @Autowired
-  private PostDonationCounsellingRepository postDonationCounsellingRepository;
-  @Autowired
-  private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
-  @Autowired
-  private PostDonationCounsellingFactory postDonationCounsellingFactory;
   
   @InitBinder
   public void initBinder(WebDataBinder binder) {
