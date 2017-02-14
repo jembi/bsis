@@ -2,11 +2,17 @@ package org.jembi.bsis.backingform.validator;
 
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
+import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.repository.LocationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 @Component
 public class PostDonationCounsellingBackingFormValidator extends BaseValidator<PostDonationCounsellingBackingForm> {
+
+  @Autowired
+  private LocationRepository locationRepository;
 
   @Override
   public void validateForm(PostDonationCounsellingBackingForm form, Errors errors) {
@@ -33,9 +39,11 @@ public class PostDonationCounsellingBackingFormValidator extends BaseValidator<P
         if (form.getReferralSite() == null) {
           errors.rejectValue("referralSite", "errors.required", "Referral site is required");
         }
-        if (form.getReferralSite() !=null && !form.getReferralSite().getIsReferralSite()) {
-          errors.rejectValue("referralSite", "errors.invalid", "Location must be a referral site");
-
+        if (form.getReferralSite() != null) {
+          Location aLocation = locationRepository.getLocation(form.getReferralSite().getId());
+          if (!aLocation.getIsReferralSite()) {
+            errors.rejectValue("referralSite", "errors.invalid", "Location must be a referral site");
+          }
         }
       }
     }

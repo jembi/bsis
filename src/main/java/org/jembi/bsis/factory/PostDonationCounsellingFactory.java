@@ -10,6 +10,7 @@ import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
@@ -30,6 +31,8 @@ public class PostDonationCounsellingFactory {
   private DonorViewModelFactory donorFactory;
   @Autowired
   private LocationFactory locationFactory;
+  @Autowired
+  private LocationRepository locationRepository;
 
   public PostDonationCounsellingViewModel createViewModel(PostDonationCounselling postDonationCounselling) {
 
@@ -48,6 +51,9 @@ public class PostDonationCounsellingFactory {
     viewModel.setFlaggedForCounselling(postDonationCounselling.isFlaggedForCounselling());
     viewModel.setNotes(postDonationCounselling.getNotes());
     viewModel.setReferred(postDonationCounselling.getReferred());
+    if (postDonationCounselling.getReferralSite() != null) {
+      viewModel.setReferralSite(locationFactory.createViewModel(postDonationCounselling.getReferralSite()));
+    }
 
     // Populate permissions
     boolean canRemoveStatus = postDonationCounsellingRepository.countNotFlaggedPostDonationCounsellingsForDonor(
@@ -113,6 +119,9 @@ public class PostDonationCounsellingFactory {
     entity.setFlaggedForCounselling(form.getFlaggedForCounselling());
     entity.setNotes(form.getNotes());
     entity.setReferred(form.isReferred());
+    if (form.getReferralSite() != null) {
+      entity.setReferralSite(locationRepository.getLocation(form.getReferralSite().getId()));
+    }
     return entity;
   }
 }
