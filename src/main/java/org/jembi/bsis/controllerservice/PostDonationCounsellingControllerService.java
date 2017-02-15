@@ -65,7 +65,8 @@ public class PostDonationCounsellingControllerService {
   }
 
   public List<PostDonationCounsellingSummaryViewModel> getCounsellingSummaries(Date startDate, Date endDate,
-      Set<Long> venueIds, CounsellingStatus counsellingStatus, Boolean referred, boolean flaggedForCounselling) {
+      Set<Long> venueIds, Long counsellingStatusId, Boolean referred, boolean flaggedForCounselling) {
+    CounsellingStatus counsellingStatus = CounsellingStatus.findById(counsellingStatusId);
     List<PostDonationCounselling> counsellings = postDonationCounsellingRepository
         .findPostDonationCounselling(startDate, endDate, venueIds, counsellingStatus, referred, flaggedForCounselling);
     return postDonationCounsellingFactory.createSummaryViewModels(counsellings);

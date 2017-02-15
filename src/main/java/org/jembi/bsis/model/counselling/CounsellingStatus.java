@@ -2,19 +2,19 @@ package org.jembi.bsis.model.counselling;
 
 public enum CounsellingStatus {
 
-  RECEIVED_COUNSELLING(1, "Received Counselling"),
-  REFUSED_COUNSELLING(2, "Refused Counselling"),
-  DID_NOT_RECEIVE_COUNSELLING(3, "Did Not Receive Counselling");
+  RECEIVED_COUNSELLING(1L, "Received Counselling"),
+  REFUSED_COUNSELLING(2L, "Refused Counselling"),
+  DID_NOT_RECEIVE_COUNSELLING(3L, "Did Not Receive Counselling");
 
-  private int id;
+  private long id;
   private String label;
 
-  private CounsellingStatus(int id, String label) {
+  private CounsellingStatus(long id, String label) {
     this.id = id;
     this.label = label;
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 
@@ -22,10 +22,12 @@ public enum CounsellingStatus {
     return label;
   }
 
-  public static CounsellingStatus findById(int id) {
-    for (CounsellingStatus value : CounsellingStatus.values()) {
-      if (value.getId() == id) {
-        return value;
+  public static CounsellingStatus findById(Long id) {
+    if (id != null) {
+      for (CounsellingStatus value : CounsellingStatus.values()) {
+        if (value.getId() == id) {
+          return value;
+        }
       }
     }
     return null;

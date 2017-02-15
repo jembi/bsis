@@ -10,7 +10,7 @@ public class CounsellingStatusViewModel {
     this.counsellingStatus = counsellingStatus;
   }
 
-  public int getId() {
+  public long getId() {
     return counsellingStatus.getId();
   }
 

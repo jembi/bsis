@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.backingform.validator.PostDonationCounsellingBackingFormValidator;
 import org.jembi.bsis.controllerservice.PostDonationCounsellingControllerService;
-import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,11 +75,11 @@ public class PostDonationCounsellingController {
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
       @RequestParam(value = "venue", required = false) List<Long> venues,
-      @RequestParam(value = "counsellingStatus", required = false) CounsellingStatus counsellingStatus,
+      @RequestParam(value = "counsellingStatus", required = false) Long counsellingStatusId,
       @RequestParam(value = "referred") Boolean referred) {
     Map<String, Object> map = new HashMap<>();
     map.put("counsellings", postDonationCounsellingControllerService.getCounsellingSummaries(startDate, endDate,
-        venues == null ? null : new HashSet<>(venues), counsellingStatus, referred, flaggedForCounselling));
+        venues == null ? null : new HashSet<>(venues), counsellingStatusId, referred, flaggedForCounselling));
     return map;
   }
 }

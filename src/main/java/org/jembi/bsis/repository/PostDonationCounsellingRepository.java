@@ -1,6 +1,5 @@
 package org.jembi.bsis.repository;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +22,8 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
   public List<PostDonationCounselling> findPostDonationCounselling(Date startDate, Date endDate, Set<Long> venueIds, 
       CounsellingStatus counsellingStatus, Boolean referred, boolean flaggedForCounselling) {
     
+    String counsellingStatusName = counsellingStatus != null ? counsellingStatus.name() : null;
+    
     return entityManager.createNamedQuery(
         PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING,
         PostDonationCounselling.class)
@@ -30,7 +31,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("venueIds", venueIds)
-        .setParameter("counsellingStatus", counsellingStatus)
+        .setParameter("counsellingStatus", counsellingStatusName)
         .setParameter("referred", referred)
         .setParameter("flaggedForCounselling", flaggedForCounselling)
         .getResultList();

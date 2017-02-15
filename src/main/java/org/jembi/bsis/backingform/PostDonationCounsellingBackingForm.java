@@ -32,7 +32,7 @@ public class PostDonationCounsellingBackingForm {
     return counsellingStatus;
   }
 
-  public void setCounsellingStatus(Integer counsellingStatusId) {
+  public void setCounsellingStatus(Long counsellingStatusId) {
     if (counsellingStatusId == null) {
       return;
     }
