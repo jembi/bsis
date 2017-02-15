@@ -72,13 +72,13 @@ public class PostDonationCounsellingController {
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING_DONORS + "')")
-  public List<PostDonationCounsellingSummaryViewModel> getDonationSummaries(
-      @RequestParam(value = "flaggedForCounselling", required = true, defaultValue = "false") boolean flaggedForCounselling,
+  public List<PostDonationCounsellingSummaryViewModel> searchPostDonationCounselling(
+      @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
       @RequestParam(value = "venue", required = false) List<Long> venues,
       @RequestParam(value = "counsellingStatus", required = false) CounsellingStatus counsellingStatus,
-      @RequestParam(value = "referred", required = false, defaultValue = "false") boolean referred) {
+      @RequestParam(value = "referred") Boolean referred) {
     
       return postDonationCounsellingControllerService.getCounsellingSummaries(startDate, endDate, 
           venues == null ? null : new HashSet<>(venues), counsellingStatus, referred, flaggedForCounselling);
