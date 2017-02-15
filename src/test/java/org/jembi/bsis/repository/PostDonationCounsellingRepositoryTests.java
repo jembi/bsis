@@ -70,7 +70,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     Location firstVenue = aVenue().buildAndPersist(entityManager);
     Location secondVenue = aVenue().buildAndPersist(entityManager);
     List<Long> venues = Arrays.asList(firstVenue.getId(), secondVenue.getId());
-
+    
     aPostDonationCounselling()
         .thatIsFlaggedForCounselling()
         .thatIsNotDeleted()
@@ -210,6 +210,73 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
         startDate.toDate(), endDate.toDate(), NO_VENUES, NO_COUNSELLING_STATUS, NO_REFERRED, true);
 
     assertThat(returnedPostDonationCounsellingList.size(), is(1));
+  }
+  
+  /*@Test
+  public void testFindPostDonationCounsellingWithDonorFlaggedForCounsellingWithCounsellingStatus_shouldReturnPostDonationCounsellingWithExpectedCounsellingStatus() {
+    
+    CounsellingStatus expectedCounsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
+    CounsellingStatus filteredCounsellingStatus = CounsellingStatus.DID_NOT_RECEIVE_COUNSELLING;
+    
+    // Donation with expected counselling status
+    PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
+        .thatIsFlaggedForCounselling()
+        .thatIsNotDeleted()
+        .withCounsellingStatus(expectedCounsellingStatus)
+        .buildAndPersist(entityManager);
+
+    // Excluded by counselling status
+    aPostDonationCounselling()
+        .thatIsFlaggedForCounselling()
+        .thatIsNotDeleted()
+        .withCounsellingStatus(filteredCounsellingStatus)
+        .buildAndPersist(entityManager);
+
+    // Excluded by counselling status
+    aPostDonationCounselling()
+    .thatIsFlaggedForCounselling()
+    .thatIsNotDeleted()
+    .withCounsellingStatus(filteredCounsellingStatus)
+    .buildAndPersist(entityManager);
+    
+    List<PostDonationCounselling> expectedPostDonationCounsellingList = new ArrayList<>(Arrays.asList(expectedPostDonationCounselling));
+
+    List<PostDonationCounselling> returnedPostDonationCounsellingList = postDonationCounsellingRepository.findPostDonationCounselling(
+        NO_START_DATE, NO_END_DATE, NO_VENUES, expectedCounsellingStatus, NO_REFERRED, true);
+
+    assertThat(returnedPostDonationCounsellingList, is(expectedPostDonationCounsellingList));
+  }*/
+  
+  @Test
+  public void testFindPostDonationCounsellingWithDonorFlaggedForCounsellingWithReferred_shouldReturnPostDonationCounsellingWithReferredTrue() {
+    
+    // PostDonationCounselling referred true
+    PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
+        .thatIsFlaggedForCounselling()
+        .thatIsNotDeleted()
+        .withReferred(Boolean.TRUE)
+        .buildAndPersist(entityManager);
+
+    // Excluded by referred false
+    aPostDonationCounselling()
+        .thatIsFlaggedForCounselling()
+        .thatIsNotDeleted()
+        .withReferred(Boolean.FALSE)
+        .buildAndPersist(entityManager);
+
+    // Excluded by referred false
+    aPostDonationCounselling()
+    .thatIsFlaggedForCounselling()
+    .thatIsNotDeleted()
+    .withReferred(Boolean.FALSE)
+    .buildAndPersist(entityManager);
+    
+    List<PostDonationCounselling> expectedPostDonationCounsellingList = new ArrayList<>(Arrays.asList(expectedPostDonationCounselling));
+
+    List<PostDonationCounselling> returnedPostDonationCounsellingList = postDonationCounsellingRepository.findPostDonationCounselling(
+        NO_START_DATE, NO_END_DATE, NO_VENUES, NO_COUNSELLING_STATUS, Boolean.TRUE, true);
+
+    assertThat(returnedPostDonationCounsellingList, is(expectedPostDonationCounsellingList));
   }
 
   @Test(expected = NoResultException.class)

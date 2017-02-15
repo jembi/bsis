@@ -1,10 +1,5 @@
 package org.jembi.bsis.repository;
 
-import java.util.Date;
-import java.util.Set;
-
-import org.jembi.bsis.model.counselling.CounsellingStatus;
-
 public class PostDonationCounsellingNamedQueryConstants {
 
   public static final String NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONOR =
@@ -46,12 +41,13 @@ public class PostDonationCounsellingNamedQueryConstants {
   public static final String NAME_FIND_POST_DONATION_COUNSELLING =
       "PostDonationCounselling.findPostDonationCounselling";
   public static final String QUERY_FIND_POST_DONATION_COUNSELLING =
+      
       "SELECT pdc " +
           "FROM PostDonationCounselling pdc " +
           "WHERE pdc.isDeleted = :isDeleted " +
           "AND pdc.flaggedForCounselling = :flaggedForCounselling " +
           "AND (:referred IS NULL OR pdc.referred = :referred) " +
-          "AND (:venueIds IS NULL OR pdc.donation.venue.id IN :venueIds) " +
+          "AND ((:venueIds) IS NULL OR pdc.donation.venue.id IN (:venueIds)) " +
           "AND (:counsellingStatus IS NULL OR pdc.counsellingStatus = :counsellingStatus) " +
           "AND (:startDate IS NULL OR pdc.donation.donationDate >= :startDate) " +
           "AND (:endDate IS NULL OR pdc.donation.donationDate <= :endDate)";
