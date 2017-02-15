@@ -13,7 +13,6 @@ import org.jembi.bsis.backingform.validator.PostDonationCounsellingBackingFormVa
 import org.jembi.bsis.controllerservice.PostDonationCounsellingControllerService;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.PostDonationCounsellingSummaryViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -72,15 +71,16 @@ public class PostDonationCounsellingController {
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_POST_DONATION_COUNSELLING_DONORS + "')")
-  public List<PostDonationCounsellingSummaryViewModel> searchPostDonationCounselling(
+  public Map<String, Object> searchPostDonationCounselling(
       @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
       @RequestParam(value = "venue", required = false) List<Long> venues,
       @RequestParam(value = "counsellingStatus", required = false) CounsellingStatus counsellingStatus,
       @RequestParam(value = "referred") Boolean referred) {
-    
-      return postDonationCounsellingControllerService.getCounsellingSummaries(startDate, endDate, 
-          venues == null ? null : new HashSet<>(venues), counsellingStatus, referred, flaggedForCounselling);
+    Map<String, Object> map = new HashMap<>();
+    map.put("counsellings", postDonationCounsellingControllerService.getCounsellingSummaries(startDate, endDate,
+        venues == null ? null : new HashSet<>(venues), counsellingStatus, referred, flaggedForCounselling));
+    return map;
   }
 }
