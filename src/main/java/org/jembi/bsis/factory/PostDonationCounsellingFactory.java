@@ -103,11 +103,11 @@ public class PostDonationCounsellingFactory {
     viewModel.setLastName(donor.getLastName());
     viewModel.setGender(donor.getGender());
     viewModel.setBirthDate(donor.getBirthDate());
-    viewModel.setBloodAbo(donation.getBloodAbo());
-    viewModel.setBloodRh(donation.getBloodRh());
+    viewModel.setBloodGroup(donation.getBloodAbo() + donation.getBloodRh());
     viewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
     viewModel.setDonationDate(donation.getDonationDate());
     viewModel.setVenue(locationFactory.createViewModel(donation.getVenue()));
+    viewModel.setDonorId(donor.getId());
     return viewModel;
   }
 

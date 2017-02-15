@@ -27,8 +27,8 @@ public class PostDonationCounsellingSummaryViewModelMatcher extends TypeSafeMatc
         .appendText("\nLast Name: ").appendValue(expected.getLastName())
         .appendText("\nGender: ").appendValue(expected.getGender())
         .appendText("\nBirth Date: ").appendValue(expected.getBirthDate())
-        .appendText("\nBloodAbo: ").appendValue(expected.getBloodAbo())
-        .appendText("\nBloodRh: ").appendValue(expected.getBloodRh())
+        .appendText("\nBloodGroup: ").appendValue(expected.getBloodGroup())
+        .appendText("\nDonorId: ").appendValue(expected.getDonorId())
         .appendText("\nDIN: ").appendValue(expected.getDonationIdentificationNumber())
         .appendText("\nDonation Date: ").appendValue(expected.getDonationDate())
         .appendText("\nVenue: ").appendValue(expected.getVenue());
@@ -45,8 +45,8 @@ public class PostDonationCounsellingSummaryViewModelMatcher extends TypeSafeMatc
         Objects.equals(actual.getLastName(), expected.getLastName()) &&
         Objects.equals(actual.getGender(), expected.getGender()) &&
         Objects.equals(actual.getBirthDate(), expected.getBirthDate()) &&
-        Objects.equals(actual.getBloodAbo(), expected.getBloodAbo()) &&
-        Objects.equals(actual.getBloodRh(), expected.getBloodRh()) &&
+        Objects.equals(actual.getBloodGroup(), expected.getBloodGroup()) &&
+        Objects.equals(actual.getDonorId(), expected.getDonorId()) &&
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
         Objects.equals(actual.getVenue(), expected.getVenue());
   }

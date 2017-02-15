@@ -15,11 +15,11 @@ public class PostDonationCounsellingSummaryViewModel {
   private String lastName;
   private Gender gender;
   private Date birthDate;
-  private String bloodAbo;
-  private String bloodRh;
+  private String bloodGroup;
   private String donationIdentificationNumber;
   private Date donationDate;
   private LocationViewModel venue;
+  private long donorId;
 
   public long getId() {
     return id;
@@ -93,20 +93,12 @@ public class PostDonationCounsellingSummaryViewModel {
     this.birthDate = birthDate;
   }
 
-  public String getBloodAbo() {
-    return bloodAbo;
+  public String getBloodGroup() {
+    return bloodGroup;
   }
 
-  public void setBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
-  }
-
-  public String getBloodRh() {
-    return bloodRh;
-  }
-
-  public void setBloodRh(String bloodRh) {
-    this.bloodRh = bloodRh;
+  public void setBloodGroup(String bloodGroup) {
+    this.bloodGroup = bloodGroup;
   }
 
   public String getDonationIdentificationNumber() {
@@ -131,6 +123,14 @@ public class PostDonationCounsellingSummaryViewModel {
 
   public void setVenue(LocationViewModel venue) {
     this.venue = venue;
+  }
+
+  public long getDonorId() {
+    return donorId;
+  }
+
+  public void setDonorId(long donorId) {
+    this.donorId = donorId;
   }
 
 }

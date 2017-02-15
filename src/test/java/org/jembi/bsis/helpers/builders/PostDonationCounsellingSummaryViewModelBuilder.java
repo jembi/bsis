@@ -18,11 +18,11 @@ public class PostDonationCounsellingSummaryViewModelBuilder
   private String lastName;
   private Gender gender;
   private Date birthDate;
-  private String bloodAbo;
-  private String bloodRh;
+  private String bloodGroup;
   private String donationIdentificationNumber;
   private Date donationDate;
   private LocationViewModel venue;
+  private long donorId;
   
   public PostDonationCounsellingSummaryViewModelBuilder withId(long id) {
     this.id = id;
@@ -69,13 +69,8 @@ public class PostDonationCounsellingSummaryViewModelBuilder
     return this;
   }
 
-  public PostDonationCounsellingSummaryViewModelBuilder withBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
-    return this;
-  }
-
-  public PostDonationCounsellingSummaryViewModelBuilder withbloodRh(String bloodRh) {
-    this.bloodRh = bloodRh;
+  public PostDonationCounsellingSummaryViewModelBuilder withBloodGroup(String bloodGroup) {
+    this.bloodGroup = bloodGroup;
     return this;
   }
 
@@ -95,14 +90,18 @@ public class PostDonationCounsellingSummaryViewModelBuilder
     return this;
   }
 
+  public PostDonationCounsellingSummaryViewModelBuilder withDonorId(long donorId) {
+    this.donorId = donorId;
+    return this;
+  }
+
   @Override
   public PostDonationCounsellingSummaryViewModel build() {
     PostDonationCounsellingSummaryViewModel viewModel = new PostDonationCounsellingSummaryViewModel();
     viewModel.setId(id);
     viewModel.setCounsellingDate(counsellingDate);
     viewModel.setBirthDate(birthDate);
-    viewModel.setBloodAbo(bloodAbo);
-    viewModel.setBloodRh(bloodRh);
+    viewModel.setBloodGroup(bloodGroup);
     viewModel.setCounselled(counselled);
     viewModel.setReferred(referred);
     viewModel.setDonationDate(donationDate);
@@ -112,6 +111,7 @@ public class PostDonationCounsellingSummaryViewModelBuilder
     viewModel.setDonationIdentificationNumber(donationIdentificationNumber);
     viewModel.setVenue(venue);
     viewModel.setDonorNumber(donorNumber);
+    viewModel.setDonorId(donorId);
     return viewModel;
   }
 
