@@ -77,7 +77,7 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("orderStatus", OrderStatus.DISPATCHED)
-        .setParameter("orderType", OrderType.ISSUE)
+        .setParameter("orderTypes", OrderType.getIssueOrderTypes())
         .setParameter("orderDeleted", false)
         .getResultList();
   }
@@ -88,7 +88,7 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("orderStatus", OrderStatus.DISPATCHED)
-        .setParameter("orderType", OrderType.ISSUE)
+        .setParameter("orderTypes", OrderType.getIssueOrderTypes())
         .setParameter("orderDeleted", false)
         .getResultList();
   }
