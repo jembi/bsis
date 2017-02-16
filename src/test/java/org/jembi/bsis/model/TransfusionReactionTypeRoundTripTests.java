@@ -15,6 +15,11 @@ public class TransfusionReactionTypeRoundTripTests extends ContextDependentTestS
     aTransfusionReactionType().buildAndPersist(entityManager);
   }
 
+  @Test
+  public void testPersistValidTransfusionReactionTypeWithNoDescription_shouldPersistSuccessfully() {
+    aTransfusionReactionType().withDescription(null).buildAndPersist(entityManager);
+  }
+
   @Test(expected = ConstraintViolationException.class)
   public void testPersistTransfusionReactionTypeWithNoName_shouldThrow() {
     aTransfusionReactionType().withName(null).buildAndPersist(entityManager);
