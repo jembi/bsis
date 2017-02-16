@@ -28,6 +28,10 @@
 			<column name="id" type="BIGINT(20)" autoIncrement="true">
 				<constraints primaryKey="true" />
 			</column>
+		    <column name="REV" type="INT(11)">
+		        <constraints primaryKey="true" />
+		    </column>
+		    <column name="REVTYPE" type="TINYINT(4)"/>
 			<column name="name1" type="VARCHAR(20)" />
 			<column name="name2" type="VARCHAR(20)" />
 			<column name="dateOfBirth" type="DATE" />
