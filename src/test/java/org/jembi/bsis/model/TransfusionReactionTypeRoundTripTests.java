@@ -11,22 +11,22 @@ import org.junit.Test;
 public class TransfusionReactionTypeRoundTripTests extends ContextDependentTestSuite {
 
   @Test
-  public void testPersistValidDivision() {
+  public void testPersistValidTransfusionReactionType() {
     aTransfusionReactionType().buildAndPersist(entityManager);
   }
 
   @Test(expected = ConstraintViolationException.class)
-  public void testPersistValidTransfusionReactionTypeWithNoName_shouldThrow() {
+  public void testPersistTransfusionReactionTypeWithNoName_shouldThrow() {
     aTransfusionReactionType().withName(null).buildAndPersist(entityManager);
   }
 
   @Test(expected = ConstraintViolationException.class)
-  public void testPersistValidTransfusionReactionTypeBlankName_shouldThrow() {
+  public void testPersistTransfusionReactionTypeBlankName_shouldThrow() {
     aTransfusionReactionType().withName("").buildAndPersist(entityManager);
   }
 
   @Test(expected = PersistenceException.class)
-  public void testPersistValidTransfusionReactionTypeTooLongName_shouldThrow() {
+  public void testPersistTransfusionReactionTypeTooLongName_shouldThrow() {
     aTransfusionReactionType()
         .withName("A very long transfusion reaction type name. One that is longer than 255 characters "
             + " which is the maximum length of the transfusion reaction type. This is indeed a very long"
