@@ -64,7 +64,12 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
         errors.rejectValue("dispatchedTo", "invalid", "Invalid dispatchedTo");
       }
     }
-    
+
+    // Validate patiaent for type PATIENT_REQUEST
+    if (form.getType() == OrderType.PATIENT_REQUEST && form.getPatient() == null) {
+      errors.rejectValue("patient", "required", "patient details are required");
+    }
+
     // Validate OrderFormItems
     if (form.getItems() != null) { // it can be null if the Order has just been created
       List<OrderFormItemBackingForm> items = form.getItems();
