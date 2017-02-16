@@ -20,8 +20,8 @@
 			<column name="patientNumber" type="VARCHAR(20)" />
 			<column name="hospitalBloodBankNumber" type="VARCHAR(20)" />
 			<column name="hospitalWardNumber" type="VARCHAR(20)" />
-			<column name="bloodAbo" type="VARCHAR(50)" />
-			<column name="bloodRh" type="VARCHAR(50)" />
+			<column name="bloodAbo" type="VARCHAR(2)" />
+			<column name="bloodRh" type="VARCHAR(1)" />
 		</createTable>
 
 		<createTable tableName="Patient_AUD">
@@ -35,8 +35,8 @@
 			<column name="patientNumber" type="VARCHAR(20)" />
 			<column name="hospitalBloodBankNumber" type="VARCHAR(20)" />
 			<column name="hospitalWardNumber" type="VARCHAR(20)" />
-			<column name="bloodAbo" type="VARCHAR(50)" />
-			<column name="bloodRh" type="VARCHAR(50)" />
+			<column name="bloodAbo" type="VARCHAR(2)" />
+			<column name="bloodRh" type="VARCHAR(1)" />
 		</createTable>
 	</changeSet>
 </databaseChangeLog>

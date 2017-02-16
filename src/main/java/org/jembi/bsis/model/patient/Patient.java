@@ -38,10 +38,10 @@ public class Patient extends BaseEntity{
   @Column(length = 20)
   private String hospitalWardNumber;
 
-  @Column(length = 50)
+  @Column(length = 2)
   private String bloodAbo;
 
-  @Column(length = 50)
+  @Column(length = 1)
   private String bloodRh;
 
   public String getName1() {
