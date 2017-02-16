@@ -1,7 +1,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
- logicalFilePath="./liquibase/updates/2567-add-patients.xml">
+ logicalFilePath="./liquibase/updates/2567-add-patient-details-for-patient-request.xml">
 
 	<changeSet id="20170216-1151" author="tmvumbi2">
 		<!-- Add tables Patient and Patient_AUD -->

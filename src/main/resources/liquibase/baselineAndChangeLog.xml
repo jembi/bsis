@@ -84,5 +84,5 @@
   <include file="liquibase/updates/2123-add-edit-location-with-type-referral.xml"/>
   <include file="liquibase/updates/2121-add-referred-boolean-to-couselling.xml"/>
   <include file="liquibase/updates/2122-record-referral-site-for-TTI-POS-donor.xml"/>
-  <include file="liquibase/updates/2567-add-patients.xml"/>
+  <include file="liquibase/updates/2567-add-patient-details-for-patient-request.xml"/>
 </databaseChangeLog>
