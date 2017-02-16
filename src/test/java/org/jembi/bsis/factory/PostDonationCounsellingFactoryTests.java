@@ -37,7 +37,6 @@ import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
-import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
@@ -179,7 +178,6 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
     DonorViewModel expectedDonorViewModel = aDonorViewModel().withDonor(donor).build();
     DonationViewModel expectedDonationViewModel = aDonationViewModel().withId(donationId).build();
-    CounsellingStatusViewModel expectedCounsellingStatus = new CounsellingStatusViewModel(counsellingStatus);
 
     PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
         .withId(postDonationCounsellingId)
@@ -188,7 +186,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withPermission("canRemoveStatus", false)
         .thatIsNotFlaggedForCounselling()
         .thatIsNotReferred()
-        .withCounsellingStatusViewModel(expectedCounsellingStatus)
+        .withCounsellingStatus(counsellingStatus)
         .withCounsellingDate(counsellingDate)
         .withNotes(notes)
         .build();
@@ -227,7 +225,6 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
     DonorViewModel expectedDonorViewModel = aDonorViewModel().withDonor(donor).build();
     DonationViewModel expectedDonationViewModel = aDonationViewModel().withId(donationId).build();
-    CounsellingStatusViewModel expectedCounsellingStatus = new CounsellingStatusViewModel(counsellingStatus);
 
     PostDonationCounsellingViewModel expectedPostDonationCounsellingViewModel = aPostDonationCounsellingViewModel()
         .withId(postDonationCounsellingId)
@@ -235,7 +232,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withDonor(expectedDonorViewModel)
         .withPermission("canRemoveStatus", false)
         .thatIsNotFlaggedForCounselling()
-        .withCounsellingStatusViewModel(expectedCounsellingStatus)
+        .withCounsellingStatus(counsellingStatus)
         .withCounsellingDate(null)
         .withNotes(notes)
         .withReferred(null)

@@ -12,7 +12,6 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
-import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingSummaryViewModel;
@@ -43,9 +42,7 @@ public class PostDonationCounsellingFactory {
     viewModel.setDonation(donationViewModel);
     viewModel.setId(postDonationCounselling.getId());
     viewModel.setCounsellingDate(postDonationCounselling.getCounsellingDate());
-    if (postDonationCounselling.getCounsellingStatus() != null) {
-      viewModel.setCounsellingStatus(new CounsellingStatusViewModel(postDonationCounselling.getCounsellingStatus()));
-    }
+    viewModel.setCounsellingStatus(postDonationCounselling.getCounsellingStatus());
     DonorViewModel donorViewModel = donorFactory.createDonorViewModel(postDonationCounselling.getDonation().getDonor());
     viewModel.setDonor(donorViewModel);
     viewModel.setFlaggedForCounselling(postDonationCounselling.isFlaggedForCounselling());

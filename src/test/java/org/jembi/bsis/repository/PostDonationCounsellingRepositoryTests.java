@@ -71,17 +71,19 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     Location secondVenue = aVenue().buildAndPersist(entityManager);
     List<Long> venues = Arrays.asList(firstVenue.getId(), secondVenue.getId());
     
-    aPostDonationCounselling()
+    PostDonationCounselling one = aPostDonationCounselling()
         .thatIsFlaggedForCounselling()
         .thatIsNotDeleted()
         .withDonation(aDonation().withVenue(firstVenue).build())
         .buildAndPersist(entityManager);
 
-    aPostDonationCounselling()
+    PostDonationCounselling two = aPostDonationCounselling()
         .thatIsFlaggedForCounselling()
         .thatIsNotDeleted()
         .withDonation(aDonation().withVenue(secondVenue).build())
         .buildAndPersist(entityManager);
+
+    List<PostDonationCounselling> expectedPostDonationCounsellingList = Arrays.asList(one, two);
 
     // Excluded by venue
     aPostDonationCounselling()
@@ -95,7 +97,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     List<PostDonationCounselling> returnedDonations = postDonationCounsellingRepository.findPostDonationCounselling(
         NO_START_DATE, NO_END_DATE, new HashSet<>(venues), NO_COUNSELLING_STATUS, NO_REFERRED, true);
 
-    assertThat(returnedDonations.size(), is(2));
+    assertThat(returnedDonations, is(expectedPostDonationCounsellingList));
   }
 
   @Test

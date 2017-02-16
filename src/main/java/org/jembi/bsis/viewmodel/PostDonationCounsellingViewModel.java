@@ -3,6 +3,7 @@ package org.jembi.bsis.viewmodel;
 import java.util.Date;
 import java.util.Map;
 
+import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,7 +14,7 @@ public class PostDonationCounsellingViewModel {
 
   private boolean flaggedForCounselling;
 
-  private CounsellingStatusViewModel counsellingStatus;
+  private CounsellingStatus counsellingStatus;
 
   private Date counsellingDate;
 
@@ -54,11 +55,11 @@ public class PostDonationCounsellingViewModel {
     this.counsellingDate = counsellingDate;
   }
 
-  public CounsellingStatusViewModel getCounsellingStatus() {
+  public CounsellingStatus getCounsellingStatus() {
     return counsellingStatus;
   }
 
-  public void setCounsellingStatus(CounsellingStatusViewModel counsellingStatus) {
+  public void setCounsellingStatus(CounsellingStatus counsellingStatus) {
     this.counsellingStatus = counsellingStatus;
   }
 

@@ -1,6 +1,5 @@
 package org.jembi.bsis.controllerservice;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +13,6 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
 import org.jembi.bsis.service.PostDonationCounsellingCRUDService;
-import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingSummaryViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
@@ -56,17 +54,8 @@ public class PostDonationCounsellingControllerService {
     return locationFactory.createViewModels(locationRepository.getReferralSites());
   }
 
-  public List<CounsellingStatusViewModel> getCounsellingStatuses() {
-    List<CounsellingStatusViewModel> counsellingStatuses = new ArrayList<>();
-    for (CounsellingStatus counsellingStatus : CounsellingStatus.values()) {
-      counsellingStatuses.add(new CounsellingStatusViewModel(counsellingStatus));
-    }
-    return counsellingStatuses;
-  }
-
   public List<PostDonationCounsellingSummaryViewModel> getCounsellingSummaries(Date startDate, Date endDate,
-      Set<Long> venueIds, Long counsellingStatusId, Boolean referred, boolean flaggedForCounselling) {
-    CounsellingStatus counsellingStatus = CounsellingStatus.findById(counsellingStatusId);
+      Set<Long> venueIds, CounsellingStatus counsellingStatus, Boolean referred, boolean flaggedForCounselling) {
     List<PostDonationCounselling> counsellings = postDonationCounsellingRepository
         .findPostDonationCounselling(startDate, endDate, venueIds, counsellingStatus, referred, flaggedForCounselling);
     return postDonationCounsellingFactory.createSummaryViewModels(counsellings);
