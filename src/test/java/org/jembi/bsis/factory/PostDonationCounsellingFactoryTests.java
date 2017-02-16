@@ -18,9 +18,12 @@ import static org.jembi.bsis.helpers.builders.PostDonationCounsellingViewModelBu
 import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingMatcher.hasSameStateAsPostDonationCounselling;
 import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingSummaryViewModelMatcher.hasSameStateAsPostDonationCounsellingSummaryViewModel;
 import static org.jembi.bsis.helpers.matchers.PostDonationCounsellingViewModelMatcher.hasSameStateAsPostDonationCounsellingViewModel;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
@@ -43,10 +46,12 @@ import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 
 public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
   @InjectMocks
+  @Spy
   private PostDonationCounsellingFactory postDonationCounsellingFactory;
   @Mock
   private PostDonationCounsellingRepository postDonationCounsellingRepository;
@@ -307,6 +312,25 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     PostDonationCounselling returnedEntity = postDonationCounsellingFactory.createEntity(form);
 
     assertThat(returnedEntity, hasSameStateAsPostDonationCounselling(expectedEntity));
+  }
+
+  @Test
+  public void testCreateSummaryViewModels_shouldReturnCorrectViewModels() {
+    Donor donor = aDonor().withId(1L).build();
+    Donation donation = aDonation().withDonor(donor).build();
+    PostDonationCounselling entity1 = aPostDonationCounselling().withId(1L).withDonation(donation).build();
+    PostDonationCounselling entity2 = aPostDonationCounselling().withId(2L).withDonation(donation).build();
+    PostDonationCounselling entity3 = aPostDonationCounselling().withId(3L).withDonation(donation).build();
+
+    List<PostDonationCounselling> entities = Arrays.asList(entity1, entity2, entity3);
+
+    List<PostDonationCounsellingSummaryViewModel> viewModels =
+        postDonationCounsellingFactory.createSummaryViewModels(entities);
+
+    assertThat(viewModels.size(), is(3));
+    verify(postDonationCounsellingFactory).createSummaryViewModel(entity1);
+    verify(postDonationCounsellingFactory).createSummaryViewModel(entity2);
+    verify(postDonationCounsellingFactory).createSummaryViewModel(entity3);
   }
 
   @Test
