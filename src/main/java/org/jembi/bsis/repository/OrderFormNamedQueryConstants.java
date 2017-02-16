@@ -28,7 +28,7 @@ public class OrderFormNamedQueryConstants {
       "INNER JOIN o.components c " +
       "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
       "AND o.status = :orderStatus " +
-      "AND o.type = :orderType " +
+      "AND o.type IN (:orderTypes) " +
       "AND o.isDeleted = :orderDeleted " +
       "GROUP BY c.componentType " +
       "ORDER BY c.componentType ";

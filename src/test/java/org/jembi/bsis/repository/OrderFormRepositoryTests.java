@@ -363,7 +363,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     ComponentType firstComponentType = aComponentType().buildAndPersist(entityManager);
     ComponentType secondComponentType = aComponentType().buildAndPersist(entityManager);
     
-    // Expected, 2 first components, 1 second component
+    // Expected, 2 first components, 1 second component, ISSUE
     anOrderForm()
         .withOrderDate(startDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
@@ -373,11 +373,11 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withComponent(aComponent().withComponentType(secondComponentType).build())
         .buildAndPersist(entityManager);
 
-    // Expected, 1 first component, 1 second component
+    // Expected, 1 first component, 1 second component, PATIENT_REQUEST
     anOrderForm()
         .withOrderDate(endDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
-        .withOrderType(OrderType.ISSUE)
+        .withOrderType(OrderType.PATIENT_REQUEST)
         .withComponent(aComponent().withComponentType(firstComponentType).build())
         .withComponent(aComponent().withComponentType(secondComponentType).build())
         .buildAndPersist(entityManager);
