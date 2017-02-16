@@ -255,6 +255,12 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withOrderStatus(OrderStatus.DISPATCHED)
         .withOrderType(OrderType.ISSUE)
         .buildAndPersist(entityManager);
+
+    OrderForm order3 = OrderFormBuilder.anOrderForm()
+        .withOrderDate(startDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.PATIENT_REQUEST)
+        .buildAndPersist(entityManager);
     
     OrderFormItemBuilder.anOrderItemForm()
         .withComponentType(componentType1)
@@ -280,12 +286,18 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withOrderForm(order2)
         .buildAndPersist(entityManager);
 
+    OrderFormItemBuilder.anOrderItemForm()
+        .withComponentType(componentType1)
+        .withNumberOfUnits(2)
+        .withOrderForm(order3)
+        .buildAndPersist(entityManager);
+
     // Run test
     List<BloodUnitsOrderDTO> dtos = orderFormRepository.findBloodUnitsOrdered(startDate, endDate);
 
     // Verify
     Assert.assertEquals("Found 2 dtos", 2, dtos.size());
-    Assert.assertEquals("Correct count", 8, dtos.get(0).getCount());
+    Assert.assertEquals("Correct count", 10, dtos.get(0).getCount());
     Assert.assertEquals("Correct componentType", componentType1, dtos.get(0).getComponentType());
     Assert.assertEquals("Correct count", 7, dtos.get(1).getCount());
     Assert.assertEquals("Correct componentType", componentType2, dtos.get(1).getComponentType());

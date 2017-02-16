@@ -13,7 +13,7 @@ public class OrderFormNamedQueryConstants {
       "FROM OrderFormItem ofi, OrderForm o " +
       "WHERE ofi.orderForm = o " +
       "AND o.status = :orderStatus " +
-      "AND o.type = :orderType " +
+      "AND o.type IN (:orderTypes) " +
       "AND o.isDeleted = :orderDeleted " +
       "AND o.orderDate BETWEEN :startDate AND :endDate " +
       "GROUP BY ofi.componentType " +

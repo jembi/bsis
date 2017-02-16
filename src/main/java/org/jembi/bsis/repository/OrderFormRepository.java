@@ -1,6 +1,5 @@
 package org.jembi.bsis.repository;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("orderStatus", OrderStatus.DISPATCHED)
-        .setParameter("orderType", OrderType.ISSUE)
+        .setParameter("orderTypes", OrderType.getIssueOrderTypes())
         .setParameter("orderDeleted", false)
         .getResultList();
   }
@@ -89,7 +88,7 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("orderStatus", OrderStatus.DISPATCHED)
-        .setParameter("orderTypes", Arrays.asList(OrderType.ISSUE, OrderType.PATIENT_REQUEST))
+        .setParameter("orderTypes", OrderType.getIssueOrderTypes())
         .setParameter("orderDeleted", false)
         .getResultList();
   }

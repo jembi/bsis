@@ -1,10 +1,13 @@
 package org.jembi.bsis.model.order;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum OrderType {
   TRANSFER, ISSUE, PATIENT_REQUEST;
   
   public static boolean isIssue(OrderType orderType) {
-    if (orderType == OrderType.ISSUE || orderType == OrderType.PATIENT_REQUEST) {
+    if (OrderType.getIssueOrderTypes().contains(orderType)) {
       return true;
     }
     
@@ -17,5 +20,9 @@ public enum OrderType {
     }
 
     return false;
+  }
+
+  public static List<OrderType> getIssueOrderTypes() {
+    return Arrays.asList(OrderType.ISSUE, OrderType.PATIENT_REQUEST);
   }
 }
