@@ -21,6 +21,8 @@ public class OrderFormBackingForm {
 
   private LocationBackingForm dispatchedTo;
 
+  private PatientBackingForm patient;
+
   private OrderStatus status;
 
   private OrderType type;
@@ -92,6 +94,14 @@ public class OrderFormBackingForm {
 
   public void setComponents(List<ComponentBackingForm> components) {
     this.components = components;
+  }
+
+  public PatientBackingForm getPatient () {
+    return patient;
+  }
+
+  public void setPatient (PatientBackingForm patient) {
+    this.patient = patient;
   }
 
   @JsonIgnore
