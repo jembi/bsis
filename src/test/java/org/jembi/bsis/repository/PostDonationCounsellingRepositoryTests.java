@@ -212,7 +212,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     assertThat(returnedPostDonationCounsellingList.size(), is(1));
   }
   
-  /*@Test
+  @Test
   public void testFindPostDonationCounsellingWithDonorFlaggedForCounsellingWithCounsellingStatus_shouldReturnPostDonationCounsellingWithExpectedCounsellingStatus() {
     
     CounsellingStatus expectedCounsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
@@ -245,7 +245,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
         NO_START_DATE, NO_END_DATE, NO_VENUES, expectedCounsellingStatus, NO_REFERRED, true);
 
     assertThat(returnedPostDonationCounsellingList, is(expectedPostDonationCounsellingList));
-  }*/
+  }
   
   @Test
   public void testFindPostDonationCounsellingWithDonorFlaggedForCounsellingWithReferred_shouldReturnPostDonationCounsellingWithReferredTrue() {
