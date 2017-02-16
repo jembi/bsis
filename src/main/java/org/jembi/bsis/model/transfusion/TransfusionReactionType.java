@@ -2,14 +2,21 @@ package org.jembi.bsis.model.transfusion;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.repository.constant.TransfusionReactionTypeNamedQueryConstants;
 
 /**
  * Entity representing a Transfusion Reaction Type.
  */
+@NamedQueries({
+  @NamedQuery(name = TransfusionReactionTypeNamedQueryConstants.NAME_GET_ALL_TRANSFUSION_REACTION_TYPES,
+        query = TransfusionReactionTypeNamedQueryConstants.QUERY_GET_ALL_TRANSFUSION_REACTION_TYPES)
+})
 @Entity
 @Audited
 public class TransfusionReactionType extends BaseModificationTrackerEntity {
