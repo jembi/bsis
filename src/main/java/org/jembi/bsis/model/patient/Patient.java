@@ -14,6 +14,8 @@ import org.jembi.bsis.model.util.Gender;
 @Entity
 public class Patient extends BaseEntity{
 
+  private static final long serialVersionUID = 1L;
+
   @NotBlank
   @Column(length = 20)
   private String name1;
