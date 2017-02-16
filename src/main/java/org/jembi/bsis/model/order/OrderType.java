@@ -10,4 +10,12 @@ public enum OrderType {
     
     return false;
   }
+
+  public static boolean isTransfer(OrderType orderType) {
+    if (orderType == OrderType.TRANSFER) {
+      return true;
+    }
+
+    return false;
+  }
 }

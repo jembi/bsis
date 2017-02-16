@@ -17,5 +17,18 @@ public class OrderTypeTests {
   @Test
   public void testIsIssueWithTransferOrderType_shouldReturnFalse() {
     assertThat(OrderType.isIssue(OrderType.TRANSFER), is(false));
+    assertThat(OrderType.isIssue(null), is(false));
+  }
+
+  @Test
+  public void testIsTransferWithIssueAndPatientRequestOrderTpes_shouldReturnFalse() {
+    assertThat(OrderType.isTransfer(OrderType.ISSUE), is(false));
+    assertThat(OrderType.isTransfer(OrderType.PATIENT_REQUEST), is(false));
+    assertThat(OrderType.isTransfer(null), is(false));
+  }
+
+  @Test
+  public void testIsTransferWithTransferOrderType_shouldReturnTrue() {
+    assertThat(OrderType.isTransfer(OrderType.TRANSFER), is(true));
   }
 }
