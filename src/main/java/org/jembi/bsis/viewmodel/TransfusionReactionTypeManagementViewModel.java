@@ -2,7 +2,7 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.Objects;
 
-public class TransfusionReactionTypeFullViewModel extends TransfusionReactionTypeViewModel {
+public class TransfusionReactionTypeManagementViewModel extends TransfusionReactionTypeViewModel {
 
   private String description;
 
@@ -17,11 +17,11 @@ public class TransfusionReactionTypeFullViewModel extends TransfusionReactionTyp
   @Override
   public boolean equals(Object other) {
 
-    if (!(other instanceof TransfusionReactionTypeFullViewModel)) {
+    if (!(other instanceof TransfusionReactionTypeManagementViewModel)) {
       return false;
     }
     // FIXME: use super method to remove duplicate code.
-    TransfusionReactionTypeFullViewModel otherViewModel = (TransfusionReactionTypeFullViewModel) other;
+    TransfusionReactionTypeManagementViewModel otherViewModel = (TransfusionReactionTypeManagementViewModel) other;
     return Objects.equals(otherViewModel.getId(), getId()) 
         && Objects.equals(otherViewModel.getName(), getName())
         && Objects.equals(otherViewModel.getIsDeleted(), getIsDeleted())
