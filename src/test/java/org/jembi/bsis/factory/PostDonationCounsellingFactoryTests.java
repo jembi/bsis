@@ -1,6 +1,8 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
@@ -362,5 +364,124 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         postDonationCounsellingFactory.createSummaryViewModel(postDonationCounselling);
 
     assertThat(summary, hasSameStateAsPostDonationCounsellingSummaryViewModel(expectedSummary));
+  }
+  
+  @Test
+  public void testCreateSummaryViewModelWhereReferredIsNull_shouldSetReferredToEmpty() {
+
+    Donor donor = aDonor().withId(1L).build();
+    Donation donation = aDonation().withDonor(donor).build();
+    PostDonationCounselling counselling = aPostDonationCounselling()
+        .withId(1L)
+        .withDonation(donation)
+        .withReferred(null)
+        .build();
+
+    PostDonationCounsellingSummaryViewModel summary =
+        postDonationCounsellingFactory.createSummaryViewModel(counselling);
+
+    assertThat(summary.getReferred(), isEmptyString());
+  }
+
+  @Test
+  public void testCreateSummaryViewModelWhereReferredIsTrue_shouldSetReferredToY() {
+
+    Donor donor = aDonor().withId(1L).build();
+    Donation donation = aDonation().withDonor(donor).build();
+    PostDonationCounselling counselling = aPostDonationCounselling()
+        .withId(1L)
+        .withDonation(donation)
+        .withReferred(true)
+        .build();
+
+    PostDonationCounsellingSummaryViewModel summary =
+        postDonationCounsellingFactory.createSummaryViewModel(counselling);
+
+    assertThat(summary.getReferred(), is("Y"));
+  }
+  
+  @Test
+  public void testCreateSummaryViewModelWhereReferredIsFalse_shouldSetReferredToN() {
+
+    Donor donor = aDonor().withId(1L).build();
+    Donation donation = aDonation().withDonor(donor).build();
+    PostDonationCounselling counselling = aPostDonationCounselling()
+        .withId(1L)
+        .withDonation(donation)
+        .withReferred(false)
+        .build();
+
+    PostDonationCounsellingSummaryViewModel summary =
+        postDonationCounsellingFactory.createSummaryViewModel(counselling);
+
+    assertThat(summary.getReferred(), is("N"));
+  }
+  
+  @Test
+  public void testCreateSummaryViewModelWhereStatusIsNull_shouldSetCouselledToEmpty() {
+
+    Donor donor = aDonor().withId(1L).build();
+    Donation donation = aDonation().withDonor(donor).build();
+    PostDonationCounselling counselling = aPostDonationCounselling()
+        .withId(1L)
+        .withDonation(donation)
+        .withCounsellingStatus(null)
+        .build();
+
+    PostDonationCounsellingSummaryViewModel summary =
+        postDonationCounsellingFactory.createSummaryViewModel(counselling);
+
+    assertThat(summary.getReferred(), isEmptyString());
+  }
+  
+  @Test
+  public void testCreateSummaryViewModelWhereStatusIsReceivedCounselling_shouldSetCouselledToY() {
+
+    Donor donor = aDonor().withId(1L).build();
+    Donation donation = aDonation().withDonor(donor).build();
+    PostDonationCounselling counselling = aPostDonationCounselling()
+        .withId(1L)
+        .withDonation(donation)
+        .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
+        .build();
+
+    PostDonationCounsellingSummaryViewModel summary =
+        postDonationCounsellingFactory.createSummaryViewModel(counselling);
+
+    assertThat(summary.getCounselled(), is("Y"));
+  }
+  
+  @Test
+  public void testCreateSummaryViewModelWhereStatusIsRefusedCounselling_shouldSetCouselledToR() {
+
+    Donor donor = aDonor().withId(1L).build();
+    Donation donation = aDonation().withDonor(donor).build();
+    PostDonationCounselling counselling = aPostDonationCounselling()
+        .withId(1L)
+        .withDonation(donation)
+        .withCounsellingStatus(CounsellingStatus.REFUSED_COUNSELLING)
+        .build();
+
+    PostDonationCounsellingSummaryViewModel summary =
+        postDonationCounsellingFactory.createSummaryViewModel(counselling);
+
+    assertThat(summary.getCounselled(), is("R"));
+  }
+  
+  @Test
+  public void testCreateSummaryViewModelWhereStatusIsDidNotReceiveCounselling_shouldSetCouselledToN() {
+
+    Donor donor = aDonor().withId(1L).build();
+    Donation donation = aDonation().withDonor(donor).build();
+    PostDonationCounselling counselling = aPostDonationCounselling()
+        .withId(1L)
+        .withDonation(donation)
+        .withCounsellingStatus(CounsellingStatus.DID_NOT_RECEIVE_COUNSELLING)
+        .build();
+
+    PostDonationCounsellingSummaryViewModel summary =
+        postDonationCounsellingFactory.createSummaryViewModel(counselling);
+
+    assertThat(summary.getCounselled(), is("N"));
   }
 }
