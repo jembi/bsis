@@ -9,6 +9,7 @@ import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
       try {
         dispatchedFrom = locationRepository.getLocation(form.getDispatchedFrom().getId());
         if (!dispatchedFrom.getIsDistributionSite()) {
-          errors.rejectValue("dispatchedFrom", "invalid", "dispatchedFrom must be a distribution site");
+          errors.rejectValue("dispatchedFrom", "invalidType", "dispatchedFrom must be a distribution site");
         }
       } catch (NoResultException e) {
         errors.rejectValue("dispatchedFrom", "invalid", "Invalid dispatchedFrom");
@@ -47,11 +48,17 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
     // Validate dispatchedTo
     if (form.getDispatchedTo() == null || form.getDispatchedTo().getId() == null) {
       errors.rejectValue("dispatchedTo", "required", "dispatchedTo is required");
-    } else {
+    } else if (form.getType() != null) {
       try {
         Location dispatchedTo = locationRepository.getLocation(form.getDispatchedTo().getId());
-        if (!dispatchedTo.getIsDistributionSite() && !dispatchedTo.getIsUsageSite()) {
-          errors.rejectValue("dispatchedTo", "invalid", "dispatchedTo must be a distribution or usage site");
+        if (OrderType.isIssue(form.getType())) {
+          if (!dispatchedTo.getIsUsageSite()) {
+            errors.rejectValue("dispatchedTo", "invalidType", "dispatchedTo must be a usage site");
+          }
+        } else {
+          if (!dispatchedTo.getIsDistributionSite()) {
+            errors.rejectValue("dispatchedTo", "invalidType", "dispatchedTo must be a distribution site");
+          }
         }
       } catch (NoResultException e) {
         errors.rejectValue("dispatchedTo", "invalid", "Invalid dispatchedTo");
@@ -98,10 +105,10 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
       } else {
 
         if (dispatchedFrom != null && !component.getLocation().equals(dispatchedFrom)) {
-          errors.rejectValue("location", "invalid location", "component doesn't exist in " + dispatchedFrom.getName());
+          errors.rejectValue("location", "invalid", "component doesn't exist in " + dispatchedFrom.getName());
         }
         if (!component.getInventoryStatus().equals(InventoryStatus.IN_STOCK)) {
-          errors.rejectValue("inventoryStatus", "invalid inventory status", "component inventory status must be IN_STOCK");
+          errors.rejectValue("inventoryStatus", "invalid", "component inventory status must be IN_STOCK");
         }
       }
     }
