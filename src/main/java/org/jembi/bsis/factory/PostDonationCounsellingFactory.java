@@ -89,6 +89,11 @@ public class PostDonationCounsellingFactory {
         counselled = "N";
       }
     }
+    
+    String referred = "";
+    if (postDonationCounselling.getReferred() != null) {
+      referred = postDonationCounselling.getReferred() == true ? "Y" : "N";
+    }
 
     Donation donation = postDonationCounselling.getDonation();
     Donor donor = donation.getDonor();
@@ -96,7 +101,7 @@ public class PostDonationCounsellingFactory {
     PostDonationCounsellingSummaryViewModel viewModel = new PostDonationCounsellingSummaryViewModel();
     viewModel.setId(postDonationCounselling.getId());
     viewModel.setCounselled(counselled);
-    viewModel.setReferred(postDonationCounselling.getReferred() == true ? "Y" : "N");
+    viewModel.setReferred(referred);
     viewModel.setCounsellingDate(postDonationCounselling.getCounsellingDate());
     viewModel.setDonorNumber(donor.getDonorNumber());
     viewModel.setFirstName(donor.getFirstName());
