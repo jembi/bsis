@@ -2,9 +2,8 @@ package org.jembi.bsis.controller;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -74,12 +73,12 @@ public class PostDonationCounsellingController {
       @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
-      @RequestParam(value = "venue", required = false) List<Long> venues,
+      @RequestParam(value = "venue", required = false) Set<Long> venues,
       @RequestParam(value = "counsellingStatus", required = false) Long counsellingStatusId,
-      @RequestParam(value = "referred") Boolean referred) {
+      @RequestParam(value = "referred", required = false) Boolean referred) {
     Map<String, Object> map = new HashMap<>();
     map.put("counsellings", postDonationCounsellingControllerService.getCounsellingSummaries(startDate, endDate,
-        venues == null ? null : new HashSet<>(venues), counsellingStatusId, referred, flaggedForCounselling));
+        venues, counsellingStatusId, referred, flaggedForCounselling));
     return map;
   }
 }
