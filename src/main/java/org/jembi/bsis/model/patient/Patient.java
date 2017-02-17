@@ -7,12 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
 import org.jembi.bsis.model.BaseEntity;
 import org.jembi.bsis.model.util.Gender;
 
 @Entity
-public class Patient extends BaseEntity{
+@Audited
+public class Patient extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 

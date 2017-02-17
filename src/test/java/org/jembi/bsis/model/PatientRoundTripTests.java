@@ -23,7 +23,7 @@ public class PatientRoundTripTests extends ContextDependentTestSuite {
       .withName1(null)
       .withName2("name2")
       .buildAndPersist(entityManager);
-  }  
+  }
 
   @Test(expected = ConstraintViolationException.class)
   public void testPersistWithoutName2_shouldThrow() {
@@ -31,6 +31,6 @@ public class PatientRoundTripTests extends ContextDependentTestSuite {
       .withName1("name1")
       .withName2(null)
       .buildAndPersist(entityManager);
-  }  
+  }
 
 }
