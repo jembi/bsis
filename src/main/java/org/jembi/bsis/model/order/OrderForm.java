@@ -66,7 +66,7 @@ public class OrderForm extends BaseModificationTrackerEntity {
   @JoinTable(name = "OrderForm_Component", joinColumns = {@JoinColumn(name = "orderForm_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "component_id", referencedColumnName = "id")})
   private List<Component> components = new ArrayList<Component>();
 
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, cascade = {CascadeType.ALL})
   private Patient patient;
 
   public Date getOrderDate() {
