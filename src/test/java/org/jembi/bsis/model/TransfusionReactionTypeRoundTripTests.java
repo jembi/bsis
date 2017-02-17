@@ -31,6 +31,12 @@ public class TransfusionReactionTypeRoundTripTests extends ContextDependentTestS
   }
 
   @Test(expected = PersistenceException.class)
+  public void testPersistTransfusionReactionTypeWithNonUniqueName_shouldThrow() {
+    aTransfusionReactionType().withName("Same").buildAndPersist(entityManager);
+    aTransfusionReactionType().withName("Same").buildAndPersist(entityManager);
+  }
+
+  @Test(expected = PersistenceException.class)
   public void testPersistTransfusionReactionTypeTooLongName_shouldThrow() {
     aTransfusionReactionType()
         .withName("A very long transfusion reaction type name. One that is longer than 255 characters "
