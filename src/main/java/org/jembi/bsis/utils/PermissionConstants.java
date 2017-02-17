@@ -121,6 +121,7 @@ public class PermissionConstants {
   public static final String MANAGE_BLOOD_TESTS = "Manage Blood Tests";
   public static final String MANAGE_REQUESTS = "Manage Requests";
   public static final String MANAGE_GENERAL_CONFIGS = "Manage General Configs";
+  public static final String MANAGE_TRANSFUSION_REACTION_TYPES = "Manage Transfusion Reaction Types";
 
   //Page Control Permissions
   public static final String VIEW_DONOR_INFORMATION = "View Donor Information";
