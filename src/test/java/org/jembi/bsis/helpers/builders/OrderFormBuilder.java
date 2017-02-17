@@ -29,7 +29,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   private List<OrderFormItem> items = new ArrayList<>();
   private Date createdDate;
   private List<Component> components = new ArrayList<>();
-  private Patient patient = aPatient().build();
+  private Patient patient;
 
   public OrderFormBuilder withId(Long id) {
     this.id = id;
