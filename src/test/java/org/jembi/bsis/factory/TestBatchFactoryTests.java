@@ -3,6 +3,7 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aTestingSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
@@ -22,9 +23,13 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
+import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
+import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.DonationTestOutcomesReportViewModelBuilder;
 import org.jembi.bsis.helpers.builders.DonorBuilder;
 import org.jembi.bsis.helpers.builders.PackTypeBuilder;
+import org.jembi.bsis.helpers.builders.TestBatchBuilder;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
@@ -42,9 +47,11 @@ import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DonationBatchFullViewModel;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
+import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -72,6 +79,8 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   private DonationBatchRepository donationBatchRepository;
   @Mock
   private LocationRepository locationRepository;
+  @Mock
+  private DonationFactory donationFactory;
 
   private DonationBatch createDonationBatch() {
     PackType packType = PackTypeBuilder.aPackType().withTestSampleProduced(true).build();
@@ -489,4 +498,38 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
   }
   
+  @Test
+  public void testCreateDonationViewModels_shouldReturnOnlyAmbiguous() {
+
+    Donation d1 = DonationBuilder.aDonation().withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS).build();
+    Donation d2 = DonationBuilder.aDonation().withBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED).build();
+    Donation d3 = DonationBuilder.aDonation().withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS).build();
+    Donation d4 = DonationBuilder.aDonation().withBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED).build();
+
+    DonationViewModel d1ViewModel =
+        aDonationViewModel().withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS).build();
+    DonationViewModel d3ViewModel =
+        aDonationViewModel().withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS).build();
+
+    ArrayList<Donation> donations1 = new ArrayList<Donation>();
+    donations1.add(d1);
+    donations1.add(d2);
+    ArrayList<Donation> donations2 = new ArrayList<Donation>();
+    donations2.add(d3);
+    donations2.add(d4);
+    DonationBatch donationBatch1 = DonationBatchBuilder.aDonationBatch().withDonations(donations1).build();
+    DonationBatch donationBatch2 = DonationBatchBuilder.aDonationBatch().withDonations(donations2).build();
+    TestBatch testBatch =
+        TestBatchBuilder.aTestBatch().withDonationBatch(donationBatch1).withDonationBatch(donationBatch2).build();
+    
+    when(donationFactory.createDonationViewModelWithoutPermissions(d1)).thenReturn(d1ViewModel);
+    when(donationFactory.createDonationViewModelWithoutPermissions(d3)).thenReturn(d3ViewModel);
+    
+    List<DonationViewModel> donationModels =
+        testBatchFactory.createDonationViewModels(testBatch, BloodTypingMatchStatus.AMBIGUOUS);
+
+    Assert.assertTrue("2 ambiguous donations on the test batch", donationModels.size() == 2);
+
+  }
+
 }

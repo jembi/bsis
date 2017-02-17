@@ -103,7 +103,7 @@ public class DonationFactory {
     donationViewModel.setBloodPressureDiastolic(donation.getBloodPressureDiastolic());
     donationViewModel.setBleedStartTime(donation.getBleedStartTime());
     donationViewModel.setBleedEndTime(donation.getBleedEndTime());
-    donationViewModel.setVenue(locationFactory.createFullViewModel(donation.getVenue()));
+    donationViewModel.setVenue(locationFactory.createViewModel(donation.getVenue()));
     donationViewModel.setReleased(donation.isReleased());
 
     if (donation.getAdverseEvent() != null) {
