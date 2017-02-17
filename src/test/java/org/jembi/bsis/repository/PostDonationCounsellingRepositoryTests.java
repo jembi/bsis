@@ -219,6 +219,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
   public void testFindPostDonationCounsellingWithCounsellingStatus_shouldReturnPostDonationCounsellingWithExpectedCounsellingStatus() {
     
     CounsellingStatus expectedCounsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
+    CounsellingStatus filteredCounsellingStatus = CounsellingStatus.DID_NOT_RECEIVE_COUNSELLING;
     
     // Donation with expected counselling status
     PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
@@ -231,15 +232,8 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     aPostDonationCounselling()
         .thatIsFlaggedForCounselling()
         .thatIsNotDeleted()
-        .withCounsellingStatus(NO_COUNSELLING_STATUS)
+        .withCounsellingStatus(filteredCounsellingStatus)
         .buildAndPersist(entityManager);
-
-    // Excluded by counselling status
-    aPostDonationCounselling()
-    .thatIsFlaggedForCounselling()
-    .thatIsNotDeleted()
-    .withCounsellingStatus(NO_COUNSELLING_STATUS)
-    .buildAndPersist(entityManager);
     
     List<PostDonationCounselling> expectedPostDonationCounsellingList = new ArrayList<>(Arrays.asList(expectedPostDonationCounselling));
 
