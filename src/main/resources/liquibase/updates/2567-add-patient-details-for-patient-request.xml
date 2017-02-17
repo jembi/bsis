@@ -52,7 +52,7 @@
       </column>
     </addColumn>
     <addColumn tableName="OrderForm_AUD">
-      <column name="patient_id" type="BIGINT(20)" defaultValue="NULL" />
+      <column name="patient_id" type="BIGINT(20)" />
     </addColumn>
   </changeSet>
 </databaseChangeLog>
