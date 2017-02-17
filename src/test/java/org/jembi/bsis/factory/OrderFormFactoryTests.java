@@ -1,8 +1,8 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aDistributionSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
@@ -13,6 +13,9 @@ import static org.jembi.bsis.helpers.builders.OrderFormItemBackingFormBuilder.an
 import static org.jembi.bsis.helpers.builders.OrderFormItemBuilder.anOrderItemForm;
 import static org.jembi.bsis.helpers.builders.OrderFormItemViewModelBuilder.anOrderFormItemViewModel;
 import static org.jembi.bsis.helpers.builders.OrderFormViewModelBuilder.anOrderFormViewModel;
+import static org.jembi.bsis.helpers.builders.PatientBackingFormBuilder.aPatientBackingForm;
+import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
+import static org.jembi.bsis.helpers.builders.PatientViewModelBuilder.aPatientViewModel;
 import static org.jembi.bsis.helpers.matchers.OrderFormFullViewModelMatcher.hasSameStateAsOrderFormFullViewModel;
 import static org.jembi.bsis.helpers.matchers.OrderFormMatcher.hasSameStateAsOrderForm;
 import static org.jembi.bsis.helpers.matchers.OrderFormViewModelMatcher.hasSameStateAsOrderFormViewModel;
@@ -26,33 +29,29 @@ import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
-import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder;
+import org.jembi.bsis.helpers.builders.PatientBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.model.order.OrderFormItem;
 import org.jembi.bsis.model.order.OrderType;
-import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.OrderFormConstraintChecker;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormItemViewModel;
 import org.jembi.bsis.viewmodel.OrderFormViewModel;
-import org.jembi.bsis.viewmodel.PatientViewModel;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public class OrderFormFactoryTests {
+public class OrderFormFactoryTests extends UnitTestSuite {
 
   @InjectMocks
   private OrderFormFactory orderFormFactory;
@@ -109,7 +108,6 @@ public class OrderFormFactoryTests {
     // Setup mock
     when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
     when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
-    when(patientFactory.createEntity(new PatientBackingForm())).thenReturn(new Patient());
 
     OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);
    
@@ -139,7 +137,6 @@ public class OrderFormFactoryTests {
     // Setup mock
     when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
     when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
-    when(patientFactory.createEntity(new PatientBackingForm())).thenReturn(new Patient());
     when(orderFormItemFactory.createEntity(Mockito.any(OrderForm.class), Mockito.any(OrderFormItemBackingForm.class)))
       .thenReturn(expectedItem1);
 
@@ -239,7 +236,6 @@ public class OrderFormFactoryTests {
     when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
     when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
     when(componentRepository.findComponent(1L)).thenReturn(expectedComponent);
-    when(patientFactory.createEntity(new PatientBackingForm())).thenReturn(new Patient());
 
     OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);
 
@@ -300,7 +296,6 @@ public class OrderFormFactoryTests {
     // Setup mock
     when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
     when(locationFactory.createFullViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
-    when(patientFactory.createViewModel(new Patient())).thenReturn(new PatientViewModel());
 
     OrderFormViewModel convertedViewModel = orderFormFactory.createViewModel(entity);
 
@@ -317,8 +312,6 @@ public class OrderFormFactoryTests {
     OrderFormViewModel expectedViewModel1 = anOrderFormViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
-        .withOrderType(OrderType.PATIENT_REQUEST)
-        .withPatient(new PatientViewModel())
         .withOrderDate(orderDate1).withId(1L).build();
     
     OrderFormViewModel expectedViewModel2 = anOrderFormViewModel()
@@ -329,7 +322,8 @@ public class OrderFormFactoryTests {
     OrderForm entity1 = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
-        .withOrderDate(orderDate1).withId(1L).build();
+        .withOrderDate(orderDate1).withId(1L)
+        .withPatient(PatientBuilder.aPatient().build()).build();
     
     OrderForm entity2 = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
@@ -345,5 +339,59 @@ public class OrderFormFactoryTests {
     assertThat("2 OrderFormViewModels returned", convertedViewModels.size() == 2);
     assertThat(convertedViewModels.get(0), hasSameStateAsOrderFormViewModel(expectedViewModel1));
     assertThat(convertedViewModels.get(1), hasSameStateAsOrderFormViewModel(expectedViewModel2));
+  }
+  
+  @Test
+  public void testConvertPatientRequestEntitiesToOrderFormViewModel_shouldReturnExpectedViewModel() {
+    Location dispatchedFrom = getBaseDispatchedFromLocation();
+    Location dispatchedTo = getBaseDispatchedToLocation();
+    Date orderDate1 = new Date();
+
+    OrderFormViewModel expectedViewModel =
+        anOrderFormViewModel()
+        .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
+        .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
+        .withOrderType(OrderType.PATIENT_REQUEST)
+        .withPatient(aPatientViewModel().withId(1L).build())
+        .withOrderDate(orderDate1).withId(1L).build();
+
+    OrderForm entity = anOrderForm()
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .withOrderDate(orderDate1).withId(1L)
+        .withOrderType(OrderType.PATIENT_REQUEST)
+        .withPatient(aPatient().withId(1L).build()).build();
+    
+    // Setup mock
+    when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
+    when(locationFactory.createFullViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
+    when(patientFactory.createViewModel(entity.getPatient())).thenReturn(expectedViewModel.getPatient());
+
+    OrderFormViewModel convertedViewModel = orderFormFactory.createViewModel(entity);
+
+    assertThat(convertedViewModel, hasSameStateAsOrderFormViewModel(expectedViewModel));
+  }
+  
+  @Test
+  public void testConvertPatientRequestOrderFormBackingFormToOrderFormEntity_shouldReturnExpectedEntity() {
+    Location dispatchedFrom = getBaseDispatchedFromLocation();
+    Location dispatchedTo = getBaseDispatchedToLocation();
+    Date orderDate = new Date();
+
+    OrderForm expectedEntity = anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
+        .withOrderDate(orderDate).build();
+    
+    OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(getBaseDispatchedFromLocationBackingForm())
+        .withDispatchedTo(getBaseDispatchedToLocationBackingForm()).withOrderDate(orderDate)
+        .withPatient(aPatientBackingForm().build()).build();
+
+    // Setup mock
+    when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
+    when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
+    when(patientFactory.createEntity(backingForm.getPatient())).thenReturn(aPatient().build());
+
+    OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);
+   
+    assertThat(convertedEntity, hasSameStateAsOrderForm(expectedEntity));
   }
 }

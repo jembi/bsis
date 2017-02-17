@@ -61,6 +61,7 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
     viewModel.setOrderDate(orderDate);
     viewModel.setStatus(status);
     viewModel.setType(type);
+    viewModel.setPatient(patient);
     return viewModel;
   }
 
