@@ -32,15 +32,18 @@
             	<constraints nullable="false" />
             </column>
             <column name="isDeleted" type="tinyint(1)"/>
-			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdDate" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
 			<column name="createdBy_id" type="BIGINT(20)">
-				<constraints foreignKeyName="fk_Transfusion_createdBy" references="User(id)" />
+				<constraints foreignKeyName="fk_Transfusion_createdBy" references="User(id)" nullable="false"  />
 			</column>
 			<column name="lastUpdated" type="TIMESTAMP" />
 			<column name="lastUpdatedBy_id" type="BIGINT(20)">
 				<constraints foreignKeyName="fk_Transfusion_lastUpdatedBy" references="User(id)" />
 			</column>
         </createTable>
+        
         <createTable tableName="Transfusion_AUD">
             <column name="id" type="BIGINT(20)" autoIncrement="true">
                 <constraints primaryKey="true"  />
