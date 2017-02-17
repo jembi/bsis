@@ -132,4 +132,12 @@ public class OrderForm extends BaseModificationTrackerEntity {
   public void setComponents(List<Component> components) {
     this.components = components;
   }
+
+  public Patient getPatient() {
+    return patient;
+  }
+
+  public void setPatient(Patient patient) {
+    this.patient = patient;
+  }
 }
