@@ -44,7 +44,7 @@ public class TransfusionReactionTypeManagementViewModelBuilder extends AbstractB
     return viewModel;
   }
 
-  public static TransfusionReactionTypeManagementViewModelBuilder aTransfusionReactionTypeFullViewModel() {
+  public static TransfusionReactionTypeManagementViewModelBuilder aTransfusionReactionTypeManagementViewModel() {
     return new TransfusionReactionTypeManagementViewModelBuilder();
   }
 

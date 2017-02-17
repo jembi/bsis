@@ -6,7 +6,7 @@ public class TransfusionReactionTypeViewModel {
 
   private long id;
   private String name;
-  private boolean isDeleted;
+  private boolean isDeleted = false;
 
   public long getId() {
     return id;
