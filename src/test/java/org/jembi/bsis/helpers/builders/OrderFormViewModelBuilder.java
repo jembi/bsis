@@ -6,6 +6,7 @@ import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormViewModel;
+import org.jembi.bsis.viewmodel.PatientViewModel;
 
 public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewModel> {
 
@@ -13,6 +14,7 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
   private Date orderDate;
   private LocationFullViewModel dispatchedFrom;
   private LocationFullViewModel dispatchedTo;
+  private PatientViewModel patient;
   private OrderStatus status = OrderStatus.CREATED;
   private OrderType type = OrderType.ISSUE;
 
@@ -33,6 +35,11 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
 
   public OrderFormViewModelBuilder withDispatchedTo(LocationFullViewModel dispatchedTo) {
     this.dispatchedTo = dispatchedTo;
+    return this;
+  }
+
+  public OrderFormViewModelBuilder withPatient(PatientViewModel patient) {
+    this.patient = patient;
     return this;
   }
 

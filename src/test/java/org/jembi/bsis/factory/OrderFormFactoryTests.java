@@ -26,12 +26,15 @@ import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
+import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.model.order.OrderFormItem;
+import org.jembi.bsis.model.order.OrderType;
+import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.OrderFormConstraintChecker;
@@ -40,6 +43,7 @@ import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormItemViewModel;
 import org.jembi.bsis.viewmodel.OrderFormViewModel;
+import org.jembi.bsis.viewmodel.PatientViewModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -64,6 +68,9 @@ public class OrderFormFactoryTests {
   
   @Mock
   private LocationFactory locationFactory;
+
+  @Mock
+  private PatientFactory patientFactory;
 
   @Mock
   private ComponentRepository componentRepository;
@@ -102,6 +109,7 @@ public class OrderFormFactoryTests {
     // Setup mock
     when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
     when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
+    when(patientFactory.createEntity(new PatientBackingForm())).thenReturn(new Patient());
 
     OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);
    
@@ -131,6 +139,7 @@ public class OrderFormFactoryTests {
     // Setup mock
     when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
     when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
+    when(patientFactory.createEntity(new PatientBackingForm())).thenReturn(new Patient());
     when(orderFormItemFactory.createEntity(Mockito.any(OrderForm.class), Mockito.any(OrderFormItemBackingForm.class)))
       .thenReturn(expectedItem1);
 
@@ -230,6 +239,7 @@ public class OrderFormFactoryTests {
     when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
     when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
     when(componentRepository.findComponent(1L)).thenReturn(expectedComponent);
+    when(patientFactory.createEntity(new PatientBackingForm())).thenReturn(new Patient());
 
     OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);
 
@@ -290,6 +300,7 @@ public class OrderFormFactoryTests {
     // Setup mock
     when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
     when(locationFactory.createFullViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
+    when(patientFactory.createViewModel(new Patient())).thenReturn(new PatientViewModel());
 
     OrderFormViewModel convertedViewModel = orderFormFactory.createViewModel(entity);
 
@@ -306,6 +317,8 @@ public class OrderFormFactoryTests {
     OrderFormViewModel expectedViewModel1 = anOrderFormViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
+        .withOrderType(OrderType.PATIENT_REQUEST)
+        .withPatient(new PatientViewModel())
         .withOrderDate(orderDate1).withId(1L).build();
     
     OrderFormViewModel expectedViewModel2 = anOrderFormViewModel()

@@ -16,6 +16,8 @@ public class OrderFormViewModel extends BaseViewModel {
 
   private LocationFullViewModel dispatchedTo;
 
+  private PatientViewModel patient;
+
   private OrderStatus status;
 
   private OrderType type;
@@ -43,6 +45,14 @@ public class OrderFormViewModel extends BaseViewModel {
 
   public void setDispatchedTo(LocationFullViewModel dispatchedTo) {
     this.dispatchedTo = dispatchedTo;
+  }
+
+  public PatientViewModel getPatient () {
+    return patient;
+  }
+
+  public void setPatient (PatientViewModel patient) {
+    this.patient = patient;
   }
 
   public OrderStatus getStatus() {

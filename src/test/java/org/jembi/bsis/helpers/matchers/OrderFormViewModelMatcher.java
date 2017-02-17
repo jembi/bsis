@@ -20,7 +20,8 @@ public class OrderFormViewModelMatcher extends TypeSafeMatcher<OrderFormViewMode
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nOrder Date: ").appendValue(expected.getOrderDate())
         .appendText("\nDispatched From: ").appendValue(expected.getDispatchedFrom())
-        .appendText("\nDispatched To: ").appendValue(expected.getDispatchedTo());
+        .appendText("\nDispatched To: ").appendValue(expected.getDispatchedTo())
+        .appendText("\nPatient: ").appendValue(expected.getPatient());
   }
 
   @Override
@@ -28,7 +29,8 @@ public class OrderFormViewModelMatcher extends TypeSafeMatcher<OrderFormViewMode
     return Objects.equals(actual.getId(), expected.getId()) &&
         Objects.equals(actual.getOrderDate(), expected.getOrderDate()) &&
         Objects.equals(actual.getDispatchedFrom(), expected.getDispatchedFrom()) &&
-        Objects.equals(actual.getDispatchedTo(), expected.getDispatchedTo());
+        Objects.equals(actual.getDispatchedTo(), expected.getDispatchedTo()) &&
+        Objects.equals(actual.getPatient(), expected.getPatient());
   }
 
   public static OrderFormViewModelMatcher hasSameStateAsOrderFormViewModel(OrderFormViewModel expected) {
