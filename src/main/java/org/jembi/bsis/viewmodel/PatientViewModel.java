@@ -4,7 +4,8 @@ import java.util.Date;
 
 import org.jembi.bsis.model.util.Gender;
 
-public class PatientViewModel {
+
+public class PatientViewModel extends BaseViewModel {
   
   private String name1;
   private String name2;
@@ -57,6 +58,7 @@ public class PatientViewModel {
   public String getHospitalBloodBankNumber() {
     return hospitalBloodBankNumber;
   }
+  
   public void setHospitalBloodBankNumber(String hospitalBloodBankNumber) {
     this.hospitalBloodBankNumber = hospitalBloodBankNumber;
   }

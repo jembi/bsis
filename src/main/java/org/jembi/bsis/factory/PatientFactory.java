@@ -10,6 +10,7 @@ public class PatientFactory {
   
   public PatientViewModel createViewModel(Patient patient) {
     PatientViewModel patientViewModel = new PatientViewModel();
+    patientViewModel.setId(patient.getId());
     patientViewModel.setName1(patient.getName1());
     patientViewModel.setName2(patient.getName2());
     patientViewModel.setDateOfBirth(patient.getDateOfBirth());
@@ -33,7 +34,7 @@ public class PatientFactory {
     patient.setGender(patientBackingForm.getGender());
     patient.setPatientNumber(patientBackingForm.getPatientNumber());
     patient.setHospitalBloodBankNumber(patientBackingForm.getHospitalBloodBankNumber());
-    patient.setHospitalWardNumber(patientBackingForm.getHospitalBloodBankNumber());
+    patient.setHospitalWardNumber(patientBackingForm.getHospitalWardNumber());
     patient.setBloodAbo(patientBackingForm.getBloodAbo());
     patient.setBloodRh(patientBackingForm.getBloodRh());
     
