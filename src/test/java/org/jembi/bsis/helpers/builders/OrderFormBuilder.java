@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +15,7 @@ import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.model.order.OrderFormItem;
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
+import org.jembi.bsis.model.patient.Patient;
 
 public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   
@@ -27,6 +29,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   private List<OrderFormItem> items = new ArrayList<>();
   private Date createdDate;
   private List<Component> components = new ArrayList<>();
+  private Patient patient = aPatient().build();
 
   public OrderFormBuilder withId(Long id) {
     this.id = id;
@@ -72,19 +75,24 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
     this.items = items;
     return this;
   }
-  
+
   public OrderFormBuilder withCreatedDate(Date createdDate) {
     this.createdDate = createdDate;
     return this;
   }
-  
+
   public OrderFormBuilder withComponents(List<Component> components) {
     this.components = components;
     return this;
   }
-  
+
   public OrderFormBuilder withComponent(Component component) {
     this.components.add(component);
+    return this;
+  }
+
+  public OrderFormBuilder withPatient(Patient patient) {
+    this.patient = patient;
     return this;
   }
 
@@ -101,6 +109,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
     orderForm.setIsDeleted(isDeleted);
     orderForm.setItems(items);
     orderForm.setComponents(components);
+    orderForm.setPatient(patient);
     return orderForm;
   }
 
@@ -108,7 +117,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   public AbstractEntityPersister<OrderForm> getPersister() {
     return new OrderFormPersister();
   }
-  
+
   public static OrderFormBuilder anOrderForm() {
     return new OrderFormBuilder();
   }

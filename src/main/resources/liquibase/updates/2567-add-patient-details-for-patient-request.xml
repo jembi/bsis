@@ -43,4 +43,16 @@
 			<column name="bloodRh" type="VARCHAR(1)" />
 		</createTable>
 	</changeSet>
+
+	<changeSet id="20170217-0810" author="tmvumbi2">
+		<!-- Add patient_id to OrderForm and OrderForm_AUD -->
+		<addColumn tableName="OrderForm">
+	      <column name="patient_id" type="BIGINT(20)" defaultValue="NULL" >
+	      	<constraints foreignKeyName="fk_OrderForm_patient" references="Patient(id)" />
+	      </column>
+	    </addColumn>
+		<addColumn tableName="OrderForm_AUD">
+	      <column name="patient_id" type="BIGINT(20)" defaultValue="NULL" />
+	    </addColumn>
+	</changeSet>
 </databaseChangeLog>
