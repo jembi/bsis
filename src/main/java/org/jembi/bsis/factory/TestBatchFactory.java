@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -19,6 +20,7 @@ import org.jembi.bsis.service.TestBatchConstraintChecker;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
+import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,9 @@ public class TestBatchFactory {
   @Autowired
   private LocationRepository locationRepository;
   
+  @Autowired
+  private DonationFactory donationFactory;
+
   public TestBatch createEntity(TestBatchBackingForm backingForm) {
     TestBatch testBatch = new TestBatch();
     testBatch.setId(backingForm.getId());
@@ -103,6 +108,27 @@ public class TestBatchFactory {
     TestBatchFullViewModel testBatchViewModel = new TestBatchFullViewModel();
     populateFullViewModel(testBatch, testBatchViewModel, isTestingSupervisor);
     return testBatchViewModel;
+  }
+
+  /**
+   * Creates a list of DonationViewModel objects from a test batch, with the option of filtering by
+   * blood typing match status if the bloodTypingMatchStatus parameter is not null.
+   *
+   * @param testBatch the test batch
+   * @param bloodTypingMatchStatus the blood typing match status
+   * @return the list< donation summary view model>
+   */
+  public List<DonationViewModel> createDonationViewModels(TestBatch testBatch,
+      BloodTypingMatchStatus bloodTypingMatchStatus) {
+    List<DonationViewModel> donationViewModels = new ArrayList<>();
+    for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+      for (Donation donation : donationBatch.getDonations()) {
+        if (bloodTypingMatchStatus == null || donation.getBloodTypingMatchStatus().equals(bloodTypingMatchStatus)) {
+          donationViewModels.add(donationFactory.createDonationViewModelWithoutPermissions(donation));
+        }
+      }
+    }
+    return donationViewModels;
   }
 
   /**

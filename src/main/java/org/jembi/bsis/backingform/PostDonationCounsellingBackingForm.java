@@ -32,11 +32,8 @@ public class PostDonationCounsellingBackingForm {
     return counsellingStatus;
   }
 
-  public void setCounsellingStatus(Integer counsellingStatusId) {
-    if (counsellingStatusId == null) {
-      return;
-    }
-    this.counsellingStatus = CounsellingStatus.findById(counsellingStatusId);
+  public void setCounsellingStatus(CounsellingStatus counsellingStatus) {
+    this.counsellingStatus = counsellingStatus;
   }
 
   public Date getCounsellingDate() {

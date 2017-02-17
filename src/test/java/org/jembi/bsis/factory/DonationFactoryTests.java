@@ -1,7 +1,6 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.jembi.bsis.helpers.builders.DonationTypeViewModelBuilder.aDonationTypeViewModel;
 import static org.jembi.bsis.helpers.builders.AdverseEventBackingFormBuilder.anAdverseEventBackingForm;
 import static org.jembi.bsis.helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static org.jembi.bsis.helpers.builders.AdverseEventViewModelBuilder.anAdverseEventViewModel;
@@ -9,9 +8,11 @@ import static org.jembi.bsis.helpers.builders.DonationBackingFormBuilder.aDonati
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationTypeBuilder.aDonationType;
+import static org.jembi.bsis.helpers.builders.DonationTypeViewModelBuilder.aDonationTypeViewModel;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.PackTypeFullViewModelBuilder.aPackTypeViewFullModel;
 import static org.jembi.bsis.helpers.matchers.DonationViewModelMatcher.hasSameStateAsDonationViewModel;
@@ -45,7 +46,7 @@ import org.jembi.bsis.service.DonorConstraintChecker;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
-import org.jembi.bsis.viewmodel.LocationFullViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -174,6 +175,7 @@ public class DonationFactoryTests {
 
     AdverseEventViewModel adverseEventViewModel = anAdverseEventViewModel().withId(irrelevantAdverseEventId).build();
     DonationTypeViewModel donationTypeViewModel = aDonationTypeViewModel().withId(23L).build();
+    LocationViewModel venueViewModel = aLocationViewModel().withId(venue.getId()).build();
 
     DonationViewModel expectedDonationViewModel = aDonationViewModel()
         .withId(IRRELEVANT_DONATION_ID)
@@ -203,7 +205,7 @@ public class DonationFactoryTests {
         .withBloodPressureDiastolic(bloodPressureDiastolic)
         .withBleedStartTime(bleedStartTime)
         .withBleedEndTime(bleedEndTime)
-        .withVenue(new LocationFullViewModel(venue))
+        .withVenue(venueViewModel)
         .thatIsReleased()
         .build();
 
@@ -212,7 +214,7 @@ public class DonationFactoryTests {
     when(donationConstraintChecker.canEditPackType(donation)).thenReturn(irrelevantCanEditPackTypePermission);
     when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(irrelevantCanDonatePermission);
     when(adverseEventFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
-    when(locationFactory.createFullViewModel(venue)).thenReturn(new LocationFullViewModel(venue));
+    when(locationFactory.createViewModel(venue)).thenReturn(venueViewModel);
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
     when(donationTypeFactory.createViewModel(donationType)).thenReturn(donationTypeViewModel);
 
