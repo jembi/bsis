@@ -24,7 +24,7 @@ public class TransfusionReactionType extends BaseModificationTrackerEntity {
   private static final long serialVersionUID = 1L;
 
   @NotBlank
-  @Column(length = 255, nullable = false)
+  @Column(length = 255, unique = true, nullable = false)
   private String name;
 
   @Column
