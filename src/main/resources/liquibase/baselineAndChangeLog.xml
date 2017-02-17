@@ -86,4 +86,5 @@
   <include file="liquibase/updates/2122-record-referral-site-for-TTI-POS-donor.xml"/>
   <include file="liquibase/updates/2567-add-patient-details-for-patient-request.xml"/>
   <include file="liquibase/updates/2562-configure-transfusion-reaction-types.xml"/>
+  <include file="liquibase/updates/2582-add-transfusion-data-for-a-din.xml"/>
 </databaseChangeLog>

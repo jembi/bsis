@@ -1,0 +1,64 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20170217-1139" author="jmuzinda">
+		<!-- Add Transfusion and Transfusion_AUD tables  -->
+		<createTable tableName="Transfusion">
+            <column name="id" type="BIGINT(20)" autoIncrement="true">
+                <constraints primaryKey="true"  />
+            </column>            
+            <column name="donationIdentificationNumber" type="VARCHAR(20)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="patient_id" type="BIGINT(20)">
+                <constraints foreignKeyName="fk_Transfusion_patient" references="Patient(id)" nullable="false" />
+            </column>
+            <column name="componentCode" type="VARCHAR(20)" />
+            <column name="componentType_id" type="BIGINT(20)">
+                <constraints foreignKeyName="fk_Transfusion_componentType" references="Location(id)"/>
+            </column>
+            <column name="usageSite_id" type="BIGINT(20)">
+                <constraints foreignKeyName="fk_Transfusion_location" references="Location(id)"/>
+            </column>
+            <column name="transfusionOutcome" type="VARCHAR(30)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="transfusionReactionType_id" type="BIGINT(20)">
+                <constraints foreignKeyName="fk_Transfusion_transfusionReactionType" references="TransfusionReactionType(id)"/>
+            </column>            
+            <column name="dateTransfused" type="DATE">
+            	<constraints nullable="false" />
+            </column>
+            <column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdBy_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_Transfusion_createdBy" references="User(id)" />
+			</column>
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_Transfusion_lastUpdatedBy" references="User(id)" />
+			</column>
+        </createTable>
+        <createTable tableName="Transfusion_AUD">
+            <column name="id" type="BIGINT(20)" autoIncrement="true">
+                <constraints primaryKey="true"  />
+            </column>            
+            <column name="donationIdentificationNumber" type="VARCHAR(20)" />
+            <column name="patient_id" type="BIGINT(20)" />
+            <column name="componentCode" type="VARCHAR(20)" />
+            <column name="componentType_id" type="BIGINT(20)" />
+            <column name="usageSite_id" type="BIGINT(20)" />
+            <column name="transfusionOutcome" type="VARCHAR(30)" />
+            <column name="transfusionReactionType_id" type="BIGINT(20)" />
+            <column name="dateTransfused" type="DATE" />
+            <column name="isDeleted" type="tinyint(1)"/>
+			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdBy_id" type="BIGINT(20)" />
+			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdatedBy_id" type="BIGINT(20)" />
+        </createTable>
+	</changeSet>
+
+</databaseChangeLog>
