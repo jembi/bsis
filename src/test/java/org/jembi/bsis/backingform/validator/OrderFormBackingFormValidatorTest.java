@@ -166,7 +166,10 @@ public class OrderFormBackingFormValidatorTest {
     OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
     backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
-    backingForm.setPatient(new PatientBackingForm());
+    PatientBackingForm patientBackingForm =  new PatientBackingForm();
+    patientBackingForm.setName1("First Name");
+    patientBackingForm.setName2("Last Name");
+    backingForm.setPatient(patientBackingForm);
 
     // set up mocks
     when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
@@ -202,6 +205,30 @@ public class OrderFormBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("patient details are required", errors.getFieldErrors().get(0).getDefaultMessage());
+
+  }
+
+  @Test
+  public void testValidPatientRequestWithPatientNoNames_shouldHaveOneErrors() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(new PatientBackingForm());
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("patient first name is required", errors.getFieldErrors().get(0).getDefaultMessage());
+    Assert.assertEquals("patient last name is required", errors.getFieldErrors().get(1).getDefaultMessage());
 
   }
 
@@ -314,7 +341,10 @@ public class OrderFormBackingFormValidatorTest {
   public void testValidatePatientRequestIssueToMustBeUsageSite_getInvalidLocationTypeError() {
     // set up data
     OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
-    backingForm.setPatient(new PatientBackingForm());
+    PatientBackingForm patientBackingForm =  new PatientBackingForm();
+    patientBackingForm.setName1("First Name");
+    patientBackingForm.setName2("Last Name");
+    backingForm.setPatient(patientBackingForm);
 
     // can't issue a patient request to a distribution site
     Location distributionSite = aDistributionSite().withId(2l).build();
