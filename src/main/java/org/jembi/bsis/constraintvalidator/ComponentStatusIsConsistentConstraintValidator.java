@@ -33,6 +33,7 @@ public class ComponentStatusIsConsistentConstraintValidator implements Constrain
       ComponentStatus.PROCESSED,
       ComponentStatus.ISSUED,
       ComponentStatus.DISCARDED,
+      ComponentStatus.TRANSFUSED,
       ComponentStatus.AVAILABLE);
 
   @Override
