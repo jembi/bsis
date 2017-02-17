@@ -235,6 +235,13 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
         .withCounsellingStatus(filteredCounsellingStatus)
         .buildAndPersist(entityManager);
     
+ // Excluded by null counselling status
+    aPostDonationCounselling()
+        .thatIsFlaggedForCounselling()
+        .thatIsNotDeleted()
+        .withCounsellingStatus(NO_COUNSELLING_STATUS)
+        .buildAndPersist(entityManager);
+    
     List<PostDonationCounselling> expectedPostDonationCounsellingList = new ArrayList<>(Arrays.asList(expectedPostDonationCounselling));
 
     List<PostDonationCounselling> returnedPostDonationCounsellingList = postDonationCounsellingRepository.findPostDonationCounselling(
