@@ -73,10 +73,10 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
       } else {
         PatientBackingForm patient = form.getPatient();
         if (patient.getName1() == null) {
-          errors.rejectValue("patient", "required", "patient first name is required");
+          errors.rejectValue("patient.name1", "required", "patient name1 is required");
         }
         if (patient.getName2() == null) {
-          errors.rejectValue("patient", "required", "patient last name is required");
+          errors.rejectValue("patient.name2", "required", "patient name2 is required");
         }
       }
     }
