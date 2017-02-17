@@ -62,7 +62,7 @@
     </insert>
   </changeSet>
 
-  <changeSet id="20170217-0540" author="micnice">
+  <changeSet id="20170217-1100" author="micnice">
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         SELECT count(*) FROM TransfusionReactionType;
@@ -70,96 +70,112 @@
     </preConditions>
     <comment>Add transfusion reaction types</comment>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="1"/>
       <column name="name" value="ABO incompatibility"/>
       <column name="isDeleted" value="0"/>
       <column name="description" value="Immunological haemolysis due to ABO incompatibility" />
       <column name="createdBy_id" value="1"/>
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="2"/>
       <column name="name" value="Allo-antibody"/>
       <column name="isDeleted" value="0"/>
       <column name="description" value="Haemolysis	Immunological haemolysis due to other allo-antibody" />
       <column name="createdBy_id" value="1"/>
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="3"/>
       <column name="name" value="NI Haemolysis"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Non-immunological haemolysis" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="4"/>
       <column name="name" value="Anaphylaxis"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Anaphylaxis/hypersensitivity" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="5"/>
       <column name="name" value="TACO"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Transfusion-associated circulatory overload" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="6"/>
       <column name="name" value="TRALI"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Transfusion-related acute lung injury" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="7"/>
       <column name="name" value="TTBI"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Transfusion-transmitted bacterial infection" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="8"/>
       <column name="name" value="TT-HBV"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Transfusion-transmitted viral infection HBV" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="9"/>
       <column name="name" value="TT-HCV"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Transfusion-transmitted viral infection HCV" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="10"/>
       <column name="name" value="TT-HIV"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Transfusion-transmitted viral infection HIV" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="11"/>
       <column name="name" value="TT-Other"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Transfusion-transmitted viral infection other" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="12"/>
       <column name="name" value="TT-Malaria"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Transfusion-transmitted parasitical infection (malaria)" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="13"/>
       <column name="name" value="TT-Parasitical"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Transfusion-transmitted parasitical infection (other)" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="14"/>
       <column name="name" value="PTP"/>
       <column name="isDeleted" value="0"/>
       <column name="createdBy_id" value="1"/>
       <column name="description" value="Post-transfusion purpura" />
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="15"/>
       <column name="name" value="TA-GVHD"/>
       <column name="isDeleted" value="0"/>
       <column name="description" value="Transfusion-associated – graft versus host disease" />
       <column name="createdBy_id" value="1"/>
     </insert>
     <insert tableName="TransfusionReactionType">
+      <column name="id" value="16"/>
       <column name="name" value="Other"/>
       <column name="isDeleted" value="0"/>
       <column name="description" value="Other reactions" />
