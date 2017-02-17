@@ -1,7 +1,6 @@
 package org.jembi.bsis.helpers.builders;
 
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
-import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
 
 import java.util.ArrayList;
 import java.util.Date;
