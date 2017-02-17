@@ -91,7 +91,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanDiscardWithUsedComponent_shouldReturnFalse() {
     Component component = aComponent()
-        .withStatus(ComponentStatus.USED)
+        .withStatus(ComponentStatus.TRANSFUSED)
         .withComponentBatch(aComponentBatch().build())
         .build();
     boolean canDiscard = componentConstraintChecker.canDiscard(component);
@@ -202,7 +202,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanProcessWithUsedComponent_shouldReturnFalse() {
     Component component = aComponent()
-        .withStatus(ComponentStatus.USED)
+        .withStatus(ComponentStatus.TRANSFUSED)
         .withParentComponent(aComponent().build())
         .withComponentBatch(aComponentBatch().build())
         .withComponentType(aComponentType()
@@ -375,7 +375,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanPreProcessComponentWithUsedComponent_shouldReturnFalse() {
     Component component = aComponent()
-        .withStatus(ComponentStatus.USED)
+        .withStatus(ComponentStatus.TRANSFUSED)
         .withComponentBatch(aComponentBatch().build())
         .build();
     boolean canPreProcess = componentConstraintChecker.canPreProcess(component);
@@ -461,7 +461,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
 
   @Test
   public void testCanUnprocessWithUsedComponent_shouldReturnFalse() {
-    Component component = aComponent().withStatus(ComponentStatus.USED).build();
+    Component component = aComponent().withStatus(ComponentStatus.TRANSFUSED).build();
     boolean canUnprocess = componentConstraintChecker.canUnprocess(component);
     assertThat(canUnprocess, is(false));
   }
@@ -531,7 +531,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanUnprocessWithUsedChildComponent_shouldReturnFalse() {
     Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child = aComponent().withId(2L).withStatus(ComponentStatus.USED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component child = aComponent().withId(2L).withStatus(ComponentStatus.TRANSFUSED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child));
 
@@ -626,7 +626,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
  
   @Test
   public void testCanUndiscardComponentWithUsedStatus_shouldReturnFalse() {
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.USED).build();
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.TRANSFUSED).build();
     
     boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
     

@@ -216,7 +216,7 @@ public class ReturnFormBackingFormValidatorTest {
     Component component1 = aComponent().withStatus(ComponentStatus.QUARANTINED).withLocation(getBaseReturnedFrom()).build();
     Component component2 = aComponent().withStatus(ComponentStatus.AVAILABLE).withLocation(getBaseReturnedFrom()).build();
     Component component3 = aComponent().withStatus(ComponentStatus.EXPIRED).withLocation(getBaseReturnedFrom()).build();
-    Component component5 = aComponent().withStatus(ComponentStatus.USED).withLocation(getBaseReturnedFrom()).build();
+    Component component5 = aComponent().withStatus(ComponentStatus.TRANSFUSED).withLocation(getBaseReturnedFrom()).build();
     Component component6 = aComponent().withStatus(ComponentStatus.UNSAFE).withLocation(getBaseReturnedFrom()).build();
     Component component7 = aComponent().withStatus(ComponentStatus.DISCARDED).withLocation(getBaseReturnedFrom()).build();
     Component component8 = aComponent().withStatus(ComponentStatus.PROCESSED).withLocation(getBaseReturnedFrom()).build();

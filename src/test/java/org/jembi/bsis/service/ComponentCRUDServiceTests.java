@@ -1764,7 +1764,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   
   @Test
   public void testMarkUsedComponentAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus() {
-    testMarkComponentsAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus(ComponentStatus.USED);
+    testMarkComponentsAsUnsafe_shouldCreateStatusChangeAndNotUpdateStatus(ComponentStatus.TRANSFUSED);
   }
   
   @Test
