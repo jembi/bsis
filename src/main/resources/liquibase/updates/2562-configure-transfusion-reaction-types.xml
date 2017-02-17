@@ -45,4 +45,22 @@
       <column name="isDeleted" type="TINYINT(1)" defaultValue="0" />
     </createTable>
   </changeSet>
+  
+  <changeSet id="20170217-0255" author="rowanpi">
+    <insert tableName="Permission">
+      <column name="id">119</column>
+      <column name="name">Manage Transfusion Reaction Types</column>
+    </insert>
+    <comment>Assign Manage Transfusion Reaction Types permission to superuser</comment>
+    <insert tableName="Permission_Role">
+      <column name="permissions_id" value="119"></column>
+      <column name="roles_id" value="1"></column>
+    </insert>
+    <comment>Assign Manage Transfusion Reaction Types permission to admin user</comment>
+    <insert tableName="Permission_Role">
+      <column name="permissions_id" value="119"></column>
+      <column name="roles_id" value="2"></column>
+    </insert>
+    
+  </changeSet>
 </databaseChangeLog>
