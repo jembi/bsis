@@ -17,7 +17,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   private TransfusionRepository transfusionRepository;
   
   @Test
-  public void testSaveTransfusion_shouldShouldAlsoPersistPatient() {
+  public void testSaveTransfusion_shouldAlsoPersistPatient() {
     
     Transfusion transfusion = aTransfusion()
         .withDonationIdentificationNumber("1234567")
