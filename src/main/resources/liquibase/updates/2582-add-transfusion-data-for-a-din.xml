@@ -100,7 +100,7 @@
           <column name="permissions_id" value="123"></column>
           <column name="roles_id" value="1"></column>
       </insert>
-      <!--Assign permissions Add, Edit, View and Void division to Admin user -->    
+      <!--Assign permissions Add, Edit, View and Void permissions to Admin user -->    
       <insert tableName="Permission_Role">
           <column name="permissions_id" value="120"></column>
           <column name="roles_id" value="2"></column>
@@ -117,7 +117,7 @@
           <column name="permissions_id" value="123"></column>
           <column name="roles_id" value="2"></column>
       </insert> 
-       <!--Assign permissions Add, Edit, View and Void division to Inventory Staff -->
+       <!--Assign permissions Add, Edit, View and Void permissions to Inventory Staff -->
       <insert tableName="Permission_Role">    
           <column name="permissions_id" value="120"></column>
           <column name="roles_id" value="15"></column>
