@@ -37,6 +37,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.model.order.OrderFormItem;
 import org.jembi.bsis.model.order.OrderType;
+import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.OrderFormConstraintChecker;
@@ -46,6 +47,7 @@ import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormItemViewModel;
 import org.jembi.bsis.viewmodel.OrderFormViewModel;
+import org.jembi.bsis.viewmodel.PatientViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -306,12 +308,15 @@ public class OrderFormFactoryTests extends UnitTestSuite {
   public void testConvertEntitiesToOrderFormViewModels_shouldReturnExpectedViewModels() {
     Location dispatchedFrom = getBaseDispatchedFromLocation();
     Location dispatchedTo = getBaseDispatchedToLocation();
+    Patient patient = aPatient().withId(1L).build();
     Date orderDate1 = new Date();
     Date orderDate2 = new Date();
+    PatientViewModel patientViewModel = aPatientViewModel().withId(1L).build();
 
     OrderFormViewModel expectedViewModel1 = anOrderFormViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
+        .withPatient(patientViewModel)
         .withOrderDate(orderDate1).withId(1L).build();
     
     OrderFormViewModel expectedViewModel2 = anOrderFormViewModel()
@@ -323,7 +328,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate1).withId(1L)
-        .withPatient(PatientBuilder.aPatient().build()).build();
+        .withPatient(patient).build();
     
     OrderForm entity2 = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
@@ -333,6 +338,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
     // Setup mock
     when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel1.getDispatchedFrom());
     when(locationFactory.createFullViewModel(dispatchedTo)).thenReturn(expectedViewModel1.getDispatchedTo());
+    when(patientFactory.createViewModel(patient)).thenReturn(patientViewModel);
 
     List<OrderFormViewModel> convertedViewModels = orderFormFactory.createViewModels(Arrays.asList(entity1, entity2));
 
