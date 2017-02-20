@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
+import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.order.OrderType;
@@ -65,9 +66,19 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
       }
     }
 
-    // Validate patiaent for type PATIENT_REQUEST
-    if (form.getType() == OrderType.PATIENT_REQUEST && form.getPatient() == null) {
-      errors.rejectValue("patient", "required", "patient details are required");
+    // Validate patient for type PATIENT_REQUEST
+    if (form.getType() == OrderType.PATIENT_REQUEST) {
+      if (form.getPatient() == null) {
+        errors.rejectValue("patient", "required", "patient details are required");
+      } else {
+        PatientBackingForm patient = form.getPatient();
+        if (patient.getName1() == null) {
+          errors.rejectValue("patient.name1", "required", "patient name1 is required");
+        }
+        if (patient.getName2() == null) {
+          errors.rejectValue("patient.name2", "required", "patient name2 is required");
+        }
+      }
     }
 
     // Validate OrderFormItems

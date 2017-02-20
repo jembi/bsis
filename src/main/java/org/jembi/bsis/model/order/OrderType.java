@@ -22,6 +22,14 @@ public enum OrderType {
     return false;
   }
 
+  public static boolean isPatientRequest(OrderType orderType) {
+    if (orderType == OrderType.PATIENT_REQUEST) {
+      return true;
+    }
+
+    return false;
+  }
+
   public static List<OrderType> getIssueOrderTypes() {
     return Arrays.asList(OrderType.ISSUE, OrderType.PATIENT_REQUEST);
   }

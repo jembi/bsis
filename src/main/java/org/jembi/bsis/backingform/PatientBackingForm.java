@@ -23,7 +23,7 @@ public class PatientBackingForm {
   private Gender gender;
   private String patientNumber;
   private String hospitalBloodBankNumber;
-  private String hospitalWard;
+  private String hospitalWardNumber;
   private String bloodAbo;
   private String bloodRh;
   
@@ -84,12 +84,12 @@ public class PatientBackingForm {
     this.hospitalBloodBankNumber = hospitalBloodBankNumber;
   }
   
-  public String getHospitalWard() {
-    return hospitalWard;
+  public String getHospitalWardNumber() {
+    return hospitalWardNumber;
   }
   
-  public void setHospitalWard(String hospitalWard) {
-    this.hospitalWard = hospitalWard;
+  public void setHospitalWardNumber(String hospitalWardNumber) {
+    this.hospitalWardNumber = hospitalWardNumber;
   }
 
   public String getBloodAbo() {
