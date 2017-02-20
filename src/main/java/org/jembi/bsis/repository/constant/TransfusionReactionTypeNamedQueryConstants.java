@@ -7,4 +7,8 @@ public class TransfusionReactionTypeNamedQueryConstants {
       "SELECT t FROM TransfusionReactionType t "
       + "WHERE (:includeDeleted = TRUE OR t.isDeleted = FALSE)"
       + "ORDER BY name ASC ";
+
+  public static final String NAME_FIND_BY_ID = "TransfusionReactionType.findById";
+  public static final String QUERY_FIND_BY_ID =
+      "SELECT trt FROM TransfusionReactionType trt WHERE trt.id = :id AND trt.isDeleted = :isDeleted";
 }
