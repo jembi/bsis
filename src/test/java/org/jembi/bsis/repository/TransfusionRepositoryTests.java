@@ -1,7 +1,12 @@
 package org.jembi.bsis.repository;
 
 import static org.jembi.bsis.helpers.builders.TransfusionBuilder.aTransfusion;
+
+import javax.persistence.ManyToOne;
+
 import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -25,12 +30,20 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
             .withName1("Name 1")
             .withName2("Name 1")
             .buildAndPersist(entityManager))
+        .withReceivedFrom(aUsageSite()
+            .withName("Received From")
+            .buildAndPersist(entityManager))
+        .withComponentType(aComponentType()
+            .withComponentTypeName("Component Type")
+            .buildAndPersist(entityManager))
         .build();
     
     Transfusion savedTransfusion = transfusionRepository.update(transfusion);
     assertThat(savedTransfusion.getPatient(), is(transfusion.getPatient()));
     assertThat(savedTransfusion.getId(), is(IsNull.notNullValue()));
     assertThat(savedTransfusion.getPatient().getId(), is(IsNull.notNullValue()));
+    assertThat(savedTransfusion.getComponentType().getId(), is(IsNull.notNullValue()));
+    assertThat(savedTransfusion.getReceivedFrom().getId(), is(IsNull.notNullValue()));
     
   }
 }
