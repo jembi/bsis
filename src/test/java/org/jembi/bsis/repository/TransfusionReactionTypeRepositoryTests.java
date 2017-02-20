@@ -1,6 +1,8 @@
 package org.jembi.bsis.repository;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTransfusionReactionType;
+import static org.jembi.bsis.helpers.matchers.TransfusionReactionTypeMatcher.hasSameStateAsTransfusionReactionType;
 
 import java.util.List;
 
@@ -61,4 +63,18 @@ public class TransfusionReactionTypeRepositoryTests extends ContextDependentTest
     Assert.assertTrue("Verify reaction 5 present", transfusionReactionTypes.contains(reactionType5));
   }
 
+  @Test
+  public void testGetById_verifyCorrectEntityReturned() {
+    TransfusionReactionType expectedReactionType = aTransfusionReactionType().withName("reaction 1").buildAndPersist(entityManager); // match
+    aTransfusionReactionType().withName("reaction 2").buildAndPersist(entityManager); // no match
+
+    TransfusionReactionType reactionType = transfusionReactionTypeRepository.findById(expectedReactionType.getId());
+
+    assertThat(reactionType, hasSameStateAsTransfusionReactionType(expectedReactionType));
+  }
+
+  @Test(expected = javax.persistence.NoResultException.class)
+  public void testGetById_verifyExeptionThrown() {
+    transfusionReactionTypeRepository.findById(1L);
+  }
 }

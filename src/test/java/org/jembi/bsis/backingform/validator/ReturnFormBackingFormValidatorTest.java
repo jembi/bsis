@@ -212,7 +212,7 @@ public class ReturnFormBackingFormValidatorTest {
     // set up data
     ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
 
-    // create components with statuses QUARANTINED, AVAILABLE, EXPIRED, USED, UNSAFE, DISCARDED and PROCESSED
+    // create components with statuses QUARANTINED, AVAILABLE, EXPIRED, TRANSFUSED, UNSAFE, DISCARDED and PROCESSED
     Component component1 = aComponent().withStatus(ComponentStatus.QUARANTINED).withLocation(getBaseReturnedFrom()).build();
     Component component2 = aComponent().withStatus(ComponentStatus.AVAILABLE).withLocation(getBaseReturnedFrom()).build();
     Component component3 = aComponent().withStatus(ComponentStatus.EXPIRED).withLocation(getBaseReturnedFrom()).build();
