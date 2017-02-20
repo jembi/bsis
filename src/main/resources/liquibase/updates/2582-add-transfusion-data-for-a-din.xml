@@ -62,6 +62,77 @@
 			<column name="lastUpdated" type="TIMESTAMP" />
 			<column name="lastUpdatedBy_id" type="BIGINT(20)" />
         </createTable>
-	</changeSet>
-
+  </changeSet>
+  <changeSet id="20170220-1457" author="tumijacob">
+    <!-- Add Add, Edit, View and Void Transfusion permissions-->
+      <insert tableName="Permission">
+          <column name="id" value="120"/>
+          <column name="name" value="Add Transfusion Data"/>
+      </insert>
+      <insert tableName="Permission">
+          <column name="id" value="121"/>
+          <column name="name" value="Edit Transfusion Data"/>
+      </insert>
+      <insert tableName="Permission">
+          <column name="id" value="122"/>
+          <column name="name" value="View Transfusion Data"/>
+      </insert>
+      <insert tableName="Permission">
+          <column name="id" value="123"/>
+          <column name="name" value="Void Transfusion Data"/>
+      </insert>
+  </changeSet>
+  <changeSet id="20170220-1549" author="tumijacob">
+      <!-- Assign Add, Edit, View and Void permissions to Superuser -->
+      <insert tableName="Permission_Role">
+          <column name="permissions_id" value="120"></column>
+          <column name="roles_id" value="1"></column>
+      </insert>
+      <insert tableName="Permission_Role">
+          <column name="permissions_id" value="121"></column>
+          <column name="roles_id" value="1"></column>
+      </insert>    
+      <insert tableName="Permission_Role">
+          <column name="permissions_id" value="122"></column>
+          <column name="roles_id" value="1"></column>
+      </insert>    
+      <insert tableName="Permission_Role">
+          <column name="permissions_id" value="123"></column>
+          <column name="roles_id" value="1"></column>
+      </insert>
+      <!--Assign permissions Add, Edit, View and Void division to Admin user -->    
+      <insert tableName="Permission_Role">
+          <column name="permissions_id" value="120"></column>
+          <column name="roles_id" value="2"></column>
+      </insert>    
+      <insert tableName="Permission_Role">
+          <column name="permissions_id" value="121"></column>
+          <column name="roles_id" value="2"></column>
+      </insert>    
+      <insert tableName="Permission_Role">
+          <column name="permissions_id" value="122"></column>
+          <column name="roles_id" value="2"></column>
+      </insert>   
+      <insert tableName="Permission_Role">
+          <column name="permissions_id" value="123"></column>
+          <column name="roles_id" value="2"></column>
+      </insert> 
+       <!--Assign permissions Add, Edit, View and Void division to Inventory Staff -->
+      <insert tableName="Permission_Role">    
+          <column name="permissions_id" value="120"></column>
+          <column name="roles_id" value="15"></column>
+      </insert> 
+      <insert tableName="Permission_Role">
+          <column name="permissions_id" value="121"></column>
+          <column name="roles_id" value="15"></column>
+      </insert>   
+      <insert tableName="Permission_Role">   
+          <column name="permissions_id" value="122"></column>
+          <column name="roles_id" value="15"></column>
+      </insert>  
+      <insert tableName="Permission_Role">    
+          <column name="permissions_id" value="123"></column>
+          <column name="roles_id" value="15"></column>
+      </insert>
+  </changeSet>
 </databaseChangeLog>
