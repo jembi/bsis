@@ -24,7 +24,9 @@
       <column name="description" type="TEXT">
         <constraints nullable="true" />
       </column>
-      <column name="isDeleted" type="TINYINT(1)" defaultValue="0" />
+      <column name="isDeleted" type="TINYINT(1)" defaultValue="0">
+        <constraints nullable="false" />
+      </column>
     </createTable>
 
     <createTable tableName="TransfusionReactionType_AUD">
