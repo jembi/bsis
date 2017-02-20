@@ -204,7 +204,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
   }
 
   @Test
-  public void testValidPatientRequestWithPatientNoNames_shouldHaveOneErrors() {
+  public void testValidPatientRequestWithPatientNoNames_shouldHaveTwoErrors() {
     // set up data
     OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
     backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
