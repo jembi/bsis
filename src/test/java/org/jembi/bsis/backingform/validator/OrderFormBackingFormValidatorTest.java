@@ -159,7 +159,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
   }
   
   @Test
-  public void testValidPatientRequest_noErrors() {
+  public void testValidatePatientRequest_noErrors() {
     // set up data
     OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
     backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
@@ -182,7 +182,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
   }
 
   @Test
-  public void testValidPatientRequestNoPatient_shouldHaveOneErrors() {
+  public void testValidatePatientRequestNoPatient_shouldHaveOneErrors() {
     // set up data
     OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
     backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
@@ -204,7 +204,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
   }
 
   @Test
-  public void testValidPatientRequestWithPatientNoNames_shouldHaveTwoErrors() {
+  public void testValidatePatientRequestWithPatientNoNames_shouldHaveTwoErrors() {
     // set up data
     OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
     backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
@@ -224,7 +224,50 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     // check asserts
     Assert.assertEquals("patient name1 is required", errors.getFieldErrors().get(0).getDefaultMessage());
     Assert.assertEquals("patient name2 is required", errors.getFieldErrors().get(1).getDefaultMessage());
+  }
 
+  @Test
+  public void testValidatePatientRequestWithPatientWithOnlyName1_shouldHaveOneError() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().withName1("name1").build());
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("patient name2 is required", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidatePatientRequestWithPatientWithOnlyName2_shouldHaveOneError() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().withName2("name2").build());
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("patient name1 is required", errors.getFieldErrors().get(0).getDefaultMessage());
   }
 
   @Test
