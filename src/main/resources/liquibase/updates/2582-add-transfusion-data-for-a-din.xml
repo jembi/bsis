@@ -6,57 +6,63 @@
 	<changeSet id="20170217-1139" author="jmuzinda">
 		<!-- Add Transfusion and Transfusion_AUD tables  -->
 		<createTable tableName="Transfusion">
-            <column name="id" type="BIGINT(20)" autoIncrement="true">
-                <constraints primaryKey="true"  />
-            </column>            
-            <column name="donationIdentificationNumber" type="VARCHAR(20)">
-            	<constraints nullable="false" />
-            </column>
-            <column name="patient_id" type="BIGINT(20)">
-                <constraints foreignKeyName="fk_Transfusion_patient" references="Patient(id)" nullable="false" />
-            </column>
-            <column name="componentCode" type="VARCHAR(20)" />
-            <column name="componentType_id" type="BIGINT(20)">
-                <constraints foreignKeyName="fk_Transfusion_componentType" references="Location(id)"/>
-            </column>
-            <column name="usageSite_id" type="BIGINT(20)">
-                <constraints foreignKeyName="fk_Transfusion_location" references="Location(id)"/>
-            </column>
-            <column name="transfusionOutcome" type="VARCHAR(30)">
-            	<constraints nullable="false" />
-            </column>
-            <column name="transfusionReactionType_id" type="BIGINT(20)">
-                <constraints foreignKeyName="fk_Transfusion_transfusionReactionType" references="TransfusionReactionType(id)"/>
-            </column>            
-            <column name="dateTransfused" type="DATE">
-            	<constraints nullable="false" />
-            </column>
-            <column name="isDeleted" type="tinyint(1)"/>
+			<column name="id" type="BIGINT(20)" autoIncrement="true">
+				<constraints primaryKey="true"  />
+			</column>            
+			<column name="donationIdentificationNumber" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="patient_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_Transfusion_patient" references="Patient(id)" nullable="false" />
+			</column>
+			<column name="componentType_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_Transfusion_componentType" references="ComponentType(id)" nullable="false" />
+			</column>
+			<column name="receivedFrom_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_Transfusion_location" references="Location(id)" nullable="false" />
+			</column>
+			<column name="transfusionOutcome" type="VARCHAR(30)">
+				<constraints nullable="false" />
+			</column>
+			<column name="transfusionReactionType_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_Transfusion_transfusionReactionType" references="TransfusionReactionType(id)"/>
+			</column>            
+			<column name="dateTransfused" type="DATE">
+				<constraints nullable="false" />
+			</column>
+			<column name="notes" type="LONGTEXT" />
+			<column name="isDeleted" type="tinyint(1)" defaultValue="false">
+				<constraints nullable="false" />
+			</column>
 			<column name="createdDate" type="TIMESTAMP">
 				<constraints nullable="false" />
 			</column>
 			<column name="createdBy_id" type="BIGINT(20)">
-				<constraints foreignKeyName="fk_Transfusion_createdBy" references="User(id)" nullable="false"  />
+				<constraints foreignKeyName="fk_Transfusion_createdBy" references="User(id)" nullable="false" />
 			</column>
 			<column name="lastUpdated" type="TIMESTAMP" />
 			<column name="lastUpdatedBy_id" type="BIGINT(20)">
 				<constraints foreignKeyName="fk_Transfusion_lastUpdatedBy" references="User(id)" />
 			</column>
-        </createTable>
-        
-        <createTable tableName="Transfusion_AUD">
-            <column name="id" type="BIGINT(20)" autoIncrement="true">
-                <constraints primaryKey="true"  />
-            </column>            
-            <column name="donationIdentificationNumber" type="VARCHAR(20)" />
-            <column name="patient_id" type="BIGINT(20)" />
-            <column name="componentCode" type="VARCHAR(20)" />
-            <column name="componentType_id" type="BIGINT(20)" />
-            <column name="usageSite_id" type="BIGINT(20)" />
-            <column name="transfusionOutcome" type="VARCHAR(30)" />
-            <column name="transfusionReactionType_id" type="BIGINT(20)" />
-            <column name="dateTransfused" type="DATE" />
-            <column name="isDeleted" type="tinyint(1)"/>
+		</createTable>
+		
+		<createTable tableName="Transfusion_AUD">
+			<column name="id" type="BIGINT(20)" autoIncrement="true">
+				<constraints primaryKey="true"  />
+			</column>   
+			<column name="REV" type="INT(11)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="REVTYPE" type="TINYINT(4)" />         
+			<column name="donationIdentificationNumber" type="VARCHAR(20)" />
+			<column name="patient_id" type="BIGINT(20)" />
+			<column name="componentType_id" type="BIGINT(20)" />
+			<column name="receivedFrom_id" type="BIGINT(20)" />
+			<column name="transfusionOutcome" type="VARCHAR(30)" />
+			<column name="transfusionReactionType_id" type="BIGINT(20)" />
+			<column name="dateTransfused" type="DATE" />
+			<column name="notes" type="LONGTEXT" />
+			<column name="isDeleted" type="tinyint(1)"/>
 			<column name="createdDate" type="TIMESTAMP" />
 			<column name="createdBy_id" type="BIGINT(20)" />
 			<column name="lastUpdated" type="TIMESTAMP" />
@@ -134,5 +140,5 @@
           <column name="permissions_id" value="123"></column>
           <column name="roles_id" value="15"></column>
       </insert>
-  </changeSet>
+  </changeSet>	
 </databaseChangeLog>
