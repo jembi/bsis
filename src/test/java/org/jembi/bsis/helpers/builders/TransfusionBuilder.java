@@ -19,13 +19,13 @@ public class TransfusionBuilder extends AbstractEntityBuilder<Transfusion> {
   private User lastUpdatedBy;
   private String donationIdentificationNumber;
   private Patient patient;
-  private String componentCode;
   private ComponentType componentType;
-  private Location usageSite;
+  private Location receivedFrom;
   private TransfusionReactionType transfusionReactionType;
   private TransfusionOutcome transfusionOutcome;
-  private Date dateTransfused;  
-  private Boolean isDeleted;
+  private Date dateTransfused;
+  private String notes;
+  private boolean isDeleted;
   
   public TransfusionBuilder withId(Long id) {
     this.id = id;
@@ -42,23 +42,23 @@ public class TransfusionBuilder extends AbstractEntityBuilder<Transfusion> {
     return this;
   }
   
-  public TransfusionBuilder withComponentCode(String componentCode) {
-    this.componentCode = componentCode;
-    return this;
-  }
-  
   public TransfusionBuilder withComponentType(ComponentType componentType) {
     this.componentType = componentType;
     return this;
   }
   
-  public TransfusionBuilder withUsageSite(Location usageSite) {
-    this.usageSite = usageSite;
+  public TransfusionBuilder withReceivedFrom(Location receivedFrom) {
+    this.receivedFrom = receivedFrom;
     return this;
   }
   
   public TransfusionBuilder withTransfusionReactionType(TransfusionReactionType transfusionReactionType) {
     this.transfusionReactionType = transfusionReactionType;
+    return this;
+  }
+  
+  public TransfusionBuilder withNotes(String notes) {
+    this.notes = notes;
     return this;
   }
 
@@ -108,12 +108,12 @@ public class TransfusionBuilder extends AbstractEntityBuilder<Transfusion> {
     transfusion.setId(id);
     transfusion.setDonationIdentificationNumber(donationIdentificationNumber);
     transfusion.setPatient(patient);
-    transfusion.setComponentCode(componentCode);
     transfusion.setComponentType(componentType);
-    transfusion.setUsageSite(usageSite);
+    transfusion.setReceivedFrom(receivedFrom);
     transfusion.setTransfusionReactionType(transfusionReactionType);
     transfusion.setTransfusionOutcome(transfusionOutcome);
     transfusion.setDateTransfused(dateTransfused);
+    transfusion.setNotes(notes);
     transfusion.setIsDeleted(isDeleted);    
     transfusion.setCreatedDate(createdDate);
     transfusion.setCreatedBy(createdBy);

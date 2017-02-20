@@ -29,13 +29,11 @@ public class Transfusion extends BaseModificationTrackerEntity {
   @ManyToOne(optional = false)
   private Patient patient;
   
-  private String componentCode;
-  
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = false)
   private ComponentType componentType;
   
-  @ManyToOne(optional = true)
-  private Location usageSite;
+  @ManyToOne(optional = false)
+  private Location receivedFrom;
   
   @ManyToOne(optional = true)
   private TransfusionReactionType transfusionReactionType;
@@ -47,7 +45,9 @@ public class Transfusion extends BaseModificationTrackerEntity {
   @Temporal(TemporalType.DATE)
   private Date dateTransfused;
   
-  private Boolean isDeleted;
+  private String notes;
+  
+  private boolean isDeleted = false;
 
   public String getDonationIdentificationNumber() {
     return donationIdentificationNumber;
@@ -65,14 +65,6 @@ public class Transfusion extends BaseModificationTrackerEntity {
     this.patient = patient;
   }
 
-  public String getComponentCode() {
-    return componentCode;
-  }
-
-  public void setComponentCode(String componentCode) {
-    this.componentCode = componentCode;
-  }
-
   public ComponentType getComponentType() {
     return componentType;
   }
@@ -81,12 +73,12 @@ public class Transfusion extends BaseModificationTrackerEntity {
     this.componentType = componentType;
   }
 
-  public Location getUsageSite() {
-    return usageSite;
+  public Location getReceivedFrom() {
+    return receivedFrom;
   }
 
-  public void setUsageSite(Location usageSite) {
-    this.usageSite = usageSite;
+  public void setReceivedFrom(Location receivedFrom) {
+    this.receivedFrom = receivedFrom;
   }
 
   public TransfusionReactionType getTransfusionReactionType() {
@@ -113,11 +105,19 @@ public class Transfusion extends BaseModificationTrackerEntity {
     this.dateTransfused = dateTransfused;
   }
 
-  public Boolean getIsDeleted() {
+  public String getNotes() {
+    return notes;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
+  public boolean getIsDeleted() {
     return isDeleted;
   }
 
-  public void setIsDeleted(Boolean isDeleted) {
+  public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
   
