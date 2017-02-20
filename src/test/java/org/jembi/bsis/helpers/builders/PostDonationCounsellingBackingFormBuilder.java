@@ -66,8 +66,7 @@ public class PostDonationCounsellingBackingFormBuilder extends AbstractBuilder<P
     PostDonationCounsellingBackingForm form = new PostDonationCounsellingBackingForm();
     form.setId(id);
     form.setCounsellingDate(counsellingDate);
-    // cater for null counselling status values
-    form.setCounsellingStatus(counsellingStatus != null ? counsellingStatus.getId() : null);
+    form.setCounsellingStatus(counsellingStatus);
     form.setFlaggedForCounselling(flaggedForCounselling);
     form.setReferred(referred);
     form.setNotes(notes);

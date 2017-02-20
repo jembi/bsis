@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
+import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
@@ -14,7 +14,7 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
 
   private long id;
   private boolean flaggedForCounselling = false;
-  private CounsellingStatusViewModel counsellingStatus;
+  private CounsellingStatus counsellingStatus;
   private Date counsellingDate;
   private DonorViewModel donor;
   private String notes;
@@ -58,8 +58,7 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
     return this;
   }
 
-  public PostDonationCounsellingViewModelBuilder withCounsellingStatusViewModel(
-      CounsellingStatusViewModel counsellingStatus) {
+  public PostDonationCounsellingViewModelBuilder withCounsellingStatus(CounsellingStatus counsellingStatus) {
     this.counsellingStatus = counsellingStatus;
     return this;
   }
