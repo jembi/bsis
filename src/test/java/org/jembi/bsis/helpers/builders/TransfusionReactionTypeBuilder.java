@@ -7,7 +7,7 @@ public class TransfusionReactionTypeBuilder extends AbstractEntityBuilder<Transf
   private Long id;
   private String name = "default.transfusionreactiontype.name";
   private String description = "default description";
-  private Boolean isDeleted = false;
+  private boolean isDeleted = false;
 
   public TransfusionReactionTypeBuilder withId(long id) {
     this.id = id;
@@ -29,7 +29,7 @@ public class TransfusionReactionTypeBuilder extends AbstractEntityBuilder<Transf
     return this;
   }
 
-  public TransfusionReactionTypeBuilder withIsDeleted(Boolean isDeleted) {
+  public TransfusionReactionTypeBuilder withIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
     return this;
   }

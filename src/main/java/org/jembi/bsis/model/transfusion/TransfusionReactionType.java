@@ -32,7 +32,7 @@ public class TransfusionReactionType extends BaseModificationTrackerEntity {
   @Column
   private String description;
 
-  private Boolean isDeleted;
+  private boolean isDeleted;
 
   public String getName() {
     return name;
