@@ -3,6 +3,9 @@ package org.jembi.bsis.viewmodel;
 import java.util.Date;
 
 import org.jembi.bsis.model.util.Gender;
+import org.jembi.bsis.utils.DateTimeSerialiser;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 public class PatientViewModel extends BaseViewModel {
@@ -33,6 +36,7 @@ public class PatientViewModel extends BaseViewModel {
     this.name2 = name2;
   }
   
+  @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getDateOfBirth() {
     return dateOfBirth;
   }

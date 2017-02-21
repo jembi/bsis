@@ -58,6 +58,7 @@ public class OrderFormCRUDService {
     existingOrderForm.setDispatchedFrom(updatedOrderForm.getDispatchedFrom());
     existingOrderForm.setDispatchedTo(updatedOrderForm.getDispatchedTo());
     existingOrderForm.setComponents(updatedOrderForm.getComponents());
+    existingOrderForm.setPatient(updatedOrderForm.getPatient());
     return orderFormRepository.update(existingOrderForm);
   }
 
