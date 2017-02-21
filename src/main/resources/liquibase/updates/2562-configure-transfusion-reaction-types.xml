@@ -1,0 +1,203 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/2562-configure-transfusion-reaction-types.xml">
+
+  <changeSet id="20170216-1805" author="rowanpi">
+    <createTable tableName="TransfusionReactionType">
+      <column name="id" type="BIGINT(20)" autoIncrement="true">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="createdDate" type="TIMESTAMP">
+        <constraints nullable="false" />
+      </column>
+      <column name="createdBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_TransfusionReactionType_createdBy" references="User(id)" />
+      </column>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_TransfusionReactionType_lastUpdatedBy" references="User(id)" />
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false" unique="true" uniqueConstraintName="uq_transfusionReactionTypeName" />
+      </column>
+      <column name="description" type="TEXT">
+        <constraints nullable="true" />
+      </column>
+      <column name="isDeleted" type="TINYINT(1)" defaultValue="0">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <createTable tableName="TransfusionReactionType_AUD">
+      <column name="id" type="BIGINT(20)" autoIncrement="true">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="REV" type="INT(11)">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="REVTYPE" type="TINYINT(4)"/>
+      <column name="createdDate" type="TIMESTAMP"/>
+      <column name="createdBy_id" type="BIGINT(20)"/>
+      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdatedBy_id" type="BIGINT(20)"/>
+      <column name="name" type="varchar(255)"/>
+      <column name="description" type="TEXT"/>
+      <column name="isDeleted" type="TINYINT(1)" defaultValue="0" />
+    </createTable>
+  </changeSet>
+  
+  <changeSet id="20170217-0255" author="rowanpi">
+    <insert tableName="Permission">
+      <column name="id">119</column>
+      <column name="name">Manage Transfusion Reaction Types</column>
+    </insert>
+    <comment>Assign Manage Transfusion Reaction Types permission to superuser</comment>
+    <insert tableName="Permission_Role">
+      <column name="permissions_id" value="119"></column>
+      <column name="roles_id" value="1"></column>
+    </insert>
+    <comment>Assign Manage Transfusion Reaction Types permission to admin user</comment>
+    <insert tableName="Permission_Role">
+      <column name="permissions_id" value="119"></column>
+      <column name="roles_id" value="2"></column>
+    </insert>
+  </changeSet>
+
+  <changeSet id="20170217-1100" author="micnice">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        SELECT count(*) FROM TransfusionReactionType;
+      </sqlCheck>
+    </preConditions>
+    <comment>Add transfusion reaction types</comment>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="1"/>
+      <column name="name" value="ABO incompatibility"/>
+      <column name="isDeleted" value="0"/>
+      <column name="description" value="Immunological haemolysis due to ABO incompatibility" />
+      <column name="createdBy_id" value="1"/>
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="2"/>
+      <column name="name" value="Allo-antibody"/>
+      <column name="isDeleted" value="0"/>
+      <column name="description" value="Haemolysis	Immunological haemolysis due to other allo-antibody" />
+      <column name="createdBy_id" value="1"/>
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="3"/>
+      <column name="name" value="NI Haemolysis"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Non-immunological haemolysis" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="4"/>
+      <column name="name" value="Anaphylaxis"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Anaphylaxis/hypersensitivity" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="5"/>
+      <column name="name" value="TACO"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Transfusion-associated circulatory overload" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="6"/>
+      <column name="name" value="TRALI"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Transfusion-related acute lung injury" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="7"/>
+      <column name="name" value="TTBI"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Transfusion-transmitted bacterial infection" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="8"/>
+      <column name="name" value="TT-HBV"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Transfusion-transmitted viral infection HBV" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="9"/>
+      <column name="name" value="TT-HCV"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Transfusion-transmitted viral infection HCV" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="10"/>
+      <column name="name" value="TT-HIV"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Transfusion-transmitted viral infection HIV" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="11"/>
+      <column name="name" value="TT-Other"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Transfusion-transmitted viral infection other" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="12"/>
+      <column name="name" value="TT-Malaria"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Transfusion-transmitted parasitical infection (malaria)" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="13"/>
+      <column name="name" value="TT-Parasitical"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Transfusion-transmitted parasitical infection (other)" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="14"/>
+      <column name="name" value="PTP"/>
+      <column name="isDeleted" value="0"/>
+      <column name="createdBy_id" value="1"/>
+      <column name="description" value="Post-transfusion purpura" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="15"/>
+      <column name="name" value="TA-GVHD"/>
+      <column name="isDeleted" value="0"/>
+      <column name="description" value="Transfusion-associated – graft versus host disease" />
+      <column name="createdBy_id" value="1"/>
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+    <insert tableName="TransfusionReactionType">
+      <column name="id" value="16"/>
+      <column name="name" value="Other"/>
+      <column name="isDeleted" value="0"/>
+      <column name="description" value="Other reactions" />
+      <column name="createdBy_id" value="1"/>
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+    </insert>
+  </changeSet>
+</databaseChangeLog>
