@@ -2783,5 +2783,50 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Verify
     assertThat(returnedComponent.getStatus(), is(ComponentStatus.QUARANTINED));
   }
-  
+
+  @Test
+  public void testTransfuseComponent_shouldHaveCorrectStatus() {
+    // Set up data
+    Location location = aLocation().build();
+    Donation donation = aDonation().build();
+    Component transfusedComponent = aComponent()
+        .withStatus(ComponentStatus.ISSUED)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    Component expectedComponent = aComponent()
+        .withStatus(ComponentStatus.TRANSFUSED)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    
+    // Set up mocks
+    when(componentConstraintChecker.canTransfuse(argThat(hasSameStateAsComponent(transfusedComponent)))).thenReturn(true);
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedComponent)))).thenReturn(expectedComponent);
+    
+    // Run test
+    Component returnedComponent = componentCRUDService.transfuseComponent(transfusedComponent);
+    
+    // Verify
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedComponent)));
+    assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testTransfuseComponentThatsAvailable_shouldThrow() {
+    // Set up data
+    Location location = aLocation().build();
+    Donation donation = aDonation().build();
+    Component transfusedComponent = aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    
+    // Set up mocks
+    when(componentConstraintChecker.canTransfuse(argThat(hasSameStateAsComponent(transfusedComponent)))).thenReturn(false);
+    
+    // Run test
+    componentCRUDService.transfuseComponent(transfusedComponent);
+  }
 }

@@ -728,4 +728,66 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
     assertThat(canRecordChildComponentWeight, is(false));
   }
 
+  @Test
+  public void testCanTransfuseWithIssuedComponent_shouldReturnTrue() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.ISSUED)
+        .build();
+    boolean canTransfuse = componentConstraintChecker.canTransfuse(component);
+    assertThat(canTransfuse, is(true));
+  }
+
+  @Test
+  public void testCanTransfuseWithUnsafeComponent_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.UNSAFE)
+        .build();
+    boolean canTransfuse = componentConstraintChecker.canTransfuse(component);
+    assertThat(canTransfuse, is(false));
+  }
+
+  @Test
+  public void testCanTransfuseWithAvailableComponent_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.AVAILABLE)
+        .build();
+    boolean canTransfuse = componentConstraintChecker.canTransfuse(component);
+    assertThat(canTransfuse, is(false));
+  }
+
+  @Test
+  public void testCanTransfuseWithDiscardedComponent_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.DISCARDED)
+        .build();
+    boolean canTransfuse = componentConstraintChecker.canTransfuse(component);
+    assertThat(canTransfuse, is(false));
+  }
+
+  @Test
+  public void testCanTransfuseWithExpiredComponent_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.EXPIRED)
+        .build();
+    boolean canTransfuse = componentConstraintChecker.canTransfuse(component);
+    assertThat(canTransfuse, is(false));
+  }
+
+  @Test
+  public void testCanTransfuseWithProcessedComponent_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.PROCESSED)
+        .build();
+    boolean canTransfuse = componentConstraintChecker.canTransfuse(component);
+    assertThat(canTransfuse, is(false));
+  }
+
+  @Test
+  public void testCanTransfuseWithQuarantinedComponent_shouldReturnFalse() {
+    Component component = aComponent()
+        .withStatus(ComponentStatus.QUARANTINED)
+        .build();
+    boolean canTransfuse = componentConstraintChecker.canTransfuse(component);
+    assertThat(canTransfuse, is(false));
+  }
 }
