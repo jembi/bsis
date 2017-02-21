@@ -271,6 +271,54 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
   }
 
   @Test
+  public void testValidatePatientRequestWithPatientWithName1ExceedingMaxLength_shouldHaveOneError() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().withName1("very_long_name_exceeding_maximum_length_allowed").withName2("name2").build());
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals(errors.getFieldErrors().size(), 1);
+    Assert.assertEquals("patient.name1", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("Maximum length for this field is 20", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidatePatientRequestWithPatientWithName2ExceedingMaxLength_shouldHaveOneError() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().withName1("name1").withName2("very_long_name_exceeding_maximum_length_allowed").build());
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals(errors.getFieldErrors().size(), 1);
+    Assert.assertEquals("patient.name2", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("Maximum length for this field is 20", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
   public void testValidateDispatchedFromAndTo_getRequiredError() {
     // set up data
     OrderFormBackingForm backingForm = getIssueOrderFormBackingForm();

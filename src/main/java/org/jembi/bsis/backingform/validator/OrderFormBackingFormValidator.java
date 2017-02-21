@@ -19,6 +19,7 @@ import org.springframework.validation.Errors;
 
 @Component
 public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackingForm> {
+  private static final Integer MAX_LENGTH_NAME = 20;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -74,10 +75,16 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
         PatientBackingForm patient = form.getPatient();
         if (patient.getName1() == null) {
           errors.rejectValue("patient.name1", "required", "patient name1 is required");
+        } else if (patient.getName1().length() > MAX_LENGTH_NAME) {
+          errors.rejectValue("patient.name1", "errors.fieldLength", "Maximum length for this field is " + MAX_LENGTH_NAME);
         }
+
         if (patient.getName2() == null) {
           errors.rejectValue("patient.name2", "required", "patient name2 is required");
+        } else if (patient.getName2().length() > MAX_LENGTH_NAME) {
+          errors.rejectValue("patient.name2", "errors.fieldLength", "Maximum length for this field is " + MAX_LENGTH_NAME);
         }
+
       }
     }
 
