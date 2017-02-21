@@ -33,6 +33,9 @@ public class TransfusionFactory {
   @Autowired
   private LocationFactory locationFactory;
 
+  @Autowired
+  private ComponentFactory  componentFactory;
+
   public Transfusion createEntity(TransfusionBackingForm form) {
     Transfusion transfusion = new Transfusion();
     transfusion.setId(form.getId());
@@ -60,8 +63,7 @@ public class TransfusionFactory {
   public TransfusionViewModel createViewModel(Transfusion transfusion) {
     TransfusionViewModel viewModel = new TransfusionViewModel();
     viewModel.setId(transfusion.getId());
-    // Fix me reset references here
-    // viewModel.setComponentType(componentTypeFactory.createViewModel(transfusion.getComponentType()));
+    viewModel.setComponent(componentFactory.createComponentViewModel(transfusion.getComponent()));
     viewModel.setDateTransfused(transfusion.getDateTransfused());
     viewModel.setDonationIdentificationNumber(transfusion.getDonationIdentificationNumber());
     viewModel.setPatient(patientFactory.createViewModel(transfusion.getPatient()));

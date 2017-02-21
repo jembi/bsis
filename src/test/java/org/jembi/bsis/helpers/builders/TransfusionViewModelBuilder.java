@@ -1,7 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
-import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.PatientViewModel;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
@@ -15,7 +15,7 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
   private String donationIdentificationNumber;
   private PatientViewModel patient;
   private String notes;
-  private ComponentTypeViewModel componentType;
+  private ComponentViewModel component;
   private LocationViewModel usageSite;
   private TransfusionReactionTypeViewModel transfusionReactionType;
   private TransfusionOutcome transfusionOutcome;
@@ -37,8 +37,8 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
     return this;
   }
   
-  public TransfusionViewModelBuilder withComponentType(ComponentTypeViewModel componentType) {
-    this.componentType = componentType;
+  public TransfusionViewModelBuilder withComponent(ComponentViewModel component) {
+    this.component = component;
     return this;
   }
   
@@ -83,7 +83,7 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
     transfusionViewModel.setId(id);
     transfusionViewModel.setDonationIdentificationNumber(donationIdentificationNumber);
     transfusionViewModel.setPatient(patient);
-    transfusionViewModel.setComponentType(componentType);
+    transfusionViewModel.setComponent(component);
     transfusionViewModel.setUsageSite(usageSite);
     transfusionViewModel.setTransfusionReactionType(transfusionReactionType);
     transfusionViewModel.setTransfusionOutcome(transfusionOutcome);

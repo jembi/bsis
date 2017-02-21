@@ -15,7 +15,7 @@ public class TransfusionViewModel {
 
   private PatientViewModel patient;
 
-  private ComponentTypeViewModel componentType;
+  private ComponentViewModel component;
 
   private LocationViewModel usageSite;
 
@@ -53,12 +53,12 @@ public class TransfusionViewModel {
     this.patient = patient;
   }
 
-  public ComponentTypeViewModel getComponentType() {
-    return componentType;
+  public ComponentViewModel getComponent () {
+    return component;
   }
 
-  public void setComponentType(ComponentTypeViewModel componentType) {
-    this.componentType = componentType;
+  public void setComponent (ComponentViewModel component) {
+    this.component = component;
   }
 
   public String getNotes () {

@@ -2,9 +2,8 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBackingFormBuilder.aComponentTypeBackingForm;
-import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
-import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
@@ -32,18 +31,16 @@ import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.backingform.TransfusionBackingForm;
 import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
 import org.jembi.bsis.model.component.Component;
-import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 import org.jembi.bsis.repository.ComponentRepository;
-import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
-import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.PatientViewModel;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
@@ -61,15 +58,13 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   @Mock
   private PatientFactory patientFactory;
   @Mock
-  private ComponentTypeRepository componentTypeRepository;
-  @Mock
   private ComponentRepository componentRepository;
   @Mock
   private TransfusionReactionTypeRepository transfusionReactionTypeRepository;
   @Mock
   private LocationRepository locationRepository;
   @Mock
-  private ComponentTypeFactory componentTypeFactory;
+  private ComponentFactory componentFactory;
   @Mock
   private TransfusionReactionTypeFactory transfusionReactionTypeFactory;
   @Mock
@@ -106,7 +101,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withDateTransfused(transfusionDate)
         .thatIsNotDeleted()
         .build();
-    
+
     when(locationRepository.getLocation(1L)).thenReturn(receivedFrom);
     when(patientFactory.createEntity(patientForm)).thenReturn(patient);
 
@@ -219,18 +214,16 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   @Test
   @Ignore
   public void testCreateViewModel_shouldReturnViewModelWithCorrectState() {
-    String componentTypeCode = "123";
     Date transfusionDate = new Date();
 
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
     Patient patient = aPatient().withId(1L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
+    Component component = aComponent().withId(1L).build();
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion transfusion = aTransfusion()
         .withId(1L)
         .withDonationIdentificationNumber("123456")
-        //Fix me reset reference here to Component
-        //.withComponentType(componentType)
+        .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .withPatient(patient)
@@ -240,7 +233,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
 
     // setup expectations
-    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel().withId(1L).build();
+    ComponentViewModel componentViewModel = aComponentViewModel().withId(1L).build();
     LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
     PatientViewModel patientViewModel = aPatientViewModel().withId(1L).build();
     TransfusionReactionTypeViewModel transfusionReactionTypeViewModel = aTransfusionReactionTypeViewModel()
@@ -250,7 +243,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     TransfusionViewModel expectedViewModel = aTransfusionViewModel()
         .withId(1L)
         .withDonationIdentificationNumber("123456")
-        .withComponentType(componentTypeViewModel)
+        .withComponent(componentViewModel)
         .withUsageSite(receivedFromViewModel)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .withPatient(patientViewModel)
@@ -260,7 +253,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
 
     // Setup mock
-    when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
+    when(componentFactory.createComponentViewModel(component)).thenReturn(componentViewModel);
     when(transfusionReactionTypeFactory.createTransfusionReactionTypeViewModel(transfusionReactionType))
         .thenReturn(transfusionReactionTypeViewModel);
     when(patientFactory.createViewModel(patient)).thenReturn(patientViewModel);
@@ -276,19 +269,17 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   @Test
   @Ignore
   public void testCreateViewModels_returnsCollection() {
-    String componentTypeCode = "123";
     Date transfusionDate = new Date();
 
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
     Patient patient = aPatient().withId(1L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
+    Component component = aComponent().withId(1L).build();
     Location receivedFrom = aLocation().withId(1L).build();
     List<Transfusion> transfusions = new ArrayList<>();
     transfusions.add(aTransfusion()
         .withId(1L)
         .withDonationIdentificationNumber("123456")
-        // Fix me reset reference here to Component
-        //.withComponentType(componentType)
+        .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .withPatient(patient)
@@ -299,8 +290,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     transfusions.add(aTransfusion()
         .withId(2L)
         .withDonationIdentificationNumber("1234567")
-        // Fix me reset reference here to Component
-        //.withComponentType(componentType)
+        .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.UNKNOWN)
         .withPatient(patient)
