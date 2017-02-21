@@ -1,18 +1,10 @@
 package org.jembi.bsis.helpers.matchers;
 
-import java.util.Date;
 import java.util.Objects;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.counselling.PostDonationCounselling;
-import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.model.transfusion.Transfusion;
-import org.jembi.bsis.model.transfusion.TransfusionOutcome;
-import org.jembi.bsis.model.transfusion.TransfusionReactionType;
-import org.jembi.bsis.model.user.User;
 
 public class TransfusionMatcher extends TypeSafeMatcher<Transfusion> {
 
@@ -37,7 +29,8 @@ public class TransfusionMatcher extends TypeSafeMatcher<Transfusion> {
         .appendText("\nUsage Site: ").appendValue(expected.getUsageSite())
         .appendText("\ntTransfusion Reaction Type: ").appendValue(expected.getTransfusionReactionType())
         .appendText("\nTransfusion Outcome: ").appendValue(expected.getTransfusionOutcome())
-        .appendText("\nDate Transfused: ").appendValue(expected.getDateTransfused());
+        .appendText("\nDate Transfused: ").appendValue(expected.getDateTransfused())
+        .appendText("\nReaction Type: ").appendValue(expected.getTransfusionReactionType());
   }
   
   @Override
@@ -56,7 +49,8 @@ public class TransfusionMatcher extends TypeSafeMatcher<Transfusion> {
         Objects.equals(actual.getUsageSite(), expected.getUsageSite()) &&
         Objects.equals(actual.getTransfusionReactionType(), expected.getTransfusionReactionType()) &&
         Objects.equals(actual.getTransfusionOutcome(), expected.getTransfusionOutcome()) &&
-        Objects.equals(actual.getDateTransfused(), expected.getDateTransfused());
+        Objects.equals(actual.getDateTransfused(), expected.getDateTransfused()) &&
+        Objects.equals(actual.getTransfusionReactionType(), expected.getTransfusionReactionType());
   }
 
   public static TransfusionMatcher hasSameStateAsTransfusion(Transfusion expected) {
