@@ -25,7 +25,7 @@ public class TransfusionCRUDService {
    * transfusion. The Component status will be set to TRANSFUSED
    * 
    * @param transfusion Transfusion entity to be saved
-   * @param transfusedComponentType ComponentType of the Component that was transfused
+   * @param transfusedComponentTypeId Long if of the component type that was transfused
    * @return Transfusion persisted record
    */
   public Transfusion createTransfusion(Transfusion transfusion, Long transfusedComponentTypeId) {
