@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class PatientBackingForm {
@@ -25,8 +24,7 @@ public class PatientBackingForm {
   private String patientNumber;
   private String hospitalBloodBankNumber;
   private String hospitalWardNumber;
-  private String bloodAbo;
-  private String bloodRh;
+  private String bloodGroup;
   
   public Long getId() {
     return id;
@@ -93,24 +91,12 @@ public class PatientBackingForm {
     this.hospitalWardNumber = hospitalWardNumber;
   }
 
-  public String getBloodAbo() {
-    return bloodAbo;
+  public String getBloodGroup() {
+    return bloodGroup;
   }
 
-  public void setBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
-  }
-
-  public String getBloodRh() {
-    return bloodRh;
-  }
-
-  public void setBloodRh(String bloodRh) {
-    this.bloodRh = bloodRh;
-  }
-
-  @JsonIgnore
   public void setBloodGroup(String bloodGroup) {
-    // Ignore
+    this.bloodGroup = bloodGroup;
   }
+
 }

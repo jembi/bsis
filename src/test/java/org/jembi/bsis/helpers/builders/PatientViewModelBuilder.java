@@ -15,8 +15,7 @@ public class PatientViewModelBuilder extends AbstractBuilder<PatientViewModel> {
   private String patientNumber;
   private String hospitalBloodBankNumber;
   private String hospitalWardNumber;
-  private String bloodAbo;
-  private String bloodRh;
+  private String bloodGroup;
   
   public PatientViewModelBuilder withId(Long id) {
     this.id = id;
@@ -57,14 +56,9 @@ public class PatientViewModelBuilder extends AbstractBuilder<PatientViewModel> {
     this.hospitalWardNumber = hospitalWardNumber;
     return this;
   }
-  
-  public PatientViewModelBuilder withBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
-    return this;
-  }
-  
-  public PatientViewModelBuilder withBloodRh(String bloodRh) {
-    this.bloodRh = bloodRh;
+
+  public PatientViewModelBuilder withBloodGroup(String bloodGroup) {
+    this.bloodGroup = bloodGroup;
     return this;
   }
 
@@ -79,8 +73,7 @@ public class PatientViewModelBuilder extends AbstractBuilder<PatientViewModel> {
     patientViewModel.setPatientNumber(patientNumber);
     patientViewModel.setHospitalBloodBankNumber(hospitalBloodBankNumber);
     patientViewModel.setHospitalWardNumber(hospitalWardNumber);
-    patientViewModel.setBloodAbo(bloodAbo);
-    patientViewModel.setBloodRh(bloodRh);
+    patientViewModel.setBloodGroup(bloodGroup);
     
     return patientViewModel;
   }
