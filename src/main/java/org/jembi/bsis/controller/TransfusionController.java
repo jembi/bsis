@@ -9,11 +9,7 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.TransfusionBackingForm;
 import org.jembi.bsis.controllerservice.TransfusionControllerService;
 import org.jembi.bsis.controllerservice.TransfusionReactionTypeControllerService;
-import org.jembi.bsis.factory.ComponentTypeFactory;
-import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
-import org.jembi.bsis.repository.ComponentTypeRepository;
-import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,14 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransfusionController {
   
   @Autowired
-  private LocationRepository locationRepository;
-  @Autowired
-  private LocationFactory locationFactory;
-  @Autowired
-  private ComponentTypeRepository componentTypeRepository;
-  @Autowired
-  private ComponentTypeFactory componentTypeFactory;
-  @Autowired
   private TransfusionReactionTypeControllerService transfusionReactionTypeControllerService;
   @Autowired
   private TransfusionControllerService transfusionControllerService;
@@ -46,8 +34,8 @@ public class TransfusionController {
   public Map<String, Object> addTransfusionFormGenerator(HttpServletRequest request) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("addTransfusionForm", new TransfusionBackingForm());
-    map.put("componentTypes", componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypesThatCanBeIssued()));    
-    map.put("usageSites", locationFactory.createFullViewModels(locationRepository.getUsageSites()));
+    map.put("componentTypes", transfusionControllerService.getComponentTypes());    
+    map.put("usageSites", transfusionControllerService.getUsageSites());
     map.put("transfusionReactionTypes", transfusionReactionTypeControllerService.getTransfusionReactionTypes());
     map.put("transfusionOutcomes", TransfusionOutcome.values());
     return map;
