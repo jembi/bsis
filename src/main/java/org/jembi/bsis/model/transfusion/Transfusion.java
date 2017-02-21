@@ -1,8 +1,10 @@
 package org.jembi.bsis.model.transfusion;
 
 import org.jembi.bsis.model.component.Component;
+
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,7 +28,7 @@ public class Transfusion extends BaseModificationTrackerEntity {
   @NotBlank
   private String donationIdentificationNumber;
   
-  @ManyToOne(optional = false)
+  @ManyToOne(optional = false, cascade = CascadeType.ALL)
   private Patient patient;
   
   @ManyToOne(optional = false)
