@@ -1,5 +1,6 @@
 package org.jembi.bsis.model.transfusion;
 
+import org.jembi.bsis.model.component.Component;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,7 +14,6 @@ import javax.persistence.TemporalType;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
-import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
 
@@ -30,7 +30,7 @@ public class Transfusion extends BaseModificationTrackerEntity {
   private Patient patient;
   
   @ManyToOne(optional = false)
-  private ComponentType componentType;
+  private Component component;
   
   @ManyToOne(optional = false)
   private Location receivedFrom;
@@ -65,12 +65,12 @@ public class Transfusion extends BaseModificationTrackerEntity {
     this.patient = patient;
   }
 
-  public ComponentType getComponentType() {
-    return componentType;
+  public Component getComponent() {
+    return component;
   }
 
-  public void setComponentType(ComponentType componentType) {
-    this.componentType = componentType;
+  public void setComponent(Component component) {
+    this.component = component;
   }
 
   public Location getReceivedFrom() {

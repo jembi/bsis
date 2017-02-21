@@ -1,9 +1,7 @@
 package org.jembi.bsis.factory;
 
-import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.TransfusionBackingForm;
 import org.jembi.bsis.model.transfusion.Transfusion;
-import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
 import org.jembi.bsis.viewmodel.TransfusionViewModel;
@@ -18,9 +16,6 @@ public class TransfusionFactory {
 
   @Autowired
   private PatientFactory patientFactory;
-
-  @Autowired
-  private ComponentTypeRepository componentTypeRepository;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -46,11 +41,6 @@ public class TransfusionFactory {
     transfusion.setPatient(patientFactory.createEntity(form.getPatient()));
     if (form.getComponentCode() != null) {
       // the user scanned a component code - we need to use that
-      transfusion.setComponentType(componentTypeRepository.findComponentTypeByCode(form.getComponentCode()));
-    } else {
-      // they selected the component type
-      ComponentTypeBackingForm selectedComponentType = form.getComponentType();
-      transfusion.setComponentType(componentTypeRepository.findComponentTypeByCode(selectedComponentType.getComponentTypeCode()));
     }
     transfusion.setReceivedFrom(locationRepository.getLocation(form.getReceivedFrom().getId()));
     if (form.getTransfusionReactionType() != null) {

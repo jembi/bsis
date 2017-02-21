@@ -2,7 +2,7 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
 
-import org.jembi.bsis.model.componenttype.ComponentType;
+import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.model.transfusion.Transfusion;
@@ -19,7 +19,7 @@ public class TransfusionBuilder extends AbstractEntityBuilder<Transfusion> {
   private User lastUpdatedBy;
   private String donationIdentificationNumber;
   private Patient patient;
-  private ComponentType componentType;
+  private Component component;
   private Location receivedFrom;
   private TransfusionReactionType transfusionReactionType;
   private TransfusionOutcome transfusionOutcome;
@@ -42,8 +42,8 @@ public class TransfusionBuilder extends AbstractEntityBuilder<Transfusion> {
     return this;
   }
   
-  public TransfusionBuilder withComponentType(ComponentType componentType) {
-    this.componentType = componentType;
+  public TransfusionBuilder withComponent(Component component) {
+    this.component = component;
     return this;
   }
   
@@ -108,7 +108,7 @@ public class TransfusionBuilder extends AbstractEntityBuilder<Transfusion> {
     transfusion.setId(id);
     transfusion.setDonationIdentificationNumber(donationIdentificationNumber);
     transfusion.setPatient(patient);
-    transfusion.setComponentType(componentType);
+    transfusion.setComponent(component);
     transfusion.setReceivedFrom(receivedFrom);
     transfusion.setTransfusionReactionType(transfusionReactionType);
     transfusion.setTransfusionOutcome(transfusionOutcome);
