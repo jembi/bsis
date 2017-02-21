@@ -1,15 +1,16 @@
 package org.jembi.bsis.factory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jembi.bsis.backingform.TransfusionBackingForm;
 import org.jembi.bsis.model.transfusion.Transfusion;
+import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
 import org.jembi.bsis.viewmodel.TransfusionViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class TransfusionFactory {
@@ -24,7 +25,7 @@ public class TransfusionFactory {
   private TransfusionReactionTypeRepository transfusionReactionTypeRepository;
 
   @Autowired
-  private ComponentTypeFactory componentTypeFactory;
+  private ComponentRepository componentRepository;
 
   @Autowired
   private TransfusionReactionTypeFactory transfusionReactionTypeFactory;
@@ -41,6 +42,9 @@ public class TransfusionFactory {
     transfusion.setPatient(patientFactory.createEntity(form.getPatient()));
     if (form.getComponentCode() != null) {
       // the user scanned a component code - we need to use that
+      // if the user selected a componentType that will be resolved later
+      transfusion.setComponent(componentRepository.findComponentByCodeAndDIN(
+          form.getComponentCode(), form.getDonationIdentificationNumber()));
     }
     transfusion.setReceivedFrom(locationRepository.getLocation(form.getReceivedFrom().getId()));
     if (form.getTransfusionReactionType() != null) {

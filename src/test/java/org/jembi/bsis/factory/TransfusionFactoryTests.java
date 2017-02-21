@@ -1,32 +1,26 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBackingFormBuilder.aComponentTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
-import static org.jembi.bsis.helpers.builders.TransfusionBackingFormBuilder.aTransfusionBackingForm;
-import static org.jembi.bsis.helpers.builders.TransfusionBuilder.aTransfusion;
-import static org.jembi.bsis.helpers.matchers.TransfusionMatcher.hasSameStateAsTransfusion;
-import static org.jembi.bsis.helpers.matchers.TransfusionViewModelMatcher.hasSameStateAsTransfusionViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
-import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.PatientBackingFormBuilder.aPatientBackingForm;
 import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
+import static org.jembi.bsis.helpers.builders.PatientViewModelBuilder.aPatientViewModel;
 import static org.jembi.bsis.helpers.builders.TransfusionBackingFormBuilder.aTransfusionBackingForm;
 import static org.jembi.bsis.helpers.builders.TransfusionBuilder.aTransfusion;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBackingFormBuilder.aTransfusionReactionTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTransfusionReactionType;
-import static org.jembi.bsis.helpers.matchers.TransfusionMatcher.hasSameStateAsTransfusion;
-import static org.jembi.bsis.helpers.builders.TransfusionViewModelBuilder.aTransfusionViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
-import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
-import static org.jembi.bsis.helpers.builders.PatientViewModelBuilder.aPatientViewModel;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeViewModelBuilder.aTransfusionReactionTypeViewModel;
+import static org.jembi.bsis.helpers.builders.TransfusionViewModelBuilder.aTransfusionViewModel;
+import static org.jembi.bsis.helpers.matchers.TransfusionMatcher.hasSameStateAsTransfusion;
+import static org.jembi.bsis.helpers.matchers.TransfusionViewModelMatcher.hasSameStateAsTransfusionViewModel;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,13 +31,13 @@ import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.backingform.TransfusionBackingForm;
 import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
+import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
-import org.jembi.bsis.model.component.Component;
-import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
@@ -82,8 +76,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   private LocationFactory locationFactory;
 
   @Test
-  @Ignore
-  public void testCreateEntityWithoutReaction_shouldReturnEntityInCorrectState() {
+  public void testCreateEntityUsingComponentType_shouldReturnEntityInCorrectState() {
     String componentTypeCode = "123";
     String din = "123456";
     Date transfusionDate = new Date();
@@ -98,32 +91,23 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withReceivedFrom(receivedFromForm)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .withPatient(patientForm)
-        .withNotes("notes")
         .withDateTransfused(transfusionDate)
         .thatIsNotDeleted()
         .build();
 
     Patient patient = aPatient().withId(1L).build();
-    Component component = aComponent()
-        .withId(1L)
-        .withComponentCode(componentTypeCode)
-        .withDonation(aDonation().withId(1L).withDonationIdentificationNumber(din).build())
-        .build();
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion expectedEntity = aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber("123456")
-        .withComponent(component)
+        .withDonationIdentificationNumber(din)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .withPatient(patient)
-        .withNotes("notes")
         .withDateTransfused(transfusionDate)
         .thatIsNotDeleted()
         .build();
     
     when(locationRepository.getLocation(1L)).thenReturn(receivedFrom);
-    when(componentRepository.findComponentByCodeAndDIN(componentTypeCode, din)).thenReturn(component);
     when(patientFactory.createEntity(patientForm)).thenReturn(patient);
 
     Transfusion returnedEntity = transfusionFactory.createEntity(form);
@@ -132,14 +116,12 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  @Ignore
   public void testCreateEntityUsingComponentCode_shouldReturnEntityInCorrectState() {
     String componentTypeCode = "123";
     String din = "123456";
     Date transfusionDate = new Date();
 
     PatientBackingForm patientForm = aPatientBackingForm().withId(1L).build();
-    ///ComponentTypeBackingForm componentTypeForm = aComponentTypeBackingForm().withId(1L).withComponentTypeCode(componentTypeCode).build();
     LocationBackingForm receivedFromForm = aLocationBackingForm().withId(1L).build();
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withId(1L)
@@ -179,11 +161,9 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Transfusion returnedEntity = transfusionFactory.createEntity(form);
 
     assertThat(returnedEntity, hasSameStateAsTransfusion(expectedEntity));
-    verify(componentTypeRepository).findComponentTypeByCode(argThat(is(componentTypeCode)));
   }
 
   @Test
-  @Ignore
   public void testCreateEntityWithReaction_shouldReturnEntityInCorrectState() {
     String componentTypeCode = "123";
     String din = "123456";
@@ -191,14 +171,13 @@ public class TransfusionFactoryTests extends UnitTestSuite {
 
     PatientBackingForm patientForm = aPatientBackingForm().withId(1L).build();
     TransfusionReactionTypeBackingForm transfusionReactionTypeForm = aTransfusionReactionTypeBackingForm().withId(1L).build();
-    ComponentTypeBackingForm componentTypeForm = aComponentTypeBackingForm().withId(1L).withComponentTypeCode(componentTypeCode).build();
     LocationBackingForm receivedFromForm = aLocationBackingForm().withId(1L).build();
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withId(1L)
         .withDonationIdentificationNumber(din)
-        .withComponentType(componentTypeForm)
+        .withComponentCode(componentTypeCode)
         .withReceivedFrom(receivedFromForm)
-        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSION_REACTION_OCCURRED)
         .withPatient(patientForm)
         .withTransfusionReactionType(transfusionReactionTypeForm)
         .withNotes("notes")
@@ -219,7 +198,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withDonationIdentificationNumber(din)
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
-        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSION_REACTION_OCCURRED)
         .withPatient(patient)
         .withTransfusionReactionType(transfusionReactionType)
         .withNotes("notes")
