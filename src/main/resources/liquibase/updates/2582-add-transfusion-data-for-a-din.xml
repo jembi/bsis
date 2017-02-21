@@ -15,8 +15,8 @@
 			<column name="patient_id" type="BIGINT(20)">
 				<constraints foreignKeyName="fk_Transfusion_patient" references="Patient(id)" nullable="false" />
 			</column>
-			<column name="componentType_id" type="BIGINT(20)">
-				<constraints foreignKeyName="fk_Transfusion_componentType" references="ComponentType(id)" nullable="false" />
+			<column name="component_id" type="BIGINT(20)">
+				<constraints foreignKeyName="fk_Transfusion_component" references="Component(id)" nullable="false" />
 			</column>
 			<column name="receivedFrom_id" type="BIGINT(20)">
 				<constraints foreignKeyName="fk_Transfusion_location" references="Location(id)" nullable="false" />
@@ -56,7 +56,7 @@
 			<column name="REVTYPE" type="TINYINT(4)" />         
 			<column name="donationIdentificationNumber" type="VARCHAR(20)" />
 			<column name="patient_id" type="BIGINT(20)" />
-			<column name="componentType_id" type="BIGINT(20)" />
+			<column name="component_id" type="BIGINT(20)" />
 			<column name="receivedFrom_id" type="BIGINT(20)" />
 			<column name="transfusionOutcome" type="VARCHAR(30)" />
 			<column name="transfusionReactionType_id" type="BIGINT(20)" />
