@@ -56,7 +56,8 @@ public class TransfusionFactory {
   public TransfusionViewModel createViewModel(Transfusion transfusion) {
     TransfusionViewModel viewModel = new TransfusionViewModel();
     viewModel.setId(transfusion.getId());
-    viewModel.setComponentType(componentTypeFactory.createViewModel(transfusion.getComponentType()));
+    // Fix me reset references here
+    // viewModel.setComponentType(componentTypeFactory.createViewModel(transfusion.getComponentType()));
     viewModel.setDateTransfused(transfusion.getDateTransfused());
     viewModel.setDonationIdentificationNumber(transfusion.getDonationIdentificationNumber());
     viewModel.setPatient(patientFactory.createViewModel(transfusion.getPatient()));
