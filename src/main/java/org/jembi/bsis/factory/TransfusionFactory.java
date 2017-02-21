@@ -45,7 +45,6 @@ public class TransfusionFactory {
     }
     transfusion.setTransfusionOutcome(form.getTransfusionOutcome());
     transfusion.setDateTransfused(form.getDateTransfused());
-    // FIXME: waiting for this to be added: 
     transfusion.setNotes(form.getNotes());
     transfusion.setIsDeleted(form.getIsDeleted()); // note: the validator must ensure this is not null
     return transfusion;
