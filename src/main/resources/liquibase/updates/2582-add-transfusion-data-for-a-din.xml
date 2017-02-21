@@ -40,9 +40,11 @@
 			<column name="createdBy_id" type="BIGINT(20)">
 				<constraints foreignKeyName="fk_Transfusion_createdBy" references="User(id)" nullable="false" />
 			</column>
-			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdated" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
 			<column name="lastUpdatedBy_id" type="BIGINT(20)">
-				<constraints foreignKeyName="fk_Transfusion_lastUpdatedBy" references="User(id)" />
+				<constraints foreignKeyName="fk_Transfusion_lastUpdatedBy" references="User(id)" nullable="false" />
 			</column>
 		</createTable>
 		
