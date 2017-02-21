@@ -6,8 +6,12 @@ import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
+import org.jembi.bsis.viewmodel.TransfusionViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TransfusionFactory {
@@ -23,6 +27,15 @@ public class TransfusionFactory {
 
   @Autowired
   private TransfusionReactionTypeRepository transfusionReactionTypeRepository;
+
+  @Autowired
+  private ComponentTypeFactory componentTypeFactory;
+
+  @Autowired
+  private TransfusionReactionTypeFactory transfusionReactionTypeFactory;
+
+  @Autowired
+  private LocationFactory locationFactory;
 
   public Transfusion createEntity(TransfusionBackingForm form) {
     Transfusion transfusion = new Transfusion();
@@ -48,5 +61,32 @@ public class TransfusionFactory {
     transfusion.setNotes(form.getNotes());
     transfusion.setIsDeleted(form.getIsDeleted()); // note: the validator must ensure this is not null
     return transfusion;
+  }
+
+  public TransfusionViewModel createViewModel(Transfusion transfusion) {
+    TransfusionViewModel viewModel = new TransfusionViewModel();
+    viewModel.setId(transfusion.getId());
+    viewModel.setComponentType(componentTypeFactory.createViewModel(transfusion.getComponentType()));
+    viewModel.setDateTransfused(transfusion.getDateTransfused());
+    viewModel.setDonationIdentificationNumber(transfusion.getDonationIdentificationNumber());
+    viewModel.setPatient(patientFactory.createViewModel(transfusion.getPatient()));
+    viewModel.setTransfusionOutcome(transfusion.getTransfusionOutcome());
+    viewModel.setTransfusionReactionType(transfusionReactionTypeFactory.createTransfusionReactionTypeViewModel(
+        transfusion.getTransfusionReactionType()));
+    viewModel.setUsageSite(locationFactory.createViewModel(transfusion.getReceivedFrom()));
+    viewModel.setIsDeleted(transfusion.getIsDeleted());
+    // FIXME: when notes are added
+    //viewModel.setNotes(transfusion.getNotes);
+    return viewModel;
+  }
+
+  public List<TransfusionViewModel> createViewModels(List<Transfusion> transfusions) {
+    List<TransfusionViewModel> viewModels = new ArrayList<>();
+    if (transfusions != null) {
+      for (Transfusion transfusion : transfusions) {
+        viewModels.add(createViewModel(transfusion));
+      }
+    }
+    return viewModels;
   }
 }

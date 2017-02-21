@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class TransfusionViewModel {
 
+  private Long id;
+
   private String donationIdentificationNumber;
 
   private PatientViewModel patient;
@@ -24,6 +26,18 @@ public class TransfusionViewModel {
   private TransfusionOutcome transfusionOutcome;
 
   private Date dateTransfused;
+
+  private String notes;
+
+  private Boolean isDeleted;
+
+  public Long getId () {
+    return id;
+  }
+
+  public void setId (Long id) {
+    this.id = id;
+  }
 
   public String getDonationIdentificationNumber() {
     return donationIdentificationNumber;
@@ -55,6 +69,14 @@ public class TransfusionViewModel {
 
   public void setComponentType(ComponentTypeViewModel componentType) {
     this.componentType = componentType;
+  }
+
+  public String getNotes () {
+    return notes;
+  }
+
+  public void setNotes (String notes) {
+    this.notes = notes;
   }
 
   public LocationViewModel getUsageSite() {
@@ -90,4 +112,11 @@ public class TransfusionViewModel {
     this.dateTransfused = dateTransfused;
   }
 
+  public Boolean getIsDeleted () {
+    return isDeleted;
+  }
+
+  public void setIsDeleted (Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
 }
