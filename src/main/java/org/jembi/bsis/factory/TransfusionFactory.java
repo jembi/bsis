@@ -39,14 +39,14 @@ public class TransfusionFactory {
       ComponentTypeBackingForm selectedComponentType = form.getComponentType();
       transfusion.setComponentType(componentTypeRepository.findComponentTypeByCode(selectedComponentType.getComponentTypeCode()));
     }
-    transfusion.setUsageSite(locationRepository.getLocation(form.getReceivedFrom().getId()));
+    transfusion.setReceivedFrom(locationRepository.getLocation(form.getReceivedFrom().getId()));
     if (form.getTransfusionReactionType() != null) {
       transfusion.setTransfusionReactionType(transfusionReactionTypeRepository.findById(form.getTransfusionReactionType().getId()));
     }
     transfusion.setTransfusionOutcome(form.getTransfusionOutcome());
     transfusion.setDateTransfused(form.getDateTransfused());
     // FIXME: waiting for this to be added: 
-    // transfusion.setNotes(form.getNotes());
+    transfusion.setNotes(form.getNotes());
     transfusion.setIsDeleted(form.getIsDeleted()); // note: the validator must ensure this is not null
     return transfusion;
   }
