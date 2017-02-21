@@ -22,7 +22,6 @@ public class TransfusionViewModelMatcher extends TypeSafeMatcher<TransfusionView
         .appendText("\nNotes: ").appendValue(expected.getNotes())
         .appendText("\nDIN: ").appendValue(expected.getDonationIdentificationNumber())
         .appendText("\nPatient: ").appendValue(expected.getPatient())
-        .appendText("\nComponent Code: ").appendValue(expected.getComponentCode())
         .appendText("\nUsage Site: ").appendValue(expected.getUsageSite())
         .appendText("\ntTransfusion Reaction Type: ").appendValue(expected.getTransfusionReactionType())
         .appendText("\nTransfusion Outcome: ").appendValue(expected.getTransfusionOutcome())
@@ -37,7 +36,6 @@ public class TransfusionViewModelMatcher extends TypeSafeMatcher<TransfusionView
         Objects.equals(actual.getNotes(), expected.getNotes()) &&
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
         Objects.equals(actual.getPatient(), expected.getPatient()) &&
-        Objects.equals(actual.getComponentCode(), expected.getComponentCode()) &&
         Objects.equals(actual.getComponentType(), expected.getComponentType()) &&
         Objects.equals(actual.getUsageSite(), expected.getUsageSite()) &&
         Objects.equals(actual.getTransfusionReactionType(), expected.getTransfusionReactionType()) &&

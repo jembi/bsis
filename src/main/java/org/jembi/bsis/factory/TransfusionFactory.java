@@ -75,8 +75,7 @@ public class TransfusionFactory {
         transfusion.getTransfusionReactionType()));
     viewModel.setUsageSite(locationFactory.createViewModel(transfusion.getReceivedFrom()));
     viewModel.setIsDeleted(transfusion.getIsDeleted());
-    // FIXME: when notes are added
-    //viewModel.setNotes(transfusion.getNotes);
+    viewModel.setNotes(transfusion.getNotes());
     return viewModel;
   }
 

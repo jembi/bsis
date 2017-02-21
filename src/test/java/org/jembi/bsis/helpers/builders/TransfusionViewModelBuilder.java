@@ -14,7 +14,6 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
   private Long id;
   private String donationIdentificationNumber;
   private PatientViewModel patient;
-  private String componentCode;
   private String notes;
   private ComponentTypeViewModel componentType;
   private LocationViewModel usageSite;
@@ -35,11 +34,6 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
 
   public TransfusionViewModelBuilder withDonationIdentificationNumber(String donationIdentificationNumber) {
     this.donationIdentificationNumber = donationIdentificationNumber;
-    return this;
-  }
-  
-  public TransfusionViewModelBuilder withComponentCode(String componentCode) {
-    this.componentCode = componentCode;
     return this;
   }
   
@@ -89,7 +83,6 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
     transfusionViewModel.setId(id);
     transfusionViewModel.setDonationIdentificationNumber(donationIdentificationNumber);
     transfusionViewModel.setPatient(patient);
-    transfusionViewModel.setComponentCode(componentCode);
     transfusionViewModel.setComponentType(componentType);
     transfusionViewModel.setUsageSite(usageSite);
     transfusionViewModel.setTransfusionReactionType(transfusionReactionType);
