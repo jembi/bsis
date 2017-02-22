@@ -24,9 +24,8 @@ public class PatientViewModelMatcher extends TypeSafeMatcher<PatientViewModel> {
         .appendText("\nPatient number: ").appendValue(expected.getPatientNumber())
         .appendText("\nDate of birth: ").appendValue(expected.getDateOfBirth())
         .appendText("\nHospital blood bank number: ").appendValue(expected.getHospitalBloodBankNumber())
-        .appendText("\n:Hospital ward number: ").appendValue(expected.getHospitalWardNumber())
-        .appendText("\nBloodAbo: ").appendValue(expected.getBloodAbo())
-        .appendText("\nBloodRh: ").appendValue(expected.getBloodRh());
+        .appendText("\nHospital ward number: ").appendValue(expected.getHospitalWardNumber())
+        .appendText("\nBloodGroup: ").appendValue(expected.getBloodGroup());
   }
 
   @Override
@@ -38,8 +37,7 @@ public class PatientViewModelMatcher extends TypeSafeMatcher<PatientViewModel> {
         && Objects.equals(actual.getPatientNumber(), expected.getPatientNumber())
         && Objects.equals(actual.getDateOfBirth(), expected.getDateOfBirth())
         && Objects.equals(actual.getHospitalBloodBankNumber(), expected.getHospitalBloodBankNumber())
-        && Objects.equals(actual.getBloodAbo(), expected.getBloodAbo())
-        && Objects.equals(actual.getBloodRh(), expected.getBloodRh())
+        && Objects.equals(actual.getBloodGroup(), expected.getBloodGroup())
         && Objects.equals(actual.getHospitalWardNumber(), expected.getHospitalWardNumber());
   }
   

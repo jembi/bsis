@@ -2,6 +2,7 @@ package org.jembi.bsis.factory;
 
 import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.model.patient.Patient;
+import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.viewmodel.PatientViewModel;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,7 @@ public class PatientFactory {
     patientViewModel.setHospitalBloodBankNumber(patient.getHospitalBloodBankNumber());
     patientViewModel.setHospitalWardNumber(patient.getHospitalWardNumber());
     patientViewModel.setGender(patient.getGender());
-    patientViewModel.setBloodAbo(patient.getBloodAbo());
-    patientViewModel.setBloodRh(patient.getBloodRh());
+    patientViewModel.setBloodGroup(patient.getBloodAbo() + patient.getBloodRh());
     
     return patientViewModel;
   
@@ -35,8 +35,9 @@ public class PatientFactory {
     patient.setPatientNumber(patientBackingForm.getPatientNumber());
     patient.setHospitalBloodBankNumber(patientBackingForm.getHospitalBloodBankNumber());
     patient.setHospitalWardNumber(patientBackingForm.getHospitalWardNumber());
-    patient.setBloodAbo(patientBackingForm.getBloodAbo());
-    patient.setBloodRh(patientBackingForm.getBloodRh());
+    BloodGroup bloodGroup = new BloodGroup(patientBackingForm.getBloodGroup());
+    patient.setBloodAbo(bloodGroup.getBloodAbo());
+    patient.setBloodRh(bloodGroup.getBloodRh());
     
     return patient;
   }

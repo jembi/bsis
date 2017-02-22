@@ -3,7 +3,9 @@ package org.jembi.bsis.viewmodel;
 import java.util.Date;
 
 import org.jembi.bsis.model.util.Gender;
+import org.jembi.bsis.utils.DateTimeSerialiser;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class PatientViewModel extends BaseViewModel {
   
@@ -14,8 +16,7 @@ public class PatientViewModel extends BaseViewModel {
   private String patientNumber;
   private String hospitalBloodBankNumber;
   private String hospitalWardNumber;
-  private String bloodAbo;
-  private String bloodRh;
+  private String bloodGroup;
   
   public String getName1() {
     return name1;
@@ -33,6 +34,7 @@ public class PatientViewModel extends BaseViewModel {
     this.name2 = name2;
   }
   
+  @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getDateOfBirth() {
     return dateOfBirth;
   }
@@ -70,28 +72,16 @@ public class PatientViewModel extends BaseViewModel {
   public void setHospitalWardNumber(String hospitalWardNumber) {
     this.hospitalWardNumber = hospitalWardNumber;
   }
-  public String getBloodAbo() {
-    if (bloodAbo == null) {
-      return "";
-    }
-    return bloodAbo;
-  }
-  
-  public void setBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
-  }
-  public String getBloodRh() {
-    if (bloodRh == null) {
-      return "";
-    }
-    return bloodRh;
-  }
-  
+
   public String getBloodGroup() {
-    return getBloodAbo() + getBloodRh();
+    if (bloodGroup == null) {
+      return "";
+    } else {
+      return bloodGroup;
+    }
   }
-  
-  public void setBloodRh(String bloodRh) {
-    this.bloodRh = bloodRh;
+
+  public void setBloodGroup(String bloodGroup) {
+    this.bloodGroup = bloodGroup;
   }
 }

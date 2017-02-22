@@ -15,8 +15,7 @@ public class PatientBackingFormBuilder extends AbstractBuilder<PatientBackingFor
   private String patientNumber;
   private String hospitalBloodBankNumber;
   private String hospitalWard;
-  private String bloodAbo;
-  private String bloodRh;
+  private String bloodGroup;
   
   public PatientBackingFormBuilder withId(Long id) {
     this.id = id;
@@ -58,13 +57,8 @@ public class PatientBackingFormBuilder extends AbstractBuilder<PatientBackingFor
     return this;
   }
   
-  public PatientBackingFormBuilder withBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
-    return this;
-  }
-  
-  public PatientBackingFormBuilder withBloodRh(String bloodRh) {
-    this.bloodRh = bloodRh;
+  public PatientBackingFormBuilder withBloodGroup(String bloodGroup) {
+    this.bloodGroup = bloodGroup;
     return this;
   }
   
@@ -79,8 +73,7 @@ public class PatientBackingFormBuilder extends AbstractBuilder<PatientBackingFor
     patientBackingForm.setPatientNumber(patientNumber);
     patientBackingForm.setHospitalBloodBankNumber(hospitalBloodBankNumber);
     patientBackingForm.setHospitalWardNumber(hospitalWard);
-    patientBackingForm.setBloodAbo(bloodAbo);
-    patientBackingForm.setBloodRh(bloodRh);
+    patientBackingForm.setBloodGroup(bloodGroup);
     
     return patientBackingForm;
   }

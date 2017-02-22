@@ -47,8 +47,7 @@ public class PatientFactoryTests extends UnitTestSuite {
         .withHospitalBloodBankNumber("hostpitalBloodBank")
         .withHospitalWardNumber("A200")
         .withDateOfBirth(dateOfBirth.toDate())
-        .withBloodAbo("A")
-        .withBloodRh("+")
+        .withBloodGroup("A+")
         .build();
     
     // Test
@@ -71,8 +70,7 @@ public class PatientFactoryTests extends UnitTestSuite {
         .withHospitalBloodBankNumber("hostpitalBloodBank")
         .withHospitalWardNumber("A200")
         .withDateOfBirth(dateOfBirth.toDate())
-        .withBloodAbo("A")
-        .withBloodRh("+")
+        .withBloodGroup("A+")
         .build();
     
     Patient expectedPatient = aPatient()

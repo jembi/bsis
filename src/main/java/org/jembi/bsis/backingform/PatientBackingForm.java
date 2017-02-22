@@ -24,8 +24,7 @@ public class PatientBackingForm {
   private String patientNumber;
   private String hospitalBloodBankNumber;
   private String hospitalWardNumber;
-  private String bloodAbo;
-  private String bloodRh;
+  private String bloodGroup;
   
   public Long getId() {
     return id;
@@ -92,19 +91,12 @@ public class PatientBackingForm {
     this.hospitalWardNumber = hospitalWardNumber;
   }
 
-  public String getBloodAbo() {
-    return bloodAbo;
+  public String getBloodGroup() {
+    return bloodGroup;
   }
 
-  public void setBloodAbo(String bloodAbo) {
-    this.bloodAbo = bloodAbo;
+  public void setBloodGroup(String bloodGroup) {
+    this.bloodGroup = bloodGroup;
   }
 
-  public String getBloodRh() {
-    return bloodRh;
-  }
-
-  public void setBloodRh(String bloodRh) {
-    this.bloodRh = bloodRh;
-  }
 }
