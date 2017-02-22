@@ -5,8 +5,8 @@ import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
 public class TransfusionReactionTypeBackingFormBuilder extends AbstractBuilder<TransfusionReactionTypeBackingForm> {
 
   private Long id;
-  private String name = "default.transfusionreactiontype.name";
-  private String description = "default description";
+  private String name;
+  private String description;
   private boolean isDeleted = false;
 
   public TransfusionReactionTypeBackingFormBuilder withId(long id) {
