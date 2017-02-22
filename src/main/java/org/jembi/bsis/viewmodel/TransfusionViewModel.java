@@ -7,9 +7,7 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class TransfusionViewModel {
-
-  private Long id;
+public class TransfusionViewModel extends BaseViewModel {
 
   private String donationIdentificationNumber;
 
@@ -17,7 +15,7 @@ public class TransfusionViewModel {
 
   private ComponentViewModel component;
 
-  private LocationViewModel usageSite;
+  private LocationViewModel receivedFrom;
 
   private TransfusionReactionTypeViewModel transfusionReactionType;
 
@@ -27,15 +25,7 @@ public class TransfusionViewModel {
 
   private String notes;
 
-  private Boolean isDeleted;
-
-  public Long getId () {
-    return id;
-  }
-
-  public void setId (Long id) {
-    this.id = id;
-  }
+  private boolean isDeleted;
 
   public String getDonationIdentificationNumber() {
     return donationIdentificationNumber;
@@ -53,28 +43,28 @@ public class TransfusionViewModel {
     this.patient = patient;
   }
 
-  public ComponentViewModel getComponent () {
+  public ComponentViewModel getComponent() {
     return component;
   }
 
-  public void setComponent (ComponentViewModel component) {
+  public void setComponent(ComponentViewModel component) {
     this.component = component;
   }
 
-  public String getNotes () {
+  public String getNotes() {
     return notes;
   }
 
-  public void setNotes (String notes) {
+  public void setNotes(String notes) {
     this.notes = notes;
   }
 
-  public LocationViewModel getUsageSite() {
-    return usageSite;
+  public LocationViewModel getReceivedFrom() {
+    return receivedFrom;
   }
 
-  public void setUsageSite(LocationViewModel usageSite) {
-    this.usageSite = usageSite;
+  public void setReceivedFrom(LocationViewModel receivedFrom) {
+    this.receivedFrom = receivedFrom;
   }
 
   public TransfusionReactionTypeViewModel getTransfusionReactionType() {
@@ -102,11 +92,11 @@ public class TransfusionViewModel {
     this.dateTransfused = dateTransfused;
   }
 
-  public Boolean getIsDeleted () {
+  public boolean getIsDeleted() {
     return isDeleted;
   }
 
-  public void setIsDeleted (Boolean isDeleted) {
+  public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
 }

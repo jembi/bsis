@@ -70,7 +70,7 @@ public class TransfusionFactory {
     viewModel.setTransfusionOutcome(transfusion.getTransfusionOutcome());
     viewModel.setTransfusionReactionType(transfusionReactionTypeFactory.createTransfusionReactionTypeViewModel(
         transfusion.getTransfusionReactionType()));
-    viewModel.setUsageSite(locationFactory.createViewModel(transfusion.getReceivedFrom()));
+    viewModel.setReceivedFrom(locationFactory.createViewModel(transfusion.getReceivedFrom()));
     viewModel.setIsDeleted(transfusion.getIsDeleted());
     viewModel.setNotes(transfusion.getNotes());
     return viewModel;

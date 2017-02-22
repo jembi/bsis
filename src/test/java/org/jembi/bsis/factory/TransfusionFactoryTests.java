@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeBackingFormBuilder.aC
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aUsageSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.PatientBackingFormBuilder.aPatientBackingForm;
 import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
@@ -219,7 +220,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
     Patient patient = aPatient().withId(1L).build();
     Component component = aComponent().withId(1L).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Location receivedFrom = aUsageSite().withId(1L).build();
     Transfusion transfusion = aTransfusion()
         .withId(1L)
         .withDonationIdentificationNumber("123456")
@@ -267,14 +268,13 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  @Ignore
   public void testCreateViewModels_returnsCollection() {
     Date transfusionDate = new Date();
 
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
     Patient patient = aPatient().withId(1L).build();
     Component component = aComponent().withId(1L).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Location receivedFrom = aUsageSite().withId(1L).build();
     List<Transfusion> transfusions = new ArrayList<>();
     transfusions.add(aTransfusion()
         .withId(1L)
@@ -307,7 +307,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  @Ignore
   public void testCreateViewModelsWithNull_returnsEmptyCollection() {
     //Run test
     List<TransfusionViewModel> viewModels = transfusionFactory.createViewModels(null);

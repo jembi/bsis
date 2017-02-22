@@ -20,7 +20,7 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
   private TransfusionReactionTypeViewModel transfusionReactionType;
   private TransfusionOutcome transfusionOutcome;
   private Date dateTransfused;  
-  private Boolean isDeleted;
+  private boolean isDeleted;
   
   public TransfusionViewModelBuilder withId(Long id) {
     this.id = id;
@@ -84,7 +84,7 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
     transfusionViewModel.setDonationIdentificationNumber(donationIdentificationNumber);
     transfusionViewModel.setPatient(patient);
     transfusionViewModel.setComponent(component);
-    transfusionViewModel.setUsageSite(usageSite);
+    transfusionViewModel.setReceivedFrom(usageSite);
     transfusionViewModel.setTransfusionReactionType(transfusionReactionType);
     transfusionViewModel.setTransfusionOutcome(transfusionOutcome);
     transfusionViewModel.setDateTransfused(dateTransfused);

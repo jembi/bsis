@@ -16,14 +16,14 @@ public class TransfusionViewModelMatcher extends TypeSafeMatcher<TransfusionView
   
   @Override
   public void describeTo(Description description) {
-    description.appendText("A transfusion with the following state:")
+    description.appendText("A transfusion view model with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nDeleted: ").appendValue(expected.getIsDeleted())
         .appendText("\nNotes: ").appendValue(expected.getNotes())
         .appendText("\nDIN: ").appendValue(expected.getDonationIdentificationNumber())
         .appendText("\nPatient: ").appendValue(expected.getPatient())
-        .appendText("\nUsage Site: ").appendValue(expected.getUsageSite())
-        .appendText("\ntTransfusion Reaction Type: ").appendValue(expected.getTransfusionReactionType())
+        .appendText("\nReceived From: ").appendValue(expected.getReceivedFrom())
+        .appendText("\nTransfusion Reaction Type: ").appendValue(expected.getTransfusionReactionType())
         .appendText("\nTransfusion Outcome: ").appendValue(expected.getTransfusionOutcome())
         .appendText("\nDate Transfused: ").appendValue(expected.getDateTransfused())
         .appendText("\nComponent: ").appendValue(expected.getComponent());
@@ -37,7 +37,7 @@ public class TransfusionViewModelMatcher extends TypeSafeMatcher<TransfusionView
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
         Objects.equals(actual.getPatient(), expected.getPatient()) &&
         Objects.equals(actual.getComponent(), expected.getComponent()) &&
-        Objects.equals(actual.getUsageSite(), expected.getUsageSite()) &&
+        Objects.equals(actual.getReceivedFrom(), expected.getReceivedFrom()) &&
         Objects.equals(actual.getTransfusionReactionType(), expected.getTransfusionReactionType()) &&
         Objects.equals(actual.getTransfusionOutcome(), expected.getTransfusionOutcome()) &&
         Objects.equals(actual.getDateTransfused(), expected.getDateTransfused()) &&
