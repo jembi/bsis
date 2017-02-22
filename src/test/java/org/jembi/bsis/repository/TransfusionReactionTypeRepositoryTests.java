@@ -64,7 +64,7 @@ public class TransfusionReactionTypeRepositoryTests extends ContextDependentTest
   }
 
   @Test
-  public void testGetById_verifyCorrectEntityReturned() {
+  public void testFindById_verifyCorrectEntityReturned() {
     TransfusionReactionType expectedReactionType = aTransfusionReactionType().withName("reaction 1").buildAndPersist(entityManager); // match
     aTransfusionReactionType().withName("reaction 2").buildAndPersist(entityManager); // no match
 
@@ -74,7 +74,7 @@ public class TransfusionReactionTypeRepositoryTests extends ContextDependentTest
   }
 
   @Test(expected = javax.persistence.NoResultException.class)
-  public void testGetById_verifyExeptionThrown() {
+  public void testFindById_verifyExeptionThrown() {
     transfusionReactionTypeRepository.findById(1L);
   }
 }
