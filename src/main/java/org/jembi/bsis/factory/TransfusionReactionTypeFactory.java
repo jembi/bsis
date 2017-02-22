@@ -3,6 +3,7 @@ package org.jembi.bsis.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeManagementViewModel;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
@@ -49,5 +50,14 @@ public class TransfusionReactionTypeFactory {
       viewModels.add(createTransfusionReactionTypeManagementViewModel(transfusionReactionType));
     }
     return viewModels;
+  }
+
+  public TransfusionReactionType createEntity(TransfusionReactionTypeBackingForm backingForm) {
+    TransfusionReactionType transfusionReactionType = new TransfusionReactionType();
+    transfusionReactionType.setId(backingForm.getId());
+    transfusionReactionType.setName(backingForm.getName());
+    transfusionReactionType.setDescription(backingForm.getDescription());
+    transfusionReactionType.setIsDeleted(backingForm.getIsDeleted()); // note: validator needs to check that isDeleted is not null
+    return transfusionReactionType;
   }
 }

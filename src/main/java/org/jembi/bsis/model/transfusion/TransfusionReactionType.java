@@ -42,7 +42,7 @@ public class TransfusionReactionType extends BaseModificationTrackerEntity {
     return description;
   }
 
-  public Boolean getIsDeleted() {
+  public boolean getIsDeleted() {
     return isDeleted;
   }
 
@@ -54,7 +54,7 @@ public class TransfusionReactionType extends BaseModificationTrackerEntity {
     this.description = description;
   }
 
-  public void setIsDeleted(Boolean isDeleted) {
+  public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
 }
