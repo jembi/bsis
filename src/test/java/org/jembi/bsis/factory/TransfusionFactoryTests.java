@@ -5,7 +5,7 @@ import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBackingFormBuilder.aComponentTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aUsageSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.PatientBackingFormBuilder.aPatientBackingForm;
@@ -78,7 +78,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
 
     PatientBackingForm patientForm = aPatientBackingForm().withId(1L).build();
     ComponentTypeBackingForm componentTypeForm = aComponentTypeBackingForm().withId(1L).withComponentTypeCode(componentTypeCode).build();
-    LocationBackingForm receivedFromForm = aLocationBackingForm().withId(1L).build();
+    LocationBackingForm receivedFromForm = aUsageSiteBackingForm().withId(1L).build();
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withId(1L)
         .withDonationIdentificationNumber(din)
@@ -117,7 +117,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Date transfusionDate = new Date();
 
     PatientBackingForm patientForm = aPatientBackingForm().withId(1L).build();
-    LocationBackingForm receivedFromForm = aLocationBackingForm().withId(1L).build();
+    LocationBackingForm receivedFromForm = aUsageSiteBackingForm().withId(1L).build();
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withId(1L)
         .withDonationIdentificationNumber(din)
@@ -166,7 +166,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
 
     PatientBackingForm patientForm = aPatientBackingForm().withId(1L).build();
     TransfusionReactionTypeBackingForm transfusionReactionTypeForm = aTransfusionReactionTypeBackingForm().withId(1L).build();
-    LocationBackingForm receivedFromForm = aLocationBackingForm().withId(1L).build();
+    LocationBackingForm receivedFromForm = aUsageSiteBackingForm().withId(1L).build();
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withId(1L)
         .withDonationIdentificationNumber(din)
