@@ -47,7 +47,6 @@ import org.jembi.bsis.viewmodel.PatientViewModel;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
 import org.jembi.bsis.viewmodel.TransfusionViewModel;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -210,7 +209,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  @Ignore
   public void testCreateViewModel_shouldReturnViewModelWithCorrectState() {
     Date transfusionDate = new Date();
 
