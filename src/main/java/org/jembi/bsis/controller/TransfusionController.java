@@ -13,11 +13,11 @@ import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -43,10 +43,11 @@ public class TransfusionController {
   
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TRANSFUSION_DATA + "')")
-  public ResponseEntity<Map<String, Object>> addTransfusionForm(@Valid @RequestBody TransfusionBackingForm backingForm) {
+  @ResponseStatus(HttpStatus.CREATED)
+  public Map<String, Object> addTransfusion(@Valid @RequestBody TransfusionBackingForm backingForm) {
     Map<String, Object> map = new HashMap<>();
     map.put("transfusionForm", transfusionControllerService.createTransfusionForm(backingForm));
-    return new ResponseEntity<>(map, HttpStatus.CREATED);
+    return map;
   }
   
 }
