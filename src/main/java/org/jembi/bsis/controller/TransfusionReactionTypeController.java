@@ -24,10 +24,10 @@ public class TransfusionReactionTypeController {
 
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasAnyRole('" + PermissionConstants.MANAGE_TRANSFUSION_REACTION_TYPES + "')")
-  public ResponseEntity<Map<String, Object>> getTransfusionReactionTypes() {
+  public Map<String, Object> getTransfusionReactionTypes() {
     Map<String, Object> map = new HashMap<>();
     map.put("transfusionReactionTypes", transfusionReactionTypeControllerService.getTransfusionReactionTypes());
-    return new ResponseEntity<>(map, HttpStatus.OK);
+    return map;
   }
 
   @RequestMapping(method = RequestMethod.POST)
