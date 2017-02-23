@@ -7,7 +7,7 @@ public class TransfusionReactionTypeBackingFormBuilder extends AbstractBuilder<T
   private Long id;
   private String name;
   private String description;
-  private boolean isDeleted = false;
+  private Boolean isDeleted = false;
 
   public TransfusionReactionTypeBackingFormBuilder withId(long id) {
     this.id = id;
@@ -29,7 +29,7 @@ public class TransfusionReactionTypeBackingFormBuilder extends AbstractBuilder<T
     return this;
   }
 
-  public TransfusionReactionTypeBackingFormBuilder withIsDeleted(boolean isDeleted) {
+  public TransfusionReactionTypeBackingFormBuilder withIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
     return this;
   }
