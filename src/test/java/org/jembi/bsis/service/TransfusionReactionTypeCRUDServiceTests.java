@@ -11,6 +11,8 @@ import static org.jembi.bsis.helpers.matchers.TransfusionReactionTypeMatcher.has
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTransfusionReactionType;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class TransfusionReactionTypeCRUDServiceTests extends UnitTestSuite {
 
@@ -29,9 +31,10 @@ public class TransfusionReactionTypeCRUDServiceTests extends UnitTestSuite {
         .build();
 
     // Run test
-    transfusionReactionType = transfusionReactionTypeCRUDService.createTransfusionReactionType(transfusionReactionType);
+    TransfusionReactionType createdTransfusionReactionType = transfusionReactionTypeCRUDService.createTransfusionReactionType(transfusionReactionType);
     
     // Verify
     verify(transfusionReactionTypeRepository).save(argThat(hasSameStateAsTransfusionReactionType(transfusionReactionType)));
+    assertThat(createdTransfusionReactionType, is(transfusionReactionType));
   }
 }
