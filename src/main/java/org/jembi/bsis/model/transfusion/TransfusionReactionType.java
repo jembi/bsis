@@ -17,7 +17,9 @@ import org.jembi.bsis.repository.constant.TransfusionReactionTypeNamedQueryConst
   @NamedQuery(name = TransfusionReactionTypeNamedQueryConstants.NAME_GET_ALL_TRANSFUSION_REACTION_TYPES,
         query = TransfusionReactionTypeNamedQueryConstants.QUERY_GET_ALL_TRANSFUSION_REACTION_TYPES),
   @NamedQuery(name = TransfusionReactionTypeNamedQueryConstants.NAME_FIND_BY_ID,
-        query = TransfusionReactionTypeNamedQueryConstants.QUERY_FIND_BY_ID)
+        query = TransfusionReactionTypeNamedQueryConstants.QUERY_FIND_BY_ID),
+  @NamedQuery(name = TransfusionReactionTypeNamedQueryConstants.NAME_VERIFY_UNIQUE_TRANSFUSION_REACTION_TYPE_NAME,
+  query = TransfusionReactionTypeNamedQueryConstants.QUERY_VERIFY_UNIQUE_TRANSFUSION_REACTION_TYPE_NAME)
 })
 @Entity
 @Audited
