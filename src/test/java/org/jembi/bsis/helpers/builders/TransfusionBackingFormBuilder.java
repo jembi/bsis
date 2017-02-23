@@ -21,7 +21,6 @@ public class TransfusionBackingFormBuilder extends AbstractBuilder<TransfusionBa
   private TransfusionOutcome transfusionOutcome;
   private Date dateTransfused;
   private String notes;
-  private Boolean isDeleted;
   
   public TransfusionBackingFormBuilder withId(Long id) {
     this.id = id;
@@ -58,16 +57,6 @@ public class TransfusionBackingFormBuilder extends AbstractBuilder<TransfusionBa
     return this;
   }
 
-  public TransfusionBackingFormBuilder thatIsDeleted() {
-    isDeleted = true;
-    return this;
-  }
-
-  public TransfusionBackingFormBuilder thatIsNotDeleted() {
-    isDeleted = false;
-    return this;
-  }
-
   public TransfusionBackingFormBuilder withNotes(String notes) {
     this.notes = notes;
     return this;
@@ -96,7 +85,6 @@ public class TransfusionBackingFormBuilder extends AbstractBuilder<TransfusionBa
     transfusionBackingForm.setTransfusionOutcome(transfusionOutcome);
     transfusionBackingForm.setDateTransfused(dateTransfused);
     transfusionBackingForm.setNotes(notes);
-    transfusionBackingForm.setIsDeleted(isDeleted);
     return transfusionBackingForm;
   }
 

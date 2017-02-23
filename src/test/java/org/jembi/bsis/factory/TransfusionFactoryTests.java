@@ -2,8 +2,8 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
-import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBackingFormBuilder.aComponentTypeBackingForm;
+import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aUsageSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
@@ -88,7 +88,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .withPatient(patientForm)
         .withDateTransfused(transfusionDate)
-        .thatIsNotDeleted()
         .build();
 
     Patient patient = aPatient().withId(1L).build();
@@ -128,7 +127,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withPatient(patientForm)
         .withNotes("notes")
         .withDateTransfused(transfusionDate)
-        .thatIsNotDeleted()
         .build();
 
     Patient patient = aPatient().withId(1L).build();
@@ -178,7 +176,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withTransfusionReactionType(transfusionReactionTypeForm)
         .withNotes("notes")
         .withDateTransfused(transfusionDate)
-        .thatIsNotDeleted()
         .build();
 
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
