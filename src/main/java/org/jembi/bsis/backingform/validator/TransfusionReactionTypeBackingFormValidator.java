@@ -19,7 +19,7 @@ public class TransfusionReactionTypeBackingFormValidator extends BaseValidator<T
       errors.rejectValue("reactionName", "errors.required", "Reaction name is required");
     } else {
       if (!transfusionReactionTypeRepository.isUniqueTransfusionReactionTypeName(form.getId(), form.getName())) {
-        errors.rejectValue("reactionName", "errors.unique", "Reaction name already exists");
+        errors.rejectValue("name", "errors.unique", "Reaction name already exists");
       }
     }
     

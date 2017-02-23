@@ -13,10 +13,10 @@ public class TransfusionReactionTypeNamedQueryConstants {
       "SELECT trt FROM TransfusionReactionType trt WHERE trt.id = :id AND trt.isDeleted = :isDeleted";
   
   public static final String NAME_VERIFY_UNIQUE_TRANSFUSION_REACTION_TYPE_NAME =
-      "TransfusionReactionType.isUniqueReactionTpeName";
+      "TransfusionReactionType.isUniqueTransfusionReactionTypeName";
   public static final String QUERY_VERIFY_UNIQUE_TRANSFUSION_REACTION_TYPE_NAME =
       "SELECT count(t) = 0 " +
           "FROM TransfusionReactionType t " +
-          "WHERE t.name = :transfusionName " +
+          "WHERE t.name = :reactionTypeName " +
           "AND t.id != :id ";
 }
