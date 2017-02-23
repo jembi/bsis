@@ -10,6 +10,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
+import static org.jembi.bsis.helpers.builders.PatientBackingFormBuilder.aPatientBackingForm;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -30,17 +31,15 @@ import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
 import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
-@RunWith(MockitoJUnitRunner.class)
-public class OrderFormBackingFormValidatorTest {
+public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
 
   @InjectMocks
   private OrderFormBackingFormValidator orderFormBackingFormValidator;
@@ -160,7 +159,30 @@ public class OrderFormBackingFormValidatorTest {
   }
   
   @Test
-  public void testValidPatientRequest_noErrors() {
+  public void testValidatePatientRequest_noErrors() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().withName1("First Name").withName2("Last Name").build());
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    assertThat(errors.getFieldErrorCount(), is(0));
+
+  }
+
+  @Test
+  public void testValidatePatientRequestNoPatient_shouldHaveOneErrors() {
     // set up data
     OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
     backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
@@ -177,8 +199,123 @@ public class OrderFormBackingFormValidatorTest {
     orderFormBackingFormValidator.validate(backingForm, errors);
 
     // check asserts
-    assertThat(errors.getFieldErrorCount(), is(0));
+    Assert.assertEquals("patient details are required", errors.getFieldErrors().get(0).getDefaultMessage());
 
+  }
+
+  @Test
+  public void testValidatePatientRequestWithPatientNoNames_shouldHaveTwoErrors() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().build());
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("patient name1 is required", errors.getFieldErrors().get(0).getDefaultMessage());
+    Assert.assertEquals("patient name2 is required", errors.getFieldErrors().get(1).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidatePatientRequestWithPatientWithOnlyName1_shouldHaveOneError() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().withName1("name1").build());
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("patient name2 is required", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidatePatientRequestWithPatientWithOnlyName2_shouldHaveOneError() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().withName2("name2").build());
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("patient name1 is required", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidatePatientRequestWithPatientWithName1ExceedingMaxLength_shouldHaveOneError() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().withName1("very_long_name_exceeding_maximum_length_allowed").withName2("name2").build());
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals(errors.getFieldErrors().size(), 1);
+    Assert.assertEquals("patient.name1", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("Maximum length for this field is 20", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidatePatientRequestWithPatientWithName2ExceedingMaxLength_shouldHaveOneError() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().withName1("name1").withName2("very_long_name_exceeding_maximum_length_allowed").build());
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals(errors.getFieldErrors().size(), 1);
+    Assert.assertEquals("patient.name2", errors.getFieldErrors().get(0).getField());
+    Assert.assertEquals("Maximum length for this field is 20", errors.getFieldErrors().get(0).getDefaultMessage());
   }
 
   @Test
@@ -290,6 +427,7 @@ public class OrderFormBackingFormValidatorTest {
   public void testValidatePatientRequestIssueToMustBeUsageSite_getInvalidLocationTypeError() {
     // set up data
     OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setPatient(aPatientBackingForm().withName1("First Name").withName2("Last Name").build());
 
     // can't issue a patient request to a distribution site
     Location distributionSite = aDistributionSite().withId(2l).build();

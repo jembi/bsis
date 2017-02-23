@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
+import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.order.OrderType;
@@ -18,6 +19,7 @@ import org.springframework.validation.Errors;
 
 @Component
 public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackingForm> {
+  private static final Integer MAX_LENGTH_NAME = 20;
 
   @Autowired
   private LocationRepository locationRepository;
@@ -64,7 +66,28 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
         errors.rejectValue("dispatchedTo", "invalid", "Invalid dispatchedTo");
       }
     }
-    
+
+    // Validate patient for type PATIENT_REQUEST
+    if (form.getType() == OrderType.PATIENT_REQUEST) {
+      if (form.getPatient() == null) {
+        errors.rejectValue("patient", "required", "patient details are required");
+      } else {
+        PatientBackingForm patient = form.getPatient();
+        if (patient.getName1() == null) {
+          errors.rejectValue("patient.name1", "required", "patient name1 is required");
+        } else if (patient.getName1().length() > MAX_LENGTH_NAME) {
+          errors.rejectValue("patient.name1", "errors.fieldLength", "Maximum length for this field is " + MAX_LENGTH_NAME);
+        }
+
+        if (patient.getName2() == null) {
+          errors.rejectValue("patient.name2", "required", "patient name2 is required");
+        } else if (patient.getName2().length() > MAX_LENGTH_NAME) {
+          errors.rejectValue("patient.name2", "errors.fieldLength", "Maximum length for this field is " + MAX_LENGTH_NAME);
+        }
+
+      }
+    }
+
     // Validate OrderFormItems
     if (form.getItems() != null) { // it can be null if the Order has just been created
       List<OrderFormItemBackingForm> items = form.getItems();

@@ -42,6 +42,9 @@ public class OrderFormFactory {
   private LocationFactory locationFactory;
 
   @Autowired
+  private PatientFactory patientFactory;
+
+  @Autowired
   private OrderFormConstraintChecker orderFormConstraintChecker;
 
   public OrderForm createEntity(OrderFormBackingForm backingForm) {
@@ -50,6 +53,9 @@ public class OrderFormFactory {
     Location to = locationRepository.getLocation(backingForm.getDispatchedTo().getId());
     entity.setId(backingForm.getId());
     entity.setDispatchedFrom(from);
+    if (backingForm.getPatient() != null) {
+      entity.setPatient(patientFactory.createEntity(backingForm.getPatient()));
+    }
     entity.setDispatchedTo(to);
     entity.setOrderDate(backingForm.getOrderDate());
     entity.setStatus(backingForm.getStatus());
@@ -105,6 +111,9 @@ public class OrderFormFactory {
     viewModel.setId(entity.getId());
     viewModel.setDispatchedFrom(locationFactory.createFullViewModel(entity.getDispatchedFrom()));
     viewModel.setDispatchedTo(locationFactory.createFullViewModel(entity.getDispatchedTo()));
+    if (entity.getPatient() != null) {
+      viewModel.setPatient(patientFactory.createViewModel(entity.getPatient()));
+    }
     viewModel.setOrderDate(entity.getOrderDate());
     viewModel.setStatus(entity.getStatus());
     viewModel.setType(entity.getType());

@@ -8,6 +8,7 @@ import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
+import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
 
@@ -21,6 +22,7 @@ public class OrderFormBackingFormBuilder {
   private OrderType type = OrderType.ISSUE;
   private List<OrderFormItemBackingForm> items;
   private List<ComponentBackingForm> components = new ArrayList<>();
+  private PatientBackingForm patient;
 
   public OrderFormBackingFormBuilder withId(Long id) {
     this.id = id;
@@ -52,6 +54,11 @@ public class OrderFormBackingFormBuilder {
     return this;
   }
   
+  public OrderFormBackingFormBuilder withPatient(PatientBackingForm patient) {
+    this.patient = patient;
+    return this;
+  }
+
   public OrderFormBackingFormBuilder withItem(OrderFormItemBackingForm item) {
     if (items == null) {
       items = new ArrayList<>();
@@ -75,6 +82,7 @@ public class OrderFormBackingFormBuilder {
     backingForm.setType(type);
     backingForm.setItems(items);
     backingForm.setComponents(components);
+    backingForm.setPatient(patient);
     return backingForm;
   }
 

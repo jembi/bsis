@@ -22,6 +22,7 @@ import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.repository.OrderFormNamedQueryConstants;
 
 @NamedQueries({
@@ -64,6 +65,9 @@ public class OrderForm extends BaseModificationTrackerEntity {
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "OrderForm_Component", joinColumns = {@JoinColumn(name = "orderForm_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "component_id", referencedColumnName = "id")})
   private List<Component> components = new ArrayList<Component>();
+
+  @ManyToOne(optional = true, cascade = {CascadeType.ALL})
+  private Patient patient;
 
   public Date getOrderDate() {
     return orderDate;
@@ -127,5 +131,13 @@ public class OrderForm extends BaseModificationTrackerEntity {
 
   public void setComponents(List<Component> components) {
     this.components = components;
+  }
+
+  public Patient getPatient() {
+    return patient;
+  }
+
+  public void setPatient(Patient patient) {
+    this.patient = patient;
   }
 }

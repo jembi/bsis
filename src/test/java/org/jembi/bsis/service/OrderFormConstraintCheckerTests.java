@@ -1,11 +1,13 @@
 package org.jembi.bsis.service;
 
+import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
+
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.helpers.builders.OrderFormBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.model.order.OrderStatus;
-import org.jembi.bsis.service.OrderFormConstraintChecker;
+import org.jembi.bsis.model.order.OrderType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +53,35 @@ public class OrderFormConstraintCheckerTests {
     // Verify
     Assert.assertFalse("Can't dispatch", orderFormConstraintChecker.canDispatch(orderForm));
   }
-  
+
+  @Test
+  public void testCanDispatchPatientRequestWithNoPatientRecord_shouldReturnFalse() {
+    Component component = ComponentBuilder.aComponent().build();
+    OrderForm orderForm = OrderFormBuilder
+        .anOrderForm()
+        .withComponent(component)
+        .withOrderStatus(OrderStatus.CREATED)
+        .withOrderType(OrderType.PATIENT_REQUEST)
+        .build();
+
+    // Verify
+    Assert.assertFalse("Can dispatch", orderFormConstraintChecker.canDispatch(orderForm));
+  }
+
+  @Test
+  public void testCanDispatchPatientRequestWithPatientRecord_shouldReturnTrue() {
+    Component component = ComponentBuilder.aComponent().build();
+    OrderForm orderForm = OrderFormBuilder.anOrderForm()
+        .withComponent(component)
+        .withOrderStatus(OrderStatus.CREATED)
+        .withOrderType(OrderType.PATIENT_REQUEST)
+        .withPatient(aPatient().build())
+        .build();
+
+    // Verify
+    Assert.assertTrue("Can dispatch", orderFormConstraintChecker.canDispatch(orderForm));
+  }
+
   @Test
   public void testCanEdit_shouldReturnTrue() {
     OrderForm orderForm = OrderFormBuilder.anOrderForm().withOrderStatus(OrderStatus.CREATED).build();
