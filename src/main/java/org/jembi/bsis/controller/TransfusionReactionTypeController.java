@@ -6,11 +6,14 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
+import org.jembi.bsis.backingform.validator.TransfusionReactionTypeBackingFormValidator;
 import org.jembi.bsis.controllerservice.TransfusionReactionTypeControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +26,14 @@ public class TransfusionReactionTypeController {
 
   @Autowired
   private TransfusionReactionTypeControllerService transfusionReactionTypeControllerService;
-
+  @Autowired
+  private TransfusionReactionTypeBackingFormValidator transfusionReactionTypeBackingFormValidator;
+  
+  @InitBinder
+  protected void initBinder(WebDataBinder binder) {
+    binder.setValidator(transfusionReactionTypeBackingFormValidator);
+  }
+  
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasAnyRole('" + PermissionConstants.MANAGE_TRANSFUSION_REACTION_TYPES + "')")
   public Map<String, Object> getTransfusionReactionTypes() {

@@ -4,8 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
 import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
+@Component
 public class TransfusionReactionTypeBackingFormValidator extends BaseValidator<TransfusionReactionTypeBackingForm> {
   
   @Autowired
