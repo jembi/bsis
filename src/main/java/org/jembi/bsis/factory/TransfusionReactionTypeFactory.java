@@ -16,14 +16,18 @@ public class TransfusionReactionTypeFactory {
   public TransfusionReactionTypeManagementViewModel createTransfusionReactionTypeManagementViewModel(
       TransfusionReactionType transfusionReactionType) {
     TransfusionReactionTypeManagementViewModel viewModel = new TransfusionReactionTypeManagementViewModel();
-    populateBasicFields(viewModel, transfusionReactionType);
-    viewModel.setDescription(transfusionReactionType.getDescription());
+    if (transfusionReactionType != null) {
+      populateBasicFields(viewModel, transfusionReactionType);
+      viewModel.setDescription(transfusionReactionType.getDescription());
+    }
     return viewModel;
   }
 
   public TransfusionReactionTypeViewModel createTransfusionReactionTypeViewModel(TransfusionReactionType transfusionReactionType) {
     TransfusionReactionTypeViewModel viewModel = new TransfusionReactionTypeViewModel();
-    populateBasicFields(viewModel, transfusionReactionType);
+    if (transfusionReactionType != null) {
+      populateBasicFields(viewModel, transfusionReactionType);
+    }
     return viewModel;
   }
 
