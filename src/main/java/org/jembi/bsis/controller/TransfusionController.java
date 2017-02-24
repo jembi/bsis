@@ -11,8 +11,6 @@ import org.jembi.bsis.backingform.validator.TransfusionBackingFormValidator;
 import org.jembi.bsis.controllerservice.TransfusionControllerService;
 import org.jembi.bsis.controllerservice.TransfusionReactionTypeControllerService;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
-import org.jembi.bsis.model.util.BloodGroup;
-import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,8 +48,6 @@ public class TransfusionController {
     map.put("usageSites", transfusionControllerService.getUsageSites());
     map.put("transfusionReactionTypes", transfusionReactionTypeControllerService.getTransfusionReactionTypes());
     map.put("transfusionOutcomes", TransfusionOutcome.values());
-    map.put("gender", Gender.values());
-    map.put("bloodGroups", BloodGroup.getAllBloodGroups());
     return map;
   }
   
