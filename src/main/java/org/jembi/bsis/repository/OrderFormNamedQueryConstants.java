@@ -5,6 +5,18 @@ public class OrderFormNamedQueryConstants {
   public static final String NAME_FIND_BY_ID = "OrderForm.findById";
   public static final String QUERY_FIND_BY_ID =
       "SELECT o FROM OrderForm o WHERE o.id = :id AND o.isDeleted = :isDeleted";
+
+  public static final String NAME_FIND_ORDER_FORMS = "OrderForm.findOrderForms";
+  public static final String QUERY_FIND_ORDER_FORMS =
+      "SELECT o FROM OrderForm o " +
+      "WHERE o.isDeleted=:isDeleted " +
+      "AND (:orderDateFrom is null OR o.orderDate >= :orderDateFrom) " +
+      "AND (:orderDateTo is null OR o.orderDate <= :orderDateTo) " +
+      "AND (:dispatchedFromId is null OR o.dispatchedFrom.id = :dispatchedFromId) " +
+      "AND (:dispatchedToId is null OR o.dispatchedTo.id = :dispatchedToId) " +
+      "AND (:includeStatus = false OR o.status = :status) " +
+      "AND (:incudeType = false OR o.type = :type) " +
+      "ORDER BY o.orderDate DESC";
   
   public static final String NAME_FIND_BLOOD_UNITS_ORDERED =
       "OrderForm.findBloodUnitsOrdered";
