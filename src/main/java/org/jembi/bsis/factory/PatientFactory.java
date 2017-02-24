@@ -11,6 +11,10 @@ public class PatientFactory {
   
   public PatientViewModel createViewModel(Patient patient) {
     PatientViewModel patientViewModel = new PatientViewModel();
+    String bloodGroup = "";
+    if (patient.getBloodAbo() != null && patient.getBloodRh() != null) {
+      bloodGroup = patient.getBloodAbo() + patient.getBloodRh();
+    }
     patientViewModel.setId(patient.getId());
     patientViewModel.setName1(patient.getName1());
     patientViewModel.setName2(patient.getName2());
@@ -19,7 +23,7 @@ public class PatientFactory {
     patientViewModel.setHospitalBloodBankNumber(patient.getHospitalBloodBankNumber());
     patientViewModel.setHospitalWardNumber(patient.getHospitalWardNumber());
     patientViewModel.setGender(patient.getGender());
-    patientViewModel.setBloodGroup(patient.getBloodAbo() + patient.getBloodRh());
+    patientViewModel.setBloodGroup(bloodGroup);
     
     return patientViewModel;
   
