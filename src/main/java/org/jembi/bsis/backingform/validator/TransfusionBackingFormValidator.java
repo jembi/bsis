@@ -76,10 +76,10 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
           if (componentsFromDINAndComponentTypeList == null || componentsFromDINAndComponentTypeList.size() == 0) {
             errors.rejectValue("componentType", "errors.invalid",
                 "Invalid componentType. No components with the specified component type exist for the specified Donation");
-          } else if (componentsFromDINAndComponentTypeList.size() > 1) {
+          } else if (form.getComponentCode() == null && componentsFromDINAndComponentTypeList.size() > 1) {
             errors.rejectValue("componentType", "errors.invalid",
                 "More than one component returned for given component Type. A componentCode has to be entered in this case");
-          } else {
+          } else if (componentsFromDINAndComponentTypeList.size() == 1) {
             component = componentsFromDINAndComponentTypeList.get(0);
             if (component != null && component.getStatus() != ComponentStatus.ISSUED) {
               errors.rejectValue("componentType", "errors.invalid",
@@ -172,10 +172,17 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
       errors.rejectValue("patient", "errors.required", "Patient is required");
     } else {
       if (StringUtils.isBlank(form.getPatient().getName1())) {
-        errors.rejectValue("patient", "errors.required", "The Patient name1 field is mandatory");
+        errors.rejectValue("patient.name1", "errors.required", "The Patient name1 field is mandatory");
+      } else if (form.getPatient().getName1().length() > OrderFormBackingFormValidator.MAX_LENGTH_PATIENT_NAME) {
+        errors.rejectValue("patient.name1", "errors.invalid",
+            "Maximum length for this field is " + OrderFormBackingFormValidator.MAX_LENGTH_PATIENT_NAME);
       }
+
       if (StringUtils.isBlank(form.getPatient().getName2())) {
-        errors.rejectValue("patient", "errors.required", "The Patient name2 field is mandatory");
+        errors.rejectValue("patient.name2", "errors.required", "The Patient name2 field is mandatory");
+      } else if (form.getPatient().getName2().length() > OrderFormBackingFormValidator.MAX_LENGTH_PATIENT_NAME) {
+        errors.rejectValue("patient.name2", "errors.invalid",
+            "Maximum length for this field is " + OrderFormBackingFormValidator.MAX_LENGTH_PATIENT_NAME);
       }
     }
   }

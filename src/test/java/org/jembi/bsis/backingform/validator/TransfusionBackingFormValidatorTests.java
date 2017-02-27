@@ -41,7 +41,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.MapBindingResult;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -639,7 +638,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateValidTransfusionFormWithDINAndComponentTypeAndInvalidComponentStatus_shouldntGetErrors() {
+  public void testValidateTransfusionFormWithDINAndComponentTypeAndInvalidComponentStatus_shouldGetOneError() {
     // Set up data
     Date transfusedDate = (new DateTime()).minusDays(5).toDate();
     String din = "12345";
@@ -1274,6 +1273,59 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withDateTransfused(transfusedDate)
         .withReceivedFrom(aUsageSite)
         .withPatient(aPatientBackingForm()
+        .build())
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .build();
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "transfusion");
+
+    when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
+    when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
+    when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
+
+    // Run test
+    validator.validateForm(form, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(2));
+
+    assertThat(errors.getFieldError("patient.name1").getCode(), is("errors.required"));
+    assertThat(errors.getFieldError("patient.name2").getCode(), is("errors.required"));
+  }
+
+  @Test
+  public void testValidateTransfusionFormWithPatientWithLongName1AndName2_shouldGetTwoErrors() {
+    // Set up data
+    Date transfusedDate = (new DateTime()).minusDays(5).toDate();
+    String din = "12345";
+    String componentCode = "1234";
+
+    Date componentCreatedOnDate = (new DateTime()).minusDays(10).toDate();
+    
+    Component component = aComponent()
+        .withId(1L)
+        .withComponentCode(componentCode)
+        .withStatus(ComponentStatus.ISSUED)
+        .withCreatedOn(componentCreatedOnDate)
+        .build();
+
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber(din)
+        .withComponent(component)
+        .build();
+
+    long usageSiteId = 1L;
+    Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
+    LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
+
+    TransfusionBackingForm form = aTransfusionBackingForm()
+        .withDonationIdentificationNumber(din)
+        .withComponentCode(componentCode)
+        .withDateTransfused(transfusedDate)
+        .withReceivedFrom(aUsageSite)
+        .withPatient(aPatientBackingForm()
+            .withName1("A very long name longer than 20 characters")
+            .withName2("A very long name longer than 20 characters")
             .build())
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .build();
@@ -1290,8 +1342,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     // Verify
     assertThat(errors.getErrorCount(), is(2));
 
-    List<FieldError> allErrors = errors.getFieldErrors("patient");
-    assertThat(allErrors.get(0).getCode(), is("errors.required"));
-    assertThat(allErrors.get(1).getCode(), is("errors.required"));
+    assertThat(errors.getFieldError("patient.name1").getCode(), is("errors.invalid"));
+    assertThat(errors.getFieldError("patient.name2").getCode(), is("errors.invalid"));
   }
 }
