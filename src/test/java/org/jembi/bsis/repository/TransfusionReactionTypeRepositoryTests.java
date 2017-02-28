@@ -1,6 +1,9 @@
 package org.jembi.bsis.repository;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTransfusionReactionType;
+import static org.jembi.bsis.helpers.matchers.TransfusionReactionTypeMatcher.hasSameStateAsTransfusionReactionType;
 
 import java.util.List;
 
@@ -61,4 +64,45 @@ public class TransfusionReactionTypeRepositoryTests extends ContextDependentTest
     Assert.assertTrue("Verify reaction 5 present", transfusionReactionTypes.contains(reactionType5));
   }
 
+  @Test
+  public void testFindById_verifyCorrectEntityReturned() {
+    TransfusionReactionType expectedReactionType = aTransfusionReactionType().withName("reaction 1").buildAndPersist(entityManager); // match
+    aTransfusionReactionType().withName("reaction 2").buildAndPersist(entityManager); // no match
+
+    TransfusionReactionType reactionType = transfusionReactionTypeRepository.findById(expectedReactionType.getId());
+
+    assertThat(reactionType, hasSameStateAsTransfusionReactionType(expectedReactionType));
+  }
+
+  @Test(expected = javax.persistence.NoResultException.class)
+  public void testFindById_verifyExeptionThrown() {
+    transfusionReactionTypeRepository.findById(1L);
+  }
+  
+  @Test
+  public void testIsUniqueTransfusionReactionTypeName_shouldReturnTrueForUniqueReactionTypeName() {
+    TransfusionReactionType reactionTypeName = aTransfusionReactionType()
+        .withName("reactionTypeName")
+        .buildAndPersist(entityManager);
+    
+    // Test
+    boolean unique = transfusionReactionTypeRepository.isUniqueTransfusionReactionTypeName(
+        reactionTypeName.getId(), "reactionTypeName");
+    
+    assertThat(unique, is(true));
+  }
+  
+  @Test
+  public void testIsUniqueTransfusionReactionTypeNameForExistingReactionTypeName_shouldReturnFalseForUniqueReactionTypeName() {
+    aTransfusionReactionType().withName("reactionTypeName1").buildAndPersist(entityManager);
+    TransfusionReactionType reactionTypeName2 = aTransfusionReactionType()
+        .withName("reactionTypeName2")
+        .buildAndPersist(entityManager);
+    
+    // Test
+    boolean unique = transfusionReactionTypeRepository.isUniqueTransfusionReactionTypeName(
+        reactionTypeName2.getId(), "reactionTypeName1");
+   
+    assertThat(unique, is(false));
+  }
 }

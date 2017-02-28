@@ -112,4 +112,12 @@ public class ComponentConstraintChecker {
 
     return true;
   }
+
+  public boolean canTransfuse(Component component) {
+    if (component.getStatus().equals(ComponentStatus.ISSUED)) {
+      // component should be issued before it can be transfused
+      return true;
+    }
+    return false;
+  }
 }

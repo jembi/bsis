@@ -87,7 +87,11 @@ public class PermissionConstants {
 
   // Inventory Permissions
   public static final String LABEL_COMPONENT = "Label Component";
-
+  public static final String ADD_TRANSFUSION_DATA = "Add Transfusion Data";
+  public static final String EDIT_TRANSFUSION_DATA = "Edit Transfusion Data";
+  public static final String VIEW_TRANSFUSION_DATA = "View Transfusion Data";
+  public static final String VOID_TRANSFUSION_DATA = "Void Transfusion Data";
+  
   // Discard Permissions
   public static final String DISCARD_COMPONENT = "Discard Component";
   public static final String VIEW_DISCARDS = "View Discards";

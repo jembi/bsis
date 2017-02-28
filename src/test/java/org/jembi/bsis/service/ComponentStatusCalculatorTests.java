@@ -570,13 +570,13 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testUpdateComponentStatusUsed_shouldNotChange() throws Exception {
     // set up data
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.USED).build();
+    Component component = aComponent().withId(1L).withStatus(ComponentStatus.TRANSFUSED).build();
     
     // SUT
     componentStatusCalculator.updateComponentStatus(component);
     
     // verify
-    assertThat("status is not changed", component.getStatus(), is(ComponentStatus.USED));
+    assertThat("status is not changed", component.getStatus(), is(ComponentStatus.TRANSFUSED));
   }
 
   @Test

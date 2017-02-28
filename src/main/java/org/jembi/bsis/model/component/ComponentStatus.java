@@ -6,15 +6,22 @@ import java.util.List;
 
 public enum ComponentStatus {
 
-  QUARANTINED, AVAILABLE, EXPIRED, ISSUED, USED, UNSAFE, DISCARDED, PROCESSED;
+  QUARANTINED, AVAILABLE, EXPIRED, ISSUED, TRANSFUSED, UNSAFE, DISCARDED, PROCESSED;
   
   public static boolean isFinalStatus(ComponentStatus status) {
 
-    if (status == ComponentStatus.DISCARDED || status == ComponentStatus.ISSUED || status == ComponentStatus.USED
+    if (status == ComponentStatus.DISCARDED || status == ComponentStatus.ISSUED || status == ComponentStatus.TRANSFUSED
        || status == ComponentStatus.PROCESSED || status == ComponentStatus.UNSAFE) {
       return true;
     }
 
+    return false;
+  }
+  
+  public static boolean isUsedStatus(ComponentStatus status) {
+    if (status == ComponentStatus.TRANSFUSED) {
+      return true;
+    }
     return false;
   }
 

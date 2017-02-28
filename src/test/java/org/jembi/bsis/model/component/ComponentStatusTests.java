@@ -14,7 +14,7 @@ public class ComponentStatusTests {
   public void testIsFinalComponentStatus_shouldReturn_True() {
     assertThat(ComponentStatus.isFinalStatus(ComponentStatus.DISCARDED), is(true));
     assertThat(ComponentStatus.isFinalStatus(ComponentStatus.ISSUED), is(true));
-    assertThat(ComponentStatus.isFinalStatus(ComponentStatus.USED), is(true));
+    assertThat(ComponentStatus.isFinalStatus(ComponentStatus.TRANSFUSED), is(true));
     assertThat(ComponentStatus.isFinalStatus(ComponentStatus.PROCESSED), is(true));
     assertThat(ComponentStatus.isFinalStatus(ComponentStatus.UNSAFE), is(true));
   }
@@ -62,8 +62,8 @@ public class ComponentStatusTests {
   }
   
   @Test
-  public void testUSEDInGetComponentRelatedStatuses_shouldReturn_False() {
-    ComponentStatus status = ComponentStatus.USED;
+  public void testTRANSFUSEDInGetComponentRelatedStatuses_shouldReturn_False() {
+    ComponentStatus status = ComponentStatus.TRANSFUSED;
     Set<ComponentStatus> componentStatuses = new HashSet<>(ComponentStatus.getComponentRelatedStatuses());
     assertThat(componentStatuses.contains(status), is(false));
   }
@@ -80,5 +80,23 @@ public class ComponentStatusTests {
     ComponentStatus status = ComponentStatus.PROCESSED;
     Set<ComponentStatus> componentStatuses = new HashSet<>(ComponentStatus.getComponentRelatedStatuses());
     assertThat(componentStatuses.contains(status), is(false));
+  }
+  
+  //isUsedStatus
+  
+  @Test
+  public void testIsUsedStatus_shouldReturn_True() {
+    assertThat(ComponentStatus.isUsedStatus(ComponentStatus.TRANSFUSED), is(true));
+  }
+  
+  @Test
+  public void testIsUsedStatus_shouldReturn_False() {
+    assertThat(ComponentStatus.isUsedStatus(ComponentStatus.EXPIRED), is(false));
+    assertThat(ComponentStatus.isUsedStatus(ComponentStatus.AVAILABLE), is(false));
+    assertThat(ComponentStatus.isUsedStatus(ComponentStatus.QUARANTINED), is(false));
+    assertThat(ComponentStatus.isUsedStatus(ComponentStatus.ISSUED), is(false));
+    assertThat(ComponentStatus.isUsedStatus(ComponentStatus.UNSAFE), is(false));
+    assertThat(ComponentStatus.isUsedStatus(ComponentStatus.DISCARDED), is(false));
+    assertThat(ComponentStatus.isUsedStatus(ComponentStatus.PROCESSED), is(false));
   }
 }

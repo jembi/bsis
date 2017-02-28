@@ -581,6 +581,15 @@ public class ComponentCRUDService {
     return updateComponent(component);
   }
 
+  public Component transfuseComponent(Component component) {
+    // check if it is possible that this component is transfused
+    if (!componentConstraintChecker.canTransfuse(component)) {
+      throw new IllegalStateException("Component " + component.getId() + " is in the wrong state to be transfused.");
+    }
+    component.setStatus(ComponentStatus.TRANSFUSED);
+    return updateComponent(component);
+  }
+
   /**
    * Roll back component status changes. This method is called whenever component status changes
    * need to be deleted:

@@ -2,16 +2,19 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBackingFormBuilder.aTransfusionReactionTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTransfusionReactionType;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeManagementViewModelBuilder.aTransfusionReactionTypeManagementViewModel;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeViewModelBuilder.aTransfusionReactionTypeViewModel;
 import static org.jembi.bsis.helpers.matchers.TransfusionReactionTypeManagementViewModelMatcher.hasSameStateAsTransfusionReactionTypeManagementViewModel;
+import static org.jembi.bsis.helpers.matchers.TransfusionReactionTypeMatcher.hasSameStateAsTransfusionReactionType;
 import static org.jembi.bsis.helpers.matchers.TransfusionReactionTypeViewModelMatcher.hasSameStateAsTransfusionReactionTypeViewModel;
 import static org.mockito.Mockito.doReturn;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeManagementViewModel;
@@ -156,6 +159,33 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
 
     // Verify
     assertThat(returnedViewModels, is(expectedViewModels));
+  }
+
+  @Test
+  public void testCreateEntity_shouldReturnExpectedEntity() {
+    // Set up fixture
+    Long id = 1L;
+    String name = "Very bad";
+    String description = "Something really bad happened";
+    TransfusionReactionTypeBackingForm transfusionReactionTypeForm = aTransfusionReactionTypeBackingForm()
+        .withId(id)
+        .withName(name)
+        .withDescription(description)
+        .thatIsDeleted()
+        .build();
+    // Set up expectations
+    TransfusionReactionType expectedEntity = aTransfusionReactionType()
+        .withId(1L)
+        .withName(name)
+        .withDescription(description)
+        .thatIsDeleted()
+        .build();
+
+    // Exercise SUT
+    TransfusionReactionType returnedEntity = transfusionReactionTypeFactory.createEntity(transfusionReactionTypeForm);
+
+    // Verify
+    assertThat(returnedEntity, hasSameStateAsTransfusionReactionType(expectedEntity));
   }
 }
 
