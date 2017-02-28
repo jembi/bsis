@@ -54,6 +54,20 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
   }
 
   @Test
+  public void testCreateTransfusionReactionTypeViewModelWithNullTransfusionReactionType_shouldReturnEmptyViewModel() {
+    // Set up expectations
+    TransfusionReactionTypeViewModel expectedViewModel = aTransfusionReactionTypeViewModel()
+        .build();
+
+    // Exercise SUT
+    TransfusionReactionTypeViewModel returnedViewModel =
+        transfusionReactionTypeFactory.createTransfusionReactionTypeViewModel(null);
+
+    // Verify
+    assertThat(returnedViewModel, hasSameStateAsTransfusionReactionTypeViewModel(expectedViewModel));
+  }
+
+  @Test
   public void testCreateTransfusionReactionTypeManagementViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
     long transfusionReactionTypeId = 769L;
@@ -77,6 +91,20 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
     TransfusionReactionTypeManagementViewModel returnedViewModel =
         transfusionReactionTypeFactory.createTransfusionReactionTypeManagementViewModel(transfusionReactionType);
     
+    // Verify
+    assertThat(returnedViewModel, hasSameStateAsTransfusionReactionTypeManagementViewModel(expectedViewModel));
+  }
+
+  @Test
+  public void testCreateTransfusionReactionTypeManagementViewModelWithNullTransfusionReactionType_shouldReturnEmptyViewModel() {
+    // Set up expectations
+    TransfusionReactionTypeManagementViewModel expectedViewModel = aTransfusionReactionTypeManagementViewModel()
+        .build();
+
+    // Exercise SUT
+    TransfusionReactionTypeManagementViewModel returnedViewModel =
+        transfusionReactionTypeFactory.createTransfusionReactionTypeManagementViewModel(null);
+
     // Verify
     assertThat(returnedViewModel, hasSameStateAsTransfusionReactionTypeManagementViewModel(expectedViewModel));
   }

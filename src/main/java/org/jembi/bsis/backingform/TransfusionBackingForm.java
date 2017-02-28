@@ -29,8 +29,6 @@ public class TransfusionBackingForm {
   
   private Date dateTransfused;
   
-  private Boolean isDeleted;
-
   public Long getId() {
     return id;
   }
@@ -110,13 +108,5 @@ public class TransfusionBackingForm {
   @JsonSerialize(using = DateTimeSerialiser.class)
   public void setDateTransfused(Date dateTransfused) {
     this.dateTransfused = dateTransfused;
-  }
-
-  public Boolean getIsDeleted() {
-    return isDeleted;
-  }
-
-  public void setIsDeleted(Boolean isDeleted) {
-    this.isDeleted = isDeleted;
   }
 }
