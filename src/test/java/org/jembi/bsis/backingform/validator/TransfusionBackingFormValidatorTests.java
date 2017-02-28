@@ -482,6 +482,48 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     assertThat(errors.getFieldError("componentCode").getCode(), is("errors.required"));
   }
 
+  @Test
+  public void testValidateTransfusionFormWithDINAndNoComponentCodeAndComponentTypeWithNullId_shouldGetTwoErrors() {
+    // Set up data
+    Date transfusedDate = (new DateTime()).minusDays(5).toDate();
+    String din = "12345";
+    
+    List<Component> components = new ArrayList<Component>();
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber(din)
+        .withComponents(components)
+        .build();
+
+    long usageSiteId = 1L;
+    Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
+    LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
+
+    TransfusionBackingForm form = aTransfusionBackingForm()
+        .withDonationIdentificationNumber(din)
+        .withDateTransfused(transfusedDate)
+        .withComponentType(aComponentTypeBackingForm().withId(null).build())
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withReceivedFrom(aUsageSite)
+        .withPatient(aPatientBackingForm()
+            .withName1("name1")
+            .withName2("name2")
+            .build())
+        .build();
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "transfusion");
+
+    when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
+    when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
+
+    // Run test
+    validator.validateForm(form, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(2));
+    assertThat(errors.getFieldError("componentType").getCode(), is("errors.required"));
+    assertThat(errors.getFieldError("componentCode").getCode(), is("errors.required"));
+  }
+
   @SuppressWarnings("unchecked")
   @Test
   public void testValidateTransfusionFormWithDINAndInvalidComponentCode_shouldGetOneError() {

@@ -63,7 +63,7 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
 
     Component component = null;
     List<Component> componentsFromDINAndComponentTypeList = null;
-    if (form.getComponentType() != null) {
+    if (form.getComponentType() != null && form.getComponentType().getId() != null) {
       if (!componentTypeRepository.verifyComponentTypeExists(form.getComponentType().getId())) {
         errors.rejectValue("componentType", "errors.invalid",
             "Invalid componentType");
@@ -72,7 +72,7 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
         if (donation != null) {
           componentsFromDINAndComponentTypeList = componentRepository.findComponentsByDINAndType(
               form.getDonationIdentificationNumber(), form.getComponentType().getId());
-  
+
           if (componentsFromDINAndComponentTypeList == null || componentsFromDINAndComponentTypeList.size() == 0) {
             errors.rejectValue("componentType", "errors.invalid.noComponents",
                 "No components with the specified component type exist for the specified Donation");
@@ -90,10 +90,11 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
       }
     }
 
-    if (form.getComponentType() == null && form.getComponentCode() == null) {
+    if ((form.getComponentType() == null || form.getComponentType().getId() == null)
+          && StringUtils.isBlank(form.getComponentCode())) {
       errors.rejectValue("componentType", "errors.required", "componentType is required");
       errors.rejectValue("componentCode", "errors.required", "componentCode is required");
-    } else if (donation != null && form.getComponentCode() != null) {
+    } else if (donation != null && StringUtils.isNotBlank(form.getComponentCode())) {
       try {
         // note that if the component Code was specified it is used with higher priority for the
         component = componentRepository.findComponentByCodeAndDIN(form.getComponentCode(),
