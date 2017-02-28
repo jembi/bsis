@@ -1,5 +1,6 @@
 package org.jembi.bsis.backingform.validator;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -85,6 +86,11 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
           errors.rejectValue("patient.name2", "errors.fieldLength", "Maximum length for this field is " + MAX_LENGTH_NAME);
         }
 
+        if (patient.getDateOfBirth() != null) {
+          if (patient.getDateOfBirth().after(new Date())) {
+            errors.rejectValue("patient.dateOfBirth", "errors.invalid", "Patient.dateOfBirth must be in the past");
+          }
+        }
       }
     }
 

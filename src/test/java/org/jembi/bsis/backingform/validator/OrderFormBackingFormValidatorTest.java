@@ -32,6 +32,7 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -246,6 +247,50 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("patient name2 is required", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidatePatientRequestWithBirthDateAfterCurrentDate_shouldHaveOneError() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().withName1("First Name").withName2("Last Name").withDateOfBirth(new DateTime().plusDays(20).toDate()).build());
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm"))
+        .thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    Assert.assertEquals("Patient.dateOfBirth must be in the past", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidatePatientRequestWithBirthDateBeforeCurrentDate_noErrors() {
+    // set up data
+    OrderFormBackingForm backingForm = getPatientRequestOrderFormBackingForm();
+    backingForm.setItems(Arrays.asList(getBaseOrderFormItemBackingForm()));
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+    backingForm.setPatient(aPatientBackingForm().withName1("First Name").withName2("Last Name").withDateOfBirth(new DateTime().minusDays(20).toDate()).build());
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm"))
+        .thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    assertThat(errors.getFieldErrorCount(), is(0));
   }
 
   @Test
