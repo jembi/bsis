@@ -377,7 +377,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("componentType").getCode(), is("errors.invalid"));
+    assertThat(errors.getFieldError("componentType").getCode(), is("errors.invalid.noComponents"));
   }
 
   @Test
@@ -438,7 +438,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("componentType").getCode(), is("errors.invalid"));
+    assertThat(errors.getFieldError("componentType").getCode(), is("errors.invalid.multipleComponents"));
   }
 
   @Test
@@ -634,7 +634,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("componentCode").getCode(), is("errors.invalid"));
+    assertThat(errors.getFieldError("componentCode").getCode(), is("errors.invalid.componentStatus"));
   }
 
   @Test
@@ -688,7 +688,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("componentType").getCode(), is("errors.invalid"));
+    assertThat(errors.getFieldError("componentType").getCode(), is("errors.invalid.componentStatus"));
   }
 
   @Test

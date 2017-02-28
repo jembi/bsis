@@ -74,15 +74,15 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
               form.getDonationIdentificationNumber(), form.getComponentType().getId());
   
           if (componentsFromDINAndComponentTypeList == null || componentsFromDINAndComponentTypeList.size() == 0) {
-            errors.rejectValue("componentType", "errors.invalid",
+            errors.rejectValue("componentType", "errors.invalid.noComponents",
                 "No components with the specified component type exist for the specified Donation");
           } else if (form.getComponentCode() == null && componentsFromDINAndComponentTypeList.size() > 1) {
-            errors.rejectValue("componentType", "errors.invalid",
+            errors.rejectValue("componentType", "errors.invalid.multipleComponents",
                 "More than one component returned for given component Type. Please enter a componentCode");
           } else if (componentsFromDINAndComponentTypeList.size() == 1) {
             component = componentsFromDINAndComponentTypeList.get(0);
             if (component != null && component.getStatus() != ComponentStatus.ISSUED) {
-              errors.rejectValue("componentType", "errors.invalid",
+              errors.rejectValue("componentType", "errors.invalid.componentStatus",
                   "There is no component in ISSUED state for specified donationIdentificationNumber and componentType");
             }
           }
@@ -99,7 +99,7 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
         component = componentRepository.findComponentByCodeAndDIN(form.getComponentCode(),
             form.getDonationIdentificationNumber());
         if (component != null && component.getStatus() != ComponentStatus.ISSUED) {
-          errors.rejectValue("componentCode", "errors.invalid",
+          errors.rejectValue("componentCode", "errors.invalid.componentStatus",
               "There is no component in ISSUED state for specified donationIdentificationNumber and componentCode");
         }
       } catch (NoResultException e) {
