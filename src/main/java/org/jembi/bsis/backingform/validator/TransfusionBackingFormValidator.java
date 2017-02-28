@@ -66,7 +66,7 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
     if (form.getComponentType() != null) {
       if (!componentTypeRepository.verifyComponentTypeExists(form.getComponentType().getId())) {
         errors.rejectValue("componentType", "errors.invalid",
-            "Invalid componentType. Component Type does not exist");
+            "Invalid componentType");
       } else {
         // validate the components only if a valid Donation was found
         if (donation != null) {
@@ -75,15 +75,15 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
   
           if (componentsFromDINAndComponentTypeList == null || componentsFromDINAndComponentTypeList.size() == 0) {
             errors.rejectValue("componentType", "errors.invalid",
-                "Invalid componentType. No components with the specified component type exist for the specified Donation");
+                "No components with the specified component type exist for the specified Donation");
           } else if (form.getComponentCode() == null && componentsFromDINAndComponentTypeList.size() > 1) {
             errors.rejectValue("componentType", "errors.invalid",
-                "More than one component returned for given component Type. A componentCode has to be entered in this case");
+                "More than one component returned for given component Type. Please enter a componentCode");
           } else if (componentsFromDINAndComponentTypeList.size() == 1) {
             component = componentsFromDINAndComponentTypeList.get(0);
             if (component != null && component.getStatus() != ComponentStatus.ISSUED) {
               errors.rejectValue("componentType", "errors.invalid",
-                  "Invalid componentType. There is no component in ISSUED state for specified donationIdentificationNumber and componentType");
+                  "There is no component in ISSUED state for specified donationIdentificationNumber and componentType");
             }
           }
         }
@@ -100,17 +100,17 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
             form.getDonationIdentificationNumber());
         if (component != null && component.getStatus() != ComponentStatus.ISSUED) {
           errors.rejectValue("componentCode", "errors.invalid",
-              "Invalid componentCode. There is no component in ISSUED state for specified donationIdentificationNumber and componentCode");
+              "There is no component in ISSUED state for specified donationIdentificationNumber and componentCode");
         }
       } catch (NoResultException e) {
-        errors.rejectValue("componentCode", "errors.invalid", "Invalid componentCode, no result found");
+        errors.rejectValue("componentCode", "errors.invalid", "Invalid componentCode");
       }
       // validate componentType is the same as componentCode if both are configured
       if (componentsFromDINAndComponentTypeList != null && componentsFromDINAndComponentTypeList.size() > 0) {
         if (component != null && 
               component.getComponentType().getId() != componentsFromDINAndComponentTypeList.get(0).getComponentType().getId()) {
           errors.rejectValue("componentType", "errors.invalid",
-              "Invalid ComponentType. It does not match the entered component Code");
+              "ComponentType does not match the entered componentCode");
         }
       }
     }
@@ -144,10 +144,10 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
       errors.rejectValue("dateTransfused", "errors.required", "dateTransfused is required");
     } else {
       if (new Date().before(transfusionDate)) {
-        errors.rejectValue("dateTransfused", "errors.invalid", "dateTransfused is invalid. It has to be in the past");
+        errors.rejectValue("dateTransfused", "errors.invalid", "dateTransfused must be in the past");
       } else if (component != null && transfusionDate.before(component.getCreatedOn())) {
         errors.rejectValue("dateTransfused", "errors.invalid",
-            "dateTransfused is invalid. It has to be after the date that the component was created on");
+            "dateTransfused must be after the date that the component was created on");
       }
     }
   }
