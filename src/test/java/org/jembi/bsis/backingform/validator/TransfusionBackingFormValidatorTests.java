@@ -1087,7 +1087,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("dateTransfused").getCode(), is("errors.invalid.dateAfterComponentCreated"));
+    assertThat(errors.getFieldError("dateTransfused").getCode(), is("errors.invalid.dateTransfusedAfterComponentCreated"));
   }
 
   @Test
