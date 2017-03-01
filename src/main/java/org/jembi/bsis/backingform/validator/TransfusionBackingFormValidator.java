@@ -147,7 +147,7 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
       if (new Date().before(transfusionDate)) {
         errors.rejectValue("dateTransfused", "errors.invalid", "dateTransfused must be in the past");
       } else if (component != null && transfusionDate.before(component.getCreatedOn())) {
-        errors.rejectValue("dateTransfused", "errors.invalid",
+        errors.rejectValue("dateTransfused", "errors.invalid.dateAfterComponentCreated",
             "dateTransfused must be after the date that the component was created on");
       }
     }
