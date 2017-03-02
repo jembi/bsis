@@ -14,6 +14,7 @@ import org.jembi.bsis.service.report.DiscardedComponentReportGenerator;
 import org.jembi.bsis.service.report.DonorsAdverseEventsReportGenerator;
 import org.jembi.bsis.service.report.DonorsDeferredSummaryReportGenerator;
 import org.jembi.bsis.service.report.StockLevelsReportGenerator;
+import org.jembi.bsis.service.report.TransfusionSummaryReportGenerator;
 import org.jembi.bsis.service.report.TtiPrevalenceReportGenerator;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,9 @@ public class ReportsController {
   @Autowired
   private ComponentProductionReportGenerator componentProductionReportGenerator;
 
+  @Autowired
+  private TransfusionSummaryReportGenerator transfusionSummaryReportGenerator;
+
   @RequestMapping(value = "/transfusionsummary/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.TRANSFUSIONS_REPORTING + "')")
   public Map<String, Object> transfusionSummaryFormFields() {
@@ -62,6 +66,15 @@ public class ReportsController {
     map.put("usageSites", reportsControllerService.getUsageSites());
     map.put("transfusionReactionTypes", reportsControllerService.getTransfusionReactionTypes());
     return map;
+  }
+
+  @RequestMapping(value = "/transfusionsummary/generate", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.TRANSFUSIONS_REPORTING + "')")
+  public Report generateTransfusionSummaryReport(
+      @RequestParam(value = "transfusionSiteId", required = false) Long transfusionSiteId,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+    return transfusionSummaryReportGenerator.generateTransfusionSummaryReport(transfusionSiteId, startDate, endDate);
   }
   
   @RequestMapping(value = "/discardedunits/form", method = RequestMethod.GET)
