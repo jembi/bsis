@@ -1,10 +1,10 @@
 package org.jembi.bsis.helpers.matchers;
 
+import java.util.Objects;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
-
-import java.util.Objects;
 
 public class TransfusionFullViewModelMatcher extends TypeSafeMatcher<TransfusionFullViewModel> {
 
@@ -44,7 +44,8 @@ public class TransfusionFullViewModelMatcher extends TypeSafeMatcher<Transfusion
         Objects.equals(actual.getTransfusionReactionType(), expected.getTransfusionReactionType());
   }
 
-  public static TransfusionFullViewModelMatcher hasSameStateAsTransfusionViewModel(TransfusionFullViewModel expected) {
+  public static TransfusionFullViewModelMatcher hasSameStateAsTransfusionFullViewModel(
+      TransfusionFullViewModel expected) {
     return new TransfusionFullViewModelMatcher(expected);
   }
 

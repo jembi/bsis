@@ -14,12 +14,13 @@ import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
 import static org.jembi.bsis.helpers.builders.PatientViewModelBuilder.aPatientViewModel;
 import static org.jembi.bsis.helpers.builders.TransfusionBackingFormBuilder.aTransfusionBackingForm;
 import static org.jembi.bsis.helpers.builders.TransfusionBuilder.aTransfusion;
+import static org.jembi.bsis.helpers.builders.TransfusionFullViewModelBuilder.aTransfusionFullViewModel;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBackingFormBuilder.aTransfusionReactionTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTransfusionReactionType;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeViewModelBuilder.aTransfusionReactionTypeViewModel;
-import static org.jembi.bsis.helpers.builders.TransfusionFullViewModelBuilder.aTransfusionFullViewModel;
 import static org.jembi.bsis.helpers.matchers.TransfusionMatcher.hasSameStateAsTransfusion;
-import static org.jembi.bsis.helpers.matchers.TransfusionFullViewModelMatcher.hasSameStateAsTransfusionViewModel;
+import static org.jembi.bsis.helpers.matchers.TransfusionFullViewModelMatcher.hasSameStateAsTransfusionFullViewModel;
+
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -259,7 +260,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     TransfusionFullViewModel returnedViewModel = transfusionFactory.createFullViewModel(transfusion);
 
     //Verify
-    assertThat(returnedViewModel, hasSameStateAsTransfusionViewModel(expectedViewModel));
+    assertThat(returnedViewModel, hasSameStateAsTransfusionFullViewModel(expectedViewModel));
   }
 
   @Test
