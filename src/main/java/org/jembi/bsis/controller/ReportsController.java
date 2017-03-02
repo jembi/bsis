@@ -9,9 +9,9 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.service.report.BloodUnitsIssuedReportGenerator;
 import org.jembi.bsis.service.report.CollectedDonationsReportGenerator;
-import org.jembi.bsis.service.report.DonorsAdverseEventsReportGenerator;
-import org.jembi.bsis.service.report.DiscardedComponentReportGenerator;
 import org.jembi.bsis.service.report.ComponentProductionReportGenerator;
+import org.jembi.bsis.service.report.DiscardedComponentReportGenerator;
+import org.jembi.bsis.service.report.DonorsAdverseEventsReportGenerator;
 import org.jembi.bsis.service.report.DonorsDeferredSummaryReportGenerator;
 import org.jembi.bsis.service.report.StockLevelsReportGenerator;
 import org.jembi.bsis.service.report.TtiPrevalenceReportGenerator;
@@ -56,7 +56,7 @@ public class ReportsController {
   private ComponentProductionReportGenerator componentProductionReportGenerator;
 
   @RequestMapping(value = "/transfusionsummary/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
+  @PreAuthorize("hasRole('" + PermissionConstants.TRANSFUSIONS_REPORTING + "')")
   public Map<String, Object> transfusionSummaryFormFields() {
     Map<String, Object> map = new HashMap<>();
     map.put("usageSites", reportsControllerService.getUsageSites());
