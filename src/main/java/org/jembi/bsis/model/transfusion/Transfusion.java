@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -18,7 +20,12 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
+import org.jembi.bsis.repository.constant.TransfusionNamedQueryConstants;
 
+@NamedQueries({
+  @NamedQuery(name = TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSIONS_RECORDED,
+      query = TransfusionNamedQueryConstants.QUERY_FIND_TRANSFUSIONS_RECORDED)
+})
 @Entity
 @Audited
 public class Transfusion extends BaseModificationTrackerEntity {
