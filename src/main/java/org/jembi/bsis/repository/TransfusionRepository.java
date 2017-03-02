@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TransfusionRepository extends AbstractRepository<Transfusion> {
   
-  public List<TransfusionSummaryDTO> findTransfusionsRecorded(Location receivedFrom, Date startDate, Date endDate) {
-    return entityManager.createNamedQuery(TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSIONS_RECORDED, 
+  public List<TransfusionSummaryDTO> findTransfusionSummaryRecordedForUsageSiteForPeriod(Location receivedFrom, Date startDate, Date endDate) {
+    return entityManager.createNamedQuery(TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD, 
         TransfusionSummaryDTO.class)
         .setParameter("receivedFrom", receivedFrom)
         .setParameter("startDate", startDate)

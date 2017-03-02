@@ -23,8 +23,8 @@ import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.repository.constant.TransfusionNamedQueryConstants;
 
 @NamedQueries({
-  @NamedQuery(name = TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSIONS_RECORDED,
-      query = TransfusionNamedQueryConstants.QUERY_FIND_TRANSFUSIONS_RECORDED)
+  @NamedQuery(name = TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD,
+      query = TransfusionNamedQueryConstants.QUERY_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD)
 })
 @Entity
 @Audited
