@@ -18,7 +18,7 @@ import org.jembi.bsis.service.TransfusionCRUDService;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
-import org.jembi.bsis.viewmodel.TransfusionViewModel;
+import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,13 +60,13 @@ public class TransfusionControllerService {
     return transfusionReactionTypeFactory.createTransfusionReactionTypeViewModels(transfusionReactionTypes);
   }
 
-  public TransfusionViewModel createTransfusionForm(TransfusionBackingForm backingForm) {
+  public TransfusionFullViewModel createTransfusionForm(TransfusionBackingForm backingForm) {
     Transfusion entity = transfusionFactory.createEntity(backingForm);
     Long transfusedComponentTypeId = null;
     if (backingForm.getComponentType() != null) {
       transfusedComponentTypeId = backingForm.getComponentType().getId();
     }
     entity = transfusionCRUDService.createTransfusion(entity, transfusedComponentTypeId);
-    return transfusionFactory.createViewModel(entity);
+    return transfusionFactory.createFullViewModel(entity);
   }
 }

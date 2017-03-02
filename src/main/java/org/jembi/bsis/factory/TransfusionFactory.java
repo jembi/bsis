@@ -8,7 +8,7 @@ import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
-import org.jembi.bsis.viewmodel.TransfusionViewModel;
+import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,8 +59,8 @@ public class TransfusionFactory {
     return transfusion;
   }
 
-  public TransfusionViewModel createViewModel(Transfusion transfusion) {
-    TransfusionViewModel viewModel = new TransfusionViewModel();
+  public TransfusionFullViewModel createFullViewModel(Transfusion transfusion) {
+    TransfusionFullViewModel viewModel = new TransfusionFullViewModel();
     viewModel.setId(transfusion.getId());
     viewModel.setComponent(componentFactory.createComponentViewModel(transfusion.getComponent()));
     viewModel.setDateTransfused(transfusion.getDateTransfused());
@@ -75,11 +75,11 @@ public class TransfusionFactory {
     return viewModel;
   }
 
-  public List<TransfusionViewModel> createViewModels(List<Transfusion> transfusions) {
-    List<TransfusionViewModel> viewModels = new ArrayList<>();
+  public List<TransfusionFullViewModel> createFullViewModels(List<Transfusion> transfusions) {
+    List<TransfusionFullViewModel> viewModels = new ArrayList<>();
     if (transfusions != null) {
       for (Transfusion transfusion : transfusions) {
-        viewModels.add(createViewModel(transfusion));
+        viewModels.add(createFullViewModel(transfusion));
       }
     }
     return viewModels;

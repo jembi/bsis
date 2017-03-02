@@ -5,11 +5,11 @@ import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.PatientViewModel;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
-import org.jembi.bsis.viewmodel.TransfusionViewModel;
+import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
 
 import java.util.Date;
 
-public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionViewModel> {
+public class TransfusionFullViewModelBuilder extends AbstractBuilder<TransfusionFullViewModel> {
 
   private Long id;
   private String donationIdentificationNumber;
@@ -22,64 +22,64 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
   private Date dateTransfused;  
   private boolean isDeleted;
   
-  public TransfusionViewModelBuilder withId(Long id) {
+  public TransfusionFullViewModelBuilder withId(Long id) {
     this.id = id;
     return this;
   }
 
-  public TransfusionViewModelBuilder withPatient(PatientViewModel patient) {
+  public TransfusionFullViewModelBuilder withPatient(PatientViewModel patient) {
     this.patient = patient;
     return this;
   }
 
-  public TransfusionViewModelBuilder withDonationIdentificationNumber(String donationIdentificationNumber) {
+  public TransfusionFullViewModelBuilder withDonationIdentificationNumber(String donationIdentificationNumber) {
     this.donationIdentificationNumber = donationIdentificationNumber;
     return this;
   }
   
-  public TransfusionViewModelBuilder withComponent(ComponentViewModel component) {
+  public TransfusionFullViewModelBuilder withComponent(ComponentViewModel component) {
     this.component = component;
     return this;
   }
   
-  public TransfusionViewModelBuilder withUsageSite(LocationViewModel usageSite) {
+  public TransfusionFullViewModelBuilder withUsageSite(LocationViewModel usageSite) {
     this.usageSite = usageSite;
     return this;
   }
   
-  public TransfusionViewModelBuilder withTransfusionReactionType(TransfusionReactionTypeViewModel transfusionReactionType) {
+  public TransfusionFullViewModelBuilder withTransfusionReactionType(TransfusionReactionTypeViewModel transfusionReactionType) {
     this.transfusionReactionType = transfusionReactionType;
     return this;
   }
 
-  public TransfusionViewModelBuilder thatIsDeleted() {
+  public TransfusionFullViewModelBuilder thatIsDeleted() {
     isDeleted = true;
     return this;
   }
 
-  public TransfusionViewModelBuilder thatIsNotDeleted() {
+  public TransfusionFullViewModelBuilder thatIsNotDeleted() {
     isDeleted = false;
     return this;
   }
 
-  public TransfusionViewModelBuilder withTransfusionOutcome(TransfusionOutcome transfusionOutcome) {
+  public TransfusionFullViewModelBuilder withTransfusionOutcome(TransfusionOutcome transfusionOutcome) {
     this.transfusionOutcome = transfusionOutcome;
     return this;
   }
 
-  public TransfusionViewModelBuilder withDateTransfused(Date dateTransfused) {
+  public TransfusionFullViewModelBuilder withDateTransfused(Date dateTransfused) {
     this.dateTransfused = dateTransfused;
     return this;
   }
 
-  public TransfusionViewModelBuilder withNotes(String notes) {
+  public TransfusionFullViewModelBuilder withNotes(String notes) {
     this.notes = notes;
     return this;
   }
 
   @Override
-  public TransfusionViewModel build() {
-    TransfusionViewModel transfusionViewModel = new TransfusionViewModel();
+  public TransfusionFullViewModel build() {
+    TransfusionFullViewModel transfusionViewModel = new TransfusionFullViewModel();
     transfusionViewModel.setId(id);
     transfusionViewModel.setDonationIdentificationNumber(donationIdentificationNumber);
     transfusionViewModel.setPatient(patient);
@@ -93,8 +93,8 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
     return transfusionViewModel;
   }
 
-  public static TransfusionViewModelBuilder aTransfusionViewModel() {
-    return new TransfusionViewModelBuilder();
+  public static TransfusionFullViewModelBuilder aTransfusionViewModel() {
+    return new TransfusionFullViewModelBuilder();
   }
   
 }
