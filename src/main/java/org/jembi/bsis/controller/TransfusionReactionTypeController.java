@@ -39,7 +39,7 @@ public class TransfusionReactionTypeController {
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_TRANSFUSION_REACTION_TYPES + "')")
   public Map<String, Object> getTransfusionReactionTypeById(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<>();
-    map.put("transfusionReactionTypes", transfusionReactionTypeControllerService.getTransfusionReactionType(id));
+    map.put("transfusionReactionType", transfusionReactionTypeControllerService.getTransfusionReactionType(id));
     return map;
   }
   
