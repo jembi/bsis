@@ -11,45 +11,46 @@ public class TransfusionSummaryDTO {
   private long count;
   private Location transfusionSite;
 
-  public TransfusionSummaryDTO () {
+  public TransfusionSummaryDTO() {
   }
 
-  public TransfusionSummaryDTO (TransfusionOutcome transfusionOutcome, TransfusionReactionType transfusionreactionType, long count, Location transfusionSite) {
+  public TransfusionSummaryDTO(TransfusionOutcome transfusionOutcome, TransfusionReactionType transfusionreactionType,
+      long count, Location transfusionSite) {
     this.transfusionOutcome = transfusionOutcome;
     this.transfusionreactionType = transfusionreactionType;
     this.count = count;
     this.transfusionSite = transfusionSite;
   }
 
-  public TransfusionOutcome getTransfusionOutcome () {
+  public TransfusionOutcome getTransfusionOutcome() {
     return transfusionOutcome;
   }
 
-  public void setTransfusionOutcome (TransfusionOutcome transfusionOutcome) {
+  public void setTransfusionOutcome(TransfusionOutcome transfusionOutcome) {
     this.transfusionOutcome = transfusionOutcome;
   }
 
-  public TransfusionReactionType getTransfusionreactionType () {
+  public TransfusionReactionType getTransfusionreactionType() {
     return transfusionreactionType;
   }
 
-  public void setTransfusionreactionType (TransfusionReactionType transfusionreactionType) {
+  public void setTransfusionreactionType(TransfusionReactionType transfusionreactionType) {
     this.transfusionreactionType = transfusionreactionType;
   }
 
-  public long getCount () {
+  public long getCount() {
     return count;
   }
 
-  public void setCount (long count) {
+  public void setCount(long count) {
     this.count = count;
   }
 
-  public Location getTransfusionSite () {
+  public Location getTransfusionSite() {
     return transfusionSite;
   }
 
-  public void setTransfusionSite (Location transfusionSite) {
+  public void setTransfusionSite(Location transfusionSite) {
     this.transfusionSite = transfusionSite;
   }
 }
