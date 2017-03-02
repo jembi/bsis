@@ -54,6 +54,15 @@ public class ReportsController {
 
   @Autowired
   private ComponentProductionReportGenerator componentProductionReportGenerator;
+
+  @RequestMapping(value = "/transfusionsummary/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
+  public Map<String, Object> transfusionSummaryFormFields() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("usageSites", reportsControllerService.getUsageSites());
+    map.put("transfusionReactionTypes", reportsControllerService.getTransfusionReactionTypes());
+    return map;
+  }
   
   @RequestMapping(value = "/discardedunits/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
