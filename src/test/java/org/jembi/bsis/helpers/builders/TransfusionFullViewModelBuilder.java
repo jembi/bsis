@@ -93,7 +93,7 @@ public class TransfusionFullViewModelBuilder extends AbstractBuilder<Transfusion
     return transfusionViewModel;
   }
 
-  public static TransfusionFullViewModelBuilder aTransfusionViewModel() {
+  public static TransfusionFullViewModelBuilder aTransfusionFullViewModel() {
     return new TransfusionFullViewModelBuilder();
   }
   

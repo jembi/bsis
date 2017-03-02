@@ -17,7 +17,7 @@ import static org.jembi.bsis.helpers.builders.TransfusionBuilder.aTransfusion;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBackingFormBuilder.aTransfusionReactionTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTransfusionReactionType;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeViewModelBuilder.aTransfusionReactionTypeViewModel;
-import static org.jembi.bsis.helpers.builders.TransfusionFullViewModelBuilder.aTransfusionViewModel;
+import static org.jembi.bsis.helpers.builders.TransfusionFullViewModelBuilder.aTransfusionFullViewModel;
 import static org.jembi.bsis.helpers.matchers.TransfusionMatcher.hasSameStateAsTransfusion;
 import static org.jembi.bsis.helpers.matchers.TransfusionFullViewModelMatcher.hasSameStateAsTransfusionViewModel;
 import static org.mockito.Mockito.when;
@@ -236,7 +236,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withId(1L)
         .build();
 
-    TransfusionFullViewModel expectedViewModel = aTransfusionViewModel()
+    TransfusionFullViewModel expectedViewModel = aTransfusionFullViewModel()
         .withId(1L)
         .withDonationIdentificationNumber("123456")
         .withComponent(componentViewModel)
