@@ -25,7 +25,6 @@ public class TransfusionReactionTypeRepository extends AbstractRepository<Transf
     TypedQuery<TransfusionReactionType> query = entityManager.createNamedQuery(
         TransfusionReactionTypeNamedQueryConstants.NAME_FIND_BY_ID, TransfusionReactionType.class);
     query.setParameter("id", id);
-    query.setParameter("isDeleted", false);
     return query.getSingleResult();
   }
   

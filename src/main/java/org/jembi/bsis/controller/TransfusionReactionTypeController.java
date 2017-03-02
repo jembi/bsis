@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +33,14 @@ public class TransfusionReactionTypeController {
   @InitBinder
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(transfusionReactionTypeBackingFormValidator);
+  }
+
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_TRANSFUSION_REACTION_TYPES + "')")
+  public Map<String, Object> getTransfusionReactionTypeById(@PathVariable Long id) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("transfusionReactionTypes", transfusionReactionTypeControllerService.getTransfusionReactionType(id));
+    return map;
   }
   
   @RequestMapping(method = RequestMethod.GET)

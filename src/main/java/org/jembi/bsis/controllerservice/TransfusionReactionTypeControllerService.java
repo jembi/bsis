@@ -36,4 +36,9 @@ public class TransfusionReactionTypeControllerService {
      transfusionReactionType = transfusionReactionTypeCRUDService.createTransfusionReactionType(transfusionReactionType);
      return transfusionReactionTypeFactory.createTransfusionReactionTypeManagementViewModel(transfusionReactionType);
   }
+
+  public TransfusionReactionTypeManagementViewModel getTransfusionReactionType(Long id) {
+    TransfusionReactionType transfusionReactionType = transfusionReactionTypeRepository.findById(id);
+    return transfusionReactionTypeFactory.createTransfusionReactionTypeManagementViewModel(transfusionReactionType);
+ }
 }
