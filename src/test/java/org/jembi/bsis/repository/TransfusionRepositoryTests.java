@@ -59,6 +59,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   }
   
   @Test
+  @Ignore
   public void testSearchTransfusionsWithTransfusionSiteNULL_shouldReturnAllTransfusions() {
     
     aTransfusion()
