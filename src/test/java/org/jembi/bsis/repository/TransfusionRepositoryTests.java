@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
+import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTransfusionReactionType;
 import static org.jembi.bsis.helpers.builders.TransfusionBuilder.aTransfusion;
 import static org.jembi.bsis.helpers.matchers.TransfusionMatcher.hasSameStateAsTransfusion;
 
@@ -15,9 +16,9 @@ import org.hamcrest.core.IsNull;
 import org.jembi.bsis.dto.TransfusionSummaryDTO;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.transfusion.Transfusion;
+import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -59,58 +60,96 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   }
   
   @Test
-  @Ignore
-  public void testSearchTransfusionsWithTransfusionSiteNULL_shouldReturnAllTransfusions() {
+  public void testFindTransfusionSummaryRecordedForUsageSiteForPeriod_shouldReturnRightDtos() {
+    
+    Date startDate = new DateTime().minusDays(60).toDate();
+    Date endDate = new DateTime().minusDays(1).toDate();
+    TransfusionReactionType transfusionReactionType = aTransfusionReactionType()
+        .buildAndPersist(entityManager);
     
     aTransfusion()
         .withDonationIdentificationNumber("1234567")
-        .withDateTransfused(new DateTime().minusDays(25).toDate())
+        .withDateTransfused(startDate)
         .withPatient(aPatient()
             .withName1("Name 1")
             .withName2("Name 1")
             .build())
+        .withTransfusionReactionType(transfusionReactionType)
         .withReceivedFrom(aUsageSite()
             .withName("Received From")
             .buildAndPersist(entityManager))
         .withComponent(aComponent()
             .buildAndPersist(entityManager))
-        .build();
+        .buildAndPersist(entityManager);
     
     aTransfusion()
-        .withDonationIdentificationNumber("1234568")
-        .withDateTransfused(new DateTime().minusDays(10).toDate())
-        .withPatient(aPatient()
-            .withName1("Name 2")
-            .withName2("Name 2")
-            .build())
-        .withReceivedFrom(aUsageSite()
-            .withName("Received From2")
-            .buildAndPersist(entityManager))
-        .withComponent(aComponent()
-            .buildAndPersist(entityManager))
-        .build();
+    .withDonationIdentificationNumber("1234598")
+    .withDateTransfused(startDate)
+    .withPatient(aPatient()
+        .withName1("Name 2")
+        .withName2("Name 2")
+        .build())
+    .withTransfusionReactionType(transfusionReactionType)
+    .withReceivedFrom(aUsageSite()
+        .withName("Received From Station")
+        .buildAndPersist(entityManager))
+    .withComponent(aComponent()
+        .buildAndPersist(entityManager))
+    .buildAndPersist(entityManager);
     
-    aTransfusion()
-        .withDonationIdentificationNumber("1234569")
-        .withDateTransfused(new DateTime().minusDays(15).toDate())
-        .withPatient(aPatient()
-            .withName1("Name 3")
-            .withName2("Name 3")
-            .build())
-        .withReceivedFrom(aUsageSite()
-            .withName("Received From3")
-            .buildAndPersist(entityManager))
-        .withComponent(aComponent()
-            .buildAndPersist(entityManager))
-        .build();
+    
     
     Long receivedFromId = null;
-    Date startDate = new DateTime().minusDays(60).toDate();
-    Date endDate = new DateTime().minusDays(1).toDate();
     
     List<TransfusionSummaryDTO> transfusionSummaryDTOs = transfusionRepository.findTransfusionSummaryRecordedForUsageSiteForPeriod(receivedFromId, startDate, endDate);
     
     // check that the transfusion summary count returned is equal to persisted transfusions count
-    assertThat(transfusionSummaryDTOs.size(), is(3));
+    assertThat(transfusionSummaryDTOs.size(), is(2));
+  }
+  
+  @Test
+  public void testFindTransfusionSummaryRecordedForUsageSiteForPeriodWithUsageSite_shouldReturnRightDtos() {
+    
+    Date startDate = new DateTime().minusDays(60).toDate();
+    Date endDate = new DateTime().minusDays(1).toDate();
+    TransfusionReactionType transfusionReactionType = aTransfusionReactionType()
+        .buildAndPersist(entityManager);    
+    Location receivedFrom1 = aUsageSite()
+        .withName("Harare")
+        .buildAndPersist(entityManager);    
+    Location receivedFrom2 = aUsageSite()
+        .withName("Masvingo")
+        .buildAndPersist(entityManager);
+    
+    aTransfusion()
+        .withDonationIdentificationNumber("1234567")
+        .withDateTransfused(startDate)
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withTransfusionReactionType(transfusionReactionType)
+        .withReceivedFrom(receivedFrom1)
+        .withComponent(aComponent()
+            .buildAndPersist(entityManager))
+        .buildAndPersist(entityManager);
+    
+    aTransfusion()
+    .withDonationIdentificationNumber("1234581")
+    .withDateTransfused(startDate)
+    .withPatient(aPatient()
+        .withName1("Name 2")
+        .withName2("Name 2")
+        .build())
+    .withTransfusionReactionType(transfusionReactionType)
+    .withReceivedFrom(receivedFrom2)
+    .withComponent(aComponent()
+        .buildAndPersist(entityManager))
+    .buildAndPersist(entityManager);
+    
+    List<TransfusionSummaryDTO> transfusionSummaryDTOs = transfusionRepository.findTransfusionSummaryRecordedForUsageSiteForPeriod(receivedFrom2.getId(), startDate, endDate);
+    
+    // check that the transfusion summary count returned is equal to persisted transfusions count for the usageSite
+    assertThat(transfusionSummaryDTOs.size(), is(1));
   }
 }

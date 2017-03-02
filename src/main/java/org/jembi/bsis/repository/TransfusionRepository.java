@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.dto.TransfusionSummaryDTO;
-import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.repository.constant.TransfusionNamedQueryConstants;
 import org.springframework.stereotype.Repository;
