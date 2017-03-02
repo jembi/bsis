@@ -59,7 +59,6 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   }
   
   @Test
-  @Ignore
   public void testSearchTransfusionsWithTransfusionSiteNULL_shouldReturnAllTransfusions() {
     
     aTransfusion()
@@ -104,11 +103,11 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
             .buildAndPersist(entityManager))
         .build();
     
-    Location receivedFrom = null;
+    Long receivedFromId = null;
     Date startDate = new DateTime().minusDays(60).toDate();
     Date endDate = new DateTime().minusDays(1).toDate();
     
-    List<TransfusionSummaryDTO> transfusionSummaryDTOs = transfusionRepository.findTransfusionSummaryRecordedForUsageSiteForPeriod(receivedFrom, startDate, endDate);
+    List<TransfusionSummaryDTO> transfusionSummaryDTOs = transfusionRepository.findTransfusionSummaryRecordedForUsageSiteForPeriod(receivedFromId, startDate, endDate);
     
     // check that the transfusion summary count returned is equal to persisted transfusions count
     assertThat(transfusionSummaryDTOs.size(), is(3));

@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TransfusionRepository extends AbstractRepository<Transfusion> {
   
-  public List<TransfusionSummaryDTO> findTransfusionSummaryRecordedForUsageSiteForPeriod(Location receivedFrom, Date startDate, Date endDate) {
+  public List<TransfusionSummaryDTO> findTransfusionSummaryRecordedForUsageSiteForPeriod(Long receivedFromId, Date startDate, Date endDate) {
     return entityManager.createNamedQuery(TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD, 
         TransfusionSummaryDTO.class)
-        .setParameter("receivedFrom", receivedFrom)
+        .setParameter("receivedFromId", receivedFromId)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("transfusionDeleted", false)
