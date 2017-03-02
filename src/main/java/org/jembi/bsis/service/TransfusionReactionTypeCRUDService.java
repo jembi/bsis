@@ -17,4 +17,15 @@ public class TransfusionReactionTypeCRUDService {
     transfusionReactionTypeRepository.save(transfusionReactionType);
     return transfusionReactionType;
   }
+  
+  public TransfusionReactionType updateTransfusionReactionType(TransfusionReactionType transfusionReactionType) {
+    TransfusionReactionType existingTransfusionReactionType = transfusionReactionTypeRepository
+        .findById(transfusionReactionType.getId());
+    
+    existingTransfusionReactionType.setName(transfusionReactionType.getName());
+    existingTransfusionReactionType.setDescription(transfusionReactionType.getDescription());
+    existingTransfusionReactionType.setIsDeleted(transfusionReactionType.getIsDeleted());
+    
+    return transfusionReactionTypeRepository.update(existingTransfusionReactionType);
+  }
 }
