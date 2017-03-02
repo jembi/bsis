@@ -27,6 +27,4 @@ public class TransfusionReactionTypeCRUDService {
     existingTransfusionReactionType.setIsDeleted(transfusionReactionType.getIsDeleted());
     return transfusionReactionTypeRepository.update(existingTransfusionReactionType);
   }
-  
-  
 }
