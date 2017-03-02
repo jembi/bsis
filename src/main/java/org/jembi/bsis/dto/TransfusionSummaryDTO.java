@@ -7,19 +7,19 @@ import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 public class TransfusionSummaryDTO {
 
   private TransfusionOutcome transfusionOutcome;
-  private TransfusionReactionType transfusionreactionType;
-  private long count;
+  private TransfusionReactionType transfusionReactionType;
   private Location transfusionSite;
+  private long count;
 
   public TransfusionSummaryDTO() {
   }
 
-  public TransfusionSummaryDTO(TransfusionOutcome transfusionOutcome, TransfusionReactionType transfusionreactionType,
-      long count, Location transfusionSite) {
+  public TransfusionSummaryDTO(TransfusionOutcome transfusionOutcome, TransfusionReactionType transfusionReactionType,
+      Location transfusionSite, long count) {
     this.transfusionOutcome = transfusionOutcome;
-    this.transfusionreactionType = transfusionreactionType;
-    this.count = count;
+    this.transfusionReactionType = transfusionReactionType;
     this.transfusionSite = transfusionSite;
+    this.count = count;
   }
 
   public TransfusionOutcome getTransfusionOutcome() {
@@ -30,20 +30,12 @@ public class TransfusionSummaryDTO {
     this.transfusionOutcome = transfusionOutcome;
   }
 
-  public TransfusionReactionType getTransfusionreactionType() {
-    return transfusionreactionType;
+  public TransfusionReactionType getTransfusionReactionType() {
+    return transfusionReactionType;
   }
 
-  public void setTransfusionreactionType(TransfusionReactionType transfusionreactionType) {
-    this.transfusionreactionType = transfusionreactionType;
-  }
-
-  public long getCount() {
-    return count;
-  }
-
-  public void setCount(long count) {
-    this.count = count;
+  public void setTransfusionReactionType(TransfusionReactionType transfusionReactionType) {
+    this.transfusionReactionType = transfusionReactionType;
   }
 
   public Location getTransfusionSite() {
@@ -52,5 +44,13 @@ public class TransfusionSummaryDTO {
 
   public void setTransfusionSite(Location transfusionSite) {
     this.transfusionSite = transfusionSite;
+  }
+
+  public long getCount() {
+    return count;
+  }
+
+  public void setCount(long count) {
+    this.count = count;
   }
 }
