@@ -26,6 +26,7 @@ import static org.jembi.bsis.helpers.matchers.TransfusionViewModelMatcher.hasSam
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -96,15 +97,22 @@ public class TransfusionFactoryTests extends UnitTestSuite {
 
     Patient patient = aPatient().withId(1L).build();
     Location receivedFrom = aLocation().withId(1L).build();
+    Component transfusedComponent = aComponent()
+        .withId(1L)
+        .withComponentType(aComponentType().withId(1L).build())
+        .build();
+    List<Component> returnedComponents = Arrays.asList(transfusedComponent);
     Transfusion expectedEntity = aTransfusion()
         .withId(1L)
         .withReceivedFrom(receivedFrom)
+        .withComponent(transfusedComponent)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .withPatient(patient)
         .withDateTransfused(transfusionDate)
         .thatIsNotDeleted()
         .build();
 
+    when(componentRepository.findComponentsByDINAndType(din, componentTypeForm.getId())).thenReturn(returnedComponents);
     when(locationRepository.getLocation(1L)).thenReturn(receivedFrom);
     when(patientFactory.createEntity(patientForm)).thenReturn(patient);
 

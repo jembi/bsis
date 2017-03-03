@@ -5,9 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
-
 import org.apache.commons.lang3.StringUtils;
-import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.repository.TransfusionRepository;
@@ -29,25 +27,11 @@ public class TransfusionCRUDService {
    * transfusion. The Component status will be set to TRANSFUSED
    * 
    * @param transfusion Transfusion entity to be saved
-   * @param transfusedComponentTypeId Long if of the component type that was transfused
    * @return Transfusion persisted record
    */
-  public Transfusion createTransfusion(Transfusion transfusion, Long transfusedComponentTypeId) {
-    // Transfusion data must be associated with a Component
-    Component transfusedComponent = transfusion.getComponent();
-    if (transfusedComponent == null) {
-      // in this case the user didn't enter a component code - they selected the ComponentType
-      // we need to link the Component and the Transfusion data
-      List<Component> components = componentCRUDService.findComponentsByDINAndType(transfusedComponent.getDonationIdentificationNumber(), transfusedComponentTypeId);
-      if (components.size() != 1) {
-        throw new IllegalStateException("Unable to create Transfusion data. "
-            + "Error: more than one matching Component is found for DIN '" + transfusedComponent.getDonationIdentificationNumber() +"'");
-      }
-      transfusedComponent = components.get(0);
-      transfusion.setComponent(transfusedComponent);
-    }
+  public Transfusion createTransfusion(Transfusion transfusion) {
     // Update status of transfused Component
-    componentCRUDService.transfuseComponent(transfusedComponent);
+    componentCRUDService.transfuseComponent(transfusion.getComponent());
 
     transfusionRepository.save(transfusion);
 

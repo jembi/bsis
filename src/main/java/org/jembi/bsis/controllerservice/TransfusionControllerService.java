@@ -68,11 +68,7 @@ public class TransfusionControllerService {
 
   public TransfusionFullViewModel createTransfusionForm(TransfusionBackingForm backingForm) {
     Transfusion entity = transfusionFactory.createEntity(backingForm);
-    Long transfusedComponentTypeId = null;
-    if (backingForm.getComponentType() != null) {
-      transfusedComponentTypeId = backingForm.getComponentType().getId();
-    }
-    entity = transfusionCRUDService.createTransfusion(entity, transfusedComponentTypeId);
+    entity = transfusionCRUDService.createTransfusion(entity);
     return transfusionFactory.createFullViewModel(entity);
   }
 
