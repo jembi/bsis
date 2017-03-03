@@ -17,7 +17,6 @@ public class TransfusionBuilder extends AbstractEntityBuilder<Transfusion> {
   private User createdBy;
   private Date lastUpdated;
   private User lastUpdatedBy;
-  private String donationIdentificationNumber;
   private Patient patient;
   private Component component;
   private Location receivedFrom;
@@ -37,11 +36,6 @@ public class TransfusionBuilder extends AbstractEntityBuilder<Transfusion> {
     return this;
   }
 
-  public TransfusionBuilder withDonationIdentificationNumber(String donationIdentificationNumber) {
-    this.donationIdentificationNumber = donationIdentificationNumber;
-    return this;
-  }
-  
   public TransfusionBuilder withComponent(Component component) {
     this.component = component;
     return this;
@@ -106,7 +100,6 @@ public class TransfusionBuilder extends AbstractEntityBuilder<Transfusion> {
   public Transfusion build() {
     Transfusion transfusion = new Transfusion();
     transfusion.setId(id);
-    transfusion.setDonationIdentificationNumber(donationIdentificationNumber);
     transfusion.setPatient(patient);
     transfusion.setComponent(component);
     transfusion.setReceivedFrom(receivedFrom);

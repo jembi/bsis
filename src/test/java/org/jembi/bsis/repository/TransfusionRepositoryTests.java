@@ -27,7 +27,6 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   public void testSaveTransfusion_shouldAlsoPersistPatient() {
     
     Transfusion transfusion = aTransfusion()
-        .withDonationIdentificationNumber("1234567")
         .withPatient(aPatient()
             .withName1("Name 1")
             .withName2("Name 1")
@@ -57,12 +56,11 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   
   @Test
   public void testFindTransfusionsByDINAndCodeWithoutFlagCharacters_shouldReturnCorrectFields() {
-    
+    //Set up fixture
     String  donationIdentificationNumber = "1234567";
     String componentCode = "011-022";
     List<Transfusion> expectedTranfusions = Arrays.asList(
         aTransfusion()
-            .withDonationIdentificationNumber(donationIdentificationNumber)
             .withComponent(aComponent()
                 .withComponentCode(componentCode)
                 .withDonation(aDonation()
@@ -79,7 +77,6 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
        
         // Excluded by donationIdentificationNumber    
         aTransfusion()
-            .withDonationIdentificationNumber("6543219")
             .withComponent(aComponent()
                 .withComponentCode(componentCode)
                 .withDonation(aDonation()
@@ -96,7 +93,6 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
           
         // Excluded by component code    
         aTransfusion()
-            .withDonationIdentificationNumber("4242424")
             .withComponent(aComponent()
                 .withComponentCode("2011")
                 .withDonation(aDonation()
@@ -126,7 +122,6 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     String componentCode = "011-022";
     List<Transfusion> expectedTranfusions = Arrays.asList(
         aTransfusion()
-            .withDonationIdentificationNumber(donationIdentificationNumber)
             .withComponent(aComponent()
                 .withComponentCode(componentCode)
                 .withDonation(aDonation()
