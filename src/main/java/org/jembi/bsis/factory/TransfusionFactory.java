@@ -84,6 +84,7 @@ public class TransfusionFactory {
     viewModel.setDateTransfused(transfusion.getDateTransfused());
     viewModel.setTransfusionOutcome(transfusion.getTransfusionOutcome());
     viewModel.setReceivedFrom(locationFactory.createViewModel(transfusion.getReceivedFrom()));
+    viewModel.setDonationIdentificationNumber(transfusion.getComponent().getDonationIdentificationNumber());
     return viewModel;
   }
 
@@ -109,6 +110,7 @@ public class TransfusionFactory {
     viewModel.setReceivedFrom(locationFactory.createViewModel(transfusion.getReceivedFrom()));
     viewModel.setIsDeleted(transfusion.getIsDeleted());
     viewModel.setNotes(transfusion.getNotes());
+    viewModel.setDonationIdentificationNumber(transfusion.getComponent().getDonationIdentificationNumber());
     return viewModel;
   }
 

@@ -35,7 +35,9 @@ import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.backingform.TransfusionBackingForm;
 import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
+import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.model.transfusion.Transfusion;
@@ -52,7 +54,6 @@ import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
 import org.jembi.bsis.viewmodel.TransfusionViewModel;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -317,19 +318,21 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Assert.assertTrue("No view models", viewModels.isEmpty());
   }
 
-  @Ignore
   @Test
   public void testCreateTransfusionViewModel_shouldReturnViewModelWithCorrectState() {
     Date transfusionDate = new Date();
-
+    String donationIdentificationNumber = "1234567";
     String componentTypeName = "componentType";
     String componentCode = "1234";
+    Donation donation = DonationBuilder.aDonation()
+        .withDonationIdentificationNumber(donationIdentificationNumber).build();
     Component component = aComponent()
         .withId(1L)
         .withComponentType(aComponentType()
             .withComponentTypeName(componentTypeName)
             .build())
         .withComponentCode(componentCode)
+        .withDonation(donation)
         .build();
 
     Location receivedFrom = aUsageSite().withId(1L).build();
@@ -347,7 +350,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
 
     TransfusionViewModel expectedViewModel = aTransfusionViewModel()
         .withId(1L)
-        .withDonationIdentificationNumber("123456")
+        .withDonationIdentificationNumber(donationIdentificationNumber)
         .withComponentCode(componentCode)
         .withComponentType(componentTypeName)
         .withUsageSite(receivedFromViewModel)
@@ -365,14 +368,15 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     assertThat(returnedViewModel, hasSameStateAsTransfusionViewModel(expectedViewModel));
   }
 
-  @Ignore
   @Test
   public void testCreateTransfusionViewModels_returnsCollection() {
     Date transfusionDate = new Date();
-
+    String donationIdentificationNumber = "1234567";
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
     Patient patient = aPatient().withId(1L).build();
 
+    Donation donation = DonationBuilder.aDonation()
+        .withDonationIdentificationNumber(donationIdentificationNumber).build();
     String componentTypeName = "componentType";
     String componentCode = "1234";
     Component component = aComponent()
@@ -381,11 +385,11 @@ public class TransfusionFactoryTests extends UnitTestSuite {
             .withComponentTypeName(componentTypeName)
             .build())
         .withComponentCode(componentCode)
+        .withDonation(donation)
         .build();
 
     Location receivedFrom = aUsageSite().withId(1L).build();
     List<Transfusion> transfusions = new ArrayList<>();
-    String donationIdentificationNumber = "1234567";
     transfusions.add(aTransfusion()
         .withId(1L)
         .withComponent(component)
