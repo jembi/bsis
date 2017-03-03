@@ -24,7 +24,9 @@ import org.jembi.bsis.repository.constant.TranfusionNamedQueryConstants;
 
 @NamedQueries({
   @NamedQuery(name = TranfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_BY_DIN_AND_COMPONENT_CODE,
-      query = TranfusionNamedQueryConstants.QUERY_FIND_TRANSFUSION_BY_DIN_AND_COMPONENT_CODE)
+      query = TranfusionNamedQueryConstants.QUERY_FIND_TRANSFUSION_BY_DIN_AND_COMPONENT_CODE),
+  @NamedQuery(name = TranfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_BY_COMPONENT_TYPE_AND_SITE_AND_OUTCOME,
+      query = TranfusionNamedQueryConstants.QUERY_FIND_TRANSFUSION_BY_COMPONENT_TYPE_AND_SITE_AND_OUTCOME)
 })
 @Entity
 @Audited
