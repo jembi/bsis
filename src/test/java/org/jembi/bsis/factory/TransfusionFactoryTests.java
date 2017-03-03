@@ -51,6 +51,7 @@ import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
 import org.jembi.bsis.viewmodel.TransfusionViewModel;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -308,6 +309,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Assert.assertTrue("No view models", viewModels.isEmpty());
   }
 
+  @Ignore
   @Test
   public void testCreateTransfusionViewModel_shouldReturnViewModelWithCorrectState() {
     Date transfusionDate = new Date();
@@ -355,6 +357,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     assertThat(returnedViewModel, hasSameStateAsTransfusionViewModel(expectedViewModel));
   }
 
+  @Ignore
   @Test
   public void testCreateTransfusionViewModels_returnsCollection() {
     Date transfusionDate = new Date();

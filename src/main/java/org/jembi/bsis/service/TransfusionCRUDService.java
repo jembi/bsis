@@ -38,10 +38,10 @@ public class TransfusionCRUDService {
     if (transfusedComponent == null) {
       // in this case the user didn't enter a component code - they selected the ComponentType
       // we need to link the Component and the Transfusion data
-      List<Component> components = componentCRUDService.findComponentsByDINAndType(transfusion.getDonationIdentificationNumber(), transfusedComponentTypeId);
+      List<Component> components = componentCRUDService.findComponentsByDINAndType(transfusedComponent.getDonationIdentificationNumber(), transfusedComponentTypeId);
       if (components.size() != 1) {
         throw new IllegalStateException("Unable to create Transfusion data. "
-            + "Error: more than one matching Component is found for DIN '" + transfusion.getDonationIdentificationNumber() +"'");
+            + "Error: more than one matching Component is found for DIN '" + transfusedComponent.getDonationIdentificationNumber() +"'");
       }
       transfusedComponent = components.get(0);
       transfusion.setComponent(transfusedComponent);
