@@ -62,7 +62,7 @@ public class TransfusionControllerService {
 
   public List<TransfusionReactionTypeViewModel> getTransfusionReactionTypes() {
     List<TransfusionReactionType> transfusionReactionTypes =
-        transfusionReactionTypeRepository.getAllTransfusionReactionTypes(true);
+        transfusionReactionTypeRepository.getAllTransfusionReactionTypes(false);
     return transfusionReactionTypeFactory.createTransfusionReactionTypeViewModels(transfusionReactionTypes);
   }
 
