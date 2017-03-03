@@ -59,5 +59,15 @@ public class TransfusionController {
     map.put("transfusionForm", transfusionControllerService.createTransfusionForm(backingForm));
     return map;
   }
+
+  @RequestMapping(value = "/search/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TRANSFUSION_DATA + "')")
+  public Map<String, Object> findTransfusionsFormGenerator() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("componentTypes", transfusionControllerService.getComponentTypes());
+    map.put("usageSites", transfusionControllerService.getUsageSites());
+    map.put("transfusionOutcomes", transfusionControllerService.getTransfusionReactionTypes());
+    return map;
+  }
   
 }

@@ -3,6 +3,7 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBackingFormBuilder.aComponentTypeBackingForm;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aUsageSiteBackingForm;
@@ -14,10 +15,12 @@ import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
 import static org.jembi.bsis.helpers.builders.PatientViewModelBuilder.aPatientViewModel;
 import static org.jembi.bsis.helpers.builders.TransfusionBackingFormBuilder.aTransfusionBackingForm;
 import static org.jembi.bsis.helpers.builders.TransfusionBuilder.aTransfusion;
+import static org.jembi.bsis.helpers.builders.TransfusionFullViewModelBuilder.aTransfusionFullViewModel;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBackingFormBuilder.aTransfusionReactionTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTransfusionReactionType;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeViewModelBuilder.aTransfusionReactionTypeViewModel;
 import static org.jembi.bsis.helpers.builders.TransfusionViewModelBuilder.aTransfusionViewModel;
+import static org.jembi.bsis.helpers.matchers.TransfusionFullViewModelMatcher.hasSameStateAsTransfusionFullViewModel;
 import static org.jembi.bsis.helpers.matchers.TransfusionMatcher.hasSameStateAsTransfusion;
 import static org.jembi.bsis.helpers.matchers.TransfusionViewModelMatcher.hasSameStateAsTransfusionViewModel;
 import static org.mockito.Mockito.when;
@@ -44,6 +47,7 @@ import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.PatientViewModel;
+import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
 import org.jembi.bsis.viewmodel.TransfusionViewModel;
 import org.junit.Assert;
@@ -209,7 +213,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCreateViewModel_shouldReturnViewModelWithCorrectState() {
+  public void testCreateFullViewModel_shouldReturnViewModelWithCorrectState() {
     Date transfusionDate = new Date();
 
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
@@ -236,7 +240,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withId(1L)
         .build();
 
-    TransfusionViewModel expectedViewModel = aTransfusionViewModel()
+    TransfusionFullViewModel expectedViewModel = aTransfusionFullViewModel()
         .withId(1L)
         .withDonationIdentificationNumber("123456")
         .withComponent(componentViewModel)
@@ -256,14 +260,14 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     when(locationFactory.createViewModel(receivedFrom)).thenReturn(receivedFromViewModel);
 
     // Run test
-    TransfusionViewModel returnedViewModel = transfusionFactory.createViewModel(transfusion);
+    TransfusionFullViewModel returnedViewModel = transfusionFactory.createFullViewModel(transfusion);
 
     //Verify
-    assertThat(returnedViewModel, hasSameStateAsTransfusionViewModel(expectedViewModel));
+    assertThat(returnedViewModel, hasSameStateAsTransfusionFullViewModel(expectedViewModel));
   }
 
   @Test
-  public void testCreateViewModels_returnsCollection() {
+  public void testCreateFullViewModels_returnsCollection() {
     Date transfusionDate = new Date();
 
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
@@ -295,15 +299,151 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build());
 
     //Run test
-    List<TransfusionViewModel> returnedViewModels = transfusionFactory.createViewModels(transfusions);
+    List<TransfusionFullViewModel> returnedViewModels = transfusionFactory.createFullViewModels(transfusions);
 
     Assert.assertNotNull("View models have been created ", returnedViewModels);
     Assert.assertEquals("Correct number of view models is returned", 2 , returnedViewModels.size());
   }
 
   @Test
-  public void testCreateViewModelsWithNull_returnsEmptyCollection() {
+  public void testCreateFullViewModelsWithNull_returnsEmptyCollection() {
     //Run test
+    List<TransfusionFullViewModel> viewModels = transfusionFactory.createFullViewModels(null);
+
+    // do asserts
+    Assert.assertNotNull("View models created", viewModels);
+    Assert.assertTrue("No view models", viewModels.isEmpty());
+  }
+
+  @Test
+  public void testCreateTransfusionViewModel_shouldReturnViewModelWithCorrectState() {
+    Date transfusionDate = new Date();
+
+    String componentTypeName = "componentType";
+    String componentCode = "1234";
+    Component component = aComponent()
+        .withId(1L)
+        .withComponentType(aComponentType()
+            .withComponentTypeName(componentTypeName)
+            .build())
+        .withComponentCode(componentCode)
+        .build();
+
+    Location receivedFrom = aUsageSite().withId(1L).build();
+    Transfusion transfusion = aTransfusion()
+        .withId(1L)
+        .withDonationIdentificationNumber("123456")
+        .withComponent(component)
+        .withReceivedFrom(receivedFrom)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build();
+
+    // setup expectations
+    LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
+
+    TransfusionViewModel expectedViewModel = aTransfusionViewModel()
+        .withId(1L)
+        .withDonationIdentificationNumber("123456")
+        .withComponentCode(componentCode)
+        .withComponentType(componentTypeName)
+        .withUsageSite(receivedFromViewModel)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withDateTransfused(transfusionDate)
+        .build();
+
+    // Setup mock
+    when(locationFactory.createViewModel(receivedFrom)).thenReturn(receivedFromViewModel);
+
+    // Run test
+    TransfusionViewModel returnedViewModel = transfusionFactory.createViewModel(transfusion);
+
+    //Verify
+    assertThat(returnedViewModel, hasSameStateAsTransfusionViewModel(expectedViewModel));
+  }
+
+  @Test
+  public void testCreateTransfusionViewModels_returnsCollection() {
+    Date transfusionDate = new Date();
+
+    TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
+    Patient patient = aPatient().withId(1L).build();
+
+    String componentTypeName = "componentType";
+    String componentCode = "1234";
+    Component component = aComponent()
+        .withId(1L)
+        .withComponentType(aComponentType()
+            .withComponentTypeName(componentTypeName)
+            .build())
+        .withComponentCode(componentCode)
+        .build();
+
+    Location receivedFrom = aUsageSite().withId(1L).build();
+    List<Transfusion> transfusions = new ArrayList<>();
+    String donationIdentificationNumber = "1234567";
+    transfusions.add(aTransfusion()
+        .withId(1L)
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withComponent(component)
+        .withReceivedFrom(receivedFrom)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withPatient(patient)
+        .withTransfusionReactionType(transfusionReactionType)
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build());
+    transfusions.add(aTransfusion()
+        .withId(2L)
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withComponent(component)
+        .withReceivedFrom(receivedFrom)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withPatient(patient)
+        .withTransfusionReactionType(transfusionReactionType)
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build());
+
+    LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
+
+    TransfusionViewModel expectedViewModel1 = aTransfusionViewModel()
+        .withId(1L)
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withComponentCode(componentCode)
+        .withComponentType(componentTypeName)
+        .withUsageSite(receivedFromViewModel)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withDateTransfused(transfusionDate)
+        .build();
+    
+    TransfusionViewModel expectedViewModel2 = aTransfusionViewModel()
+        .withId(2L)
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withComponentCode(componentCode)
+        .withComponentType(componentTypeName)
+        .withUsageSite(receivedFromViewModel)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withDateTransfused(transfusionDate)
+        .build();
+
+    when(locationFactory.createViewModel(receivedFrom)).thenReturn(receivedFromViewModel);
+
+    //Run test
+    List<TransfusionViewModel> returnedViewModels = transfusionFactory.createViewModels(transfusions);
+
+    Assert.assertNotNull("View models have been created ", returnedViewModels);
+    Assert.assertEquals("Correct number of view models is returned", 2 , returnedViewModels.size());
+    // Verify
+    assertThat(returnedViewModels.get(0), hasSameStateAsTransfusionViewModel(expectedViewModel1));
+    // Verify
+    assertThat(returnedViewModels.get(1), hasSameStateAsTransfusionViewModel(expectedViewModel2));
+  }
+
+  @Test
+  public void testCreateViewModelsWithNull_returnsEmptyCollection() {
+    // Run test
     List<TransfusionViewModel> viewModels = transfusionFactory.createViewModels(null);
 
     // do asserts
