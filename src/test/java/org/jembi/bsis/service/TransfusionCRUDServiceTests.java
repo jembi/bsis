@@ -166,4 +166,27 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     verify(componentCRUDService).transfuseComponent(argThat(hasSameStateAsComponent(transfusedComponent)));
     verify(transfusionRepository).save(argThat(hasSameStateAsTransfusion(transfusion)));
   }
+
+  @Test
+  public void testFindTransfusionsWithNotNullDin_shouldDoFindByDinSearch() {
+    // set up mocks
+    when(transfusionRepository.findTransfusionsByDINAndComponentCode("1000000", null)).thenReturn(null);
+    // run test
+    transfusionCRUDService.findTransfusions("1000000", null, null, null, null, null, null);
+    // verify
+    verify(transfusionRepository).findTransfusionsByDINAndComponentCode("1000000", null);
+  }
+
+  @Test
+  public void testFindTransfusionsWithNullDin_shouldDoFindTransfusionsSearch() {
+    // set up mocks
+    when(transfusionRepository.findTransfusionByComponentTypeAndSiteAndOutcome(null, null, null, null, null))
+        .thenReturn(null);
+    // run test
+    transfusionCRUDService.findTransfusions(null, null, null, null, null, null, null);
+    // verify
+    verify(transfusionRepository).findTransfusionByComponentTypeAndSiteAndOutcome(null, null, null, null,
+        null);
+  }
+
 }
