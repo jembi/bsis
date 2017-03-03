@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Arrays;
 
 import org.hamcrest.core.IsNull;
+import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.transfusion.Transfusion;
@@ -162,75 +163,98 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     //Set up
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().plusDays(2).toDate();
-    Location receiveFrom = aUsageSite().build();
+    Location receiveFrom = aUsageSite().buildAndPersist(entityManager);
     ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
-
+    Component component = aComponent().withComponentType(componentType).buildAndPersist(entityManager);
     List<Transfusion> expectedTransfusions = Arrays.asList(
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(startDate)
             .withReceivedFrom(receiveFrom)
-            .withComponent(aComponent()
-                .withComponentType(componentType)
-                .build())
+            .withComponent(component)
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .build(),
+            .buildAndPersist(entityManager),
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(new Date())
             .withReceivedFrom(receiveFrom)
-            .withComponent(aComponent()
-                .withComponentType(componentType)
-                .build())
+            .withComponent(component)
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
             .buildAndPersist(entityManager)
         );
 
     // Excluded for TransfusionOutcome
     aTransfusion()
+        .withDonationIdentificationNumber("1234567")
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
         .withDateTransfused(new Date())
         .withReceivedFrom(receiveFrom)
-        .withComponent(aComponent()
-            .withComponentType(componentType)
-            .build())
+        .withComponent(component)
         .withTransfusionOutcome(TransfusionOutcome.NOT_TRANSFUSED)
         .buildAndPersist(entityManager);
 
     //Excluded for dateTransfused
     aTransfusion()
+        .withDonationIdentificationNumber("1234567")
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
         .withDateTransfused(new DateTime().plusDays(30).toDate())
         .withReceivedFrom(receiveFrom)
-        .withComponent(aComponent()
-            .withComponentType(componentType)
-            .build())
+        .withComponent(component)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .buildAndPersist(entityManager);
 
     //Excluded for componentType
     aTransfusion()
+        .withDonationIdentificationNumber("1234567")
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
         .withDateTransfused(new Date())
         .withReceivedFrom(receiveFrom)
         .withComponent(aComponent()
             .withComponentType(aComponentType().build())
-            .build())
+            .buildAndPersist(entityManager))
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .buildAndPersist(entityManager);
 
     //Excluded for site
     aTransfusion()
-        .withDateTransfused(new Date())
-        .withReceivedFrom(aUsageSite().build())
-        .withComponent(aComponent()
-            .withComponentType(componentType)
+        .withDonationIdentificationNumber("1234567")
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
             .build())
+        .withDateTransfused(new Date())
+        .withReceivedFrom(aUsageSite().buildAndPersist(entityManager))
+        .withComponent(component)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .buildAndPersist(entityManager);
 
     //Excluded for isDeleted
     aTransfusion()
+        .withDonationIdentificationNumber("1234567")
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
         .withDateTransfused(new Date())
         .withReceivedFrom(receiveFrom)
-        .withComponent(aComponent()
-            .withComponentType(componentType)
-            .build())
+        .withComponent(component)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .thatIsDeleted()
         .buildAndPersist(entityManager);
@@ -249,24 +273,31 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     //Set up
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().plusDays(2).toDate();
-    Location receiveFrom = aUsageSite().build();
+    Location receiveFrom = aUsageSite().buildAndPersist(entityManager);
     ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
+    Component component = aComponent().withComponentType(componentType).buildAndPersist(entityManager);
 
     List<Transfusion> expectedTransfusions = Arrays.asList(
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(startDate)
             .withReceivedFrom(receiveFrom)
-            .withComponent(aComponent()
-                .withComponentType(componentType)
-                .build())
+            .withComponent(component)
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .build(),
+            .buildAndPersist(entityManager),
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(new Date())
             .withReceivedFrom(receiveFrom)
-            .withComponent(aComponent()
-                .withComponentType(componentType)
-                .build())
+            .withComponent(component)
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSION_REACTION_OCCURRED)
             .buildAndPersist(entityManager)
     );
@@ -285,23 +316,33 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     //Set up
     Date startDate = new DateTime().minusDays(7).toDate();
     Date endDate = new DateTime().plusDays(2).toDate();
-    Location receiveFrom = aUsageSite().build();
+    Location receiveFrom = aUsageSite().buildAndPersist(entityManager);
 
     List<Transfusion> expectedTransfusions = Arrays.asList(
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(startDate)
             .withReceivedFrom(receiveFrom)
             .withComponent(aComponent()
                 .withComponentType(aComponentType().build())
-                .build())
+                .buildAndPersist(entityManager))
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .build(),
+            .buildAndPersist(entityManager),
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(new Date())
             .withReceivedFrom(receiveFrom)
             .withComponent(aComponent()
                 .withComponentType(aComponentType().build())
-                .build())
+                .buildAndPersist(entityManager))
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
             .buildAndPersist(entityManager)
     );
@@ -324,19 +365,29 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
 
     List<Transfusion> expectedTransfusions = Arrays.asList(
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(startDate)
-            .withReceivedFrom(aUsageSite().build())
+            .withReceivedFrom(aUsageSite().buildAndPersist(entityManager))
             .withComponent(aComponent()
                 .withComponentType(componentType)
-                .build())
+                .buildAndPersist(entityManager))
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .build(),
+            .buildAndPersist(entityManager),
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(new Date())
-            .withReceivedFrom(aUsageSite().build())
+            .withReceivedFrom(aUsageSite().buildAndPersist(entityManager))
             .withComponent(aComponent()
                 .withComponentType(componentType)
-                .build())
+                .buildAndPersist(entityManager))
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
             .buildAndPersist(entityManager)
     );
@@ -354,24 +405,34 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
 
     //Set up
     Date endDate = new DateTime().plusDays(2).toDate();
-    Location receiveFrom = aUsageSite().build();
+    Location receiveFrom = aUsageSite().buildAndPersist(entityManager);
     ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
 
     List<Transfusion> expectedTransfusions = Arrays.asList(
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(new DateTime().minusDays(7).toDate())
             .withReceivedFrom(receiveFrom)
             .withComponent(aComponent()
                 .withComponentType(componentType)
-                .build())
+                .buildAndPersist(entityManager))
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .build(),
+            .buildAndPersist(entityManager),
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(new Date())
             .withReceivedFrom(receiveFrom)
             .withComponent(aComponent()
                 .withComponentType(componentType)
-                .build())
+                .buildAndPersist(entityManager))
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
             .buildAndPersist(entityManager)
     );
@@ -389,24 +450,34 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
 
     //Set up
     Date startDate = new DateTime().minusDays(7).toDate();
-    Location receiveFrom = aUsageSite().build();
+    Location receiveFrom = aUsageSite().buildAndPersist(entityManager);
     ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
 
     List<Transfusion> expectedTransfusions = Arrays.asList(
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(startDate)
             .withReceivedFrom(receiveFrom)
             .withComponent(aComponent()
                 .withComponentType(componentType)
-                .build())
+                .buildAndPersist(entityManager))
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .build(),
+            .buildAndPersist(entityManager),
         aTransfusion()
+            .withDonationIdentificationNumber("1234567")
+            .withPatient(aPatient()
+                .withName1("Name 1")
+                .withName2("Name 1")
+                .build())
             .withDateTransfused(new Date())
             .withReceivedFrom(receiveFrom)
             .withComponent(aComponent()
                 .withComponentType(componentType)
-                .build())
+                .buildAndPersist(entityManager))
             .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
             .buildAndPersist(entityManager)
     );
