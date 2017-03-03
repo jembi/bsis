@@ -97,7 +97,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion expectedEntity = aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber(din)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .withPatient(patient)
@@ -141,7 +140,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion expectedEntity = aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber(din)
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -191,7 +189,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion expectedEntity = aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber(din)
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSION_REACTION_OCCURRED)
@@ -222,7 +219,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Location receivedFrom = aUsageSite().withId(1L).build();
     Transfusion transfusion = aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber("123456")
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -242,7 +238,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
 
     TransfusionFullViewModel expectedViewModel = aTransfusionFullViewModel()
         .withId(1L)
-        .withDonationIdentificationNumber("123456")
         .withComponent(componentViewModel)
         .withUsageSite(receivedFromViewModel)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -277,7 +272,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     List<Transfusion> transfusions = new ArrayList<>();
     transfusions.add(aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber("123456")
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -288,7 +282,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build());
     transfusions.add(aTransfusion()
         .withId(2L)
-        .withDonationIdentificationNumber("1234567")
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.UNKNOWN)
@@ -332,7 +325,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Location receivedFrom = aUsageSite().withId(1L).build();
     Transfusion transfusion = aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber("123456")
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -385,7 +377,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     String donationIdentificationNumber = "1234567";
     transfusions.add(aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber(donationIdentificationNumber)
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -396,7 +387,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build());
     transfusions.add(aTransfusion()
         .withId(2L)
-        .withDonationIdentificationNumber(donationIdentificationNumber)
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)

@@ -40,7 +40,8 @@ public class TransfusionFactory {
   public Transfusion createEntity(TransfusionBackingForm form) {
     Transfusion transfusion = new Transfusion();
     transfusion.setId(form.getId());
-    transfusion.setDonationIdentificationNumber(form.getDonationIdentificationNumber());
+    
+    
     // note: currently we always create a new patient entity because we only support creating new Transfusion data
     // and we don't attempt patient lookups.
     transfusion.setPatient(patientFactory.createEntity(form.getPatient()));
@@ -54,6 +55,7 @@ public class TransfusionFactory {
     if (form.getTransfusionReactionType() != null) {
       transfusion.setTransfusionReactionType(transfusionReactionTypeRepository.findById(form.getTransfusionReactionType().getId()));
     }
+    
     transfusion.setTransfusionOutcome(form.getTransfusionOutcome());
     transfusion.setDateTransfused(form.getDateTransfused());
     transfusion.setNotes(form.getNotes());
@@ -66,7 +68,6 @@ public class TransfusionFactory {
     viewModel.setComponentCode(transfusion.getComponent().getComponentCode());
     viewModel.setComponentType(transfusion.getComponent().getComponentType().getComponentTypeName());
     viewModel.setDateTransfused(transfusion.getDateTransfused());
-    viewModel.setDonationIdentificationNumber(transfusion.getDonationIdentificationNumber());
     viewModel.setTransfusionOutcome(transfusion.getTransfusionOutcome());
     viewModel.setReceivedFrom(locationFactory.createViewModel(transfusion.getReceivedFrom()));
     return viewModel;
@@ -87,7 +88,6 @@ public class TransfusionFactory {
     viewModel.setId(transfusion.getId());
     viewModel.setComponent(componentFactory.createComponentViewModel(transfusion.getComponent()));
     viewModel.setDateTransfused(transfusion.getDateTransfused());
-    viewModel.setDonationIdentificationNumber(transfusion.getDonationIdentificationNumber());
     viewModel.setPatient(patientFactory.createViewModel(transfusion.getPatient()));
     viewModel.setTransfusionOutcome(transfusion.getTransfusionOutcome());
     viewModel.setTransfusionReactionType(transfusionReactionTypeFactory.createTransfusionReactionTypeViewModel(
