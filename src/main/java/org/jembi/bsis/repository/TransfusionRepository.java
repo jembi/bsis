@@ -38,7 +38,7 @@ public class TransfusionRepository extends AbstractRepository<Transfusion> {
     return em.createNamedQuery(
         TranfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_BY_COMPONENT_TYPE_AND_SITE_AND_OUTCOME, Transfusion.class)
         .setParameter("componentTypeId", componentTypeId)
-        .setParameter("receivedFromId", receivedFromId)
+        .setParameter("receivedFromIdreceivedFromId", receivedFromId)
         .setParameter("includeTransfusionOutcome", includeTransfusionOutcome)
         .setParameter("transfusionOutcome", transfusionOutcome)
         .setParameter("startDate", startDate)
