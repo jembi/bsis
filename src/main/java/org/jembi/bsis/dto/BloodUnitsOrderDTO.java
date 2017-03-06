@@ -13,12 +13,6 @@ public class BloodUnitsOrderDTO {
     // Default constructor
   }
 
-  // FIXME: this constructor can be removed when BSIS-2717 is completed
-  public BloodUnitsOrderDTO(ComponentType componentType, long count) {
-    this.componentType = componentType;
-    this.count = count;
-  }
-
   public BloodUnitsOrderDTO(ComponentType componentType, Location distributionSite, long count) {
     this.componentType = componentType;
     this.distributionSite = distributionSite;
