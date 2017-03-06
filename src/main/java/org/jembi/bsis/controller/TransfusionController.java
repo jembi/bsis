@@ -59,7 +59,7 @@ public class TransfusionController {
   @ResponseStatus(HttpStatus.CREATED)
   public Map<String, Object> addTransfusion(@Valid @RequestBody TransfusionBackingForm backingForm) {
     Map<String, Object> map = new HashMap<>();
-    map.put("transfusionForm", transfusionControllerService.createTransfusionForm(backingForm));
+    map.put("transfusion", transfusionControllerService.createTransfusion(backingForm));
     return map;
   }
 

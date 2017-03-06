@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
+import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.repository.TransfusionRepository;
@@ -29,7 +30,17 @@ public class TransfusionCRUDService {
    * @param transfusion Transfusion entity to be saved
    * @return Transfusion persisted record
    */
-  public Transfusion createTransfusion(Transfusion transfusion) {
+  public Transfusion createTransfusion(
+      Transfusion transfusion, String donationIdentificatioNumber, Long transfusedComponentTypeId) {
+
+    // Transfusion data must be associated with a Component
+    if (transfusion.getComponent() == null) {
+      // in this case the user didn't enter a component code - they selected the ComponentType
+      // we need to link the Component and the Transfusion data
+      transfusion.setComponent(
+          getTransfusedComponentByDinAndComponentType(donationIdentificatioNumber, transfusedComponentTypeId));
+    }
+
     // Update status of transfused Component
     componentCRUDService.transfuseComponent(transfusion.getComponent());
 
@@ -51,5 +62,14 @@ public class TransfusionCRUDService {
       transfusions = transfusionRepository.findTransfusions(componentTypeId, receivedFromId, transfusionOutcome, startDate, endDate);
     }
     return transfusions;
+  }
+
+  private Component getTransfusedComponentByDinAndComponentType(String donationIdentificationNumber, long transfusedComponentTypeId) {
+    List<Component> components = componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, transfusedComponentTypeId);
+    if (components.size() != 1) {
+      throw new IllegalStateException("Unable to create Transfusion data. "
+          + "Error: more than one matching Component is found for DIN '" + donationIdentificationNumber +"'");
+    }
+    return components.get(0);
   }
 }
