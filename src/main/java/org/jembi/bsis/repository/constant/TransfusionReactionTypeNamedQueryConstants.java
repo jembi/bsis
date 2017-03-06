@@ -10,7 +10,7 @@ public class TransfusionReactionTypeNamedQueryConstants {
 
   public static final String NAME_FIND_BY_ID = "TransfusionReactionType.findById";
   public static final String QUERY_FIND_BY_ID =
-      "SELECT trt FROM TransfusionReactionType trt WHERE trt.id = :id AND trt.isDeleted = :isDeleted";
+      "SELECT trt FROM TransfusionReactionType trt WHERE trt.id = :id";
   
   public static final String NAME_VERIFY_UNIQUE_TRANSFUSION_REACTION_TYPE_NAME =
       "TransfusionReactionType.isUniqueTransfusionReactionTypeName";

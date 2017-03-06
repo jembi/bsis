@@ -5,15 +5,18 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
 import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
 import org.jembi.bsis.backingform.validator.TransfusionReactionTypeBackingFormValidator;
 import org.jembi.bsis.controllerservice.TransfusionReactionTypeControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +36,14 @@ public class TransfusionReactionTypeController {
   protected void initBinder(WebDataBinder binder) {
     binder.setValidator(transfusionReactionTypeBackingFormValidator);
   }
+
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_TRANSFUSION_REACTION_TYPES + "')")
+  public Map<String, Object> getTransfusionReactionTypeById(@PathVariable Long id) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("transfusionReactionType", transfusionReactionTypeControllerService.getTransfusionReactionType(id));
+    return map;
+  }
   
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasAnyRole('" + PermissionConstants.MANAGE_TRANSFUSION_REACTION_TYPES + "')")
@@ -48,6 +59,17 @@ public class TransfusionReactionTypeController {
   public Map<String, Object> addTransfusionReactionTypes(@Valid @RequestBody TransfusionReactionTypeBackingForm backingForm) {
     Map<String, Object> map = new HashMap<>();
     map.put("transfusionReactionType", transfusionReactionTypeControllerService.createTransfusionReactionType(backingForm));
+    return map;
+  }
+  
+  @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+  @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_TRANSFUSION_REACTION_TYPES + "')")
+  public Map<String, Object> updateTransfusionReactionTypes(@PathVariable("id") Long transfusionReactionTypeId,
+      @Valid @RequestBody TransfusionReactionTypeBackingForm backingForm) {
+    
+    backingForm.setId(transfusionReactionTypeId);
+    Map<String, Object> map = new HashMap<>();
+    map.put("transfusionReactionType", transfusionReactionTypeControllerService.updateTransfusionReactionType(backingForm));
     return map;
   }
 

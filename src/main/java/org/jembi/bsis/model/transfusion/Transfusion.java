@@ -19,12 +19,15 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.repository.constant.TranfusionNamedQueryConstants;
+import org.jembi.bsis.repository.constant.TransfusionNamedQueryConstants;
 
 @NamedQueries({
   @NamedQuery(name = TranfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_BY_DIN_AND_COMPONENT_CODE,
       query = TranfusionNamedQueryConstants.QUERY_FIND_TRANSFUSION_BY_DIN_AND_COMPONENT_CODE),
   @NamedQuery(name = TranfusionNamedQueryConstants.NAME_FIND_TRANSFUSIONS,
-      query = TranfusionNamedQueryConstants.QUERY_FIND_TRANSFUSIONS)
+      query = TranfusionNamedQueryConstants.QUERY_FIND_TRANSFUSIONS),
+  @NamedQuery(name = TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD,
+      query = TransfusionNamedQueryConstants.QUERY_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD)
 })
 @Entity
 @Audited
