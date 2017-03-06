@@ -222,10 +222,17 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateFullViewModel_shouldReturnViewModelWithCorrectState() {
     Date transfusionDate = new Date();
-
+    String donationIdentificationNumber = "1234567";
+    
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
     Patient patient = aPatient().withId(1L).build();
-    Component component = aComponent().withId(1L).build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(aDonation()
+            .withId(1L)
+            .withDonationIdentificationNumber(donationIdentificationNumber)
+            .build())
+        .build();
     Location receivedFrom = aUsageSite().withId(1L).build();
     Transfusion transfusion = aTransfusion()
         .withId(1L)
@@ -239,7 +246,11 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
 
     // setup expectations
-    ComponentViewModel componentViewModel = aComponentViewModel().withId(1L).build();
+    ComponentViewModel componentViewModel = aComponentViewModel()
+        .withId(1L)
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .build();
+    
     LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
     PatientViewModel patientViewModel = aPatientViewModel().withId(1L).build();
     TransfusionReactionTypeViewModel transfusionReactionTypeViewModel = aTransfusionReactionTypeViewModel()
@@ -248,6 +259,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
 
     TransfusionFullViewModel expectedViewModel = aTransfusionFullViewModel()
         .withId(1L)
+        .withDonationIdentificationNumber(donationIdentificationNumber)
         .withComponent(componentViewModel)
         .withUsageSite(receivedFromViewModel)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -274,10 +286,17 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateFullViewModels_returnsCollection() {
     Date transfusionDate = new Date();
-
+    String donationIdentificationNumber = "1234567";
+    
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
     Patient patient = aPatient().withId(1L).build();
-    Component component = aComponent().withId(1L).build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(aDonation()
+            .withId(1L)
+            .withDonationIdentificationNumber(donationIdentificationNumber)
+            .build())
+        .build();
     Location receivedFrom = aUsageSite().withId(1L).build();
     List<Transfusion> transfusions = new ArrayList<>();
     transfusions.add(aTransfusion()

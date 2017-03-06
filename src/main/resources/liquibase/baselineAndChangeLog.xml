@@ -87,4 +87,5 @@
   <include file="liquibase/updates/2567-add-patient-details-for-patient-request.xml"/>
   <include file="liquibase/updates/2562-configure-transfusion-reaction-types.xml"/>
   <include file="liquibase/updates/2582-add-transfusion-data-for-a-din.xml"/>
+  <include file="liquibase/updates/2577-find-transfusions.xml"/>
 </databaseChangeLog>
