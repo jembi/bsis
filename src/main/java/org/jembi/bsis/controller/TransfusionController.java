@@ -69,10 +69,10 @@ public class TransfusionController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", transfusionControllerService.getComponentTypes());
     map.put("usageSites", transfusionControllerService.getUsageSites());
-    map.put("transfusionOutcomes", transfusionControllerService.getTransfusionReactionTypes());
+    map.put("transfusionOutcomes", TransfusionOutcome.values());
     return map;
   }
-  
+
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TRANSFUSION_DATA + "')")
   public Map<String, Object> findTransfusions(@RequestParam(required = false) String donationIdentificationNumber,

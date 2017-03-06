@@ -148,7 +148,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   }
 
   @Test
-  public void testfindTransfusionByComponentTypeAndSiteAndOutcome_shouldReturnCorrectRecords() {
+  public void testFindTransfusions_shouldReturnCorrectRecords() {
 
     //Set up
     Date startDate = new DateTime().minusDays(7).toDate();
@@ -243,7 +243,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
         .buildAndPersist(entityManager);
 
     // Exercise SUT
-    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusionByComponentTypeAndSiteAndOutcome(
+    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusions(
         componentType.getId(), receiveFrom.getId(), TransfusionOutcome.TRANSFUSED_UNEVENTFULLY, startDate, endDate);
 
     // Verify
@@ -251,7 +251,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   }
 
   @Test
-  public void testfindTransfusionByComponentTypeAndSiteAndOutcomeWithNullOutcome_shouldReturnCorrectRecords() {
+  public void testFindTransfusionsWithNullOutcome_shouldReturnCorrectRecords() {
 
     //Set up
     Date startDate = new DateTime().minusDays(7).toDate();
@@ -284,7 +284,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     );
 
     // Exercise SUT
-    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusionByComponentTypeAndSiteAndOutcome(
+    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusions(
         componentType.getId(), receiveFrom.getId(), null, startDate, endDate);
 
     // Verify
@@ -292,7 +292,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   }
 
   @Test
-  public void testfindTransfusionByComponentTypeAndSiteAndOutcomeWithNullComponentTypeId_shouldReturnCorrectRecords() {
+  public void testFindTransfusionsWithNullComponentTypeId_shouldReturnCorrectRecords() {
 
     //Set up
     Date startDate = new DateTime().minusDays(7).toDate();
@@ -327,7 +327,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     );
 
     // Exercise SUT
-    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusionByComponentTypeAndSiteAndOutcome(
+    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusions(
         null, receiveFrom.getId(), TransfusionOutcome.TRANSFUSED_UNEVENTFULLY, startDate, endDate);
 
     // Verify
@@ -335,7 +335,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   }
 
   @Test
-  public void testfindTransfusionByComponentTypeAndSiteAndOutcomeWithNullReceivedFromId_shouldReturnCorrectRecords() {
+  public void testFindTransfusionsWithNullReceivedFromId_shouldReturnCorrectRecords() {
 
     //Set up
     Date startDate = new DateTime().minusDays(7).toDate();
@@ -370,7 +370,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     );
 
     // Exercise SUT
-    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusionByComponentTypeAndSiteAndOutcome(
+    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusions(
         componentType.getId(), null, TransfusionOutcome.TRANSFUSED_UNEVENTFULLY, startDate, endDate);
 
     // Verify
@@ -378,7 +378,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   }
 
   @Test
-  public void testfindTransfusionByComponentTypeAndSiteAndOutcomeWithNullStartDate_shouldReturnCorrectRecords() {
+  public void testFindTransfusionsWithNullStartDate_shouldReturnCorrectRecords() {
 
     //Set up
     Date endDate = new DateTime().plusDays(2).toDate();
@@ -413,7 +413,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     );
 
     // Exercise SUT
-    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusionByComponentTypeAndSiteAndOutcome(
+    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusions(
         componentType.getId(), receiveFrom.getId(), TransfusionOutcome.TRANSFUSED_UNEVENTFULLY, null, endDate);
 
     // Verify
@@ -421,7 +421,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   }
 
   @Test
-  public void testfindTransfusionByComponentTypeAndSiteAndOutcomeWithNullEndDate_shouldReturnCorrectRecords() {
+  public void testFindTransfusionsWithNullEndDate_shouldReturnCorrectRecords() {
 
     //Set up
     Date startDate = new DateTime().minusDays(7).toDate();
@@ -456,7 +456,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     );
 
     // Exercise SUT
-    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusionByComponentTypeAndSiteAndOutcome(
+    List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusions(
         componentType.getId(), receiveFrom.getId(), TransfusionOutcome.TRANSFUSED_UNEVENTFULLY, startDate, null);
 
     // Verify

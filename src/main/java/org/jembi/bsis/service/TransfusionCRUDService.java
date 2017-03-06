@@ -48,7 +48,7 @@ public class TransfusionCRUDService {
         transfusions.add(transfusion);
       }
     } else {
-      transfusions = transfusionRepository.findTransfusionByComponentTypeAndSiteAndOutcome(componentTypeId, receivedFromId, transfusionOutcome, startDate, endDate);
+      transfusions = transfusionRepository.findTransfusions(componentTypeId, receivedFromId, transfusionOutcome, startDate, endDate);
     }
     return transfusions;
   }
