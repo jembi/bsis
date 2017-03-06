@@ -19,12 +19,12 @@ public class TransfusionRepository extends AbstractRepository<Transfusion> {
   @PersistenceContext
   private EntityManager em;
   
-  public List<Transfusion> findTransfusionsByDINAndComponentCode(String donationIdentificationNumber, String componentCode) {
+  public Transfusion findTransfusionByDINAndComponentCode(String donationIdentificationNumber, String componentCode) {
     return em.createNamedQuery(TranfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_BY_DIN_AND_COMPONENT_CODE, Transfusion.class)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
         .setParameter("componentCode", componentCode)
         .setParameter("isDeleted", false)
-        .getResultList();
+        .getSingleResult();
   }
 
   public List<Transfusion> findTransfusionByComponentTypeAndSiteAndOutcome(Long componentTypeId, Long receivedFromId,

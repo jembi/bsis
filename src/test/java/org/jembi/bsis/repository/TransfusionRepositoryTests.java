@@ -60,28 +60,27 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
 
     assertThat(retrievedTransfusion, hasSameStateAsTransfusion(savedTransfusion));
   }
-  
+ 
   @Test
-  public void testFindTransfusionsByDINAndCodeWithoutFlagCharacters_shouldReturnCorrectFields() {
+  public void testFindTransfusionByDINAndCodeWithoutFlagCharacters_shouldReturnCorrectFields() {
     //Set up fixture
     String  donationIdentificationNumber = "1234567";
     String componentCode = "011-022";
-    List<Transfusion> expectedTranfusions = Arrays.asList(
-        aTransfusion()
-            .withComponent(aComponent()
-                .withComponentCode(componentCode)
-                .withDonation(aDonation()
-                    .withDonationIdentificationNumber(donationIdentificationNumber)
-                    .build()).buildAndPersist(entityManager))
-            .withPatient(aPatient() 
-               .withName1("Name 1")
-               .withName2("Name 2")
-               .buildAndPersist(entityManager))
-           .withReceivedFrom(aUsageSite()
-               .withName("Tranfusion site")
-               .buildAndPersist(entityManager))
-           .buildAndPersist(entityManager),
-       
+    Transfusion expectedTranfusion =  aTransfusion()
+        .withComponent(aComponent()
+            .withComponentCode(componentCode)
+            .withDonation(aDonation()
+                .withDonationIdentificationNumber(donationIdentificationNumber)
+                .build()).buildAndPersist(entityManager))
+        .withPatient(aPatient() 
+           .withName1("Name 1")
+           .withName2("Name 2")
+           .buildAndPersist(entityManager))
+       .withReceivedFrom(aUsageSite()
+           .withName("Tranfusion site")
+           .buildAndPersist(entityManager))
+       .buildAndPersist(entityManager);
+           
         // Excluded by donationIdentificationNumber    
         aTransfusion()
             .withComponent(aComponent()
@@ -96,7 +95,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
            .withReceivedFrom(aUsageSite()
                .withName("Transfusion site")
                .buildAndPersist(entityManager))
-           .buildAndPersist(entityManager),
+           .buildAndPersist(entityManager);
           
         // Excluded by component code    
         aTransfusion()
@@ -112,44 +111,40 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
            .withReceivedFrom(aUsageSite()
                .withName("Transfusion site")
                .buildAndPersist(entityManager))
-           .buildAndPersist(entityManager)
-    );
+           .buildAndPersist(entityManager);
     
-    List<Transfusion> returnedTransfusions = transfusionRepository
-        .findTransfusionsByDINAndComponentCode(donationIdentificationNumber, componentCode);
+    Transfusion returnedTransfusion = transfusionRepository
+        .findTransfusionByDINAndComponentCode(donationIdentificationNumber, componentCode);
     
-    assertThat(returnedTransfusions.size(), is(1));
-    assertThat(returnedTransfusions.get(0), hasSameStateAsTransfusion(expectedTranfusions.get(0)));
+    assertThat(returnedTransfusion, hasSameStateAsTransfusion(expectedTranfusion));
   }
-  
+
   @Test
-  public void testFindTransfusionsByDINAndCodeWithFlagCharacters_shouldReturnCorrectFields() {
+  public void testFindTransfusionByDINAndCodeWithFlagCharacters_shouldReturnCorrectFields() {
     
-    String  donationIdentificationNumber = "1234567BE";
+    String  donationIdentificationNumber = "1234567";
+    String flagCharacter = "BR";
     String componentCode = "011-022";
-    List<Transfusion> expectedTranfusions = Arrays.asList(
-        aTransfusion()
-            .withComponent(aComponent()
-                .withComponentCode(componentCode)
-                .withDonation(aDonation()
-                    .withDonationIdentificationNumber(donationIdentificationNumber)
-                    .withFlagCharacters("BE")
-                    .build()).buildAndPersist(entityManager))
-            .withPatient(aPatient() 
-               .withName1("Name 1")
-               .withName2("Name 2")
-               .build())
-           .withReceivedFrom(aUsageSite()
-               .withName("Tranfusion site")
-               .buildAndPersist(entityManager))
-           .buildAndPersist(entityManager)
-    );
+    Transfusion expectedTranfusion =  aTransfusion()   
+        .withComponent(aComponent()
+            .withComponentCode(componentCode)
+            .withDonation(aDonation()
+                .withDonationIdentificationNumber(donationIdentificationNumber)
+                .withFlagCharacters("BR")
+                .build()).buildAndPersist(entityManager))
+        .withPatient(aPatient() 
+           .withName1("Name 1")
+           .withName2("Name 2")
+           .build())
+       .withReceivedFrom(aUsageSite()
+           .withName("Tranfusion site")
+           .buildAndPersist(entityManager))
+       .buildAndPersist(entityManager);
     
-    List<Transfusion> returnedTransfusions = transfusionRepository
-        .findTransfusionsByDINAndComponentCode(donationIdentificationNumber, componentCode);
-    
-    assertThat(returnedTransfusions.size(), is(expectedTranfusions.size()));
-    assertThat(returnedTransfusions.get(0), hasSameStateAsTransfusion(expectedTranfusions.get(0)));
+    Transfusion returnedTransfusion = transfusionRepository
+        .findTransfusionByDINAndComponentCode(donationIdentificationNumber + flagCharacter, componentCode);
+   
+    assertThat(returnedTransfusion, hasSameStateAsTransfusion(expectedTranfusion));
   }
 
   @Test

@@ -43,7 +43,10 @@ public class TransfusionCRUDService {
     List<Transfusion> transfusions = new ArrayList<>();
     // Check if din is present
     if (StringUtils.isNotEmpty(din)) {
-      transfusions = transfusionRepository.findTransfusionsByDINAndComponentCode(din, componentCode);
+      Transfusion transfusion = transfusionRepository.findTransfusionByDINAndComponentCode(din, componentCode);
+      if (transfusion != null) {
+        transfusions.add(transfusion);
+      }
     } else {
       transfusions = transfusionRepository.findTransfusionByComponentTypeAndSiteAndOutcome(componentTypeId, receivedFromId, transfusionOutcome, startDate, endDate);
     }

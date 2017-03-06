@@ -64,11 +64,11 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testFindTransfusionsWithNotNullDin_shouldDoFindByDinSearch() {
     // set up mocks
-    when(transfusionRepository.findTransfusionsByDINAndComponentCode("1000000", null)).thenReturn(null);
+    when(transfusionRepository.findTransfusionByDINAndComponentCode("1000000", null)).thenReturn(null);
     // run test
     transfusionCRUDService.findTransfusions("1000000", null, null, null, null, null, null);
     // verify
-    verify(transfusionRepository).findTransfusionsByDINAndComponentCode("1000000", null);
+    verify(transfusionRepository).findTransfusionByDINAndComponentCode("1000000", null);
   }
 
   @Test

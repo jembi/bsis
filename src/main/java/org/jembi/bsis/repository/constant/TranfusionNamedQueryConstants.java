@@ -3,7 +3,7 @@ package org.jembi.bsis.repository.constant;
 public class TranfusionNamedQueryConstants {
   
   public static final String NAME_FIND_TRANSFUSION_BY_DIN_AND_COMPONENT_CODE =
-      "Transfusion.findTransfusionByDINAndCode";
+      "Transfusion.findTransfusionByDINAndComponentCode";
   public static final String QUERY_FIND_TRANSFUSION_BY_DIN_AND_COMPONENT_CODE =
       "SELECT t from Transfusion t "
       + "LEFT JOIN t.component.donation AS d "
