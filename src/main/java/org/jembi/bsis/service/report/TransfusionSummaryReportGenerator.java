@@ -65,7 +65,7 @@ public class TransfusionSummaryReportGenerator {
       Cohort transfusionReactionTypeCohort = new Cohort();
       transfusionReactionTypeCohort.setCategory(CohortConstants.TRANSFUSION_REACTION_TYPE_CATEGORY);
       transfusionReactionTypeCohort.setComparator(Comparator.EQUALS);
-      if(dto.getTransfusionReactionType() != null) {
+      if (dto.getTransfusionReactionType() != null) {
         transfusionReactionTypeCohort.setOption(dto.getTransfusionReactionType().getName());
       }
       dataValue.addCohort(transfusionReactionTypeCohort);
