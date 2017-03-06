@@ -78,51 +78,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   private LocationFactory locationFactory;
 
   @Test
-  public void testCreateEntityUsingComponentType_shouldReturnEntityInCorrectState() {
-    String componentTypeCode = "123";
-    String din = "123456";
-    Date transfusionDate = new Date();
-
-    PatientBackingForm patientForm = aPatientBackingForm().withId(1L).build();
-    ComponentTypeBackingForm componentTypeForm = aComponentTypeBackingForm().withId(1L).withComponentTypeCode(componentTypeCode).build();
-    LocationBackingForm receivedFromForm = aUsageSiteBackingForm().withId(1L).build();
-    TransfusionBackingForm form = aTransfusionBackingForm()
-        .withId(1L)
-        .withDonationIdentificationNumber(din)
-        .withComponentType(componentTypeForm)
-        .withReceivedFrom(receivedFromForm)
-        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-        .withPatient(patientForm)
-        .withDateTransfused(transfusionDate)
-        .build();
-
-    Patient patient = aPatient().withId(1L).build();
-    Location receivedFrom = aLocation().withId(1L).build();
-    Component transfusedComponent = aComponent()
-        .withId(1L)
-        .withComponentType(aComponentType().withId(1L).build())
-        .build();
-    List<Component> returnedComponents = Arrays.asList(transfusedComponent);
-    Transfusion expectedEntity = aTransfusion()
-        .withId(1L)
-        .withReceivedFrom(receivedFrom)
-        .withComponent(transfusedComponent)
-        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-        .withPatient(patient)
-        .withDateTransfused(transfusionDate)
-        .thatIsNotDeleted()
-        .build();
-
-    when(componentRepository.findComponentsByDINAndType(din, componentTypeForm.getId())).thenReturn(returnedComponents);
-    when(locationRepository.getLocation(1L)).thenReturn(receivedFrom);
-    when(patientFactory.createEntity(patientForm)).thenReturn(patient);
-
-    Transfusion returnedEntity = transfusionFactory.createEntity(form);
-
-    assertThat(returnedEntity, hasSameStateAsTransfusion(expectedEntity));
-  }
-
-  @Test
   public void testCreateEntityUsingComponentCode_shouldReturnEntityInCorrectState() {
     String componentTypeCode = "123";
     String din = "123456";
