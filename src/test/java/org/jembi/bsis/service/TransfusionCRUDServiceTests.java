@@ -74,12 +74,12 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testFindTransfusionsWithNullDin_shouldDoFindTransfusionsSearch() {
     // set up mocks
-    when(transfusionRepository.findTransfusionByComponentTypeAndSiteAndOutcome(null, null, null, null, null))
+    when(transfusionRepository.findTransfusions(null, null, null, null, null))
         .thenReturn(null);
     // run test
     transfusionCRUDService.findTransfusions(null, null, null, null, null, null, null);
     // verify
-    verify(transfusionRepository).findTransfusionByComponentTypeAndSiteAndOutcome(null, null, null, null,
+    verify(transfusionRepository).findTransfusions(null, null, null, null,
         null);
   }
 

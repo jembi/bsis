@@ -11,9 +11,9 @@ public class TranfusionNamedQueryConstants {
       + "OR CONCAT(d.donationIdentificationNumber, d.flagCharacters) = :donationIdentificationNumber) "
       + "AND t.component.componentCode = :componentCode AND t.isDeleted = :isDeleted";
 
-  public static final String NAME_FIND_TRANSFUSION_BY_COMPONENT_TYPE_AND_SITE_AND_OUTCOME =
-      "Transfusion.findTransfusionByComponentTypeAndSiteAndOutcome";
-  public static final String QUERY_FIND_TRANSFUSION_BY_COMPONENT_TYPE_AND_SITE_AND_OUTCOME =
+  public static final String NAME_FIND_TRANSFUSIONS =
+      "Transfusion.findTransfusions";
+  public static final String QUERY_FIND_TRANSFUSIONS =
       "SELECT t from Transfusion t " +
       "WHERE t.isDeleted = :isDeleted " +
       "AND (:componentTypeId is null OR t.component.componentType.id = :componentTypeId) " +

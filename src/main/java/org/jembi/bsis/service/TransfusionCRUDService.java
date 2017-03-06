@@ -45,7 +45,7 @@ public class TransfusionCRUDService {
     if (StringUtils.isNotEmpty(din)) {
       transfusions = transfusionRepository.findTransfusionsByDINAndComponentCode(din, componentCode);
     } else {
-      transfusions = transfusionRepository.findTransfusionByComponentTypeAndSiteAndOutcome(componentTypeId, receivedFromId, transfusionOutcome, startDate, endDate);
+      transfusions = transfusionRepository.findTransfusions(componentTypeId, receivedFromId, transfusionOutcome, startDate, endDate);
     }
     return transfusions;
   }
