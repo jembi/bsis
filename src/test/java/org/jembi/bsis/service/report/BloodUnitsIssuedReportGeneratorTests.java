@@ -7,8 +7,8 @@ import static org.jembi.bsis.helpers.builders.BloodUnitsOrderDTOBuilder.aBloodUn
 import static org.jembi.bsis.helpers.builders.CohortBuilder.aCohort;
 import static org.jembi.bsis.helpers.builders.DataValueBuilder.aDataValue;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
-import static org.jembi.bsis.helpers.builders.ReportBuilder.aReport;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
+import static org.jembi.bsis.helpers.builders.ReportBuilder.aReport;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -21,6 +21,8 @@ import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.order.OrderType;
+import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
 import org.jembi.bsis.model.reporting.Report;
@@ -53,29 +55,119 @@ public class BloodUnitsIssuedReportGeneratorTests extends UnitTestSuite {
     ComponentType componentType2 = ComponentTypeBuilder.aComponentType().withComponentTypeName("comp2").build();
 
     List<BloodUnitsOrderDTO> unitsOrdered = Arrays.asList(
-        aBloodUnitsOrderDTO().withComponentType(componentType1).withDistributionSite(distributionSite).withCount(2).build(),
-        aBloodUnitsOrderDTO().withComponentType(componentType2).withDistributionSite(distributionSite).withCount(3).build()
+        aBloodUnitsOrderDTO()
+          .withComponentType(componentType1)
+          .withDistributionSite(distributionSite)
+          .withOrderType(OrderType.ISSUE)
+          .withCount(2)
+          .build(),
+        aBloodUnitsOrderDTO()
+          .withComponentType(componentType2)
+          .withDistributionSite(distributionSite)
+          .withOrderType(OrderType.ISSUE)
+          .withCount(3)
+          .build(),
+        aBloodUnitsOrderDTO()
+          .withComponentType(componentType2)
+          .withDistributionSite(distributionSite)
+          .withOrderType(OrderType.PATIENT_REQUEST)
+          .withCount(3)
+        .build()
     );
     
     List<BloodUnitsOrderDTO> unitsIssued = Arrays.asList(
-        aBloodUnitsOrderDTO().withComponentType(componentType1).withDistributionSite(distributionSite).withCount(1).build(),
-        aBloodUnitsOrderDTO().withComponentType(componentType2).withDistributionSite(distributionSite).withCount(2).build()
+        aBloodUnitsOrderDTO().withComponentType(componentType1).withDistributionSite(distributionSite).withOrderType(OrderType.ISSUE).withCount(1).build(),
+        aBloodUnitsOrderDTO().withComponentType(componentType2).withDistributionSite(distributionSite).withOrderType(OrderType.PATIENT_REQUEST).withCount(2).build()
     );
 
     LocationViewModel expectedLocation = aLocationViewModel().withId(1L).withName("Central").build();
+
     List<DataValue> expectedDataValues = Arrays.asList(
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(2L).withId("unitsOrdered").withLocation(expectedLocation)
-            .withCohort(aCohort().withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY).withComparator(Comparator.EQUALS).withOption("comp1").build())
-            .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(3L).withId("unitsOrdered").withLocation(expectedLocation)
-            .withCohort(aCohort().withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY).withComparator(Comparator.EQUALS).withOption("comp2").build())
-            .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(1L).withId("unitsIssued").withLocation(expectedLocation)
-            .withCohort(aCohort().withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY).withComparator(Comparator.EQUALS).withOption("comp1").build())
-            .build(),
-        aDataValue().withStartDate(startDate).withEndDate(endDate).withValue(2L).withId("unitsIssued").withLocation(expectedLocation)
-            .withCohort(aCohort().withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY).withComparator(Comparator.EQUALS).withOption("comp2").build())
-            .build()
+        aDataValue()
+          .withStartDate(startDate)
+          .withEndDate(endDate)
+          .withValue(2L)
+          .withId("unitsOrdered")
+          .withLocation(expectedLocation)
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("comp1")
+              .build())
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.ORDER_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("ISSUE")
+              .build())
+          .build(),
+        aDataValue()
+          .withStartDate(startDate)
+          .withEndDate(endDate)
+          .withValue(3L)
+          .withLocation(expectedLocation)
+          .withId("unitsOrdered")
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("comp2")
+              .build())
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.ORDER_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("ISSUE")
+              .build())
+          .build(),  
+        aDataValue()
+          .withStartDate(startDate)
+          .withEndDate(endDate)
+          .withValue(3L)
+          .withId("unitsOrdered")
+          .withLocation(expectedLocation)
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("comp2")
+              .build())
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.ORDER_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("PATIENT_REQUEST")
+              .build())
+          .build(),
+        aDataValue()
+          .withStartDate(startDate)
+          .withEndDate(endDate)
+          .withValue(1L)
+          .withId("unitsIssued")
+          .withLocation(expectedLocation)
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("comp1")
+              .build())
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.ORDER_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("ISSUE")
+              .build())
+          .build(),
+        aDataValue()
+          .withStartDate(startDate)
+          .withEndDate(endDate)
+          .withValue(2L)
+          .withId("unitsIssued")
+          .withLocation(expectedLocation)
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.COMPONENT_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("comp2")
+              .build())
+          .withCohort(aCohort()
+              .withCategory(CohortConstants.ORDER_TYPE_CATEGORY)
+              .withComparator(Comparator.EQUALS)
+              .withOption("PATIENT_REQUEST")
+              .build())
+          .build()
     );
 
     Report expectedReport = aReport().withStartDate(startDate).withEndDate(endDate).withDataValues(expectedDataValues).build();

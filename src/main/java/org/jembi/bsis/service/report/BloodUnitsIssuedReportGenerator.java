@@ -56,6 +56,12 @@ public class BloodUnitsIssuedReportGenerator {
       bloodTestCohort.setComparator(Comparator.EQUALS);
       bloodTestCohort.setOption(dto.getComponentType().getComponentTypeName());
       dataValue.addCohort(bloodTestCohort);
+
+      Cohort orderTypeCohort = new Cohort();
+      orderTypeCohort.setCategory(CohortConstants.ORDER_TYPE_CATEGORY);
+      orderTypeCohort.setComparator(Comparator.EQUALS);
+      orderTypeCohort.setOption(dto.getOrderType().name());
+      dataValue.addCohort(orderTypeCohort);
       dataValues.add(dataValue);
     }
 
@@ -81,6 +87,12 @@ public class BloodUnitsIssuedReportGenerator {
       bloodTestCohort.setComparator(Comparator.EQUALS);
       bloodTestCohort.setOption(dto.getComponentType().getComponentTypeName());
       dataValue.addCohort(bloodTestCohort);
+
+      Cohort orderTypeCohort = new Cohort();
+      orderTypeCohort.setCategory(CohortConstants.ORDER_TYPE_CATEGORY);
+      orderTypeCohort.setComparator(Comparator.EQUALS);
+      orderTypeCohort.setOption(dto.getOrderType().name());
+      dataValue.addCohort(orderTypeCohort);
       dataValues.add(dataValue);
     }
 
