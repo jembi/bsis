@@ -33,6 +33,13 @@ public class TransfusionFactory {
   @Autowired
   private ComponentFactory  componentFactory;
 
+  /**
+   * Creates a ransfusion from the specified Backing form. NOTE: It does not set the component
+   * linked to the Transfusion.
+   * 
+   * @param form
+   * @return Transfusion
+   */
   public Transfusion createEntity(TransfusionBackingForm form) {
     Transfusion transfusion = new Transfusion();
     transfusion.setId(form.getId());

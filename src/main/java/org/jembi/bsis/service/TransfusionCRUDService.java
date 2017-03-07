@@ -89,7 +89,8 @@ public class TransfusionCRUDService {
     List<Component> components = componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, transfusedComponentTypeId);
     if (components.size() != 1) {
       throw new IllegalStateException("Unable to create Transfusion data. "
-          + "Error: more than one matching Component is found for DIN '" + donationIdentificationNumber +"'");
+          + "Error: Only one matching component is allowed, but zero or more than one matching Components were found for DIN: '"
+          + donationIdentificationNumber + "' and component type id: '" + transfusedComponentTypeId + "'");
     }
     return components.get(0);
   }
