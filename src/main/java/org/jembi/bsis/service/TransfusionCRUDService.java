@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class TransfusionCRUDService {
+  
+  private static final Logger LOGGER = Logger.getLogger(TransfusionCRUDService.class);
 
   @Autowired
   private TransfusionRepository transfusionRepository;
@@ -52,15 +57,20 @@ public class TransfusionCRUDService {
   public List<Transfusion> findTransfusions(String din, String componentCode, Long componentTypeId,
       Long receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
     List<Transfusion> transfusions = new ArrayList<>();
-    // Check if din is present
+
     if (StringUtils.isNotEmpty(din)) {
-      Transfusion transfusion = transfusionRepository.findTransfusionByDINAndComponentCode(din, componentCode);
-      if (transfusion != null) {
+      // user entered a DIN and Component Code
+      try {
+        Transfusion transfusion = transfusionRepository.findTransfusionByDINAndComponentCode(din, componentCode);
         transfusions.add(transfusion);
+      } catch (NoResultException e) {
+        LOGGER.debug("No Transfusion found for din '" + din + "' and componentCode '" + componentCode + "'.");
       }
     } else {
+      // user entered other search fields (not DIN and Component Code)
       transfusions = transfusionRepository.findTransfusions(componentTypeId, receivedFromId, transfusionOutcome, startDate, endDate);
     }
+
     return transfusions;
   }
 

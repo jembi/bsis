@@ -1,5 +1,7 @@
 package org.jembi.bsis.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
@@ -15,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.NoResultException;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -66,13 +70,32 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testFindTransfusionsWithNotNullDin_shouldDoFindByDinSearch() {
+  public void testFindTransfusionsWithDinAndComponentCode_shouldReturnOneTransfusion() {
+    Transfusion transfusion = aTransfusion().withId(1L).build();
+
     // set up mocks
-    when(transfusionRepository.findTransfusionByDINAndComponentCode("1000000", null)).thenReturn(null);
+    when(transfusionRepository.findTransfusionByDINAndComponentCode("1000000", "1001")).thenReturn(transfusion);
+
     // run test
-    transfusionCRUDService.findTransfusions("1000000", null, null, null, null, null, null);
-    // verify
-    verify(transfusionRepository).findTransfusionByDINAndComponentCode("1000000", null);
+    List<Transfusion> transfusions = transfusionCRUDService.findTransfusions("1000000", "1001", null, null, null, null, null);
+
+    // assert and verify
+    assertThat(transfusions.size(), is(1));
+    assertThat(transfusions.get(0), hasSameStateAsTransfusion(transfusion));
+    verify(transfusionRepository).findTransfusionByDINAndComponentCode("1000000", "1001");
+  }
+
+  @Test
+  public void testFindTransfusionsWithDinAndComponentCodeThatDoesNotExist_shouldReturnEmptyResults() {
+    // set up mocks
+    when(transfusionRepository.findTransfusionByDINAndComponentCode("1000000", "1001")).thenThrow(new NoResultException());
+
+    // run test
+    List<Transfusion> transfusions = transfusionCRUDService.findTransfusions("1000000", "1001", null, null, null, null, null);
+
+    // assert and verify
+    assertThat(transfusions.size(), is(0));
+    verify(transfusionRepository).findTransfusionByDINAndComponentCode("1000000", "1001");
   }
 
   @Test
