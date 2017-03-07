@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jembi.bsis.backingform.TransfusionBackingForm;
-import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.transfusion.Transfusion;
-import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
 import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
@@ -27,9 +25,6 @@ public class TransfusionFactory {
   private TransfusionReactionTypeRepository transfusionReactionTypeRepository;
 
   @Autowired
-  private ComponentRepository componentRepository;
-
-  @Autowired
   private TransfusionReactionTypeFactory transfusionReactionTypeFactory;
 
   @Autowired
@@ -45,12 +40,6 @@ public class TransfusionFactory {
     // note: currently we always create a new patient entity because we only support creating new Transfusion data
     // and we don't attempt patient lookups.
     transfusion.setPatient(patientFactory.createEntity(form.getPatient()));
-    if (form.getComponentCode() != null) {
-      // the user scanned a component code - we need to use that
-      // if the user selected a componentType that will be resolved later
-      transfusion.setComponent(componentRepository.findComponentByCodeAndDIN(
-          form.getComponentCode(), form.getDonationIdentificationNumber()));
-    }
     transfusion.setReceivedFrom(locationRepository.getLocation(form.getReceivedFrom().getId()));
     if (form.getTransfusionReactionType() != null) {
       transfusion.setTransfusionReactionType(transfusionReactionTypeRepository.findById(form.getTransfusionReactionType().getId()));

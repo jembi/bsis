@@ -2,7 +2,6 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
-import static org.jembi.bsis.helpers.builders.ComponentTypeBackingFormBuilder.aComponentTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
@@ -26,11 +25,9 @@ import static org.jembi.bsis.helpers.matchers.TransfusionViewModelMatcher.hasSam
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.backingform.TransfusionBackingForm;
@@ -78,52 +75,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   private LocationFactory locationFactory;
 
   @Test
-  public void testCreateEntityUsingComponentCode_shouldReturnEntityInCorrectState() {
-    String componentTypeCode = "123";
-    String din = "123456";
-    Date transfusionDate = new Date();
-
-    PatientBackingForm patientForm = aPatientBackingForm().withId(1L).build();
-    LocationBackingForm receivedFromForm = aUsageSiteBackingForm().withId(1L).build();
-    TransfusionBackingForm form = aTransfusionBackingForm()
-        .withId(1L)
-        .withDonationIdentificationNumber(din)
-        .withComponentCode(componentTypeCode)
-        .withReceivedFrom(receivedFromForm)
-        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-        .withPatient(patientForm)
-        .withNotes("notes")
-        .withDateTransfused(transfusionDate)
-        .build();
-
-    Patient patient = aPatient().withId(1L).build();
-    Component component = aComponent()
-        .withId(1L)
-        .withComponentCode(componentTypeCode)
-        .withDonation(aDonation().withId(1L).withDonationIdentificationNumber(din).build())
-        .build();
-    Location receivedFrom = aLocation().withId(1L).build();
-    Transfusion expectedEntity = aTransfusion()
-        .withId(1L)
-        .withComponent(component)
-        .withReceivedFrom(receivedFrom)
-        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-        .withPatient(patient)
-        .withNotes("notes")
-        .withDateTransfused(transfusionDate)
-        .thatIsNotDeleted()
-        .build();
-    
-    when(locationRepository.getLocation(1L)).thenReturn(receivedFrom);
-    when(componentRepository.findComponentByCodeAndDIN(componentTypeCode, din)).thenReturn(component);
-    when(patientFactory.createEntity(patientForm)).thenReturn(patient);
-
-    Transfusion returnedEntity = transfusionFactory.createEntity(form);
-
-    assertThat(returnedEntity, hasSameStateAsTransfusion(expectedEntity));
-  }
-
-  @Test
   public void testCreateEntityWithReaction_shouldReturnEntityInCorrectState() {
     String componentTypeCode = "123";
     String din = "123456";
@@ -146,15 +97,9 @@ public class TransfusionFactoryTests extends UnitTestSuite {
 
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
     Patient patient = aPatient().withId(1L).build();
-    Component component = aComponent()
-        .withId(1L)
-        .withComponentCode(componentTypeCode)
-        .withDonation(aDonation().withId(1L).withDonationIdentificationNumber(din).build())
-        .build();
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion expectedEntity = aTransfusion()
         .withId(1L)
-        .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSION_REACTION_OCCURRED)
         .withPatient(patient)
@@ -165,7 +110,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
     
     when(locationRepository.getLocation(1L)).thenReturn(receivedFrom);
-    when(componentRepository.findComponentByCodeAndDIN(componentTypeCode, din)).thenReturn(component);
     when(patientFactory.createEntity(patientForm)).thenReturn(patient);
     when(transfusionReactionTypeRepository.findById(1L)).thenReturn(transfusionReactionType);
 

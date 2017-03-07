@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
+import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.TransfusionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,9 @@ public class TransfusionCRUDService {
 
   @Autowired
   private ComponentCRUDService componentCRUDService;
+
+  @Autowired
+  private ComponentRepository componentRepository;
   
   /**
    * Create Transfusion data that links a specific Component with a Patient who received a blood
@@ -36,14 +40,13 @@ public class TransfusionCRUDService {
    * @return Transfusion persisted record
    */
   public Transfusion createTransfusion(
-      Transfusion transfusion, String donationIdentificatioNumber, Long transfusedComponentTypeId) {
+      Transfusion transfusion, String donationIdentificatioNumber, String transfusedComponentCode, Long transfusedComponentTypeId) {
 
     // Transfusion data must be associated with a Component
     if (transfusion.getComponent() == null) {
-      // in this case the user didn't enter a component code - they selected the ComponentType
       // we need to link the Component and the Transfusion data
       transfusion.setComponent(
-          getTransfusedComponentByDinAndComponentType(donationIdentificatioNumber, transfusedComponentTypeId));
+          getTransfusedComponent(donationIdentificatioNumber, transfusedComponentCode, transfusedComponentTypeId));
     }
 
     // Update status of transfused Component
@@ -74,7 +77,15 @@ public class TransfusionCRUDService {
     return transfusions;
   }
 
-  private Component getTransfusedComponentByDinAndComponentType(String donationIdentificationNumber, long transfusedComponentTypeId) {
+  private Component getTransfusedComponent(
+      String donationIdentificationNumber, String transfusedComponentCode, Long transfusedComponentTypeId) {
+    if (transfusedComponentCode != null) {
+      // the user scanned a component code - we need to use that to get the component
+      return componentRepository.findComponentByCodeAndDIN(
+          transfusedComponentCode, donationIdentificationNumber);
+    }
+
+    // if the user selected a componentType - we need to use that to get the component
     List<Component> components = componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, transfusedComponentTypeId);
     if (components.size() != 1) {
       throw new IllegalStateException("Unable to create Transfusion data. "
