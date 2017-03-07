@@ -20,16 +20,10 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
   }
 
   public List<PostDonationCounselling> findPostDonationCounselling(Date startDate, Date endDate, Set<Long> venueIds, 
-      CounsellingStatus counsellingStatus, Boolean referred, boolean flaggedForCounselling, Boolean notReferred) {
+      CounsellingStatus counsellingStatus, Boolean referred, boolean flaggedForCounselling) {
     
     String counsellingStatusName = counsellingStatus != null ? counsellingStatus.name() : null;
     boolean venuesHasItems = (venueIds == null || venueIds.isEmpty()) ? false : true;
-    Boolean referredStatus = referred;
-    // if notReferred has a value reset value of notReferred
-    if(notReferred != null) {
-      // set referredStatus to false here
-      referredStatus = false;
-    }
     
     return entityManager.createNamedQuery(
         PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING,
@@ -40,7 +34,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
         .setParameter("venueIds", venueIds)
         .setParameter("venuesHasItems", venuesHasItems)
         .setParameter("counsellingStatus", counsellingStatusName)
-        .setParameter("referred", referredStatus)
+        .setParameter("referred", referred)
         .setParameter("flaggedForCounselling", flaggedForCounselling)
         .getResultList();
   }

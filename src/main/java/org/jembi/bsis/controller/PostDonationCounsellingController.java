@@ -76,11 +76,10 @@ public class PostDonationCounsellingController {
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
       @RequestParam(value = "venue", required = false) Set<Long> venues,
       @RequestParam(value = "counsellingStatus", required = false) CounsellingStatus counsellingStatus,
-      @RequestParam(value = "referred", required = false) Boolean referred,
-      @RequestParam(value = "referred", required = false) Boolean notReferred) {
+      @RequestParam(value = "referred", required = false) Boolean referred) {
     Map<String, Object> map = new HashMap<>();
     map.put("counsellings", postDonationCounsellingControllerService.getCounsellingSummaries(startDate, endDate,
-        venues, counsellingStatus, referred, flaggedForCounselling, notReferred));
+        venues, counsellingStatus, referred, flaggedForCounselling));
     return map;
   }
 }
