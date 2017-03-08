@@ -41,12 +41,13 @@ public class PostDonationCounsellingNamedQueryConstants {
   public static final String NAME_FIND_POST_DONATION_COUNSELLING =
       "PostDonationCounselling.findPostDonationCounselling";
   public static final String QUERY_FIND_POST_DONATION_COUNSELLING =
-      
       "SELECT pdc " +
           "FROM PostDonationCounselling pdc " +
           "WHERE pdc.isDeleted = :isDeleted " +
           "AND pdc.flaggedForCounselling = :flaggedForCounselling " +
-          "AND (:referred IS NULL OR pdc.referred = :referred) " +
+          "AND ((:includeReferred = true AND :referred1 IS NOT NULL AND pdc.referred = :referred1) " +
+            "OR (:includeReferred = true AND :referred2 IS NOT NULL AND pdc.referred = :referred2) " +
+            "OR (:includeReferred = false AND pdc.referred IS NULL))" +
           "AND (:venuesHasItems = false OR pdc.donation.venue.id IN (:venueIds)) " +
           "AND (:counsellingStatus IS NULL OR pdc.counsellingStatus = :counsellingStatus) " +
           "AND (:startDate IS NULL OR pdc.donation.donationDate >= :startDate) " +
