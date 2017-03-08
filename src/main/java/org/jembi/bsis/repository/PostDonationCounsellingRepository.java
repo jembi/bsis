@@ -20,7 +20,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
   }
 
   public List<PostDonationCounselling> findPostDonationCounselling(Date startDate, Date endDate, Set<Long> venueIds, 
-      CounsellingStatus counsellingStatus, Boolean referred, boolean flaggedForCounselling) {
+      CounsellingStatus counsellingStatus, Boolean referred, Boolean notReferred, boolean flaggedForCounselling) {
     
     String counsellingStatusName = counsellingStatus != null ? counsellingStatus.name() : null;
     boolean venuesHasItems = (venueIds == null || venueIds.isEmpty()) ? false : true;
