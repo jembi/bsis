@@ -34,13 +34,9 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
         .setParameter("venueIds", venueIds)
         .setParameter("venuesHasItems", venuesHasItems)
         .setParameter("counsellingStatus", counsellingStatusName)
-<<<<<<< HEAD
         .setParameter("referred1", referred)
         .setParameter("referred2", (notReferred == null ? null : !notReferred))
         .setParameter("includeReferred", (referred != null && notReferred != null))
-=======
-        .setParameter("referred", referred)
->>>>>>> 0516a06a8dddaf20466e629243ec454f0351cee9
         .setParameter("flaggedForCounselling", flaggedForCounselling)
         .getResultList();
   }
