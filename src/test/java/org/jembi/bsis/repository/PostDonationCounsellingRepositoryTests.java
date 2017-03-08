@@ -66,7 +66,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     List<PostDonationCounselling> expectedPostDonationCounsellingList = Arrays.asList(firstExpectedPostDonationCounselling, secondExpectedPostDonationCounselling);
 
     List<PostDonationCounselling> returnedPostDonationCounsellingList = postDonationCounsellingRepository.findPostDonationCounselling(
-        NO_START_DATE, NO_END_DATE, NO_VENUES, NO_COUNSELLING_STATUS, NO_REFERRED, true, NO_REFERRED);
+        NO_START_DATE, NO_END_DATE, NO_VENUES, NO_COUNSELLING_STATUS, NO_REFERRED, NO_REFERRED, true);
     
     assertThat(returnedPostDonationCounsellingList, is(expectedPostDonationCounsellingList));
   }
@@ -250,17 +250,17 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     List<PostDonationCounselling> expectedPostDonationCounsellingList = new ArrayList<>(Arrays.asList(expectedPostDonationCounselling));
 
     List<PostDonationCounselling> returnedPostDonationCounsellingList = postDonationCounsellingRepository.findPostDonationCounselling(
-        NO_START_DATE, NO_END_DATE, NO_VENUES, expectedCounsellingStatus, NO_REFERRED, true, NO_REFERRED);
+        NO_START_DATE, NO_END_DATE, NO_VENUES, expectedCounsellingStatus, NO_REFERRED, NO_REFERRED, true);
 
     assertThat(returnedPostDonationCounsellingList, is(expectedPostDonationCounsellingList));
   }
   
   @Test
   public void testFindPostDonationCounsellingWithReferred_shouldReturnPostDonationCounsellingWithReferredTrue() {
-    
+
     // PostDonationCounselling referred true
     PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
-        .thatIsNotFlaggedForCounselling()
+        .thatIsFlaggedForCounselling()
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .withReferred(Boolean.TRUE)
         .thatIsNotDeleted()
@@ -312,7 +312,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     List<PostDonationCounselling> expectedPostDonationCounsellingList = new ArrayList<>(Arrays.asList(
         expectedPostDonationCounselling1, expectedPostDonationCounselling2));
     List<PostDonationCounselling> returnedPostDonationCounsellingList = postDonationCounsellingRepository.findPostDonationCounselling(
-        NO_START_DATE, NO_END_DATE, NO_VENUES, NO_COUNSELLING_STATUS, Boolean.TRUE, Boolean.TRUE, true);
+        NO_START_DATE, NO_END_DATE, NO_VENUES, NO_COUNSELLING_STATUS, Boolean.TRUE, Boolean.TRUE, false);
     assertThat(returnedPostDonationCounsellingList, is(expectedPostDonationCounsellingList));
   }
   
@@ -342,7 +342,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     
     List<PostDonationCounselling> expectedPostDonationCounsellingList = new ArrayList<>(Arrays.asList(expectedPostDonationCounselling));
     List<PostDonationCounselling> returnedPostDonationCounsellingList = postDonationCounsellingRepository.findPostDonationCounselling(
-        NO_START_DATE, NO_END_DATE, NO_VENUES, NO_COUNSELLING_STATUS, Boolean.FALSE, Boolean.TRUE, true);
+        NO_START_DATE, NO_END_DATE, NO_VENUES, NO_COUNSELLING_STATUS, Boolean.FALSE, Boolean.TRUE, false);
     assertThat(returnedPostDonationCounsellingList, is(expectedPostDonationCounsellingList));
   }
   
