@@ -79,7 +79,7 @@ public class PostDonationCounsellingController {
       @RequestParam(value = "referred", required = false) Boolean referred) {
     Map<String, Object> map = new HashMap<>();
     map.put("counsellings", postDonationCounsellingControllerService.getCounsellingSummaries(startDate, endDate,
-        venues, counsellingStatus, referred, flaggedForCounselling));
+        venues, counsellingStatus, referred, false, flaggedForCounselling));
     return map;
   }
 }
