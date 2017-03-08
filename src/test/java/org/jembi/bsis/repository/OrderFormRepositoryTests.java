@@ -98,6 +98,26 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     // Test
     orderFormRepository.findById(1L);
   }
+
+  @Test
+  public void testFindOrderFormByComponent_shouldReturnCorrectOrderForm() {
+    Component component = aComponent().build();
+    OrderForm orderForm = anOrderForm()
+        .withComponent(component)
+        .buildAndPersist(entityManager);
+
+    //Test
+    OrderForm returnedOrderForm = orderFormRepository.findByComponent(component.getId());
+
+    //Verify
+    Assert.assertEquals("Order form was found", orderForm, returnedOrderForm);
+  }
+
+  @Test(expected = NoResultException.class)
+  public void FindOrderFormByComponentNoneExisting_shouldThrow() {
+    //Test
+    orderFormRepository.findByComponent(1l);
+  }
   
   @Test
   public void testFindOrderFormsNoQueryParams_shouldReturnAllOrders() {
@@ -172,7 +192,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Test
     List<OrderForm> orders =
- orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, dispatchedFrom.getId(),
+        orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, dispatchedFrom.getId(),
         dispatchedTo.getId(), null, null);
 
     // Verify
@@ -249,7 +269,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withOrderStatus(OrderStatus.DISPATCHED)
         .withOrderType(OrderType.ISSUE)
         .buildAndPersist(entityManager);
-    
+
     OrderForm order2 = OrderFormBuilder.anOrderForm()
         .withOrderDate(startDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
@@ -302,7 +322,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     Assert.assertEquals("Correct count", 7, dtos.get(1).getCount());
     Assert.assertEquals("Correct componentType", componentType2, dtos.get(1).getComponentType());
   }
-  
+
   @Test
   public void testFindBloodUnitsOrderedWithExcludingFields_shouldntReturnDtos() {
     // Set up
