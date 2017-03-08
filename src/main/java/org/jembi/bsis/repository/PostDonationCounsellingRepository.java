@@ -24,7 +24,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
     
     String counsellingStatusName = counsellingStatus != null ? counsellingStatus.name() : null;
     boolean venuesHasItems = (venueIds == null || venueIds.isEmpty()) ? false : true;
-    
+
     return entityManager.createNamedQuery(
         PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING,
         PostDonationCounselling.class)
@@ -34,7 +34,9 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
         .setParameter("venueIds", venueIds)
         .setParameter("venuesHasItems", venuesHasItems)
         .setParameter("counsellingStatus", counsellingStatusName)
-        .setParameter("referred", referred)
+        .setParameter("referred1", referred)
+        .setParameter("referred2", (notReferred == null ? null : !notReferred))
+        .setParameter("includeReferred", (referred != null && notReferred != null))
         .setParameter("flaggedForCounselling", flaggedForCounselling)
         .getResultList();
   }
