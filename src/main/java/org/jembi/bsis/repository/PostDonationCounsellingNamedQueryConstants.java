@@ -45,8 +45,8 @@ public class PostDonationCounsellingNamedQueryConstants {
           "FROM PostDonationCounselling pdc " +
           "WHERE pdc.isDeleted = :isDeleted " +
           "AND pdc.flaggedForCounselling = :flaggedForCounselling " +
-          "AND ((:includeReferred = true AND pdc.referred = :referred1) " +
-            "OR (:includeReferred = true AND pdc.referred = :referred2) " +
+          "AND ((:includeReferred = true AND :referred1 IS NOT NULL AND pdc.referred = :referred1) " +
+            "OR (:includeReferred = true AND :referred2 IS NOT NULL AND pdc.referred = :referred2) " +
             "OR (:includeReferred = false AND pdc.referred IS NULL))" +
           "AND (:venuesHasItems = false OR pdc.donation.venue.id IN (:venueIds)) " +
           "AND (:counsellingStatus IS NULL OR pdc.counsellingStatus = :counsellingStatus) " +
