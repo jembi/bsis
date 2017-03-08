@@ -55,9 +55,9 @@ public class PostDonationCounsellingControllerService {
   }
 
   public List<PostDonationCounsellingSummaryViewModel> getCounsellingSummaries(Date startDate, Date endDate,
-      Set<Long> venueIds, CounsellingStatus counsellingStatus, Boolean referred, boolean flaggedForCounselling, Boolean notReferred) {
+      Set<Long> venueIds, CounsellingStatus counsellingStatus, Boolean referred, boolean flaggedForCounselling) {
     List<PostDonationCounselling> counsellings = postDonationCounsellingRepository
-        .findPostDonationCounselling(startDate, endDate, venueIds, counsellingStatus, referred, flaggedForCounselling, notReferred);
+        .findPostDonationCounselling(startDate, endDate, venueIds, counsellingStatus, referred, flaggedForCounselling);
     return postDonationCounsellingFactory.createSummaryViewModels(counsellings);
   }
 }
