@@ -22,6 +22,12 @@ public class TransfusionRepository extends AbstractRepository<Transfusion> {
         .getSingleResult();
   }
 
+  public Transfusion findTransfusionById(long transfusionId) {
+    return entityManager.createNamedQuery(TransfusionNamedQueryConstants.MANE_FIND_TRANSFUSION_BY_ID, Transfusion.class)
+        .setParameter("transfusionId", transfusionId)
+        .getSingleResult();
+  }
+
   public List<Transfusion> findTransfusions(Long componentTypeId, Long receivedFromId,
       TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
 

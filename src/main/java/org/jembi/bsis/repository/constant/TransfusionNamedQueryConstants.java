@@ -33,4 +33,9 @@ public class TransfusionNamedQueryConstants {
       "AND (:receivedFromId is null OR t.receivedFrom.id = :receivedFromId) " +
       "AND (:startDate is null OR t.dateTransfused >= :startDate) " +
       "AND (:endDate is null OR t.dateTransfused <= :endDate) ";
+
+  public static final String MANE_FIND_TRANSFUSION_BY_ID =
+      "Transfusion.findTransfusionById";
+  public static final String QUERY_FIND_TRANSFUSION_BY_ID =
+      "SELECT t FROM Transfusion t WHERE t.id = :transfusionId";
 }

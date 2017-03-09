@@ -26,7 +26,9 @@ import org.jembi.bsis.repository.constant.TransfusionNamedQueryConstants;
   @NamedQuery(name = TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSIONS,
       query = TransfusionNamedQueryConstants.QUERY_FIND_TRANSFUSIONS),
   @NamedQuery(name = TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD,
-      query = TransfusionNamedQueryConstants.QUERY_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD)
+      query = TransfusionNamedQueryConstants.QUERY_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD),
+  @NamedQuery(name = TransfusionNamedQueryConstants.MANE_FIND_TRANSFUSION_BY_ID,
+      query = TransfusionNamedQueryConstants.QUERY_FIND_TRANSFUSION_BY_ID)
 })
 @Entity
 @Audited
