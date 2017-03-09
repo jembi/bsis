@@ -7,19 +7,25 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class TransfusionViewModel extends BaseViewModel {
+public class TransfusionFullViewModel extends BaseViewModel {
 
   private String donationIdentificationNumber;
 
-  private String componentCode;
+  private PatientViewModel patient;
 
-  private String componentType;
+  private ComponentViewModel component;
 
   private LocationViewModel receivedFrom;
+
+  private TransfusionReactionTypeViewModel transfusionReactionType;
 
   private TransfusionOutcome transfusionOutcome;
 
   private Date dateTransfused;
+
+  private String notes;
+
+  private boolean isDeleted;
 
   public String getDonationIdentificationNumber() {
     return donationIdentificationNumber;
@@ -29,20 +35,28 @@ public class TransfusionViewModel extends BaseViewModel {
     this.donationIdentificationNumber = donationIdentificationNumber;
   }
 
-  public String getComponentCode() {
-    return componentCode;
+  public PatientViewModel getPatient() {
+    return patient;
   }
 
-  public void setComponentCode(String componentCode) {
-    this.componentCode = componentCode;
+  public void setPatient(PatientViewModel patient) {
+    this.patient = patient;
   }
 
-  public String getComponentType() {
-    return componentType;
+  public ComponentViewModel getComponent() {
+    return component;
   }
 
-  public void setComponentType(String componentType) {
-    this.componentType = componentType;
+  public void setComponent(ComponentViewModel component) {
+    this.component = component;
+  }
+
+  public String getNotes() {
+    return notes;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
   }
 
   public LocationViewModel getReceivedFrom() {
@@ -51,6 +65,14 @@ public class TransfusionViewModel extends BaseViewModel {
 
   public void setReceivedFrom(LocationViewModel receivedFrom) {
     this.receivedFrom = receivedFrom;
+  }
+
+  public TransfusionReactionTypeViewModel getTransfusionReactionType() {
+    return transfusionReactionType;
+  }
+
+  public void setTransfusionReactionType(TransfusionReactionTypeViewModel transfusionReactionType) {
+    this.transfusionReactionType = transfusionReactionType;
   }
 
   public TransfusionOutcome getTransfusionOutcome() {
@@ -68,5 +90,13 @@ public class TransfusionViewModel extends BaseViewModel {
 
   public void setDateTransfused(Date dateTransfused) {
     this.dateTransfused = dateTransfused;
+  }
+
+  public boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

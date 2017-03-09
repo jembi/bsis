@@ -1,0 +1,11 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+    logicalFilePath="./src/main/resources/liquibase/updates/1138-edit-order-items.xml">
+
+  <changeSet id="20170306-1122" author="tumijacob">
+    <dropColumn tableName="Transfusion" columnName="donationIdentificationNumber" />
+    <dropColumn tableName="Transfusion_AUD" columnName="donationIdentificationNumber" />
+  </changeSet>
+</databaseChangeLog>

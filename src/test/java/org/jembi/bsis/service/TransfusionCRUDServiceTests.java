@@ -1,5 +1,7 @@
 package org.jembi.bsis.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
@@ -16,12 +18,15 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
+import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.TransfusionRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
@@ -36,6 +41,65 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
   private ComponentCRUDService componentCRUDService;
   @Mock
   private TransfusionRepository transfusionRepository;
+  @Mock
+  private ComponentRepository componentRepository;
+
+  @Test
+  public void testCreateTransfusion_shouldCreateAndUpdateComponentStatus() throws Exception {
+    Date transfusionDate = new Date();
+    String din = "1234567";
+    TransfusionOutcome transfusionOutcome = TransfusionOutcome.TRANSFUSED_UNEVENTFULLY;
+    String notes = "notes";
+    Patient patient = aPatient().withId(1L).build();
+    Long componentTypeId = 1L;
+    ComponentType componentType = aComponentType().withId(componentTypeId).build();
+    Component transfusedComponent = aComponent().withId(1L).withComponentType(componentType).build();
+    Location receivedFrom = aLocation().withId(1L).build();
+    Transfusion transfusion = aTransfusion()
+        .withId(1L)
+        .withComponent(transfusedComponent)
+        .withReceivedFrom(receivedFrom)
+        .withTransfusionOutcome(transfusionOutcome)
+        .withPatient(patient)
+        .withNotes(notes)
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build();
+
+    transfusionCRUDService.createTransfusion(transfusion, din, null, componentTypeId);
+    
+    verify(componentCRUDService).transfuseComponent(argThat(hasSameStateAsComponent(transfusedComponent)));
+    verify(transfusionRepository).save(argThat(hasSameStateAsTransfusion(transfusion)));
+  }
+
+  @Test
+  public void testFindTransfusionsWithDinAndComponentCode_shouldReturnOneTransfusion() {
+    Transfusion transfusion = aTransfusion().withId(1L).build();
+
+    // set up mocks
+    when(transfusionRepository.findTransfusionByDINAndComponentCode("1000000", "1001")).thenReturn(transfusion);
+
+    // run test
+    List<Transfusion> transfusions = transfusionCRUDService.findTransfusions("1000000", "1001", null, null, null, null, null);
+
+    // assert and verify
+    assertThat(transfusions.size(), is(1));
+    assertThat(transfusions.get(0), hasSameStateAsTransfusion(transfusion));
+    verify(transfusionRepository).findTransfusionByDINAndComponentCode("1000000", "1001");
+  }
+
+  @Test
+  public void testFindTransfusionsWithDinAndComponentCodeThatDoesNotExist_shouldReturnEmptyResults() {
+    // set up mocks
+    when(transfusionRepository.findTransfusionByDINAndComponentCode("1000000", "1001")).thenThrow(new NoResultException());
+
+    // run test
+    List<Transfusion> transfusions = transfusionCRUDService.findTransfusions("1000000", "1001", null, null, null, null, null);
+
+    // assert and verify
+    assertThat(transfusions.size(), is(0));
+    verify(transfusionRepository).findTransfusionByDINAndComponentCode("1000000", "1001");
+  }
 
   @Test
   public void testCreateTransfusionUsingComponentType_shouldCreateAndUpdateComponentStatus() throws Exception {
@@ -49,7 +113,6 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion transfusion = aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber(donationIdentificationNumber)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(transfusionOutcome)
         .withPatient(patient)
@@ -61,7 +124,6 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     List<Component> returnedComponents = Arrays.asList(transfusedComponent);
     Transfusion expectedTransfusion = aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber(donationIdentificationNumber)
         .withComponent(transfusedComponent)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(transfusionOutcome)
@@ -71,10 +133,10 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
         .thatIsNotDeleted()
         .build();
 
-    when(componentCRUDService.findComponentsByDINAndType(transfusion.getDonationIdentificationNumber(), componentTypeId))
+    when(componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId))
         .thenReturn(returnedComponents);
 
-    transfusionCRUDService.createTransfusion(transfusion, componentType.getId());
+    transfusionCRUDService.createTransfusion(transfusion, donationIdentificationNumber, null, componentType.getId());
 
     verify(componentCRUDService).transfuseComponent(argThat(hasSameStateAsComponent(transfusedComponent)));
     verify(transfusionRepository).save(argThat(hasSameStateAsTransfusion(expectedTransfusion)));
@@ -92,7 +154,6 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion transfusion = aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber(donationIdentificationNumber)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(transfusionOutcome)
         .withPatient(patient)
@@ -104,10 +165,52 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Component transfusedComponent2 = aComponent().withId(2L).withComponentType(componentType).build();
     List<Component> returnedComponents = Arrays.asList(transfusedComponent1, transfusedComponent2);
 
-    when(componentCRUDService.findComponentsByDINAndType(transfusion.getDonationIdentificationNumber(), componentTypeId))
+    when(componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId))
         .thenReturn(returnedComponents);
 
-    transfusionCRUDService.createTransfusion(transfusion, componentType.getId());
+    transfusionCRUDService.createTransfusion(transfusion, donationIdentificationNumber, null, componentType.getId());
+  }
+
+  @Test
+  public void testCreateTransfusionUsingComponentCode_shouldCreateAndUpdateComponentStatus() throws Exception {
+    String donationIdentificationNumber = "1234567";
+    String transfusedComponentCode = "2001-01";
+    Date transfusionDate = new Date();
+    TransfusionOutcome transfusionOutcome = TransfusionOutcome.TRANSFUSED_UNEVENTFULLY;
+    String notes = "notes";
+    Patient patient = aPatient().withId(1L).build();
+    Location receivedFrom = aLocation().withId(1L).build();
+    Transfusion transfusion = aTransfusion()
+        .withId(1L)
+        .withReceivedFrom(receivedFrom)
+        .withTransfusionOutcome(transfusionOutcome)
+        .withPatient(patient)
+        .withNotes(notes)
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build();
+    Component transfusedComponent = aComponent()
+        .withId(1L)
+        .withComponentCode(transfusedComponentCode)
+        .build();
+    Transfusion expectedTransfusion = aTransfusion()
+        .withId(1L)
+        .withComponent(transfusedComponent)
+        .withReceivedFrom(receivedFrom)
+        .withTransfusionOutcome(transfusionOutcome)
+        .withPatient(patient)
+        .withNotes(notes)
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build();
+
+    when(componentRepository.findComponentByCodeAndDIN(transfusedComponentCode, donationIdentificationNumber))
+        .thenReturn(transfusedComponent);
+
+    transfusionCRUDService.createTransfusion(transfusion, donationIdentificationNumber, transfusedComponentCode, null);
+
+    verify(componentCRUDService).transfuseComponent(argThat(hasSameStateAsComponent(transfusedComponent)));
+    verify(transfusionRepository).save(argThat(hasSameStateAsTransfusion(expectedTransfusion)));
   }
 
   @Test(expected = IllegalStateException.class)
@@ -122,7 +225,6 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion transfusion = aTransfusion()
         .withId(1L)
-        .withDonationIdentificationNumber(donationIdentificationNumber)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(transfusionOutcome)
         .withPatient(patient)
@@ -132,38 +234,22 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
         .build();
     List<Component> returnedComponents = new ArrayList<>();
 
-    when(componentCRUDService.findComponentsByDINAndType(transfusion.getDonationIdentificationNumber(), componentTypeId))
+    when(componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId))
         .thenReturn(returnedComponents);
 
-    transfusionCRUDService.createTransfusion(transfusion, componentType.getId());
+    transfusionCRUDService.createTransfusion(transfusion, donationIdentificationNumber, null, componentType.getId());
   }
 
   @Test
-  public void testCreateTransfusion_shouldCreateAndUpdateComponentStatus() throws Exception {
-    String donationIdentificationNumber = "1234567";
-    Date transfusionDate = new Date();
-    TransfusionOutcome transfusionOutcome = TransfusionOutcome.TRANSFUSED_UNEVENTFULLY;
-    String notes = "notes";
-    Patient patient = aPatient().withId(1L).build();
-    Long componentTypeId = 1L;
-    ComponentType componentType = aComponentType().withId(componentTypeId).build();
-    Component transfusedComponent = aComponent().withId(1L).withComponentType(componentType).build();
-    Location receivedFrom = aLocation().withId(1L).build();
-    Transfusion transfusion = aTransfusion()
-        .withId(1L)
-        .withDonationIdentificationNumber(donationIdentificationNumber)
-        .withComponent(transfusedComponent)
-        .withReceivedFrom(receivedFrom)
-        .withTransfusionOutcome(transfusionOutcome)
-        .withPatient(patient)
-        .withNotes(notes)
-        .withDateTransfused(transfusionDate)
-        .thatIsNotDeleted()
-        .build();
-
-    transfusionCRUDService.createTransfusion(transfusion, componentType.getId());
-    
-    verify(componentCRUDService).transfuseComponent(argThat(hasSameStateAsComponent(transfusedComponent)));
-    verify(transfusionRepository).save(argThat(hasSameStateAsTransfusion(transfusion)));
+  public void testFindTransfusionsWithNullDin_shouldDoFindTransfusionsSearch() {
+    // set up mocks
+    when(transfusionRepository.findTransfusions(null, null, null, null, null))
+        .thenReturn(null);
+    // run test
+    transfusionCRUDService.findTransfusions(null, null, null, null, null, null, null);
+    // verify
+    verify(transfusionRepository).findTransfusions(null, null, null, null,
+        null);
   }
+
 }

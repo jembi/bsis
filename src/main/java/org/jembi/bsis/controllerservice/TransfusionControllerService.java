@@ -1,5 +1,6 @@
 package org.jembi.bsis.controllerservice;
 
+import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.backingform.TransfusionBackingForm;
@@ -9,11 +10,13 @@ import org.jembi.bsis.factory.TransfusionFactory;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.transfusion.Transfusion;
+import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.TransfusionCRUDService;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
 import org.jembi.bsis.viewmodel.TransfusionViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,24 +38,28 @@ public class TransfusionControllerService {
   private ComponentTypeRepository componentTypeRepository;
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
-  
+
   public List<LocationViewModel> getUsageSites() {
     List<Location> usageSites = locationRepository.getUsageSites();
     return locationFactory.createViewModels(usageSites);
   }
-  
+
   public List<ComponentTypeViewModel> getComponentTypes() {
     List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypesThatCanBeIssued();
     return componentTypeFactory.createViewModels(componentTypes);
   }
-  
-  public TransfusionViewModel createTransfusionForm(TransfusionBackingForm backingForm) {
+
+  public TransfusionFullViewModel createTransfusion(TransfusionBackingForm backingForm) {
     Transfusion entity = transfusionFactory.createEntity(backingForm);
-    Long transfusedComponentTypeId = null;
-    if (backingForm.getComponentType() != null) {
-      transfusedComponentTypeId = backingForm.getComponentType().getId();
-    }
-    entity = transfusionCRUDService.createTransfusion(entity, transfusedComponentTypeId);
-    return transfusionFactory.createViewModel(entity);
+    entity = transfusionCRUDService.createTransfusion(entity, backingForm.getDonationIdentificationNumber(),
+        backingForm.getComponentCode(), backingForm.getComponentType().getId());
+    return transfusionFactory.createFullViewModel(entity);
+  }
+
+  public List<TransfusionViewModel> findTransfusions(String din, String componentCode, Long componentTypeId,
+      Long receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
+    List<Transfusion> transfusions = transfusionCRUDService.findTransfusions(din, componentCode, componentTypeId,
+        receivedFromId, transfusionOutcome, startDate, endDate);
+    return transfusionFactory.createViewModels(transfusions);
   }
 }
