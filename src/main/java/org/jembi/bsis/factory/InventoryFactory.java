@@ -42,17 +42,7 @@ public class InventoryFactory {
 
   public InventoryViewModel createViewModel(Component component) {
     InventoryViewModel viewModel = new InventoryViewModel();
-    viewModel.setId(component.getId());
-    viewModel.setComponentCode(component.getComponentCode());
-    viewModel.setComponentType(componentTypeFactory.createViewModel(component.getComponentType()));
-    viewModel.setCreatedOn(component.getCreatedOn());
-    viewModel.setLocation(locationFactory.createFullViewModel(component.getLocation()));
-    viewModel.setExpiryStatus(getExpiryStatus(component));
-    viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
-    viewModel.setInventoryStatus(component.getInventoryStatus());
-    String bloodGroup = component.getDonation().getBloodAbo() + component.getDonation().getBloodRh();
-    viewModel.setBloodGroup(bloodGroup.replace("null", ""));
-    viewModel.setExpiresOn(component.getExpiresOn());
+    populateViewModel(viewModel, component);
     return viewModel;
   }
 
