@@ -93,12 +93,41 @@ public class InventoryFactoryTests {
           .withCreatedOn(createdOn)
           .withComponentType(componentTypeViewModel)
           .withExpiryStatus("")
+          .withBloodGroup("A+")
           .build();
+
     // Run test
-    InventoryViewModel createdInventoryviewModel = inventoryFactory.createViewModel(component);
+    InventoryViewModel createdInventoryViewModel = inventoryFactory.createViewModel(component);
     
     // Verify
-    assertThat(createdInventoryviewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
+    assertThat(createdInventoryViewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
+  }
+
+  @Test
+  public void testCreateInventoryViewModels_shouldReturnCorrectNumberOfViewModels() {
+
+    // Setup
+    Component component1 = aComponent()
+        .build();
+    Component component2 = aComponent()
+        .build();
+
+    // Run test
+    List<InventoryViewModel> createdInventoryViewModels = inventoryFactory.createViewModels(Arrays.asList(component1, component2));
+
+    // do asserts
+    Assert.assertNotNull("View models created", createdInventoryViewModels);
+    Assert.assertEquals("Correct number of view models created", 2, createdInventoryViewModels.size());
+  }
+
+  @Test
+  public void testCreateInventoryViewModelsWithNullColection_shouldReturnEmptyCollection() {
+
+    // Run test
+    List<InventoryViewModel> createdInventoryViewModels = inventoryFactory.createViewModels(null);
+
+    // do asserts
+    Assert.assertTrue("Collection is empty", createdInventoryViewModels.isEmpty());
   }
 
   @Test
@@ -146,6 +175,7 @@ public class InventoryFactoryTests {
             .withCreatedOn(createdOn)
             .withComponentType(componentTypeViewModel)
             .withExpiryStatus("")
+            .withBloodGroup("A+")
             .withOrderForm(orderFormFullViewModel)
             .build();
 
@@ -163,7 +193,8 @@ public class InventoryFactoryTests {
     assertThat(createdFullViewModel, hasSameStateAsInventoryFullViewModel(expectedFullViewModel));
   }
 
-  public void testCreateFullViewModels_shouldFullViewModelWithTheCorrectState() {
+  @Test
+  public void testCreateFullViewModels_shouldCreateFullViewModels() {
 
     // Setup
     Component component1 = aComponent()
@@ -179,6 +210,16 @@ public class InventoryFactoryTests {
     // do asserts
     Assert.assertNotNull("View models created", createdFullViewModels);
     Assert.assertEquals("Correct number of view models created", 2, createdFullViewModels.size());
+  }
+
+  @Test
+  public void testCreateFullViewModelsWithNullCollection_shouldReturnEmptyCollection() {
+
+    // Run test
+    List<InventoryFullViewModel> createdFullViewModels = inventoryFactory.createFullViewModels(null);
+
+    // do asserts
+    Assert.assertTrue("Collection is empty", createdFullViewModels.isEmpty());
   }
 
   @Test
@@ -226,13 +267,14 @@ public class InventoryFactoryTests {
           .withExpiryStatus("4 days to expire")
           .withComponentType(componentTypeViewModel)
           .withLocation(locationFullViewModel)
+          .withBloodGroup("")
           .build();
 
     // Run test
-    InventoryViewModel createdInventoryviewModel = inventoryFactory.createViewModel(component);
+    InventoryViewModel createdInventoryViewModel = inventoryFactory.createViewModel(component);
     
     // Verify
-    assertThat(createdInventoryviewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
+    assertThat(createdInventoryViewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
   }
   
   @Test
@@ -256,6 +298,7 @@ public class InventoryFactoryTests {
           .withExpiryStatus("Already expired")
           .withComponentType(componentTypeViewModel)
           .withLocation(locationFullViewModel)
+          .withBloodGroup("")
           .build();
 
     // Run test
@@ -264,5 +307,4 @@ public class InventoryFactoryTests {
     // Verify
     assertThat(createdInventoryViewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
   }
-
 }

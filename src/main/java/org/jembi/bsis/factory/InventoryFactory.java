@@ -50,7 +50,7 @@ public class InventoryFactory {
     InventoryFullViewModel viewModel = new InventoryFullViewModel();
     populateViewModel(viewModel, component);
     OrderForm orderForm = orderFormRepository.findByComponent(component.getId());
-    viewModel.setOrderform(orderFormFactory.createFullViewModel(orderForm));
+    viewModel.setOrderForm(orderFormFactory.createFullViewModel(orderForm));
     return viewModel;
   }
 
