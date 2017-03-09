@@ -23,10 +23,20 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
   }
 
   public OrderForm findByComponent(long componentId) {
-    return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BY_COMPONENT, OrderForm.class)
+    List<OrderForm> orderFormList =
+        entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BY_COMPONENT, OrderForm.class)
         .setParameter("componentId", componentId)
         .setParameter("isDeleted", false)
-        .getSingleResult();
+        .getResultList();
+
+    if (orderFormList.size() == 0) {
+      return null;
+    } else if (orderFormList.size() == 1) {
+      return orderFormList.get(0);
+    }
+
+    throw new IllegalStateException(
+        "The component with ID: " + componentId + " is present in more than one OrderForm. This is not allowed. ");
   }
 
   public List<OrderForm> findOrderForms(Date orderDateFrom, Date orderDateTo, Long dispatchedFromId,

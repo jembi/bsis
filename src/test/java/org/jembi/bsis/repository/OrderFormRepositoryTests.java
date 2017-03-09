@@ -113,10 +113,11 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     Assert.assertEquals("Order form was found", orderForm, returnedOrderForm);
   }
 
-  @Test(expected = NoResultException.class)
-  public void FindOrderFormByComponentNoneExisting_shouldThrow() {
+  @Test
+  public void FindOrderFormByComponentNoneExisting_shouldReturnNull() {
     //Test
-    orderFormRepository.findByComponent(1l);
+    OrderForm order = orderFormRepository.findByComponent(1l);
+    Assert.assertNull(order);
   }
   
   @Test

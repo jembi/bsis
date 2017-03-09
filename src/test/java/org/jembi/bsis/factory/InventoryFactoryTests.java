@@ -5,11 +5,11 @@ import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
+import static org.jembi.bsis.helpers.builders.InventoryFullViewModelBuilder.anInventoryFullViewModel;
 import static org.jembi.bsis.helpers.builders.InventoryViewModelBuilder.anInventoryViewModel;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
 import static org.jembi.bsis.helpers.builders.OrderFormFullViewModelBuilder.anOrderFormFullViewModel;
-import static org.jembi.bsis.helpers.builders.InventoryFullViewModelBuilder.anInventoryFullViewModel;
 import static org.jembi.bsis.helpers.matchers.InventoryFullViewModelMatcher.hasSameStateAsInventoryFullViewModel;
 import static org.jembi.bsis.helpers.matchers.InventoryViewModelMatcher.hasSameStateAsInventoryViewModel;
 import static org.mockito.Mockito.when;
@@ -147,6 +147,7 @@ public class InventoryFactoryTests {
             .withComponentType(componentTypeViewModel)
             .withExpiryStatus("")
             .withOrderForm(orderFormFullViewModel)
+            .withBloodGroup("A+")
             .build();
 
     when(locationFactory.createFullViewModel(component.getLocation()))
@@ -155,6 +156,65 @@ public class InventoryFactoryTests {
         .thenReturn(componentTypeViewModel);
     when(orderFormRepository.findByComponent(component.getId())).thenReturn(orderForm);
     when(orderFormFactory.createFullViewModel(orderForm)).thenReturn(orderFormFullViewModel);
+
+    // Run test
+    InventoryFullViewModel createdFullViewModel = inventoryFactory.createFullViewModel(component);
+
+    // Verify
+    assertThat(createdFullViewModel, hasSameStateAsInventoryFullViewModel(expectedFullViewModel));
+  }
+
+  @Test
+  public void testCreateFullViewModelWithNoOrderFormLinkedToComponent_shouldReturnFullViewModelWithTheCorrectState() {
+
+    // Setup
+    Date createdOn = new Date();
+    ComponentType aComponentType = aComponentType().withId(1L).build();
+    Component component = aComponent()
+        .withId(1L)
+        .withComponentType(aComponentType)
+        .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
+        .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
+        .withCreatedOn(createdOn)
+        .build();
+
+    // Setup mocks
+    LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
+        .withId(1L)
+        .build();
+
+    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    ComponentFullViewModel componentFullViewModel = aComponentFullViewModel()
+        .withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withComponentType(componentTypeViewModel)
+        .withLocation(locationViewModel)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .thatIsNotInitialComponent()
+        .build();
+
+    InventoryFullViewModel expectedFullViewModel =
+        anInventoryFullViewModel()
+            .withLocation(locationFullViewModel)
+            .withInventoryStatus(component.getInventoryStatus())
+            .withId(component.getId())
+            .withDonationIdentificationNumber(component.getDonationIdentificationNumber())
+            .withComponentCode(component.getComponentCode())
+            .withCreatedOn(createdOn)
+            .withComponentType(componentTypeViewModel)
+            .withExpiryStatus("")
+            .withOrderForm(null)
+            .withBloodGroup("A+")
+            .build();
+
+    when(locationFactory.createFullViewModel(component.getLocation()))
+        .thenReturn(locationFullViewModel);
+    when(componentTypeFactory.createViewModel(component.getComponentType()))
+        .thenReturn(componentTypeViewModel);
+    when(orderFormRepository.findByComponent(component.getId())).thenReturn(null);
 
     // Run test
     InventoryFullViewModel createdFullViewModel = inventoryFactory.createFullViewModel(component);
