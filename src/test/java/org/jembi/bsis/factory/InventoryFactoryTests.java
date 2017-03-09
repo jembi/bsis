@@ -2,21 +2,37 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.InventoryViewModelBuilder.anInventoryViewModel;
+import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
+import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
+import static org.jembi.bsis.helpers.builders.OrderFormFullViewModelBuilder.anOrderFormFullViewModel;
+import static org.jembi.bsis.helpers.builders.InventoryFullViewModelBuilder.anInventoryFullViewModel;
+import static org.jembi.bsis.helpers.matchers.InventoryFullViewModelMatcher.hasSameStateAsInventoryFullViewModel;
 import static org.jembi.bsis.helpers.matchers.InventoryViewModelMatcher.hasSameStateAsInventoryViewModel;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
+import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.order.OrderForm;
+import org.jembi.bsis.repository.OrderFormRepository;
+import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
+import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 import org.jembi.bsis.viewmodel.InventoryViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,6 +52,12 @@ public class InventoryFactoryTests {
 
   @Mock
   private LocationFactory locationFactory;
+
+  @Mock
+  private OrderFormRepository orderFormRepository;
+
+  @Mock
+  private OrderFormFactory orderFormFactory;
 
   @Test
   public void testCreateInventoryViewModel_shouldReturnViewModelWithTheCorrectStateAndNoExpiryStatus() {
@@ -77,6 +99,86 @@ public class InventoryFactoryTests {
     
     // Verify
     assertThat(createdInventoryviewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
+  }
+
+  @Test
+  public void testCreateFullViewModel_shouldReturnFullViewModelWithTheCorrectState() {
+
+    // Setup
+    Date createdOn = new Date();
+    ComponentType aComponentType = aComponentType().withId(1L).build();
+    Component component = aComponent()
+        .withId(1L)
+        .withComponentType(aComponentType)
+        .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
+        .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
+        .withCreatedOn(createdOn)
+        .build();
+
+    // Setup mocks
+    LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
+    ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
+        .withId(1L)
+        .build();
+
+    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    ComponentFullViewModel componentFullViewModel = aComponentFullViewModel()
+        .withId(1L)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withComponentType(componentTypeViewModel)
+        .withLocation(locationViewModel)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .thatIsNotInitialComponent()
+        .build();
+
+    OrderForm orderForm = anOrderForm().withComponents(Arrays.asList(component)).build();
+    OrderFormFullViewModel orderFormFullViewModel = anOrderFormFullViewModel().withComponent(componentFullViewModel).build();
+
+    InventoryFullViewModel expectedFullViewModel =
+        anInventoryFullViewModel()
+            .withLocation(locationFullViewModel)
+            .withInventoryStatus(component.getInventoryStatus())
+            .withId(component.getId())
+            .withDonationIdentificationNumber(component.getDonationIdentificationNumber())
+            .withComponentCode(component.getComponentCode())
+            .withCreatedOn(createdOn)
+            .withComponentType(componentTypeViewModel)
+            .withExpiryStatus("")
+            .withOrderForm(orderFormFullViewModel)
+            .build();
+
+    when(locationFactory.createFullViewModel(component.getLocation()))
+        .thenReturn(locationFullViewModel);
+    when(componentTypeFactory.createViewModel(component.getComponentType()))
+        .thenReturn(componentTypeViewModel);
+    when(orderFormRepository.findByComponent(component.getId())).thenReturn(orderForm);
+    when(orderFormFactory.createFullViewModel(orderForm)).thenReturn(orderFormFullViewModel);
+
+    // Run test
+    InventoryFullViewModel createdFullViewModel = inventoryFactory.createFullViewModel(component);
+
+    // Verify
+    assertThat(createdFullViewModel, hasSameStateAsInventoryFullViewModel(expectedFullViewModel));
+  }
+
+  public void testCreateFullViewModels_shouldFullViewModelWithTheCorrectState() {
+
+    // Setup
+    Component component1 = aComponent()
+        .withId(1L)
+        .build();
+    Component component2 = aComponent()
+        .withId(2L)
+        .build();
+
+    // Run test
+    List<InventoryFullViewModel> createdFullViewModels = inventoryFactory.createFullViewModels(Arrays.asList(component1, component2));
+
+    // do asserts
+    Assert.assertNotNull("View models created", createdFullViewModels);
+    Assert.assertEquals("Correct number of view models created", 2, createdFullViewModels.size());
   }
 
   @Test
@@ -139,7 +241,6 @@ public class InventoryFactoryTests {
     Date expiresOn = new DateTime().minusDays(20).toDate();
     Component component = aComponent().withExpiresOn(expiresOn).build();
 
-
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
     when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
@@ -158,10 +259,10 @@ public class InventoryFactoryTests {
           .build();
 
     // Run test
-    InventoryViewModel createdInventoryviewModel = inventoryFactory.createViewModel(component);
+    InventoryViewModel createdInventoryViewModel = inventoryFactory.createViewModel(component);
 
     // Verify
-    assertThat(createdInventoryviewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
+    assertThat(createdInventoryViewModel, hasSameStateAsInventoryViewModel(expectedInventoryViewModel));
   }
 
 }
