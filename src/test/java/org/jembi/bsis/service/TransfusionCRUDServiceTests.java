@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
 import static org.jembi.bsis.helpers.builders.TransfusionBuilder.aTransfusion;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
@@ -142,6 +143,59 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     verify(transfusionRepository).save(argThat(hasSameStateAsTransfusion(expectedTransfusion)));
   }
 
+  @Test
+  public void testUpdateTransfusionUsingComponentType_shouldSetComponentAndUpdateTransfusion() throws Exception {
+    String donationIdentificationNumber = "1234567";
+    Date transfusionDate = new Date();
+    TransfusionOutcome transfusionOutcome = TransfusionOutcome.TRANSFUSED_UNEVENTFULLY;
+    String notes = "notes";
+    Patient patient = aPatient().withId(1L).build();
+    Long componentTypeId = 1L;
+    ComponentType componentType = aComponentType().withId(componentTypeId).build();
+    Location receivedFrom = aLocation().withId(1L).build();
+    Transfusion existingTransfusion = aTransfusion()
+        .withId(1L)
+        .withReceivedFrom(aUsageSite().build())
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSION_REACTION_OCCURRED)
+        .withPatient(patient)
+        .withNotes(notes)
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build();
+    Transfusion transfusion = aTransfusion()
+        .withId(1L)
+        .withReceivedFrom(receivedFrom)
+        .withTransfusionOutcome(transfusionOutcome)
+        .withPatient(patient)
+        .withNotes("New Notes")
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build();
+    Component transfusedComponent = aComponent().withId(1L).withComponentType(componentType).build();
+    List<Component> returnedComponents = Arrays.asList(transfusedComponent);
+    Transfusion expectedTransfusion = aTransfusion()
+        .withId(1L)
+        .withComponent(transfusedComponent)
+        .withReceivedFrom(receivedFrom)
+        .withTransfusionOutcome(transfusionOutcome)
+        .withPatient(patient)
+        .withNotes("New Notes")
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build();
+
+    when(componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId))
+        .thenReturn(returnedComponents);
+    when(transfusionRepository.findTransfusionById(existingTransfusion.getId())).thenReturn(existingTransfusion);
+    when(transfusionRepository.update(expectedTransfusion)).thenReturn(existingTransfusion);
+
+    Transfusion returnedTransfusion = transfusionCRUDService.updateTransfusion(
+        transfusion, donationIdentificationNumber, null, componentType.getId());
+
+    //do asserts
+    assertThat(returnedTransfusion, is(expectedTransfusion));
+  }
+
   @Test(expected = IllegalStateException.class)
   public void testCreateTransfusionUsingComponentTypeThatHasMultiple_shouldThrow() throws Exception {
     String donationIdentificationNumber = "1234567";
@@ -211,6 +265,60 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
 
     verify(componentCRUDService).transfuseComponent(argThat(hasSameStateAsComponent(transfusedComponent)));
     verify(transfusionRepository).save(argThat(hasSameStateAsTransfusion(expectedTransfusion)));
+  }
+
+  @Test
+  public void testUpdateTransfusionUsingComponentCode_shouldSetComponentAndUpdateTransfusion() throws Exception {
+    String donationIdentificationNumber = "1234567";
+    String transfusedComponentCode = "2001-01";
+    Date transfusionDate = new Date();
+    TransfusionOutcome transfusionOutcome = TransfusionOutcome.TRANSFUSED_UNEVENTFULLY;
+    String notes = "notes";
+    Patient patient = aPatient().withId(1L).build();
+    Location receivedFrom = aLocation().withId(1L).build();
+    Transfusion existingTransfusion = aTransfusion()
+        .withId(1L)
+        .withReceivedFrom(aUsageSite().build())
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSION_REACTION_OCCURRED)
+        .withPatient(aPatient().build())
+        .withNotes(notes)
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build();
+    Transfusion transfusion = aTransfusion()
+        .withId(1L)
+        .withReceivedFrom(receivedFrom)
+        .withTransfusionOutcome(transfusionOutcome)
+        .withPatient(patient)
+        .withNotes("New Notes")
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build();
+    Component transfusedComponent = aComponent()
+        .withId(1L)
+        .withComponentCode(transfusedComponentCode)
+        .build();
+    Transfusion expectedTransfusion = aTransfusion()
+        .withId(1L)
+        .withComponent(transfusedComponent)
+        .withReceivedFrom(receivedFrom)
+        .withTransfusionOutcome(transfusionOutcome)
+        .withPatient(patient)
+        .withNotes("New Notes")
+        .withDateTransfused(transfusionDate)
+        .thatIsNotDeleted()
+        .build();
+
+    when(componentRepository.findComponentByCodeAndDIN(transfusedComponentCode, donationIdentificationNumber))
+        .thenReturn(transfusedComponent);
+    when(transfusionRepository.findTransfusionById(existingTransfusion.getId())).thenReturn(existingTransfusion);
+    when(transfusionRepository.update(expectedTransfusion)).thenReturn(existingTransfusion);
+
+    Transfusion returnedTransfusion = transfusionCRUDService.updateTransfusion(
+        transfusion, donationIdentificationNumber, transfusedComponentCode, null);
+
+    //do asserts
+    assertThat(returnedTransfusion, is(expectedTransfusion));
   }
 
   @Test(expected = IllegalStateException.class)
