@@ -1,11 +1,11 @@
 package org.jembi.bsis.helpers.matchers;
 
+import java.text.SimpleDateFormat;
+import java.util.Objects;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.InventoryFullViewModel;
-
-import java.text.SimpleDateFormat;
-import java.util.Objects;
 
 public class InventoryFullViewModelMatcher extends TypeSafeMatcher<InventoryFullViewModel> {
   private InventoryFullViewModel expected;
@@ -27,7 +27,7 @@ public class InventoryFullViewModelMatcher extends TypeSafeMatcher<InventoryFull
         .appendText("\nexpiryStatus: ").appendValue(expected.getExpiryStatus())
         .appendText("\nBloodGroup: ").appendValue(expected.getBloodGroup())
         .appendText("\nexpiresOn: ").appendValue(expected.getExpiresOn())
-        .appendText("\nOrderForm: ").appendValue(expected.getOrderform());
+        .appendText("\nOrderForm: ").appendValue(expected.getOrderForm());
   }
 
   @Override
@@ -45,7 +45,7 @@ public class InventoryFullViewModelMatcher extends TypeSafeMatcher<InventoryFull
             || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getLocation(), expected.getLocation()) &&
         Objects.equals(actual.getBloodGroup(), expected.getBloodGroup()) &&
-        Objects.equals(actual.getOrderform(), expected.getOrderform());
+        Objects.equals(actual.getOrderForm(), expected.getOrderForm());
   }
 
   public static InventoryFullViewModelMatcher hasSameStateAsInventoryFullViewModel(InventoryFullViewModel expected) {

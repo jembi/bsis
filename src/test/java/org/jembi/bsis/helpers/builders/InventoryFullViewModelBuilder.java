@@ -6,7 +6,7 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
-import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
+import org.jembi.bsis.viewmodel.OrderFormViewModel;
 
 public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFullViewModel>{
 
@@ -20,9 +20,9 @@ public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFull
   private Date expiresOn;
   private LocationFullViewModel location;
   private String bloodGroup;
-  private OrderFormFullViewModel orderForm;
+  private OrderFormViewModel orderForm;
 
-  public InventoryFullViewModelBuilder withOrderForm(OrderFormFullViewModel orderForm) {
+  public InventoryFullViewModelBuilder withOrderForm(OrderFormViewModel orderForm) {
     this.orderForm = orderForm;
     return this;
   }
@@ -76,8 +76,7 @@ public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFull
     this.bloodGroup = bloodGroup;
     return this;
   }
-  
-  
+
   @Override
   public InventoryFullViewModel build() {
     InventoryFullViewModel viewModel = new InventoryFullViewModel();
@@ -91,14 +90,11 @@ public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFull
     viewModel.setExpiresOn(expiresOn);
     viewModel.setLocation(location);
     viewModel.setBloodGroup(bloodGroup);
-    viewModel.setOrderform(orderForm);
+    viewModel.setOrderForm(orderForm);
     return viewModel;
   }
   
   public static InventoryFullViewModelBuilder anInventoryFullViewModel() {
     return new InventoryFullViewModelBuilder();
   }
-
-  
-
 }

@@ -42,9 +42,9 @@ public class InventoryViewModelMatcher extends TypeSafeMatcher<InventoryViewMode
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
         Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus()) && 
         (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn())
-            || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn())) && 
+            || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getLocation(), expected.getLocation()) && 
-        Objects.equals(actual.getBloodGroup(), expected.getBloodGroup()));
+        Objects.equals(actual.getBloodGroup(), expected.getBloodGroup());
   }
 
   public static InventoryViewModelMatcher hasSameStateAsInventoryViewModel(InventoryViewModel expected) {

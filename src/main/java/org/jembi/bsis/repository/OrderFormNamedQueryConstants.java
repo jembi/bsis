@@ -52,4 +52,13 @@ public class OrderFormNamedQueryConstants {
       "GROUP BY c.componentType " +
       "ORDER BY c.componentType ";
 
+  public static final String NAME_VERIFY_COMPONENT_NOT_IN_ANOTHER_ORDER_FORM =
+      "OrderForm.verifyComponentNotInAnotherOrderForm";
+  public static final String QUERY_VERIFY_COMPONENT_NOT_IN_ANOTHER_ORDER_FORM =
+      "SELECT count(o) = 0 " +
+          "FROM OrderForm o " +
+          "INNER JOIN o.components c " +
+          "WHERE (:id = null OR o.id <> :id) " +
+          "AND c.id = :componentId " +
+          "AND o.isDeleted = :isDeleted";
 }

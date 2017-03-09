@@ -1,5 +1,8 @@
 package org.jembi.bsis.repository;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
@@ -465,4 +468,57 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     Assert.assertEquals("Correct componentType", secondComponentType, returnedDTOs.get(1).getComponentType());
   }
 
+  @Test
+  public void testVerifyComponentNotInAnotherOrderForm_returnsTrue() {
+    // set up
+    Component component = aComponent().build();
+    OrderForm orderForm = anOrderForm().withComponent(component).buildAndPersist(entityManager);
+    
+    // run test
+    boolean verify = orderFormRepository.verifyComponentNotInAnotherOrderForm(orderForm.getId(), component.getId());
+    
+    // assert
+    assertThat(verify, is(true));
+  }
+
+  @Test
+  public void testVerifyComponentNotInAnotherOrderForm_returnsFalse() {
+    // set up
+    Component component = aComponent().build();
+    OrderForm orderForm1 = anOrderForm().withComponent(component).buildAndPersist(entityManager);
+    anOrderForm().withComponent(component).buildAndPersist(entityManager); // other order form
+    
+    // run test
+    assertThat(orderForm1.getId(), is(notNullValue()));
+    assertThat(component.getId(), is(notNullValue()));
+    boolean verify = orderFormRepository.verifyComponentNotInAnotherOrderForm(orderForm1.getId(), component.getId());
+    
+    // assert
+    assertThat(verify, is(false));
+  }
+
+  @Test
+  public void testVerifyComponentNotInAnotherOrderFormWhenOrderFormNotPersistedYet_returnsTrue() {
+    // set up
+    Component component = aComponent().build();
+    
+    // run test
+    boolean verify = orderFormRepository.verifyComponentNotInAnotherOrderForm(null, component.getId());
+    
+    // assert
+    assertThat(verify, is(true));
+  }
+
+  @Test
+  public void testVerifyComponentNotInAnotherOrderFormWhenOrderFormNotPersistedYet_returnsFalse() {
+    // set up
+    Component component = aComponent().build();
+    anOrderForm().withComponent(component).buildAndPersist(entityManager); // other order form
+    
+    // run test
+    boolean verify = orderFormRepository.verifyComponentNotInAnotherOrderForm(null, component.getId());
+    
+    // assert
+    assertThat(verify, is(false));
+  }
 }
