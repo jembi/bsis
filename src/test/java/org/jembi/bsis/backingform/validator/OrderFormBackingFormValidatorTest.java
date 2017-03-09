@@ -31,6 +31,7 @@ import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
 import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.repository.OrderFormRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -56,6 +57,9 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
 
   @Mock
   private ComponentRepository componentRepository;
+
+  @Mock
+  private OrderFormRepository orderFormRepository;
 
   private OrderFormBackingForm getTransferOrderFormBackingForm() {
     LocationBackingForm dispatchedFrom = aDistributionSiteBackingForm().withName("LocFrom").withId(1l).build();
@@ -127,6 +131,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
     when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+    when(orderFormRepository.verifyComponentNotInAnotherOrderForm(null, 1L)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -149,6 +154,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     when(locationRepository.getLocation(2l)).thenReturn(getTransferToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
     when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+    when(orderFormRepository.verifyComponentNotInAnotherOrderForm(null, 1L)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -172,6 +178,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
     when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+    when(orderFormRepository.verifyComponentNotInAnotherOrderForm(null, 1L)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -284,6 +291,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     when(formFieldRepository.getRequiredFormFields("OrderForm"))
         .thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
     when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+    when(orderFormRepository.verifyComponentNotInAnotherOrderForm(null, 1L)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -328,6 +336,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
     when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+    when(orderFormRepository.verifyComponentNotInAnotherOrderForm(null, 1L)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -352,6 +361,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
     when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+    when(orderFormRepository.verifyComponentNotInAnotherOrderForm(null, 1L)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -536,6 +546,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
     when(componentRepository.findComponent(1L)).thenReturn(component);
+    when(orderFormRepository.verifyComponentNotInAnotherOrderForm(null, 1L)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -561,6 +572,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
     when(componentRepository.findComponent(1L)).thenReturn(component);
+    when(orderFormRepository.verifyComponentNotInAnotherOrderForm(null, 1L)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -586,6 +598,7 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
     when(componentRepository.findComponent(1L)).thenReturn(component);
+    when(orderFormRepository.verifyComponentNotInAnotherOrderForm(null, 1L)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -635,5 +648,29 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
 
     // check asserts
     Assert.assertEquals("component id is required.", errors.getFieldErrors().get(0).getDefaultMessage());
+  }
+
+  @Test
+  public void testValidateComponentInAnotherOrderForm_invalidComponentIdError() {
+    // set up data
+    OrderFormBackingForm backingForm = getIssueOrderFormBackingForm();
+    Component component =
+        aComponent().withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withLocation(getDispatchedFromLocation()).build();
+    backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
+
+    // set up mocks
+    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
+    when(componentRepository.findComponent(1L)).thenReturn(component);
+    when(orderFormRepository.verifyComponentNotInAnotherOrderForm(null, 1L)).thenReturn(false);
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
+    orderFormBackingFormValidator.validate(backingForm, errors);
+
+    // check asserts
+    assertThat(errors.getFieldErrors().get(0).getCode(), is("errors.invalidComponentInAnotherOrderForm"));
   }
 }

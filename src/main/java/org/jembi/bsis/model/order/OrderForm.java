@@ -35,7 +35,9 @@ import org.jembi.bsis.repository.OrderFormNamedQueryConstants;
     @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_ORDER_FORMS,
         query = OrderFormNamedQueryConstants.QUERY_FIND_ORDER_FORMS),
     @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_BY_COMPONENT,
-        query = OrderFormNamedQueryConstants.QUERY_FIND_BY_COMPONENT)
+        query = OrderFormNamedQueryConstants.QUERY_FIND_BY_COMPONENT),
+    @NamedQuery(name = OrderFormNamedQueryConstants.NAME_VERIFY_COMPONENT_NOT_IN_ANOTHER_ORDER_FORM,
+        query = OrderFormNamedQueryConstants.QUERY_VERIFY_COMPONENT_NOT_IN_ANOTHER_ORDER_FORM)
 })
 @Entity
 @Audited
