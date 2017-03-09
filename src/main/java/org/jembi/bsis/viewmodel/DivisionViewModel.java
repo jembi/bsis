@@ -1,5 +1,7 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.Objects;
+
 public class DivisionViewModel {
   
   private long id;
@@ -37,5 +39,19 @@ public class DivisionViewModel {
 
   public void setParent(DivisionViewModel parent) {
     this.parent = parent;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    
+    if (!(other instanceof DivisionViewModel)) {
+      return false;
+    }
+    
+    DivisionViewModel otherViewModel = (DivisionViewModel) other;
+    return Objects.equals(otherViewModel.getId(), getId())
+        && Objects.equals(otherViewModel.getName(), getName())
+        && Objects.equals(otherViewModel.getLevel(), getLevel())
+        && Objects.equals(otherViewModel.getParent(), getParent());
   }
 }
