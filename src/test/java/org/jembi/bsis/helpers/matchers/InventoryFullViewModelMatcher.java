@@ -27,7 +27,8 @@ public class InventoryFullViewModelMatcher extends TypeSafeMatcher<InventoryFull
         .appendText("\nexpiryStatus: ").appendValue(expected.getExpiryStatus())
         .appendText("\nBloodGroup: ").appendValue(expected.getBloodGroup())
         .appendText("\nexpiresOn: ").appendValue(expected.getExpiresOn())
-        .appendText("\nOrderForm: ").appendValue(expected.getOrderForm());
+        .appendText("\nOrderForm: ").appendValue(expected.getOrderForm())
+        .appendText("\ncomponentStatus: ").appendValue(expected.getComponentStatus());
   }
 
   @Override
@@ -45,7 +46,8 @@ public class InventoryFullViewModelMatcher extends TypeSafeMatcher<InventoryFull
             || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getLocation(), expected.getLocation()) &&
         Objects.equals(actual.getBloodGroup(), expected.getBloodGroup()) &&
-        Objects.equals(actual.getOrderForm(), expected.getOrderForm());
+        Objects.equals(actual.getOrderForm(), expected.getOrderForm()) &&
+        Objects.equals(actual.getComponentStatus(), expected.getComponentStatus());
   }
 
   public static InventoryFullViewModelMatcher hasSameStateAsInventoryFullViewModel(InventoryFullViewModel expected) {

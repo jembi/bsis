@@ -70,6 +70,7 @@ public class InventoryFactoryTests {
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
         .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
         .withCreatedOn(createdOn)
+        .withStatus(ComponentStatus.ISSUED)
         .build();   
     
     // Setup mocks
@@ -94,6 +95,7 @@ public class InventoryFactoryTests {
           .withComponentType(componentTypeViewModel)
           .withExpiryStatus("")
           .withBloodGroup("A+")
+          .withComponentStatus(ComponentStatus.ISSUED)
           .build();
 
     // Run test
@@ -142,6 +144,7 @@ public class InventoryFactoryTests {
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
         .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
         .withCreatedOn(createdOn)
+        .withStatus(ComponentStatus.ISSUED)
         .build();
 
     // Setup mocks
@@ -177,7 +180,7 @@ public class InventoryFactoryTests {
             .withExpiryStatus("")
             .withBloodGroup("A+")
             .withOrderForm(orderFormFullViewModel)
-            .withBloodGroup("A+")
+            .withComponentStatus(ComponentStatus.ISSUED)
             .build();
 
     when(locationFactory.createFullViewModel(component.getLocation()))
@@ -206,6 +209,7 @@ public class InventoryFactoryTests {
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
         .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
         .withCreatedOn(createdOn)
+        .withStatus(ComponentStatus.ISSUED)
         .build();
 
     // Setup mocks
@@ -238,6 +242,7 @@ public class InventoryFactoryTests {
             .withExpiryStatus("")
             .withOrderForm(null)
             .withBloodGroup("A+")
+            .withComponentStatus(ComponentStatus.ISSUED)
             .build();
 
     when(locationFactory.createFullViewModel(component.getLocation()))
@@ -309,7 +314,7 @@ public class InventoryFactoryTests {
   public void testExpiryStatusWithFutureExpiryDate_shouldReturnDaysUntilExpiry() {
     // Setup
     Date expiresOn = new DateTime().plusHours(99).toDate();
-    Component component = aComponent().withExpiresOn(expiresOn).build();
+    Component component = aComponent().withExpiresOn(expiresOn).withStatus(ComponentStatus.ISSUED).build();
 
     // Setup mocks
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
@@ -327,6 +332,7 @@ public class InventoryFactoryTests {
           .withComponentType(componentTypeViewModel)
           .withLocation(locationFullViewModel)
           .withBloodGroup("")
+          .withComponentStatus(ComponentStatus.ISSUED)
           .build();
 
     // Run test
@@ -340,9 +346,9 @@ public class InventoryFactoryTests {
   public void testExpiryStatusWithPastExpiryDate_shouldReturnAlreadyExpiredMsg() {
     // Setup
     Date expiresOn = new DateTime().minusDays(20).toDate();
-    Component component = aComponent().withExpiresOn(expiresOn).build();
+    Component component = aComponent().withExpiresOn(expiresOn).withStatus(ComponentStatus.ISSUED).build();
 
-    // Setup mocks
+    // Setup mocks.
     LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
     when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
@@ -358,6 +364,7 @@ public class InventoryFactoryTests {
           .withComponentType(componentTypeViewModel)
           .withLocation(locationFullViewModel)
           .withBloodGroup("")
+          .withComponentStatus(ComponentStatus.ISSUED)
           .build();
 
     // Run test

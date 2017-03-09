@@ -2,6 +2,7 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
 
+import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.InventoryFullViewModel;
@@ -20,6 +21,7 @@ public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFull
   private Date expiresOn;
   private LocationFullViewModel location;
   private String bloodGroup;
+  private ComponentStatus componentStatus;
   private OrderFormViewModel orderForm;
 
   public InventoryFullViewModelBuilder withOrderForm(OrderFormViewModel orderForm) {
@@ -77,6 +79,11 @@ public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFull
     return this;
   }
 
+  public InventoryFullViewModelBuilder withComponentStatus(ComponentStatus componentStatus) {
+    this.componentStatus = componentStatus;
+    return this;
+  }
+
   @Override
   public InventoryFullViewModel build() {
     InventoryFullViewModel viewModel = new InventoryFullViewModel();
@@ -90,6 +97,7 @@ public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFull
     viewModel.setExpiresOn(expiresOn);
     viewModel.setLocation(location);
     viewModel.setBloodGroup(bloodGroup);
+    viewModel.setComponentStatus(componentStatus);
     viewModel.setOrderForm(orderForm);
     return viewModel;
   }

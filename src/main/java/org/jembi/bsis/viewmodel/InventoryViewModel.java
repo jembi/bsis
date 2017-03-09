@@ -2,6 +2,7 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
 
+import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
@@ -28,6 +29,8 @@ public class InventoryViewModel {
   private String bloodGroup;
 
   private Date expiresOn;
+
+  private ComponentStatus status;
 
   public Long getId() {
     return id;
@@ -112,4 +115,11 @@ public class InventoryViewModel {
     this.expiresOn = expiresOn;
   }
 
+  public ComponentStatus getComponentStatus() {
+    return status;
+  }
+
+  public void setComponentStatus(ComponentStatus status) {
+    this.status = status;
+  }
 }
