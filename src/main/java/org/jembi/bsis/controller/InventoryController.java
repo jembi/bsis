@@ -16,6 +16,7 @@ import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.InventoryCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
+import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -81,13 +82,10 @@ public class InventoryController {
   
   @RequestMapping(method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
-  public Map<String, Object> findComponent(
+  public InventoryFullViewModel findComponent(
       @RequestParam(required = true) String componentCode,
       @RequestParam(required = true) String donationIdentificationNumber) {
-
-    Map<String, Object> map = new HashMap<>();
-    map.put("inventory", inventoryControllerService.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber));
-    return map;
+    return inventoryControllerService.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
   }
 
 }
