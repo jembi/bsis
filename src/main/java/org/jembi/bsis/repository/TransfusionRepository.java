@@ -23,7 +23,7 @@ public class TransfusionRepository extends AbstractRepository<Transfusion> {
   }
 
   public Transfusion findTransfusionById(long transfusionId) {
-    return entityManager.createNamedQuery(TransfusionNamedQueryConstants.MANE_FIND_TRANSFUSION_BY_ID, Transfusion.class)
+    return entityManager.createNamedQuery(TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_BY_ID, Transfusion.class)
         .setParameter("transfusionId", transfusionId)
         .getSingleResult();
   }

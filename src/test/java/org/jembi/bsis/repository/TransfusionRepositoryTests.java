@@ -71,7 +71,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   }
 
   @Test
-  public void testFindTransfusionByIdWithExistingTransfusion() {
+  public void testFindTransfusionByIdWithExistingTransfusion_shouldReturnExistingTransfusion() {
     // Set up
     Transfusion transfusion = aTransfusion()
         .withDateTransfused(new Date())
@@ -92,9 +92,9 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   }
 
   @Test(expected = NoResultException.class)
-  public void testFindTransfusionByIdWithNoExistingTransfusion() {
+  public void testFindTransfusionByIdWithNoExistingTransfusion_shouldThrow() {
     // Test
-    Transfusion returnedTransfusion = transfusionRepository.findTransfusionById(20L);
+    transfusionRepository.findTransfusionById(20L);
   }
   
   @Test
