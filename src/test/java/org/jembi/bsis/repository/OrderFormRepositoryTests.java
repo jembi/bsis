@@ -2,7 +2,6 @@ package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
@@ -477,7 +476,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void testVerifyComponentNotInAnotherOrderForm_returnsTrue() {
+  public void testVerifyComponentNotInAnotherOrderFormForExistingForm_returnsTrue() {
     // set up
     Component component = aComponent().build();
     OrderForm orderForm = anOrderForm().withComponent(component).buildAndPersist(entityManager);
@@ -490,15 +489,13 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void testVerifyComponentNotInAnotherOrderForm_returnsFalse() {
+  public void testVerifyComponentNotInAnotherOrderFormForExistingForm_returnsFalse() {
     // set up
     Component component = aComponent().build();
-    OrderForm orderForm1 = anOrderForm().withComponent(component).buildAndPersist(entityManager);
+    OrderForm orderForm1 = anOrderForm().buildAndPersist(entityManager);
     anOrderForm().withComponent(component).buildAndPersist(entityManager); // other order form
     
     // run test
-    assertThat(orderForm1.getId(), is(notNullValue()));
-    assertThat(component.getId(), is(notNullValue()));
     boolean verify = orderFormRepository.verifyComponentNotInAnotherOrderForm(orderForm1.getId(), component.getId());
     
     // assert
@@ -506,7 +503,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void testVerifyComponentNotInAnotherOrderFormWhenOrderFormNotPersistedYet_returnsTrue() {
+  public void testVerifyComponentNotInAnotherOrderFormForNewForm_returnsTrue() {
     // set up
     Component component = aComponent().build();
     
@@ -518,7 +515,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void testVerifyComponentNotInAnotherOrderFormWhenOrderFormNotPersistedYet_returnsFalse() {
+  public void testVerifyComponentNotInAnotherOrderFormForNewForm_returnsFalse() {
     // set up
     Component component = aComponent().build();
     anOrderForm().withComponent(component).buildAndPersist(entityManager); // other order form
