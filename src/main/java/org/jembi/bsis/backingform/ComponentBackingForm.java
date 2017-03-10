@@ -7,6 +7,7 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.viewmodel.OrderFormViewModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -171,6 +172,21 @@ public class ComponentBackingForm {
 
   @JsonIgnore
   public void setParentComponentId(Long parentComponentId) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setOrderForm(OrderFormViewModel orderForm) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setBloodGroup(String bloodGroup) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setComponentStatus(ComponentStatus componentStatus) {
     // Ignore
   }
 }
