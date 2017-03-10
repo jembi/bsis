@@ -23,7 +23,6 @@ import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DivisionFullViewModel;
 import org.jembi.bsis.viewmodel.DivisionViewModel;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -81,7 +80,6 @@ public class DivisionFactoryTests extends UnitTestSuite {
   }
   
   @Test
-  @Ignore
   public void testCreateDivisionFullViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
     long divisionId = 769L;

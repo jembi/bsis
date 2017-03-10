@@ -45,6 +45,8 @@ public class DivisionViewModelMatcher extends TypeSafeMatcher<DivisionViewModel>
         && Objects.equals(actualParent.getLevel(), expectedParent.getLevel());
   }
   
+  
+  
   public static DivisionViewModelMatcher hasSameStateAsDivisionViewModel(DivisionViewModel expected) {
     return new DivisionViewModelMatcher(expected);
   }
