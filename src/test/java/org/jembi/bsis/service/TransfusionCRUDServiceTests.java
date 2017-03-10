@@ -192,8 +192,9 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Transfusion returnedTransfusion = transfusionCRUDService.updateTransfusion(
         transfusion, donationIdentificationNumber, null, componentType.getId());
 
-    //do asserts
+    //Do asserts
     assertThat(returnedTransfusion, is(expectedTransfusion));
+    assertThat(returnedTransfusion, hasSameStateAsTransfusion(expectedTransfusion));
   }
 
   @Test(expected = IllegalStateException.class)
@@ -317,8 +318,9 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Transfusion returnedTransfusion = transfusionCRUDService.updateTransfusion(
         transfusion, donationIdentificationNumber, transfusedComponentCode, null);
 
-    //do asserts
+    //Do asserts
     assertThat(returnedTransfusion, is(expectedTransfusion));
+    assertThat(returnedTransfusion, hasSameStateAsTransfusion(expectedTransfusion));
   }
 
   @Test(expected = IllegalStateException.class)
