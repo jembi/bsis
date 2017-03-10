@@ -13,6 +13,7 @@ import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.repository.TransfusionRepository;
 import org.jembi.bsis.service.TransfusionCRUDService;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
@@ -38,6 +39,8 @@ public class TransfusionControllerService {
   private ComponentTypeRepository componentTypeRepository;
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
+  @Autowired
+  private TransfusionRepository transfusionRepository;
 
   public List<LocationViewModel> getUsageSites() {
     List<Location> usageSites = locationRepository.getUsageSites();
@@ -61,5 +64,10 @@ public class TransfusionControllerService {
     List<Transfusion> transfusions = transfusionCRUDService.findTransfusions(din, componentCode, componentTypeId,
         receivedFromId, transfusionOutcome, startDate, endDate);
     return transfusionFactory.createViewModels(transfusions);
+  }
+  
+  public TransfusionViewModel getTransfusion(Long id) {
+    Transfusion transfusion = transfusionRepository.findTransfusionById(id);
+    return transfusionFactory.createViewModel(transfusion);
   }
 }

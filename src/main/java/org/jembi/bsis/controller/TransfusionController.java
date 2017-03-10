@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,6 +86,14 @@ public class TransfusionController {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("transfusions", transfusionControllerService.findTransfusions(donationIdentificationNumber, componentCode,
         componentTypeId, receivedFromId, transfusionOutcome, startDate, endDate));
+    return map;
+  }
+  
+  @RequestMapping(value = "{id}", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TRANSFUSION_DATA + "')")
+  public Map<String, Object> getTransfusion(@PathVariable Long id) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("transfusion", transfusionControllerService.getTransfusion(id));
     return map;
   }
 
