@@ -192,7 +192,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Transfusion returnedTransfusion = transfusionCRUDService.updateTransfusion(
         transfusion, donationIdentificationNumber, null, componentType.getId());
 
-    //Do asserts
+    // Assertions
     assertThat(returnedTransfusion, is(expectedTransfusion));
     assertThat(returnedTransfusion, hasSameStateAsTransfusion(expectedTransfusion));
   }
@@ -318,7 +318,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Transfusion returnedTransfusion = transfusionCRUDService.updateTransfusion(
         transfusion, donationIdentificationNumber, transfusedComponentCode, null);
 
-    //Do asserts
+    // Assertions
     assertThat(returnedTransfusion, is(expectedTransfusion));
     assertThat(returnedTransfusion, hasSameStateAsTransfusion(expectedTransfusion));
   }
