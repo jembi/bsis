@@ -117,12 +117,20 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
-  public void FindOrderFormByComponentNoneExisting_shouldReturnNull() {
+  public void testFindOrderFormByComponentNoneExisting_shouldReturnNull() {
     //Test
     OrderForm order = orderFormRepository.findByComponent(1l);
     Assert.assertNull(order);
   }
   
+  @Test(expected = IllegalStateException.class)
+  public void testFindOrderFormByComponentAssociatedToAnotherForm_shouldReturnNull() {
+    Component component = aComponent().build();
+    anOrderForm().withComponent(component).buildAndPersist(entityManager);
+    anOrderForm().withComponent(component).buildAndPersist(entityManager);
+    orderFormRepository.findByComponent(component.getId());
+  }
+
   @Test
   public void testFindOrderFormsNoQueryParams_shouldReturnAllOrders() {
     // Set up
