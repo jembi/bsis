@@ -64,6 +64,17 @@ public class TransfusionController {
     return map;
   }
 
+  @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TRANSFUSION_DATA+"')")
+  public Map<String, Object> updateTransfusion(@PathVariable("id") Long transfusionId,
+      @Valid @RequestBody TransfusionBackingForm backingForm) {
+
+    backingForm.setId(transfusionId);
+    Map<String, Object> map = new HashMap<>();
+    map.put("transfusion", transfusionControllerService.updateTransfusion(backingForm));
+    return map;
+  }
+
   @RequestMapping(value = "/search/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TRANSFUSION_DATA + "')")
   public Map<String, Object> findTransfusionsFormGenerator() {
