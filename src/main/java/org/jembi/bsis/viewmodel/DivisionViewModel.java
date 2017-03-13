@@ -1,20 +1,11 @@
 package org.jembi.bsis.viewmodel;
 
-public class DivisionViewModel {
+public class DivisionViewModel extends BaseViewModel {
   
-  private long id;
   private String name;
   private int level;
   private DivisionViewModel parent;
    
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
   public String getName() {
     return name;
   }
