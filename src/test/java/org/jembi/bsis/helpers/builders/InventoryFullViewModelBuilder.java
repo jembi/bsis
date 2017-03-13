@@ -6,7 +6,7 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.InventoryFullViewModel;
-import org.jembi.bsis.viewmodel.LocationFullViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.OrderFormViewModel;
 
 public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFullViewModel>{
@@ -19,7 +19,7 @@ public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFull
   private String expiryStatus;
   private String componentCode;
   private Date expiresOn;
-  private LocationFullViewModel location;
+  private LocationViewModel location;
   private String bloodGroup;
   private ComponentStatus componentStatus;
   private OrderFormViewModel orderForm;
@@ -69,7 +69,7 @@ public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFull
     return this;
   }
   
-  public InventoryFullViewModelBuilder withLocation(LocationFullViewModel location) {
+  public InventoryFullViewModelBuilder withLocation(LocationViewModel location) {
     this.location = location;
     return this;
   }

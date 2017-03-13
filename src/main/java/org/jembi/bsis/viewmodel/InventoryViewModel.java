@@ -22,7 +22,7 @@ public class InventoryViewModel {
 
   private String expiryStatus;
 
-  private LocationFullViewModel location;
+  private LocationViewModel location;
 
   private InventoryStatus inventoryStatus;
 
@@ -82,11 +82,11 @@ public class InventoryViewModel {
     this.componentType = componentType;
   }
 
-  public LocationFullViewModel getLocation() {
+  public LocationViewModel getLocation() {
     return location;
   }
 
-  public void setLocation(LocationFullViewModel location) {
+  public void setLocation(LocationViewModel location) {
     this.location = location;
   }
 

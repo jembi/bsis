@@ -2,7 +2,6 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
-import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.InventoryFullViewModelBuilder.anInventoryFullViewModel;
@@ -26,7 +25,6 @@ import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.repository.OrderFormRepository;
-import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 import org.jembi.bsis.viewmodel.InventoryViewModel;
@@ -74,9 +72,8 @@ public class InventoryFactoryTests {
         .build();   
     
     // Setup mocks
-    LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
-    when(locationFactory.createFullViewModel(component.getLocation()))
-        .thenReturn(locationFullViewModel);
+    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
 
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .withId(1L)
@@ -86,7 +83,7 @@ public class InventoryFactoryTests {
     
     InventoryViewModel expectedInventoryViewModel =
         anInventoryViewModel()
-          .withLocation(locationFullViewModel)
+          .withLocation(locationViewModel)
           .withInventoryStatus(component.getInventoryStatus())
           .withId(component.getId())
           .withDonationIdentificationNumber(component.getDonationIdentificationNumber())
@@ -148,21 +145,18 @@ public class InventoryFactoryTests {
         .build();
 
     // Setup mocks
-    LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .withId(1L)
         .build();
 
     LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
-    ComponentFullViewModel componentFullViewModel = aComponentFullViewModel()
+    InventoryViewModel componentFullViewModel = anInventoryViewModel()
         .withId(1L)
-        .withStatus(ComponentStatus.AVAILABLE)
+        .withComponentStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withComponentType(componentTypeViewModel)
         .withLocation(locationViewModel)
-        .withBloodAbo("A")
-        .withBloodRh("+")
-        .thatIsNotInitialComponent()
+        .withBloodGroup("A+")
         .build();
 
     OrderForm orderForm = anOrderForm().withComponents(Arrays.asList(component)).build();
@@ -170,7 +164,7 @@ public class InventoryFactoryTests {
 
     InventoryFullViewModel expectedFullViewModel =
         anInventoryFullViewModel()
-            .withLocation(locationFullViewModel)
+            .withLocation(locationViewModel)
             .withInventoryStatus(component.getInventoryStatus())
             .withId(component.getId())
             .withDonationIdentificationNumber(component.getDonationIdentificationNumber())
@@ -183,8 +177,7 @@ public class InventoryFactoryTests {
             .withComponentStatus(ComponentStatus.ISSUED)
             .build();
 
-    when(locationFactory.createFullViewModel(component.getLocation()))
-        .thenReturn(locationFullViewModel);
+    when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
     when(orderFormRepository.findByComponent(component.getId())).thenReturn(orderForm);
@@ -213,26 +206,14 @@ public class InventoryFactoryTests {
         .build();
 
     // Setup mocks
-    LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
+    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .withId(1L)
         .build();
 
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
-    ComponentFullViewModel componentFullViewModel = aComponentFullViewModel()
-        .withId(1L)
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withComponentType(componentTypeViewModel)
-        .withLocation(locationViewModel)
-        .withBloodAbo("A")
-        .withBloodRh("+")
-        .thatIsNotInitialComponent()
-        .build();
-
     InventoryFullViewModel expectedFullViewModel =
         anInventoryFullViewModel()
-            .withLocation(locationFullViewModel)
+            .withLocation(locationViewModel)
             .withInventoryStatus(component.getInventoryStatus())
             .withId(component.getId())
             .withDonationIdentificationNumber(component.getDonationIdentificationNumber())
@@ -245,8 +226,7 @@ public class InventoryFactoryTests {
             .withComponentStatus(ComponentStatus.ISSUED)
             .build();
 
-    when(locationFactory.createFullViewModel(component.getLocation()))
-        .thenReturn(locationFullViewModel);
+    when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
     when(orderFormRepository.findByComponent(component.getId())).thenReturn(null);
@@ -317,8 +297,8 @@ public class InventoryFactoryTests {
     Component component = aComponent().withExpiresOn(expiresOn).withStatus(ComponentStatus.ISSUED).build();
 
     // Setup mocks
-    LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
-    when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
+    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
@@ -330,7 +310,7 @@ public class InventoryFactoryTests {
           .withExpiresOn(expiresOn)
           .withExpiryStatus("4 days to expire")
           .withComponentType(componentTypeViewModel)
-          .withLocation(locationFullViewModel)
+          .withLocation(locationViewModel)
           .withBloodGroup("")
           .withComponentStatus(ComponentStatus.ISSUED)
           .build();
@@ -349,8 +329,8 @@ public class InventoryFactoryTests {
     Component component = aComponent().withExpiresOn(expiresOn).withStatus(ComponentStatus.ISSUED).build();
 
     // Setup mocks.
-    LocationFullViewModel locationFullViewModel = new LocationFullViewModel(component.getLocation());
-    when(locationFactory.createFullViewModel(component.getLocation())).thenReturn(locationFullViewModel);
+    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
@@ -362,7 +342,7 @@ public class InventoryFactoryTests {
           .withExpiresOn(expiresOn)
           .withExpiryStatus("Already expired")
           .withComponentType(componentTypeViewModel)
-          .withLocation(locationFullViewModel)
+          .withLocation(locationViewModel)
           .withBloodGroup("")
           .withComponentStatus(ComponentStatus.ISSUED)
           .build();
