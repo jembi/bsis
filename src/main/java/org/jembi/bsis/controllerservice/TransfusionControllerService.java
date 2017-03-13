@@ -73,8 +73,8 @@ public class TransfusionControllerService {
     return transfusionFactory.createViewModels(transfusions);
   }
   
-  public TransfusionViewModel getTransfusion(Long id) {
+  public TransfusionFullViewModel getTransfusion(Long id) {
     Transfusion transfusion = transfusionRepository.findTransfusionById(id);
-    return transfusionFactory.createViewModel(transfusion);
+    return transfusionFactory.createFullViewModel(transfusion);
   }
 }
