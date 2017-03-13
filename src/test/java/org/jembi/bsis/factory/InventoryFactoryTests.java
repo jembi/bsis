@@ -8,11 +8,12 @@ import static org.jembi.bsis.helpers.builders.InventoryFullViewModelBuilder.anIn
 import static org.jembi.bsis.helpers.builders.InventoryViewModelBuilder.anInventoryViewModel;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
-import static org.jembi.bsis.helpers.builders.OrderFormFullViewModelBuilder.anOrderFormFullViewModel;
+import static org.jembi.bsis.helpers.builders.OrderFormViewModelBuilder.anOrderFormViewModel;
 import static org.jembi.bsis.helpers.matchers.InventoryFullViewModelMatcher.hasSameStateAsInventoryFullViewModel;
 import static org.jembi.bsis.helpers.matchers.InventoryViewModelMatcher.hasSameStateAsInventoryViewModel;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +31,7 @@ import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 import org.jembi.bsis.viewmodel.InventoryViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
-import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
+import org.jembi.bsis.viewmodel.OrderFormViewModel;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
@@ -160,7 +161,9 @@ public class InventoryFactoryTests {
         .build();
 
     OrderForm orderForm = anOrderForm().withComponents(Arrays.asList(component)).build();
-    OrderFormFullViewModel orderFormFullViewModel = anOrderFormFullViewModel().withComponent(componentFullViewModel).build();
+    List<OrderForm> orderForms = Arrays.asList(orderForm);
+    OrderFormViewModel orderFormViewModel = anOrderFormViewModel().build();
+    List<OrderFormViewModel> orderFormViewModels = Arrays.asList(orderFormViewModel);
 
     InventoryFullViewModel expectedFullViewModel =
         anInventoryFullViewModel()
@@ -173,15 +176,15 @@ public class InventoryFactoryTests {
             .withComponentType(componentTypeViewModel)
             .withExpiryStatus("")
             .withBloodGroup("A+")
-            .withOrderForm(orderFormFullViewModel)
+            .withOrderForms(orderFormViewModels)
             .withComponentStatus(ComponentStatus.ISSUED)
             .build();
 
     when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
-    when(orderFormRepository.findByComponent(component.getId())).thenReturn(orderForm);
-    when(orderFormFactory.createFullViewModel(orderForm)).thenReturn(orderFormFullViewModel);
+    when(orderFormRepository.findByComponent(component.getId())).thenReturn(orderForms);
+    when(orderFormFactory.createViewModels(orderForms)).thenReturn(orderFormViewModels);
 
     // Run test
     InventoryFullViewModel createdFullViewModel = inventoryFactory.createFullViewModel(component);
@@ -221,7 +224,7 @@ public class InventoryFactoryTests {
             .withCreatedOn(createdOn)
             .withComponentType(componentTypeViewModel)
             .withExpiryStatus("")
-            .withOrderForm(null)
+            .withOrderForms(new ArrayList<OrderFormViewModel>())
             .withBloodGroup("A+")
             .withComponentStatus(ComponentStatus.ISSUED)
             .build();
@@ -229,7 +232,7 @@ public class InventoryFactoryTests {
     when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
-    when(orderFormRepository.findByComponent(component.getId())).thenReturn(null);
+    when(orderFormRepository.findByComponent(component.getId())).thenReturn(new ArrayList<OrderForm>());
 
     // Run test
     InventoryFullViewModel createdFullViewModel = inventoryFactory.createFullViewModel(component);

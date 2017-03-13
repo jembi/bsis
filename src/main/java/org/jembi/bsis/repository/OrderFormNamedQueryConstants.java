@@ -60,5 +60,6 @@ public class OrderFormNamedQueryConstants {
           "INNER JOIN o.components c " +
           "WHERE (:id = null OR o.id <> :id) " +
           "AND c.id = :componentId " +
+          "AND o.status = :orderStatus " +
           "AND o.isDeleted = :isDeleted";
 }

@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -176,7 +177,7 @@ public class ComponentBackingForm {
   }
 
   @JsonIgnore
-  public void setOrderForm(OrderFormViewModel orderForm) {
+  public void setOrderForms(List<OrderFormViewModel> orderForms) {
     // Ignore
   }
 

@@ -1,14 +1,16 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.List;
+
 public class InventoryFullViewModel extends InventoryViewModel {
 
-  private OrderFormViewModel orderForm;
+  private List<OrderFormViewModel> orderForms;
 
-  public OrderFormViewModel getOrderForm() {
-    return orderForm;
+  public List<OrderFormViewModel> getOrderForms() {
+    return orderForms;
   }
 
-  public void setOrderForm(OrderFormViewModel orderForm) {
-    this.orderForm = orderForm;
+  public void setOrderForms(List<OrderFormViewModel> orderForms) {
+    this.orderForms = orderForms;
   }
 }

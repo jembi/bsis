@@ -1,6 +1,8 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -22,10 +24,15 @@ public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFull
   private LocationViewModel location;
   private String bloodGroup;
   private ComponentStatus componentStatus;
-  private OrderFormViewModel orderForm;
+  private List<OrderFormViewModel> orderForms = new ArrayList<>();
 
   public InventoryFullViewModelBuilder withOrderForm(OrderFormViewModel orderForm) {
-    this.orderForm = orderForm;
+    this.orderForms.add(orderForm);
+    return this;
+  }
+
+  public InventoryFullViewModelBuilder withOrderForms(List<OrderFormViewModel> orderForms) {
+    this.orderForms = orderForms;
     return this;
   }
   
@@ -98,7 +105,7 @@ public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFull
     viewModel.setLocation(location);
     viewModel.setBloodGroup(bloodGroup);
     viewModel.setComponentStatus(componentStatus);
-    viewModel.setOrderForm(orderForm);
+    viewModel.setOrderForms(orderForms);
     return viewModel;
   }
   
