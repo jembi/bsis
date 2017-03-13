@@ -2,6 +2,7 @@ package org.jembi.bsis.backingform;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
@@ -108,5 +109,10 @@ public class TransfusionBackingForm {
   @JsonSerialize(using = DateTimeSerialiser.class)
   public void setDateTransfused(Date dateTransfused) {
     this.dateTransfused = dateTransfused;
+  }
+
+  @JsonIgnore
+  public void setComponent(ComponentBackingForm component) {
+    //Ignore
   }
 }

@@ -86,10 +86,13 @@ public class TransfusionFactory {
     viewModel.setDateTransfused(transfusion.getDateTransfused());
     viewModel.setPatient(patientFactory.createViewModel(transfusion.getPatient()));
     viewModel.setTransfusionOutcome(transfusion.getTransfusionOutcome());
-    viewModel.setTransfusionReactionType(transfusionReactionTypeFactory.createTransfusionReactionTypeViewModel(
-        transfusion.getTransfusionReactionType()));
+    if (transfusion.getTransfusionReactionType() == null) {
+      viewModel.setTransfusionReactionType(null);
+    } else {
+      viewModel.setTransfusionReactionType(transfusionReactionTypeFactory.createTransfusionReactionTypeViewModel(
+          transfusion.getTransfusionReactionType()));
+    }
     viewModel.setReceivedFrom(locationFactory.createViewModel(transfusion.getReceivedFrom()));
-    viewModel.setIsDeleted(transfusion.getIsDeleted());
     viewModel.setNotes(transfusion.getNotes());
     viewModel.setDonationIdentificationNumber(transfusion.getComponent().getDonationIdentificationNumber());
     return viewModel;

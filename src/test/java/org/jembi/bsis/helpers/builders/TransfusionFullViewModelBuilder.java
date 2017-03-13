@@ -19,8 +19,7 @@ public class TransfusionFullViewModelBuilder extends AbstractBuilder<Transfusion
   private LocationViewModel usageSite;
   private TransfusionReactionTypeViewModel transfusionReactionType;
   private TransfusionOutcome transfusionOutcome;
-  private Date dateTransfused;  
-  private boolean isDeleted;
+  private Date dateTransfused;
   
   public TransfusionFullViewModelBuilder withId(Long id) {
     this.id = id;
@@ -52,16 +51,6 @@ public class TransfusionFullViewModelBuilder extends AbstractBuilder<Transfusion
     return this;
   }
 
-  public TransfusionFullViewModelBuilder thatIsDeleted() {
-    isDeleted = true;
-    return this;
-  }
-
-  public TransfusionFullViewModelBuilder thatIsNotDeleted() {
-    isDeleted = false;
-    return this;
-  }
-
   public TransfusionFullViewModelBuilder withTransfusionOutcome(TransfusionOutcome transfusionOutcome) {
     this.transfusionOutcome = transfusionOutcome;
     return this;
@@ -79,18 +68,17 @@ public class TransfusionFullViewModelBuilder extends AbstractBuilder<Transfusion
 
   @Override
   public TransfusionFullViewModel build() {
-    TransfusionFullViewModel transfusionViewModel = new TransfusionFullViewModel();
-    transfusionViewModel.setId(id);
-    transfusionViewModel.setDonationIdentificationNumber(donationIdentificationNumber);
-    transfusionViewModel.setPatient(patient);
-    transfusionViewModel.setComponent(component);
-    transfusionViewModel.setReceivedFrom(usageSite);
-    transfusionViewModel.setTransfusionReactionType(transfusionReactionType);
-    transfusionViewModel.setTransfusionOutcome(transfusionOutcome);
-    transfusionViewModel.setDateTransfused(dateTransfused);
-    transfusionViewModel.setIsDeleted(isDeleted);
-    transfusionViewModel.setNotes(notes);
-    return transfusionViewModel;
+    TransfusionFullViewModel transfusionFullViewModel = new TransfusionFullViewModel();
+    transfusionFullViewModel.setId(id);
+    transfusionFullViewModel.setDonationIdentificationNumber(donationIdentificationNumber);
+    transfusionFullViewModel.setPatient(patient);
+    transfusionFullViewModel.setComponent(component);
+    transfusionFullViewModel.setReceivedFrom(usageSite);
+    transfusionFullViewModel.setTransfusionReactionType(transfusionReactionType);
+    transfusionFullViewModel.setTransfusionOutcome(transfusionOutcome);
+    transfusionFullViewModel.setDateTransfused(dateTransfused);
+    transfusionFullViewModel.setNotes(notes);
+    return transfusionFullViewModel;
   }
 
   public static TransfusionFullViewModelBuilder aTransfusionFullViewModel() {
