@@ -3,6 +3,7 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.InventoryViewModelBuilder.anInventoryViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aDistributionSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
@@ -29,8 +30,6 @@ import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.OrderFormBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
-import org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder;
-import org.jembi.bsis.helpers.builders.PatientBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
@@ -42,7 +41,7 @@ import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.OrderFormConstraintChecker;
 import org.jembi.bsis.suites.UnitTestSuite;
-import org.jembi.bsis.viewmodel.ComponentFullViewModel;
+import org.jembi.bsis.viewmodel.InventoryViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 import org.jembi.bsis.viewmodel.OrderFormItemViewModel;
@@ -65,7 +64,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
   private OrderFormItemFactory orderFormItemFactory;
 
   @Mock
-  private ComponentFactory componentFactory;
+  private InventoryFactory inventoryFactory;
   
   @Mock
   private LocationFactory locationFactory;
@@ -251,14 +250,14 @@ public class OrderFormFactoryTests extends UnitTestSuite {
     Date orderDate = new Date();
 
     Component component = aComponent().withId(1L).withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(dispatchedFrom).build();
-    ComponentFullViewModel componentFullViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel().withId(1L)
+    InventoryViewModel inventoryViewModel = anInventoryViewModel().withId(1L)
         .withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(aLocationViewModel().withId(1L).build()).build();
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withPermission("canDispatch", true).withPermission("canEdit", true).withPermission("canDelete", true)
         .withOrderDate(orderDate).withId(1L)
-        .withComponent(componentFullViewModel).build();
+        .withComponent(inventoryViewModel).build();
 
     OrderForm entity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
@@ -267,7 +266,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
         .withId(1L).withComponent(component).build();
     
     // Setup mock
-    when(componentFactory.createComponentFullViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
+    when(inventoryFactory.createViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
     when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
     when(locationFactory.createFullViewModel(dispatchedTo)).thenReturn(expectedViewModel.getDispatchedTo());
     when(orderFormConstraintChecker.canDispatch(entity)).thenReturn(true);

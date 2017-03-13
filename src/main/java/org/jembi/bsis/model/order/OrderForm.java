@@ -33,7 +33,11 @@ import org.jembi.bsis.repository.OrderFormNamedQueryConstants;
     @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_BLOOD_UNITS_ISSUED,
         query = OrderFormNamedQueryConstants.QUERY_FIND_BLOOD_UNITS_ISSUED),
     @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_ORDER_FORMS,
-        query = OrderFormNamedQueryConstants.QUERY_FIND_ORDER_FORMS)
+        query = OrderFormNamedQueryConstants.QUERY_FIND_ORDER_FORMS),
+    @NamedQuery(name = OrderFormNamedQueryConstants.NAME_FIND_BY_COMPONENT,
+        query = OrderFormNamedQueryConstants.QUERY_FIND_BY_COMPONENT),
+    @NamedQuery(name = OrderFormNamedQueryConstants.NAME_IS_COMPONENT_IN_ANOTHER_ORDER_FORM,
+        query = OrderFormNamedQueryConstants.QUERY_IS_COMPONENT_IN_ANOTHER_ORDER_FORM)
 })
 @Entity
 @Audited

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jembi.bsis.controllerservice.InventoryControllerService;
 import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.factory.InventoryFactory;
 import org.jembi.bsis.factory.LocationFactory;
@@ -15,6 +16,7 @@ import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.InventoryCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
+import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -47,6 +49,9 @@ public class InventoryController {
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
   
+  @Autowired
+  private InventoryControllerService inventoryControllerService;
+  
   @RequestMapping(method = RequestMethod.GET, value = "/search/form")
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
   public ResponseEntity<Map<String, Object>> getOrderFormForm() {
@@ -73,6 +78,14 @@ public class InventoryController {
     map.put("inventories", inventoryFactory.createViewModels(components));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
+  }
+  
+  @RequestMapping(method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
+  public InventoryFullViewModel findComponent(
+      @RequestParam(required = true) String componentCode,
+      @RequestParam(required = true) String donationIdentificationNumber) {
+    return inventoryControllerService.findComponentByCodeAndDIN(componentCode, donationIdentificationNumber);
   }
 
 }

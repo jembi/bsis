@@ -14,6 +14,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.repository.OrderFormRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -30,6 +31,9 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
 
   @Autowired
   private ComponentRepository componentRepository;
+
+  @Autowired
+  private OrderFormRepository orderFormRepository;
 
   @Override
   public void validateForm(OrderFormBackingForm form, Errors errors) {
@@ -114,7 +118,7 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
       for (int i = 0, len = components.size(); i < len; i++) {
         errors.pushNestedPath("components[" + i + "]");
         try {
-          validateComponentForm(components.get(i), dispatchedFrom, errors);
+          validateComponentForm(form, components.get(i), dispatchedFrom, errors);
         } finally {
           errors.popNestedPath();
         }
@@ -124,7 +128,7 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
     commonFieldChecks(form, errors);
   }
 
-  private void validateComponentForm(ComponentBackingForm componentBackingForm, Location dispatchedFrom, Errors errors) {
+  private void validateComponentForm(OrderFormBackingForm form, ComponentBackingForm componentBackingForm, Location dispatchedFrom, Errors errors) {
     if (componentBackingForm.getId() == null) {
       errors.rejectValue("id", "required", "component id is required.");
     } else {
@@ -132,7 +136,9 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
       if (component == null) {
         errors.rejectValue("id", "invalid", "component id is invalid.");
       } else {
-
+        if (orderFormRepository.isComponentInAnotherOrderForm(form.getId(), componentBackingForm.getId())) {
+          errors.rejectValue("id", "errors.invalidComponentInAnotherOrderForm", "component is in another order form");
+        }
         if (dispatchedFrom != null && !component.getLocation().equals(dispatchedFrom)) {
           errors.rejectValue("location", "invalid", "component doesn't exist in " + dispatchedFrom.getName());
         }

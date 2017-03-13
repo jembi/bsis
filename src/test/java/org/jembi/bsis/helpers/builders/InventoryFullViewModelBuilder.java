@@ -1,14 +1,17 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
-import org.jembi.bsis.viewmodel.InventoryViewModel;
+import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.OrderFormViewModel;
 
-public class InventoryViewModelBuilder extends AbstractBuilder<InventoryViewModel> {
+public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFullViewModel>{
 
   private Long id;
   private ComponentTypeViewModel componentType;
@@ -21,65 +24,76 @@ public class InventoryViewModelBuilder extends AbstractBuilder<InventoryViewMode
   private LocationViewModel location;
   private String bloodGroup;
   private ComponentStatus componentStatus;
+  private List<OrderFormViewModel> orderForms = new ArrayList<>();
 
-  public InventoryViewModelBuilder withId(Long id) {
+  public InventoryFullViewModelBuilder withOrderForm(OrderFormViewModel orderForm) {
+    this.orderForms.add(orderForm);
+    return this;
+  }
+
+  public InventoryFullViewModelBuilder withOrderForms(List<OrderFormViewModel> orderForms) {
+    this.orderForms = orderForms;
+    return this;
+  }
+  
+  public InventoryFullViewModelBuilder withId(Long id) {
     this.id = id;
     return this;
   }
-
-  public InventoryViewModelBuilder withInventoryStatus(InventoryStatus inventoryStatus) {
+  
+  public InventoryFullViewModelBuilder withInventoryStatus(InventoryStatus inventoryStatus) {
     this.inventoryStatus = inventoryStatus;
     return this;
   }
-
-  public InventoryViewModelBuilder withComponentType(ComponentTypeViewModel componentType) {
+  
+  public InventoryFullViewModelBuilder withComponentType(ComponentTypeViewModel componentType) {
     this.componentType = componentType;
     return this;
   }
-
-  public InventoryViewModelBuilder withDonationIdentificationNumber(String donationIdentificationNumber) {
+  
+  public InventoryFullViewModelBuilder withDonationIdentificationNumber(String donationIdentificationNumber) {
     this.donationIdentificationNumber = donationIdentificationNumber;
     return this;
   }
-
-  public InventoryViewModelBuilder withCreatedOn(Date createdOn) {
+  
+  public InventoryFullViewModelBuilder withCreatedOn(Date createdOn) {
     this.createdOn = createdOn;
     return this;
   }
-
-  public InventoryViewModelBuilder withExpiryStatus(String expiryStatus) {
+  
+  public InventoryFullViewModelBuilder withExpiryStatus(String expiryStatus) {
     this.expiryStatus = expiryStatus;
     return this;
   }
-
-  public InventoryViewModelBuilder withComponentCode(String componentCode) {
+  
+  public InventoryFullViewModelBuilder withComponentCode(String componentCode) {
     this.componentCode = componentCode;
     return this;
   }
-
-  public InventoryViewModelBuilder withExpiresOn(Date expiresOn) {
+  
+  public InventoryFullViewModelBuilder withExpiresOn(Date expiresOn) {
     this.expiresOn = expiresOn;
     return this;
   }
-
-  public InventoryViewModelBuilder withLocation(LocationViewModel location) {
+  
+  public InventoryFullViewModelBuilder withLocation(LocationViewModel location) {
     this.location = location;
     return this;
   }
-
-  public InventoryViewModelBuilder withBloodGroup(String bloodGroup) {
+  
+  public InventoryFullViewModelBuilder withBloodGroup(String bloodGroup) {
     this.bloodGroup = bloodGroup;
     return this;
   }
 
-  public InventoryViewModelBuilder withComponentStatus(ComponentStatus componentStatus) {
+  public InventoryFullViewModelBuilder withComponentStatus(ComponentStatus componentStatus) {
     this.componentStatus = componentStatus;
     return this;
   }
 
   @Override
-  public InventoryViewModel build() {
-    InventoryViewModel viewModel = new InventoryViewModel();
+  public InventoryFullViewModel build() {
+    InventoryFullViewModel viewModel = new InventoryFullViewModel();
     viewModel.setId(id);
     viewModel.setInventoryStatus(inventoryStatus);
     viewModel.setComponentType(componentType);
@@ -91,11 +105,11 @@ public class InventoryViewModelBuilder extends AbstractBuilder<InventoryViewMode
     viewModel.setLocation(location);
     viewModel.setBloodGroup(bloodGroup);
     viewModel.setComponentStatus(componentStatus);
+    viewModel.setOrderForms(orderForms);
     return viewModel;
   }
   
-  public static InventoryViewModelBuilder anInventoryViewModel() {
-    return new InventoryViewModelBuilder();
+  public static InventoryFullViewModelBuilder anInventoryFullViewModel() {
+    return new InventoryFullViewModelBuilder();
   }
-
 }

@@ -5,19 +5,18 @@ import java.util.Objects;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.jembi.bsis.viewmodel.InventoryViewModel;
+import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 
-public class InventoryViewModelMatcher extends TypeSafeMatcher<InventoryViewModel> {
+public class InventoryFullViewModelMatcher extends TypeSafeMatcher<InventoryFullViewModel> {
+  private InventoryFullViewModel expected;
 
-  private InventoryViewModel expected;
-
-  public InventoryViewModelMatcher(InventoryViewModel expected) {
+  public InventoryFullViewModelMatcher(InventoryFullViewModel expected) {
     this.expected = expected;
   }
 
   @Override
   public void describeTo(Description description) {
-    description.appendText("An InventoryViewModel with the following state:")
+    description.appendText("An InventoryFullViewModel with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nComponentCode: ").appendValue(expected.getComponentCode())
         .appendText("\nComponentType: ").appendValue(expected.getComponentType())
@@ -28,11 +27,12 @@ public class InventoryViewModelMatcher extends TypeSafeMatcher<InventoryViewMode
         .appendText("\nexpiryStatus: ").appendValue(expected.getExpiryStatus())
         .appendText("\nBloodGroup: ").appendValue(expected.getBloodGroup())
         .appendText("\nexpiresOn: ").appendValue(expected.getExpiresOn())
+        .appendText("\nOrderForms: ").appendValue(expected.getOrderForms())
         .appendText("\ncomponentStatus: ").appendValue(expected.getComponentStatus());
   }
 
   @Override
-  public boolean matchesSafely(InventoryViewModel actual) {
+  public boolean matchesSafely(InventoryFullViewModel actual) {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     return Objects.equals(actual.getId(), expected.getId()) &&
         Objects.equals(actual.getComponentCode(), expected.getComponentCode()) &&
@@ -41,16 +41,16 @@ public class InventoryViewModelMatcher extends TypeSafeMatcher<InventoryViewMode
         (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn())
             || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
-        Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus()) && 
+        Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus()) &&
         (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn())
             || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
-        Objects.equals(actual.getLocation(), expected.getLocation()) && 
-        Objects.equals(actual.getBloodGroup(), expected.getBloodGroup())  &&
+        Objects.equals(actual.getLocation(), expected.getLocation()) &&
+        Objects.equals(actual.getBloodGroup(), expected.getBloodGroup()) &&
+        Objects.equals(actual.getOrderForms(), expected.getOrderForms()) &&
         Objects.equals(actual.getComponentStatus(), expected.getComponentStatus());
   }
 
-  public static InventoryViewModelMatcher hasSameStateAsInventoryViewModel(InventoryViewModel expected) {
-    return new InventoryViewModelMatcher(expected);
+  public static InventoryFullViewModelMatcher hasSameStateAsInventoryFullViewModel(InventoryFullViewModel expected) {
+    return new InventoryFullViewModelMatcher(expected);
   }
-
 }

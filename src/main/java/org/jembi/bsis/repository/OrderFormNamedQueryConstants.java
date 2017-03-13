@@ -6,6 +6,13 @@ public class OrderFormNamedQueryConstants {
   public static final String QUERY_FIND_BY_ID =
       "SELECT o FROM OrderForm o WHERE o.id = :id AND o.isDeleted = :isDeleted";
 
+  public static final String NAME_FIND_BY_COMPONENT = "OrderForm.findByComponent";
+  public static final String QUERY_FIND_BY_COMPONENT =
+      "SELECT o FROM OrderForm o " +
+      "INNER JOIN o.components c " +
+      "WHERE c.id = :componentId " +
+      "AND o.isDeleted = :isDeleted";
+
   public static final String NAME_FIND_ORDER_FORMS = "OrderForm.findOrderForms";
   public static final String QUERY_FIND_ORDER_FORMS =
       "SELECT o FROM OrderForm o " +
@@ -45,4 +52,14 @@ public class OrderFormNamedQueryConstants {
       "GROUP BY o.dispatchedFrom, c.componentType, o.type " +
       "ORDER BY o.dispatchedFrom, c.componentType ";
 
+  public static final String NAME_IS_COMPONENT_IN_ANOTHER_ORDER_FORM =
+      "OrderForm.isComponentInAnotherOrderForm";
+  public static final String QUERY_IS_COMPONENT_IN_ANOTHER_ORDER_FORM =
+      "SELECT count(o) > 0 " +
+          "FROM OrderForm o " +
+          "INNER JOIN o.components c " +
+          "WHERE (:id = null OR o.id <> :id) " +
+          "AND c.id = :componentId " +
+          "AND o.status = :orderStatus " +
+          "AND o.isDeleted = :isDeleted";
 }

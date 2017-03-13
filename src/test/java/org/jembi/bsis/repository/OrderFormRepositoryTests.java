@@ -103,7 +103,42 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     // Test
     orderFormRepository.findById(1L);
   }
+
+  @Test
+  public void testFindOrderFormByComponent_shouldReturnCorrectOrderForm() {
+    Component component = aComponent().build();
+    OrderForm orderForm = anOrderForm()
+        .withComponent(component)
+        .buildAndPersist(entityManager);
+
+    //Test
+    List<OrderForm> returnedOrderForms = orderFormRepository.findByComponent(component.getId());
+
+    //Verify
+    Assert.assertNotNull("Order for list was returned", returnedOrderForms);
+    Assert.assertEquals("Order form was found", 1, returnedOrderForms.size());
+    Assert.assertEquals("Order form was found", orderForm, returnedOrderForms.get(0));
+  }
+
+  @Test
+  public void testFindOrderFormByComponentNoneExisting_shouldReturnNull() {
+    //Test
+    List<OrderForm> returnedOrderForms = orderFormRepository.findByComponent(1l);
+    Assert.assertNotNull("Order for list was returned", returnedOrderForms);
+    Assert.assertEquals("Order form was not found", 0, returnedOrderForms.size());
+  }
   
+  public void testFindOrderFormByComponentAssociatedToAnotherForm_shouldReturnNull() {
+    Component component = aComponent().build();
+    OrderForm orderForm1 = anOrderForm().withComponent(component).withOrderStatus(OrderStatus.DISPATCHED).buildAndPersist(entityManager);
+    OrderForm orderForm2 = anOrderForm().withComponent(component).buildAndPersist(entityManager);
+    List<OrderForm> returnedOrderForms = orderFormRepository.findByComponent(component.getId());
+    Assert.assertNotNull("Order for list was returned", returnedOrderForms);
+    Assert.assertEquals("Order forms were found", 2, returnedOrderForms.size());
+    Assert.assertEquals("Order form was found", orderForm1, returnedOrderForms.get(0));
+    Assert.assertEquals("Order form was found", orderForm2, returnedOrderForms.get(1));
+  }
+
   @Test
   public void testFindOrderFormsNoQueryParams_shouldReturnAllOrders() {
     // Set up
@@ -177,7 +212,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Test
     List<OrderForm> orders =
- orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, dispatchedFrom.getId(),
+        orderFormRepository.findOrderForms(twoDaysAgo, aDayAgo, dispatchedFrom.getId(),
         dispatchedTo.getId(), null, null);
 
     // Verify
@@ -257,7 +292,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withOrderType(OrderType.ISSUE)
         .withDispatchedFrom(dispatchedFrom1)
         .buildAndPersist(entityManager);
-    
+
     OrderForm order2 = OrderFormBuilder.anOrderForm()
         .withOrderDate(startDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
@@ -331,7 +366,6 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     assertThat(dtos.get(1), hasSameStateAsBloodUnitsOrderDTO(dto2));
     assertThat(dtos.get(2), hasSameStateAsBloodUnitsOrderDTO(dto3));
   }
-
 
   @Test
   public void testFindBloodUnitsOrderedWithDifferentOrderTypeAndSameLocationsAndDifferentComponentType_shouldReturnRightDtos() {
@@ -818,4 +852,85 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     assertThat(returnedDTOs.get(3), hasSameStateAsBloodUnitsOrderDTO(dto4));
   }
 
+  @Test
+  public void testIsComponentInAnotherOrderFormForExistingForm_returnsFalse() {
+    // set up
+    Component component = aComponent().build();
+    OrderForm orderForm = anOrderForm()
+        .withComponent(component)
+        .withOrderStatus(OrderStatus.CREATED)
+        .buildAndPersist(entityManager);
+    
+    // run test
+    boolean verify = orderFormRepository.isComponentInAnotherOrderForm(orderForm.getId(), component.getId());
+    
+    // assert
+    assertThat(verify, is(false));
+  }
+
+  @Test
+  public void testIsComponentInAnotherOrderFormForExistingForm_returnsTrue() {
+    // set up
+    Component component = aComponent().build();
+    OrderForm orderForm1 = anOrderForm()
+        .withOrderStatus(OrderStatus.CREATED)
+        .buildAndPersist(entityManager);
+    anOrderForm() // other order form
+        .withComponent(component)
+        .withOrderStatus(OrderStatus.CREATED)
+        .buildAndPersist(entityManager);
+    
+    // run test
+    boolean verify = orderFormRepository.isComponentInAnotherOrderForm(orderForm1.getId(), component.getId());
+    
+    // assert
+    assertThat(verify, is(true));
+  }
+
+  @Test
+  public void testIsComponentInAnotherOrderFormForExistingDispatchedForm_returnsFalse() {
+    // set up
+    Component component = aComponent().build();
+    OrderForm orderForm1 = anOrderForm()
+        .withOrderStatus(OrderStatus.CREATED)
+        .buildAndPersist(entityManager);
+    anOrderForm() // other order form, but is dispatched
+        .withComponent(component)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .buildAndPersist(entityManager);
+    
+    // run test
+    boolean verify = orderFormRepository.isComponentInAnotherOrderForm(orderForm1.getId(), component.getId());
+    
+    // assert
+    assertThat(verify, is(false));
+  }
+
+  @Test
+  public void testIsComponentInAnotherOrderFormForNewForm_returnsFalse() {
+    // set up
+    Component component = aComponent().build();
+    
+    // run test
+    boolean verify = orderFormRepository.isComponentInAnotherOrderForm(null, component.getId());
+    
+    // assert
+    assertThat(verify, is(false));
+  }
+
+  @Test
+  public void testIsComponentInAnotherOrderFormForNewForm_returnsTrue() {
+    // set up
+    Component component = aComponent().build();
+    anOrderForm()  // other order form
+      .withComponent(component)
+      .withOrderStatus(OrderStatus.CREATED)
+      .buildAndPersist(entityManager);
+    
+    // run test
+    boolean verify = orderFormRepository.isComponentInAnotherOrderForm(null, component.getId());
+    
+    // assert
+    assertThat(verify, is(true));
+  }
 }

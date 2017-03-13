@@ -22,6 +22,13 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
     return query.getSingleResult();
   }
 
+  public List<OrderForm> findByComponent(long componentId) {
+    return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BY_COMPONENT, OrderForm.class)
+        .setParameter("componentId", componentId)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
+
   public List<OrderForm> findOrderForms(Date orderDateFrom, Date orderDateTo, Long dispatchedFromId,
       Long dispatchedToId, OrderType type, OrderStatus status) {
     boolean includeStatus = true, incudeType = true;
@@ -67,4 +74,12 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
         .getResultList();
   }
 
+  public boolean isComponentInAnotherOrderForm(Long id, Long componentId) {
+    return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_IS_COMPONENT_IN_ANOTHER_ORDER_FORM, Boolean.class)
+        .setParameter("id", id)
+        .setParameter("componentId", componentId)
+        .setParameter("orderStatus", OrderStatus.CREATED)
+        .setParameter("isDeleted", false)
+        .getSingleResult();
+  }
 }
