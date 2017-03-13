@@ -1,7 +1,5 @@
 package org.jembi.bsis.model.transfusion;
 
-import org.jembi.bsis.model.component.Component;
-
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -16,13 +14,18 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotBlank;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
+import org.jembi.bsis.repository.constant.TranfusionNamedQueryConstants;
 import org.jembi.bsis.repository.constant.TransfusionNamedQueryConstants;
 
 @NamedQueries({
+  @NamedQuery(name = TranfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_BY_DIN_AND_COMPONENT_CODE,
+      query = TranfusionNamedQueryConstants.QUERY_FIND_TRANSFUSION_BY_DIN_AND_COMPONENT_CODE),
+  @NamedQuery(name = TranfusionNamedQueryConstants.NAME_FIND_TRANSFUSIONS,
+      query = TranfusionNamedQueryConstants.QUERY_FIND_TRANSFUSIONS),
   @NamedQuery(name = TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD,
       query = TransfusionNamedQueryConstants.QUERY_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD)
 })
@@ -31,9 +34,6 @@ import org.jembi.bsis.repository.constant.TransfusionNamedQueryConstants;
 public class Transfusion extends BaseModificationTrackerEntity {
   
   private static final long serialVersionUID = 1L;
-  
-  @NotBlank
-  private String donationIdentificationNumber;
   
   @ManyToOne(optional = false, cascade = CascadeType.ALL)
   private Patient patient;
@@ -57,14 +57,6 @@ public class Transfusion extends BaseModificationTrackerEntity {
   private String notes;
   
   private boolean isDeleted = false;
-
-  public String getDonationIdentificationNumber() {
-    return donationIdentificationNumber;
-  }
-
-  public void setDonationIdentificationNumber(String donationIdentificationNumber) {
-    this.donationIdentificationNumber = donationIdentificationNumber;
-  }
 
   public Patient getPatient() {
     return patient;

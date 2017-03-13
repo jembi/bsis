@@ -13,5 +13,6 @@ public class CohortConstants {
   public static final String DISCARD_REASON_CATEGORY = "Discard Reason";
   public static final String TRANSFUSION_REACTION_TYPE_CATEGORY = "Transfusion Reaction Type";
   public static final String TRANSFUSION_OUTCOME_CATEGORY = "Transfusion Outcome";
+  public static final String ORDER_TYPE_CATEGORY = "Order Type";
 
 }

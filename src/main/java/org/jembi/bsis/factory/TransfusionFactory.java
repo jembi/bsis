@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.jembi.bsis.backingform.TransfusionBackingForm;
 import org.jembi.bsis.model.transfusion.Transfusion;
-import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
+import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
 import org.jembi.bsis.viewmodel.TransfusionViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +25,6 @@ public class TransfusionFactory {
   private TransfusionReactionTypeRepository transfusionReactionTypeRepository;
 
   @Autowired
-  private ComponentRepository componentRepository;
-
-  @Autowired
   private TransfusionReactionTypeFactory transfusionReactionTypeFactory;
 
   @Autowired
@@ -36,19 +33,20 @@ public class TransfusionFactory {
   @Autowired
   private ComponentFactory  componentFactory;
 
+  /**
+   * Creates a ransfusion from the specified Backing form. NOTE: It does not set the component
+   * linked to the Transfusion.
+   * 
+   * @param form
+   * @return Transfusion
+   */
   public Transfusion createEntity(TransfusionBackingForm form) {
     Transfusion transfusion = new Transfusion();
     transfusion.setId(form.getId());
-    transfusion.setDonationIdentificationNumber(form.getDonationIdentificationNumber());
+    
     // note: currently we always create a new patient entity because we only support creating new Transfusion data
     // and we don't attempt patient lookups.
     transfusion.setPatient(patientFactory.createEntity(form.getPatient()));
-    if (form.getComponentCode() != null) {
-      // the user scanned a component code - we need to use that
-      // if the user selected a componentType that will be resolved later
-      transfusion.setComponent(componentRepository.findComponentByCodeAndDIN(
-          form.getComponentCode(), form.getDonationIdentificationNumber()));
-    }
     transfusion.setReceivedFrom(locationRepository.getLocation(form.getReceivedFrom().getId()));
     if (form.getTransfusionReactionType() != null) {
       transfusion.setTransfusionReactionType(transfusionReactionTypeRepository.findById(form.getTransfusionReactionType().getId()));
@@ -62,16 +60,12 @@ public class TransfusionFactory {
   public TransfusionViewModel createViewModel(Transfusion transfusion) {
     TransfusionViewModel viewModel = new TransfusionViewModel();
     viewModel.setId(transfusion.getId());
-    viewModel.setComponent(componentFactory.createComponentViewModel(transfusion.getComponent()));
+    viewModel.setComponentCode(transfusion.getComponent().getComponentCode());
+    viewModel.setComponentType(transfusion.getComponent().getComponentType().getComponentTypeName());
     viewModel.setDateTransfused(transfusion.getDateTransfused());
-    viewModel.setDonationIdentificationNumber(transfusion.getDonationIdentificationNumber());
-    viewModel.setPatient(patientFactory.createViewModel(transfusion.getPatient()));
     viewModel.setTransfusionOutcome(transfusion.getTransfusionOutcome());
-    viewModel.setTransfusionReactionType(transfusionReactionTypeFactory.createTransfusionReactionTypeViewModel(
-        transfusion.getTransfusionReactionType()));
     viewModel.setReceivedFrom(locationFactory.createViewModel(transfusion.getReceivedFrom()));
-    viewModel.setIsDeleted(transfusion.getIsDeleted());
-    viewModel.setNotes(transfusion.getNotes());
+    viewModel.setDonationIdentificationNumber(transfusion.getComponent().getDonationIdentificationNumber());
     return viewModel;
   }
 
@@ -80,6 +74,32 @@ public class TransfusionFactory {
     if (transfusions != null) {
       for (Transfusion transfusion : transfusions) {
         viewModels.add(createViewModel(transfusion));
+      }
+    }
+    return viewModels;
+  }
+
+  public TransfusionFullViewModel createFullViewModel(Transfusion transfusion) {
+    TransfusionFullViewModel viewModel = new TransfusionFullViewModel();
+    viewModel.setId(transfusion.getId());
+    viewModel.setComponent(componentFactory.createComponentViewModel(transfusion.getComponent()));
+    viewModel.setDateTransfused(transfusion.getDateTransfused());
+    viewModel.setPatient(patientFactory.createViewModel(transfusion.getPatient()));
+    viewModel.setTransfusionOutcome(transfusion.getTransfusionOutcome());
+    viewModel.setTransfusionReactionType(transfusionReactionTypeFactory.createTransfusionReactionTypeViewModel(
+        transfusion.getTransfusionReactionType()));
+    viewModel.setReceivedFrom(locationFactory.createViewModel(transfusion.getReceivedFrom()));
+    viewModel.setIsDeleted(transfusion.getIsDeleted());
+    viewModel.setNotes(transfusion.getNotes());
+    viewModel.setDonationIdentificationNumber(transfusion.getComponent().getDonationIdentificationNumber());
+    return viewModel;
+  }
+
+  public List<TransfusionFullViewModel> createFullViewModels(List<Transfusion> transfusions) {
+    List<TransfusionFullViewModel> viewModels = new ArrayList<>();
+    if (transfusions != null) {
+      for (Transfusion transfusion : transfusions) {
+        viewModels.add(createFullViewModel(transfusion));
       }
     }
     return viewModels;

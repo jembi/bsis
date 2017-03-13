@@ -28,29 +28,29 @@ public class OrderFormNamedQueryConstants {
   public static final String NAME_FIND_BLOOD_UNITS_ORDERED =
       "OrderForm.findBloodUnitsOrdered";
   public static final String QUERY_FIND_BLOOD_UNITS_ORDERED =
-      "SELECT NEW org.jembi.bsis.dto.BloodUnitsOrderDTO(ofi.componentType, SUM(ofi.numberOfUnits)) " +
+      "SELECT NEW org.jembi.bsis.dto.BloodUnitsOrderDTO(ofi.componentType, o.dispatchedFrom, o.type, SUM(ofi.numberOfUnits)) " +
       "FROM OrderFormItem ofi, OrderForm o " +
       "WHERE ofi.orderForm = o " +
       "AND o.status = :orderStatus " +
       "AND o.type IN (:orderTypes) " +
       "AND o.isDeleted = :orderDeleted " +
       "AND o.orderDate BETWEEN :startDate AND :endDate " +
-      "GROUP BY ofi.componentType " +
-      "ORDER BY ofi.componentType ";
+      "GROUP BY o.dispatchedFrom, ofi.componentType, o.type " +
+      "ORDER BY o.dispatchedFrom, ofi.componentType ";
   
   
   public static final String NAME_FIND_BLOOD_UNITS_ISSUED =
       "OrderForm.findBloodUnitsIssued";
   public static final String QUERY_FIND_BLOOD_UNITS_ISSUED =
-      "SELECT NEW org.jembi.bsis.dto.BloodUnitsOrderDTO(c.componentType, COUNT(c)) " +
+      "SELECT NEW org.jembi.bsis.dto.BloodUnitsOrderDTO(c.componentType, o.dispatchedFrom, o.type, COUNT(c)) " +
       "FROM OrderForm o " +
       "INNER JOIN o.components c " +
       "WHERE o.orderDate BETWEEN :startDate AND :endDate " +
       "AND o.status = :orderStatus " +
       "AND o.type IN (:orderTypes) " +
       "AND o.isDeleted = :orderDeleted " +
-      "GROUP BY c.componentType " +
-      "ORDER BY c.componentType ";
+      "GROUP BY o.dispatchedFrom, c.componentType, o.type " +
+      "ORDER BY o.dispatchedFrom, c.componentType ";
 
   public static final String NAME_IS_COMPONENT_IN_ANOTHER_ORDER_FORM =
       "OrderForm.verifyComponentNotInAnotherOrderForm";

@@ -1,34 +1,23 @@
 package org.jembi.bsis.helpers.builders;
 
-import org.jembi.bsis.model.transfusion.TransfusionOutcome;
-import org.jembi.bsis.viewmodel.ComponentViewModel;
-import org.jembi.bsis.viewmodel.LocationViewModel;
-import org.jembi.bsis.viewmodel.PatientViewModel;
-import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
-import org.jembi.bsis.viewmodel.TransfusionViewModel;
-
 import java.util.Date;
+
+import org.jembi.bsis.model.transfusion.TransfusionOutcome;
+import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.TransfusionViewModel;
 
 public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionViewModel> {
 
   private Long id;
   private String donationIdentificationNumber;
-  private PatientViewModel patient;
-  private String notes;
-  private ComponentViewModel component;
+  private String componentCode;
+  private String componentType;
   private LocationViewModel usageSite;
-  private TransfusionReactionTypeViewModel transfusionReactionType;
   private TransfusionOutcome transfusionOutcome;
   private Date dateTransfused;  
-  private boolean isDeleted;
   
   public TransfusionViewModelBuilder withId(Long id) {
     this.id = id;
-    return this;
-  }
-
-  public TransfusionViewModelBuilder withPatient(PatientViewModel patient) {
-    this.patient = patient;
     return this;
   }
 
@@ -37,28 +26,18 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
     return this;
   }
   
-  public TransfusionViewModelBuilder withComponent(ComponentViewModel component) {
-    this.component = component;
+  public TransfusionViewModelBuilder withComponentCode(String componentCode) {
+    this.componentCode = componentCode;
     return this;
   }
-  
+
+  public TransfusionViewModelBuilder withComponentType(String componentType) {
+    this.componentType = componentType;
+    return this;
+  }
+
   public TransfusionViewModelBuilder withUsageSite(LocationViewModel usageSite) {
     this.usageSite = usageSite;
-    return this;
-  }
-  
-  public TransfusionViewModelBuilder withTransfusionReactionType(TransfusionReactionTypeViewModel transfusionReactionType) {
-    this.transfusionReactionType = transfusionReactionType;
-    return this;
-  }
-
-  public TransfusionViewModelBuilder thatIsDeleted() {
-    isDeleted = true;
-    return this;
-  }
-
-  public TransfusionViewModelBuilder thatIsNotDeleted() {
-    isDeleted = false;
     return this;
   }
 
@@ -72,24 +51,16 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
     return this;
   }
 
-  public TransfusionViewModelBuilder withNotes(String notes) {
-    this.notes = notes;
-    return this;
-  }
-
   @Override
   public TransfusionViewModel build() {
     TransfusionViewModel transfusionViewModel = new TransfusionViewModel();
     transfusionViewModel.setId(id);
     transfusionViewModel.setDonationIdentificationNumber(donationIdentificationNumber);
-    transfusionViewModel.setPatient(patient);
-    transfusionViewModel.setComponent(component);
+    transfusionViewModel.setComponentCode(componentCode);
+    transfusionViewModel.setComponentType(componentType);
     transfusionViewModel.setReceivedFrom(usageSite);
-    transfusionViewModel.setTransfusionReactionType(transfusionReactionType);
     transfusionViewModel.setTransfusionOutcome(transfusionOutcome);
     transfusionViewModel.setDateTransfused(dateTransfused);
-    transfusionViewModel.setIsDeleted(isDeleted);
-    transfusionViewModel.setNotes(notes);
     return transfusionViewModel;
   }
 

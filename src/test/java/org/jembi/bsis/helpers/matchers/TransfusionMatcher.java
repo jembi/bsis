@@ -23,7 +23,6 @@ public class TransfusionMatcher extends TypeSafeMatcher<Transfusion> {
         .appendText("\nCreated Date: ").appendValue(expected.getCreatedDate())
         .appendText("\nLast Updated By: ").appendValue(expected.getLastUpdatedBy())
         .appendText("\nLast Updated Date: ").appendValue(expected.getLastUpdated())
-        .appendText("\nDIN: ").appendValue(expected.getDonationIdentificationNumber())
         .appendText("\nPatient: ").appendValue(expected.getPatient())
         .appendText("\nComponent: ").appendValue(expected.getComponent())
         .appendText("\nNotes: ").appendValue(expected.getNotes())
@@ -43,7 +42,6 @@ public class TransfusionMatcher extends TypeSafeMatcher<Transfusion> {
         Objects.equals(actual.getCreatedDate(), expected.getCreatedDate()) &&
         Objects.equals(actual.getLastUpdatedBy(), expected.getLastUpdatedBy()) &&
         Objects.equals(actual.getLastUpdated(), expected.getLastUpdated()) &&
-        Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
         Objects.equals(actual.getPatient(), expected.getPatient()) &&
         Objects.equals(actual.getNotes(), expected.getNotes()) &&
         Objects.equals(actual.getComponent(), expected.getComponent()) &&
