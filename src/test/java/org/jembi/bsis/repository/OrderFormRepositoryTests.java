@@ -482,10 +482,10 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     OrderForm orderForm = anOrderForm().withComponent(component).buildAndPersist(entityManager);
     
     // run test
-    boolean verify = orderFormRepository.verifyComponentNotInAnotherOrderForm(orderForm.getId(), component.getId());
+    boolean verify = orderFormRepository.isComponentInAnotherOrderForm(orderForm.getId(), component.getId());
     
     // assert
-    assertThat(verify, is(true));
+    assertThat(verify, is(false));
   }
 
   @Test
@@ -496,10 +496,10 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().withComponent(component).buildAndPersist(entityManager); // other order form
     
     // run test
-    boolean verify = orderFormRepository.verifyComponentNotInAnotherOrderForm(orderForm1.getId(), component.getId());
+    boolean verify = orderFormRepository.isComponentInAnotherOrderForm(orderForm1.getId(), component.getId());
     
     // assert
-    assertThat(verify, is(false));
+    assertThat(verify, is(true));
   }
 
   @Test
@@ -508,10 +508,10 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     Component component = aComponent().build();
     
     // run test
-    boolean verify = orderFormRepository.verifyComponentNotInAnotherOrderForm(null, component.getId());
+    boolean verify = orderFormRepository.isComponentInAnotherOrderForm(null, component.getId());
     
     // assert
-    assertThat(verify, is(true));
+    assertThat(verify, is(false));
   }
 
   @Test
@@ -521,9 +521,9 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
     anOrderForm().withComponent(component).buildAndPersist(entityManager); // other order form
     
     // run test
-    boolean verify = orderFormRepository.verifyComponentNotInAnotherOrderForm(null, component.getId());
+    boolean verify = orderFormRepository.isComponentInAnotherOrderForm(null, component.getId());
     
     // assert
-    assertThat(verify, is(false));
+    assertThat(verify, is(true));
   }
 }

@@ -84,8 +84,8 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
         .getResultList();
   }
 
-  public boolean verifyComponentNotInAnotherOrderForm(Long id, Long componentId) {
-    return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_VERIFY_COMPONENT_NOT_IN_ANOTHER_ORDER_FORM, Boolean.class)
+  public boolean isComponentInAnotherOrderForm(Long id, Long componentId) {
+    return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_IS_COMPONENT_IN_ANOTHER_ORDER_FORM, Boolean.class)
         .setParameter("id", id)
         .setParameter("componentId", componentId)
         .setParameter("isDeleted", false)

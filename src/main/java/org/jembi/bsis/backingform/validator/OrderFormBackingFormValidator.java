@@ -136,7 +136,7 @@ public class OrderFormBackingFormValidator extends BaseValidator<OrderFormBackin
       if (component == null) {
         errors.rejectValue("id", "invalid", "component id is invalid.");
       } else {
-        if (!orderFormRepository.verifyComponentNotInAnotherOrderForm(form.getId(), componentBackingForm.getId())) {
+        if (orderFormRepository.isComponentInAnotherOrderForm(form.getId(), componentBackingForm.getId())) {
           errors.rejectValue("id", "errors.invalidComponentInAnotherOrderForm", "component is in another order form");
         }
         if (dispatchedFrom != null && !component.getLocation().equals(dispatchedFrom)) {
