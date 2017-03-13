@@ -28,8 +28,24 @@ public class DivisionViewModelMatcher extends TypeSafeMatcher<DivisionViewModel>
     return Objects.equals(actual.getId(), expected.getId())
         && Objects.equals(actual.getName(), expected.getName())
         && Objects.equals(actual.getLevel(), expected.getLevel())
-        && Objects.equals(actual.getParent(), expected.getParent());
+        && matchParent(actual.getParent(), expected.getParent());
   }
+  
+  // This method was specifically created so that java will not use 
+  // default equals method when comparing the object parent which 
+  // will always return false as a new object is always created
+  private boolean matchParent(DivisionViewModel actualParent, DivisionViewModel expectedParent) {
+    if (actualParent == null && expectedParent == null) {
+      return true;
+    } else if ((actualParent == null && expectedParent != null) || (actualParent != null && expectedParent == null)) {
+      return false;
+    }
+    return Objects.equals(actualParent.getId(), expectedParent.getId())
+        && Objects.equals(actualParent.getName(), expectedParent.getName())
+        && Objects.equals(actualParent.getLevel(), expectedParent.getLevel());
+  }
+  
+  
   
   public static DivisionViewModelMatcher hasSameStateAsDivisionViewModel(DivisionViewModel expected) {
     return new DivisionViewModelMatcher(expected);

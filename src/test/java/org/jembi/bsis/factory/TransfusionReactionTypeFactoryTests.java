@@ -186,7 +186,8 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
         transfusionReactionTypeFactory.createTransfusionReactionTypeManagementViewModels(transfusionReactionTypes);
 
     // Verify
-    assertThat(returnedViewModels, is(expectedViewModels));
+    assertThat(returnedViewModels.get(0), hasSameStateAsTransfusionReactionTypeManagementViewModel(expectedViewModels.get(0)));
+    assertThat(returnedViewModels.get(1), hasSameStateAsTransfusionReactionTypeManagementViewModel(expectedViewModels.get(1)));
   }
 
   @Test
