@@ -23,7 +23,6 @@ import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
-import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.repository.OrderFormRepository;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
@@ -151,14 +150,6 @@ public class InventoryFactoryTests {
         .build();
 
     LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
-    InventoryViewModel componentFullViewModel = anInventoryViewModel()
-        .withId(1L)
-        .withComponentStatus(ComponentStatus.AVAILABLE)
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withComponentType(componentTypeViewModel)
-        .withLocation(locationViewModel)
-        .withBloodGroup("A+")
-        .build();
 
     OrderForm orderForm = anOrderForm().withComponents(Arrays.asList(component)).build();
     List<OrderForm> orderForms = Arrays.asList(orderForm);
