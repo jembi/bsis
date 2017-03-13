@@ -122,7 +122,7 @@ public class GlobalControllerExceptionHandler {
   public ResponseEntity<Map<String, Object>> handleNoResultException(NoResultException error) {
     
     LOGGER.error(error.getMessage());
-    LOGGER.debug("No result found", error);
+    LOGGER.trace(error);
     
     Map<String, Object> errorMap = new HashMap<String, Object>();
     errorMap.put("hasErrors", "true");

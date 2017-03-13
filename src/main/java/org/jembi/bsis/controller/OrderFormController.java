@@ -16,6 +16,7 @@ import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -44,35 +45,34 @@ public class OrderFormController {
   
   @RequestMapping(method = RequestMethod.GET, value = "/form")
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_ORDER_FORM + "')")
-  public Map<String, Object> getOrderFormForm() {
+  public ResponseEntity<Map<String, Object>> getOrderFormForm() {
     Map<String, Object> map = new HashMap<>();
     map.put("orderForm", new OrderFormBackingForm());
     map.put("usageSites", orderFormControllerService.getUsageSites());
     map.put("distributionSites", orderFormControllerService.getDistributionSites());
-    return map;
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   @RequestMapping(method = RequestMethod.GET, value = "/items/form")
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_ORDER_FORM + "')")
-  public Map<String, Object> getOrderFormItemForm() {
+  public ResponseEntity<Map<String, Object>> getOrderFormItemForm() {
     Map<String, Object> map = new HashMap<>();
     map.put("orderFormItem", new OrderFormItemBackingForm());
     map.put("componentTypes", orderFormControllerService.getAllComponentTypes());
-    return map;
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_ORDER_FORM + "')")
-  @ResponseStatus(HttpStatus.CREATED)
-  public Map<String, Object> addOrderForm(@Valid @RequestBody OrderFormBackingForm backingForm) {
+  public ResponseEntity<Map<String, Object>> addOrderForm(@Valid @RequestBody OrderFormBackingForm backingForm) {
     Map<String, Object> map = new HashMap<>();
     map.put("orderForm", orderFormControllerService.createOrderForm(backingForm));
-    return map;
+    return new ResponseEntity<>(map, HttpStatus.CREATED);
   }
 
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_ORDER_FORM + "')")
-  public Map<String, Object> updateOrderForm(@PathVariable("id") Long orderFormId,
+  public ResponseEntity<Map<String, Object>> updateOrderForm(@PathVariable("id") Long orderFormId,
       @Valid @RequestBody OrderFormBackingForm backingForm) {
     
     // Use the id parameter from the path
@@ -80,20 +80,20 @@ public class OrderFormController {
 
     Map<String, Object> map = new HashMap<>();
     map.put("orderForm", orderFormControllerService.updateOrderForm(backingForm));
-    return map;
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   @RequestMapping(method = RequestMethod.GET, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ORDER_FORM + "')")
-  public Map<String, Object> getOrderForm(@PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> getOrderForm(@PathVariable Long id) {
     Map<String, Object> map = new HashMap<>();
     map.put("orderForm", orderFormControllerService.findOrderForm(id));
-    return map;
+    return new ResponseEntity<>(map, HttpStatus.OK);
   }
   
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ORDER_FORM + "')")
-  public Map<String, Object> findComponentBatches(
+  public ResponseEntity<Map<String, Object>> findComponentBatches(
       @RequestParam(value = "orderDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date orderDateFrom,
       @RequestParam(value = "orderDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date orderDateTo,
       @RequestParam(value = "dispatchedFromId", required = false) Long dispatchedFromId,
@@ -102,7 +102,7 @@ public class OrderFormController {
       @RequestParam(value = "status", required = false) OrderStatus status) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("orderForms", orderFormControllerService.findOrderForms(orderDateFrom, orderDateTo, dispatchedFromId, dispatchedToId, type, status));
-    return map;
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
