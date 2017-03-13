@@ -53,7 +53,7 @@ public class OrderFormNamedQueryConstants {
       "ORDER BY o.dispatchedFrom, c.componentType ";
 
   public static final String NAME_IS_COMPONENT_IN_ANOTHER_ORDER_FORM =
-      "OrderForm.verifyComponentNotInAnotherOrderForm";
+      "OrderForm.isComponentInAnotherOrderForm";
   public static final String QUERY_IS_COMPONENT_IN_ANOTHER_ORDER_FORM =
       "SELECT count(o) > 0 " +
           "FROM OrderForm o " +
