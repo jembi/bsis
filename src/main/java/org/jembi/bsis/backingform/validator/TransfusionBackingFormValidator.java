@@ -81,9 +81,16 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
                 "More than one component returned for given component Type. Please enter a componentCode");
           } else if (componentsFromDINAndComponentTypeList.size() == 1) {
             component = componentsFromDINAndComponentTypeList.get(0);
-            if (component != null && component.getStatus() != ComponentStatus.ISSUED) {
-              errors.rejectValue("componentType", "errors.invalid.componentStatus",
-                  "There is no component in ISSUED state for specified donationIdentificationNumber and componentType");
+            if (form.getId() == null) { // new transfusion
+              if (component != null && component.getStatus() != ComponentStatus.ISSUED) {
+                errors.rejectValue("componentType", "errors.invalid.componentStatus",
+                    "There is no component in ISSUED state for specified donationIdentificationNumber and componentType");
+              }
+            } else { // update existing transfusion
+              if (component != null && component.getStatus() != ComponentStatus.TRANSFUSED) {
+                errors.rejectValue("componentType", "errors.invalid.componentStatus",
+                    "There is no component in TRANSFUSED state for specified donationIdentificationNumber and componentType");
+              }
             }
           }
         }
@@ -99,9 +106,16 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
         // note that if the component Code was specified it is used with higher priority for the
         component = componentRepository.findComponentByCodeAndDIN(form.getComponentCode(),
             form.getDonationIdentificationNumber());
-        if (component != null && component.getStatus() != ComponentStatus.ISSUED) {
-          errors.rejectValue("componentCode", "errors.invalid.componentStatus",
-              "There is no component in ISSUED state for specified donationIdentificationNumber and componentCode");
+        if (form.getId() == null) { // new transfusion
+          if (component != null && component.getStatus() != ComponentStatus.ISSUED) {
+            errors.rejectValue("componentCode", "errors.invalid.componentStatus",
+                "There is no component in ISSUED state for specified donationIdentificationNumber and componentCode");
+          }
+        } else { // update existing transfusion
+          if (component != null && component.getStatus() != ComponentStatus.TRANSFUSED) {
+            errors.rejectValue("componentCode", "errors.invalid.componentStatus",
+                "There is no component in TRANSFUSED state for specified donationIdentificationNumber and componentCode");
+          }
         }
       } catch (NoResultException e) {
         errors.rejectValue("componentCode", "errors.invalid", "Invalid componentCode");
