@@ -98,9 +98,6 @@ public class TransfusionCRUDService {
   public Transfusion updateTransfusion(Transfusion transfusion,  String donationIdentificatioNumber, String transfusedComponentCode, Long transfusedComponentTypeId) {
     Transfusion existingTransfusion = transfusionRepository.findTransfusionById(transfusion.getId());
 
-    //Need to update component since componentCode or componentType might have changed
-    existingTransfusion.setComponent(
-        getTransfusedComponent(donationIdentificatioNumber, transfusedComponentCode, transfusedComponentTypeId));
     existingTransfusion.setDateTransfused(transfusion.getDateTransfused());
     existingTransfusion.setIsDeleted(transfusion.getIsDeleted());
     existingTransfusion.setNotes(transfusion.getNotes());
