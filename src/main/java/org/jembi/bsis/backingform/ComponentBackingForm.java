@@ -15,12 +15,12 @@ public class ComponentBackingForm {
   private Long id;
   private Integer weight;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   public Long getId() {
     return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public Integer getWeight() {
@@ -110,6 +110,11 @@ public class ComponentBackingForm {
   }
 
   @JsonIgnore
+  public void setDonationFlagCharacters(String donationFlagCharacters) {
+    // Ignore
+  }
+
+  @JsonIgnore
   public void setPackType(PackType packType) {
     // Ignore
   }
@@ -150,8 +155,22 @@ public class ComponentBackingForm {
   }
 
   @JsonIgnore
+  public void setProcessedOn(Date processedOn) {
+    // Ignore
+  }
+
+  @JsonIgnore
   public void setIsInitialComponent(boolean isInitialComponent) {
     // Ignore
   }
 
+  @JsonIgnore
+  public void setDonationDateTime(Date donationDateTime) {
+    // Ignore
+  }
+
+  @JsonIgnore
+  public void setParentComponentId(Long parentComponentId) {
+    // Ignore
+  }
 }

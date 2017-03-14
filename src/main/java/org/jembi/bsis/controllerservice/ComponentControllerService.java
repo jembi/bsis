@@ -1,30 +1,39 @@
 package org.jembi.bsis.controllerservice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.jembi.bsis.backingform.ComponentBackingForm;
+import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
+import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
+import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.ComponentCRUDService;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.DiscardReasonViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +62,15 @@ public class ComponentControllerService {
   @Autowired
   private ComponentStatusChangeReasonFactory componentStatusChangeReasonFactory;
 
+  @Autowired
+  private ComponentTypeCombinationRepository componentTypeCombinationRepository;
+
+  @Autowired
+  private LocationRepository locationRepository;
+
+  @Autowired
+  private LocationFactory locationFactory;
+
   public ComponentFullViewModel findComponentById(Long id) {
     Component component = componentRepository.findComponentById(id);
     ComponentFullViewModel componentFullViewModel = componentFactory.createComponentFullViewModel(component);
@@ -74,7 +92,7 @@ public class ComponentControllerService {
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(donationNumber);
     return componentFactory.createComponentViewModels(results);
   }
-  
+
   public List<ComponentViewModel> findComponentsByDonationIdentificationNumberAndStatus(
       String donationIdentificationNumber, ComponentStatus status) {
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumberAndStatus(
@@ -83,24 +101,24 @@ public class ComponentControllerService {
   }
 
   public List<ComponentViewModel> findAnyComponent(List<Long> componentTypeIds,
-      ComponentStatus status, Date dateFrom, Date dateTo) {
-    List<Component> results = componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo);
+      ComponentStatus status, Date dateFrom, Date dateTo, Long locationId) {
+    List<Component> results = componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, locationId);
     List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
     return components;
   }
   
   public List<ComponentManagementViewModel> processComponent(RecordComponentBackingForm recordComponentForm) {
     Component parentComponent = componentCRUDService.processComponent(recordComponentForm.getParentComponentId(), 
-        recordComponentForm.getComponentTypeCombination().getId());
+        recordComponentForm.getComponentTypeCombination().getId(), recordComponentForm.getProcessedOn());
     List<Component> results = componentRepository.findComponentsByDonationIdentificationNumber(
         parentComponent.getDonationIdentificationNumber());
     List<ComponentManagementViewModel> componentViewModels = componentFactory.createManagementViewModels(results);
     return componentViewModels;
   }
   
-  public ComponentManagementViewModel recordComponentWeight(ComponentBackingForm componentBackingForm) {
-    Component component = componentCRUDService.recordComponentWeight(componentBackingForm.getId(),
-        componentBackingForm.getWeight());
+  public ComponentManagementViewModel preProcessComponent(ComponentPreProcessingBackingForm componentBackingForm) {
+    Component component = componentCRUDService.preProcessComponent(componentBackingForm.getId(),
+        componentBackingForm.getWeight(), componentBackingForm.getBleedStartTime(), componentBackingForm.getBleedEndTime());
     return componentFactory.createManagementViewModel(component);
   }
   
@@ -136,5 +154,27 @@ public class ComponentControllerService {
     }
     return componentViewModels;
   }
+
+  public Map<Long, List<ComponentTypeViewModel>> getProducedComponentTypesByCombinationId() {
+    Map<Long, List<ComponentTypeViewModel>> map = new HashMap<Long, List<ComponentTypeViewModel>>();
+    for (ComponentTypeCombination combination : componentTypeCombinationRepository
+        .getAllComponentTypeCombinations(false)) {
+      map.put(combination.getId(), componentTypeFactory.createViewModels(combination.getComponentTypes()));
+    }
+    return map;
+  }
   
+  public ComponentManagementViewModel recordChildComponentWeight(ComponentBackingForm componentBackingForm) {
+    Component component = componentCRUDService.recordChildComponentWeight(componentBackingForm.getId(), 
+        componentBackingForm.getWeight());
+    return componentFactory.createManagementViewModel(component);
+  }
+
+  public List<ComponentStatus> getComponentStatuses() {
+    return Arrays.asList(ComponentStatus.values());
+  }
+
+  public List<LocationViewModel> getLocations() {
+    return locationFactory.createViewModels(locationRepository.getAllLocations(false));
+  }
 }

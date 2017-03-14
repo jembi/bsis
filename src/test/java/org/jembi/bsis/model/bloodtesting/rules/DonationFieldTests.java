@@ -28,7 +28,8 @@ public class DonationFieldTests extends UnitTestSuite {
   public void testGetDonationFieldsForCategoryBloodTyping_returnsCorrectEnums() throws Exception {
     List<DonationField> expectedFields = Arrays.asList(
         DonationField.BLOODABO, 
-        DonationField.BLOODRH);
+        DonationField.BLOODRH,
+        DonationField.TITRE);
 
     List<DonationField> fields = DonationField.getDonationFieldsForCategory(BloodTestCategory.BLOODTYPING);
     
@@ -53,6 +54,13 @@ public class DonationFieldTests extends UnitTestSuite {
   public void testGetNewInformationForDonationFieldForTTIStatus_returnsCorrectStrings() throws Exception {
     List<String> expectedNewInformation = Arrays.asList("NOT_DONE","TTI_SAFE", "TTI_UNSAFE", "INDETERMINATE"); 
     List<String> newInformation = DonationField.getNewInformationForDonationField(DonationField.TTISTATUS);    
+    assertThat(newInformation, is(expectedNewInformation));
+  }
+
+  @Test
+  public void testGetNewInformationForDonationFieldForTitre_returnsCorrectStrings() throws Exception {
+    List<String> expectedNewInformation = Arrays.asList("HIGH", "LOW");
+    List<String> newInformation = DonationField.getNewInformationForDonationField(DonationField.TITRE);    
     assertThat(newInformation, is(expectedNewInformation));
   }
 

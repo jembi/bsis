@@ -53,6 +53,8 @@ public class PostDonationCounselling extends BaseModificationTrackerEntity {
   @Column(nullable = false)
   private boolean isDeleted;
 
+  private String notes;
+
   public PostDonationCounselling() {
     super();
   }
@@ -95,5 +97,13 @@ public class PostDonationCounselling extends BaseModificationTrackerEntity {
 
   public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public String getNotes() {
+    return notes;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
   }
 }

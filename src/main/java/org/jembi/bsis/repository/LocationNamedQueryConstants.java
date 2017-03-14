@@ -3,7 +3,9 @@ package org.jembi.bsis.repository;
 public class LocationNamedQueryConstants {
 
   public static final String NAME_GET_ALL_LOCATIONS = "Location.getAllLocations";
-  public static final String QUERY_GET_ALL_LOCATIONS = "SELECT l FROM Location l ORDER BY name ASC";
+  public static final String QUERY_GET_ALL_LOCATIONS = "SELECT l FROM Location l "
+      + "WHERE :includeDeleted = TRUE OR l.isDeleted = FALSE "
+      + "ORDER BY name ASC";
   
   public static final String NAME_COUNT_LOCATION_WITH_ID = "Location.countLocationWithId";
   public static final String QUERY_COUNT_LOCATION_WITH_ID =

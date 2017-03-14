@@ -1,0 +1,14 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="20170116-1211" author="jmuzinda">
+      <comment>Add ComponentStatusChangeReason for type: LOW_WEIGHT</comment>
+	    <insert tableName="ComponentStatusChangeReason">
+	      <column name="category" value="UNSAFE" />
+	      <column name="isDeleted" value="0" />
+	      <column name="type" value="LOW_WEIGHT" />
+	    </insert>
+	</changeSet>
+</databaseChangeLog>

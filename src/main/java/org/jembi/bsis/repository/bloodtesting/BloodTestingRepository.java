@@ -20,6 +20,7 @@ import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
+import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
@@ -166,12 +167,15 @@ public class BloodTestingRepository {
 
   public Map<Long, BloodTestResult> getRecentTestResultsForDonation(
       Long donationId) {
-    String queryStr = "SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted";
+    String queryStr = "SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted";
     TypedQuery<BloodTestResult> query = em.createQuery(queryStr,
         BloodTestResult.class);
     query.setParameter("donationId", donationId);
     query.setParameter("testOutcomeDeleted", false);
+    query.setParameter("isActive",true);
+    query.setParameter("isDeleted", false);
     List<BloodTestResult> bloodTestResults = query.getResultList();
     Map<Long, BloodTestResult> recentBloodTestResults = new HashMap<Long, BloodTestResult>();
     for (BloodTestResult bt : bloodTestResults) {
@@ -227,15 +231,20 @@ public class BloodTestingRepository {
     BloodTypingMatchStatus oldBloodTypingMatchStatus = donation.getBloodTypingMatchStatus();
     BloodTypingMatchStatus newBloodTypingMatchStatus = ruleResult.getBloodTypingMatchStatus();
 
+    Titre oldTitre = donation.getTitre();
+    Titre newTitre = ruleResult.getTitre();
+
     if (!bothEmptyOrEquals(newBloodAbo, oldBloodAbo)
         || !bothEmptyOrEquals(newBloodRh, oldBloodRh) || !Objects.equals(newTtiStatus, oldTtiStatus)
         || !Objects.equals(newBloodTypingStatus, oldBloodTypingStatus)
-        || !Objects.equals(oldBloodTypingMatchStatus, newBloodTypingMatchStatus)) {
+        || !Objects.equals(oldBloodTypingMatchStatus, newBloodTypingMatchStatus)
+        || !Objects.equals(oldTitre, newTitre)) {
       donation.setBloodAbo(newBloodAbo);
       donation.setBloodRh(newBloodRh);
       donation.setTTIStatus(ruleResult.getTTIStatus());
       donation.setBloodTypingStatus(ruleResult.getBloodTypingStatus());
       donation.setBloodTypingMatchStatus(ruleResult.getBloodTypingMatchStatus());
+      donation.setTitre(ruleResult.getTitre());
 
       donationUpdated = true;
     }
@@ -243,8 +252,8 @@ public class BloodTestingRepository {
     if (LOGGER.isInfoEnabled()) {
       LOGGER.info("Updating Donation '" + donation.getId() + "' with Abo/Rh="
           + donation.getBloodAbo() + donation.getBloodRh() + " TTIStatus="
-          + donation.getTTIStatus() + " BloodTypingStatus=" + donation.getBloodTypingStatus()
-          + " " + donation.getBloodTypingMatchStatus());
+          + donation.getTTIStatus() + " Titre=" + donation.getTitre() + " BloodTypingStatus=" 
+          + donation.getBloodTypingStatus() + " " + donation.getBloodTypingMatchStatus());
     }
 
     return donationUpdated;

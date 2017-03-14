@@ -1,5 +1,6 @@
 package org.jembi.bsis.repository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -18,6 +19,8 @@ import org.jembi.bsis.dto.DiscardedComponentDTO;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
+import org.jembi.bsis.model.inventory.InventoryStatus;
+import org.jembi.bsis.model.util.BloodGroup;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,43 +32,26 @@ public class ComponentRepository extends AbstractRepository<Component> {
   private EntityManager em;
 
   public List<Component> findAnyComponent(List<Long> componentTypes, ComponentStatus status,
-      Date donationDateFrom, Date donationDateTo) {
-    TypedQuery<Component> query;
-    String queryStr = "SELECT DISTINCT c FROM Component c LEFT JOIN FETCH c.donation WHERE " +
-        "c.isDeleted= :isDeleted ";
+      Date donationDateFrom, Date donationDateTo, Long locationId) {
 
-    if (status != null) {
-      queryStr += "AND c.status = :status ";
+    boolean includeComponentTypes = true, includeStatus = true;
+    if (status == null) {
+      includeStatus = false;
     }
-    if (componentTypes != null && !componentTypes.isEmpty()) {
-      queryStr += "AND c.componentType.id IN (:componentTypeIds) ";
-    }
-    if (donationDateFrom != null) {
-      queryStr += "AND c.donation.donationDate >= :donationDateFrom ";
-    }
-    if (donationDateTo != null) {
-      queryStr += "AND c.donation.donationDate <= :donationDateTo ";
+    if (componentTypes == null) {
+      includeComponentTypes = false;
     }
 
-    queryStr += " ORDER BY c.id ASC";
-
-    query = em.createQuery(queryStr, Component.class);
-    query.setParameter("isDeleted", Boolean.FALSE);
-
-    if (status != null) {
-      query.setParameter("status", status);
-    }
-    if (componentTypes != null && !componentTypes.isEmpty()) {
-      query.setParameter("componentTypeIds", componentTypes);
-    }
-    if (donationDateFrom != null) {
-      query.setParameter("donationDateFrom", donationDateFrom);
-    }
-    if (donationDateTo != null) {
-      query.setParameter("donationDateTo", donationDateTo);
-    }
-
-    return query.getResultList();
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_ANY_COMPONENT, Component.class)
+          .setParameter("isDeleted", Boolean.FALSE)
+          .setParameter("status", status)
+          .setParameter("locationId", locationId)
+          .setParameter("componentTypeIds", componentTypes)
+          .setParameter("donationDateFrom", donationDateFrom)
+          .setParameter("donationDateTo", donationDateTo)
+          .setParameter("includeStatus", includeStatus)
+          .setParameter("includeComponentTypes", includeComponentTypes)
+          .getResultList();
   }
 
   public List<Component> findComponentsByDonationIdentificationNumber(String donationIdentificationNumber) {
@@ -111,7 +97,8 @@ public class ComponentRepository extends AbstractRepository<Component> {
 
   public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, long componentTypeId) {
     String queryStr = "SELECT c from Component c WHERE " +
-        "c.donation.donationIdentificationNumber = :donationIdentificationNumber AND " +
+        "(c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
+        "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) AND " +
         "c.componentType.id = :componentTypeId AND c.isDeleted = false";
     TypedQuery<Component> query = em.createQuery(queryStr, Component.class);
     query.setParameter("donationIdentificationNumber", donationIdentificationNumber);
@@ -185,6 +172,68 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .setParameter("endDate", endDate)
         .setParameter("excludedStatuses", Arrays.asList(ComponentStatus.PROCESSED))
         .setParameter("deleted",false)
+        .getResultList();
+  }
+
+  public List<Component> findSafeComponents(Long componentTypeId, Long locationId, List<BloodGroup> bloodGroups,
+      Date startDate, Date endDate, InventoryStatus inventoryStatus, boolean includeInitialComponents) {
+    boolean includeBloodGroups = true;
+    List<String> stringBloodGroups = null;
+
+    if(bloodGroups == null || bloodGroups.isEmpty()) {
+      includeBloodGroups = false;
+    } else {
+      stringBloodGroups = new ArrayList<>();
+      for(BloodGroup bloodGroup: bloodGroups) {
+        stringBloodGroups.add(bloodGroup.getBloodAbo()+bloodGroup.getBloodRh());
+      }
+    }
+
+    return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SAFE_COMPONENTS, Component.class)
+        .setParameter("locationId", locationId)
+        .setParameter("componentTypeId", componentTypeId)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("includeBloodGroups", includeBloodGroups)
+        .setParameter("bloodGroups", stringBloodGroups)
+        .setParameter("inventoryStatus",inventoryStatus)
+        .setParameter("isDeleted", false)
+        .setParameter("includeInitialComponents", includeInitialComponents)
+        .getResultList();
+  }
+
+  /**
+   * Finds Components by DIN, Component Code and Status. If ComponentCode and/or Status is null it
+   * is not used in the filter criteria.
+   * 
+   * @param donationIdentificationNumber
+   * @param componentCode
+   * @param status
+   * @return
+   */
+  public List<Component> findComponentsByDINAndComponentCodeAndStatus(String donationIdentificationNumber,
+      String componentCode, ComponentStatus status, boolean includeInitialComponents) {
+
+    boolean includeAllComponentCodes = false;
+    boolean includeAllComponentStatuses = false;
+
+    if (componentCode == null) {
+      includeAllComponentCodes = true;
+    }
+
+    if (status == null) {
+      includeAllComponentStatuses = true;
+    }
+
+    return em
+        .createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS, Component.class)
+        .setParameter("donationIdentificationNumber", donationIdentificationNumber)
+        .setParameter("includeAllComponentCodes", includeAllComponentCodes)
+        .setParameter("componentCode", componentCode)
+        .setParameter("includeAllComponentStatuses", includeAllComponentStatuses)
+        .setParameter("status", status)
+        .setParameter("isDeleted", Boolean.FALSE)
+        .setParameter("includeInitialComponents", includeInitialComponents)
         .getResultList();
   }
 }

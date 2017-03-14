@@ -4,6 +4,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +32,7 @@ import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
+import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
@@ -246,6 +250,66 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   }
 
   @Test
+  public void testUpdateDonationWithTestResultsUpdatedTitreFromNull_shouldUpdate() throws Exception {
+    // set up data
+    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(null).build();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setTitre(Titre.LOW);
+
+    // run test
+    boolean updated = service.updateDonationWithTestResults(donation, ruleResult);
+
+    // do asserts
+    assertThat(updated, is(true));
+    assertThat(donation.getTitre(), is(Titre.LOW));
+  }
+
+  @Test
+  public void testUpdateDonationWithTestResultsUpdatedTitreFromHighToLow_shouldUpdate() throws Exception {
+    // set up data
+    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(Titre.HIGH).build();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setTitre(Titre.LOW);
+
+    // run test
+    boolean updated = service.updateDonationWithTestResults(donation, ruleResult);
+
+    // do asserts
+    assertThat(updated, is(true));
+    assertThat(donation.getTitre(), is(Titre.LOW));
+  }
+
+  @Test
+  public void testUpdateDonationWithTestResultsUpdatedTitreFromHighToNT_shouldUpdate() throws Exception {
+    // set up data
+    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(Titre.HIGH).build();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setTitre(null);
+
+    // run test
+    boolean updated = service.updateDonationWithTestResults(donation, ruleResult);
+
+    // do asserts
+    assertThat(updated, is(true));
+    assertThat(donation.getTitre(), nullValue());
+  }
+
+  @Test
+  public void testUpdateDonationWithTestResultsSameTitre_shouldNotUpdate() throws Exception {
+    // set up data
+    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(Titre.HIGH).build();
+    BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
+    ruleResult.setTitre(Titre.HIGH);
+
+    // run test
+    boolean updated = service.updateDonationWithTestResults(donation, ruleResult);
+
+    // do asserts
+    assertThat(updated, is(false));
+    assertThat(donation.getTitre(), is(Titre.HIGH));
+  }
+
+  @Test
   public void testSaveBloodTestingResultsTestBatchNotReleased() throws Exception {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
@@ -269,11 +333,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted", BloodTestResult.class))
+    when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
             .thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
     when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -315,11 +382,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted", BloodTestResult.class))
+    when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
             .thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
     when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -365,11 +435,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, reEnteredBloodTestResults)).thenReturn(ruleResult).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted", BloodTestResult.class))
+    when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
             .thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
     when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -412,11 +485,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted", BloodTestResult.class))
+    when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
             .thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
     when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
@@ -464,11 +540,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
         .thenReturn(donation1);
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_2))
         .thenReturn(donation2);
-    when(entityManager.createQuery("SELECT bt FROM BloodTestResult bt WHERE "
-        + "bt.donation.id=:donationId AND bt.isDeleted = :testOutcomeDeleted", BloodTestResult.class))
+    when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
+        + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
+        + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
             .thenReturn(typedQuery);
     when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
     when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);

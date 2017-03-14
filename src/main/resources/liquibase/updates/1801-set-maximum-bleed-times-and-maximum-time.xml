@@ -1,0 +1,26 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20161212-0910" author="jmuzinda">
+    <comment>Add maxBleedTime and maxTimeSinceDonation columns to ComponentType</comment>
+    <addColumn tableName="ComponentType">
+      <column name="maxBleedTime" type="TINYINT(3)" defaultValue="NULL" />
+      <column name="maxTimeSinceDonation" type="TINYINT(3)" defaultValue="NULL" />
+    </addColumn>
+    <addColumn tableName="ComponentType_AUD">
+      <column name="maxBleedTime" type="TINYINT(3)" defaultValue="NULL" />
+      <column name="maxTimeSinceDonation" type="TINYINT(3)" defaultValue="NULL" />
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20161215-0958" author="timler">
+    <comment>Make tracking columns on ComponentType not nullable</comment>
+    <addNotNullConstraint tableName="ComponentType" columnName="createdDate" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="ComponentType" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="ComponentType" columnName="lastUpdated" columnDataType="TIMESTAMP" />
+    <addNotNullConstraint tableName="ComponentType" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
+  </changeSet>
+
+</databaseChangeLog>

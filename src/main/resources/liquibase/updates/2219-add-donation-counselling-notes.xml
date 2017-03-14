@@ -1,0 +1,15 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170202-1236" author="jmuzinda">
+  <!-- Add notes field to both PostDonationCounselling and PostDonationCounselling_AUD -->
+    <addColumn tableName="PostDonationCounselling">
+      <column name="notes" type="LONGTEXT" />
+    </addColumn>
+    <addColumn tableName="PostDonationCounselling_AUD">
+      <column name="notes" type="LONGTEXT" />
+    </addColumn>
+  </changeSet>
+    
+</databaseChangeLog>

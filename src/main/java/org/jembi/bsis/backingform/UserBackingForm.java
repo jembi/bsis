@@ -1,20 +1,25 @@
 package org.jembi.bsis.backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.Valid;
-
-import org.jembi.bsis.model.user.Role;
-import org.jembi.bsis.model.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserBackingForm {
 
-  @Valid
-  @JsonIgnore
-  private User user;
+  private Long id;
+  private String username;
+  private String password;
+  private String firstName;
+  private String lastName;
+  private String emailId;
+
+  private Boolean isStaff;
+  private Boolean isActive;
+  private Boolean isAdmin;
+  private Boolean isDeleted;
+  private String notes;
+  private Date lastLogin;
 
   private boolean modifyPassword;
   private String userConfirmPassword;
@@ -25,154 +30,9 @@ public class UserBackingForm {
   private String roleUser;
   @JsonIgnore
   private String passwordReset;
-
-  public UserBackingForm() {
-    setUser(new User());
-  }
-
-  public UserBackingForm(User user) {
-    this.setUser(user);
-  }
-
-  public boolean equals(Object obj) {
-    return getUser().equals(obj);
-  }
-
-  public Long getId() {
-    return getUser().getId();
-  }
-
-  public String getUsername() {
-    return getUser().getUsername();
-  }
-
-  public String getPassword() {
-    return getUser().getPassword();
-  }
-
-  public Boolean isPasswordReset() {
-    return getUser().isPasswordReset();
-  }
-
-  public String getFirstName() {
-    return getUser().getFirstName();
-  }
-
-  public String getLastName() {
-    return getUser().getLastName();
-  }
-
-  public String getEmailId() {
-    return getUser().getEmailId();
-  }
-
-  public Boolean getIsStaff() {
-    return getUser().getIsStaff();
-  }
-
-  public Boolean getIsActive() {
-    return getUser().getIsActive();
-  }
-
-  public Boolean getIsAdmin() {
-    return getUser().getIsAdmin();
-  }
-
-  public Date getLastLogin() {
-    return getUser().getLastLogin();
-  }
-
-  public String getNotes() {
-    return getUser().getNotes();
-  }
-
-  public Boolean getIsDeleted() {
-    return getUser().getIsDeleted();
-  }
-
-  public int hashCode() {
-    return getUser().hashCode();
-  }
-
-  public void setId(Long id) {
-    getUser().setId(id);
-  }
-
-  public void setUsername(String username) {
-    getUser().setUsername(username);
-  }
-
-  public void setPassword(String password) {
-    getUser().setPassword(password);
-  }
-
-  public void setFirstName(String firstName) {
-    getUser().setFirstName(firstName);
-  }
-
-  public void setLastName(String lastName) {
-    getUser().setLastName(lastName);
-  }
-
-  public void setEmailId(String emailId) {
-    getUser().setEmailId(emailId);
-  }
-
-  public void setIsStaff(Boolean isStaff) {
-    getUser().setIsStaff(isStaff);
-  }
-
-  public void setIsActive(Boolean isActive) {
-    getUser().setIsActive(isActive);
-  }
-
-  public void setIsSuperuser(Boolean isAdmin) {
-    getUser().setIsSuperuser(isAdmin);
-  }
-
-  public void setLastLogin(Date lastLogin) {
-    getUser().setLastLogin(lastLogin);
-  }
-
-  public void setNotes(String notes) {
-    getUser().setNotes(notes);
-  }
-
-  public void setIsDeleted(Boolean isDeleted) {
-    getUser().setIsDeleted(isDeleted);
-  }
-
-  public void setIsAdmin(Boolean isAdmin) {
-    getUser().setIsAdmin(isAdmin);
-  }
-
-  public String toString() {
-    return getUser().toString();
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
-
-  public boolean isModifyPassword() {
-    return modifyPassword;
-  }
-
-  public void setModifyPassword(boolean modifyPassword) {
-    this.modifyPassword = modifyPassword;
-  }
-
-  public List<Role> getRoles() {
-    return user.getRoles();
-  }
-
-  public void setRoles(List<Role> roles) {
-    user.setRoles(roles);
-  }
+  private Boolean isPasswordReset = Boolean.FALSE;
+  
+  private List<RoleBackingForm> roles;
 
   /**
    * @return the userConfirmPassword
@@ -182,24 +42,54 @@ public class UserBackingForm {
   }
 
   /**
-   * @param userConfirmPassword the userConfirPassword to set
-   */
-  public void setConfirmPassword(String userConfirmPassword) {
-    this.userConfirmPassword = userConfirmPassword;
-  }
-
-  /**
    * @return the currentPassword
    */
   public String getCurrentPassword() {
     return currentPassword;
   }
 
-  /**
-   * @param currentPassword the currentPassword to set
-   */
-  public void setCurrentPassword(String currentPassword) {
-    this.currentPassword = currentPassword;
+  public String getEmailId() {
+    return emailId;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public Boolean getIsActive() {
+    return isActive;
+  }
+
+  public Boolean getIsAdmin() {
+    return isAdmin;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public Boolean getIsStaff() {
+    return isStaff;
+  }
+
+  public Date getLastLogin() {
+    return lastLogin;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public String getNotes() {
+    return notes;
+  }
+
+  public String getPassword() {
+    return password;
   }
 
   /**
@@ -210,24 +100,10 @@ public class UserBackingForm {
   }
 
   /**
-   * @param roleAdmin the roleAdmin to set
-   */
-  public void setRoleAdmin(String roleAdmin) {
-    this.roleAdmin = roleAdmin;
-  }
-
-  /**
    * @return the roleDonorLab
    */
   public String getRoleDonorLab() {
     return roleDonorLab;
-  }
-
-  /**
-   * @param roleDonorLab the roleDonorLab to set
-   */
-  public void setRoleDonorLab(String roleDonorLab) {
-    this.roleDonorLab = roleDonorLab;
   }
 
   /**
@@ -238,17 +114,109 @@ public class UserBackingForm {
   }
 
   /**
-   * @param roleTestLab the roleTestLab to set
-   */
-  public void setRoleTestLab(String roleTestLab) {
-    this.roleTestLab = roleTestLab;
-  }
-
-  /**
    * @return the roleUser
    */
   public String getRoleUser() {
     return roleUser;
+  }
+
+  public String getUserConfirmPassword() {
+    return userConfirmPassword;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public boolean isModifyPassword() {
+    return modifyPassword;
+  }
+
+  public Boolean isPasswordReset() {
+    return isPasswordReset;
+  }
+
+  /**
+   * @param userConfirmPassword the userConfirPassword to set
+   */
+  public void setConfirmPassword(String userConfirmPassword) {
+    this.userConfirmPassword = userConfirmPassword;
+  }
+
+  /**
+   * @param currentPassword the currentPassword to set
+   */
+  public void setCurrentPassword(String currentPassword) {
+    this.currentPassword = currentPassword;
+  }
+
+  public void setEmailId(String emailId) {
+    this.emailId = emailId;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setIsActive(Boolean isActive) {
+    this.isActive = isActive;
+  }
+
+  public void setIsAdmin(Boolean isAdmin) {
+    this.isAdmin = isAdmin;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
+  }
+
+  public void setIsStaff(Boolean isStaff) {
+    this.isStaff = isStaff;
+  }
+
+  public void setLastLogin(Date lastLogin) {
+    this.lastLogin = lastLogin;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public void setModifyPassword(boolean modifyPassword) {
+    this.modifyPassword = modifyPassword;
+  }
+
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  /**
+   * @param roleAdmin the roleAdmin to set
+   */
+  public void setRoleAdmin(String roleAdmin) {
+    this.roleAdmin = roleAdmin;
+  }
+
+  /**
+   * @param roleDonorLab the roleDonorLab to set
+   */
+  public void setRoleDonorLab(String roleDonorLab) {
+    this.roleDonorLab = roleDonorLab;
+  }
+
+  /**
+   * @param roleTestLab the roleTestLab to set
+   */
+  public void setRoleTestLab(String roleTestLab) {
+    this.roleTestLab = roleTestLab;
   }
 
   /**
@@ -258,5 +226,24 @@ public class UserBackingForm {
     this.roleUser = roleUser;
   }
 
+  public void setUserConfirmPassword(String userConfirmPassword) {
+    this.userConfirmPassword = userConfirmPassword;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public List<RoleBackingForm> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(List<RoleBackingForm> roles) {
+    this.roles = roles;
+  }
+
+  public void setIsPasswordReset(Boolean isPasswordReset) {
+    this.isPasswordReset = isPasswordReset;
+  }
 
 }

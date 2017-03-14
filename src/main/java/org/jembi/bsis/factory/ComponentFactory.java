@@ -55,14 +55,21 @@ public class ComponentFactory {
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
     viewModel.setHasComponentBatch(component.hasComponentBatch());
     viewModel.setInventoryStatus(component.getInventoryStatus());
+    viewModel.setBleedStartTime(component.getDonation().getBleedStartTime());
+    viewModel.setBleedEndTime(component.getDonation().getBleedEndTime());
+    viewModel.setDonationDateTime(component.getDonation().getInitialComponent().getCreatedOn());
+    if (component.getParentComponent() != null) {
+      viewModel.setParentComponentId(component.getParentComponent().getId());
+    }
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDiscard", componentConstraintChecker.canDiscard(component));
     permissions.put("canProcess", componentConstraintChecker.canProcess(component));
-    permissions.put("canRecordWeight", componentConstraintChecker.canRecordWeight(component));
+    permissions.put("canPreProcess", componentConstraintChecker.canPreProcess(component));
     permissions.put("canUnprocess", componentConstraintChecker.canUnprocess(component));
     permissions.put("canUndiscard", componentConstraintChecker.canUndiscard(component));
+    permissions.put("canRecordChildComponentWeight", componentConstraintChecker.canRecordChildComponentWeight(component));
     viewModel.setPermissions(permissions);
 
     return viewModel;
@@ -104,10 +111,9 @@ public class ComponentFactory {
     viewModel.setExpiresOn(component.getExpiresOn());
     viewModel.setInventoryStatus(component.getInventoryStatus());
     viewModel.setIssuedOn(component.getIssuedOn());
-    viewModel.setLocation(locationFactory.createFullViewModel(component.getLocation()));
     viewModel.setNotes(component.getNotes());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
-    viewModel.setIsInitialComponent(component.getParentComponent() == null);
+    viewModel.setIsInitialComponent(component.isInitialComponent());
     return viewModel;
   }
 
@@ -117,8 +123,10 @@ public class ComponentFactory {
     viewModel.setCreatedOn(component.getCreatedOn());
     viewModel.setExpiresOn(component.getExpiresOn());
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
+    viewModel.setDonationFlagCharacters(component.getDonation().getFlagCharacters());
     viewModel.setExpiryStatus(getExpiryStatus(component));
     viewModel.setId(component.getId());
+    viewModel.setLocation(locationFactory.createViewModel(component.getLocation()));
     viewModel.setStatus(component.getStatus());
     return viewModel;
   }

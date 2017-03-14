@@ -1,0 +1,640 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170105-0937" author="timler">
+    <comment>Add column gravity to ComponentType</comment>
+    <addColumn tableName="ComponentType">
+      <column name="gravity" type="DECIMAL(4,3)" defaultValue="NULL" />
+    </addColumn>
+  </changeSet>
+  
+  <changeSet id="20170105-0938" author="timler">
+    <comment>Add column gravity to ComponentType_AUD</comment>
+    <addColumn tableName="ComponentType_AUD">
+      <column name="gravity" type="DECIMAL(4,3)" defaultValue="NULL" />
+    </addColumn>
+  </changeSet>
+
+  <!-- Moved to allow for default data to be inserted with gravity (timler) -->
+  <changeSet id="20161214-1350" author="danfuterman">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        <![CDATA[
+            SELECT count(*) FROM ComponentType;
+			]]>
+      </sqlCheck>
+    </preConditions>
+    <comment>Add component types</comment>
+    <insert tableName="ComponentType">
+      <column name="id" value="1"/>
+      <column name="componentTypeCode" value="0011"/>
+      <column name="componentTypeName" value="Whole Blood Single Pack - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value = "NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="transportInfo" value=""/>
+      <column name="preparationInfo" value=""/>
+      <column name="canBeIssued" value="0"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="gravity" value="1.053" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="2"/>
+      <column name="componentTypeCode" value="0012"/>
+      <column name="componentTypeName" value="Whole Blood Double Pack - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value = "NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="transportInfo" value=""/>
+      <column name="preparationInfo" value=""/>
+      <column name="canBeIssued" value="0"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="gravity" value="1.053" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="3"/>
+      <column name="componentTypeCode" value="0013"/>
+      <column name="componentTypeName" value="Whole Blood Triple Pack - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value = "NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="transportInfo" value=""/>
+      <column name="preparationInfo" value=""/>
+      <column name="canBeIssued" value="0"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="gravity" value="1.053" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="4"/>
+      <column name="componentTypeCode" value="0014"/>
+      <column name="componentTypeName" value="Whole Blood Quad Pack - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value = "NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="transportInfo" value=""/>
+      <column name="preparationInfo" value=""/>
+      <column name="canBeIssued" value="0"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="gravity" value="1.053" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="5"/>
+      <column name="componentTypeCode" value="0021"/>
+      <column name="componentTypeName" value="Apheresis"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="5"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="transportInfo" value=""/>
+      <column name="preparationInfo" value=""/>
+      <column name="canBeIssued" value="0"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="gravity" value="NULL" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="6"/>
+      <column name="componentTypeCode" value="1001"/>
+      <column name="componentTypeName" value="Whole Blood - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store at 2-6°C"/>
+      <column name="transportInfo" value="Transport at 2-10°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
+      <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="gravity" value="1.053" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="7"/>
+      <column name="componentTypeCode" value="1005"/>
+      <column name="componentTypeName" value="Whole Blood Poor Platelets - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store at 2-6°C"/>
+      <column name="transportInfo" value="Transport at 2-10°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
+      <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="12" />
+      <column name="maxTimeSinceDonation" value="24" />
+      <column name="gravity" value="1.03" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="8"/>
+      <column name="componentTypeCode" value="2001"/>
+      <column name="componentTypeName" value="Packed Red Cells - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="0"/>
+      <column name="storageInfo" value="Store at 2-6°C"/>
+      <column name="transportInfo" value="Transport at 2-10°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
+      <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="gravity" value="1.053" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="9"/>
+      <column name="componentTypeCode" value="2011"/>
+      <column name="componentTypeName" value="Packed Red Cells - SAGM"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="42"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="0"/>
+      <column name="storageInfo" value="Store at 2-6°C"/>
+      <column name="transportInfo" value="Transport at 2-10°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
+      <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="gravity" value="1.053" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="10"/>
+      <column name="componentTypeCode" value="3001"/>
+      <column name="componentTypeName" value="Fresh Frozen Plasma - Whole Blood"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="365"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store below -30°C"/>
+      <column name="transportInfo" value="Transport below -25°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
+      <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="15" />
+      <column name="maxTimeSinceDonation" value="24" />
+      <column name="gravity" value="1.03" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="11"/>
+      <column name="componentTypeCode" value="3002"/>
+      <column name="componentTypeName" value="Frozen Plasma - Whole Blood"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="365"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store below -30°C"/>
+      <column name="transportInfo" value="Transport below -25°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
+      <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="gravity" value="1.03" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="12"/>
+      <column name="componentTypeCode" value="4001"/>
+      <column name="componentTypeName" value="Platelets Concentrate - Whole Blood"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="5"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store at 20-24°C"/>
+      <column name="transportInfo" value="Transport at 20-24°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
+      <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="12" />
+      <column name="maxTimeSinceDonation" value="24" />
+      <column name="gravity" value="1.03" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="13"/>
+      <column name="componentTypeCode" value="4011"/>
+      <column name="componentTypeName" value="Platelets Concentrate - Whole Blood - 24H"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="1"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store at 20-24°C"/>
+      <column name="transportInfo" value="Transport at 20-24°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
+      <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="12" />
+      <column name="maxTimeSinceDonation" value="24" />
+      <column name="gravity" value="1.03" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="14"/>
+      <column name="componentTypeCode" value="2101"/>
+      <column name="componentTypeName" value="Packed Red Cells - Paediatric - CPDA"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="35"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="0"/>
+      <column name="storageInfo" value="Store at 2-6°C"/>
+      <column name="transportInfo" value="Transport at 2-10°C"/>
+      <column name="preparationInfo" value="Prepared from 450 ±50ml WB"/>
+      <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="NULL" />
+      <column name="maxTimeSinceDonation" value="NULL" />
+      <column name="gravity" value="1.053" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="15"/>
+      <column name="componentTypeCode" value="3011"/>
+      <column name="componentTypeName" value="Fresh Frozen Plasma - Apheresis"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="365"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store below -30°C"/>
+      <column name="transportInfo" value="Transport below -25°C"/>
+      <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="15" />
+      <column name="maxTimeSinceDonation" value="24" />
+      <column name="gravity" value="1.03" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+    <insert tableName="ComponentType">
+      <column name="id" value="16"/>
+      <column name="componentTypeCode" value="4021"/>
+      <column name="componentTypeName" value="Platelets Concentrate - Apheresis"/>
+      <column name="description" value=""/>
+      <column name="expiresAfter" value="5"/>
+      <column name="expiresAfterUnits" value="DAYS"/>
+      <column name="hasBloodGroup" value="1"/>
+      <column name="pediComponentType_id" value="NULL"/>
+      <column name="isDeleted" value="0"/>
+      <column name="containsPlasma" value="1"/>
+      <column name="storageInfo" value="Store at 20-24°C"/>
+      <column name="transportInfo" value="Transport at 20-24°C"/>
+      <column name="canBeIssued" value="1"/>
+      <column name="maxBleedTime" value="12" />
+      <column name="maxTimeSinceDonation" value="24" />
+      <column name="gravity" value="1.03" />
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdBy_id" value="1" />
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdatedBy_id" value="1" />
+    </insert>
+  </changeSet>
+
+  <!-- Moved due to foreign key dependency on ComponenType (timler) -->
+  <changeSet id="20161209-1650" author="timler">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        <![CDATA[
+				SELECT count(*) FROM PackType;
+				]]>
+      </sqlCheck>
+    </preConditions>
+    <comment>Add pack types with weight</comment>
+    <insert tableName="PackType">
+      <column name="packType" value="Single"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="1"/>
+      <column name="countAsDonation" value="1"/>
+      <column name="periodBetweenDonations" value="90"/>
+      <column name="testSampleProduced" value="1"/>
+      <column name="minWeight" value="426"/>
+      <column name="maxWeight" value="520"/>
+      <column name="lowVolumeWeight" value="316"/>
+    </insert>
+    <insert tableName="PackType">
+      <column name="packType" value="Double"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="2"/>
+      <column name="countAsDonation" value="1"/>
+      <column name="periodBetweenDonations" value="90"/>
+      <column name="testSampleProduced" value="1"/>
+      <column name="minWeight" value="426"/>
+      <column name="maxWeight" value="520"/>
+      <column name="lowVolumeWeight" value="316"/>
+    </insert>
+    <insert tableName="PackType">
+      <column name="packType" value="Triple"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="3"/>
+      <column name="countAsDonation" value="1"/>
+      <column name="periodBetweenDonations" value="90"/>
+      <column name="testSampleProduced" value="1"/>
+      <column name="minWeight" value="426"/>
+      <column name="maxWeight" value="520"/>
+      <column name="lowVolumeWeight" value="316"/>
+    </insert>
+    <insert tableName="PackType">
+      <column name="packType" value="Quad"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="4"/>
+      <column name="countAsDonation" value="1"/>
+      <column name="periodBetweenDonations" value="90"/>
+      <column name="testSampleProduced" value="1"/>
+      <column name="minWeight" value="426"/>
+      <column name="maxWeight" value="520"/>
+      <column name="lowVolumeWeight" value="316"/>
+    </insert>
+    <insert tableName="PackType">
+      <column name="packType" value="Apheresis"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="5"/>
+      <column name="countAsDonation" value="1"/>
+      <column name="periodBetweenDonations" value="30"/>
+      <column name="testSampleProduced" value="1"/>
+      <column name="minWeight" value="1"/>
+      <column name="maxWeight" value="600"/>
+      <column name="lowVolumeWeight" value="1"/>
+    </insert>
+    <insert tableName="PackType">
+      <column name="packType" value="Dry Pack"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="NULL"/>
+      <column name="countAsDonation" value="0"/>
+      <column name="periodBetweenDonations" value="0"/>
+      <column name="testSampleProduced" value="1"/>
+    </insert>
+    <insert tableName="PackType">
+      <column name="packType" value="Test Only"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="NULL"/>
+      <column name="countAsDonation" value="0"/>
+      <column name="periodBetweenDonations" value="0"/>
+      <column name="testSampleProduced" value="1"/>
+    </insert>
+    <insert tableName="PackType">
+      <column name="packType" value="Did Not Bleed"/>
+      <column name="isDeleted" value="0"/>
+      <column name="componentType_id" value="NULL"/>
+      <column name="countAsDonation" value="0"/>
+      <column name="periodBetweenDonations" value="0"/>
+      <column name="testSampleProduced" value="0"/>
+    </insert>
+  </changeSet>
+
+  <!-- Moved due to foreign key dependency on ComponentType (timler) -->
+  <changeSet id="20161213-0910" author="danfuterman">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        <![CDATA[
+				SELECT count(*) FROM ComponentTypeCombination_ComponentType;
+				]]>
+      </sqlCheck>
+    </preConditions>
+    <comment>Add component type combination mappings</comment>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="1"/>
+      <column name="componentTypes_id" value="6"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="2"/>
+      <column name="componentTypes_id" value="8"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="2"/>
+      <column name="componentTypes_id" value="10"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="3"/>
+      <column name="componentTypes_id" value="8"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="3"/>
+      <column name="componentTypes_id" value="11"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="4"/>
+      <column name="componentTypes_id" value="7"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="4"/>
+      <column name="componentTypes_id" value="13"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="5"/>
+      <column name="componentTypes_id" value="9"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="5"/>
+      <column name="componentTypes_id" value="10"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="5"/>
+      <column name="componentTypes_id" value="12"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="6"/>
+      <column name="componentTypes_id" value="9"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="6"/>
+      <column name="componentTypes_id" value="10"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="7"/>
+      <column name="componentTypes_id" value="9"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="7"/>
+      <column name="componentTypes_id" value="11"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="8"/>
+      <column name="componentTypes_id" value="14"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="8"/>
+      <column name="componentTypes_id" value="14"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="8"/>
+      <column name="componentTypes_id" value="14"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="8"/>
+      <column name="componentTypes_id" value="10"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="9"/>
+      <column name="componentTypes_id" value="15"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="9"/>
+      <column name="componentTypes_id" value="16"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="10"/>
+      <column name="componentTypes_id" value="15"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="10"/>
+      <column name="componentTypes_id" value="16"/>
+    </insert>
+    <insert tableName="ComponentTypeCombination_ComponentType">
+      <column name="componentTypeCombinations_id" value="10"/>
+      <column name="componentTypes_id" value="16"/>
+    </insert>
+  </changeSet>
+
+  <!-- Moved due to foreign key dependency on ComponentType (timler) -->
+  <changeSet id="20161213-0911" author="danfuterman">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        <![CDATA[
+				SELECT count(*) FROM ComponentType_ComponentTypeCombination;
+				]]>
+      </sqlCheck>
+    </preConditions>
+    <comment>Add component type combination rules</comment>
+    <insert tableName="ComponentType_ComponentTypeCombination">
+      <column name="sourceComponentTypes_id" value="1"/>
+      <column name="producedComponentTypeCombinations_id" value="1"/>
+    </insert>
+    <insert tableName="ComponentType_ComponentTypeCombination">
+      <column name="sourceComponentTypes_id" value="2"/>
+      <column name="producedComponentTypeCombinations_id" value="2"/>
+    </insert>
+    <insert tableName="ComponentType_ComponentTypeCombination">
+      <column name="sourceComponentTypes_id" value="2"/>
+      <column name="producedComponentTypeCombinations_id" value="3"/>
+    </insert>
+    <insert tableName="ComponentType_ComponentTypeCombination">
+      <column name="sourceComponentTypes_id" value="2"/>
+      <column name="producedComponentTypeCombinations_id" value="4"/>
+    </insert>
+    <insert tableName="ComponentType_ComponentTypeCombination">
+      <column name="sourceComponentTypes_id" value="3"/>
+      <column name="producedComponentTypeCombinations_id" value="5"/>
+    </insert>
+    <insert tableName="ComponentType_ComponentTypeCombination">
+      <column name="sourceComponentTypes_id" value="3"/>
+      <column name="producedComponentTypeCombinations_id" value="6"/>
+    </insert>
+    <insert tableName="ComponentType_ComponentTypeCombination">
+      <column name="sourceComponentTypes_id" value="3"/>
+      <column name="producedComponentTypeCombinations_id" value="7"/>
+    </insert>
+    <insert tableName="ComponentType_ComponentTypeCombination">
+      <column name="sourceComponentTypes_id" value="4"/>
+      <column name="producedComponentTypeCombinations_id" value="8"/>
+    </insert>
+    <insert tableName="ComponentType_ComponentTypeCombination">
+      <column name="sourceComponentTypes_id" value="5"/>
+      <column name="producedComponentTypeCombinations_id" value="9"/>
+    </insert>
+    <insert tableName="ComponentType_ComponentTypeCombination">
+      <column name="sourceComponentTypes_id" value="5"/>
+      <column name="producedComponentTypeCombinations_id" value="10"/>
+    </insert>
+  </changeSet>
+
+    
+ </databaseChangeLog>

@@ -18,6 +18,7 @@ import org.jembi.bsis.backingform.validator.DonationBackingFormValidator;
 import org.jembi.bsis.controllerservice.DonationControllerService;
 import org.jembi.bsis.factory.DonationSummaryViewModelFactory;
 import org.jembi.bsis.factory.DonationTypeFactory;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.PackTypeFactory;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.HaemoglobinLevel;
@@ -92,6 +93,9 @@ public class DonationController {
   @Autowired
   private PackTypeFactory packTypeFactory;
 
+  @Autowired
+  private LocationFactory locationFactory;
+
   public DonationController() {
   }
 
@@ -108,15 +112,9 @@ public class DonationController {
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONATION_INFORMATION + "')")
   public Map<String, Object> addDonationFormGenerator(HttpServletRequest request) {
-
-    DonationBackingForm form = new DonationBackingForm();
-
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("addDonationForm", form);
+    map.put("addDonationForm", new DonationBackingForm());
     addEditSelectorOptions(map);
-    Map<String, Map<String, Object>> formFields = formFieldAccessorService.getFormFieldsForForm("donation");
-    // to ensure custom field names are displayed in the form
-    map.put("donationFields", formFields);
     return map;
   }
 
@@ -206,9 +204,9 @@ public class DonationController {
   }
 
   private void addEditSelectorOptions(Map<String, Object> m) {
-    m.put("venues", locationRepository.getVenues());
+    m.put("venues", locationFactory.createViewModels(locationRepository.getVenues()));
     List<DonationType> donationTypes = donorTypeRepository.getAllDonationTypes();
-    m.put("donationTypes", donationTypeFactory.createDonationTypeViewModels(donationTypes));
+    m.put("donationTypes", donationTypeFactory.createViewModels(donationTypes));
     m.put("packTypes", packTypeFactory.createFullViewModels(packTypeRepository.getAllEnabledPackTypes()));
     List<Map<String, Object>> haemoglobinLevels = new ArrayList<>();
     for (HaemoglobinLevel value : HaemoglobinLevel.values()) {

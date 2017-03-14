@@ -1,10 +1,11 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aDistributionSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
+import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.OrderFormBackingFormBuilder.anOrderFormBackingForm;
 import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
 import static org.jembi.bsis.helpers.builders.OrderFormFullViewModelBuilder.anOrderFormFullViewModel;
@@ -243,7 +244,7 @@ public class OrderFormFactoryTests {
 
     Component component = aComponent().withId(1L).withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(dispatchedFrom).build();
     ComponentFullViewModel componentFullViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel().withId(1L)
-        .withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(new LocationFullViewModel(dispatchedFrom)).build();
+        .withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(aLocationViewModel().withId(1L).build()).build();
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))

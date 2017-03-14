@@ -5,14 +5,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jembi.bsis.model.audit.EntityModification;
-import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.viewmodel.AuditRevisionViewModel;
+import org.jembi.bsis.viewmodel.UserViewModel;
 
 public class AuditRevisionViewModelBuilder extends AbstractBuilder<AuditRevisionViewModel> {
 
   private int id;
   private Date revisionDate;
-  private User user;
+  private UserViewModel user;
   private Set<EntityModification> entityModifications = new HashSet<>();
 
   public AuditRevisionViewModelBuilder withId(int id) {
@@ -25,7 +25,7 @@ public class AuditRevisionViewModelBuilder extends AbstractBuilder<AuditRevision
     return this;
   }
 
-  public AuditRevisionViewModelBuilder withUser(User user) {
+  public AuditRevisionViewModelBuilder withUser(UserViewModel user) {
     this.user = user;
     return this;
   }

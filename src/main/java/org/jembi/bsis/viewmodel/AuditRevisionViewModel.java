@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jembi.bsis.model.audit.EntityModification;
-import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -16,7 +15,7 @@ public class AuditRevisionViewModel {
 
   private int id;
   private Date revisionDate;
-  private User user;
+  private UserViewModel user;
   private Set<EntityModification> entityModifications = new HashSet<>();
 
   public int getId() {
@@ -37,13 +36,10 @@ public class AuditRevisionViewModel {
   }
 
   public UserViewModel getUser() {
-    if (user == null) {
-      return null;
-    }
-    return new UserViewModel(user);
+    return user;
   }
 
-  public void setUser(User user) {
+  public void setUser(UserViewModel user) {
     this.user = user;
   }
 

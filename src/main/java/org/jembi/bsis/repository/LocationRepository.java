@@ -68,10 +68,10 @@ public class LocationRepository extends AbstractRepository<Location>{
         .getResultList();
   }
 
-  public List<Location> getAllLocations() {
-    TypedQuery<Location> query =
-        em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_LOCATIONS, Location.class);
-    return query.getResultList();
+  public List<Location> getAllLocations(boolean includeDeleted) {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_LOCATIONS, Location.class)
+        .setParameter("includeDeleted", includeDeleted)
+        .getResultList();
   }
 
   public Location getLocation(Long selectedLocationId) {

@@ -8,6 +8,8 @@ public class ComponentTypeViewModelBuilder extends AbstractBuilder<ComponentType
   private String componentTypeName;
   private String componentTypeCode;
   private String description;
+  private Integer maxBleedTime;
+  private Integer maxTimeSinceDonation;
 
   public ComponentTypeViewModelBuilder withId(Long id) {
     this.id = id;
@@ -29,6 +31,16 @@ public class ComponentTypeViewModelBuilder extends AbstractBuilder<ComponentType
     return this;
   }
   
+  public ComponentTypeViewModelBuilder withMaxBleedTime(Integer maxBleedTime) {
+    this.maxBleedTime = maxBleedTime;
+    return this;
+  }
+
+  public ComponentTypeViewModelBuilder withMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
+    this.maxTimeSinceDonation = maxTimeSinceDonation;
+    return this;
+  }
+
   @Override
   public ComponentTypeViewModel build() {
     ComponentTypeViewModel viewModel = new ComponentTypeViewModel();
@@ -36,6 +48,8 @@ public class ComponentTypeViewModelBuilder extends AbstractBuilder<ComponentType
     viewModel.setComponentTypeName(componentTypeName);
     viewModel.setComponentTypeCode(componentTypeCode);
     viewModel.setDescription(description);
+    viewModel.setMaxBleedTime(maxBleedTime);
+    viewModel.setMaxTimeSinceDonation(maxTimeSinceDonation);
 
     return viewModel;
   }

@@ -2,20 +2,21 @@ package org.jembi.bsis.controllerservice;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.ComponentBackingFormBuilder.aComponentBackingForm;
+import static org.jembi.bsis.helpers.builders.ComponentPreProcessingBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBuilder.aComponentTypeCombination;
+import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBackingFormBuilder.aComponentTypeCombinationBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.jembi.bsis.backingform.ComponentBackingForm;
+import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
@@ -178,7 +179,6 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // SUT
     List<ComponentViewModel> returnedViewModels = componentControllerService.findComponentsByDonationIdentificationNumberAndStatus(
         donationIdentificationNumber, status);
-    
     // verify
     assertThat(returnedViewModels, is(componentViewModels));
   }
@@ -200,15 +200,15 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     );
     
     // setup mocks
-    Mockito.when(componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo)).thenReturn(components);
+    Mockito.when(componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, null)).thenReturn(components);
     Mockito.when(componentFactory.createComponentViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
-    componentControllerService.findAnyComponent(componentTypeIds, status, dateFrom, dateTo);
+    componentControllerService.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, null);
     
     // verify
     Mockito.verify(componentRepository).findAnyComponent(componentTypeIds, status, dateFrom,
-        dateTo);
+        dateTo, null);
     Mockito.verify(componentFactory).createComponentViewModels(components);
   }
   
@@ -216,6 +216,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   public void testProcessComponent_shouldCallServiceRepositoryAndFactory() throws Exception {
     // setup data
     String donationIdentificationNumber = "1234567";
+    Date processedOn = new Date();
     List<Component> components = Arrays.asList(
         ComponentBuilder.aComponent().withId(1L)
           .withDonation(DonationBuilder.aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
@@ -227,24 +228,24 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
         ComponentManagementViewModelBuilder.aComponentManagementViewModel().build()
     );
     RecordComponentBackingForm form = new RecordComponentBackingForm();
-    form.setParentComponentId("1");
-    form.setComponentTypeCombination(aComponentTypeCombination().withId(1L).build());
+    form.setParentComponentId(1L);
+    form.setComponentTypeCombination(aComponentTypeCombinationBackingForm().withId(1L).build());
+    form.setProcessedOn(processedOn);
     
     // setup mocks   
-    Mockito.when(
-        componentCRUDService.processComponent(form.getParentComponentId(), form.getComponentTypeCombination().getId()))
-        .thenReturn(components.get(0));
-    Mockito.when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
-    Mockito.when(componentFactory.createManagementViewModels(components)).thenReturn(componentViewModels);
+    when(componentCRUDService.processComponent(form.getParentComponentId(), form.getComponentTypeCombination().getId(),
+        processedOn)).thenReturn(components.get(0));
+    when(componentRepository.findComponentsByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(components);
+    when(componentFactory.createManagementViewModels(components)).thenReturn(componentViewModels);
     
     // SUT
     componentControllerService.processComponent(form);
     
     // verify
-    Mockito.verify(componentCRUDService).processComponent(form.getParentComponentId(),
-        form.getComponentTypeCombination().getId());
-    Mockito.verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
-    Mockito.verify(componentFactory).createManagementViewModels(components);
+    verify(componentCRUDService).processComponent(form.getParentComponentId(),
+        form.getComponentTypeCombination().getId(), processedOn);
+    verify(componentRepository).findComponentsByDonationIdentificationNumber(donationIdentificationNumber);
+    verify(componentFactory).createManagementViewModels(components);
   }
   
   @Test
@@ -310,20 +311,26 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   public void testRecordComponentWeight_shouldCallServiceRepositoryAndFactory() throws Exception {
     // setup data
     Long componentId = Long.valueOf(1);
-    int componentWeight = 123;
-    ComponentBackingForm backingForm = aComponentBackingForm().withId(componentId).withWeight(componentWeight).build();
+    final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    Integer componentWeight = Integer.valueOf(123);
+    ComponentPreProcessingBackingForm backingForm = aComponentBackingForm()
+        .withId(componentId)
+        .withWeight(componentWeight)
+        .withBleedStartTime(dateFormat.parse("2016-12-14 08:10"))
+        .withBleedEndTime(dateFormat.parse("2016-12-14 08:20"))
+        .build();
     Component component = aComponent().withId(componentId).withWeight(componentWeight).build();
     
     // setup mocks
-    Mockito.when(componentCRUDService.recordComponentWeight(componentId, componentWeight)).thenReturn(component);
+    Mockito.when(componentCRUDService.preProcessComponent(componentId, componentWeight, backingForm.getBleedStartTime(), backingForm.getBleedEndTime())).thenReturn(component);
     Mockito.when(componentFactory.createManagementViewModel(component))
     .thenReturn(ComponentManagementViewModelBuilder.aComponentManagementViewModel().build());
     
     // SUT
-    componentControllerService.recordComponentWeight(backingForm);
+    componentControllerService.preProcessComponent(backingForm);
     
     // verify
-    Mockito.verify(componentCRUDService).recordComponentWeight(componentId, componentWeight);
+    Mockito.verify(componentCRUDService).preProcessComponent(componentId, componentWeight, backingForm.getBleedStartTime(), backingForm.getBleedEndTime());
     Mockito.verify(componentFactory).createManagementViewModel(component);
   }
   

@@ -2,14 +2,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
-  logicalFilePath="./liquibase/db-data.xml">
+  logicalFilePath="./liquibase/db-data-lbts.xml">
 
 	<!-- ALWAYS USE A UNIQUE IDENTIFIER of format id="yyyymmdd-hhmm" eg: id="20140225-1815" -->
 	<!-- ALWAYS UPDATE YOUR LOCAL REPO FROM GITHUB AND VERIFY YOUR id IS UNIQUE -->
 	<!-- NEVER DELETE OR MODIFY EXISTING CHANGE SETS - instead add new change sets 
 		 reversing the previous ones if you need to change or delete info from another changeset-->
 
-	<changeSet id="20141117-1301" author="srikanthmalyala">
+	<changeSet id="20150114-0956" author="danfuterman">
 		<comment>Add donation types</comment>
 		<insert tableName = "DonationType">
 			<column name="donationType" value="Voluntary"/>
@@ -29,289 +29,65 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20141117-1303" author="srikanthmalyala">
-		<comment>Add request types</comment>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Emergency"/>
-			<column name="description" value="0"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Group and Save"/>
-			<column name="description" value=""/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Group and Screen"/>
-			<column name="description" value=""/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Standard"/>
-			<column name="description" value=""/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Urgent"/>
-			<column name="description" value=""/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "RequestType">
-			<column name="requestType" value="Elective Surgery"/>
-			<column name="description" value=""/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-	</changeSet>
-
 	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150817-15:35" author="srikanthmalyala">
+	<changeSet id="20150817-1552" author="danfuterman">
 	    <preConditions onFail="MARK_RAN">
 		    <sqlCheck expectedResult="0"> 
 				<![CDATA[
-				SELECT count(*) FROM ComponentType WHERE componentTypeNameShort = "WB";
-				]]>
-			</sqlCheck>
- 		</preConditions>
-		<comment>Add component types</comment>
-		<insert tableName = "ComponentType">
-			<column name="componentTypeNameShort" value="WB"/>
-			<column name="componentTypeName" value="Whole Blood"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="componentTypeNameShort" value="RCC"/>
-			<column name="componentTypeName" value="Red Cell Concentrate"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="componentTypeNameShort" value="FFP"/>
-			<column name="componentTypeName" value="Fresh Frozen Plasma"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="365"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="componentTypeNameShort" value="Platelets"/>
-			<column name="componentTypeName" value="Platelets"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="5"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="1"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="componentTypeNameShort" value="Whole Blood Pedi"/>
-			<column name="componentTypeName" value="Whole Blood Pedi"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="0"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="componentTypeNameShort" value="RCC Pedi"/>
-			<column name="componentTypeName" value="Red Cell Concentrate Pedi"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="35"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="0"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="componentTypeNameShort" value="FFP Pedi"/>
-			<column name="componentTypeName" value="Fresh Frozen Plasma Pedi"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="365"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="0"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-		<insert tableName = "ComponentType">
-			<column name="componentTypeNameShort" value="Platelets Pedi"/>
-			<column name="componentTypeName" value="Platelets Pedi"/>
-			<column name="description" value=""/>
-			<column name="expiresAfter" value="5"/>
-			<column name="expiresAfterUnits" value="DAYS"/>
-			<column name="hasBloodGroup" value="0"/>
-			<column name="pediComponentType_id" value="NULL"/>
-			<column name="isDeleted" value="0"/>
-		</insert>
-	</changeSet>	
-
-	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20150817-1545" author="srikanthmalyala">
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
-				SELECT count(*) FROM ComponentTypeCombination WHERE combinationName = "Whole Blood";
+				SELECT count(*) FROM ComponentTypeCombination WHERE id = 1;
 				]]>
 			</sqlCheck>
  		</preConditions>
 		<comment>Add component type combinations</comment>
 		<insert tableName = "ComponentTypeCombination">
+			<column name="id" value="1"/>
 			<column name="combinationName" value="Whole Blood"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ComponentTypeCombination">
-			<column name="combinationName" value="RCC, FFP, Platelets"/>
+			<column name="id" value="2"/>
+			<column name="combinationName" value="PRC-CPDA, FFP"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ComponentTypeCombination">
-			<column name="combinationName" value="Whole Blood Pedi"/>
+			<column name="id" value="3"/>
+			<column name="combinationName" value="PRC-CPDA, FP"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
 		<insert tableName = "ComponentTypeCombination">
-			<column name="combinationName" value="RCC Pedi, FFP Pedi, FFP Pedi"/>
+			<column name="id" value="4"/>
+			<column name="combinationName" value="WB Poor Platelets, PC-24H"/>
 			<column name="isDeleted" value="0"/>
 		</insert>
-	</changeSet>
-
-	<changeSet id="20141117-0919" author="srikanthmalyala">
-		<comment>Add component type combination mappings</comment>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="1"/>
-			<column name="componentTypes_id" value="1"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="2"/>
-			<column name="componentTypes_id" value="2"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="2"/>
-			<column name="componentTypes_id" value="3"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="2"/>
-			<column name="componentTypes_id" value="4"/>
-		</insert>
-			<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="3"/>
-			<column name="componentTypes_id" value="5"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="4"/>
-			<column name="componentTypes_id" value="6"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="4"/>
-			<column name="componentTypes_id" value="7"/>
-		</insert>
-		<insert tableName = "ComponentTypeCombination_ComponentType">
-			<column name="componentTypeCombinations_id" value="4"/>
-			<column name="componentTypes_id" value="8"/>
-		</insert>
-	</changeSet>
-
-	<!-- Updated (timler): for #294 (refactoring) -->
-	<changeSet id="20141117-0931" author="srikanthmalyala">
-	    <preConditions onFail="MARK_RAN">
-		    <sqlCheck expectedResult="0"> 
-				<![CDATA[
-				SELECT count(*) FROM ComponentType WHERE pediComponentType_id = 5;
-				]]>
-			</sqlCheck>
- 		</preConditions>
-		<comment>Add paediatric component type associations</comment>
-		<update tableName="ComponentType">
-			<column name="pediComponentType_id" value = "5"/>
-			<where>id = "1"</where>
-		</update>
-		<update tableName="ComponentType">
-			<column name="pediComponentType_id" value = "6"/>
-			<where>id = "2"</where>
-		</update>
-		<update tableName="ComponentType">
-			<column name="pediComponentType_id" value = "7"/>
-			<where>id = "3"</where>
-		</update>
-		<update tableName="ComponentType">
-			<column name="pediComponentType_id" value = "8"/>
-			<where>id = "4"</where>
-		</update>
-	</changeSet>
-
-	<changeSet id="20141117-0938" author="srikanthmalyala">
-		<comment>Add locations</comment>
-		<insert tableName = "Location">
-			<column name="name" value="Key North"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+		<insert tableName = "ComponentTypeCombination">
+			<column name="id" value="5"/>
+			<column name="combinationName" value="PRC-SAGM, FFP, PC"/>
 			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
 		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="Key East"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+		<insert tableName = "ComponentTypeCombination">
+			<column name="id" value="6"/>
+			<column name="combinationName" value="PRC-SAGM, FFP"/>
 			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
 		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="Key South"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+		<insert tableName = "ComponentTypeCombination">
+			<column name="id" value="7"/>
+			<column name="combinationName" value="PRC-SAGM, FP"/>
 			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>	
-		<insert tableName = "Location">
-			<column name="name" value="Key West"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
 		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="Key Mobile"/>
-			<column name="isMobileSite" value="1"/>
-			<column name="isUsageSite" value="0"/>
-			<column name="isDonorPanel" value="1"/>
+		<insert tableName = "ComponentTypeCombination">
+			<column name="id" value="8"/>
+			<column name="combinationName" value="3 X PRC-Paed-CPDA, FFP"/>
 			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
 		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="General Clinic"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="0"/>
+		<insert tableName = "ComponentTypeCombination">
+			<column name="id" value="9"/>
+			<column name="combinationName" value="FFP-Apheresis, PC-Apheresis"/>
 			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
 		</insert>
-		<insert tableName = "Location">
-			<column name="name" value="General Clinic #2"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="0"/>
+		<insert tableName = "ComponentTypeCombination">
+			<column name="id" value="10"/>
+			<column name="combinationName" value="FFP Apheresis, 2 X PC-Apheresis"/>
 			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
-		</insert>	
-		<insert tableName = "Location">
-			<column name="name" value="General Clinic #3"/>
-			<column name="isMobileSite" value="0"/>
-			<column name="isUsageSite" value="1"/>
-			<column name="isDonorPanel" value="0"/>
-			<column name="isDeleted" value="0"/>
-			<column name="notes" value=""/>
 		</insert>
 	</changeSet>
 
@@ -392,7 +168,7 @@
 				]]>
 			</sqlCheck>
  		</preConditions>
- 		<comment>Add component discard reasons</comment>
+		<comment>Add component discard reasons</comment>
 		<insert tableName="ComponentStatusChangeReason">
 			<column name="statusChangeReason" value="Incomplete Donation"/>
 			<column name="category" value="DISCARDED"/>
@@ -570,6 +346,7 @@
 		</insert>
 	</changeSet>
 
+	<!--  NOT USED FOR BETA-RELEASE
 	<changeSet id="20141117-1128" author="srikanthmalyala">
 		<comment>Add donor code groups</comment>
 		<insert tableName="DonorCodeGroup">
@@ -620,6 +397,8 @@
 			<column name="donorCodeGroupId" value="2"></column>   
 		</insert>
 	</changeSet>
+	
+	-->
 
 	<changeSet id="20141117-1141" author="srikanthmalyala">
 		<comment>Add address types</comment>
@@ -636,8 +415,8 @@
 			<column name="preferredAddressType" value="Postal Address"></column>
 		</insert>
 	</changeSet>
-	
-	<changeSet id="20150922-1100" author="danfuterman">
+    
+    <changeSet id="20150922-1100" author="danfuterman">
 		<comment>Add default adverse event types</comment>
 		<insert tableName="AdverseEventType">
 			<column name="name" value="Haematoma"></column>
@@ -695,6 +474,153 @@
             <column name="dataType_id" value="4"></column>
         </insert>
     </changeSet>
+    
+    <changeSet id="20151005-1101" author="bausmeier">
+
+        <comment>HIV confirmatory test</comment>
+        <insert tableName="BloodTest">
+            <column name="id" value="29"></column>
+            <column name="bloodTestType" value="CONFIRMATORY_TTI"></column>
+            <column name="category" value="TTI"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="2"></column>
+            <column name="testName" value="HIV Confirmatory 3"></column>
+            <column name="testNameShort" value="HIV Conf 3"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <insert tableName="BloodTestingRule">
+            <column name="bloodTestsIds" value="29"></column>
+            <column name="category" value="TTI"></column>
+            <column name="donationFieldChanged" value="TTISTATUS"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="markSampleAsUnsafe" value="0"></column>
+            <column name="newInformation" value="TTI_UNSAFE"></column>
+            <column name="pattern" value="POS"></column>
+            <column name="subCategory" value="TTI"></column>
+        </insert>
+
+        <comment>HBV confirmatory test</comment>
+        <insert tableName="BloodTest">
+            <column name="id" value="30"></column>
+            <column name="bloodTestType" value="CONFIRMATORY_TTI"></column>
+            <column name="category" value="TTI"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="2"></column>
+            <column name="testName" value="HBV Confirmatory 3"></column>
+            <column name="testNameShort" value="HBV Conf 3"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <insert tableName="BloodTestingRule">
+            <column name="bloodTestsIds" value="30"></column>
+            <column name="category" value="TTI"></column>
+            <column name="donationFieldChanged" value="TTISTATUS"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="markSampleAsUnsafe" value="0"></column>
+            <column name="newInformation" value="TTI_UNSAFE"></column>
+            <column name="pattern" value="POS"></column>
+            <column name="subCategory" value="TTI"></column>
+        </insert>
+
+        <comment>HCV confirmatory test</comment>
+        <insert tableName="BloodTest">
+            <column name="id" value="31"></column>
+            <column name="bloodTestType" value="CONFIRMATORY_TTI"></column>
+            <column name="category" value="TTI"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="2"></column>
+            <column name="testName" value="HCV Confirmatory 3"></column>
+            <column name="testNameShort" value="HCV Conf 3"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <insert tableName="BloodTestingRule">
+            <column name="bloodTestsIds" value="31"></column>
+            <column name="category" value="TTI"></column>
+            <column name="donationFieldChanged" value="TTISTATUS"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="markSampleAsUnsafe" value="0"></column>
+            <column name="newInformation" value="TTI_UNSAFE"></column>
+            <column name="pattern" value="POS"></column>
+            <column name="subCategory" value="TTI"></column>
+        </insert>
+
+        <comment>Syphilis confirmatory test</comment>
+        <insert tableName="BloodTest">
+            <column name="id" value="32"></column>
+            <column name="bloodTestType" value="CONFIRMATORY_TTI"></column>
+            <column name="category" value="TTI"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="2"></column>
+            <column name="testName" value="Syphilis Confirmatory 3"></column>
+            <column name="testNameShort" value="Syphilis Conf 3"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <insert tableName="BloodTestingRule">
+            <column name="bloodTestsIds" value="32"></column>
+            <column name="category" value="TTI"></column>
+            <column name="donationFieldChanged" value="TTISTATUS"></column>
+            <column name="context" value="RECORD_TTI_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="markSampleAsUnsafe" value="0"></column>
+            <column name="newInformation" value="TTI_UNSAFE"></column>
+            <column name="pattern" value="POS"></column>
+            <column name="subCategory" value="TTI"></column>
+        </insert>
+        
+        <sql>
+            UPDATE BloodTestingRule SET pendingTestsIds = '29' WHERE id IN (9, 10);
+            UPDATE BloodTestingRule SET pendingTestsIds = '30' WHERE id IN (13, 14);
+            UPDATE BloodTestingRule SET pendingTestsIds = '31' WHERE id IN (17, 18);
+            UPDATE BloodTestingRule SET pendingTestsIds = '32' WHERE id IN (21, 22);
+        </sql>
+    </changeSet>
+    
+    <changeSet id="20151006-1200" author="bausmeier">
+    
+        <update tableName="BloodTest">
+            <column name="flagComponentsForDiscard" value="1" type="tinyint(1)"></column>
+            <where>category = 'TTI'</where>
+        </update>
+    
+        <insert tableName="BloodTest">
+            <column name="id" value="33"></column>
+            <column name="bloodTestType" value="BASIC_BLOODTYPING"></column>
+            <column name="category" value="BLOODTYPING"></column>
+            <column name="context" value="RECORD_BLOOD_TYPING_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="7"></column>
+            <column name="testName" value="Antibody Screen"></column>
+            <column name="testNameShort" value="AbScr"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+            <column name="flagComponentsForDiscard" value="1"></column>
+        </insert>
+    </changeSet>
 
     <changeSet id="20151023-1015" author="bausmeier">
         <insert tableName="GeneralConfig">
@@ -733,56 +659,162 @@
             <where>reason = 'Travel history'</where>
         </update>
 	</changeSet>
+
+
+	<changeSet id="20160112-1030" author="debonair">
+		<update tableName="Donation">
+			<column name="haemoglobinLevel" value="Fail" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'High'</where>
+		</update>
+		<update tableName="Donation">
+			<column name="haemoglobinLevel" value="Fail" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Low'</where>
+		</update>
+		<update tableName="Donation">
+			<column name="haemoglobinLevel" value="Pass" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Normal'</where>
+		</update>
+
+		<update tableName="Donation_AUD">
+			<column name="haemoglobinLevel" value="Fail" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'High'</where>
+		</update>
+		<update tableName="Donation_AUD">
+			<column name="haemoglobinLevel" value="Fail" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Low'</where>
+		</update>
+		<update tableName="Donation_AUD">
+			<column name="haemoglobinLevel" value="Pass" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Normal'</where>
+		</update>
+	</changeSet>
+
+	<changeSet id="20160121-1424" author="debonair">
+		<update tableName="Donation">
+			<column name="haemoglobinLevel" value="FAIL" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Fail'</where>
+		</update>
+		<update tableName="Donation">
+			<column name="haemoglobinLevel" value="PASS" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Pass'</where>
+		</update>
+		<update tableName="Donation_AUD">
+			<column name="haemoglobinLevel" value="FAIL" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Fail'</where>
+		</update>
+		<update tableName="Donation_AUD">
+			<column name="haemoglobinLevel" value="PASS" type="varchar(20)"></column>
+			<where>haemoglobinLevel = 'Pass'</where>
+		</update>
+	</changeSet>
 	
-    <changeSet id="20160126-1453" author="timler">
+    <changeSet id="20160127-0846" author="timler">
         <comment>Rename Conf 1, Conf 2 and Conf 3 BloodTests</comment>
         <update tableName="BloodTest">
+            <column name="testName" value="HIV Repeat 1" type="varchar(25)"></column>
             <column name="testNameShort" value="HIV Repeat 1" type="varchar(25)"></column>
-            <where>testNameShort = 'HIV Conf 1'</where>
+            <where>id = 18</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HIV Repeat 2" type="varchar(25)"></column>
             <column name="testNameShort" value="HIV Repeat 2" type="varchar(25)"></column>
-            <where>testNameShort = 'HIV Conf 2'</where>
+            <where>id = 19</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HIV Confirmatory" type="varchar(25)"></column>
             <column name="testNameShort" value="HIV Conf" type="varchar(25)"></column>
-            <where>testNameShort = 'HIV Conf 3'</where>
+            <where>id = 29</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HBV Repeat 1" type="varchar(25)"></column>
             <column name="testNameShort" value="HBV Repeat 1" type="varchar(25)"></column>
-            <where>testNameShort = 'HBV Conf 1'</where>
+            <where>id = 21</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HBV Repeat 2" type="varchar(25)"></column>
             <column name="testNameShort" value="HBV Repeat 2" type="varchar(25)"></column>
-            <where>testNameShort = 'HBV Conf 2'</where>
+            <where>id = 22</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HBV Confirmatory" type="varchar(25)"></column>
             <column name="testNameShort" value="HBV Conf" type="varchar(25)"></column>
-            <where>testNameShort = 'HBV Conf 3'</where>
+            <where>id = 30</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HCV Repeat 1" type="varchar(25)"></column>
             <column name="testNameShort" value="HCV Repeat 1" type="varchar(25)"></column>
-            <where>testNameShort = 'HCV Conf 1'</where>
+            <where>id = 24</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HCV Repeat 2" type="varchar(25)"></column>
             <column name="testNameShort" value="HCV Repeat 2" type="varchar(25)"></column>
-            <where>testNameShort = 'HCV Conf 2'</where>
+            <where>id = 25</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="HCV Confirmatory" type="varchar(25)"></column>
             <column name="testNameShort" value="HCV Conf" type="varchar(25)"></column>
-            <where>testNameShort = 'HCV Conf 3'</where>
+            <where>id = 31</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="Syphilis Repeat 1" type="varchar(25)"></column>
             <column name="testNameShort" value="Syphilis Repeat 1" type="varchar(25)"></column>
-            <where>testNameShort = 'Syphilis Conf 1'</where>
+            <where>id = 27</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="Syphilis Repeat 2" type="varchar(25)"></column>
             <column name="testNameShort" value="Syphilis Repeat 2" type="varchar(25)"></column>
-            <where>testNameShort = 'Syphilis Conf 2'</where>
+            <where>id = 28</where>
         </update>
         <update tableName="BloodTest">
+            <column name="testName" value="Syphilis Confirmatory" type="varchar(25)"></column>
             <column name="testNameShort" value="Syphilis Conf" type="varchar(25)"></column>
-            <where>testNameShort = 'Syphilis Conf 3'</where>
+            <where>id = 32</where>
+        </update>
+    </changeSet>
+	
+    <changeSet id="20160127-1210" author="timler">
+        <comment>Add Blood Abo/Rh repeat tests</comment>
+        <insert tableName="BloodTest">
+            <column name="id" value="34"></column>
+            <column name="bloodTestType" value="REPEAT_BLOODTYPING"></column>
+            <column name="category" value="BLOODTYPING"></column>
+            <column name="context" value="RECORD_BLOOD_TYPING_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value=""></column>
+            <column name="positiveResults" value="A,B,AB,O"></column>
+            <column name="rankInCategory" value="1"></column>
+            <column name="testName" value="ABO Repeat 1"></column>
+            <column name="testNameShort" value="ABO Repeat 1"></column>
+            <column name="validResults" value="A,B,AB,O"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <insert tableName="BloodTest">
+            <column name="id" value="35"></column>
+            <column name="bloodTestType" value="REPEAT_BLOODTYPING"></column>
+            <column name="category" value="BLOODTYPING"></column>
+            <column name="context" value="RECORD_BLOOD_TYPING_TESTS"></column>
+            <column name="isActive" value="1"></column>
+            <column name="isEmptyAllowed" value="0"></column>
+            <column name="negativeResults" value="NEG"></column>
+            <column name="positiveResults" value="POS"></column>
+            <column name="rankInCategory" value="1"></column>
+            <column name="testName" value="Rh Repeat 1"></column>
+            <column name="testNameShort" value="Rh Repeat 1"></column>
+            <column name="validResults" value="POS,NEG"></column>
+            <column name="isDeleted" value="0"></column>
+        </insert>
+        <sql>
+            UPDATE BloodTestingRule SET pendingTestsIds = '34' WHERE id in ('1','2','3','4');
+            UPDATE BloodTestingRule SET pendingTestsIds = '35' WHERE id in ('5', '6');
+        </sql>
+    </changeSet>
+    
+    <changeSet id="20160202-1133" author="bausmeier">
+        <update tableName="GeneralConfig">
+            <column name="name" value="testing.deferDonorsWithNegRepeatOutcomes" type="varchar(255)"></column>
+            <column name="description" value="Defer donors with a POS TTI test outcome, where all repeat outcomes are NEG" type="varchar(255)"></column>
+            <where>name = "testing.deferDonorsWithNegConfirmatoryOutcomes"</where>
         </update>
     </changeSet>
     
@@ -792,5 +824,97 @@
             UPDATE BloodTest SET validResults = 'POS,NEG,NT' WHERE id in (29,30,31,32);
         </sql>
     </changeSet>
+
+	<!-- fix foreign key bug (originated in db-fix-ids.xml) -->
+	<changeSet id="20160301-1124" author="timler">
+		<preConditions onFail="MARK_RAN">
+			<changeSetExecuted id="20151209-1510" author="timler" changeLogFile="./liquibase/db-fix-ids.xml" />
+		</preConditions>
+		<comment>Fix foreign key reference BloodTest_WorksheetType - BloodTest</comment>
+		<dropForeignKeyConstraint baseTableName="BloodTest_WorksheetType"
+			constraintName="fk_BloodTest_WorksheetType_worksheetTypes_id" />
+		<addForeignKeyConstraint constraintName="fk_BloodTest_WorksheetType_worksheetTypes_id"
+			baseColumnNames="worksheetTypes_id" baseTableName="BloodTest_WorksheetType"
+			referencedColumnNames="id" referencedTableName="WorksheetType" />
+	</changeSet>
+
+	<!-- delete Weak D test -->
+	<changeSet id="20160301-0925" author="timler">
+		<preConditions onFail="MARK_RAN">
+			<not>
+				<sqlCheck expectedResult="0"> 
+				<![CDATA[
+				SELECT count(*) FROM BloodTest WHERE testNameShort = 'Weak D';
+				]]>
+				</sqlCheck>
+			</not>
+		</preConditions>
+		<comment>Remove Weak D test (and delete all results)</comment>
+		<!-- hard delete the test results -->
+		<sql>
+			DELETE FROM BloodTestResult WHERE bloodTest_id = (SELECT id from
+			BloodTest where testNameShort = 'Weak D');
+		</sql>
+		<delete tableName="BloodTest_WorksheetType">
+			<where>bloodTests_id = (SELECT id from BloodTest where testNameShort = 'Weak D')</where>
+		</delete>
+		<!-- finally ... delete the Weak D test -->
+		<delete tableName="BloodTest">
+			<where>testNameShort = 'Weak D'</where>
+		</delete>
+	</changeSet>
+	
+	    <changeSet id="20160307-1530" author="lauravignoli">
+        <comment>Update some maxLength on FormField for Donor</comment>
+        <sql>
+            UPDATE FormField SET maxLength = 20 WHERE form = 'Donor' AND field IN ('firstName', 'middleName', 'lastName', 'callingName');
+            UPDATE FormField SET isRequired = true WHERE form = 'Donor' AND field = 'preferredLanguage';       
+        </sql>
+        <insert tableName="FormField">
+			<column name="form" value="Donor"></column>
+			<column name="FIELD" value="venue"></column>
+			<column name="defaultDisplayName" value="Venue"></column>
+			<column name="defaultValue" value=""></column>
+			<column name="maxLength" value="0"></column>
+			<column name="hidden" value="0"></column>
+			<column name="isHidable" value="1"></column>
+			<column name="isRequired" value="1"></column>
+			<column name="canBeOptional" value="1"></column>
+			<column name="autoGenerate" value="0"></column>
+			<column name="isAutoGeneratable" value="0"></column>
+			<column name="useCurrentTime" value="0"></column>
+			<column name="isTimeField" value="0"></column>
+		</insert>
+    </changeSet>
+
+    <changeSet id="20160315-1355" author="bausmeier">
+        <comment>Add NT (NOT-TESTED) as a valid option for titre and antibody screening blood tests</comment>
+        <sql>
+            UPDATE BloodTest SET validResults = CONCAT(validResults, ',NT') WHERE id IN (3, 33);
+        </sql>
+    </changeSet>
+	
+    <changeSet id="20160309-1132" author="timler">
+        <comment>Removed useParametersFromBatch from Donation FormFields</comment>
+        <delete tableName="FormField">
+            <where>form = 'donation' and field = 'useParametersFromBatch'</where>
+        </delete>
+    </changeSet>
+
+	<changeSet id="20160404" author="debonair">
+		<comment>Add view donations, view donation information and view donation batch roles to Donor Counselling Staff</comment>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="15"></column>
+			<column name="roles_id" value="6"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="60"></column>
+			<column name="roles_id" value="6"></column>
+		</insert>
+		<insert tableName="Permission_Role">
+			<column name="permissions_id" value="70"></column>
+			<column name="roles_id" value="6"></column>
+		</insert>
+	</changeSet>
 
 </databaseChangeLog>

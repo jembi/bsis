@@ -29,6 +29,26 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
   private ComponentTypeBackingFormValidator componentTypeBackingFormValidator;
   @Mock
   private ComponentTypeRepository componentTypeRepository;
+
+  @Test
+  public void testValidateFormComplete_shouldHaveNoErrors() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(10)
+        .withMaxBleedTime(10)
+        .withMaxTimeSinceDonation(5)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(0));
+  }
   
   @Test
   public void testValidateFormWithNoName_shouldHaveOneError() {
@@ -264,5 +284,280 @@ public class ComponentTypeBackingFormValidatorTests extends UnitTestSuite {
     
     assertThat(errors.getFieldErrorCount(), is(1));
     assertThat(errors.getFieldError("expiresAfter").getCode(), is("errors.nonPositive"));
+  }
+
+  @Test
+  public void testValidateFormWithBelow0MaxBleedTime_shouldHaveOneError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(10)
+        .withMaxBleedTime(-10)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("maxBleedTime").getCode(), is("errors.invalid"));
+  }
+
+  @Test
+  public void testValidateFormWith0MaxBleedTime_shouldHaveNoErrors() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(10)
+        .withMaxBleedTime(0)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(0));
+  }
+
+  @Test
+  public void testValidateFormWith60MaxBleedTime_shouldHaveNoErrors() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(10)
+        .withMaxBleedTime(60)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(0));
+  }
+
+  @Test
+  public void testValidateFormWithGreater60MaxBleedTime_shouldHaveOneError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(10)
+        .withMaxBleedTime(61)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("maxBleedTime").getCode(), is("errors.invalid"));
+  }
+
+  @Test
+  public void testValidateFormWithSuperLargeMaxBleedTime_shouldHaveOneError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(10)
+        .withMaxBleedTime(600)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("maxBleedTime").getCode(), is("errors.invalid"));
+  }
+
+  @Test
+  public void testValidateFormWithBelow0MaxTimeSinceDonation_shouldHaveOneError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(10)
+        .withMaxTimeSinceDonation(-5)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("maxTimeSinceDonation").getCode(), is("errors.invalid"));
+  }
+
+  @Test
+  public void testValidateFormWith0MaxTimeSinceDonation_shouldHaveNoError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(10)
+        .withMaxTimeSinceDonation(0)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(0));
+  }
+
+  @Test
+  public void testValidateFormWith30MaxTimeSinceDonation_shouldHaveNoError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(10)
+        .withMaxTimeSinceDonation(30)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(0));
+  }
+
+  @Test
+  public void testValidateFormWithGreater30MaxTimeSinceDonation_shouldHaveOneError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(10)
+        .withMaxTimeSinceDonation(60)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("maxTimeSinceDonation").getCode(), is("errors.invalid"));
+  }
+  
+  @Test
+  public void testValidateFormWithCorrectGravity_shouldHaveNoError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(35)
+        .withGravity(1.004)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(0));
+  }
+  
+  @Test
+  public void testValidateFormWithLessThanMinimumGravity_shouldHaveOneError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(35)
+        .withGravity(0.000)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("gravity").getCode(), is("errors.invalid"));
+  }
+  
+  @Test
+  public void testValidateFormWithMoreThanMinimumGravity_shouldHaveOneError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(35)
+        .withGravity(2.015)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("gravity").getCode(), is("errors.invalid"));
+  }
+  
+  @Test
+  public void testValidateFormWithMoreThanThreeGravityDecimalPlaces_shouldHaveOneError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(35)
+        .withGravity(1.00567)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("gravity").getCode(), is("errors.invalid"));
+  }
+
+  @Test
+  public void testValidateFormWithReallyLargeMaxTimeSinceDonation_shouldHaveOneError() {
+    ComponentTypeBackingForm backingForm = aComponentTypeBackingForm()
+        .withId(1L)
+        .withComponentTypeName("Component Type")
+        .withComponentTypeCode(COMPONENT_TYPE_CODE)
+        .withExpiresAfter(10)
+        .withMaxTimeSinceDonation(6009)
+        .build();
+
+    when(componentTypeRepository.findComponentTypeByCode(COMPONENT_TYPE_CODE)).thenThrow(new NoResultException());
+    when(componentTypeRepository.isUniqueComponentTypeName(1L, "Component Type")).thenReturn(true);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentType");
+    componentTypeBackingFormValidator.validateForm(backingForm, errors);
+
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("maxTimeSinceDonation").getCode(), is("errors.invalid"));
   }
 }

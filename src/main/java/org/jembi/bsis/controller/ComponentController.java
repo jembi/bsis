@@ -11,10 +11,14 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.backingform.ComponentBackingForm;
+import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 import org.jembi.bsis.backingform.UndiscardComponentsBackingForm;
+import org.jembi.bsis.backingform.validator.ComponentBackingFormValidator;
+import org.jembi.bsis.backingform.validator.ComponentPreProcessingBackingFormValidator;
 import org.jembi.bsis.backingform.validator.DiscardComponentsBackingFormValidator;
+import org.jembi.bsis.backingform.validator.RecordComponentBackingFormValidator;
 import org.jembi.bsis.controllerservice.ComponentControllerService;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -43,9 +47,33 @@ public class ComponentController {
   @Autowired
   private DiscardComponentsBackingFormValidator discardComponentsBackingFormValidator;
 
+  @Autowired
+  private RecordComponentBackingFormValidator recordComponentBackingFormValidator;
+
+  @Autowired
+  private ComponentPreProcessingBackingFormValidator componentPreProcessingBackingFormValidator;
+
+  @Autowired
+  private ComponentBackingFormValidator componentBackingFormValidator;
+
   @InitBinder("discardComponentsBackingForm")
-  protected void initBinder(WebDataBinder binder) {
+  protected void discardInitBinder(WebDataBinder binder) {
     binder.setValidator(discardComponentsBackingFormValidator);
+  }
+
+  @InitBinder("recordComponentBackingForm")
+  protected void recordInitBinder(WebDataBinder binder) {
+    binder.setValidator(recordComponentBackingFormValidator);
+  }
+
+  @InitBinder("componentPreProcessingBackingForm")
+  protected void preProcessInitBinder(WebDataBinder binder) {
+    binder.setValidator(componentPreProcessingBackingFormValidator);
+  }
+
+  @InitBinder("componentBackingForm")
+  protected void recordChildWeightInitBinder(WebDataBinder binder) {
+    binder.setValidator(componentBackingFormValidator);
   }
 
   @RequestMapping(value = "/discard/form", method = RequestMethod.GET)
@@ -98,26 +126,29 @@ public class ComponentController {
   public Map<String, Object> getFindComponentForm() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentTypes", componentControllerService.getComponentTypes());
-    map.put("returnReasons", componentControllerService.getReturnReasons());
     map.put("discardReasons", componentControllerService.getDiscardReasons());
     map.put("recordComponentForm", new RecordComponentBackingForm());
+    map.put("producedComponentTypesByCombinationId",
+        componentControllerService.getProducedComponentTypesByCombinationId());
+    map.put("componentStatuses", componentControllerService.getComponentStatuses());
+    map.put("locations", componentControllerService.getLocations());
     return map;
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_COMPONENT + "')")
   public Map<String, Object> findComponentPagination(HttpServletRequest request,
-      @RequestParam(value = "componentNumber", required = false, defaultValue = "") String componentNumber,
       @RequestParam(value = "donationIdentificationNumber", required = false, defaultValue = "") String donationIdentificationNumber,
-      @RequestParam(value = "componentTypes", required = false, defaultValue = "") List<Long> componentTypeIds,
+      @RequestParam(value = "componentTypes", required = false) List<Long> componentTypeIds,
       @RequestParam(value = "status", required = false) ComponentStatus status,
       @RequestParam(value = "donationDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateFrom,
-      @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo) {
+      @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo,
+      @RequestParam(value = "locationId", required = false) Long locationId) {
 
     List<ComponentViewModel> components;
     
     if (StringUtils.isBlank(donationIdentificationNumber)) {
-      components = componentControllerService.findAnyComponent(componentTypeIds, status, donationDateFrom, donationDateTo);
+      components = componentControllerService.findAnyComponent(componentTypeIds, status, donationDateFrom, donationDateTo, locationId);
     } else if (status != null) {
       components = componentControllerService.findComponentsByDonationIdentificationNumberAndStatus(
           donationIdentificationNumber, status);
@@ -143,23 +174,23 @@ public class ComponentController {
   @RequestMapping(value = "/recordcombinations", method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> recordNewComponentCombinations(
-      @RequestBody RecordComponentBackingForm recordComponentForm) throws ParseException {
+      @RequestBody @Valid RecordComponentBackingForm recordComponentBackingForm) throws ParseException {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("components", componentControllerService.processComponent(recordComponentForm));
+    map.put("components", componentControllerService.processComponent(recordComponentBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.CREATED);
   }
   
-  @RequestMapping(value = "{id}/weight", method = RequestMethod.PUT)
+  @RequestMapping(value = "{id}/preprocess ", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> updateComponentWeight(
+  public ResponseEntity<Map<String, Object>> preProcessComponent(
       @PathVariable("id") long componentId,
-      @RequestBody @Valid ComponentBackingForm componentBackingForm) {
+      @RequestBody @Valid ComponentPreProcessingBackingForm componentPreProcessingBackingForm) {
 
-    componentBackingForm.setId(componentId); // Use the id parameter from the path
+    componentPreProcessingBackingForm.setId(componentId); // Use the id parameter from the path
 
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("component", componentControllerService.recordComponentWeight(componentBackingForm));
+    map.put("component", componentControllerService.preProcessComponent(componentPreProcessingBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
   
@@ -169,6 +200,18 @@ public class ComponentController {
       @PathVariable("id") Long componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("component", componentControllerService.unprocessComponent(componentId));
+    return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "{id}/recordchildweight ", method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT + "')")
+  public ResponseEntity<Map<String, Object>> recordChildWeight(@PathVariable("id") long componentId,
+      @RequestBody @Valid ComponentBackingForm componentBackingForm) {
+
+    componentBackingForm.setId(componentId); // Use the id parameter from the path
+
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("component", componentControllerService.recordChildComponentWeight(componentBackingForm));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 }

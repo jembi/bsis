@@ -3,6 +3,7 @@ package org.jembi.bsis.factory;
 import static org.jembi.bsis.helpers.builders.OrderFormBuilder.anOrderForm;
 import static org.jembi.bsis.helpers.builders.OrderFormItemBackingFormBuilder.anOrderFormItemBackingForm;
 import static org.jembi.bsis.helpers.builders.OrderFormItemBuilder.anOrderItemForm;
+import static org.mockito.Mockito.when;
 
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
 import org.jembi.bsis.factory.ComponentTypeFactory;
@@ -34,6 +35,8 @@ public class OrderFormItemFactoryTests {
     OrderFormItemBackingForm backingForm = anOrderFormItemBackingForm().withId(1L)
         .withBloodGroup("A+").withNumberOfUnits(2)
         .withComponentType(componentType).build();
+    
+    when(componentTypeFactory.createEntity(backingForm.getComponentType())).thenReturn(componentType);
     
     OrderForm orderForm = anOrderForm().build();
     OrderFormItem convertedEntity = orderFormItemFactory.createEntity(orderForm, backingForm);

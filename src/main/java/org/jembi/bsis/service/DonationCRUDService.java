@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import javax.persistence.NoResultException;
 
+import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.backingform.BloodTypingResolutionsBackingForm;
 import org.jembi.bsis.model.component.Component;
@@ -28,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class DonationCRUDService {
 
+  private static final Logger LOGGER = Logger.getLogger(DonationCRUDService.class);
+
   @Autowired
   private DonationRepository donationRepository;
   @Autowired
@@ -48,6 +51,10 @@ public class DonationCRUDService {
   private TestBatchStatusChangeService testBatchStatusChangeService;
   @Autowired
   private BloodTestsService bloodTestsService;
+  @Autowired
+  private CheckCharacterService checkCharacterService;
+  @Autowired
+  private DateGeneratorService dateGeneratorService;
 
   public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
 
@@ -77,6 +84,11 @@ public class DonationCRUDService {
       donorRepository.updateDonor(donor);
     }
 
+    // Soft delete related components
+    for (Component component: donation.getComponents()) {
+      componentCRUDService.deleteComponent(component.getId());
+    }
+
     donorService.setDonorDueToDonate(donor);
   }
 
@@ -86,6 +98,7 @@ public class DonationCRUDService {
     donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     donation.setTTIStatus(TTIStatus.NOT_DONE);
     donation.setIsDeleted(false);
+    donation.setFlagCharacters(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber()));
 
     boolean discardComponents = false;
 
@@ -119,6 +132,18 @@ public class DonationCRUDService {
     return donation;
   }
 
+  /**
+   * Updates the specified Donation, performing constraint checks where necessary (for changing bleed times and/or pack type).
+   *
+   * If the bleed times are updated, then the initial Component's createdOn date will be modified.
+   *
+   * If the pack type is updated, then initial components can be deleted, modified or created depending on whether the previous
+   * and new pack types produce test samples or count as donations. The donation will be released if the new pack type counts
+   * as a donation and the test batch it belongs to has been released/closed.
+   *
+   * @param updatedDonation Donation, must not be a managed entity otherwise checks will not be run correctly
+   * @return Donation that has been updated and persisted
+   */
   public Donation updateDonation(Donation updatedDonation) {
     Donation existingDonation = donationRepository.findDonationById(updatedDonation.getId());
     
@@ -202,6 +227,17 @@ public class DonationCRUDService {
     existingDonation.setBleedStartTime(updatedDonation.getBleedStartTime());
     existingDonation.setBleedEndTime(updatedDonation.getBleedEndTime());
     existingDonation.setAdverseEvent(updatedDonation.getAdverseEvent());
+
+    if (bleedTimesUpdated) {
+      Component initialComponent = existingDonation.getInitialComponent();
+      if (initialComponent != null) {
+        Date newCreatedOn = dateGeneratorService.generateDateTime(initialComponent.getCreatedOn(), existingDonation.getBleedStartTime());
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("Setting createdOn for Component " + initialComponent.getId() + " to " + newCreatedOn);
+        }
+        initialComponent.setCreatedOn(newCreatedOn);
+      }
+    }
 
     Donation donation = donationRepository.updateDonation(existingDonation);
 

@@ -33,7 +33,7 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testGetAllLocations() throws Exception {
-    List<Location> all = locationRepository.getAllLocations();
+    List<Location> all = locationRepository.getAllLocations(true);
     Assert.assertNotNull("There are Locations", all);
     Assert.assertEquals("There are 10 Locations", 10, all.size());
   }

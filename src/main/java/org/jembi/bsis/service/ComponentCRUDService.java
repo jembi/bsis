@@ -30,7 +30,11 @@ import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
+import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.utils.SecurityUtils;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +71,12 @@ public class ComponentCRUDService {
   
   @Autowired
   private DonationBatchRepository donationBatchRepository;
+  
+  @Autowired
+  private DonationRepository donationRepository;
+
+  @Autowired
+  private BleedTimeService bleedTimeService;
 
   public Component createInitialComponent(Donation donation) {
 
@@ -91,7 +101,7 @@ public class ComponentCRUDService {
     component.setCreatedBy(donation.getCreatedBy());
 
     // set new component expiresOn date to be 'expiresAfter' days after the createdOn date
-    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), componentType.getExpiresAfter()));
+    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), componentType.getExpiresAfter(), componentType.getExpiresAfterUnits()));
 
     // set the component venue and component batch (if already created for the donation batch)
     ComponentBatch componentBatch = donationBatchRepository.findComponentBatchByDonationbatchId(
@@ -124,7 +134,7 @@ public class ComponentCRUDService {
 
     component.setComponentType(newComponentType);
     component.setComponentCode(newComponentType.getComponentTypeCode());
-    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), newComponentType.getExpiresAfter()));
+    component.setExpiresOn(calculateExpiresOn(component.getCreatedOn(), newComponentType.getExpiresAfter(), newComponentType.getExpiresAfterUnits()));
 
     componentRepository.update(component);
     return component;
@@ -138,11 +148,18 @@ public class ComponentCRUDService {
     return createdOn;
   }
 
-  private Date calculateExpiresOn(Date createdOn, Integer expiresAfter) {
-    Calendar expiresOn = Calendar.getInstance();
-    expiresOn.setTime(createdOn); // defaults to the createdOn date
-    expiresOn.add(Calendar.DATE, expiresAfter);
-    return expiresOn.getTime();
+  private Date calculateExpiresOn(Date createdOn, Integer expiresAfter, ComponentTypeTimeUnits expiresAfterUnits) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(createdOn);
+
+    // set component expiry date
+    if (expiresAfterUnits == ComponentTypeTimeUnits.DAYS)
+      cal.add(Calendar.DAY_OF_YEAR, expiresAfter);
+    else if (expiresAfterUnits == ComponentTypeTimeUnits.HOURS)
+      cal.add(Calendar.HOUR, expiresAfter);
+    else if (expiresAfterUnits== ComponentTypeTimeUnits.YEARS)
+      cal.add(Calendar.YEAR, expiresAfter);
+    return cal.getTime();
   }
 
   /**
@@ -181,6 +198,14 @@ public class ComponentCRUDService {
     }
   }
 
+  public Component deleteComponent(long componentId) {
+    LOGGER.info("Deleting component " + componentId);
+
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    existingComponent.setIsDeleted(true);
+    return componentRepository.update(existingComponent);
+  }
+
   public void updateComponentStatusesForDonation(Donation donation) {
 
     LOGGER.info("Updating component statuses for donation: " + donation);
@@ -193,17 +218,17 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component processComponent(String parentComponentId, long componentTypeCombinationId) {
+  public Component processComponent(long parentComponentId, long componentTypeCombinationId, Date processedOn) {
 
-    Component parentComponent = componentRepository.findComponentById(Long.valueOf(parentComponentId));
+    Component parentComponent = componentRepository.findComponentById(parentComponentId);
+    parentComponent.setProcessedOn(processedOn);
     ComponentTypeCombination componentTypeCombination =
         componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId);
     
     if (!componentConstraintChecker.canProcess(parentComponent)) {
       throw new IllegalStateException("Component " + parentComponentId + " cannot be processed.");
     }
-    
-    Donation donation = parentComponent.getDonation();
+
     ComponentStatus parentStatus = parentComponent.getStatus();
 
     // map of new components, storing component type and num. of units
@@ -234,52 +259,11 @@ public class ComponentCRUDService {
 
     for (ComponentType pt : newComponents.keySet()) {
 
-      String componentTypeCode = pt.getComponentTypeCode();
       int noOfUnits = newComponents.get(pt);
 
       // Add New component
       if (!parentStatus.equals(ComponentStatus.PROCESSED) && !parentStatus.equals(ComponentStatus.DISCARDED)) {
-
-        for (int i = 1; i <= noOfUnits; i++) {
-          Component component = new Component();
-          component.setIsDeleted(false);
-
-          // if there is more than one unit of the component, append unit number suffix
-          if (noOfUnits > 1) {
-            component.setComponentCode(componentTypeCode + "-0" + i);
-          } else {
-            component.setComponentCode(componentTypeCode);
-          }
-          component.setComponentType(pt);
-          component.setDonation(donation);
-          component.setParentComponent(parentComponent);
-          component.setStatus(ComponentStatus.QUARANTINED);
-          component.setCreatedOn(donation.getDonationDate());
-          component.setLocation(parentComponent.getLocation());
-          component.setComponentBatch(parentComponent.getComponentBatch());
-
-          Calendar cal = Calendar.getInstance();
-          Date createdOn = cal.getTime();
-          cal.setTime(component.getCreatedOn());
-
-          // set component expiry date
-          if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.DAYS)
-            cal.add(Calendar.DAY_OF_YEAR, pt.getExpiresAfter());
-          else if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.HOURS)
-            cal.add(Calendar.HOUR, pt.getExpiresAfter());
-          else if (pt.getExpiresAfterUnits() == ComponentTypeTimeUnits.YEARS)
-            cal.add(Calendar.YEAR, pt.getExpiresAfter());
-
-          Date expiresOn = cal.getTime();
-          component.setCreatedOn(createdOn);
-          component.setExpiresOn(expiresOn);
-
-          addComponent(component);
-          
-          if (parentStatus == ComponentStatus.UNSAFE) {
-            markChildComponentsAsUnsafeWhereApplicable(component);
-          }
-        }
+        createChildComponent(pt, noOfUnits, parentComponent);
       }
     }
 
@@ -290,25 +274,26 @@ public class ComponentCRUDService {
   }
 
   /**
-   * Mark child components as unsafe where applicable.
-   * 
-   * Loop through the initial component status changes, and only avoid marking the component as
-   * unsafe for the status change where the status change reason type is
-   * TEST_RESULTS_CONTAINS_PLASMA and the component doesn't contain plasma.
-   * 
-   * For all other status change reason types, mark the component as unsafe with reason type
-   * UNSAFE_PARENT.
+   * Mark child component as unsafe where applicable.
+   *
+   * If the parent component is unsafe then the child component will be marked as unsafe (using
+   * the reason UNSAFE_PARENT) except where the status change reason type is
+   * TEST_RESULTS_CONTAINS_PLASMA and this component doesn't contain plasma.
+   *
+   * If the donation bleed time exceeds the maximum bleed time, or if the time since the donation
+   * exceeds the max time since donation, for this component type then this component will be
+   * marked as unsafe using EXCEEDS_MAX_BLEED_TIME or EXCEEDS_MAXTIME_SINCE_DONATION
    *
    * @param component the component
    */
-  private void markChildComponentsAsUnsafeWhereApplicable(Component component) {
+  private void markChildComponentAsUnsafeWhereApplicable(Component component) {
     Component initialComponent = component.getParentComponent();
+    Donation donation = initialComponent.getDonation();
     // If the component was processed more than once, get the initial component as the parent of the parent
-    while (initialComponent.getParentComponent() != null) {
+    while (!initialComponent.isInitialComponent()) {
       initialComponent = initialComponent.getParentComponent();
     }
-    
-    boolean markComponentAsUnsafe = false;
+
     if (initialComponent.getStatusChanges() != null) {
       for (ComponentStatusChange statusChange : initialComponent.getStatusChanges()) {
         
@@ -316,23 +301,34 @@ public class ComponentCRUDService {
           // skip deleted status change reasons
           continue;
         }
-        
+
         if (!component.getComponentType().getContainsPlasma()
             && statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE
-            && statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA) {
+            && (statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA
+            || statusChange.getStatusChangeReason().getType() == ComponentStatusChangeReasonType.LOW_WEIGHT)) {
           // skip because the component doesn't contain plasma and the unsafe reason only applies to
           // components that do contain plasma
           continue;
         }
-        
+
         if (statusChange.getStatusChangeReason().getCategory() == ComponentStatusChangeReasonCategory.UNSAFE) {
-          markComponentAsUnsafe = true;
-          break;
+          markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+          return;
         }
+
       }
     }
-    if (markComponentAsUnsafe) {
-      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.UNSAFE_PARENT);
+
+    long bleedTime = bleedTimeService.getBleedTime(donation.getBleedStartTime(), donation.getBleedEndTime());
+    long timeSinceDonation = bleedTimeService.getTimeSinceDonation(
+        initialComponent.getCreatedOn(), initialComponent.getProcessedOn());
+
+    if (component.getComponentType().getMaxBleedTime() != null
+        && bleedTime >= component.getComponentType().getMaxBleedTime()) {
+      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME);
+    } else if (component.getComponentType().getMaxTimeSinceDonation() != null
+        && timeSinceDonation >= component.getComponentType().getMaxTimeSinceDonation()) {
+      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
     }
   }
 
@@ -340,6 +336,13 @@ public class ComponentCRUDService {
     for (Long id : componentIds) {
       discardComponent(id, discardReasonId, discardReasonText);
     }
+  }
+
+  public Component removeComponentFromStock(Component component) {
+    LOGGER.info("Removing component " + component.getId() + " from stock");
+
+    component.setInventoryStatus(InventoryStatus.REMOVED);
+    return componentRepository.update(component);
   }
 
   public Component discardComponent(Long componentId, Long discardReasonId, String discardReasonText) {
@@ -386,29 +389,64 @@ public class ComponentCRUDService {
     return rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.DISCARDED);
   }
   
-  public Component recordComponentWeight(long componentId, int componentWeight) {
+  public Component preProcessComponent(long componentId, Integer componentWeight, Date bleedStartTime, Date bleedEndTime) {
     Component existingComponent = componentRepository.findComponentById(componentId);
 
+    // update donation bleed times
+    Donation existingDonation = existingComponent.getDonation();
+    existingDonation.setBleedStartTime(bleedStartTime);
+    existingDonation.setBleedEndTime(bleedEndTime);
+    donationRepository.updateDonation(existingDonation);
+
+    // update component createdOn
+    // note: existingComponent is the initial component because pre-processing is only done for the initial component
+    Date newCreatedOn = dateGeneratorService.generateDateTime(existingComponent.getCreatedOn(), bleedStartTime);
+    existingComponent.setCreatedOn(newCreatedOn);
+    
     // check if the weight is being updated
     if (existingComponent.getWeight() != null && existingComponent.getWeight() == componentWeight) {
       return existingComponent;
     }
 
     // check if it is possible to update the weight
-    if (!componentConstraintChecker.canRecordWeight(existingComponent)) {
-      throw new IllegalStateException("The weight of Component " + componentId 
-          + " cannot be updated from " + existingComponent.getWeight() + " to " + componentWeight);
+    if (!componentConstraintChecker.canPreProcess(existingComponent)) {
+      throw new IllegalStateException("The component " + componentId 
+          + " cannot be pre-processed");
     }
     // it's OK to update the weight
     existingComponent.setWeight(componentWeight);
 
-    // check if the component should be discarded or re-evaluated
-    if (componentStatusCalculator.shouldComponentBeDiscardedForWeight(existingComponent)) {
-      existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
-    } else if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
-      // need to rollback
+    // roll back Component Status if unsafe. Note that only statuses that can be rolled back will
+    // and should be e.g. for reasons of invalid weight or low weight.
+    if (existingComponent.getStatus().equals(ComponentStatus.UNSAFE)) {
       rollBackComponentStatus(existingComponent, ComponentStatusChangeReasonCategory.UNSAFE);
     }
+
+    // Mark the component as unsafe if necessary.
+    if (componentStatusCalculator.shouldComponentBeDiscardedForInvalidWeight(existingComponent)) {
+      existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.INVALID_WEIGHT);
+    } else if (componentStatusCalculator.shouldComponentBeDiscardedForLowWeight(existingComponent)) {
+      existingComponent = markComponentAsUnsafe(existingComponent, ComponentStatusChangeReasonType.LOW_WEIGHT);
+    }
+
+    return updateComponent(existingComponent);
+  }
+
+  public Component recordChildComponentWeight(long componentId, Integer componentWeight) {
+    Component existingComponent = componentRepository.findComponentById(componentId);
+    
+    // check if the weight is being updated
+    if (existingComponent.getWeight() != null && existingComponent.getWeight() == componentWeight) {
+      return existingComponent;
+    }
+
+    // check if it is possible to update the weight of the child component
+    if (!componentConstraintChecker.canRecordChildComponentWeight(existingComponent)) {
+      throw new IllegalStateException("The weight of child component " + componentId 
+          + " cannot be updated");
+    }
+    // it's OK to update the weight
+    existingComponent.setWeight(componentWeight);
 
     return updateComponent(existingComponent);
   }
@@ -437,6 +475,9 @@ public class ComponentCRUDService {
     if (parentComponent.getInventoryStatus() == InventoryStatus.REMOVED) {
       parentComponent.setInventoryStatus(InventoryStatus.IN_STOCK);
     }
+
+    // Reset processedOn date
+    parentComponent.setProcessedOn(null);
 
     // FIXME: Create component status change for when processing a component
     return rollBackComponentStatus(parentComponent, null);
@@ -608,4 +649,42 @@ public class ComponentCRUDService {
     }
   }
 
+  /**
+   * Create child components from produced component types
+   *
+   * @param pt produced component type
+   * @param noOfUnits number of units produced
+   * @param parentComponent component being processed
+   */
+  private void createChildComponent(ComponentType pt, int noOfUnits, Component parentComponent) {
+    String componentTypeCode = pt.getComponentTypeCode();
+    for (int i = 1; i <= noOfUnits; i++) {
+      Component component = new Component();
+      component.setIsDeleted(false);
+
+      // if there is more than one unit of the component, append unit number suffix
+      if (noOfUnits > 1) {
+        component.setComponentCode(componentTypeCode + "-0" + i);
+      } else {
+        component.setComponentCode(componentTypeCode);
+      }
+      component.setComponentType(pt);
+      component.setDonation(parentComponent.getDonation());
+      component.setParentComponent(parentComponent);
+      component.setStatus(ComponentStatus.QUARANTINED);
+      component.setCreatedOn(parentComponent.getProcessedOn());
+      component.setLocation(parentComponent.getLocation());
+      component.setComponentBatch(parentComponent.getComponentBatch());
+
+      DateTime donationBleedDateTime = new DateTime()
+          .withDate(new LocalDate(parentComponent.getDonation().getDonationDate()))
+          .withTime(new LocalTime(parentComponent.getDonation().getBleedStartTime()));
+
+      component.setExpiresOn(calculateExpiresOn(donationBleedDateTime.toDate(), pt.getExpiresAfter(), pt.getExpiresAfterUnits()));
+
+      addComponent(component);
+
+      markChildComponentAsUnsafeWhereApplicable(component);
+    }
+  }
 }

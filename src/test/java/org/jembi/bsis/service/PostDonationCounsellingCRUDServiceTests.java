@@ -12,14 +12,10 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
-import org.jembi.bsis.helpers.builders.UserBuilder;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.PostDonationCounsellingRepository;
-import org.jembi.bsis.service.DateGeneratorService;
-import org.jembi.bsis.service.PostDonationCounsellingCRUDService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -38,22 +34,15 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreatePostDonationCounselling_shouldPersistAndReturnAFlaggedPostDonationCounsellingForDonation() {
     Donation donation = aDonation().withId(23L).build();
-    Date counsellingDate = new Date();
 
     PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
         .withId(null)
         .thatIsFlaggedForCounselling()
         .thatIsNotDeleted()
         .withDonation(donation)
-        .withCreatedBy(loggedInUser)
-        .withCreatedDate(counsellingDate)
-        .withLastUpdated(counsellingDate)
-        .withLastUpdatedBy(loggedInUser)
         .withCounsellingStatus(null)
         .withCounsellingDate(null)
         .build();
-
-    when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
 
     when(postDonationCounsellingRepository.findPostDonationCounsellingForDonation(donation)).thenReturn(null);
 
@@ -87,12 +76,13 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
   @Test(expected = IllegalArgumentException.class)
   public void testUpdatePostDonationCounsellingWithNoExistingPostDonationCounselling_shouldThrow() {
     long postDonationCounsellingId = 75;
+    PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
+        .withId(postDonationCounsellingId)
+        .build();
 
-    when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
-        .thenReturn(null);
+    when(postDonationCounsellingRepository.findById(postDonationCounsellingId)).thenReturn(null);
 
-    postDonationCounsellingCRUDService.updatePostDonationCounselling(postDonationCounsellingId,
-        CounsellingStatus.RECEIVED_COUNSELLING, new Date(), "");
+    postDonationCounsellingCRUDService.updatePostDonationCounselling(postDonationCounselling);
   }
 
   @Test
@@ -104,21 +94,22 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
     Date existingCounsellingDate = new DateTime().minusDays(1).toDate();
     Date counsellingDate = new Date();
     String notes = "some notes";
-
-    User ordinary = UserBuilder.aUser()
-        .withUsername("ordinary")
-        .withId(2l)
+    
+    PostDonationCounselling updatedPostDonationCounselling = aPostDonationCounselling()
+        .withId(postDonationCounsellingId)
+        .withCounsellingDate(counsellingDate)
+        .withCounsellingStatus(counsellingStatus)
+        .thatIsNotFlaggedForCounselling()
+        .withDonation(null)
+        .withNotes(notes)
         .build();
-
 
     PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
         .withId(postDonationCounsellingId)
         .thatIsFlaggedForCounselling()
         .thatIsNotDeleted()
-        .withCreatedBy(ordinary)
-        .withLastUpdated(existingCounsellingDate)
-        .withLastUpdatedBy(ordinary)
-        .withCreatedDate(existingCounsellingDate)
+        .withCounsellingDate(existingCounsellingDate)
+        .withCounsellingStatus(null)
         .withDonation(aDonation()
             .withId(donationId)
             .build())
@@ -128,19 +119,13 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
         .withId(postDonationCounsellingId)
         .thatIsNotFlaggedForCounselling()
         .thatIsNotDeleted()
-        .withCreatedBy(ordinary)
-        .withLastUpdated(counsellingDate)
-        .withLastUpdatedBy(loggedInUser)
-        .withCreatedDate(existingCounsellingDate)
         .withCounsellingStatus(counsellingStatus)
         .withCounsellingDate(counsellingDate)
         .withDonation(aDonation()
             .withId(donationId)
-            .withNotes(notes)
             .build())
+        .withNotes(notes)
         .build();
-
-    when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
 
     when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
         .thenReturn(existingPostDonationCounselling);
@@ -148,7 +133,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
         .thenReturn(expectedPostDonationCounselling);
 
     PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingCRUDService
-        .updatePostDonationCounselling(postDonationCounsellingId, counsellingStatus, counsellingDate, notes);
+        .updatePostDonationCounselling(updatedPostDonationCounselling);
 
     verify(postDonationCounsellingRepository).findById(postDonationCounsellingId);
     verify(postDonationCounsellingRepository).update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling)));
@@ -156,65 +141,4 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
 
   }
 
-  @Test
-  public void testFlagForCounselling_shouldFlagForCounsellingAndReturnPostDonationCounselling() {
-    long postDonationCounsellingId = 75;
-    long donationId = 55;
-    CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
-    Date existingCounsellingDate = new DateTime().minusDays(1).toDate();
-    Date counsellingDate = new Date();
-    String notes = "some notes";
-
-    User ordinary = UserBuilder.aUser()
-        .withUsername("ordinary")
-        .withId(2l)
-        .build();
-
-    PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
-        .withId(postDonationCounsellingId)
-        .thatIsNotFlaggedForCounselling()
-        .thatIsNotDeleted()
-        .withCounsellingStatus(counsellingStatus)
-        .withCounsellingDate(existingCounsellingDate)
-        .withCreatedBy(ordinary)
-        .withLastUpdated(existingCounsellingDate)
-        .withLastUpdatedBy(ordinary)
-        .withCreatedDate(existingCounsellingDate)
-        .withDonation(aDonation()
-            .withId(donationId)
-            .withNotes(notes)
-            .build())
-        .build();
-
-    PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
-        .withId(postDonationCounsellingId)
-        .thatIsFlaggedForCounselling()
-        .thatIsNotDeleted()
-        .withCreatedDate(existingCounsellingDate)
-        .withCreatedBy(ordinary)
-        .withLastUpdated(counsellingDate)
-        .withLastUpdatedBy(loggedInUser)
-        .withCounsellingStatus(null)
-        .withCounsellingDate(null)
-        .withDonation(aDonation()
-            .withId(donationId)
-            .withNotes(null)
-            .build())
-        .build();
-
-    when(dateGeneratorService.generateDate()).thenReturn(counsellingDate);
-
-    when(postDonationCounsellingRepository.findById(postDonationCounsellingId))
-        .thenReturn(existingPostDonationCounselling);
-    when(postDonationCounsellingRepository.update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling))))
-        .thenReturn(expectedPostDonationCounselling);
-
-    PostDonationCounselling returnedPostDonationCounselling = postDonationCounsellingCRUDService
-        .flagForCounselling(postDonationCounsellingId);
-
-    verify(postDonationCounsellingRepository).findById(postDonationCounsellingId);
-    verify(postDonationCounsellingRepository).update(argThat(hasSameStateAsPostDonationCounselling(expectedPostDonationCounselling)));
-
-    assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
-  }
 }

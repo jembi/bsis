@@ -5,10 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
-import org.jembi.bsis.model.BaseEntity;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 
 @Entity
-public class GeneralConfig extends BaseEntity {
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+public class GeneralConfig extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

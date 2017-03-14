@@ -13,11 +13,11 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseModificationTrackerEntity;
 
 @Entity
 @Audited
-public class User extends BaseEntity {
+public class User extends BaseModificationTrackerEntity {
 
   private static final long serialVersionUID = 1L;
 

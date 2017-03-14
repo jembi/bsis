@@ -67,15 +67,13 @@ public class ComponentBatchCRUDService {
     componentBatch.getComponents().clear();
     Set<Component> components = new HashSet<>();
     for (Donation donation : donationBatch.getDonations()) {
-      for (Component component : donation.getComponents()) {
-        if (component.getParentComponent() == null) {
-          // found initial component
-          components.add(component);
-          component.setComponentBatch(componentBatch);
-          // Move received components to the component batch's location
-          component.setLocation(componentBatch.getLocation());
-          break;
-        }
+      Component component = donation.getInitialComponent();
+      if (component != null) {
+        // found initial component
+        components.add(component);
+        component.setComponentBatch(componentBatch);
+        // Move received components to the component batch's location
+        component.setLocation(componentBatch.getLocation());
       }
     }
     componentBatch.setComponents(components);

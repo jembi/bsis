@@ -21,12 +21,11 @@ import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.factory.DonorDeferralFactory;
 import org.jembi.bsis.factory.DonorViewModelFactory;
 import org.jembi.bsis.factory.LocationFactory;
-import org.jembi.bsis.factory.PostDonationCounsellingViewModelFactory;
+import org.jembi.bsis.factory.PostDonationCounsellingFactory;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
-import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.AdverseEventRepository;
 import org.jembi.bsis.repository.ContactMethodTypeRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
@@ -110,10 +109,11 @@ public class DonorController {
   private DuplicateDonorService duplicateDonorService;
 
   @Autowired
-  PostDonationCounsellingViewModelFactory postDonationCounsellingViewModelFactory;
+  PostDonationCounsellingFactory postDonationCounsellingFactory;
 
   @Autowired
   private DonorBackingFormValidator donorBackingFormValidator;
+
   @Autowired
   private DonorControllerService donorControllerService;
 
@@ -139,7 +139,7 @@ public class DonorController {
     map.put("isDonorCurrentlyDeferred", isCurrentlyDeferred);
     if (isCurrentlyDeferred) {
       map.put("donorLatestDeferredUntilDate", donorRepository.getLastDonorDeferralDate(id));
-      map.put("donorLatestDeferral", donorRepository.getLastDonorDeferral(id));
+      map.put("donorLatestDeferral", donorControllerService.getLastDeferral(id));
     }
 
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -164,7 +164,7 @@ public class DonorController {
     map.put("flaggedForCounselling", flaggedForCounselling);
     map.put("hasCounselling", hasCounselling);
     map.put("deferredUntil", CustomDateFormatter.getDateTimeString(donorRepository.getLastDonorDeferralDate(id)));
-    map.put("deferral", donorRepository.getLastDonorDeferral(id));
+    map.put("deferral", donorControllerService.getLastDeferral(id));
     map.put("canDelete", donorConstraintChecker.canDeleteDonor(id));
     map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
     map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
@@ -211,12 +211,16 @@ public class DonorController {
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_DONOR + "')")
   public Map<String, Object> addDonorFormGenerator(HttpServletRequest request) {
-
     Map<String, Object> map = new HashMap<String, Object>();
-    DonorBackingForm form = new DonorBackingForm();
-
-    map.put("addDonorForm", form);
-    addEditSelectorOptions(map);
+    map.put("addDonorForm", new DonorBackingForm());
+    map.put("venues", locationFactory.createFullViewModels(locationRepository.getVenues()));
+    // FIXME: preferredContactMethods, languages, idTypes and addressTypes are lists containing entities.
+    // Only ViewModels should be returned because they are designed to only return the required information/
+    // Returning entities can cause issues when the entities contain tracking fields. See BSIS-2469
+    map.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
+    map.put("languages", donorRepository.getAllLanguages());
+    map.put("idTypes", donorRepository.getAllIdTypes());
+    map.put("addressTypes", donorRepository.getAllAddressTypes());
     return map;
   }
 
@@ -305,10 +309,7 @@ public class DonorController {
   @RequestMapping(value = "{id}/deferrals", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
   public Map<String, Object> viewDonorDeferrals(@PathVariable("id") Long donorId) {
-
-    Donor donor = donorRepository.findDonorById(donorId);
     List<DonorDeferral> donorDeferrals = donorRepository.getDonorDeferrals(donorId);
-
     Map<String, Object> map = new HashMap<>();
     map.put("allDonorDeferrals", donorDeferralFactory.createDonorDeferralViewModels(donorDeferrals));
     map.put("isDonorCurrentlyDeferred", donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donorId));
@@ -437,17 +438,8 @@ public class DonorController {
 
     PostDonationCounselling postDonationCounselling = postDonationCounsellingRepository
         .findPostDonationCounsellingForDonor(donorId);
-    return postDonationCounsellingViewModelFactory
-        .createPostDonationCounsellingViewModel(postDonationCounselling);
-  }
-
-  private void addEditSelectorOptions(Map<String, Object> m) {
-    List<Location> venues = locationRepository.getVenues();
-    m.put("venues", locationFactory.createFullViewModels(venues));
-    m.put("preferredContactMethods", contactMethodTypeRepository.getAllContactMethodTypes());
-    m.put("languages", donorRepository.getAllLanguages());
-    m.put("idTypes", donorRepository.getAllIdTypes());
-    m.put("addressTypes", donorRepository.getAllAddressTypes());
+    return postDonationCounsellingFactory
+        .createViewModel(postDonationCounselling);
   }
 
   private int getNumberOfDonations(List<Donation> donations) {

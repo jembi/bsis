@@ -22,7 +22,9 @@ import org.jembi.bsis.repository.constant.ComponentTypeCombinationsQueryConstant
   @NamedQuery(name = ComponentTypeCombinationsQueryConstants.NAME_FIND_COMPONENT_TYPE_COMBINATION,
       query = ComponentTypeCombinationsQueryConstants.QUERY_FIND_COMPONENT_TYPE_COMBINATION),
   @NamedQuery(name = ComponentTypeCombinationsQueryConstants.NAME_VERIFY_UNIQUE_COMPONENT_TYPE_COMBINATION_NAME,
-      query = ComponentTypeCombinationsQueryConstants.QUERY_VERIFY_UNIQUE_COMPONENT_TYPE_COMBINATION_NAME)
+      query = ComponentTypeCombinationsQueryConstants.QUERY_VERIFY_UNIQUE_COMPONENT_TYPE_COMBINATION_NAME),
+  @NamedQuery(name = ComponentTypeCombinationsQueryConstants.NAME_VERIFY_COMPONENT_TYPE_COMBINATION_WITH_ID_EXISTS,
+      query = ComponentTypeCombinationsQueryConstants.QUERY_VERIFY_COMPONENT_TYPE_COMBINATION_WITH_ID_EXISTS)
 })
 
 @Audited

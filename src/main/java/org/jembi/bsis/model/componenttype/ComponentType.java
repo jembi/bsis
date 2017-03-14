@@ -52,6 +52,10 @@ public class ComponentType extends BaseModificationTrackerEntity {
 
   @Column(nullable = false)
   private Integer expiresAfter;
+  
+  private Integer maxBleedTime;
+  
+  private Integer maxTimeSinceDonation;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 30, nullable = false)
@@ -105,6 +109,8 @@ public class ComponentType extends BaseModificationTrackerEntity {
   private boolean canBeIssued = true;
 
   private boolean containsPlasma = true;
+  
+  private Double gravity;
 
   public Boolean getIsDeleted() {
     return isDeleted;
@@ -275,6 +281,14 @@ public class ComponentType extends BaseModificationTrackerEntity {
     this.containsPlasma = containsPlasma;
   }
 
+  public Double getGravity() {
+    return gravity;
+  }
+
+  public void setGravity(Double gravity) {
+    this.gravity = gravity;
+  }
+
   public void copy(ComponentType componentType) {
     this.componentTypeName = componentType.getComponentTypeName();
     this.componentTypeCode = componentType.getComponentTypeCode();
@@ -294,7 +308,41 @@ public class ComponentType extends BaseModificationTrackerEntity {
     this.canBeIssued = componentType.getCanBeIssued();
     this.isDeleted = componentType.getIsDeleted();
     this.containsPlasma = componentType.getContainsPlasma();
+    this.maxBleedTime = componentType.getMaxBleedTime();
+    this.maxTimeSinceDonation = componentType.getMaxTimeSinceDonation();
+    this.gravity = componentType.getGravity();
   }
 
+  /**
+   * Returns the max bleed time in minutes
+   * @return
+   */
+  public Integer getMaxBleedTime() {
+    return maxBleedTime;
+  }
+
+  /**
+   *  Sets the max bleed time (in minutes)
+   * @param maxBleedTime
+   */
+  public void setMaxBleedTime(Integer maxBleedTime) {
+    this.maxBleedTime = maxBleedTime;
+  }
+
+  /**
+   * Returns the max time since donation in hours
+   * @return
+   */
+  public Integer getMaxTimeSinceDonation() {
+    return maxTimeSinceDonation;
+  }
+
+  /**
+   * Sets the  max time since donation (in hours)
+   * @param maxTimeSinceDonation
+   */
+  public void setMaxTimeSinceDonation(Integer maxTimeSinceDonation) {
+    this.maxTimeSinceDonation = maxTimeSinceDonation;
+  }
 
 }

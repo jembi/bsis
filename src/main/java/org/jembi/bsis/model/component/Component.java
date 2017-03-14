@@ -51,6 +51,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN_AND_STATUS,
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN_AND_STATUS),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_ANY_COMPONENT,
+        query = ComponentNamedQueryConstants.QUERY_FIND_ANY_COMPONENT),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN,
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENT_BY_CODE_AND_DIN),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENT_BY_CODE_AND_DIN_IN_STOCK,
@@ -62,7 +64,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_FOR_EXPORT,
         query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_FOR_EXPORT),
     @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE,
-        query = ComponentNamedQueryConstants.QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE)
+        query = ComponentNamedQueryConstants.QUERY_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS,
+        query = ComponentNamedQueryConstants.QUERY_FIND_COMPONENTS_BY_DIN_AND_COMPONENT_CODE_AND_STATUS),
+    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_SAFE_COMPONENTS,
+        query = ComponentNamedQueryConstants.QUERY_FIND_SAFE_COMPONENTS)
 })
 @Entity
 @Audited
@@ -91,6 +97,9 @@ public class Component extends BaseModificationTrackerEntity {
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date issuedOn;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date processedOn;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 30, nullable = false)
@@ -131,22 +140,6 @@ public class Component extends BaseModificationTrackerEntity {
   private Location location;
 
   private Integer weight;
-
-  public Component() {
-    super();
-  }
-
-  public void copy(Component component) {
-    assert (this.getId().equals(component.getId()));
-    this.donation = component.donation;
-    this.componentType = component.componentType;
-    this.createdOn = component.createdOn;
-    this.expiresOn = component.expiresOn;
-    this.notes = component.notes;
-    this.componentCode = component.componentCode;
-    this.location = component.location;
-    this.inventoryStatus = component.inventoryStatus;
-  }
 
   public Donation getDonation() {
     return donation;
@@ -257,6 +250,16 @@ public class Component extends BaseModificationTrackerEntity {
     this.subdivisionCode = subdivisionCode;
   }
 
+  /**
+   * Determines if this component is the initial component for a donation
+   * (which means that it has no parent)
+   *
+   * @return true if this component is the root component for this donation, false otherwise
+   */
+  public boolean isInitialComponent() {
+    return parentComponent == null;
+  }
+
   public Component getParentComponent() {
     return parentComponent;
   }
@@ -316,4 +319,13 @@ public class Component extends BaseModificationTrackerEntity {
   public void setWeight(Integer weight) {
     this.weight = weight;
   }
+
+  public Date getProcessedOn() {
+    return processedOn;
+  }
+
+  public void setProcessedOn(Date processedOn) {
+    this.processedOn = processedOn;
+  }
+
 }

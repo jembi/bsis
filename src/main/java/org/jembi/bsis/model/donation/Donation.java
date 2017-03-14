@@ -61,7 +61,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE,
         query = DonationNamedQueryConstants.QUERY_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATIONS_FOR_EXPORT,
-        query = DonationNamedQueryConstants.QUERY_FIND_DONATIONS_FOR_EXPORT)
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATIONS_FOR_EXPORT),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED,
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER,
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER)
 })
 @Entity
 @Audited
@@ -180,6 +184,13 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
   // If this donation has been released in a test batch
   @Column(nullable = false)
   private boolean released = false;
+  
+  @Column(nullable = true)
+  private String flagCharacters;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length = 10)
+  private Titre titre;
 
   public Donation() {
     super();
@@ -214,6 +225,8 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.bleedEndTime = donation.getBleedEndTime();
     this.venue = donation.getVenue();
     this.adverseEvent = donation.getAdverseEvent();
+    this.titre = donation.getTitre();
+    this.flagCharacters = donation.getFlagCharacters();
   }
 
   public String getDonationIdentificationNumber() {
@@ -284,7 +297,24 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
     this.venue = donation.getVenue();
     this.bloodAbo = donation.bloodAbo;
     this.bloodRh = donation.bloodRh;
+    this.flagCharacters = donation.flagCharacters;
     this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
+    this.titre = donation.titre;
+  }
+
+  /**
+   * Finds the initial component (which is the component which is the parent
+   * of all other components) for this Donation.
+   *
+   * @return Component, or null if there are no components
+   */
+  public Component getInitialComponent() {
+    for (Component component : this.components) {
+      if (component.isInitialComponent()) {
+        return component;
+      }
+    }
+    return null;
   }
 
   public List<Component> getComponents() {
@@ -496,6 +526,22 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
 
   public void setReleased(boolean released) {
     this.released = released;
+  }
+
+  public Titre getTitre () {
+    return titre;
+  }
+
+  public void setTitre (Titre titre) {
+    this.titre = titre;
+  }
+
+  public String getFlagCharacters() {
+    return flagCharacters;
+  }
+
+  public void setFlagCharacters(String flagCharacters) {
+    this.flagCharacters = flagCharacters;
   }
 
 }

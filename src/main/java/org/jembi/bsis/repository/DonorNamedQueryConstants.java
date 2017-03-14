@@ -37,8 +37,10 @@ public class DonorNamedQueryConstants {
   public static final String QUERY_FIND_DONOR_BY_DONATION_IDENTIFICATION_NUMBER =
       "SELECT d.donor " +
       "FROM Donation d " +
-      "WHERE d.donationIdentificationNumber = :donationIdentificationNumber " +
+      "WHERE (d.donationIdentificationNumber = :donationIdentificationNumber " +
+      "OR CONCAT(d.donationIdentificationNumber, d.flagCharacters) = :donationIdentificationNumber) " +
       "AND d.donor.isDeleted = :isDeleted " +
+      "AND d.isDeleted = :isDonationDeleted " +
       "AND d.donor.donorStatus NOT IN :excludedStatuses";
 
   public static final String NAME_COUNT_DONOR_WITH_ID = "Donor.countDonorWithId";

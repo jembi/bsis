@@ -1,8 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-    <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
-    <DonationType id="2" donationType="Family" isDeleted="false"/>
-    <DonationType id="3" donationType="Autologous" isDeleted="false"/>
-    <DonationType id="4" donationType="Other" isDeleted="false"/>
-    <DonationType id="5" donationType="Rubbish" isDeleted="true"/>
+  <user id="1" emailId="admin" firstName="admin" isactive="1" isAdmin="1" isDeleted="0" isStaff="1" username="admin"
+    password="admin" createdDate="2017-01-15" />
+
+    <DonationType id="1" donationType="Voluntary" isDeleted="false" createdDate="2017-01-23" createdBy_id="1"/>
+    <DonationType id="2" donationType="Family" isDeleted="false" createdDate="2017-01-23" createdBy_id="1"/>
+    <DonationType id="3" donationType="Autologous" isDeleted="false" createdDate="2017-01-23" createdBy_id="1"/>
+    <DonationType id="4" donationType="Other" isDeleted="false" createdDate="2017-01-23" createdBy_id="1"/>
+    <DonationType id="5" donationType="Rubbish" isDeleted="true" createdDate="2017-01-23" createdBy_id="1"/>
 </dataset>

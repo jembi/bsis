@@ -1,8 +1,12 @@
 package org.jembi.bsis.model.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class BloodGroup {
 
@@ -55,6 +59,21 @@ public class BloodGroup {
 
   public BloodGroup toBloodGroup(String bloodGroup) {
     return BloodGroup.bloodgroups.get(bloodGroup.toLowerCase());
+  }
+
+  public static List<BloodGroup> toBloodGroups(List<String> bloodGroups) {
+    if (bloodGroups == null) {
+      return null;
+    }
+    List<BloodGroup> bloodGroupsList = new ArrayList<BloodGroup>();
+    for (String bloodGroup : bloodGroups) {
+      BloodGroup bg = new BloodGroup(bloodGroup);
+      if (StringUtils.isEmpty(bg.getBloodAbo())) {
+        throw new IllegalArgumentException("Invalid bloodGroup.");
+      }
+      bloodGroupsList.add(bg);
+    }
+    return bloodGroupsList;
   }
 
   @Override

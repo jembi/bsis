@@ -46,7 +46,7 @@ public class UserBackingFormValidator extends BaseValidator<UserBackingForm> {
   private boolean checkCurrentPassword(UserBackingForm form, Errors errors) {
 
     if (form.getCurrentPassword() == null) {
-      errors.rejectValue("user.password", "user.incorrect", "Current password is required");
+      errors.rejectValue("password", "user.incorrect", "Current password is required");
       return false;
     }
 
@@ -54,33 +54,33 @@ public class UserBackingFormValidator extends BaseValidator<UserBackingForm> {
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     boolean matches = encoder.matches(form.getCurrentPassword(), user.getPassword());
     if (!matches) {
-      errors.rejectValue("user.password", "user.incorrect", "Current password does not match");
+      errors.rejectValue("password", "user.incorrect", "Current password does not match");
     }
     return matches;
   }
 
   private void comparePassword(UserBackingForm form, Errors errors) {
     if (StringUtils.isBlank(form.getPassword()) || StringUtils.isBlank(form.getConfirmPassword())) {
-      errors.rejectValue("user.password", "user.incorrect", "Password cannot be blank");
+      errors.rejectValue("password", "user.incorrect", "Password cannot be blank");
     } else if (!form.getPassword().equals(form.getConfirmPassword())) {
-      errors.rejectValue("user.password", "user.incorrect", "Passwords do not match");
+      errors.rejectValue("password", "user.incorrect", "Passwords do not match");
     }
 
   }
 
   private void checkRoles(UserBackingForm form, Errors errors) {
     if (form.getRoles().isEmpty()) {
-      errors.rejectValue("user.roles", "user.selectRole", "Must select at least one Role");
+      errors.rejectValue("roles", "user.selectRole", "Must select at least one Role");
     }
   }
 
   private void checkUserName(UserBackingForm form, Errors errors) {
 
     boolean flag = false;
-    String userName = form.getUser().getUsername();
+    String userName = form.getUsername();
 
-    if (isDuplicateUserName(form.getUser())) {
-      errors.rejectValue("user.username", "userName.nonunique", "Username already exists.");
+    if (isDuplicateUserName(form)) {
+      errors.rejectValue("username", "userName.nonunique", "Username already exists.");
     }
 
     if (userName.length() <= 2 || userName.length() >= 50) {
@@ -92,7 +92,7 @@ public class UserBackingFormValidator extends BaseValidator<UserBackingForm> {
     }
 
     if (flag && userName.length() > 0) {
-      errors.rejectValue("user.username", "user.incorrect",
+      errors.rejectValue("username", "user.incorrect",
           "Username invalid. Use only alphanumeric characters, underscore (_), hyphen (-), and period (.).");
     }
 
@@ -126,14 +126,14 @@ public class UserBackingFormValidator extends BaseValidator<UserBackingForm> {
     return false;
   }
 
-  private boolean isDuplicateUserName(User user) {
-    String userName = user.getUsername();
+  private boolean isDuplicateUserName(UserBackingForm form) {
+    String userName = form.getUsername();
     if (StringUtils.isBlank(userName)) {
       return false;
     }
 
     User existingUser = userRepository.findUser(userName);
-    if (existingUser != null && !existingUser.getId().equals(user.getId())) {
+    if (existingUser != null && !existingUser.getId().equals(form.getId())) {
       return true;
     }
 

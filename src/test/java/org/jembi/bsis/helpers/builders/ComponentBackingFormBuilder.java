@@ -6,12 +6,12 @@ public class ComponentBackingFormBuilder extends AbstractBuilder<ComponentBackin
 
   private Long id;
   private Integer weight;
-  
+
   public ComponentBackingFormBuilder withId(Long id) {
     this.id = id;
     return this;
   }
-  
+
   public ComponentBackingFormBuilder withWeight(Integer weight) {
     this.weight = weight;
     return this;

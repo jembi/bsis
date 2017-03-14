@@ -369,7 +369,7 @@ public class DataImportService {
     Map<String, IdType> idTypeCache = buildIdTypeCache();
     Map<String, ContactMethodType> contactMethodTypeCache = buildContactMethodTypeCache();
     Map<String, AddressType> addressTypeCache = buildAddressTypeCache();
-    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRuleRepository.getBloodTestingRules(false);
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRuleRepository.getBloodTestingRules(false, false);
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -683,7 +683,7 @@ public class DataImportService {
     Map<String, AdverseEventType> adverseEventTypeCache = buildAdverseEventTypeCache();
     Map<String, DonationBatch> donationBatches = new HashMap<>();
     Map<String, TestBatch> testBatches = new HashMap<>();
-    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRuleRepository.getBloodTestingRules(false);
+    List<BloodTestingRule> bloodTestingRuleCache = bloodTestingRuleRepository.getBloodTestingRules(false, false);
 
     // Keep a reference to the row containing the headers
     Row headers = null;
@@ -732,7 +732,10 @@ public class DataImportService {
 
           case "donationType":
             DonationTypeBackingForm donationTypeBackingForm = new DonationTypeBackingForm();
-            donationTypeBackingForm.setDonationType(donationTypeCache.get(cell.getStringCellValue()));
+            DonationType donationType = donationTypeCache.get(cell.getStringCellValue());
+            donationTypeBackingForm.setId(donationType.getId());
+            donationTypeBackingForm.setType(donationType.getDonationType());
+            donationTypeBackingForm.setIsDeleted(donationType.getIsDeleted());
             donationBackingForm.setDonationType(donationTypeBackingForm);
             break;
 
@@ -1275,7 +1278,7 @@ public class DataImportService {
 
   private Map<String, Location> buildLocationCache () {
     Map<String, Location>  locationCache = new HashMap<>();
-    List<Location> locations = locationRepository.getAllLocations();
+    List<Location> locations = locationRepository.getAllLocations(true);
     for (Location location : locations) {
       locationCache.put(location.getName(), location);
     }
