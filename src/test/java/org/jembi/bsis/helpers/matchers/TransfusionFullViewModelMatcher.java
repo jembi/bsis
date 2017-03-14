@@ -18,7 +18,6 @@ public class TransfusionFullViewModelMatcher extends TypeSafeMatcher<Transfusion
   public void describeTo(Description description) {
     description.appendText("A transfusion view model with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nDeleted: ").appendValue(expected.getIsDeleted())
         .appendText("\nNotes: ").appendValue(expected.getNotes())
         .appendText("\nDIN: ").appendValue(expected.getDonationIdentificationNumber())
         .appendText("\nPatient: ").appendValue(expected.getPatient())
@@ -32,7 +31,6 @@ public class TransfusionFullViewModelMatcher extends TypeSafeMatcher<Transfusion
   @Override
   public boolean matchesSafely(TransfusionFullViewModel actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
-        Objects.equals(actual.getIsDeleted(), expected.getIsDeleted()) &&
         Objects.equals(actual.getNotes(), expected.getNotes()) &&
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
         Objects.equals(actual.getPatient(), expected.getPatient()) &&

@@ -1,7 +1,5 @@
 package org.jembi.bsis.viewmodel;
 
-import java.util.Objects;
-
 public class TransfusionReactionTypeViewModel {
 
   private long id;
@@ -30,18 +28,5 @@ public class TransfusionReactionTypeViewModel {
 
   public void setIsDeleted(boolean isDeleted) {
     this.isDeleted = isDeleted;
-  }
-
-  @Override
-  public boolean equals(Object other) {
-
-    if (!(other instanceof TransfusionReactionTypeViewModel)) {
-      return false;
-    }
-
-    TransfusionReactionTypeViewModel otherViewModel = (TransfusionReactionTypeViewModel) other;
-    return Objects.equals(otherViewModel.getId(), getId()) 
-        && Objects.equals(otherViewModel.getName(), getName())
-        && Objects.equals(otherViewModel.getIsDeleted(), getIsDeleted());
   }
 }

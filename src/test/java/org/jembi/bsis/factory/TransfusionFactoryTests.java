@@ -165,7 +165,71 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withPatient(patientViewModel)
         .withTransfusionReactionType(transfusionReactionTypeViewModel)
         .withDateTransfused(transfusionDate)
+        .build();
+
+    // Setup mock
+    when(componentFactory.createComponentViewModel(component)).thenReturn(componentViewModel);
+    when(transfusionReactionTypeFactory.createTransfusionReactionTypeViewModel(transfusionReactionType))
+        .thenReturn(transfusionReactionTypeViewModel);
+    when(patientFactory.createViewModel(patient)).thenReturn(patientViewModel);
+    when(locationFactory.createViewModel(receivedFrom)).thenReturn(receivedFromViewModel);
+
+    // Run test
+    TransfusionFullViewModel returnedViewModel = transfusionFactory.createFullViewModel(transfusion);
+
+    //Verify
+    assertThat(returnedViewModel, hasSameStateAsTransfusionFullViewModel(expectedViewModel));
+  }
+
+  @Test
+  public void testCreateFullViewModelWithNullReactionType_shouldReturnViewModelWithNullReactionType() {
+    Date transfusionDate = new Date();
+    String donationIdentificationNumber = "1234567";
+
+    TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
+    Patient patient = aPatient().withId(1L).build();
+    Component component = aComponent()
+        .withId(1L)
+        .withDonation(aDonation()
+            .withId(1L)
+            .withDonationIdentificationNumber(donationIdentificationNumber)
+            .build())
+        .build();
+    Location receivedFrom = aUsageSite().withId(1L).build();
+    Transfusion transfusion = aTransfusion()
+        .withId(1L)
+        .withComponent(component)
+        .withReceivedFrom(receivedFrom)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withPatient(patient)
+        .withTransfusionReactionType(transfusionReactionType)
+        .withTransfusionReactionType(null)
+        .withDateTransfused(transfusionDate)
         .thatIsNotDeleted()
+        .build();
+
+    // setup expectations
+    ComponentViewModel componentViewModel = aComponentViewModel()
+        .withId(1L)
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .build();
+
+    LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
+    PatientViewModel patientViewModel = aPatientViewModel().withId(1L).build();
+    TransfusionReactionTypeViewModel transfusionReactionTypeViewModel = aTransfusionReactionTypeViewModel()
+        .withId(1L)
+        .build();
+
+    TransfusionFullViewModel expectedViewModel = aTransfusionFullViewModel()
+        .withId(1L)
+        .withDonationIdentificationNumber(donationIdentificationNumber)
+        .withComponent(componentViewModel)
+        .withUsageSite(receivedFromViewModel)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withPatient(patientViewModel)
+        .withTransfusionReactionType(transfusionReactionTypeViewModel)
+        .withTransfusionReactionType(null)
+        .withDateTransfused(transfusionDate)
         .build();
 
     // Setup mock

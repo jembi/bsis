@@ -25,8 +25,6 @@ public class TransfusionFullViewModel extends BaseViewModel {
 
   private String notes;
 
-  private boolean isDeleted;
-
   public String getDonationIdentificationNumber() {
     return donationIdentificationNumber;
   }
@@ -90,13 +88,5 @@ public class TransfusionFullViewModel extends BaseViewModel {
 
   public void setDateTransfused(Date dateTransfused) {
     this.dateTransfused = dateTransfused;
-  }
-
-  public boolean getIsDeleted() {
-    return isDeleted;
-  }
-
-  public void setIsDeleted(boolean isDeleted) {
-    this.isDeleted = isDeleted;
   }
 }

@@ -94,4 +94,17 @@ public class TransfusionCRUDService {
     }
     return components.get(0);
   }
+
+  public Transfusion updateTransfusion(Transfusion transfusion,  String donationIdentificatioNumber, String transfusedComponentCode, Long transfusedComponentTypeId) {
+    Transfusion existingTransfusion = transfusionRepository.findTransfusionById(transfusion.getId());
+
+    existingTransfusion.setDateTransfused(transfusion.getDateTransfused());
+    existingTransfusion.setIsDeleted(transfusion.getIsDeleted());
+    existingTransfusion.setNotes(transfusion.getNotes());
+    existingTransfusion.setPatient(transfusion.getPatient());
+    existingTransfusion.setReceivedFrom(transfusion.getReceivedFrom());
+    existingTransfusion.setTransfusionOutcome(transfusion.getTransfusionOutcome());
+    existingTransfusion.setTransfusionReactionType(transfusion.getTransfusionReactionType());
+    return transfusionRepository.update(existingTransfusion);
+  }
 }

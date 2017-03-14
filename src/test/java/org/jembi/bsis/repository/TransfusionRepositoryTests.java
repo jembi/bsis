@@ -28,8 +28,11 @@ import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.NoResultException;
 
 public class TransfusionRepositoryTests extends SecurityContextDependentTestSuite {
   
@@ -65,6 +68,33 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
         .getSingleResult();
 
     assertThat(retrievedTransfusion, hasSameStateAsTransfusion(savedTransfusion));
+  }
+
+  @Test
+  public void testFindTransfusionByIdWithExistingTransfusion_shouldReturnExistingTransfusion() {
+    // Set up
+    Transfusion transfusion = aTransfusion()
+        .withDateTransfused(new Date())
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withReceivedFrom(aUsageSite().buildAndPersist(entityManager))
+        .withComponent(aComponent()
+            .buildAndPersist(entityManager))
+        .buildAndPersist(entityManager);
+
+    // Test
+    Transfusion returnedTransfusion = transfusionRepository.findTransfusionById(transfusion.getId());
+
+    // Verify
+    Assert.assertEquals("Transfusion was found", transfusion, returnedTransfusion);
+  }
+
+  @Test(expected = NoResultException.class)
+  public void testFindTransfusionByIdWithNoExistingTransfusion_shouldThrow() {
+    // Test
+    transfusionRepository.findTransfusionById(20L);
   }
   
   @Test

@@ -11,11 +11,14 @@ import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aUsageS
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.PatientBackingFormBuilder.aPatientBackingForm;
+import static org.jembi.bsis.helpers.builders.PatientBuilder.aPatient;
 import static org.jembi.bsis.helpers.builders.TransfusionBackingFormBuilder.aTransfusionBackingForm;
+import static org.jembi.bsis.helpers.builders.TransfusionBuilder.aTransfusion;
 import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBackingFormBuilder.aTransfusionReactionTypeBackingForm;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +31,13 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.repository.TransfusionRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -60,6 +65,9 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
   @Mock
   private LocationRepository locationRepository;
+
+  @Mock
+  private TransfusionRepository transfusionRepository;
 
   @Test
   public void testValidateValidTransfusionFormWithDINAndComponentCode_shouldntGetErrors() {
@@ -109,6 +117,219 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     assertThat(errors.getErrorCount(), is(0));
+  }
+
+  @Test
+  public void testValidateTransfusionUpdateFormWithComponentCodeAndInvalidComponentStatus_shoulGetOneError() {
+    // Set up data
+    Date transfusedDate = (new DateTime()).minusDays(5).toDate();
+    String din = "12345";
+    String componentCode = "1234";
+
+    Date componentCreatedOnDate = (new DateTime()).minusDays(10).toDate();
+
+    Long componentId = 1L;
+    Component component = aComponent()
+        .withId(componentId)
+        .withComponentCode(componentCode)
+        .withStatus(ComponentStatus.ISSUED)
+        .withCreatedOn(componentCreatedOnDate)
+        .build();
+
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber(din)
+        .withComponent(component)
+        .build();
+
+    long usageSiteId = 1L;
+    long transfusionId = 1L;
+    Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
+    LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
+
+    TransfusionBackingForm form = aTransfusionBackingForm()
+        .withId(1L)
+        .withDonationIdentificationNumber(din)
+        .withComponentCode(componentCode)
+        .withDateTransfused(transfusedDate)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withReceivedFrom(aUsageSite)
+        .withPatient(aPatientBackingForm()
+            .withName1("name1")
+            .withName2("name2")
+            .build())
+        .build();
+
+    Transfusion existingTransfusion = aTransfusion()
+        .withId(transfusionId)
+        .withComponent(component)
+        .withDateTransfused(transfusedDate)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withReceivedFrom(aUsageSite().withId(usageSiteId).build())
+        .withPatient(aPatient()
+            .withName1("name1")
+            .withName2("name2")
+            .build())
+        .build();
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "transfusion");
+
+    when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
+    when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
+    when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
+    when(transfusionRepository.findTransfusionById(transfusionId)).thenReturn(existingTransfusion);
+
+    // Run test
+    validator.validateForm(form, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("componentCode").getCode(), is("errors.invalid.componentStatus"));
+    assertThat(errors.getFieldError("componentCode").getDefaultMessage(), is("There is no component in TRANSFUSED state for specified donationIdentificationNumber and componentCode"));
+  }
+
+  @Test
+  public void testValidateTransfusionUpdateFormWithComponentTypeAndInvalidComponentStatus_shoulGetOneError() {
+    // Set up data
+    Date transfusedDate = (new DateTime()).minusDays(5).toDate();
+    String din = "12345";
+    String componentCode = "1234";
+
+    Date componentCreatedOnDate = (new DateTime()).minusDays(10).toDate();
+
+    Long componentId = 1L;
+    Component component = aComponent()
+        .withId(componentId)
+        .withComponentCode(componentCode)
+        .withStatus(ComponentStatus.ISSUED)
+        .withCreatedOn(componentCreatedOnDate)
+        .build();
+
+    List<Component> components = Arrays.asList(component);
+
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber(din)
+        .withComponent(component)
+        .build();
+
+    long usageSiteId = 1L;
+    long transfusionId = 1L;
+    Long componentTypeId = 1L;
+    Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
+    LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
+
+    TransfusionBackingForm form = aTransfusionBackingForm()
+        .withId(1L)
+        .withDonationIdentificationNumber(din)
+        .withComponentType(aComponentTypeBackingForm().withId(componentTypeId).build())
+        .withDateTransfused(transfusedDate)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withReceivedFrom(aUsageSite)
+        .withPatient(aPatientBackingForm()
+            .withName1("name1")
+            .withName2("name2")
+            .build())
+        .build();
+
+    Transfusion existingTransfusion = aTransfusion()
+        .withId(transfusionId)
+        .withComponent(component)
+        .withDateTransfused(transfusedDate)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withReceivedFrom(aUsageSite().withId(usageSiteId).build())
+        .withPatient(aPatient()
+            .withName1("name1")
+            .withName2("name2")
+            .build())
+        .build();
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "transfusion");
+
+    when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
+    when(componentRepository.findComponentsByDINAndType(din, componentTypeId)).thenReturn(components);
+    when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
+    when(transfusionRepository.findTransfusionById(transfusionId)).thenReturn(existingTransfusion);
+
+    // Run test
+    validator.validateForm(form, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("componentType").getCode(), is("errors.invalid.componentStatus"));
+    assertThat(errors.getFieldError("componentType").getDefaultMessage(), is("There is no component in TRANSFUSED state for specified donationIdentificationNumber and componentType"));
+  }
+
+  @Test
+  public void testValidateTransfusionUpdateFormWithDifferentComponentType_shoulGetOneError() {
+    // Set up data
+    Date transfusedDate = (new DateTime()).minusDays(5).toDate();
+    String din = "12345";
+    String componentCode = "1234";
+
+    Date componentCreatedOnDate = (new DateTime()).minusDays(10).toDate();
+
+    Long componentId = 1L;
+    Long differentComponentId = 2L;
+    Component component = aComponent()
+        .withId(componentId)
+        .withComponentCode(componentCode)
+        .withStatus(ComponentStatus.TRANSFUSED)
+        .withCreatedOn(componentCreatedOnDate)
+        .build();
+
+    List<Component> components = Arrays.asList(component);
+
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber(din)
+        .withComponent(component)
+        .build();
+
+    long usageSiteId = 1L;
+    long transfusionId = 1L;
+    Long componentTypeId = 1L;
+    Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
+    LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
+
+    TransfusionBackingForm form = aTransfusionBackingForm()
+        .withId(1L)
+        .withDonationIdentificationNumber(din)
+        .withComponentType(aComponentTypeBackingForm().withId(componentTypeId).build())
+        .withDateTransfused(transfusedDate)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withReceivedFrom(aUsageSite)
+        .withPatient(aPatientBackingForm()
+            .withName1("name1")
+            .withName2("name2")
+            .build())
+        .build();
+
+    Transfusion existingTransfusion = aTransfusion()
+        .withId(transfusionId)
+        .withComponent(aComponent().withId(differentComponentId).build())
+        .withDateTransfused(transfusedDate)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .withReceivedFrom(aUsageSite().withId(usageSiteId).build())
+        .withPatient(aPatient()
+            .withName1("name1")
+            .withName2("name2")
+            .build())
+        .build();
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "transfusion");
+
+    when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
+    when(componentRepository.findComponentsByDINAndType(din, componentTypeId)).thenReturn(components);
+    when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
+    when(transfusionRepository.findTransfusionById(transfusionId)).thenReturn(existingTransfusion);
+
+    // Run test
+    validator.validateForm(form, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("donationIdentificationNumber").getCode(), is("errors.invalid.componentCantBeEdited"));
+    assertThat(errors.getFieldError("donationIdentificationNumber").getDefaultMessage(), is("The component cannot be modified"));
   }
 
   @Test
