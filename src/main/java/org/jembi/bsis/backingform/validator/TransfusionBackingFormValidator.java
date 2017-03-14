@@ -92,16 +92,9 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
                     "There is no component in ISSUED state for specified donationIdentificationNumber and componentType");
               }
             } else { // update existing transfusion
-              Transfusion transfusion = transfusionRepository.findTransfusionById(form.getId());
-
               if (component != null && component.getStatus() != ComponentStatus.TRANSFUSED) {
                 errors.rejectValue("componentType", "errors.invalid.componentStatus",
                     "There is no component in TRANSFUSED state for specified donationIdentificationNumber and componentType");
-              }
-
-              if (component != null && !component.getId().equals(transfusion.getComponent().getId())) {
-                errors.rejectValue("componentType", "errors.invalid.componentStatus",
-                    "The component cannot be modified");
               }
             }
           }
@@ -124,16 +117,9 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
                 "There is no component in ISSUED state for specified donationIdentificationNumber and componentCode");
           }
         } else { // update existing transfusion
-          Transfusion transfusion = transfusionRepository.findTransfusionById(form.getId());
-
           if (component != null && component.getStatus() != ComponentStatus.TRANSFUSED) {
             errors.rejectValue("componentCode", "errors.invalid.componentStatus",
                 "There is no component in TRANSFUSED state for specified donationIdentificationNumber and componentCode");
-          }
-
-          if (component != null && !component.getId().equals(transfusion.getComponent().getId())) {
-            errors.rejectValue("componentCode", "errors.invalid.componentStatus",
-                "The component cannot be modified");
           }
         }
       } catch (NoResultException e) {
@@ -148,6 +134,16 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
         }
       }
     }
+
+    if (component != null && form.getId() != null) {
+      Transfusion transfusion = transfusionRepository.findTransfusionById(form.getId());
+
+      if (!component.getId().equals(transfusion.getComponent().getId())) {
+        errors.rejectValue("componentType", "errors.invalid.componentHasBeenEdited",
+            "The component cannot be modified");
+      }
+    }
+
     return component;
   }
 

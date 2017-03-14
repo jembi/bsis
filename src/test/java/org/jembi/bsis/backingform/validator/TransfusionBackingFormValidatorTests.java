@@ -188,75 +188,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateTransfusionUpdateFormWithDifferentComponentCode_shoulGetOneError() {
-    // Set up data
-    Date transfusedDate = (new DateTime()).minusDays(5).toDate();
-    String din = "12345";
-    String componentCode = "1234";
-
-    Date componentCreatedOnDate = (new DateTime()).minusDays(10).toDate();
-
-    Long componentId = 1L;
-    Long differentComponentId = 2L;
-    Component component = aComponent()
-        .withId(componentId)
-        .withComponentCode(componentCode)
-        .withStatus(ComponentStatus.TRANSFUSED)
-        .withCreatedOn(componentCreatedOnDate)
-        .build();
-
-    Donation donation = aDonation()
-        .withDonationIdentificationNumber(din)
-        .withComponent(component)
-        .build();
-
-    long usageSiteId = 1L;
-    long transfusionId = 1L;
-    Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
-    LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
-
-    TransfusionBackingForm form = aTransfusionBackingForm()
-        .withId(1L)
-        .withDonationIdentificationNumber(din)
-        .withComponentCode(componentCode)
-        .withDateTransfused(transfusedDate)
-        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-        .withReceivedFrom(aUsageSite)
-        .withPatient(aPatientBackingForm()
-            .withName1("name1")
-            .withName2("name2")
-            .build())
-        .build();
-
-    Transfusion existingTransfusion = aTransfusion()
-        .withId(transfusionId)
-        .withComponent(aComponent().withId(differentComponentId).build())
-        .withDateTransfused(transfusedDate)
-        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-        .withReceivedFrom(aUsageSite().withId(usageSiteId).build())
-        .withPatient(aPatient()
-            .withName1("name1")
-            .withName2("name2")
-            .build())
-        .build();
-
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "transfusion");
-
-    when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
-    when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
-    when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    when(transfusionRepository.findTransfusionById(transfusionId)).thenReturn(existingTransfusion);
-
-    // Run test
-    validator.validateForm(form, errors);
-
-    // Verify
-    assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("componentCode").getCode(), is("errors.invalid.componentStatus"));
-    assertThat(errors.getFieldError("componentCode").getDefaultMessage(), is("The component cannot be modified"));
-  }
-
-  @Test
   public void testValidateTransfusionUpdateFormWithComponentTypeAndInvalidComponentStatus_shoulGetOneError() {
     // Set up data
     Date transfusedDate = (new DateTime()).minusDays(5).toDate();
@@ -397,7 +328,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("componentType").getCode(), is("errors.invalid.componentStatus"));
+    assertThat(errors.getFieldError("componentType").getCode(), is("errors.invalid.componentHasBeenEdited"));
     assertThat(errors.getFieldError("componentType").getDefaultMessage(), is("The component cannot be modified"));
   }
 
