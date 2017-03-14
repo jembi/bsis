@@ -198,7 +198,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     Long componentId = 1L;
     Component component = aComponent()
-        .withId(1L)
+        .withId(componentId)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.ISSUED)
         .withCreatedOn(componentCreatedOnDate)
@@ -328,8 +328,8 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     // Verify
     assertThat(errors.getErrorCount(), is(1));
-    assertThat(errors.getFieldError("componentType").getCode(), is("errors.invalid.componentHasBeenEdited"));
-    assertThat(errors.getFieldError("componentType").getDefaultMessage(), is("The component cannot be modified"));
+    assertThat(errors.getFieldError("donationIdentificationNumber").getCode(), is("errors.invalid.componentCantBeEdited"));
+    assertThat(errors.getFieldError("donationIdentificationNumber").getDefaultMessage(), is("The component cannot be modified"));
   }
 
   @Test

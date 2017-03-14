@@ -139,7 +139,7 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
       Transfusion transfusion = transfusionRepository.findTransfusionById(form.getId());
 
       if (!component.getId().equals(transfusion.getComponent().getId())) {
-        errors.rejectValue("componentType", "errors.invalid.componentHasBeenEdited",
+        errors.rejectValue("donationIdentificationNumber", "errors.invalid.componentCantBeEdited",
             "The component cannot be modified");
       }
     }
