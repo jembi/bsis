@@ -111,11 +111,11 @@ public class TransfusionCRUDService {
   public void deleteTransfusion(Long transfusionId) throws IllegalStateException, NoResultException {
     Transfusion transfusion = transfusionRepository.findTransfusionById(transfusionId);
     if (transfusion == null) {
-      throw new IllegalStateException("DonorDeferral with id " + transfusionId
+      throw new IllegalStateException("Transfusion with id " + transfusionId
           + " does not exist (or has already been deleted).");
     }
 
-    //Rollback component from TRANSFUSED to USED status
+    // Rollback component status from TRANSFUSED to ISSUED
     componentCRUDService.untransfuseComponent(transfusion.getComponent());
 
     transfusion.setIsDeleted(Boolean.TRUE);
