@@ -2,7 +2,7 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.Set;
 
-public class RoleViewModel extends BaseViewModel {
+public class RoleViewModel extends BaseViewModel<Long> {
 
   private String name;
   private String description;

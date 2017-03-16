@@ -3,7 +3,7 @@ package org.jembi.bsis.viewmodel;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
-public class BloodTestingRuleViewModel extends BaseViewModel {
+public class BloodTestingRuleViewModel extends BaseViewModel<Long> {
 
   private String testNameShort;
   private DonationField donationFieldChanged;

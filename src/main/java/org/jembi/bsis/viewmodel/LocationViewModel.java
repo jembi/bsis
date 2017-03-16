@@ -1,6 +1,6 @@
 package org.jembi.bsis.viewmodel;
 
-public class LocationViewModel extends BaseViewModel {
+public class LocationViewModel extends BaseViewModel<Long> {
 
   private String name;
   private boolean isDeleted;

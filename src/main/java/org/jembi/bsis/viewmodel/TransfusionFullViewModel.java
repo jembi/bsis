@@ -7,7 +7,7 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class TransfusionFullViewModel extends BaseViewModel {
+public class TransfusionFullViewModel extends BaseViewModel<Long> {
 
   private String donationIdentificationNumber;
 
