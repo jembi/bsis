@@ -696,6 +696,17 @@ public class ComponentCRUDService {
       }
     }
   }
+  
+  public Component untransfuseComponent(Component component) {
+    // component must have TRANSFUSED status
+    if (!component.getStatus().equals(ComponentStatus.TRANSFUSED)) {
+      throw new IllegalStateException("Component " + component.getId() + " with status " + component.getStatus() + " must have TRANSFUSED status");
+    }
+    LOGGER.info("Changing component " + component.getId() + " status from TRANSFUSED to ISSUED");
+    
+    component.setStatus(ComponentStatus.ISSUED);
+    return componentRepository.update(component);
+  }
 
   /**
    * Create child components from produced component types

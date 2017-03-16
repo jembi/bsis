@@ -2829,4 +2829,48 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Run test
     componentCRUDService.transfuseComponent(transfusedComponent);
   }
+  
+  @Test
+  public void testUnTransfuseComponentThatsTransfused_shouldReturnComponentInCorrectState() {
+    // Set up data
+    Location location = aLocation().build();
+    Donation donation = aDonation().build();
+    Component transfusedComponent = aComponent()
+        .withStatus(ComponentStatus.TRANSFUSED)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    
+    Component expectedComponent = aComponent()
+        .withStatus(ComponentStatus.ISSUED)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    
+    // set up mocks
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedComponent)))).thenReturn(expectedComponent);
+    
+    // Run test
+    Component returnedComponent = componentCRUDService.untransfuseComponent(transfusedComponent);
+    
+    // Verify
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedComponent)));
+    assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
+  }
+  
+  @Test(expected = IllegalStateException.class)
+  public void testUnTransfuseComponentThatsNotTransfused_shouldThrow() {
+    // Set up data
+    Location location = aLocation().build();
+    Donation donation = aDonation().build();
+    Component component = aComponent()
+        .withStatus(ComponentStatus.ISSUED)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    
+    // Run test
+    componentCRUDService.untransfuseComponent(component);
+  }
+  
 }
