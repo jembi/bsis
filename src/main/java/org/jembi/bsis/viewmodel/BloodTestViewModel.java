@@ -3,7 +3,7 @@ package org.jembi.bsis.viewmodel;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
-public class BloodTestViewModel extends BaseViewModel {
+public class BloodTestViewModel extends BaseViewModel<Long> {
 
   private String testName;
   private String testNameShort;

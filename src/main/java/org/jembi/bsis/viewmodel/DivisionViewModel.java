@@ -1,6 +1,6 @@
 package org.jembi.bsis.viewmodel;
 
-public class DivisionViewModel extends BaseViewModel {
+public class DivisionViewModel extends BaseViewModel<Long> {
   
   private String name;
   private int level;

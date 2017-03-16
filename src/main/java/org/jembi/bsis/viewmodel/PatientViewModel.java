@@ -7,7 +7,7 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class PatientViewModel extends BaseViewModel {
+public class PatientViewModel extends BaseViewModel<Long> {
   
   private String name1;
   private String name2;
