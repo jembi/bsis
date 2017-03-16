@@ -1,5 +1,8 @@
 package org.jembi.bsis.backingform.validator;
 
+import java.util.Date;
+
+import org.apache.commons.lang3.time.DateUtils;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.location.Location;
@@ -27,6 +30,11 @@ public class PostDonationCounsellingBackingFormValidator extends BaseValidator<P
     } else {
       if (form.getCounsellingDate() == null) {
         errors.rejectValue("counsellingDate", "errors.required", "Counselling Date is required");
+      }
+      if (form.getCounsellingDate() != null) {
+        if (!(DateUtils.isSameDay(form.getCounsellingDate(), new Date())) && (form.getCounsellingDate().after(new Date()))) {
+          errors.rejectValue("counsellingDate", "errors.invalid", "Counselling Date should not be in the future");
+        }
       }
       if (form.getCounsellingStatus() == null) {
         errors.rejectValue("counsellingStatus", "errors.required", "Counselling Status is required");

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
@@ -17,6 +18,7 @@ import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -259,5 +261,124 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
     assertThat(errors.getErrorCount(), is(1));
     assertThat(errors.getFieldError("referralSite").getCode(), is("errors.invalid"));
     assertThat(errors.getFieldError("referralSite").getDefaultMessage(), is("Location must be a referral site"));
+  }
+  
+  @Test
+  public void testValidatePostDonationCounsellingWithInvalidDate_shouldReturnError() {
+    // Set up data
+    String locationName = "A Referral Site";
+    Long locationId = 1L;
+
+    Location location = aLocation()
+        .withId(locationId)
+        .withName(locationName)
+        .thatIsReferralSite()
+        .build();
+
+    LocationBackingForm locationForm = LocationBackingFormBuilder.aProcessingSiteBackingForm()
+        .withId(1L)
+        .withName(locationName)
+        .thatIsReferralSite()
+        .build();
+    Date dateInTheFuture = new DateTime().plusDays(2).toDate();
+    
+    PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
+        .aPostDonationCounsellingBackingForm()
+        .thatIsNotFlaggedForCounselling()
+        .withCounsellingDate(dateInTheFuture)
+        .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
+        .thatIsReferred()
+        .withReferralSite(locationForm)
+        .build();
+    
+    when(locationRepository.getLocation(1L)).thenReturn(location);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
+
+    // Run test
+    validator.validateForm(form, errors);
+    
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("counsellingDate").getCode(), is("errors.invalid"));
+    assertThat(errors.getFieldError("counsellingDate").getDefaultMessage(), is("Counselling Date should not be in the future"));
+  }
+  
+  @Test
+  public void testValidatePostDonationCounsellingWithSameDate_shouldNotReturnError() {
+    // Set up data
+    String locationName = "A Referral Site";
+    Long locationId = 1L;
+
+    Location location = aLocation()
+        .withId(locationId)
+        .withName(locationName)
+        .thatIsReferralSite()
+        .build();
+
+    LocationBackingForm locationForm = LocationBackingFormBuilder.aProcessingSiteBackingForm()
+        .withId(1L)
+        .withName(locationName)
+        .thatIsReferralSite()
+        .build();
+    Date sameDayButLaterTime = new DateTime().plusHours(1).toDate();
+    
+    PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
+        .aPostDonationCounsellingBackingForm()
+        .thatIsNotFlaggedForCounselling()
+        .withCounsellingDate(sameDayButLaterTime)
+        .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
+        .thatIsReferred()
+        .withReferralSite(locationForm)
+        .build();
+    
+    when(locationRepository.getLocation(1L)).thenReturn(location);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
+
+    // Run test
+    validator.validateForm(form, errors);
+    
+    // Verify
+    assertThat(errors.getErrorCount(), is(0));
+  }
+  
+  @Test
+  public void testValidatePostDonationCounsellingWithPastDate_shouldNotReturnError() {
+    // Set up data
+    String locationName = "A Referral Site";
+    Long locationId = 1L;
+
+    Location location = aLocation()
+        .withId(locationId)
+        .withName(locationName)
+        .thatIsReferralSite()
+        .build();
+
+    LocationBackingForm locationForm = LocationBackingFormBuilder.aProcessingSiteBackingForm()
+        .withId(1L)
+        .withName(locationName)
+        .thatIsReferralSite()
+        .build();
+    Date sameDayButLaterTime = new DateTime().minusDays(10).toDate();
+    
+    PostDonationCounsellingBackingForm form = PostDonationCounsellingBackingFormBuilder
+        .aPostDonationCounsellingBackingForm()
+        .thatIsNotFlaggedForCounselling()
+        .withCounsellingDate(sameDayButLaterTime)
+        .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
+        .thatIsReferred()
+        .withReferralSite(locationForm)
+        .build();
+    
+    when(locationRepository.getLocation(1L)).thenReturn(location);
+
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
+
+    // Run test
+    validator.validateForm(form, errors);
+    
+    // Verify
+    assertThat(errors.getErrorCount(), is(0));
   }
 }
