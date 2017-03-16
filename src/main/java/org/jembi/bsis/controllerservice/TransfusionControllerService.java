@@ -81,4 +81,8 @@ public class TransfusionControllerService {
     Transfusion transfusion = transfusionRepository.findTransfusionById(id);
     return transfusionFactory.createFullViewModel(transfusion);
   }
+
+  public void deleteTransfusion(Long id) {
+    transfusionCRUDService.deleteTransfusion(id);
+  }
 }
