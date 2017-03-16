@@ -705,7 +705,7 @@ public class ComponentCRUDService {
     LOGGER.info("Changing component " + component.getId() + " status from TRANSFUSED to ISSUED");
     
     component.setStatus(ComponentStatus.ISSUED);
-    return componentRepository.update(component);
+    return updateComponent(component);
   }
 
   /**
