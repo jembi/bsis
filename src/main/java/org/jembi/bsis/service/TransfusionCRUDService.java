@@ -114,6 +114,10 @@ public class TransfusionCRUDService {
       throw new IllegalStateException("DonorDeferral with id " + transfusionId
           + " does not exist (or has already been deleted).");
     }
+
+    //Rollback component from TRANSFUSED to USED status
+    componentCRUDService.untransfuseComponent(transfusion.getComponent());
+
     transfusion.setIsDeleted(Boolean.TRUE);
     transfusionRepository.update(transfusion);
   }
