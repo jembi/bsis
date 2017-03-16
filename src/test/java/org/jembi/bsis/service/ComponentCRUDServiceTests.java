@@ -2833,15 +2833,19 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUnTransfuseComponentThatsTransfused_shouldReturnComponentInCorrectState() {
     // Set up data
-    Location location = aLocation().build();
+    Location location = aLocation().thatIsUsageSite().build();
     Donation donation = aDonation().build();
+    Long componentId = 1L;
+    
     Component transfusedComponent = aComponent()
+        .withId(componentId)
         .withStatus(ComponentStatus.TRANSFUSED)
         .withDonation(donation)
         .withLocation(location)
         .build();
     
     Component expectedComponent = aComponent()
+        .withId(componentId)
         .withStatus(ComponentStatus.ISSUED)
         .withDonation(donation)
         .withLocation(location)
@@ -2861,9 +2865,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test(expected = IllegalStateException.class)
   public void testUnTransfuseComponentThatsNotTransfused_shouldThrow() {
     // Set up data
-    Location location = aLocation().build();
+    Location location = aLocation().thatIsUsageSite().build();
     Donation donation = aDonation().build();
     Component component = aComponent()
+        .withId(1L)
         .withStatus(ComponentStatus.ISSUED)
         .withDonation(donation)
         .withLocation(location)
