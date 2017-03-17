@@ -12,7 +12,6 @@ import org.jembi.bsis.factory.DonationTypeFactory;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.TransfusionReactionTypeFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
 import org.jembi.bsis.repository.BloodTestRepository;
