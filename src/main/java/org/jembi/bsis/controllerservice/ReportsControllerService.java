@@ -7,19 +7,23 @@ import javax.transaction.Transactional;
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.factory.DeferralReasonFactory;
+import org.jembi.bsis.factory.DonationTypeFactory;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.TransfusionReactionTypeFactory;
+import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DiscardReasonRepository;
+import org.jembi.bsis.repository.DonationTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
 import org.jembi.bsis.viewmodel.AdverseEventTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.DeferralReasonViewModel;
 import org.jembi.bsis.viewmodel.DiscardReasonViewModel;
+import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +66,12 @@ public class ReportsControllerService {
   @Autowired
   private TransfusionReactionTypeRepository transfusionReactionTypeRepository;
 
+  @Autowired
+  private DonationTypeRepository donationTypeRepository;
+
+  @Autowired
+  private DonationTypeFactory donationTypeFactory;
+
   public List<ComponentTypeViewModel> getAllComponentTypesThatCanBeIssued() {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypesThatCanBeIssued());
   }
@@ -102,5 +112,9 @@ public class ReportsControllerService {
   public List<TransfusionReactionTypeViewModel> getTransfusionReactionTypes() {
     List<TransfusionReactionType> transfusionReactionTypes = transfusionReactionTypeRepository.getAllTransfusionReactionTypes(false);
     return transfusionReactionTypeFactory.createTransfusionReactionTypeViewModels(transfusionReactionTypes);
+  }
+
+  public List<DonationTypeViewModel> getDonationTypes() {
+    return donationTypeFactory.createViewModels(donationTypeRepository.getAllDonationTypes());
   }
 }
