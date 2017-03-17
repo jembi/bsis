@@ -28,6 +28,7 @@ public abstract class BaseViewModel<T> {
       return false;
     if (getClass() != obj.getClass())
       return false;
+    @SuppressWarnings("unchecked")
     BaseViewModel<T> other = (BaseViewModel<T>) obj;
     if (getId() == null) {
       if (other.getId() != null)
