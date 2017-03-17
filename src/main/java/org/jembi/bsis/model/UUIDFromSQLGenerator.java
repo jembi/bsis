@@ -1,6 +1,7 @@
 package org.jembi.bsis.model;
 
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,7 +40,7 @@ public class UUIDFromSQLGenerator implements IdentifierGenerator {
             if (!rs.next()) {
               throw new HibernateException("The database returned no UUID identity value");
             }
-            result = UUID.nameUUIDFromBytes(rs.getBytes("uuid"));
+            result = convertBytesToUUID(rs.getBytes("uuid"));
           } finally {
             session.getTransactionCoordinator().getJdbcCoordinator().release(rs, st);
           }
@@ -54,5 +55,22 @@ public class UUIDFromSQLGenerator implements IdentifierGenerator {
     } else {
       throw new IllegalArgumentException("UUID generation is not yet implemented for dialect " + dialect);
     }
+  }
+
+  /**
+   * This method takes a UUID represented as a 16 byte array and converts it to the java.util.UUID
+   * type.
+   * 
+   * @param bytes
+   * @return
+   */
+  public static UUID convertBytesToUUID(byte[] bytes) {
+    if (bytes.length != 16) {
+      throw new IllegalArgumentException("Excepted 16 bytes only");
+    }
+    ByteBuffer bb = ByteBuffer.wrap(bytes);
+    long firstLong = bb.getLong();
+    long secondLong = bb.getLong();
+    return new UUID(firstLong, secondLong);
   }
 }
