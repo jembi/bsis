@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import org.jembi.bsis.backingform.TransfusionBackingForm;
 import org.jembi.bsis.backingform.validator.TransfusionBackingFormValidator;
 import org.jembi.bsis.controllerservice.TransfusionControllerService;
-import org.jembi.bsis.controllerservice.TransfusionReactionTypeControllerService;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransfusionController {
   
   @Autowired
-  private TransfusionReactionTypeControllerService transfusionReactionTypeControllerService;
-  @Autowired
   private TransfusionControllerService transfusionControllerService;
   @Autowired
   private TransfusionBackingFormValidator transfusionBackingFormsValidator;
@@ -50,7 +47,7 @@ public class TransfusionController {
     map.put("addTransfusionForm", new TransfusionBackingForm());
     map.put("componentTypes", transfusionControllerService.getComponentTypes());    
     map.put("usageSites", transfusionControllerService.getUsageSites());
-    map.put("transfusionReactionTypes", transfusionReactionTypeControllerService.getTransfusionReactionTypes());
+    map.put("transfusionReactionTypes", transfusionControllerService.getTransfusionReactionTypes());
     map.put("transfusionOutcomes", TransfusionOutcome.values());
     return map;
   }

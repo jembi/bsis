@@ -7,17 +7,21 @@ import org.jembi.bsis.backingform.TransfusionBackingForm;
 import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.TransfusionFactory;
+import org.jembi.bsis.factory.TransfusionReactionTypeFactory;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.transfusion.Transfusion;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
+import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
 import org.jembi.bsis.repository.TransfusionRepository;
 import org.jembi.bsis.service.TransfusionCRUDService;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
+import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
 import org.jembi.bsis.viewmodel.TransfusionViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +45,10 @@ public class TransfusionControllerService {
   private ComponentTypeFactory componentTypeFactory;
   @Autowired
   private TransfusionRepository transfusionRepository;
+  @Autowired
+  private TransfusionReactionTypeRepository transfusionReactionTypeRepository;
+  @Autowired
+  private TransfusionReactionTypeFactory transfusionReactionTypeFactory;
 
   public List<LocationViewModel> getUsageSites() {
     List<Location> usageSites = locationRepository.getUsageSites();
@@ -80,5 +88,11 @@ public class TransfusionControllerService {
   public TransfusionFullViewModel getTransfusion(Long id) {
     Transfusion transfusion = transfusionRepository.findTransfusionById(id);
     return transfusionFactory.createFullViewModel(transfusion);
+  }
+  
+  public List<TransfusionReactionTypeViewModel> getTransfusionReactionTypes() {
+    List<TransfusionReactionType> transfusionReactionTypes = 
+        transfusionReactionTypeRepository.getAllTransfusionReactionTypes(false);
+    return transfusionReactionTypeFactory.createTransfusionReactionTypeViewModels(transfusionReactionTypes);
   }
 }
