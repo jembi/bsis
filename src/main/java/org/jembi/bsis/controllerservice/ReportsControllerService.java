@@ -4,19 +4,23 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.jembi.bsis.factory.BloodTestFactory;
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.factory.DeferralReasonFactory;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.TransfusionReactionTypeFactory;
+import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
+import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DiscardReasonRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
 import org.jembi.bsis.viewmodel.AdverseEventTypeViewModel;
+import org.jembi.bsis.viewmodel.BloodTestViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.DeferralReasonViewModel;
 import org.jembi.bsis.viewmodel.DiscardReasonViewModel;
@@ -61,6 +65,12 @@ public class ReportsControllerService {
 
   @Autowired
   private TransfusionReactionTypeRepository transfusionReactionTypeRepository;
+  
+  @Autowired
+  private BloodTestFactory bloodTestFactory;
+  
+  @Autowired
+  private BloodTestRepository bloodTestRepository;
 
   public List<ComponentTypeViewModel> getAllComponentTypesThatCanBeIssued() {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypesThatCanBeIssued());
@@ -102,5 +112,9 @@ public class ReportsControllerService {
   public List<TransfusionReactionTypeViewModel> getTransfusionReactionTypes() {
     List<TransfusionReactionType> transfusionReactionTypes = transfusionReactionTypeRepository.getAllTransfusionReactionTypes(false);
     return transfusionReactionTypeFactory.createTransfusionReactionTypeViewModels(transfusionReactionTypes);
+  }
+  
+  public List<BloodTestViewModel> getActiveTTIBloodTests() {
+    return bloodTestFactory.createViewModels(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI));
   }
 }

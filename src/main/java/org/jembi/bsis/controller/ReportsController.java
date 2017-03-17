@@ -58,6 +58,9 @@ public class ReportsController {
 
   @Autowired
   private TransfusionSummaryReportGenerator transfusionSummaryReportGenerator;
+  
+  @Autowired
+  private ReportsControllerService reportsControllerAServicel;
 
   @RequestMapping(value = "/transfusionsummary/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.TRANSFUSIONS_REPORTING + "')")
@@ -193,5 +196,13 @@ public class ReportsController {
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return componentProductionReportGenerator.generateComponentProductionReport(processingSiteId, startDate, endDate);
+  }
+  
+  @RequestMapping(value = "/ttiprevalence/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.TTI_REPORTING + "')")
+  public Map<String, Object> getActiveTTIBloodTestsReportForm() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("ttiBloodTests", reportsControllerAServicel.getActiveTTIBloodTests());
+    return map;
   }
 }
