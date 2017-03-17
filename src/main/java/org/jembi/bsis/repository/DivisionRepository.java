@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.TypedQuery;
 
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class DivisionRepository extends AbstractRepository<Division> {
 
-  public Division findDivisionById(long id) {
+  public Division findDivisionById(UUID id) {
     return entityManager.createNamedQuery(DivisionNamedQueryConstants.NAME_FIND_DIVISION_BY_ID, Division.class)
         .setParameter("id", id)
         .getSingleResult();
@@ -39,7 +40,7 @@ public class DivisionRepository extends AbstractRepository<Division> {
     return divisions.get(0);
   }
 
-  public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level, Long parentId) {
+  public List<Division> findDivisions(String name, boolean includeSimilarResults, Integer level, UUID parentId) {
     // build up Query string
     StringBuilder queryBuilder = new StringBuilder("SELECT div FROM Division div ");
 

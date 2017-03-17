@@ -8,7 +8,7 @@ import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.repository.constant.DivisionNamedQueryConstants;
 
 /**
@@ -26,7 +26,7 @@ import org.jembi.bsis.repository.constant.DivisionNamedQueryConstants;
 })
 @Entity
 @Audited
-public class Division extends BaseModificationTrackerEntity {
+public class Division extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

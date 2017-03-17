@@ -4,9 +4,10 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Abstract parent class for all entities that use a UUID type identifier. Entities are model
@@ -18,7 +19,8 @@ import javax.persistence.MappedSuperclass;
 public abstract class BaseUUIDEntity extends BSISEntity<UUID> {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO) // FIXME, this needs to be updated to our custom generator. 
+  @GeneratedValue(generator = "uuidFromSql")
+  @GenericGenerator(name = "uuidFromSql", strategy = "org.jembi.bsis.model.UUIDFromSQLGenerator")
   @Column(name = "id", columnDefinition = "BINARY(16)", nullable = false, insertable = false, updatable = false)
   private UUID id;
 

@@ -2,19 +2,20 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.viewmodel.DivisionFullViewModel;
 import org.jembi.bsis.viewmodel.DivisionViewModel;
 
 public class DivisionFullViewModelBuilder extends AbstractBuilder<DivisionFullViewModel> {
   
-  private long id;
+  private UUID id;
   private String name;
   private int level;
   private DivisionViewModel parent;
   private Map<String, Boolean> permissions = new HashMap<>();
   
-  public DivisionFullViewModelBuilder withId(long id) {
+  public DivisionFullViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
