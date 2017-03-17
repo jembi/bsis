@@ -1,11 +1,12 @@
 package org.jembi.bsis.backingform.validator;
 
+import java.util.Date;
+
+import org.apache.commons.lang3.time.DateUtils;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.LocationRepository;
-import org.jembi.bsis.service.DateGeneratorService;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -15,8 +16,6 @@ public class PostDonationCounsellingBackingFormValidator extends BaseValidator<P
 
   @Autowired
   private LocationRepository locationRepository;
-  @Autowired
-  private DateGeneratorService dateGeneratorService;
 
   @Override
   public void validateForm(PostDonationCounsellingBackingForm form, Errors errors) {
@@ -33,9 +32,7 @@ public class PostDonationCounsellingBackingFormValidator extends BaseValidator<P
         errors.rejectValue("counsellingDate", "errors.required", "Counselling Date is required");
       }
       if (form.getCounsellingDate() != null) {
-        LocalDate counsellingDate = dateGeneratorService.generateLocalDate(form.getCounsellingDate());
-        LocalDate currentDate = dateGeneratorService.generateLocalDate();
-        if (counsellingDate.isAfter(currentDate)) {
+        if (!(DateUtils.isSameDay(form.getCounsellingDate(), new Date())) && (form.getCounsellingDate().after(new Date()))) {
           errors.rejectValue("counsellingDate", "errors.invalid", "Counselling Date should not be in the future");
         }
       }
