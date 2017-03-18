@@ -2,7 +2,7 @@
   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-  <changeSet author="lauravignoli" id="20170315-1214" dbms="mysql,h2">
+  <changeSet id="20170315-1214" author="lauravignoli">
      <sqlFile encoding="utf8" path="./functions/GENERATEBINARYUUID.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
   </changeSet>
 
@@ -70,10 +70,51 @@
       <column name="id" type="BINARY(16)" afterColumn="id_temp"/>
       <column name="parent_id" type="BINARY(16)" afterColumn="parent_id_temp"/>
     </addColumn>
+
+    <sql dbms="mysql">
+      ALTER TABLE Division ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)), 
+        HEX(SUBSTR(id,  5, 2)), 
+        HEX(SUBSTR(id,  7, 2)), 
+        HEX(SUBSTR(id,  9, 2)), 
+        HEX(SUBSTR(id, 11)) ))) 
+      VIRTUAL AFTER id
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Division ADD parent_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(parent_id,  1, 4)), 
+        HEX(SUBSTR(parent_id,  5, 2)), 
+        HEX(SUBSTR(parent_id,  7, 2)), 
+        HEX(SUBSTR(parent_id,  9, 2)), 
+        HEX(SUBSTR(parent_id, 11)) ))) 
+      VIRTUAL AFTER parent_id
+    </sql>
+
     <addColumn tableName="Division_AUD">
       <column name="id" type="BINARY(16)" afterColumn="id_temp"/>
       <column name="parent_id" type="BINARY(16)" afterColumn="parent_id_temp"/>
     </addColumn>
+
+    <sql dbms="mysql">
+      ALTER TABLE Division_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)), 
+        HEX(SUBSTR(id,  5, 2)), 
+        HEX(SUBSTR(id,  7, 2)), 
+        HEX(SUBSTR(id,  9, 2)), 
+        HEX(SUBSTR(id, 11)) ))) 
+      VIRTUAL AFTER id
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Division_AUD ADD parent_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(parent_id,  1, 4)), 
+        HEX(SUBSTR(parent_id,  5, 2)), 
+        HEX(SUBSTR(parent_id,  7, 2)), 
+        HEX(SUBSTR(parent_id,  9, 2)), 
+        HEX(SUBSTR(parent_id, 11)) ))) 
+      VIRTUAL AFTER parent_id
+    </sql>
 
     <sql dbms="mysql">
       UPDATE Division d
@@ -86,6 +127,36 @@
       <column name="divisionLevel3_id" type="BINARY(16)" afterColumn="divisionLevel3_id_temp"/>
     </addColumn>
 
+    <sql dbms="mysql">
+      ALTER TABLE Location ADD divisionLevel1_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(divisionLevel1_id,  1, 4)), 
+        HEX(SUBSTR(divisionLevel1_id,  5, 2)), 
+        HEX(SUBSTR(divisionLevel1_id,  7, 2)), 
+        HEX(SUBSTR(divisionLevel1_id,  9, 2)), 
+        HEX(SUBSTR(divisionLevel1_id, 11)) ))) 
+      VIRTUAL AFTER divisionLevel1_id
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Location ADD divisionLevel2_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(divisionLevel2_id,  1, 4)), 
+        HEX(SUBSTR(divisionLevel2_id,  5, 2)), 
+        HEX(SUBSTR(divisionLevel2_id,  7, 2)), 
+        HEX(SUBSTR(divisionLevel2_id,  9, 2)), 
+        HEX(SUBSTR(divisionLevel2_id, 11)) ))) 
+      VIRTUAL AFTER divisionLevel2_id
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Location ADD divisionLevel3_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(divisionLevel3_id,  1, 4)), 
+        HEX(SUBSTR(divisionLevel3_id,  5, 2)), 
+        HEX(SUBSTR(divisionLevel3_id,  7, 2)), 
+        HEX(SUBSTR(divisionLevel3_id,  9, 2)), 
+        HEX(SUBSTR(divisionLevel3_id, 11)) ))) 
+      VIRTUAL AFTER divisionLevel3_id
+    </sql>
+
     <addColumn tableName="Location_AUD">
       <column name="divisionLevel1_id" type="BINARY(16)" afterColumn="divisionLevel1_id_temp"/>
       <column name="divisionLevel2_id" type="BINARY(16)" afterColumn="divisionLevel2_id_temp"/>
@@ -93,46 +164,76 @@
     </addColumn>
 
     <sql dbms="mysql">
-     UPDATE Location AS l
+      ALTER TABLE Location_AUD ADD divisionLevel1_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(divisionLevel1_id,  1, 4)), 
+        HEX(SUBSTR(divisionLevel1_id,  5, 2)), 
+        HEX(SUBSTR(divisionLevel1_id,  7, 2)), 
+        HEX(SUBSTR(divisionLevel1_id,  9, 2)), 
+        HEX(SUBSTR(divisionLevel1_id, 11)) ))) 
+      VIRTUAL AFTER divisionLevel1_id
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Location_AUD ADD divisionLevel2_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(divisionLevel2_id,  1, 4)), 
+        HEX(SUBSTR(divisionLevel2_id,  5, 2)), 
+        HEX(SUBSTR(divisionLevel2_id,  7, 2)), 
+        HEX(SUBSTR(divisionLevel2_id,  9, 2)), 
+        HEX(SUBSTR(divisionLevel2_id, 11)) ))) 
+      VIRTUAL AFTER divisionLevel2_id
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Location_AUD ADD divisionLevel3_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(divisionLevel3_id,  1, 4)), 
+        HEX(SUBSTR(divisionLevel3_id,  5, 2)), 
+        HEX(SUBSTR(divisionLevel3_id,  7, 2)), 
+        HEX(SUBSTR(divisionLevel3_id,  9, 2)), 
+        HEX(SUBSTR(divisionLevel3_id, 11)) ))) 
+      VIRTUAL AFTER divisionLevel3_id
+    </sql>
+
+    <sql dbms="mysql">
+      UPDATE Location AS l
         LEFT JOIN Division AS d1 ON (d1.id_temp = l.divisionLevel1_id_temp)
         LEFT JOIN Division AS d2 ON (d2.id_temp = l.divisionLevel2_id_temp)
         LEFT JOIN Division AS d3 ON (d3.id_temp = l.divisionLevel3_id_temp)
-     SET 
+      SET 
         l.divisionLevel1_id = d1.id,
         l.divisionLevel2_id = d2.id,
         l.divisionLevel3_id = d3.id
     </sql>
 
     <sql dbms="mysql">
-     UPDATE Location_AUD AS la
+      UPDATE Location_AUD AS la
         LEFT JOIN Division AS d1 ON (d1.id_temp = la.divisionLevel1_id_temp)
         LEFT JOIN Division AS d2 ON (d2.id_temp = la.divisionLevel2_id_temp)
         LEFT JOIN Division AS d3 ON (d3.id_temp = la.divisionLevel3_id_temp)
-     SET 
+      SET 
         la.divisionLevel1_id = d1.id,
         la.divisionLevel2_id = d2.id,
         la.divisionLevel3_id = d3.id
     </sql>
 
     <sql dbms="mysql">
-     UPDATE Division AS d
-       LEFT JOIN Division AS d1 ON (d1.id_temp = d.parent_id_temp)
-     SET 
-      d.parent_id = d1.id
+      UPDATE Division AS d
+        LEFT JOIN Division AS d1 ON (d1.id_temp = d.parent_id_temp)
+      SET 
+        d.parent_id = d1.id
     </sql>
 
     <sql dbms="mysql">
-     UPDATE Division_AUD AS da
-       LEFT JOIN Division AS d ON (da.id_temp = d.id_temp)
-     SET 
-      da.id = d.id
+      UPDATE Division_AUD AS da
+        LEFT JOIN Division AS d ON (da.id_temp = d.id_temp)
+      SET 
+        da.id = d.id
     </sql>
 
     <sql dbms="mysql">
-     UPDATE Division_AUD AS da
-       LEFT JOIN Division AS d ON (da.parent_id_temp = d.id_temp)
-     SET 
-      da.parent_id = d.parent_id
+      UPDATE Division_AUD AS da
+        LEFT JOIN Division AS d ON (da.parent_id_temp = d.id_temp)
+      SET 
+        da.parent_id = d.parent_id
     </sql>
 
     <!-- Remove auto increment from the existing id column -->
