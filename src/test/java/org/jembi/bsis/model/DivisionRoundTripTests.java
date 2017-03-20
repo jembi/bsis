@@ -16,7 +16,8 @@ public class DivisionRoundTripTests extends ContextDependentTestSuite {
 
   @Test
   public void testPersistValidDivisionWithParent() {
-    aDivision().withLevel(2).withParent(aDivision().withLevel(1).build()).buildAndPersist(entityManager);
+    aDivision().withLevel(2).withParent(aDivision().withName("default.division.name2").withLevel(1).build())
+        .buildAndPersist(entityManager);
   }
 
   @Test(expected = ConstraintViolationException.class)
