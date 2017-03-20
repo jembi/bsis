@@ -1,15 +1,17 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.viewmodel.DivisionViewModel;
 
 public class DivisionViewModelBuilder extends AbstractBuilder<DivisionViewModel> {
   
-  private long id;
+  private UUID id;
   private String name;
   private int level;
   private DivisionViewModel parent;
   
-  public DivisionViewModelBuilder withId(long id) {
+  public DivisionViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -35,19 +36,22 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateValidForm_shouldntGetErrors() {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
+    UUID divisionId2 = UUID.randomUUID();
+
     DivisionBackingForm parentForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(1L).withLevel(1).withName("Level1Division").build();
+        .withId(divisionId1).withLevel(1).withName("Level1Division").build();
     
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(2L).withLevel(2).withName("Level2Division").withParent(parentForm).build();
+        .withId(divisionId2).withLevel(2).withName("Level2Division").withParent(parentForm).build();
     
     Division parent = DivisionBuilder.aDivision()
-        .withId(1L).withLevel(1).withName("Level1Division").build();
+        .withId(divisionId1).withLevel(1).withName("Level1Division").build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
-    when(divisionRepository.findDivisionById(1L)).thenReturn(parent);
+    when(divisionRepository.findDivisionById(divisionId1)).thenReturn(parent);
     when(formFieldRepository.getRequiredFormFields("division")).thenReturn(Arrays.asList(new String[] {"name", "level"}));
     when(divisionRepository.findDivisionByName("Level2Division")).thenReturn(null);
     
@@ -61,8 +65,9 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithNullName_shouldGetError() throws Exception {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(1L).withLevel(1).withName(null).build();
+        .withId(divisionId1).withLevel(1).withName(null).build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
 
@@ -80,8 +85,10 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithEmptyName_shouldGetError() throws Exception {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
+
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(1L).withLevel(1).withName("").build();
+        .withId(divisionId1).withLevel(1).withName("").build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
 
@@ -100,11 +107,14 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithExistingNameAndNewId_shouldGetError() throws Exception {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
+    UUID divisionId2 = UUID.randomUUID();
+
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(1L).withLevel(1).withName("Level1Division").build();
+        .withId(divisionId1).withLevel(1).withName("Level1Division").build();
     
     Division division = DivisionBuilder.aDivision()
-        .withId(2L).withName("Level1Division").build();
+        .withId(divisionId2).withName("Level1Division").build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
 
@@ -123,11 +133,13 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithExistingNameAndId_shouldntGetError() throws Exception {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
+
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(1L).withLevel(1).withName("Level1Division").build();
+        .withId(divisionId1).withLevel(1).withName("Level1Division").build();
     
     Division division = DivisionBuilder.aDivision()
-        .withId(1L).withName("Level1Division").build();
+        .withId(divisionId1).withName("Level1Division").build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
 
@@ -145,8 +157,10 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithNullLevel_shouldGetError() throws Exception {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
+
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(1L).withLevel(null).withName("Division").build();
+        .withId(divisionId1).withLevel(null).withName("Division").build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
 
@@ -165,8 +179,10 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithLevelGreaterThanThree_shouldGetError() throws Exception {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
+
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(1L).withLevel(4).withName("Division").build();
+        .withId(divisionId1).withLevel(4).withName("Division").build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
 
@@ -185,8 +201,10 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithLevelLowerThanOne_shouldGetError() throws Exception {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
+
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(1L).withLevel(0).withName("Division").build();
+        .withId(divisionId1).withLevel(0).withName("Division").build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
 
@@ -205,17 +223,20 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithNullParentId_shouldGetError() throws Exception {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
+    UUID divisionId2 = UUID.randomUUID();
+
     DivisionBackingForm parentForm = DivisionBackingFormBuilder.aDivisionBackingForm()
         .withId(null).withLevel(1).withName("Level1Division").build();
     
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(2L).withLevel(2).withName("Level2Division").withParent(parentForm).build();
+        .withId(divisionId2).withLevel(2).withName("Level2Division").withParent(parentForm).build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
     when(divisionRepository.findDivisionByName("Level2Division")).thenReturn(null);
-    when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionById(divisionId1)).thenThrow(new NoResultException());
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -228,17 +249,20 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithNonExistentParent_shouldGetError() throws Exception {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
+    UUID divisionId2 = UUID.randomUUID();
+
     DivisionBackingForm parentForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(1L).withLevel(1).withName("Level1Division").build();
+        .withId(divisionId1).withLevel(1).withName("Level1Division").build();
     
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(2L).withLevel(2).withName("Level2Division").withParent(parentForm).build();
+        .withId(divisionId2).withLevel(2).withName("Level2Division").withParent(parentForm).build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
     when(divisionRepository.findDivisionByName("Level2Division")).thenReturn(null);
-    when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionById(divisionId1)).thenThrow(new NoResultException());
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -251,17 +275,20 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithLevel2AndParentLevelNot1_shouldGetError() throws Exception {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
+    UUID divisionId2 = UUID.randomUUID();
+
     DivisionBackingForm parentForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(1L).withLevel(3).withName("Level3Division").build();
+        .withId(divisionId1).withLevel(3).withName("Level3Division").build();
     
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(2L).withLevel(2).withName("Level2Division").withParent(parentForm).build();
+        .withId(divisionId2).withLevel(2).withName("Level2Division").withParent(parentForm).build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
     when(divisionRepository.findDivisionByName("Level2Division")).thenReturn(null);
-    when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionById(divisionId1)).thenThrow(new NoResultException());
 
     // Run test
     validator.validate(divisionForm, errors);
@@ -274,17 +301,20 @@ public class DivisionBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithLevel3AndParentLevelNot2_shouldGetError() throws Exception {
     // Set up data
+    UUID divisionId1 = UUID.randomUUID();
+    UUID divisionId2 = UUID.randomUUID();
+
     DivisionBackingForm parentForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(1L).withLevel(1).withName("Level1Division").build();
+        .withId(divisionId1).withLevel(1).withName("Level1Division").build();
     
     DivisionBackingForm divisionForm = DivisionBackingFormBuilder.aDivisionBackingForm()
-        .withId(2L).withLevel(3).withName("Level3Division").withParent(parentForm).build();
+        .withId(divisionId2).withLevel(3).withName("Level3Division").withParent(parentForm).build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "division");
     
     // Set up mocks
     when(divisionRepository.findDivisionByName("Level3Division")).thenReturn(null);
-    when(divisionRepository.findDivisionById(1L)).thenThrow(new NoResultException());
+    when(divisionRepository.findDivisionById(divisionId1)).thenThrow(new NoResultException());
 
     // Run test
     validator.validate(divisionForm, errors);

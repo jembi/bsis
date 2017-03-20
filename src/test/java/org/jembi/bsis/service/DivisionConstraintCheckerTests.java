@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.repository.DivisionRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
@@ -21,7 +23,7 @@ public class DivisionConstraintCheckerTests extends UnitTestSuite {
   
   @Test
   public void testCanEditLevelWithNoChildren_shouldReturnTrue() {
-    Division division = aDivision().withId(8L).build();
+    Division division = aDivision().withId(UUID.randomUUID()).build();
     
     when(divisionRepository.countDivisionsWithParent(division)).thenReturn(0L);
     
@@ -32,7 +34,7 @@ public class DivisionConstraintCheckerTests extends UnitTestSuite {
   
   @Test
   public void testCanEditLevelWithChildren_shouldReturnFalse() {
-    Division division = aDivision().withId(7L).build();
+    Division division = aDivision().withId(UUID.randomUUID()).build();
     
     when(divisionRepository.countDivisionsWithParent(division)).thenReturn(1L);
     

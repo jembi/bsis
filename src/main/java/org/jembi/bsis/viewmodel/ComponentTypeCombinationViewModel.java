@@ -1,6 +1,6 @@
 package org.jembi.bsis.viewmodel;
 
-public class ComponentTypeCombinationViewModel extends BaseViewModel {
+public class ComponentTypeCombinationViewModel extends BaseViewModel<Long> {
   
   private String combinationName;
   private boolean isDeleted;

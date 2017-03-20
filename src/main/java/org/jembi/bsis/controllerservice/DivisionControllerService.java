@@ -1,6 +1,7 @@
 package org.jembi.bsis.controllerservice;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DivisionBackingForm;
 import org.jembi.bsis.factory.DivisionFactory;
@@ -32,12 +33,12 @@ public class DivisionControllerService {
   }
 
   public List<DivisionViewModel> findDivisions(String name, boolean includeSimilarResults, Integer level,
-      Long parentId) {
+      UUID parentId) {
     List<Division> divisions = divisionRepository.findDivisions(name, includeSimilarResults, level, parentId);
     return divisionFactory.createDivisionViewModels(divisions);
   }
 
-  public DivisionFullViewModel findDivisionById(long id) {
+  public DivisionFullViewModel findDivisionById(UUID id) {
     Division division = divisionRepository.findDivisionById(id);
     return divisionFactory.createDivisionFullViewModel(division);
   }

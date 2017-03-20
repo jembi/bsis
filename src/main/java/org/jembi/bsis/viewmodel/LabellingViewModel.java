@@ -3,7 +3,7 @@ package org.jembi.bsis.viewmodel;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LabellingViewModel extends BaseViewModel {
+public class LabellingViewModel extends BaseViewModel<Long> {
 
   private String componentName;
   private String componentCode;

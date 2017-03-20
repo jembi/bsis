@@ -1,6 +1,6 @@
 package org.jembi.bsis.viewmodel;
 
-public class PackTypeViewModel extends BaseViewModel {
+public class PackTypeViewModel extends BaseViewModel<Long> {
 
   private String packType;
 

@@ -7,7 +7,7 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ReturnFormViewModel extends BaseViewModel {
+public class ReturnFormViewModel extends BaseViewModel<Long> {
 
   private Date returnDate;
 

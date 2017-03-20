@@ -6,6 +6,7 @@ import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
 import static org.jembi.bsis.helpers.matchers.DivisionMatcher.hasSameStateAsDivision;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -289,7 +290,7 @@ public class DivisionRepositoryTests extends ContextDependentTestSuite {
   @Test(expected = NoResultException.class)
   public void testFindDivisionByIdWithMissingDivision_shouldThrow() {
     // Exercise SUT
-    divisionRepository.findDivisionById(1L);
+    divisionRepository.findDivisionById(UUID.randomUUID());
   }
   
   @Test

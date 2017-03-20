@@ -1,6 +1,6 @@
 package org.jembi.bsis.viewmodel;
 
-public class DonationTypeViewModel extends BaseViewModel {
+public class DonationTypeViewModel extends BaseViewModel<Long> {
 
   private String type;
   private Boolean isDeleted;

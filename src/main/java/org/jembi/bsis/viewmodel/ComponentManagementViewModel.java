@@ -10,7 +10,7 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ComponentManagementViewModel extends BaseViewModel {
+public class ComponentManagementViewModel extends BaseViewModel<Long> {
 
   private ComponentTypeViewModel componentType;
   private Date createdOn;
