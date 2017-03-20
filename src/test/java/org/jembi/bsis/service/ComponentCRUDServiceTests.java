@@ -2829,4 +2829,53 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Run test
     componentCRUDService.transfuseComponent(transfusedComponent);
   }
+  
+  @Test
+  public void testUnTransfuseComponentThatsTransfused_shouldReturnComponentInCorrectState() {
+    // Set up data
+    Location location = aLocation().thatIsUsageSite().build();
+    Donation donation = aDonation().build();
+    Long componentId = 1L;
+    
+    Component transfusedComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.TRANSFUSED)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    
+    Component expectedComponent = aComponent()
+        .withId(componentId)
+        .withStatus(ComponentStatus.ISSUED)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    
+    // set up mocks
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedComponent)))).thenReturn(expectedComponent);
+    
+    // Run test
+    Component returnedComponent = componentCRUDService.untransfuseComponent(transfusedComponent);
+    
+    // Verify
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedComponent)));
+    assertThat(returnedComponent, hasSameStateAsComponent(expectedComponent));
+  }
+  
+  @Test(expected = IllegalStateException.class)
+  public void testUnTransfuseComponentThatsNotTransfused_shouldThrow() {
+    // Set up data
+    Location location = aLocation().thatIsUsageSite().build();
+    Donation donation = aDonation().build();
+    Component component = aComponent()
+        .withId(1L)
+        .withStatus(ComponentStatus.ISSUED)
+        .withDonation(donation)
+        .withLocation(location)
+        .build();
+    
+    // Run test
+    componentCRUDService.untransfuseComponent(component);
+  }
+  
 }
