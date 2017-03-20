@@ -33,7 +33,6 @@ import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.usage.ComponentUsage;
 import org.jembi.bsis.repository.ComponentNamedQueryConstants;
 import org.jembi.bsis.repository.InventoryNamedQueryConstants;
 
@@ -117,9 +116,6 @@ public class Component extends BaseModificationTrackerEntity {
 
   @OneToOne(optional = true)
   private Component parentComponent;
-
-  @OneToOne(mappedBy = "component")
-  private ComponentUsage usage;
 
   @ManyToOne
   private ComponentBatch componentBatch;
@@ -232,14 +228,6 @@ public class Component extends BaseModificationTrackerEntity {
       statusChanges = new TreeSet<>();
     }
     statusChanges.add(statusChange);
-  }
-
-  public ComponentUsage getUsage() {
-    return usage;
-  }
-
-  public void setUsage(ComponentUsage usage) {
-    this.usage = usage;
   }
 
   public String getSubdivisionCode() {
