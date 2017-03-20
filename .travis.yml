@@ -4,7 +4,7 @@ sudo: required
 language: java
 
 before_install:
-  - echo "USE mysql;\nSET PASSWORD FOR root = PASSWORD('root');\nFLUSH PRIVILEGES;\n" | mysql -u root
+  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - mysql -e 'create database bsis;'
 
 after_success:
