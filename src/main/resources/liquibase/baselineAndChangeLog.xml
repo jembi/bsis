@@ -89,4 +89,5 @@
   <include file="liquibase/updates/2582-add-transfusion-data-for-a-din.xml"/>
   <include file="liquibase/updates/2577-find-transfusions.xml"/>
   <include file="liquibase/updates/2685-add-transfusion-summary-report.xml"/>
+  <include file="liquibase/updates/2772-remove-usage-repository-and-component-usage.xml"/>
 </databaseChangeLog>
