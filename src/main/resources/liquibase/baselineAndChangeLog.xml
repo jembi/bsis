@@ -90,5 +90,4 @@
   <include file="liquibase/updates/2577-find-transfusions.xml"/>
   <include file="liquibase/updates/2685-add-transfusion-summary-report.xml"/>
   <include file="liquibase/updates/2461-baseline-uuid-implementation.xml"/>
-  <include file="liquibase/updates/2395-remove-unused.xml"/>
 </databaseChangeLog>

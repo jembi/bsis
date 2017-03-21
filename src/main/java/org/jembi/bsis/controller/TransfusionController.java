@@ -105,10 +105,4 @@ public class TransfusionController {
     return map;
   }
 
-  @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('" + PermissionConstants.VOID_TRANSFUSION_DATA + "')")
-  public void deleteTransfusion(@PathVariable Long id) {
-    transfusionControllerService.deleteTransfusion(id);
-  }
 }

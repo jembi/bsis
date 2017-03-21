@@ -22,7 +22,6 @@ import java.util.List;
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.model.component.Component;
-import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
@@ -254,39 +253,4 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
         null);
   }
 
-  @Test
-  public void testDeleteTransfusion_shouldMarkAsDeleted() {
-    // Set up
-    Transfusion transfusion = aTransfusion()
-        .withId(1L)
-        .withDateTransfused(new Date())
-        .withPatient(aPatient()
-            .withName1("Name 1")
-            .withName2("Name 1")
-            .build())
-        .withReceivedFrom(aUsageSite().build())
-        .withComponent(aComponent()
-            .withId(1L)
-            .withStatus(ComponentStatus.TRANSFUSED)
-            .build())
-        .build();
-
-    // Mocks
-    when(transfusionRepository.findTransfusionById(1L)).thenReturn(transfusion);
-    // Test
-    transfusionCRUDService.deleteTransfusion(1L);
-
-    // Assertions
-    assertThat("Transfusion has been deleted", transfusion.getIsDeleted());
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void testDeleteTransfusionDeleted_shouldThrow() {
-
-    // Mocks
-    when(transfusionRepository.findTransfusionById(1L)).thenReturn(null);
-
-    // Test
-    transfusionCRUDService.deleteTransfusion(1L);
-  }
 }

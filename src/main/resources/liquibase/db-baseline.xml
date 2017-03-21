@@ -7,8 +7,7 @@
 	<!-- Updated (timler): for #293 (refactoring) -->
 	<!-- Updated (timler): for #294 (refactoring) -->
 	<!-- Updated (timler): for #328 (refactoring) -->
-    <!-- Updated (timler): for BSIS-2841 (upgrade mysql) -->
-	<changeSet id="20170320-1348" author="devang">
+	<changeSet id="20150818-1237" author="devang">
 	    <preConditions onFail="MARK_RAN">
 		    <not><tableExists tableName="BloodTest" /></not>
 		</preConditions>

@@ -38,10 +38,8 @@ import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TransfusionRepository;
-import org.jembi.bsis.service.DateGeneratorService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -70,26 +68,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
   @Mock
   private TransfusionRepository transfusionRepository;
-
-  @Mock
-  private DateGeneratorService dateGeneratorService;
-
-  private void setupDateGeneratorServiceMocks(Date transfusedDate, Date componentCreatedOnDate, boolean includeComponentCreatedOnMock) {
-    when(dateGeneratorService.generateLocalDate(transfusedDate)).thenReturn(new LocalDate(transfusedDate));
-    when(dateGeneratorService.generateLocalDate()).thenReturn(new LocalDate(new Date()));
-    if (includeComponentCreatedOnMock) {
-      when(dateGeneratorService.generateLocalDate(componentCreatedOnDate))
-        .thenReturn(new LocalDate(componentCreatedOnDate));
-    }
-  }
-
-  private void setupDateGeneratorServiceMocks(Date transfusedDate, Date componentCreatedOnDate) {
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate, true);
-  }
-
-  private void setupDateGeneratorServiceMocks(Date transfusedDate) {
-    setupDateGeneratorServiceMocks(transfusedDate, null, false);
-  }
 
   @Test
   public void testValidateValidTransfusionFormWithDINAndComponentCode_shouldntGetErrors() {
@@ -133,7 +111,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -200,7 +177,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
     when(transfusionRepository.findTransfusionById(transfusionId)).thenReturn(existingTransfusion);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -273,7 +249,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(componentRepository.findComponentsByDINAndType(din, componentTypeId)).thenReturn(components);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
     when(transfusionRepository.findTransfusionById(transfusionId)).thenReturn(existingTransfusion);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -347,7 +322,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(componentRepository.findComponentsByDINAndType(din, componentTypeId)).thenReturn(components);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
     when(transfusionRepository.findTransfusionById(transfusionId)).thenReturn(existingTransfusion);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -403,7 +377,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
     when(componentRepository.findComponentsByDINAndType(din, componentTypeId)).thenReturn(components);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -461,7 +434,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(components.get(0));
     when(componentRepository.findComponentsByDINAndType(din, componentTypeId)).thenReturn(components);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -498,7 +470,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenThrow(NoResultException.class);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -533,7 +504,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "transfusion");
 
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -578,7 +548,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(false);
     when(componentRepository.findComponentsByDINAndType(din, componentTypeId)).thenReturn(components);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -623,7 +592,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
     when(componentRepository.findComponentsByDINAndType(din, componentTypeId)).thenReturn(components);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -685,7 +653,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
     when(componentRepository.findComponentsByDINAndType(din, componentTypeId)).thenReturn(components);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -726,7 +693,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -769,7 +735,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -813,7 +778,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenThrow(NoResultException.class);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -876,7 +840,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .build());
     when(componentRepository.findComponentsByDINAndType(din, 1L)).thenReturn(components);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -928,7 +891,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -983,7 +945,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
     when(componentRepository.findComponentsByDINAndType(din, componentTypeId)).thenReturn(components);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1034,7 +995,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1087,7 +1047,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1140,7 +1099,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1193,7 +1151,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1294,7 +1251,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1302,94 +1258,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     // Verify
     assertThat(errors.getErrorCount(), is(1));
     assertThat(errors.getFieldError("dateTransfused").getCode(), is("errors.invalid"));
-  }
-  
-  @Test
-  public void testValidateTransfusionFormWithValidTransfusionDateOnSameDateAsComponentCreatedOnDate_shouldGetNoErrors() {
-    // Set up data
-    Date transfusedDate = (new DateTime()).minusDays(2).toDate();
-    String din = "12345";
-    String componentCode = "1234";
-
-    Date componentCreatedOnDate = (new DateTime()).minusDays(2).toDate();
-
-    Component component = aComponent().withId(1L).withComponentCode(componentCode).withStatus(ComponentStatus.ISSUED)
-        .withCreatedOn(componentCreatedOnDate).build();
-
-    Donation donation = aDonation().withDonationIdentificationNumber(din).withComponent(component).build();
-
-    long usageSiteId = 1L;
-    Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
-    LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
-
-    TransfusionBackingForm form = aTransfusionBackingForm().withDonationIdentificationNumber(din)
-        .withComponentCode(componentCode).withReceivedFrom(aUsageSite).withDateTransfused(transfusedDate)
-        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-        .withPatient(aPatientBackingForm().withName1("name1").withName2("name2").build()).build();
-
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "transfusion");
-
-    when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
-    when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
-    when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
-
-    // Run test
-    validator.validateForm(form, errors);
-
-    // Verify
-    assertThat(errors.getErrorCount(), is(0));
-  }
-
-  @Test
-  public void testValidateTransfusionFormWithValidTransfusionDateOnSameDateAsComponentCreatedOnDateOnCurrentDate_shouldGetNoErrors() {
-    // Set up data
-    Date transfusedDate = new Date();
-    String din = "12345";
-    String componentCode = "1234";
-
-    Date componentCreatedOnDate = new Date();
-    
-    Component component = aComponent()
-        .withId(1L)
-        .withComponentCode(componentCode)
-        .withStatus(ComponentStatus.ISSUED)
-        .withCreatedOn(componentCreatedOnDate)
-        .build();
-
-    Donation donation = aDonation()
-        .withDonationIdentificationNumber(din)
-        .withComponent(component)
-        .build();
-
-    long usageSiteId = 1L;
-    Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
-    LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
-
-    TransfusionBackingForm form = aTransfusionBackingForm()
-        .withDonationIdentificationNumber(din)
-        .withComponentCode(componentCode)
-        .withReceivedFrom(aUsageSite)
-        .withDateTransfused(transfusedDate)
-        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-        .withPatient(aPatientBackingForm()
-            .withName1("name1")
-            .withName2("name2")
-            .build())
-        .build();
-
-    Errors errors = new MapBindingResult(new HashMap<String, String>(), "transfusion");
-
-    when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
-    when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
-    when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
-
-    // Run test
-    validator.validateForm(form, errors);
-
-    // Verify
-    assertThat(errors.getErrorCount(), is(0));
   }
 
   @Test
@@ -1434,7 +1302,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1480,7 +1347,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1532,7 +1398,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(aProcessingSiteId)).thenReturn(aProcessingSite);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1584,7 +1449,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenThrow(NoResultException.class);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1632,7 +1496,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1682,7 +1545,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);
@@ -1736,7 +1598,6 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(component);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
-    setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
     // Run test
     validator.validateForm(form, errors);

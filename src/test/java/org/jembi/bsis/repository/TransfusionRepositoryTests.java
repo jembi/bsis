@@ -96,25 +96,6 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     // Test
     transfusionRepository.findTransfusionById(20L);
   }
-
-  @Test(expected = NoResultException.class)
-  public void testFindTransfusionByIdThatIsDeleted_shouldThrow() {
-    // Set up
-    Transfusion transfusion = aTransfusion()
-        .withDateTransfused(new Date())
-        .withPatient(aPatient()
-            .withName1("Name 1")
-            .withName2("Name 1")
-            .build())
-        .withReceivedFrom(aUsageSite().buildAndPersist(entityManager))
-        .thatIsDeleted()
-        .withComponent(aComponent()
-            .buildAndPersist(entityManager))
-        .buildAndPersist(entityManager);
-
-    // Test
-    transfusionRepository.findTransfusionById(transfusion.getId());
-  }
   
   @Test
   public void testFindTransfusionSummaryRecordedForUsageSiteForPeriod_shouldReturnRightDtos() {

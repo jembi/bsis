@@ -1,5 +1,6 @@
 package org.jembi.bsis.backingform.validator;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -18,8 +19,6 @@ import org.jembi.bsis.repository.ComponentTypeRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TransfusionRepository;
-import org.jembi.bsis.service.DateGeneratorService;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 
@@ -40,9 +39,6 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
 
   @Autowired
   private TransfusionRepository transfusionRepository;
-
-  @Autowired
-  private DateGeneratorService dateGeneratorService;
 
   @Override
   public void validateForm(TransfusionBackingForm form, Errors errors) {
@@ -173,19 +169,15 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
   }
 
   private void validateDateTransfused(TransfusionBackingForm form, Errors errors, Component component) {
-    LocalDate transfusionDate = dateGeneratorService.generateLocalDate(form.getDateTransfused());
+    Date transfusionDate = form.getDateTransfused();
     if (transfusionDate == null) {
       errors.rejectValue("dateTransfused", "errors.required", "dateTransfused is required");
     } else {
-      LocalDate currentDate = dateGeneratorService.generateLocalDate();
-      if (currentDate.isBefore(transfusionDate)) {
+      if (new Date().before(transfusionDate)) {
         errors.rejectValue("dateTransfused", "errors.invalid", "dateTransfused must be in the past");
-      } else if (component != null) {
-        LocalDate createdOnDate = dateGeneratorService.generateLocalDate(component.getCreatedOn());
-        if (transfusionDate.isBefore(createdOnDate)) {
-          errors.rejectValue("dateTransfused", "errors.invalid.dateTransfusedAfterComponentCreated",
+      } else if (component != null && transfusionDate.before(component.getCreatedOn())) {
+        errors.rejectValue("dateTransfused", "errors.invalid.dateTransfusedAfterComponentCreated",
             "dateTransfused must be after the date that the component was created on");
-        }
       }
     }
   }

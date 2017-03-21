@@ -107,18 +107,4 @@ public class TransfusionCRUDService {
     existingTransfusion.setTransfusionReactionType(transfusion.getTransfusionReactionType());
     return transfusionRepository.update(existingTransfusion);
   }
-
-  public void deleteTransfusion(Long transfusionId) throws IllegalStateException, NoResultException {
-    Transfusion transfusion = transfusionRepository.findTransfusionById(transfusionId);
-    if (transfusion == null) {
-      throw new IllegalStateException("Transfusion with id " + transfusionId
-          + " does not exist (or has already been deleted).");
-    }
-
-    // Rollback component status from TRANSFUSED to ISSUED
-    componentCRUDService.untransfuseComponent(transfusion.getComponent());
-
-    transfusion.setIsDeleted(Boolean.TRUE);
-    transfusionRepository.update(transfusion);
-  }
 }

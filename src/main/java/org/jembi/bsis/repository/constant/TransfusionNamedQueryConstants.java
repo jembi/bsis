@@ -37,5 +37,5 @@ public class TransfusionNamedQueryConstants {
   public static final String NAME_FIND_TRANSFUSION_BY_ID =
       "Transfusion.findTransfusionById";
   public static final String QUERY_FIND_TRANSFUSION_BY_ID =
-      "SELECT t FROM Transfusion t WHERE t.id = :transfusionId AND t.isDeleted = :isDeleted";
+      "SELECT t FROM Transfusion t WHERE t.id = :transfusionId";
 }

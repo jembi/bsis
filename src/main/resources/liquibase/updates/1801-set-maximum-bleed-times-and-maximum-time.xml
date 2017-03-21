@@ -15,16 +15,11 @@
     </addColumn>
   </changeSet>
 
-  <changeSet id="20170320-1342" author="timler">
-    <preConditions onFail="MARK_RAN">
-	  <not><changeSetExecuted id="20161215-0958" author="timler" changeLogFile="liquibase/updates/1801-set-maximum-bleed-times-and-maximum-time.xml" /></not>
-	</preConditions>
+  <changeSet id="20161215-0958" author="timler">
     <comment>Make tracking columns on ComponentType not nullable</comment>
-    <sql>
-      ALTER TABLE ComponentType CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
-      ALTER TABLE ComponentType CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
-    </sql>
+    <addNotNullConstraint tableName="ComponentType" columnName="createdDate" columnDataType="TIMESTAMP" />
     <addNotNullConstraint tableName="ComponentType" columnName="createdBy_id" columnDataType="BIGINT(20)" />
+    <addNotNullConstraint tableName="ComponentType" columnName="lastUpdated" columnDataType="TIMESTAMP" />
     <addNotNullConstraint tableName="ComponentType" columnName="lastUpdatedBy_id" columnDataType="BIGINT(20)" />
   </changeSet>
 

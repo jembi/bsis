@@ -3,7 +3,6 @@ package org.jembi.bsis.service;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 
@@ -43,28 +42,5 @@ public class DateGeneratorService {
    */
   public Date generateDate(Date date) {
     return new LocalDate(date).toDate();
-  }
-
-  /**
-   * Converts a java.util.Date to a LocalDate (Joda) 
-   * @param date
-   * @return
-   */
-  public LocalDate generateLocalDate(Date date) {
-    if (date == null) {
-      return null;
-    }
-    DateTime dt = new DateTime(date);
-    return dt.toLocalDate();
-  }
-
-  /**
-   * Returns new LocalDate with current date
-   * 
-   * @param date
-   * @return
-   */
-  public LocalDate generateLocalDate() {
-    return new LocalDate();
   }
 }
