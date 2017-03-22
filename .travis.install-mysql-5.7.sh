@@ -5,3 +5,4 @@ sudo apt-key adv --keyserver pgp.mit.edu --recv-keys A4A9406876FCBD3C456770C88C7
 sudo apt-get update -q
 sudo apt-get install -q -y -o Dpkg::Options::=--force-confnew mysql-server
 sudo mysql_upgrade
+sudo service mysql restart
