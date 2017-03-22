@@ -64,7 +64,7 @@ public class UUIDFromSQLGenerator implements IdentifierGenerator {
    * @param bytes
    * @return
    */
-  public static UUID convertBytesToUUID(byte[] bytes) {
+  protected UUID convertBytesToUUID(byte[] bytes) {
     if (bytes.length != 16) {
       throw new IllegalArgumentException("Excepted 16 bytes only");
     }
