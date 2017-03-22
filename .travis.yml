@@ -7,7 +7,7 @@ language: java
 
 before_install:
   - bash .travis.install-mysql-5.7.sh
-  - echo "USE mysql;\nSET PASSWORD FOR root = PASSWORD('root');\nFLUSH PRIVILEGES;\n" | mysql -u root
+  - echo "USE mysql;\nALTER USER root IDENTIFIED BY 'root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - mysql -u root -proot -e 'create database bsis;'
 
 after_success:
