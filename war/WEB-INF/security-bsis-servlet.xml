@@ -306,8 +306,8 @@
   </http>
 
   <!-- Enable stateful access to swagger-ui  -->
+  <http pattern="/login.html" security="none" />
   <http auto-config="true" use-expressions="true">
-    <intercept-url pattern="/login.html*" access="isAnonymous()" />
     <intercept-url pattern="/**" access="isFullyAuthenticated()" />
     <form-login login-page="/login.html"
                 default-target-url="/index.html"
