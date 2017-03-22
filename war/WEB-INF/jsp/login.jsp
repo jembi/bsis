@@ -7,7 +7,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>BSIS</title>
-<jsp:include page="commonHeadIncludes.jsp" flush="true" />
 <link type="text/css" rel="stylesheet" href="css/login.css" />
 </head>
 <body>
