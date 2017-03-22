@@ -310,7 +310,7 @@
     <intercept-url pattern="/login.html*" access="isAnonymous()" />
     <intercept-url pattern="/**" access="isFullyAuthenticated()" />
     <form-login login-page="/login.html"
-                default-target-url="/api.html"
+                default-target-url="/index.html"
                 authentication-failure-url="/login.html?error=true"
                 always-use-default-target="true" />
   </http>   
