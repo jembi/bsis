@@ -20,22 +20,26 @@
     </delete>
   </changeSet>
 
-  <changeSet id="20161031-0937" author="timler">
+  <!-- refactoring BSIS-2841 (timler) -->
+  <changeSet id="20170323-1045" author="timler">
+    <preConditions onFail="MARK_RAN">
+      <not><columnExists tableName="BloodTest" columnName="createdDate" /></not>
+    </preConditions>
     <comment>Add modification tracker fields to BloodTest tables and initialize them</comment>
     <addColumn tableName="BloodTest">
-      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="createdBy_id" type="BIGINT(20)" >
         <constraints foreignKeyName="fk_BloodTest_createdBy" references="User(id)" />
       </column>
-      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="lastUpdatedBy_id" type="BIGINT(20)">
         <constraints foreignKeyName="fk_BloodTest_lastUpdatedBy" references="User(id)" />
       </column>
     </addColumn>
     <addColumn tableName="BloodTest_AUD">
-      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="createdBy_id" type="BIGINT(20)" />
-      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="lastUpdatedBy_id" type="BIGINT(20)" />
     </addColumn>
     <update tableName="BloodTest">

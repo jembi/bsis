@@ -541,72 +541,6 @@
 		</sql>
 	</changeSet>
 
-	<!--For Issue #36[Add Donor Codes Functionality] -->
-	<changeSet id="20140504-1130" author="srikanthmalyala">
-
-		<createTable  tableName="DonorCodeGroup">
-			<column name="id" type="BIGINT" autoIncrement = "true">
-				<constraints primaryKey="true" nullable="false" />
-			</column>
-			<column name="donorCodeGroup" type="varchar(255)"/> 
-		</createTable>
-	
-		<createTable  tableName="DonorCode">
-			<column name="id" type="BIGINT" autoIncrement="true">
-			<constraints primaryKey="true" nullable="false" />
-			 </column>
-			  <column name="donorCode" type="varchar(255)"/> 
-			 <column name="donorCodeGroupId" type="BIGINT">
-				<constraints  nullable="false" />
-			 </column>
-		</createTable>
-		<addForeignKeyConstraint baseColumnNames="donorCodeGroupId"
-			 baseTableName="DonorCode"
-			 constraintName="fk_DonorCode_DonorCodeGroup"
-			 referencedColumnNames="id"
-			 referencedTableName="DonorCodeGroup"/>
-
-		<createTable  tableName="DonorDonorCode">
-			<column name="id" type="BIGINT" autoIncrement="true">
-				<constraints primaryKey="true" nullable="false" />
-			</column>
-			<column name="donorId" type="BIGINT">
-				<constraints  nullable="false" />
-			</column>
-			<column name="donorCodeId" type="BIGINT">
-				<constraints  nullable="false" />
-			</column>
-			<column name="createdDate" type="TIMESTAMP"/>
-			<column name="lastUpdated" type="TIMESTAMP"/>
-			<column name="createdBy_id" type="SMALLINT"/>
-			<column name="lastUpdatedBy_id" type="SMALLINT"/>
-		</createTable>
-		<addForeignKeyConstraint baseColumnNames="donorCodeId"
-			  baseTableName="DonorDonorCode"
-			  constraintName="fk_DonorDonorCode_DonorCode"
-			  referencedColumnNames="id"
-			  referencedTableName="DonorCode"/>
-		<addForeignKeyConstraint baseColumnNames="donorId"
-			  baseTableName="DonorDonorCode"
-			  constraintName="fk_DonorDonorCode_Donor"
-			  referencedColumnNames="id"
-			  referencedTableName="Donor"/>
-
-		<createTable  tableName="DonorDonorCode_AUD">
-			 <column name="id" type="BIGINT" autoIncrement="true">
-				<constraints primaryKey="true" nullable="false" />
-			</column>
-			<column name="REV" type="INT">
-				<constraints  primaryKey="true" nullable="false" />
-			</column>
-			<column name="REVTYPE" type="TINYINT"/>
-			<column name="createdDate" type="TIMESTAMP"/>
-			<column name="lastUpdated" type="TIMESTAMP"/>
-			<column name="createdBy_id" type="SMALLINT"/>
-			<column name="lastUpdatedBy_id" type="SMALLINT"/>
-		</createTable>
-	</changeSet>
-
 	<!-- For issue 172[Add in additional donor demographic fields] -->
 	<changeSet id="20140504-1341" author="srikanthmalyala">
 		<addColumn tableName="Donor">
@@ -950,20 +884,41 @@
 		</addColumn>
 	</changeSet>
 
+    <!-- refactoring BSIS-2841 (timler) -->
 	<!-- For issue 229 [Create testBatch table]  -->
-	<changeSet id="20131112-2005" author="gtlnikita">
+	<changeSet id="20170323-1113" author="gtlnikita">
+      <preConditions onFail="MARK_RAN">
+        <not><tableExists tableName="TestBatch" /></not>
+      </preConditions>
 		<createTable tableName="TestBatch">
 			<column name="id" type="smallint(6)" autoIncrement="true">
 				<constraints primaryKey="true" nullable="false"/>
 			</column>
 			<column name="batchNumber" type="varchar(20)"></column>
 			<column name="isDeleted" type="tinyint(1)"></column>
-			<column name="createdDate" type="timestamp"></column>
-			<column name="lastUpdated" type="timestamp"></column>
+			<column name="createdDate" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+			<column name="lastUpdated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
 			<column name="notes" type="longtext"></column>
 			<column name="status" type="varchar(20)"></column>
 			<column name="createdBy_id" type="smallint(6)"></column>
 			<column name="lastUpdatedBy_id" type="smallint(6)"></column>
+		</createTable>
+		<createTable tableName="TestBatch_AUD">
+			<column name="id" type="smallint(6)">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="batchNumber" type="varchar(20)"></column>
+			<column name="isDeleted" type="tinyint(1)"></column>
+			<column name="createdDate" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+			<column name="lastUpdated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
+			<column name="notes" type="longtext"></column>
+			<column name="status" type="varchar(20)"></column>
+			<column name="createdBy_id" type="smallint(6)"></column>
+			<column name="lastUpdatedBy_id" type="smallint(6)"></column>
+			<column name="REV" type="INT">
+				<constraints  primaryKey="true" nullable="false" />
+			</column>
+			<column name="REVTYPE" type="tinyint(4)"></column>
 		</createTable>
 	</changeSet>
 
@@ -995,26 +950,6 @@
 			 baseColumnNames="testBatch_id" 
 			 baseTableName="DonationBatch_AUD" 
 			 referencedColumnNames="id"/>
-	</changeSet>
-
-	<changeSet id="20131113-1933" author="srikanthmalyala">
-		<createTable tableName="TestBatch_AUD">
-			<column name="id" type="smallint(6)">
-				<constraints primaryKey="true" nullable="false"/>
-			</column>
-			<column name="batchNumber" type="varchar(20)"></column>
-			<column name="isDeleted" type="tinyint(1)"></column>
-			<column name="createdDate" type="timestamp"></column>
-			<column name="lastUpdated" type="timestamp"></column>
-			<column name="notes" type="longtext"></column>
-			<column name="status" type="varchar(20)"></column>
-			<column name="createdBy_id" type="smallint(6)"></column>
-			<column name="lastUpdatedBy_id" type="smallint(6)"></column>
-			<column name="REV" type="INT">
-				<constraints  primaryKey="true" nullable="false" />
-			</column>
-			<column name="REVTYPE" type="tinyint(4)"></column>
-		</createTable>
 	</changeSet>
 
 	<!-- #246 Adapt Donations to use single Location field -->
@@ -1892,7 +1827,11 @@
 		</insert>
 	</changeSet>
 
-	<changeSet id="20151026-1145" author="debonair">
+    <!-- refactoring BSIS-2841 (timler) -->
+	<changeSet id="20170323-1157" author="debonair">
+      <preConditions onFail="MARK_RAN">
+        <tableExists tableName="DonorCode" />
+      </preConditions>
 		<comment>385 - Refactor out Donor Code</comment>
 		<dropForeignKeyConstraint baseTableName="DonorDonorCode" constraintName="fk_DonorDonorCode_DonorCode" />
 		<dropForeignKeyConstraint baseTableName="DonorDonorCode" constraintName="fk_DonorDonorCode_Donor" />
@@ -1963,14 +1902,18 @@
         </insert>
     </changeSet>
 
+    <!-- refactoring BSIS-2841 (timler) -->
 	<!-- For issue 386 [Add isDeleted field to PostDonationCounselling and PostDonationCounselling_AUD Tables] -->
-	<changeSet id="20151117-1509" author="debonair">
+	<changeSet id="20170323-1115" author="debonair">
+      <preConditions onFail="MARK_RAN">
+        <not><columnExists tableName="PostDonationCounselling" columnName="createdDate" /></not>
+      </preConditions>
 		<addColumn tableName="PostDonationCounselling">
 			<column name="isDeleted" type="TINYINT(1)">
 				<constraints nullable="false" />
 			</column>
-			<column name="createdDate" type="TIMESTAMP"/>
-			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
 			<column name="createdBy_id" type="SMALLINT"/>
 			<column name="lastUpdatedBy_id" type="SMALLINT"/>
 		</addColumn>
@@ -1979,8 +1922,8 @@
 			<column name="isDeleted" type="TINYINT(1)">
 				<constraints nullable="false" />
 			</column>
-			<column name="createdDate" type="TIMESTAMP"/>
-			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
 			<column name="createdBy_id" type="SMALLINT"/>
 			<column name="lastUpdatedBy_id" type="SMALLINT"/>
 		</addColumn>

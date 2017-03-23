@@ -17,22 +17,26 @@
       columnDataType="varchar(255)" />
   </changeSet>
 
-  <changeSet id="20161018-1530" author="lauravignoli">
+  <!-- refactoring BSIS-2841 (timler) -->
+  <changeSet id="20170323-1025" author="lauravignoli">
+    <preConditions onFail="MARK_RAN">
+      <not><columnExists tableName="ComponentTypeCombination" columnName="createdDate" /></not>
+    </preConditions>
     <comment>Add modification tracker fields to ComponentTypeCombination tables and initialize them</comment>
     <addColumn tableName="ComponentTypeCombination">
-      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="createdBy_id" type="BIGINT(20)" >
         <constraints foreignKeyName="fk_ComponentTypeCombination_createdBy" references="User(id)" />
       </column>
-      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="lastUpdatedBy_id" type="BIGINT(20)">
         <constraints foreignKeyName="fk_ComponentTypeCombination_lastUpdatedBy" references="User(id)" />
       </column>
     </addColumn>
     <addColumn tableName="ComponentTypeCombination_AUD">
-      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="createdBy_id" type="BIGINT(20)" />
-      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="lastUpdatedBy_id" type="BIGINT(20)" />
     </addColumn>
     <update tableName="ComponentTypeCombination">
@@ -49,7 +53,8 @@
     </update>
   </changeSet>
 
-  <changeSet id="20161019-1549" author="timler">
+  <!-- refactoring BSIS-2841 (timler) -->
+  <changeSet id="20170323-1026" author="timler">
     <preConditions onFail="MARK_RAN">
       <not>
         <columnExists tableName="ComponentType" columnName="createdDate" />
@@ -57,19 +62,19 @@
     </preConditions>
     <comment>Adding modification tracker fields to ComponentType and ComponentType_AUD tables</comment>
     <addColumn tableName="ComponentType">
-      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="createdBy_id" type="BIGINT(20)">
         <constraints foreignKeyName="fk_ComponentType_createdBy" references="User(id)" />
       </column>
-      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="lastUpdatedBy_id" type="BIGINT(20)">
         <constraints foreignKeyName="fk_ComponentType_lastUpdatedBy" references="User(id)" />
       </column>
     </addColumn>
     <addColumn tableName="ComponentType_AUD">
-      <column name="createdDate" type="TIMESTAMP" />
+      <column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="createdBy_id" type="BIGINT(20)" />
-      <column name="lastUpdated" type="TIMESTAMP" />
+      <column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
       <column name="lastUpdatedBy_id" type="BIGINT(20)" />
     </addColumn>
     <update tableName="ComponentType">

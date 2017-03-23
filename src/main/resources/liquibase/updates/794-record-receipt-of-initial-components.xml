@@ -4,7 +4,11 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
   logicalFilePath="./liquibase/updates/794-record-receipt-of-initial-components.xml">
 
-	<changeSet id="20160421-1056" author="timler">
+    <!-- refactoring BSIS-2841 (timler) -->
+	<changeSet id="20170323-1047" author="timler">
+	    <preConditions onFail="MARK_RAN">
+		    <not><tableExists tableName="ComponentBatch" /></not>
+		</preConditions>
 		<comment>BSIS-794 - Add ComponentBatch entity.</comment>
 		<createTable tableName="ComponentBatch">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -14,12 +18,12 @@
                 <constraints foreignKeyName="fk_ComponentBatch_Location" references="Location(id)"/>
             </column>
             <column name="status" type="VARCHAR(20)"/>
-            <column name="collectionDate" type="TIMESTAMP"/>
-            <column name="deliveryDate" type="TIMESTAMP"/>
+            <column name="collectionDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="deliveryDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
             <column name="isDeleted" type="tinyint(1)"/>
-			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
 			<column name="createdBy_id" type="BIGINT" />
-			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
 			<column name="lastUpdatedBy_id" type="BIGINT" />
         </createTable>
         <createTable tableName="ComponentBatch_AUD">
@@ -28,14 +32,14 @@
             </column>
             <column name="location_id" type="BIGINT"/>
             <column name="status" type="VARCHAR(20)"/>
-            <column name="collectionDate" type="TIMESTAMP"/>
-            <column name="deliveryDate" type="TIMESTAMP"/>
+            <column name="collectionDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="deliveryDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
             <column name="isDeleted" type="tinyint(1)"/>
-			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
 			<column name="createdBy_id" type="BIGINT">
 			    <constraints foreignKeyName="fk_ComponentBatch_createdBy" references="User(id)"/>
 			</column>
-			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
 			<column name="lastUpdatedBy_id" type="BIGINT">
 			    <constraints foreignKeyName="fk_ComponentBatch_lastUpdatedBy" references="User(id)"/>
 			</column>
@@ -46,7 +50,11 @@
         </createTable>
 	</changeSet>
 	
-	<changeSet id="20160421-1026" author="timler">
+    <!-- refactoring BSIS-2841 (timler) -->
+	<changeSet id="20170323-1048" author="timler">
+	    <preConditions onFail="MARK_RAN">
+		    <not><tableExists tableName="BloodTransportBox" /></not>
+		</preConditions>
 		<comment>BSIS-794 - Add BloodTransportBox entity.</comment>
 		<createTable tableName="BloodTransportBox">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -57,11 +65,11 @@
                 <constraints foreignKeyName="fk_BloodTransportBox_ComponentBatch" references="ComponentBatch(id)"/>
             </column>
             <column name="isDeleted" type="tinyint(1)"/>
-			<column name="createdDate" type="TIMESTAMP" />
+			<column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
 			<column name="createdBy_id" type="BIGINT" >
 			    <constraints foreignKeyName="fk_BloodTransportBox_createdBy" references="User(id)"/>
 			</column>
-			<column name="lastUpdated" type="TIMESTAMP" />
+			<column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
 			<column name="lastUpdatedBy_id" type="BIGINT" >
 			    <constraints foreignKeyName="fk_BloodTransportBox_lastUpdatedBy" references="User(id)"/>
 			</column>
@@ -73,9 +81,9 @@
             <column name="temperature" type="DECIMAL(5,2)"/>
             <column name="componentBatch_id" type="BIGINT"/>
             <column name="isDeleted" type="tinyint(1)"/>
-			<column name="createdDate" type="TIMESTAMP"/>
+			<column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
 			<column name="createdBy_id" type="BIGINT"/>
-			<column name="lastUpdated" type="TIMESTAMP"/>
+			<column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
 			<column name="lastUpdatedBy_id" type="BIGINT"/>
             <column name="REV" type="int">
                 <constraints primaryKey="true"  />
