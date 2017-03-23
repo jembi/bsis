@@ -18,8 +18,8 @@ public class UUIDFromSQLGeneratorTests {
 
     Long lsb = testData.getLeastSignificantBits();
     Long msb = testData.getMostSignificantBits();
-    byte[] bytesLSB = ByteBuffer.allocate(Long.SIZE / Byte.SIZE).putLong(lsb).array();
-    byte[] bytesMSB = ByteBuffer.allocate(Long.SIZE / Byte.SIZE).putLong(msb).array();
+    byte[] bytesLSB = ByteBuffer.allocate(8).putLong(lsb).array();
+    byte[] bytesMSB = ByteBuffer.allocate(8).putLong(msb).array();
     
     byte[] UUIDByteArray = ArrayUtils.addAll(bytesMSB, bytesLSB);
 
