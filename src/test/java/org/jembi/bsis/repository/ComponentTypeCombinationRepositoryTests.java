@@ -76,7 +76,7 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
   public void testUpdateComponentTypeCombination_shouldPersistTrackingFieldsCorrectly() {
     // Set up data
     ComponentTypeCombination componentTypeCombination = aComponentTypeCombination()
-        .withComponentType(ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager))
+        .withComponentType(ComponentTypeBuilder.aComponentType().build())
         .withSourceComponentType(ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager))
         .buildAndPersist(entityManager);
 
