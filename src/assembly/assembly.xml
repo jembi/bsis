@@ -29,7 +29,7 @@
    <outputDirectory>/</outputDirectory>
   </file>
   <file>
-   <source>war/WEB-INF/classes/log4j.properties</source>
+   <source>src/main/resources/log4j.properties</source>
    <outputDirectory>/</outputDirectory>
   </file>
  </files>
