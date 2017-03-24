@@ -346,6 +346,60 @@
 		</insert>
 	</changeSet>
 
+	<!--  NOT USED FOR BETA-RELEASE
+	<changeSet id="20141117-1128" author="srikanthmalyala">
+		<comment>Add donor code groups</comment>
+		<insert tableName="DonorCodeGroup">
+			<column name="id" value="1"></column>
+			<column name="donorCodeGroup" value="Test Only"></column>
+		</insert>
+		<insert tableName="DonorCodeGroup">
+			<column name="id" value="2"></column>
+			<column name="donorCodeGroup" value="Do Not Bleed"></column>
+		</insert>
+	</changeSet>
+	
+	<changeSet id="20141117-1133" author="srikanthmalyala">
+		<comment>Add donor codes</comment>
+		<insert tableName="DonorCode">
+			<column name="id" value="1"></column>
+			<column name="donorCode" value="Blood group antibody"></column>
+			<column name="donorCodeGroupId" value="1"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="2"></column>
+			<column name="donorCode" value="Follow up samples required"></column>
+			<column name="donorCodeGroupId" value="1"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="3"></column>
+			<column name="donorCode" value="Lab query"></column>
+			<column name="donorCodeGroupId" value="1"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="4"></column>
+			<column name="donorCode" value="Biological false positive"></column>
+			<column name="donorCodeGroupId" value="2"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="5"></column>
+			<column name="donorCode" value="For counseling – HCV"></column>
+			<column name="donorCodeGroupId" value="2"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="6"></column>
+			<column name="donorCode" value="For counseling – HIV"></column>
+			<column name="donorCodeGroupId" value="2"></column>   
+		</insert>
+		<insert tableName="DonorCode">
+			<column name="id" value="7"></column>
+			<column name="donorCode" value="TTI Reactive"></column>
+			<column name="donorCodeGroupId" value="2"></column>   
+		</insert>
+	</changeSet>
+	
+	-->
+
 	<changeSet id="20141117-1141" author="srikanthmalyala">
 		<comment>Add address types</comment>
 		<insert tableName="AddressType">

@@ -3,11 +3,8 @@
  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
  logicalFilePath="./liquibase/updates/870-add-new-order.xml">
 
-  <!-- refactoring BSIS-2841 (timler) -->
-  <changeSet id="20170323-1054" author="bausmeier">
-    <preConditions onFail="MARK_RAN">
-      <not><tableExists tableName="OrderForm" /></not>
-    </preConditions>
+ <changeSet id="20160511-1143" author="bausmeier">
+
   <createTable tableName="OrderForm">
    <column name="id" type="BIGINT(20)" autoIncrement="true">
     <constraints primaryKey="true" />
@@ -21,11 +18,11 @@
    <column name="dispatchedTo_id" type="BIGINT(20)">
     <constraints nullable="false" foreignKeyName="fk_OrderForm_dispatchedTo" references="Location(id)" />
    </column>
-   <column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
+   <column name="createdDate" type="TIMESTAMP" />
    <column name="createdBy_id" type="BIGINT(20)">
     <constraints foreignKeyName="fk_OrderForm_createdBy" references="User(id)" />
    </column>
-   <column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
+   <column name="lastUpdated" type="TIMESTAMP" />
    <column name="lastUpdatedBy_id" type="BIGINT(20)">
     <constraints foreignKeyName="fk_OrderForm_lastUpdatedBy" references="User(id)" />
    </column>
@@ -47,9 +44,9 @@
    <column name="orderDate" type="DATETIME" />
    <column name="dispatchedFrom_id" type="BIGINT(20)" />
    <column name="dispatchedTo_id" type="BIGINT(20)" />
-   <column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
+   <column name="createdDate" type="TIMESTAMP" />
    <column name="createdBy_id" type="BIGINT(20)" />
-   <column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
+   <column name="lastUpdated" type="TIMESTAMP" />
    <column name="lastUpdatedBy_id" type="BIGINT(20)" />
    <column name="isDeleted" type="tinyint(1)"/>
    <column name="status" type="VARCHAR(20)"/>

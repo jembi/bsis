@@ -3,24 +3,18 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
     logicalFilePath="./src/main/resources/liquibase/updates/2562-configure-transfusion-reaction-types.xml">
 
-  <!-- refactoring BSIS-2841 (timler) -->
-  <changeSet id="20170323-1036" author="rowanpi">
-    <preConditions onFail="MARK_RAN">
-      <not>
-        <tableExists tableName="TransfusionReactionType" />
-      </not>
-    </preConditions>
+  <changeSet id="20170216-1805" author="rowanpi">
     <createTable tableName="TransfusionReactionType">
       <column name="id" type="BIGINT(20)" autoIncrement="true">
         <constraints primaryKey="true" />
       </column>
-      <column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+      <column name="createdDate" type="TIMESTAMP">
         <constraints nullable="false" />
       </column>
       <column name="createdBy_id" type="BIGINT(20)">
         <constraints foreignKeyName="fk_TransfusionReactionType_createdBy" references="User(id)" />
       </column>
-      <column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdated" type="TIMESTAMP" />
       <column name="lastUpdatedBy_id" type="BIGINT(20)">
         <constraints foreignKeyName="fk_TransfusionReactionType_lastUpdatedBy" references="User(id)" />
       </column>
@@ -43,9 +37,9 @@
         <constraints primaryKey="true" />
       </column>
       <column name="REVTYPE" type="TINYINT(4)"/>
-      <column name="createdDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
+      <column name="createdDate" type="TIMESTAMP"/>
       <column name="createdBy_id" type="BIGINT(20)"/>
-      <column name="lastUpdated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP" />
+      <column name="lastUpdated" type="TIMESTAMP" />
       <column name="lastUpdatedBy_id" type="BIGINT(20)"/>
       <column name="name" type="varchar(255)"/>
       <column name="description" type="TEXT"/>
