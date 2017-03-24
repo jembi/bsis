@@ -31,7 +31,7 @@ public class Division extends BaseModificationTrackerUUIDEntity {
   private static final long serialVersionUID = 1L;
 
   @NotBlank
-  @Column(length = 255, nullable = false)
+  @Column(length = 255, nullable = false, unique = true)
   private String name;
 
   @Column

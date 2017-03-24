@@ -2,6 +2,7 @@ package org.jembi.bsis.model;
 
 import static org.jembi.bsis.helpers.builders.DivisionBuilder.aDivision;
 
+import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 
 import org.jembi.bsis.suites.ContextDependentTestSuite;
@@ -20,13 +21,19 @@ public class DivisionRoundTripTests extends ContextDependentTestSuite {
         .buildAndPersist(entityManager);
   }
 
-  @Test(expected = ConstraintViolationException.class)
+  @Test(expected = PersistenceException.class)
   public void testPersistValidDivisionWithNoName_shouldThrow() {
+    aDivision().withName("sameName").buildAndPersist(entityManager);
+    aDivision().withName("sameName").buildAndPersist(entityManager);
+  }
+
+  @Test(expected = ConstraintViolationException.class)
+  public void testPersistDivisionWithNoName_shouldThrow() {
     aDivision().withName(null).buildAndPersist(entityManager);
   }
 
   @Test(expected = ConstraintViolationException.class)
-  public void testPersistValidDivisionWithBlankName_shouldThrow() {
+  public void testPersistDivisionWithBlankName_shouldThrow() {
     aDivision().withName("").buildAndPersist(entityManager);
   }
 
