@@ -232,24 +232,4 @@
 		value="200" description="Donation Donor pulseMax" dataType_id="2" />
 	<GeneralConfig id="13" name="components.createInitialComponents" value="true" dataType_id="4" />
 		
-	<GenericConfig id="6" propertyName="ageLimitsEnabled"
-		propertyOwner="donationRequirements" propertyValue="true" />
-	<GenericConfig id="7" propertyName="minimumAge"
-		propertyOwner="donationRequirements" propertyValue="16" />
-	<GenericConfig id="8" propertyName="maximumAge"
-		propertyOwner="donationRequirements" propertyValue="65" />
-	<GenericConfig id="9" propertyName="minimumWeight"
-		propertyOwner="donationRequirements" propertyValue="65" />
-	<GenericConfig id="10" propertyName="donorWeightUnit"
-		propertyOwner="donationRequirements" propertyValue="Kg." />
-	<GenericConfig id="11" propertyName="daysBetweenConsecutiveDonations"
-		propertyOwner="donationRequirements" propertyValue="90" />
-	<GenericConfig id="12" propertyName="donorDeferralCheckRequired"
-		propertyOwner="donationRequirements" propertyValue="true" />
-	<GenericConfig id="13" propertyName="donorBloodGroupMatchRequired"
-		propertyOwner="donationRequirements" propertyValue="true" />
-	<GenericConfig id="14" propertyName="donorHistoryCheckRequired"
-		propertyOwner="donationRequirements" propertyValue="true" />
-	<GenericConfig id="15" propertyName="useShortNameForProductTypes"
-		propertyOwner="products" propertyValue="true" />
 </dataset>
