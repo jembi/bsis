@@ -14,7 +14,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class BaseModificationTrackerUUIDEntityTest extends SecurityContextDependentTestSuite {
+public class BaseModificationTrackerUUIDEntityTests extends SecurityContextDependentTestSuite {
 
   @Autowired
   private DivisionRepository divisionRepository;
@@ -45,7 +45,7 @@ public class BaseModificationTrackerUUIDEntityTest extends SecurityContextDepend
   }
 
   @Test
-  public void testSetModificationTracker() throws Exception {
+  public void testSetModificationTracker() {
     Division division = aDivision().withName("Div").buildAndPersist(entityManager);
     RowModificationTracker tracker = new RowModificationTracker();
     Date createdDateInThePast = DateTime.now().minusDays(2).toDate();

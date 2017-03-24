@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-public class BaseUUIDEntityTest {
+public class BaseUUIDEntityTests {
   
   private static final UUID UUID1 = UUID.randomUUID();
   private static final UUID UUID2 = UUID.randomUUID();
@@ -33,7 +33,7 @@ public class BaseUUIDEntityTest {
   public void testToStringNullId() {
     TestEntity testEntity1 = new TestEntity();
     String str = testEntity1.toString();
-    assertThat("Object short class name in toString", str.contains("BaseUUIDEntityTest.TestEntity"), is(true));
+    assertThat("Object short class name in toString", str.contains("BaseUUIDEntityTests.TestEntity"), is(true));
     assertThat("Null id referenced in toString", str.contains("id=<null>"), is(true));
   }
 
@@ -134,15 +134,5 @@ public class BaseUUIDEntityTest {
     TestEntity testEntity2 = new TestEntity();
     testEntity2.setId(UUID1);
     assertThat("hash function is equals", testEntity1.hashCode(), is(testEntity2.hashCode()));
-  }
-
-  @Test
-  public void testHashCodeConsistant() {
-    TestEntity testEntity1 = new TestEntity();
-    testEntity1.setId(UUID1);
-    int hashCode = testEntity1.hashCode();
-    for (int i = 0; i < 25; i++) {
-      assertThat("HashCode is consistant", hashCode, is(testEntity1.hashCode()));
-    }
   }
 }
