@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
@@ -121,14 +122,14 @@ public class OrderFormFactoryTests extends UnitTestSuite {
     Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
 
-    OrderFormItem expectedItem1 = anOrderItemForm().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    OrderFormItem expectedItem1 = anOrderItemForm().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     OrderForm expectedEntity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate)
         .withOrderFormItem(expectedItem1).build();
     
-    OrderFormItemBackingForm item1 = anOrderFormItemBackingForm().withId(1L).withBloodGroup("A+").build();
+    OrderFormItemBackingForm item1 = anOrderFormItemBackingForm().withId(UUID.randomUUID()).withBloodGroup("A+").build();
     OrderFormBackingForm backingForm = anOrderFormBackingForm()
         .withDispatchedFrom(getBaseDispatchedFromLocationBackingForm())
         .withDispatchedTo(getBaseDispatchedToLocationBackingForm())

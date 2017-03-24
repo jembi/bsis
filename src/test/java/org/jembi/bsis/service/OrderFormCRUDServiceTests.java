@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
@@ -85,7 +86,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     Date orderDate = new Date();
     Location dispatchedFrom = aDistributionSite().build();
     Location dispatchedTo = aDistributionSite().build();
-    OrderFormItem orderFormItem = anOrderItemForm().withId(7L).build();
+    OrderFormItem orderFormItem = anOrderItemForm().withId(UUID.randomUUID()).build();
     Component component = aComponent().build();
     
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withCreatedDate(createdDate).build();

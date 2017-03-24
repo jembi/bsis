@@ -1,23 +1,14 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
 
-public class OrderFormItemViewModel {
-  
-  private Long id;
+public class OrderFormItemViewModel extends BaseViewModel<UUID> {
   
   private ComponentTypeViewModel componentType;
   
   private String bloodGroup;
   
   private int numberOfUnits;
-  
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   public ComponentTypeViewModel getComponentType() {
     return componentType;

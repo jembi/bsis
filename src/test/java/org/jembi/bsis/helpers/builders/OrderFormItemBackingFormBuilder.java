@@ -4,14 +4,16 @@ import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.OrderFormItemBackingForm;
 import org.jembi.bsis.model.componenttype.ComponentType;
 
+import java.util.UUID;
+
 public class OrderFormItemBackingFormBuilder {
 
-  private Long id;
+  private UUID id;
   private ComponentTypeBackingForm componentType;
   private String bloodGroup;
   private int numberOfUnits;
 
-  public OrderFormItemBackingFormBuilder withId(Long id) {
+  public OrderFormItemBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
