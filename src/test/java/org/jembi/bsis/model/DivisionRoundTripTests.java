@@ -22,7 +22,7 @@ public class DivisionRoundTripTests extends ContextDependentTestSuite {
   }
 
   @Test(expected = PersistenceException.class)
-  public void testPersistValidDivisionWithNoName_shouldThrow() {
+  public void testPersistDivisionWithSameName_shouldThrow() {
     aDivision().withName("sameName").buildAndPersist(entityManager);
     aDivision().withName("sameName").buildAndPersist(entityManager);
   }
