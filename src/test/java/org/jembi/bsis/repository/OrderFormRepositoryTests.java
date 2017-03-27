@@ -734,8 +734,6 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
         .withCount(1)
         .build();
 
-
-
     // Verify
     assertThat(returnedDTOs.size(), is(4));
     assertThat(returnedDTOs, hasItem(hasSameStateAsBloodUnitsOrderDTO(dto1)));
