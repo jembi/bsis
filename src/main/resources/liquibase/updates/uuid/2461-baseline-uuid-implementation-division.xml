@@ -7,14 +7,6 @@
   </changeSet>
 
   <changeSet id="20170317-0942"  author="rowanpi">
-    <preConditions onFail="MARK_RAN">
-      <sqlCheck expectedResult="0">
-        <![CDATA[
-          SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'Division' AND COLUMN_NAME = 'id' AND TABLE_SCHEMA = 'bsis' AND DATA_TYPE = 'BINARY';
-        ]]>
-       </sqlCheck>
-    </preConditions>
-
     <dropForeignKeyConstraint baseTableName="Division" constraintName="fk_Division_parent"/>
     <dropForeignKeyConstraint baseTableName="Location" constraintName="fk_Location_divisionLevel1"/>
     <dropForeignKeyConstraint baseTableName="Location" constraintName="fk_Location_divisionLevel2"/>
@@ -102,61 +94,40 @@
     <modifyDataType
             columnName="id"
             newDataType="BIGINT(20)"
-            schemaName="bsis"
-            tableName="Division"/>
-
-    <dropPrimaryKey 
-            constraintName="PRIMARY"
-            schemaName="bsis"
-            tableName="Division"/>
-    <addPrimaryKey
-            columnNames="id"
-            constraintName="PRIMARY"
-            schemaName="bsis"
             tableName="Division"/>
 
     <modifyDataType columnName="id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="Division"/>
 
     <modifyDataType columnName="id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="Division_AUD"/>
 
     <modifyDataType columnName="parent_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="Division"/>
     <modifyDataType columnName="divisionLevel1_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="Location"/>
     <modifyDataType columnName="divisionLevel2_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="Location"/>
     <modifyDataType columnName="divisionLevel3_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="Location"/>
 
     <modifyDataType columnName="parent_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="Division_AUD"/>
     <modifyDataType columnName="divisionLevel1_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="Location_AUD"/>
     <modifyDataType columnName="divisionLevel2_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="Location_AUD"/>
     <modifyDataType columnName="divisionLevel3_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="Location_AUD"/>
 
     <sql>
@@ -171,7 +142,7 @@
         HEX(SUBSTR(id,  7, 2)),
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
-      VIRTUAL AFTER id
+      VIRTUAL AFTER id;
     </sql>
 
     <sql dbms="mysql">
@@ -181,7 +152,7 @@
         HEX(SUBSTR(id,  7, 2)),
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
-      VIRTUAL AFTER id
+      VIRTUAL AFTER id;
     </sql>
 
     <sql dbms="mysql">
@@ -191,7 +162,7 @@
         HEX(SUBSTR(parent_id,  7, 2)),
         HEX(SUBSTR(parent_id,  9, 2)),
         HEX(SUBSTR(parent_id, 11)) )))
-      VIRTUAL AFTER parent_id
+      VIRTUAL AFTER parent_id;
     </sql>
 
     <sql dbms="mysql">
@@ -201,7 +172,7 @@
         HEX(SUBSTR(divisionLevel1_id,  7, 2)),
         HEX(SUBSTR(divisionLevel1_id,  9, 2)),
         HEX(SUBSTR(divisionLevel1_id, 11)) )))
-      VIRTUAL AFTER divisionLevel1_id
+      VIRTUAL AFTER divisionLevel1_id;
     </sql>
 
     <sql dbms="mysql">
@@ -211,7 +182,7 @@
         HEX(SUBSTR(divisionLevel2_id,  7, 2)),
         HEX(SUBSTR(divisionLevel2_id,  9, 2)),
         HEX(SUBSTR(divisionLevel2_id, 11)) )))
-      VIRTUAL AFTER divisionLevel2_id
+      VIRTUAL AFTER divisionLevel2_id;
     </sql>
 
     <sql dbms="mysql">
@@ -221,7 +192,7 @@
         HEX(SUBSTR(divisionLevel3_id,  7, 2)),
         HEX(SUBSTR(divisionLevel3_id,  9, 2)),
         HEX(SUBSTR(divisionLevel3_id, 11)) )))
-      VIRTUAL AFTER divisionLevel3_id
+      VIRTUAL AFTER divisionLevel3_id;
     </sql>
 
     <sql dbms="mysql">
@@ -231,7 +202,7 @@
         HEX(SUBSTR(parent_id,  7, 2)),
         HEX(SUBSTR(parent_id,  9, 2)),
         HEX(SUBSTR(parent_id, 11)) )))
-      VIRTUAL AFTER parent_id
+      VIRTUAL AFTER parent_id;
     </sql>
 
     <sql dbms="mysql">
@@ -241,7 +212,7 @@
         HEX(SUBSTR(divisionLevel1_id,  7, 2)),
         HEX(SUBSTR(divisionLevel1_id,  9, 2)),
         HEX(SUBSTR(divisionLevel1_id, 11)) )))
-      VIRTUAL AFTER divisionLevel1_id
+      VIRTUAL AFTER divisionLevel1_id;
     </sql>
 
     <sql dbms="mysql">
@@ -251,7 +222,7 @@
         HEX(SUBSTR(divisionLevel2_id,  7, 2)),
         HEX(SUBSTR(divisionLevel2_id,  9, 2)),
         HEX(SUBSTR(divisionLevel2_id, 11)) )))
-      VIRTUAL AFTER divisionLevel2_id
+      VIRTUAL AFTER divisionLevel2_id;
     </sql>
 
     <sql dbms="mysql">
@@ -261,15 +232,14 @@
         HEX(SUBSTR(divisionLevel3_id,  7, 2)),
         HEX(SUBSTR(divisionLevel3_id,  9, 2)),
         HEX(SUBSTR(divisionLevel3_id, 11)) )))
-      VIRTUAL AFTER divisionLevel3_id
+      VIRTUAL AFTER divisionLevel3_id;
     </sql>
 
     <sql>
       UPDATE Division_AUD AS updateTable
         LEFT JOIN Division AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
-      SET 
-        updateTable.id = joinTable.id
-      WHERE joinTable.id IS NOT null 
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
     </sql>
 
     <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
@@ -283,105 +253,87 @@
     <sql>
       UPDATE Division AS updateTable
         LEFT JOIN Division AS joinedTable ON (updateTable.parent_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.parent_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.parent_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <sql>
       UPDATE Location AS updateTable
         LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel1_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.divisionLevel1_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.divisionLevel1_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <sql>
       UPDATE Location AS updateTable
         LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel2_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.divisionLevel2_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.divisionLevel2_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <sql>
       UPDATE Location AS updateTable
         LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel3_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.divisionLevel3_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.divisionLevel3_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <sql>
       UPDATE Division_AUD AS updateTable
         LEFT JOIN Division AS joinedTable ON (updateTable.parent_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.parent_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.parent_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <sql>
       UPDATE Location_AUD AS updateTable
         LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel1_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.divisionLevel1_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.divisionLevel1_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <sql>
       UPDATE Location_AUD AS updateTable
         LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel2_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.divisionLevel2_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.divisionLevel2_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <sql>
       UPDATE Location_AUD AS updateTable
         LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel3_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.divisionLevel3_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.divisionLevel3_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <dropColumn columnName="id_temp"
-            schemaName="bsis"
             tableName="Division"/>
 
     <dropColumn columnName="id_temp"
-            schemaName="bsis"
             tableName="Division_AUD"/>
 
     <dropColumn columnName="parent_id_temp"
-            schemaName="bsis"
             tableName="Division"/>
 
     <dropColumn columnName="divisionLevel1_id_temp"
-            schemaName="bsis"
             tableName="Location"/>
 
     <dropColumn columnName="divisionLevel2_id_temp"
-            schemaName="bsis"
             tableName="Location"/>
 
     <dropColumn columnName="divisionLevel3_id_temp"
-            schemaName="bsis"
             tableName="Location"/>
 
     <dropColumn columnName="parent_id_temp"
-            schemaName="bsis"
             tableName="Division_AUD"/>
 
     <dropColumn columnName="divisionLevel1_id_temp"
-            schemaName="bsis"
             tableName="Location_AUD"/>
 
     <dropColumn columnName="divisionLevel2_id_temp"
-            schemaName="bsis"
             tableName="Location_AUD"/>
 
     <dropColumn columnName="divisionLevel3_id_temp"
-            schemaName="bsis"
             tableName="Location_AUD"/>
 
     <addForeignKeyConstraint baseColumnNames="parent_id"
@@ -407,6 +359,7 @@
             constraintName="fk_Location_divisionLevel3"
             referencedColumnNames="id"
             referencedTableName="Division"/>
+
 
   </changeSet>
 </databaseChangeLog>
