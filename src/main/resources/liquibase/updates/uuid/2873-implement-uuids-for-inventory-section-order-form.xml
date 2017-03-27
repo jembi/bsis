@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   <changeSet id="20170324-1130"  author="tmvumbi2">
-  
+ 
     <dropForeignKeyConstraint baseTableName="OrderFormItem" constraintName="fk_OrderFormItem_orderForm"/>
     <dropForeignKeyConstraint baseTableName="OrderForm_Component" constraintName="fk_OrderForm_Component_OrderForm"/>
 
@@ -101,6 +101,7 @@
             newDataType="BINARY(16)"
             schemaName="bsis"
             tableName="OrderFormItem_AUD"/>
+
     <modifyDataType columnName="orderForm_id"
             newDataType="BINARY(16)"
             schemaName="bsis"
@@ -176,7 +177,15 @@
         LEFT JOIN OrderForm AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
       SET 
         updateTable.id = joinTable.id
-      WHERE joinTable.id IS NOT null
+      WHERE joinTable.id IS NOT null 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuid's cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE OrderForm_AUD
+      FROM OrderForm_AUD
+        LEFT JOIN OrderForm AS joinTable ON (OrderForm_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
     </sql>
 
     <sql>
@@ -184,32 +193,37 @@
         LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
       SET 
          updateTable.orderForm_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null\n    </sql>
+      WHERE joinedTable.id IS NOT null 
+    </sql>
 
     <sql>
       UPDATE OrderForm_Component AS updateTable
         LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
       SET 
          updateTable.orderForm_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null\n    </sql>
+      WHERE joinedTable.id IS NOT null 
+    </sql>
 
     <sql>
       UPDATE OrderFormItem_AUD AS updateTable
         LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
       SET 
          updateTable.orderForm_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null\n    </sql>
+      WHERE joinedTable.id IS NOT null 
+    </sql>
 
     <sql>
       UPDATE OrderForm_Component_AUD AS updateTable
         LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
       SET 
          updateTable.orderForm_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null\n    </sql>
+      WHERE joinedTable.id IS NOT null 
+    </sql>
 
     <dropColumn columnName="id_temp"
             schemaName="bsis"
             tableName="OrderForm"/>
+
     <dropColumn columnName="id_temp"
             schemaName="bsis"
             tableName="OrderForm_AUD"/>
