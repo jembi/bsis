@@ -3,6 +3,14 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   <changeSet id="20170324-1154"  author="micnice">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        <![CDATA[
+            SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'OrderFormItem' AND COLUMN_NAME = 'id' AND TABLE_SCHEMA = 'bsis' AND DATA_TYPE = 'BINARY';
+        ]]>
+      </sqlCheck>
+    </preConditions>
+
     <comment>This is one large change set that migrates the OrderFormItem table from an integer id primary key
     to a UUID of type BINARY(16). </comment>
 
