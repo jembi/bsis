@@ -146,17 +146,14 @@
             newDataType="BINARY(16)"
             schemaName="bsis"
             tableName="Division_AUD"/>
-
     <modifyDataType columnName="divisionLevel1_id"
             newDataType="BINARY(16)"
             schemaName="bsis"
             tableName="Location_AUD"/>
-
     <modifyDataType columnName="divisionLevel2_id"
             newDataType="BINARY(16)"
             schemaName="bsis"
             tableName="Location_AUD"/>
-
     <modifyDataType columnName="divisionLevel3_id"
             newDataType="BINARY(16)"
             schemaName="bsis"
@@ -275,7 +272,7 @@
       WHERE joinTable.id IS NOT null 
     </sql>
 
-    <!-- Delete orphaned rows from Audit table. These values uuid's cannot be found since the rows were deleted in the original table-->
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
     <sql>
       DELETE Division_AUD
       FROM Division_AUD
