@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.helpers.builders.ReturnFormBuilder;
@@ -68,12 +69,13 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
   
   @Test(expected = IllegalStateException.class)
   public void testUpdateReturnFormWhenCannotEdit_shouldThrow() {
+    UUID id = UUID.randomUUID();
     // Set up data
-    ReturnForm existingReturnForm = aReturnForm().withId(1L).withReturnStatus(ReturnStatus.RETURNED).build();
-    ReturnForm updatedReturnForm = aReturnForm().withId(1L).withReturnStatus(ReturnStatus.RETURNED).build();
+    ReturnForm existingReturnForm = aReturnForm().withId(id).withReturnStatus(ReturnStatus.RETURNED).build();
+    ReturnForm updatedReturnForm = aReturnForm().withId(id).withReturnStatus(ReturnStatus.RETURNED).build();
     
     // Set up mocks
-    when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
+    when(returnFormRepository.findById(id)).thenReturn(existingReturnForm);
     when(returnFormConstraintChecker.canEdit(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(false);
     
     // Run test
@@ -82,16 +84,17 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
   
   @Test(expected = IllegalStateException.class)
   public void testUpdateReturnFormWhenCannotReturn_shouldThrow() {
+    UUID id = UUID.randomUUID();
     // Set up data
-    ReturnForm existingReturnForm = aReturnForm().withId(1L).withReturnStatus(ReturnStatus.CREATED).build();
+    ReturnForm existingReturnForm = aReturnForm().withId(id).withReturnStatus(ReturnStatus.CREATED).build();
     ReturnForm updatedReturnForm = aReturnForm()
-        .withId(1L)
+        .withId(id)
         .withReturnStatus(ReturnStatus.RETURNED)
         .withComponents(Collections.<Component>emptyList())
         .build();
     
     // Set up mocks
-    when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
+    when(returnFormRepository.findById(id)).thenReturn(existingReturnForm);
     when(returnFormConstraintChecker.canEdit(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(true);
     when(returnFormConstraintChecker.canReturn(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(false);
     
@@ -105,15 +108,16 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
     Location returnedFrom = aDistributionSite().build();
     Location returnedTo = aUsageSite().build();
     Component component = aComponent().build();
+    UUID id = UUID.randomUUID();
     
     ReturnForm existingReturnForm = ReturnFormBuilder.aReturnForm()
-        .withId(1L)
+        .withId(id)
         .withReturnStatus(ReturnStatus.CREATED)
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
         .build();
     ReturnForm updatedReturnForm = ReturnFormBuilder.aReturnForm()
-        .withId(1L)
+        .withId(id)
         .withReturnStatus(ReturnStatus.CREATED)
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
@@ -121,7 +125,7 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
         .build();
 
     // Setup mocks
-    when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
+    when(returnFormRepository.findById(id)).thenReturn(existingReturnForm);
     when(returnFormConstraintChecker.canEdit(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(true);
     when(returnFormRepository.update(argThat(hasSameStateAsReturnForm(updatedReturnForm)))).thenReturn(updatedReturnForm);
     
@@ -140,15 +144,16 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
     Location returnedFrom = aDistributionSite().build();
     Location returnedTo = aUsageSite().build();
     Component component = aComponent().build();
+    UUID id = UUID.randomUUID();
     
     ReturnForm existingReturnForm = ReturnFormBuilder.aReturnForm()
-        .withId(1L)
+        .withId(id)
         .withReturnStatus(ReturnStatus.CREATED)
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
         .build();
     ReturnForm updatedReturnForm = ReturnFormBuilder.aReturnForm()
-        .withId(1L)
+        .withId(id)
         .withReturnStatus(ReturnStatus.RETURNED)
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
@@ -156,7 +161,7 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
         .build();
 
     // Setup mocks
-    when(returnFormRepository.findById(1L)).thenReturn(existingReturnForm);
+    when(returnFormRepository.findById(id)).thenReturn(existingReturnForm);
     when(returnFormConstraintChecker.canEdit(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(true);
     when(returnFormConstraintChecker.canReturn(argThat(hasSameStateAsReturnForm(existingReturnForm)))).thenReturn(true);
     when(returnFormRepository.update(argThat(hasSameStateAsReturnForm(updatedReturnForm)))).thenReturn(updatedReturnForm);
@@ -173,7 +178,7 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
   @Test(expected = IllegalStateException.class)
   public void testDeleteReturnFormThatCannotBeDeleted_shouldThrow() {
     // Set up fixture
-    long returnFormId = 17L;
+    UUID returnFormId = UUID.randomUUID();
     ReturnForm existingReturnForm = aReturnForm().withId(returnFormId).build();
     
     // Set up expectations
@@ -187,7 +192,7 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testDeleteReturnForm_shouldUpdateReturnFormStatusToDeleted() {
     // Set up fixture
-    long returnFormId = 17L;
+    UUID returnFormId = UUID.randomUUID();
     Location returnedFrom = aDistributionSite().withId(7L).build();
     Location returnedTo = aUsageSite().withId(55L).build();
     Date returnDate = new Date();

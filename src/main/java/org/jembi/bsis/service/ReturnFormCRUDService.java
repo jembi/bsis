@@ -1,5 +1,7 @@
 package org.jembi.bsis.service;
 
+import java.util.UUID;
+
 import javax.transaction.Transactional;
 
 import org.jembi.bsis.model.component.Component;
@@ -55,7 +57,7 @@ public class ReturnFormCRUDService {
     return returnFormRepository.update(existingReturnForm);
   }
   
-  public void deleteReturnForm(long returnFormId) {
+  public void deleteReturnForm(UUID returnFormId) {
     ReturnForm existingReturnForm = returnFormRepository.findById(returnFormId);
     
     if (!returnFormConstraintChecker.canDelete(existingReturnForm)) {

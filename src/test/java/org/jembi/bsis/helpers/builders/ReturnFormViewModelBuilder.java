@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.returnform.ReturnStatus;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
@@ -8,13 +9,13 @@ import org.jembi.bsis.viewmodel.ReturnFormViewModel;
 
 public class ReturnFormViewModelBuilder extends AbstractBuilder<ReturnFormViewModel> {
 
-  private Long id;
+  private UUID id;
   private Date returnDate;
   private LocationFullViewModel returnedFrom;
   private LocationFullViewModel returnedTo;
   private ReturnStatus status = ReturnStatus.CREATED;
 
-  public ReturnFormViewModelBuilder withId(Long id) {
+  public ReturnFormViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

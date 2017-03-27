@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -74,7 +75,7 @@ public class ReturnFormController {
 
   @RequestMapping(method = RequestMethod.GET, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ORDER_FORM + "')")
-  public ResponseEntity<Map<String, Object>> getReturnForm(@PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> getReturnForm(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<>();
     map.put("returnForm", returnFormControllerService.findById(id));
     return new ResponseEntity<>(map, HttpStatus.OK);
@@ -82,7 +83,7 @@ public class ReturnFormController {
 
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_ORDER_FORM + "')")
-  public ResponseEntity<Map<String, Object>> updateReturnForm(@PathVariable("id") Long id,
+  public ResponseEntity<Map<String, Object>> updateReturnForm(@PathVariable("id") UUID id,
       @Valid @RequestBody ReturnFormBackingForm backingForm) {
 
     // Use the id parameter from the path
@@ -112,7 +113,7 @@ public class ReturnFormController {
   @RequestMapping(method = RequestMethod.DELETE, value = "{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_ORDER_FORM + "')")
-  public void deleteReturnForm(@PathVariable("id") long returnFormId) {
+  public void deleteReturnForm(@PathVariable("id") UUID returnFormId) {
     returnFormControllerService.deleteReturnForm(returnFormId);
   }
 }

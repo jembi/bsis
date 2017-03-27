@@ -17,7 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ReturnFormNamedQueryConstants;
@@ -27,7 +27,7 @@ import org.jembi.bsis.repository.ReturnFormNamedQueryConstants;
   query = ReturnFormNamedQueryConstants.QUERY_FIND_BY_ID)})
 @Entity
 @Audited
-public class ReturnForm extends BaseModificationTrackerEntity {
+public class ReturnForm extends BaseModificationTrackerUUIDEntity {
   
   private static final long serialVersionUID = 1L;
 

@@ -5,6 +5,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.ReturnFormPersister;
@@ -15,7 +16,7 @@ import org.jembi.bsis.model.returnform.ReturnStatus;
 
 public class ReturnFormBuilder extends AbstractEntityBuilder<ReturnForm> {
 
-  private Long id;
+  private UUID id;
   private boolean isDeleted = false;
   private Date returnDate = new Date();
   private Location returnedFrom = aLocation().build();
@@ -23,7 +24,7 @@ public class ReturnFormBuilder extends AbstractEntityBuilder<ReturnForm> {
   private ReturnStatus status = ReturnStatus.CREATED;
   private List<Component> components = new ArrayList<>();
 
-  public ReturnFormBuilder withId(Long id) {
+  public ReturnFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
