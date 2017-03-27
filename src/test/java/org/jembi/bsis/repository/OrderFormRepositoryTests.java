@@ -14,6 +14,7 @@ import static org.jembi.bsis.helpers.matchers.BloodUnitsOrderDTOMatcher.hasSameS
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -101,7 +102,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   @Test(expected = NoResultException.class)
   public void testFindOrderFormWithNoExistingOrderForm() {
     // Test
-    orderFormRepository.findById(1L);
+    orderFormRepository.findById(UUID.randomUUID());
   }
 
   @Test

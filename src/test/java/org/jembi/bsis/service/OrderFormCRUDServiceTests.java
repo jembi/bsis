@@ -30,7 +30,7 @@ import org.mockito.Mock;
 
 public class OrderFormCRUDServiceTests extends UnitTestSuite {
   
-  private static final Long ORDER_FORM_ID = 17L;
+  private static final UUID ORDER_FORM_ID = UUID.randomUUID();
   
   @InjectMocks
   private OrderFormCRUDService orderFormCRUDService;

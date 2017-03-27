@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
@@ -15,7 +16,7 @@ import org.jembi.bsis.viewmodel.OrderFormItemViewModel;
 
 public class OrderFormFullViewModelBuilder extends AbstractBuilder<OrderFormFullViewModel> {
 
-  private Long id;
+  private UUID id;
   private Date orderDate;
   private LocationFullViewModel dispatchedFrom;
   private LocationFullViewModel dispatchedTo;
@@ -25,7 +26,7 @@ public class OrderFormFullViewModelBuilder extends AbstractBuilder<OrderFormFull
   private List<InventoryViewModel> components = new ArrayList<>();
   private Map<String, Boolean> permissions = new HashMap<>();
 
-  public OrderFormFullViewModelBuilder withId(Long id) {
+  public OrderFormFullViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
@@ -10,7 +11,7 @@ import org.jembi.bsis.viewmodel.PatientViewModel;
 
 public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewModel> {
 
-  private Long id;
+  private UUID id;
   private Date orderDate;
   private LocationFullViewModel dispatchedFrom;
   private LocationFullViewModel dispatchedTo;
@@ -18,7 +19,7 @@ public class OrderFormViewModelBuilder extends AbstractBuilder<OrderFormViewMode
   private OrderStatus status = OrderStatus.CREATED;
   private OrderType type = OrderType.ISSUE;
 
-  public OrderFormViewModelBuilder withId(Long id) {
+  public OrderFormViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

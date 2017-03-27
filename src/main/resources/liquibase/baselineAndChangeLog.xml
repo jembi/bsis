@@ -93,4 +93,5 @@
   <include file="liquibase/updates/2772-remove-usage-repository-and-component-usage.xml"/>
   <include file="liquibase/updates/2395-remove-unused.xml"/>
   <include file="liquibase/updates/uuid/2873-implement-uuids-for-inventory-section-order-form-item.xml"/>
+  <include file="liquibase/updates/uuid/2873-implement-uuids-for-inventory-section-order-form.xml"/>
 </databaseChangeLog>

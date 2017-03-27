@@ -5,6 +5,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.OrderFormPersister;
@@ -18,7 +19,7 @@ import org.jembi.bsis.model.patient.Patient;
 
 public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   
-  private Long id;
+  private UUID id;
   private Date orderDate = new Date();
   private Location dispatchedFrom = aLocation().build();
   private Location dispatchedTo = aLocation().build();
@@ -30,7 +31,7 @@ public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   private List<Component> components = new ArrayList<>();
   private Patient patient;
 
-  public OrderFormBuilder withId(Long id) {
+  public OrderFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

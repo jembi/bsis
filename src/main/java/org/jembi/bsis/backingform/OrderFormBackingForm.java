@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
@@ -13,7 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class OrderFormBackingForm {
 
-  private Long id;
+  private UUID id;
 
   private Date orderDate;
 
@@ -31,11 +32,11 @@ public class OrderFormBackingForm {
 
   private List<ComponentBackingForm> components;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
