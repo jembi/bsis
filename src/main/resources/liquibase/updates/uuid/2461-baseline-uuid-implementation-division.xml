@@ -7,69 +7,162 @@
   </changeSet>
 
   <changeSet id="20170317-0942"  author="rowanpi">
-    <comment>This is one large change set that migrates the Division table from an integer id primary key
-    to a UUID of type BINARY(16). </comment>
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        <![CDATA[
+          SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'Division' AND COLUMN_NAME = 'id' AND TABLE_SCHEMA = 'bsis' AND DATA_TYPE = 'BINARY';
+        ]]>
+       </sqlCheck>
+    </preConditions>
 
+    <dropForeignKeyConstraint baseTableName="Division" constraintName="fk_Division_parent"/>
     <dropForeignKeyConstraint baseTableName="Location" constraintName="fk_Location_divisionLevel1"/>
     <dropForeignKeyConstraint baseTableName="Location" constraintName="fk_Location_divisionLevel2"/>
     <dropForeignKeyConstraint baseTableName="Location" constraintName="fk_Location_divisionLevel3"/>
 
-    <dropForeignKeyConstraint baseTableName="Division" constraintName="fk_Division_parent"/>
+    <addColumn tableName="Division">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
 
-    <renameColumn columnDataType="BIGINT"
-                newColumnName="id_temp"
-                oldColumnName="id"
-                tableName="Division"/>
-
-    <renameColumn columnDataType="BIGINT"
-                newColumnName="parent_id_temp"
-                oldColumnName="parent_id"
-                tableName="Division"/>
-
-    <renameColumn columnDataType="BIGINT"
-                newColumnName="id_temp"
-                oldColumnName="id"
-                tableName="Division_AUD"/>
-
-    <renameColumn columnDataType="BIGINT"
-                newColumnName="parent_id_temp"
-                oldColumnName="parent_id"
-                tableName="Division_AUD"/>
-
-    <renameColumn columnDataType="BIGINT"
-                newColumnName="divisionLevel1_id_temp"
-                oldColumnName="divisionLevel1_id"
-                tableName="Location"/>
-
-    <renameColumn columnDataType="BIGINT"
-                newColumnName="divisionLevel2_id_temp"
-                oldColumnName="divisionLevel2_id"
-                tableName="Location"/>
-
-    <renameColumn columnDataType="BIGINT"
-                newColumnName="divisionLevel3_id_temp"
-                oldColumnName="divisionLevel3_id"
-                tableName="Location"/>
-
-    <renameColumn columnDataType="BIGINT"
-                newColumnName="divisionLevel1_id_temp"
-                oldColumnName="divisionLevel1_id"
-                tableName="Location_AUD"/>
-
-    <renameColumn columnDataType="BIGINT"
-                newColumnName="divisionLevel2_id_temp"
-                oldColumnName="divisionLevel2_id"
-                tableName="Location_AUD"/>
-
-    <renameColumn columnDataType="BIGINT"
-                newColumnName="divisionLevel3_id_temp"
-                oldColumnName="divisionLevel3_id"
-                tableName="Location_AUD"/>
+    <addColumn tableName="Division_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
 
     <addColumn tableName="Division">
-      <column name="id" type="BINARY(16)" afterColumn="id_temp"/>
-      <column name="parent_id" type="BINARY(16)" afterColumn="parent_id_temp"/>
+      <column name="parent_id_temp" type="BIGINT" afterColumn="parent_id"/>
     </addColumn>
+
+    <addColumn tableName="Location">
+      <column name="divisionLevel1_id_temp" type="BIGINT" afterColumn="divisionLevel1_id"/>
+      <column name="divisionLevel2_id_temp" type="BIGINT" afterColumn="divisionLevel2_id"/>
+      <column name="divisionLevel3_id_temp" type="BIGINT" afterColumn="divisionLevel3_id"/>
+    </addColumn>
+
+    <addColumn tableName="Division_AUD">
+      <column name="parent_id_temp" type="BIGINT" afterColumn="parent_id"/>
+    </addColumn>
+
+    <addColumn tableName="Location_AUD">
+      <column name="divisionLevel1_id_temp" type="BIGINT" afterColumn="divisionLevel1_id"/>
+      <column name="divisionLevel2_id_temp" type="BIGINT" afterColumn="divisionLevel2_id"/>
+      <column name="divisionLevel3_id_temp" type="BIGINT" afterColumn="divisionLevel3_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE Division 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE Division_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE Division_AUD 
+      SET parent_id_temp = parent_id;
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD 
+      SET divisionLevel1_id_temp = divisionLevel1_id;
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD 
+      SET divisionLevel2_id_temp = divisionLevel2_id;
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD 
+      SET divisionLevel3_id_temp = divisionLevel3_id;
+    </sql>
+
+    <sql>
+      UPDATE Division 
+      SET parent_id_temp = parent_id;
+    </sql>
+
+    <sql>
+      UPDATE Location 
+      SET divisionLevel1_id_temp = divisionLevel1_id;
+    </sql>
+
+    <sql>
+      UPDATE Location 
+      SET divisionLevel2_id_temp = divisionLevel2_id;
+    </sql>
+
+    <sql>
+      UPDATE Location 
+      SET divisionLevel3_id_temp = divisionLevel3_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType
+            columnName="id"
+            newDataType="BIGINT(20)"
+            schemaName="bsis"
+            tableName="Division"/>
+
+    <dropPrimaryKey 
+            constraintName="PRIMARY"
+            schemaName="bsis"
+            tableName="Division"/>
+    <addPrimaryKey
+            columnNames="id"
+            constraintName="PRIMARY"
+            schemaName="bsis"
+            tableName="Division"/>
+
+    <modifyDataType columnName="id"
+            newDataType="BINARY(16)"
+            schemaName="bsis"
+            tableName="Division"/>
+
+    <modifyDataType columnName="id"
+            newDataType="BINARY(16)"
+            schemaName="bsis"
+            tableName="Division_AUD"/>
+
+    <modifyDataType columnName="parent_id"
+            newDataType="BINARY(16)"
+            schemaName="bsis"
+            tableName="Division"/>
+    <modifyDataType columnName="divisionLevel1_id"
+            newDataType="BINARY(16)"
+            schemaName="bsis"
+            tableName="Location"/>
+    <modifyDataType columnName="divisionLevel2_id"
+            newDataType="BINARY(16)"
+            schemaName="bsis"
+            tableName="Location"/>
+    <modifyDataType columnName="divisionLevel3_id"
+            newDataType="BINARY(16)"
+            schemaName="bsis"
+            tableName="Location"/>
+
+    <modifyDataType columnName="parent_id"
+            newDataType="BINARY(16)"
+            schemaName="bsis"
+            tableName="Division_AUD"/>
+    <modifyDataType columnName="divisionLevel1_id"
+            newDataType="BINARY(16)"
+            schemaName="bsis"
+            tableName="Location_AUD"/>
+    <modifyDataType columnName="divisionLevel2_id"
+            newDataType="BINARY(16)"
+            schemaName="bsis"
+            tableName="Location_AUD"/>
+    <modifyDataType columnName="divisionLevel3_id"
+            newDataType="BINARY(16)"
+            schemaName="bsis"
+            tableName="Location_AUD"/>
+
+    <sql>
+      UPDATE Division 
+      SET id = GENERATEBINARYUUID();
+    </sql>
 
     <sql dbms="mysql">
       ALTER TABLE Division ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
@@ -80,21 +173,6 @@
         HEX(SUBSTR(id, 11)) )))
       VIRTUAL AFTER id
     </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Division ADD parent_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(parent_id,  1, 4)),
-        HEX(SUBSTR(parent_id,  5, 2)),
-        HEX(SUBSTR(parent_id,  7, 2)),
-        HEX(SUBSTR(parent_id,  9, 2)),
-        HEX(SUBSTR(parent_id, 11)) )))
-      VIRTUAL AFTER parent_id
-    </sql>
-
-    <addColumn tableName="Division_AUD">
-      <column name="id" type="BINARY(16)" afterColumn="id_temp"/>
-      <column name="parent_id" type="BINARY(16)" afterColumn="parent_id_temp"/>
-    </addColumn>
 
     <sql dbms="mysql">
       ALTER TABLE Division_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
@@ -115,53 +193,6 @@
         HEX(SUBSTR(parent_id, 11)) )))
       VIRTUAL AFTER parent_id
     </sql>
-
-    <sql dbms="mysql">
-      UPDATE Division d
-      SET id = GENERATEBINARYUUID();
-    </sql>
-
-    <addColumn tableName="Location">
-      <column name="divisionLevel1_id" type="BINARY(16)" afterColumn="divisionLevel1_id_temp"/>
-      <column name="divisionLevel2_id" type="BINARY(16)" afterColumn="divisionLevel2_id_temp"/>
-      <column name="divisionLevel3_id" type="BINARY(16)" afterColumn="divisionLevel3_id_temp"/>
-    </addColumn>
-
-    <sql dbms="mysql">
-      ALTER TABLE Location ADD divisionLevel1_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(divisionLevel1_id,  1, 4)),
-        HEX(SUBSTR(divisionLevel1_id,  5, 2)),
-        HEX(SUBSTR(divisionLevel1_id,  7, 2)),
-        HEX(SUBSTR(divisionLevel1_id,  9, 2)),
-        HEX(SUBSTR(divisionLevel1_id, 11)) )))
-      VIRTUAL AFTER divisionLevel1_id
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Location ADD divisionLevel2_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(divisionLevel2_id,  1, 4)),
-        HEX(SUBSTR(divisionLevel2_id,  5, 2)),
-        HEX(SUBSTR(divisionLevel2_id,  7, 2)),
-        HEX(SUBSTR(divisionLevel2_id,  9, 2)),
-        HEX(SUBSTR(divisionLevel2_id, 11)) )))
-      VIRTUAL AFTER divisionLevel2_id
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Location ADD divisionLevel3_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(divisionLevel3_id,  1, 4)),
-        HEX(SUBSTR(divisionLevel3_id,  5, 2)),
-        HEX(SUBSTR(divisionLevel3_id,  7, 2)),
-        HEX(SUBSTR(divisionLevel3_id,  9, 2)),
-        HEX(SUBSTR(divisionLevel3_id, 11)) )))
-      VIRTUAL AFTER divisionLevel3_id
-    </sql>
-
-    <addColumn tableName="Location_AUD">
-      <column name="divisionLevel1_id" type="BINARY(16)" afterColumn="divisionLevel1_id_temp"/>
-      <column name="divisionLevel2_id" type="BINARY(16)" afterColumn="divisionLevel2_id_temp"/>
-      <column name="divisionLevel3_id" type="BINARY(16)" afterColumn="divisionLevel3_id_temp"/>
-    </addColumn>
 
     <sql dbms="mysql">
       ALTER TABLE Location_AUD ADD divisionLevel1_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
@@ -194,63 +225,134 @@
     </sql>
 
     <sql dbms="mysql">
-      UPDATE Location AS l
-        LEFT JOIN Division AS d1 ON (d1.id_temp = l.divisionLevel1_id_temp)
-        LEFT JOIN Division AS d2 ON (d2.id_temp = l.divisionLevel2_id_temp)
-        LEFT JOIN Division AS d3 ON (d3.id_temp = l.divisionLevel3_id_temp)
-      SET 
-        l.divisionLevel1_id = d1.id,
-        l.divisionLevel2_id = d2.id,
-        l.divisionLevel3_id = d3.id
+      ALTER TABLE Division ADD parent_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(parent_id,  1, 4)),
+        HEX(SUBSTR(parent_id,  5, 2)),
+        HEX(SUBSTR(parent_id,  7, 2)),
+        HEX(SUBSTR(parent_id,  9, 2)),
+        HEX(SUBSTR(parent_id, 11)) )))
+      VIRTUAL AFTER parent_id
     </sql>
 
     <sql dbms="mysql">
-      UPDATE Location_AUD AS la
-        LEFT JOIN Division AS d1 ON (d1.id_temp = la.divisionLevel1_id_temp)
-        LEFT JOIN Division AS d2 ON (d2.id_temp = la.divisionLevel2_id_temp)
-        LEFT JOIN Division AS d3 ON (d3.id_temp = la.divisionLevel3_id_temp)
-      SET 
-        la.divisionLevel1_id = d1.id,
-        la.divisionLevel2_id = d2.id,
-        la.divisionLevel3_id = d3.id
+      ALTER TABLE Location ADD divisionLevel1_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(divisionLevel1_id,  1, 4)),
+        HEX(SUBSTR(divisionLevel1_id,  5, 2)),
+        HEX(SUBSTR(divisionLevel1_id,  7, 2)),
+        HEX(SUBSTR(divisionLevel1_id,  9, 2)),
+        HEX(SUBSTR(divisionLevel1_id, 11)) )))
+      VIRTUAL AFTER divisionLevel1_id
     </sql>
 
     <sql dbms="mysql">
-      UPDATE Division AS d
-        LEFT JOIN Division AS d1 ON (d1.id_temp = d.parent_id_temp)
-      SET 
-        d.parent_id = d1.id
+      ALTER TABLE Location ADD divisionLevel2_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(divisionLevel2_id,  1, 4)),
+        HEX(SUBSTR(divisionLevel2_id,  5, 2)),
+        HEX(SUBSTR(divisionLevel2_id,  7, 2)),
+        HEX(SUBSTR(divisionLevel2_id,  9, 2)),
+        HEX(SUBSTR(divisionLevel2_id, 11)) )))
+      VIRTUAL AFTER divisionLevel2_id
     </sql>
 
     <sql dbms="mysql">
-      UPDATE Division_AUD AS da
-        LEFT JOIN Division AS d ON (da.id_temp = d.id_temp)
-      SET 
-        da.id = d.id
+      ALTER TABLE Location ADD divisionLevel3_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(divisionLevel3_id,  1, 4)),
+        HEX(SUBSTR(divisionLevel3_id,  5, 2)),
+        HEX(SUBSTR(divisionLevel3_id,  7, 2)),
+        HEX(SUBSTR(divisionLevel3_id,  9, 2)),
+        HEX(SUBSTR(divisionLevel3_id, 11)) )))
+      VIRTUAL AFTER divisionLevel3_id
     </sql>
 
-    <sql dbms="mysql">
-      UPDATE Division_AUD AS da
-        LEFT JOIN Division AS d ON (da.parent_id_temp = d.id_temp)
+    <sql>
+      UPDATE Division_AUD AS updateTable
+        LEFT JOIN Division AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
       SET 
-        da.parent_id = d.parent_id
+        updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null 
     </sql>
 
-    <!-- Remove auto increment from the existing id column -->
-    <modifyDataType
-            columnName="id_temp"
-            newDataType="BIGINT(20)"
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE Division_AUD
+      FROM Division_AUD
+        LEFT JOIN Division AS joinTable ON (Division_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE Division AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.parent_id_temp = joinedTable.id_temp)
+      SET 
+         updateTable.parent_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null 
+    </sql>
+
+    <sql>
+      UPDATE Location AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel1_id_temp = joinedTable.id_temp)
+      SET 
+         updateTable.divisionLevel1_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null 
+    </sql>
+
+    <sql>
+      UPDATE Location AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel2_id_temp = joinedTable.id_temp)
+      SET 
+         updateTable.divisionLevel2_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null 
+    </sql>
+
+    <sql>
+      UPDATE Location AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel3_id_temp = joinedTable.id_temp)
+      SET 
+         updateTable.divisionLevel3_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null 
+    </sql>
+
+    <sql>
+      UPDATE Division_AUD AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.parent_id_temp = joinedTable.id_temp)
+      SET 
+         updateTable.parent_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null 
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel1_id_temp = joinedTable.id_temp)
+      SET 
+         updateTable.divisionLevel1_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null 
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel2_id_temp = joinedTable.id_temp)
+      SET 
+         updateTable.divisionLevel2_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null 
+    </sql>
+
+    <sql>
+      UPDATE Location_AUD AS updateTable
+        LEFT JOIN Division AS joinedTable ON (updateTable.divisionLevel3_id_temp = joinedTable.id_temp)
+      SET 
+         updateTable.divisionLevel3_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null 
+    </sql>
+
+    <dropColumn columnName="id_temp"
             schemaName="bsis"
             tableName="Division"/>
 
-    <dropPrimaryKey 
-            constraintName="PRIMARY"
+    <dropColumn columnName="id_temp"
             schemaName="bsis"
-            tableName="Division"/>
+            tableName="Division_AUD"/>
 
-    <addPrimaryKey
-            columnNames="id"
-            constraintName="PRIMARY"
+    <dropColumn columnName="parent_id_temp"
             schemaName="bsis"
             tableName="Division"/>
 
@@ -266,18 +368,6 @@
             schemaName="bsis"
             tableName="Location"/>
 
-    <dropColumn columnName="id_temp"
-            schemaName="bsis"
-            tableName="Division"/>
-
-    <dropColumn columnName="parent_id_temp"
-            schemaName="bsis"
-            tableName="Division"/>
-
-    <dropColumn columnName="id_temp"
-            schemaName="bsis"
-            tableName="Division_AUD"/>
-
     <dropColumn columnName="parent_id_temp"
             schemaName="bsis"
             tableName="Division_AUD"/>
@@ -293,6 +383,12 @@
     <dropColumn columnName="divisionLevel3_id_temp"
             schemaName="bsis"
             tableName="Location_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="parent_id"
+            baseTableName="Division"
+            constraintName="fk_Division_parent"
+            referencedColumnNames="id"
+            referencedTableName="Division"/>
 
     <addForeignKeyConstraint baseColumnNames="divisionLevel1_id"
             baseTableName="Location"
@@ -309,12 +405,6 @@
     <addForeignKeyConstraint baseColumnNames="divisionLevel3_id"
             baseTableName="Location"
             constraintName="fk_Location_divisionLevel3"
-            referencedColumnNames="id"
-            referencedTableName="Division"/>
-
-    <addForeignKeyConstraint baseColumnNames="parent_id"
-            baseTableName="Division"
-            constraintName="fk_Division_parent"
             referencedColumnNames="id"
             referencedTableName="Division"/>
 
