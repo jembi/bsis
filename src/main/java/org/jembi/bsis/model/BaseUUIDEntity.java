@@ -20,7 +20,7 @@ public abstract class BaseUUIDEntity extends BSISEntity<UUID> {
 
   @Id
   @GeneratedValue(generator = "uuidFromSql")
-  @GenericGenerator(name = "uuidFromSql", strategy = "org.jembi.bsis.model.UUIDFromSQLGenerator")
+  @GenericGenerator(name = "uuidFromSql", strategy = "org.jembi.bsis.model.BSISUUIDGenerator")
   @Column(name = "id", columnDefinition = "BINARY(16)", nullable = false, insertable = false, updatable = false)
   private UUID id;
 
