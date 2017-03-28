@@ -24,50 +24,34 @@
     </addColumn>
 
     <sql>
-      UPDATE ReturnForm 
-      SET id_temp = id;
+      UPDATE ReturnForm SET id_temp = id;
     </sql>
 
     <sql>
-      UPDATE ReturnForm_AUD 
-      SET id_temp = id;
+      UPDATE ReturnForm_AUD SET id_temp = id;
     </sql>
 
     <sql>
-      UPDATE ReturnForm_Component_AUD 
-      SET returnForm_id_temp = returnForm_id;
+      UPDATE ReturnForm_Component_AUD SET returnForm_id_temp = returnForm_id;
     </sql>
 
     <sql>
-      UPDATE ReturnForm_Component 
-      SET returnForm_id_temp = returnForm_id;
+      UPDATE ReturnForm_Component SET returnForm_id_temp = returnForm_id;
     </sql>
 
     <!-- Remove auto increment from the existing id column -->
-    <modifyDataType
-            columnName="id"
-            newDataType="BIGINT(20)"
-            tableName="ReturnForm"/>
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="ReturnForm"/>
 
-    <modifyDataType columnName="id"
-            newDataType="BINARY(16)"
-            tableName="ReturnForm"/>
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ReturnForm"/>
 
-    <modifyDataType columnName="id"
-            newDataType="BINARY(16)"
-            tableName="ReturnForm_AUD"/>
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ReturnForm_AUD"/>
 
-    <modifyDataType columnName="returnForm_id"
-            newDataType="BINARY(16)"
-            tableName="ReturnForm_Component"/>
+    <modifyDataType columnName="returnForm_id" newDataType="BINARY(16)" tableName="ReturnForm_Component"/>
 
-    <modifyDataType columnName="returnForm_id"
-            newDataType="BINARY(16)"
-            tableName="ReturnForm_Component_AUD"/>
+    <modifyDataType columnName="returnForm_id" newDataType="BINARY(16)" tableName="ReturnForm_Component_AUD"/>
 
     <sql>
-      UPDATE ReturnForm 
-      SET id = GENERATEBINARYUUID();
+      UPDATE ReturnForm SET id = GENERATEBINARYUUID();
     </sql>
 
     <sql dbms="mysql">
@@ -139,17 +123,13 @@
       WHERE joinedTable.id IS NOT null; 
     </sql>
 
-    <dropColumn columnName="id_temp"
-            tableName="ReturnForm"/>
+    <dropColumn columnName="id_temp" tableName="ReturnForm"/>
 
-    <dropColumn columnName="id_temp"
-            tableName="ReturnForm_AUD"/>
+    <dropColumn columnName="id_temp" tableName="ReturnForm_AUD"/>
 
-    <dropColumn columnName="returnForm_id_temp"
-            tableName="ReturnForm_Component"/>
+    <dropColumn columnName="returnForm_id_temp" tableName="ReturnForm_Component"/>
 
-    <dropColumn columnName="returnForm_id_temp"
-            tableName="ReturnForm_Component_AUD"/>
+    <dropColumn columnName="returnForm_id_temp" tableName="ReturnForm_Component_AUD"/>
 
     <addForeignKeyConstraint baseColumnNames="returnForm_id"
             baseTableName="ReturnForm_Component"
