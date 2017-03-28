@@ -27,34 +27,57 @@ public class UUIDFromSQLGenerator implements IdentifierGenerator {
     // HSQL does not support the prepared statement sql. The below is a work-around so that
     // the JUnit suite, which uses HSQL, will work.
     if (dialect instanceof HSQLDialect) {
-      return UUID.randomUUID();
+      return getUUIDForHSQLTestingOnly();
     } else if (dialect instanceof MySQL5Dialect) {
-      final String sql = "select GENERATEBINARYUUID() as uuid";
-      try {
-        PreparedStatement st =
-            session.getTransactionCoordinator().getJdbcCoordinator().getStatementPreparer().prepareStatement(sql);
-        try {
-          ResultSet rs = session.getTransactionCoordinator().getJdbcCoordinator().getResultSetReturn().extract(st);
-          final UUID result;
-          try {
-            if (!rs.next()) {
-              throw new HibernateException("The database returned no UUID identity value");
-            }
-            result = convertBytesToUUID(rs.getBytes("uuid"));
-          } finally {
-            session.getTransactionCoordinator().getJdbcCoordinator().release(rs, st);
-          }
-          return result;
-        } finally {
-          session.getTransactionCoordinator().getJdbcCoordinator().release(st);
-        }
-      }
-      catch (SQLException sqle) {
-        throw session.getFactory().getSQLExceptionHelper().convert(sqle, "could not retrieve UUID", sql);
-      }
+      return getVersion1UUIDFromDatabase(session);
     } else {
       throw new IllegalArgumentException("UUID generation is not yet implemented for dialect " + dialect);
     }
+  }
+
+  private Serializable getVersion1UUIDFromDatabase(SessionImplementor session) {
+    final String sql = "select GENERATEBINARYUUID() as uuid";
+    try {
+      PreparedStatement st =
+          session.getTransactionCoordinator().getJdbcCoordinator().getStatementPreparer().prepareStatement(sql);
+      try {
+        ResultSet rs = session.getTransactionCoordinator().getJdbcCoordinator().getResultSetReturn().extract(st);
+        final UUID result;
+        try {
+          if (!rs.next()) {
+            throw new HibernateException("The database returned no UUID identity value");
+          }
+          result = convertBytesToUUID(rs.getBytes("uuid"));
+        } finally {
+          session.getTransactionCoordinator().getJdbcCoordinator().release(rs, st);
+        }
+        return result;
+      } finally {
+        session.getTransactionCoordinator().getJdbcCoordinator().release(st);
+      }
+    }
+    catch (SQLException sqle) {
+      throw session.getFactory().getSQLExceptionHelper().convert(sqle, "could not retrieve UUID", sql);
+    }
+  }
+
+  /**
+   * This method for generator a UUD is only to be used for testing purposes.
+   * 
+   * @return
+   */
+  private Serializable getUUIDForHSQLTestingOnly() {
+    UUID hsqlUUID = UUID.randomUUID();
+    Long uuidLSB = hsqlUUID.getLeastSignificantBits();
+    Long uuidMSB = hsqlUUID.getMostSignificantBits();
+    // This sets the MSB to the current time so that any ordering based on the UUID will be
+    // chronologically sequential.
+    uuidMSB = System.currentTimeMillis();
+    // UUIDs are compared by it's long value. This means that the MSB
+    // leading bit is a sign bit. This will affect the ordering, and so is removed. This should
+    // suffice for purposes of testing i.e. the UUID will still be unique.
+    uuidMSB = uuidMSB & 0x7FFFFFFFL;
+    return new UUID(uuidMSB, uuidLSB);
   }
 
   /**
