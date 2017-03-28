@@ -10,7 +10,7 @@ import java.util.UUID;
 import org.hibernate.HibernateException;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.HSQLDialect;
-import org.hibernate.dialect.MySQL5Dialect;
+import org.hibernate.dialect.MySQLDialect;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
@@ -26,10 +26,10 @@ public class UUIDFromSQLGenerator implements IdentifierGenerator {
     Dialect dialect = session.getFactory().getDialect();
     // HSQL does not support the prepared statement sql. The below is a work-around so that
     // the JUnit suite, which uses HSQL, will work.
-    if (dialect instanceof HSQLDialect) {
-      return getUUIDForHSQLTestingOnly();
-    } else if (dialect instanceof MySQL5Dialect) {
+    if (dialect instanceof MySQLDialect) {
       return getVersion1UUIDFromDatabase(session);
+    } else if (dialect instanceof HSQLDialect) {
+      return getUUIDForHSQLTestingOnly();
     } else {
       throw new IllegalArgumentException("UUID generation is not yet implemented for dialect " + dialect);
     }
