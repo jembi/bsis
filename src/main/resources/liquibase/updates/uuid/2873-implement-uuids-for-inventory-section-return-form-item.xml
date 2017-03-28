@@ -6,7 +6,15 @@
 	<comment>Migrate the ReturnForm table from an integer id primary key
 	to a UUID of type BINARY(16). </comment>
 	<dropForeignKeyConstraint baseTableName="ReturnForm_Component" constraintName="fk_ReturnForm_Component_ReturnForm"/>
-
+	
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        <![CDATA[
+          SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'ReturnForm' AND COLUMN_NAME = 'id' AND TABLE_SCHEMA = 'bsis' AND DATA_TYPE = 'BINARY';
+        ]]>
+      </sqlCheck>
+    </preConditions>
+ 
     <addColumn tableName="ReturnForm">
       <column name="id_temp" type="BIGINT" afterColumn="id"/>
     </addColumn>
