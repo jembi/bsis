@@ -24,11 +24,11 @@ public class BSISUUIDGenerator implements IdentifierGenerator {
 
   public Serializable generate(SessionImplementor session, Object obj) throws HibernateException {
     Dialect dialect = session.getFactory().getDialect();
-    // HSQL does not support the prepared statement sql. The below is a work-around so that
-    // the JUnit suite, which uses HSQL, will work.
     if (dialect instanceof MySQLDialect) {
       return getVersion1UUIDFromDatabase(session);
     } else if (dialect instanceof HSQLDialect) {
+      // HSQL does not support the prepared statement sql. The below is a work-around so that
+      // the JUnit suite, which uses HSQL, will work.
       return getUUIDForHSQLTestingOnly();
     } else {
       throw new IllegalArgumentException("UUID generation is not yet implemented for dialect " + dialect);
