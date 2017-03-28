@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   <changeSet id="20170324-1130"  author="tmvumbi2">
- 
+
     <dropForeignKeyConstraint baseTableName="OrderFormItem" constraintName="fk_OrderFormItem_orderForm"/>
     <dropForeignKeyConstraint baseTableName="OrderForm_Component" constraintName="fk_OrderForm_Component_OrderForm"/>
 
@@ -65,46 +65,28 @@
     <modifyDataType
             columnName="id"
             newDataType="BIGINT(20)"
-            schemaName="bsis"
-            tableName="OrderForm"/>
-
-    <dropPrimaryKey 
-            constraintName="PRIMARY"
-            schemaName="bsis"
-            tableName="OrderForm"/>
-    <addPrimaryKey
-            columnNames="id"
-            constraintName="PRIMARY"
-            schemaName="bsis"
             tableName="OrderForm"/>
 
     <modifyDataType columnName="id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="OrderForm"/>
 
     <modifyDataType columnName="id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="OrderForm_AUD"/>
 
     <modifyDataType columnName="orderForm_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="OrderFormItem"/>
     <modifyDataType columnName="orderForm_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="OrderForm_Component"/>
 
     <modifyDataType columnName="orderForm_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="OrderFormItem_AUD"/>
-
     <modifyDataType columnName="orderForm_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="OrderForm_Component_AUD"/>
 
     <sql>
@@ -119,7 +101,7 @@
         HEX(SUBSTR(id,  7, 2)),
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
-      VIRTUAL AFTER id
+      VIRTUAL AFTER id;
     </sql>
 
     <sql dbms="mysql">
@@ -129,7 +111,7 @@
         HEX(SUBSTR(id,  7, 2)),
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
-      VIRTUAL AFTER id
+      VIRTUAL AFTER id;
     </sql>
 
     <sql dbms="mysql">
@@ -139,7 +121,7 @@
         HEX(SUBSTR(orderForm_id,  7, 2)),
         HEX(SUBSTR(orderForm_id,  9, 2)),
         HEX(SUBSTR(orderForm_id, 11)) )))
-      VIRTUAL AFTER orderForm_id
+      VIRTUAL AFTER orderForm_id;
     </sql>
 
     <sql dbms="mysql">
@@ -149,7 +131,7 @@
         HEX(SUBSTR(orderForm_id,  7, 2)),
         HEX(SUBSTR(orderForm_id,  9, 2)),
         HEX(SUBSTR(orderForm_id, 11)) )))
-      VIRTUAL AFTER orderForm_id
+      VIRTUAL AFTER orderForm_id;
     </sql>
 
     <sql dbms="mysql">
@@ -159,7 +141,7 @@
         HEX(SUBSTR(orderForm_id,  7, 2)),
         HEX(SUBSTR(orderForm_id,  9, 2)),
         HEX(SUBSTR(orderForm_id, 11)) )))
-      VIRTUAL AFTER orderForm_id
+      VIRTUAL AFTER orderForm_id;
     </sql>
 
     <sql dbms="mysql">
@@ -169,18 +151,17 @@
         HEX(SUBSTR(orderForm_id,  7, 2)),
         HEX(SUBSTR(orderForm_id,  9, 2)),
         HEX(SUBSTR(orderForm_id, 11)) )))
-      VIRTUAL AFTER orderForm_id
+      VIRTUAL AFTER orderForm_id;
     </sql>
 
     <sql>
       UPDATE OrderForm_AUD AS updateTable
         LEFT JOIN OrderForm AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
-      SET 
-        updateTable.id = joinTable.id
-      WHERE joinTable.id IS NOT null 
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
     </sql>
 
-    <!-- Delete orphaned rows from Audit table. These values uuid's cannot be found since the rows were deleted in the original table-->
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
     <sql>
       DELETE OrderForm_AUD
       FROM OrderForm_AUD
@@ -191,57 +172,47 @@
     <sql>
       UPDATE OrderFormItem AS updateTable
         LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.orderForm_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.orderForm_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <sql>
       UPDATE OrderForm_Component AS updateTable
         LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.orderForm_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.orderForm_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <sql>
       UPDATE OrderFormItem_AUD AS updateTable
         LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.orderForm_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.orderForm_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <sql>
       UPDATE OrderForm_Component_AUD AS updateTable
         LEFT JOIN OrderForm AS joinedTable ON (updateTable.orderForm_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.orderForm_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.orderForm_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <dropColumn columnName="id_temp"
-            schemaName="bsis"
             tableName="OrderForm"/>
 
     <dropColumn columnName="id_temp"
-            schemaName="bsis"
             tableName="OrderForm_AUD"/>
 
     <dropColumn columnName="orderForm_id_temp"
-            schemaName="bsis"
             tableName="OrderFormItem"/>
 
     <dropColumn columnName="orderForm_id_temp"
-            schemaName="bsis"
             tableName="OrderForm_Component"/>
 
     <dropColumn columnName="orderForm_id_temp"
-            schemaName="bsis"
             tableName="OrderFormItem_AUD"/>
 
     <dropColumn columnName="orderForm_id_temp"
-            schemaName="bsis"
             tableName="OrderForm_Component_AUD"/>
 
     <addForeignKeyConstraint baseColumnNames="orderForm_id"
@@ -256,5 +227,7 @@
             referencedColumnNames="id"
             referencedTableName="OrderForm"/>
 
-  </changeSet>
+    </changeSet>
+
 </databaseChangeLog>
+
