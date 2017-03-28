@@ -199,8 +199,8 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
   public void testCreateEntity_shouldReturnExpectedEntity() {
     // Set up fixture
     UUID id = UUID.randomUUID();
-    String name = "Very bad";
-    String description = "Something really bad happened";
+    String name = "reaction name";
+    String description = "reaction description";
     TransfusionReactionTypeBackingForm transfusionReactionTypeForm = aTransfusionReactionTypeBackingForm()
         .withId(id)
         .withName(name)
