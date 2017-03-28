@@ -78,6 +78,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
 
   @Mock
   private OrderFormConstraintChecker orderFormConstraintChecker;
+  private UUID uuid = UUID.randomUUID();
  
   private Location getBaseDispatchedFromLocation() {
     return aDistributionSite().withName("LocFrom").withId(1l).build();
@@ -312,10 +313,10 @@ public class OrderFormFactoryTests extends UnitTestSuite {
   public void testConvertEntitiesToOrderFormViewModels_shouldReturnExpectedViewModels() {
     Location dispatchedFrom = getBaseDispatchedFromLocation();
     Location dispatchedTo = getBaseDispatchedToLocation();
-    Patient patient = aPatient().withId(1L).build();
+    Patient patient = aPatient().withId(uuid).build();
     Date orderDate1 = new Date();
     Date orderDate2 = new Date();
-    PatientViewModel patientViewModel = aPatientViewModel().withId(1L).build();
+    PatientViewModel patientViewModel = aPatientViewModel().withId(uuid).build();
     UUID orderFormId1 = UUID.randomUUID();
     UUID orderFormId2 = UUID.randomUUID();
 
@@ -365,7 +366,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withOrderType(OrderType.PATIENT_REQUEST)
-        .withPatient(aPatientViewModel().withId(1L).build())
+        .withPatient(aPatientViewModel().withId(uuid).build())
         .withOrderDate(orderDate1).withId(orderFormId).build();
 
     OrderForm entity = anOrderForm()
@@ -373,7 +374,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
         .withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate1).withId(orderFormId)
         .withOrderType(OrderType.PATIENT_REQUEST)
-        .withPatient(aPatient().withId(1L).build()).build();
+        .withPatient(aPatient().withId(uuid).build()).build();
     
     // Setup mock
     when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());

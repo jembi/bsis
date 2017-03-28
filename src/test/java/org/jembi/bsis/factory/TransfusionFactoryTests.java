@@ -74,6 +74,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   private TransfusionReactionTypeFactory transfusionReactionTypeFactory;
   @Mock
   private LocationFactory locationFactory;
+  private UUID uuid = UUID.randomUUID();
 
   @Test
   public void testCreateEntityWithReaction_shouldReturnEntityInCorrectState() {
@@ -81,7 +82,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     String din = "123456";
     Date transfusionDate = new Date();
 
-    PatientBackingForm patientForm = aPatientBackingForm().withId(1L).build();
+    PatientBackingForm patientForm = aPatientBackingForm().withId(uuid).build();
     TransfusionReactionTypeBackingForm transfusionReactionTypeForm = aTransfusionReactionTypeBackingForm().withId(1L).build();
     LocationBackingForm receivedFromForm = aUsageSiteBackingForm().withId(1L).build();
     UUID transfusionId = UUID.randomUUID();
@@ -98,7 +99,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
 
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
-    Patient patient = aPatient().withId(1L).build();
+    Patient patient = aPatient().withId(uuid).build();
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion expectedEntity = aTransfusion()
         .withId(transfusionId)
@@ -126,7 +127,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     String donationIdentificationNumber = "1234567";
     
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
-    Patient patient = aPatient().withId(1L).build();
+    Patient patient = aPatient().withId(uuid).build();
     Component component = aComponent()
         .withId(1L)
         .withDonation(aDonation()
@@ -154,7 +155,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
     
     LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
-    PatientViewModel patientViewModel = aPatientViewModel().withId(1L).build();
+    PatientViewModel patientViewModel = aPatientViewModel().withId(uuid).build();
     TransfusionReactionTypeViewModel transfusionReactionTypeViewModel = aTransfusionReactionTypeViewModel()
         .withId(1L)
         .build();
@@ -190,7 +191,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     String donationIdentificationNumber = "1234567";
 
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
-    Patient patient = aPatient().withId(1L).build();
+    Patient patient = aPatient().withId(uuid).build();
     Component component = aComponent()
         .withId(1L)
         .withDonation(aDonation()
@@ -219,7 +220,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
 
     LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
-    PatientViewModel patientViewModel = aPatientViewModel().withId(1L).build();
+    PatientViewModel patientViewModel = aPatientViewModel().withId(uuid).build();
     TransfusionReactionTypeViewModel transfusionReactionTypeViewModel = aTransfusionReactionTypeViewModel()
         .withId(1L)
         .build();
@@ -256,7 +257,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     String donationIdentificationNumber = "1234567";
     
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
-    Patient patient = aPatient().withId(1L).build();
+    Patient patient = aPatient().withId(uuid).build();
     Component component = aComponent()
         .withId(1L)
         .withDonation(aDonation()
@@ -360,7 +361,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Date transfusionDate = new Date();
     String donationIdentificationNumber = "1234567";
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(1L).build();
-    Patient patient = aPatient().withId(1L).build();
+    Patient patient = aPatient().withId(uuid).build();
 
     Donation donation = DonationBuilder.aDonation()
         .withDonationIdentificationNumber(donationIdentificationNumber).build();

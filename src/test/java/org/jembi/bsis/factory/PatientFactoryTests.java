@@ -8,6 +8,8 @@ import static org.jembi.bsis.helpers.builders.PatientViewModelBuilder.aPatientVi
 import static org.jembi.bsis.helpers.matchers.PatientMatcher.hasSameStateAsPatient;
 import static org.jembi.bsis.helpers.matchers.PatientViewModelMatcher.hasSameStateAsPatientViewModel;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.model.util.Gender;
@@ -21,13 +23,14 @@ public class PatientFactoryTests extends UnitTestSuite {
   
   @InjectMocks
   private PatientFactory patientFactory;
+  private UUID uuid = UUID.randomUUID();
   
   @Test
   public void testCreatePatientViewModel_shouldReturnViewModelWithCorrectState() {
     // Set up fixtures
     LocalDate dateOfBirth = new LocalDate(1970, 05, 22);
     Patient patient = aPatient()
-        .withId(1L)
+        .withId(uuid)
         .withName1("PatientName")
         .withName2("PatientSurname")
         .withGender(Gender.female)
@@ -40,7 +43,7 @@ public class PatientFactoryTests extends UnitTestSuite {
         .build();
     
     PatientViewModel expectedViewModel = aPatientViewModel()
-        .withId(1L)
+        .withId(uuid)
         .withName1("PatientName")
         .withName2("PatientSurname")
         .withGender(Gender.female)
@@ -63,7 +66,7 @@ public class PatientFactoryTests extends UnitTestSuite {
     // Set up fixtures
     LocalDate dateOfBirth = new LocalDate(1970, 05, 22);
     Patient patient = aPatient()
-        .withId(1L)
+        .withId(uuid)
         .withName1("PatientName")
         .withName2("PatientSurname")
         .withGender(Gender.female)
@@ -87,7 +90,7 @@ public class PatientFactoryTests extends UnitTestSuite {
     // Set up fixtures
     LocalDate dateOfBirth = new LocalDate(1970, 05, 22);
     PatientBackingForm patientBackingForm = aPatientBackingForm()
-        .withId(1L)
+        .withId(uuid)
         .withName1("PatientName")
         .withName2("PatientSurname")
         .withGender(Gender.female)
@@ -99,7 +102,7 @@ public class PatientFactoryTests extends UnitTestSuite {
         .build();
     
     Patient expectedPatient = aPatient()
-        .withId(1L)
+        .withId(uuid)
         .withName1("PatientName")
         .withName2("PatientSurname")
         .withGender(Gender.female)

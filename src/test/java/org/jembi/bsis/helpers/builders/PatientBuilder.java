@@ -1,12 +1,13 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.patient.Patient;
 import org.jembi.bsis.model.util.Gender;
 
 public class PatientBuilder extends AbstractEntityBuilder<Patient> {
-  private Long id;
+  private UUID id;
   private String name1;
   private String name2;
   private Date dateOfBirth;
@@ -17,7 +18,7 @@ public class PatientBuilder extends AbstractEntityBuilder<Patient> {
   private String bloodAbo;
   private String bloodRh;
 
-  public PatientBuilder withId(Long id) {
+  public PatientBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
