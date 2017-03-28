@@ -131,7 +131,7 @@ public class ReportsController {
   @PreAuthorize("hasRole('" + PermissionConstants.TTI_REPORTING + "')")
   public Map<String, Object> getActiveTTIBloodTestsReportForm() {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("ttiBloodTests", reportsControllerService.getActiveTTIBloodTests());
+    map.put("ttiBloodTests", reportsControllerService.getEnabledTTIBloodTests());
     return map;
   }
 

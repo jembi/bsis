@@ -23,13 +23,17 @@ public class BloodTestRepository extends AbstractRepository<BloodTest> {
   }
 
   public List<BloodTest> getBloodTestsOfType(BloodTestType type) {
-    return getBloodTestsOfTypes(Arrays.asList(type));
+    return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_TYPE, BloodTest.class)
+        .setParameter("types", Arrays.asList(type))
+        .setParameter("isActive", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
   }
 
-  private List<BloodTest> getBloodTestsOfTypes(List<BloodTestType> types) {
+  public List<BloodTest> getEnabledBloodTestsOfType(BloodTestType type) {
     return entityManager.createNamedQuery(BloodTestNamedQueryConstants.NAME_GET_BLOOD_TESTS_BY_TYPE, BloodTest.class)
-        .setParameter("types", types)
-        .setParameter("isActive", true)
+        .setParameter("types", Arrays.asList(type))
+        .setParameter("isActive", null) // should return tests regardless of whether they are active or not
         .setParameter("isDeleted", false)
         .getResultList();
   }

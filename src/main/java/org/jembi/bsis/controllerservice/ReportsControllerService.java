@@ -123,8 +123,8 @@ public class ReportsControllerService {
     return transfusionReactionTypeFactory.createTransfusionReactionTypeViewModels(transfusionReactionTypes);
   }
   
-  public List<BloodTestViewModel> getActiveTTIBloodTests() {
-    return bloodTestFactory.createViewModels(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI));
+  public List<BloodTestViewModel> getEnabledTTIBloodTests() {
+    return bloodTestFactory.createViewModels(bloodTestRepository.getEnabledBloodTestsOfType(BloodTestType.BASIC_TTI));
   }
 
  public List<DonationTypeViewModel> getDonationTypes() {
