@@ -8,10 +8,11 @@ import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
 import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class TransfusionFullViewModelBuilder extends AbstractBuilder<TransfusionFullViewModel> {
 
-  private Long id;
+  private UUID id;
   private String donationIdentificationNumber;
   private PatientViewModel patient;
   private String notes;
@@ -21,7 +22,7 @@ public class TransfusionFullViewModelBuilder extends AbstractBuilder<Transfusion
   private TransfusionOutcome transfusionOutcome;
   private Date dateTransfused;
   
-  public TransfusionFullViewModelBuilder withId(Long id) {
+  public TransfusionFullViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.dto.TransfusionSummaryDTO;
 import org.jembi.bsis.model.transfusion.Transfusion;
@@ -22,7 +23,7 @@ public class TransfusionRepository extends AbstractRepository<Transfusion> {
         .getSingleResult();
   }
 
-  public Transfusion findTransfusionById(long transfusionId) {
+  public Transfusion findTransfusionById(UUID transfusionId) {
     return entityManager.createNamedQuery(TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_BY_ID, Transfusion.class)
         .setParameter("transfusionId", transfusionId)
         .setParameter("isDeleted", false)

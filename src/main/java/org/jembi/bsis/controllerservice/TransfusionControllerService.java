@@ -2,6 +2,7 @@ package org.jembi.bsis.controllerservice;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TransfusionBackingForm;
 import org.jembi.bsis.factory.ComponentTypeFactory;
@@ -85,12 +86,12 @@ public class TransfusionControllerService {
     return transfusionFactory.createViewModels(transfusions);
   }
   
-  public TransfusionFullViewModel getTransfusion(Long id) {
+  public TransfusionFullViewModel getTransfusion(UUID id) {
     Transfusion transfusion = transfusionRepository.findTransfusionById(id);
     return transfusionFactory.createFullViewModel(transfusion);
   }
 
-  public void deleteTransfusion(Long id) {
+  public void deleteTransfusion(UUID id) {
     transfusionCRUDService.deleteTransfusion(id);
   }
   

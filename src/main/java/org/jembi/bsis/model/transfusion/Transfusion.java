@@ -14,7 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.patient.Patient;
@@ -32,7 +32,7 @@ import org.jembi.bsis.repository.constant.TransfusionNamedQueryConstants;
 })
 @Entity
 @Audited
-public class Transfusion extends BaseModificationTrackerEntity {
+public class Transfusion extends BaseModificationTrackerUUIDEntity {
   
   private static final long serialVersionUID = 1L;
   

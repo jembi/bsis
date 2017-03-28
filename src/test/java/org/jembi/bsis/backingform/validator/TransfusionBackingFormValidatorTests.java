@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -165,12 +166,12 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .build();
 
     long usageSiteId = 1L;
-    long transfusionId = 1L;
+    UUID transfusionId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
     TransfusionBackingForm form = aTransfusionBackingForm()
-        .withId(1L)
+        .withId(transfusionId)
         .withDonationIdentificationNumber(din)
         .withComponentCode(componentCode)
         .withDateTransfused(transfusedDate)
@@ -236,13 +237,13 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .build();
 
     long usageSiteId = 1L;
-    long transfusionId = 1L;
+    UUID transfusionId = UUID.randomUUID();
     Long componentTypeId = 1L;
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
     TransfusionBackingForm form = aTransfusionBackingForm()
-        .withId(1L)
+        .withId(transfusionId)
         .withDonationIdentificationNumber(din)
         .withComponentType(aComponentTypeBackingForm().withId(componentTypeId).build())
         .withDateTransfused(transfusedDate)
@@ -310,13 +311,13 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .build();
 
     long usageSiteId = 1L;
-    long transfusionId = 1L;
+    UUID transfusionId = UUID.randomUUID();
     Long componentTypeId = 1L;
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
     TransfusionBackingForm form = aTransfusionBackingForm()
-        .withId(1L)
+        .withId(transfusionId)
         .withDonationIdentificationNumber(din)
         .withComponentType(aComponentTypeBackingForm().withId(componentTypeId).build())
         .withDateTransfused(transfusedDate)

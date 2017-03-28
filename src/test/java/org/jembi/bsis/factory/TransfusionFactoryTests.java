@@ -27,6 +27,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PatientBackingForm;
@@ -83,8 +84,9 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     PatientBackingForm patientForm = aPatientBackingForm().withId(1L).build();
     TransfusionReactionTypeBackingForm transfusionReactionTypeForm = aTransfusionReactionTypeBackingForm().withId(1L).build();
     LocationBackingForm receivedFromForm = aUsageSiteBackingForm().withId(1L).build();
+    UUID transfusionId = UUID.randomUUID();
     TransfusionBackingForm form = aTransfusionBackingForm()
-        .withId(1L)
+        .withId(transfusionId)
         .withDonationIdentificationNumber(din)
         .withComponentCode(componentTypeCode)
         .withReceivedFrom(receivedFromForm)
@@ -99,7 +101,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Patient patient = aPatient().withId(1L).build();
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion expectedEntity = aTransfusion()
-        .withId(1L)
+        .withId(transfusionId)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSION_REACTION_OCCURRED)
         .withPatient(patient)
@@ -133,8 +135,9 @@ public class TransfusionFactoryTests extends UnitTestSuite {
             .build())
         .build();
     Location receivedFrom = aUsageSite().withId(1L).build();
+    UUID transfusionId = UUID.randomUUID();
     Transfusion transfusion = aTransfusion()
-        .withId(1L)
+        .withId(transfusionId)
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -157,7 +160,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
 
     TransfusionFullViewModel expectedViewModel = aTransfusionFullViewModel()
-        .withId(1L)
+        .withId(transfusionId)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withComponent(componentViewModel)
         .withUsageSite(receivedFromViewModel)
@@ -196,8 +199,9 @@ public class TransfusionFactoryTests extends UnitTestSuite {
             .build())
         .build();
     Location receivedFrom = aUsageSite().withId(1L).build();
+    UUID transfusionId = UUID.randomUUID();
     Transfusion transfusion = aTransfusion()
-        .withId(1L)
+        .withId(transfusionId)
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -221,7 +225,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
 
     TransfusionFullViewModel expectedViewModel = aTransfusionFullViewModel()
-        .withId(1L)
+        .withId(transfusionId)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withComponent(componentViewModel)
         .withUsageSite(receivedFromViewModel)
@@ -263,7 +267,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Location receivedFrom = aUsageSite().withId(1L).build();
     List<Transfusion> transfusions = new ArrayList<>();
     transfusions.add(aTransfusion()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -273,7 +277,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .thatIsNotDeleted()
         .build());
     transfusions.add(aTransfusion()
-        .withId(2L)
+        .withId(UUID.randomUUID())
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.UNKNOWN)
@@ -318,8 +322,9 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
 
     Location receivedFrom = aUsageSite().withId(1L).build();
+    UUID transfusionId = UUID.randomUUID();
     Transfusion transfusion = aTransfusion()
-        .withId(1L)
+        .withId(transfusionId)
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -331,7 +336,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
 
     TransfusionViewModel expectedViewModel = aTransfusionViewModel()
-        .withId(1L)
+        .withId(transfusionId)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withComponentCode(componentCode)
         .withComponentType(componentTypeName)
@@ -361,6 +366,8 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withDonationIdentificationNumber(donationIdentificationNumber).build();
     String componentTypeName = "componentType";
     String componentCode = "1234";
+    UUID transfusionId1 = UUID.randomUUID();
+    UUID transfusionId2 = UUID.randomUUID();
     Component component = aComponent()
         .withId(1L)
         .withComponentType(aComponentType()
@@ -373,7 +380,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Location receivedFrom = aUsageSite().withId(1L).build();
     List<Transfusion> transfusions = new ArrayList<>();
     transfusions.add(aTransfusion()
-        .withId(1L)
+        .withId(transfusionId1)
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -383,7 +390,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .thatIsNotDeleted()
         .build());
     transfusions.add(aTransfusion()
-        .withId(2L)
+        .withId(transfusionId2)
         .withComponent(component)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
@@ -396,7 +403,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
 
     TransfusionViewModel expectedViewModel1 = aTransfusionViewModel()
-        .withId(1L)
+        .withId(transfusionId1)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withComponentCode(componentCode)
         .withComponentType(componentTypeName)
@@ -406,7 +413,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
     
     TransfusionViewModel expectedViewModel2 = aTransfusionViewModel()
-        .withId(2L)
+        .withId(transfusionId2)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withComponentCode(componentCode)
         .withComponentType(componentTypeName)

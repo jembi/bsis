@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.viewmodel.LocationViewModel;
@@ -8,7 +9,7 @@ import org.jembi.bsis.viewmodel.TransfusionViewModel;
 
 public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionViewModel> {
 
-  private Long id;
+  private UUID id;
   private String donationIdentificationNumber;
   private String componentCode;
   private String componentType;
@@ -16,7 +17,7 @@ public class TransfusionViewModelBuilder extends AbstractBuilder<TransfusionView
   private TransfusionOutcome transfusionOutcome;
   private Date dateTransfused;  
   
-  public TransfusionViewModelBuilder withId(Long id) {
+  public TransfusionViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
