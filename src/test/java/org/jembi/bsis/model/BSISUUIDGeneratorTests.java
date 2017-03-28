@@ -9,11 +9,11 @@ import java.util.UUID;
 import org.apache.commons.lang.ArrayUtils;
 import org.junit.Test;
 
-public class UUIDFromSQLGeneratorTests {
+public class BSISUUIDGeneratorTests {
 
   @Test
   public void testConvertBytesToUUID() {
-    UUIDFromSQLGenerator uuidGenerator = new UUIDFromSQLGenerator();
+    BSISUUIDGenerator uuidGenerator = new BSISUUIDGenerator();
     UUID testData = UUID.randomUUID();
 
     Long lsb = testData.getLeastSignificantBits();

@@ -17,9 +17,9 @@ import org.hibernate.id.IdentifierGenerator;
 /**
  * UUID From SQL Generator that calls the GENERATEBINARYUUID() function to obtain a UUID.
  */
-public class UUIDFromSQLGenerator implements IdentifierGenerator {
+public class BSISUUIDGenerator implements IdentifierGenerator {
 
-  public UUIDFromSQLGenerator() {
+  public BSISUUIDGenerator() {
   }
 
   public Serializable generate(SessionImplementor session, Object obj) throws HibernateException {
