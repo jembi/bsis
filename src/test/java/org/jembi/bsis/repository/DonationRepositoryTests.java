@@ -47,7 +47,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     Date irrelevantEndDate = new DateTime().minusDays(2).toDate();
 
     Location expectedVenue = aVenue().build();
-    DonationType expectedDonationType = aDonationType().build();
+    DonationType expectedDonationType = aDonationType().thatIsNotDeleted().build();
     String expectedBloodAbo = "A";
     String expectedBloodRh = "+";
     Gender expectedGender = Gender.male;
@@ -85,12 +85,23 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
-    // Excluded by deleted
+    // Excluded by deleted donation
     aDonation()
         .thatIsDeleted()
         .withDonationDate(irrelevantStartDate)
         .withDonor(aDonor().withGender(expectedGender).build())
         .withDonationType(expectedDonationType)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .withVenue(expectedVenue)
+        .buildAndPersist(entityManager);
+ 
+    // Excluded by deleted donationType
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationDate(irrelevantStartDate)
+        .withDonor(aDonor().withGender(expectedGender).build())
+        .withDonationType(aDonationType().thatIsDeleted().build())
         .withBloodAbo(expectedBloodAbo)
         .withBloodRh(expectedBloodRh)
         .withVenue(expectedVenue)
