@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -21,14 +22,14 @@ public class TransfusionReactionTypeRepository extends AbstractRepository<Transf
     return query.getResultList();
   }
 
-  public TransfusionReactionType findById(Long id) throws NoResultException {
+  public TransfusionReactionType findById(UUID id) throws NoResultException {
     TypedQuery<TransfusionReactionType> query = entityManager.createNamedQuery(
         TransfusionReactionTypeNamedQueryConstants.NAME_FIND_BY_ID, TransfusionReactionType.class);
     query.setParameter("id", id);
     return query.getSingleResult();
   }
   
-  public boolean isUniqueTransfusionReactionTypeName(Long id, String reactionTypeName) {
+  public boolean isUniqueTransfusionReactionTypeName(UUID id, String reactionTypeName) {
     // passing null as the ID parameter does not work because the IDs in mysql are never null. So if
     // id is null, the below rather uses -1 which achieves the same result in the case of this
     // query.

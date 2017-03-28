@@ -6,6 +6,7 @@ import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTr
 import static org.jembi.bsis.helpers.matchers.TransfusionReactionTypeMatcher.hasSameStateAsTransfusionReactionType;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
@@ -76,7 +77,7 @@ public class TransfusionReactionTypeRepositoryTests extends ContextDependentTest
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindById_verifyExeptionThrown() {
-    transfusionReactionTypeRepository.findById(1L);
+    transfusionReactionTypeRepository.findById(UUID.randomUUID());
   }
   
   @Test

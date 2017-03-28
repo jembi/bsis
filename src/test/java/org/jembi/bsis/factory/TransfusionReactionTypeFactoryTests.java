@@ -13,6 +13,7 @@ import static org.mockito.Mockito.doReturn;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
@@ -32,7 +33,7 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateTransfusionReactionTypeViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
-    long transfusionReactionTypeId = 769L;
+    UUID transfusionReactionTypeId = UUID.randomUUID();
     String transfusionReactionTypeName = "Some transfusionReactionType";
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType()
         .withId(transfusionReactionTypeId)
@@ -70,7 +71,7 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateTransfusionReactionTypeManagementViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
-    long transfusionReactionTypeId = 769L;
+    UUID transfusionReactionTypeId = UUID.randomUUID();
     String transfusionReactionTypeName = "Some transfusionReactionType";
     String description = "Default description";
 
@@ -112,20 +113,22 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateTransfusionReactionTypeViewModels_shouldReturnExpectedViewModels() {
     // Set up fixture
+    UUID id1 = UUID.randomUUID();
+    UUID id2 = UUID.randomUUID();
     TransfusionReactionType firstTransfusionReactionType = aTransfusionReactionType()
-        .withId(1L)
+        .withId(id1)
         .withName("First")
         .build();
     TransfusionReactionType secondTransfusionReactionType = aTransfusionReactionType()
-        .withId(3L)
+        .withId(id2)
         .withName("Second")
         .build();
     List<TransfusionReactionType> transfusionReactionTypes =
         Arrays.asList(firstTransfusionReactionType, secondTransfusionReactionType);
 
     // Set up expectations
-    TransfusionReactionTypeViewModel firstViewModel = aTransfusionReactionTypeViewModel().withId(1L).withName("First").withIsDeleted(false).build();
-    TransfusionReactionTypeViewModel secondViewModel = aTransfusionReactionTypeViewModel().withId(3L).withName("Second").withIsDeleted(false).build();
+    TransfusionReactionTypeViewModel firstViewModel = aTransfusionReactionTypeViewModel().withId(id1).withName("First").withIsDeleted(false).build();
+    TransfusionReactionTypeViewModel secondViewModel = aTransfusionReactionTypeViewModel().withId(id2).withName("Second").withIsDeleted(false).build();
     List<TransfusionReactionTypeViewModel> expectedViewModels = Arrays.asList(firstViewModel, secondViewModel);
 
     doReturn(firstViewModel).when(transfusionReactionTypeFactory)
@@ -144,17 +147,19 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateTransfusionReactionManagementTypeViewModels_shouldReturnExpectedViewModels() {
     // Set up fixture
+    UUID id1 = UUID.randomUUID();
+    UUID id2 = UUID.randomUUID();
     String description1 = "Description 1";
     String firstName = "First";
     TransfusionReactionType firstTransfusionReactionType = aTransfusionReactionType()
-        .withId(1L)
+        .withId(id1)
         .withName(firstName)
         .withDescription(description1)
         .build();
     String description2 = "Description 2";
     String secondName = "Second";
     TransfusionReactionType secondTransfusionReactionType = aTransfusionReactionType()
-        .withId(3L)
+        .withId(id2)
         .withName(secondName)
         .withDescription(description2)
         .build();
@@ -163,13 +168,13 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
 
     // Set up expectations
     TransfusionReactionTypeManagementViewModel firstViewModel = aTransfusionReactionTypeManagementViewModel()
-        .withId(1L)
+        .withId(id1)
         .withName(firstName)
         .withDescription(description1)
         .withIsDeleted(false)
         .build();
     TransfusionReactionTypeManagementViewModel secondViewModel = aTransfusionReactionTypeManagementViewModel()
-        .withId(3L)
+        .withId(id2)
         .withName(secondName)
         .withDescription(description2)
         .withIsDeleted(false).build();
@@ -193,7 +198,7 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntity_shouldReturnExpectedEntity() {
     // Set up fixture
-    Long id = 1L;
+    UUID id = UUID.randomUUID();
     String name = "Very bad";
     String description = "Something really bad happened";
     TransfusionReactionTypeBackingForm transfusionReactionTypeForm = aTransfusionReactionTypeBackingForm()
@@ -204,7 +209,7 @@ public class TransfusionReactionTypeFactoryTests extends UnitTestSuite {
         .build();
     // Set up expectations
     TransfusionReactionType expectedEntity = aTransfusionReactionType()
-        .withId(1L)
+        .withId(id)
         .withName(name)
         .withDescription(description)
         .thatIsDeleted()
