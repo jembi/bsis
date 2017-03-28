@@ -5,7 +5,7 @@
   <changeSet id="20170327-1059"  author="jmuzinda">
 	<comment>Migrate the ReturnForm table from an integer id primary key
 	to a UUID of type BINARY(16). </comment>
-	    <dropForeignKeyConstraint baseTableName="ReturnForm_Component" constraintName="fk_ReturnForm_Component_ReturnForm"/>
+	<dropForeignKeyConstraint baseTableName="ReturnForm_Component" constraintName="fk_ReturnForm_Component_ReturnForm"/>
 
     <addColumn tableName="ReturnForm">
       <column name="id_temp" type="BIGINT" afterColumn="id"/>
@@ -47,37 +47,22 @@
     <modifyDataType
             columnName="id"
             newDataType="BIGINT(20)"
-            schemaName="bsis"
-            tableName="ReturnForm"/>
-
-    <dropPrimaryKey 
-            constraintName="PRIMARY"
-            schemaName="bsis"
-            tableName="ReturnForm"/>
-    <addPrimaryKey
-            columnNames="id"
-            constraintName="PRIMARY"
-            schemaName="bsis"
             tableName="ReturnForm"/>
 
     <modifyDataType columnName="id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="ReturnForm"/>
 
     <modifyDataType columnName="id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="ReturnForm_AUD"/>
 
     <modifyDataType columnName="returnForm_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="ReturnForm_Component"/>
 
     <modifyDataType columnName="returnForm_id"
             newDataType="BINARY(16)"
-            schemaName="bsis"
             tableName="ReturnForm_Component_AUD"/>
 
     <sql>
@@ -92,7 +77,7 @@
         HEX(SUBSTR(id,  7, 2)),
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
-      VIRTUAL AFTER id
+      VIRTUAL AFTER id;
     </sql>
 
     <sql dbms="mysql">
@@ -102,7 +87,7 @@
         HEX(SUBSTR(id,  7, 2)),
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
-      VIRTUAL AFTER id
+      VIRTUAL AFTER id;
     </sql>
 
     <sql dbms="mysql">
@@ -112,7 +97,7 @@
         HEX(SUBSTR(returnForm_id,  7, 2)),
         HEX(SUBSTR(returnForm_id,  9, 2)),
         HEX(SUBSTR(returnForm_id, 11)) )))
-      VIRTUAL AFTER returnForm_id
+      VIRTUAL AFTER returnForm_id;
     </sql>
 
     <sql dbms="mysql">
@@ -122,18 +107,17 @@
         HEX(SUBSTR(returnForm_id,  7, 2)),
         HEX(SUBSTR(returnForm_id,  9, 2)),
         HEX(SUBSTR(returnForm_id, 11)) )))
-      VIRTUAL AFTER returnForm_id
+      VIRTUAL AFTER returnForm_id;
     </sql>
 
     <sql>
       UPDATE ReturnForm_AUD AS updateTable
         LEFT JOIN ReturnForm AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
-      SET 
-        updateTable.id = joinTable.id
-      WHERE joinTable.id IS NOT null 
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
     </sql>
 
-    <!-- Delete orphaned rows from Audit table. These values uuid's cannot be found since the rows were deleted in the original table-->
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
     <sql>
       DELETE ReturnForm_AUD
       FROM ReturnForm_AUD
@@ -144,33 +128,27 @@
     <sql>
       UPDATE ReturnForm_Component AS updateTable
         LEFT JOIN ReturnForm AS joinedTable ON (updateTable.returnForm_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.returnForm_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.returnForm_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <sql>
       UPDATE ReturnForm_Component_AUD AS updateTable
         LEFT JOIN ReturnForm AS joinedTable ON (updateTable.returnForm_id_temp = joinedTable.id_temp)
-      SET 
-         updateTable.returnForm_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null 
+      SET updateTable.returnForm_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
     </sql>
 
     <dropColumn columnName="id_temp"
-            schemaName="bsis"
             tableName="ReturnForm"/>
 
     <dropColumn columnName="id_temp"
-            schemaName="bsis"
             tableName="ReturnForm_AUD"/>
 
     <dropColumn columnName="returnForm_id_temp"
-            schemaName="bsis"
             tableName="ReturnForm_Component"/>
 
     <dropColumn columnName="returnForm_id_temp"
-            schemaName="bsis"
             tableName="ReturnForm_Component_AUD"/>
 
     <addForeignKeyConstraint baseColumnNames="returnForm_id"
