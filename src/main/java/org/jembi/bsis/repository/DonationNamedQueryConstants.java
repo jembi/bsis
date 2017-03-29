@@ -34,6 +34,7 @@ public class DonationNamedQueryConstants {
       "SELECT NEW org.jembi.bsis.dto.CollectedDonationDTO(d.donationType, do.gender, d.bloodAbo, d.bloodRh, d.venue, COUNT(d)) " +
           "FROM Donation d, Donor do " +
           "WHERE d.donor = do AND d.donationDate BETWEEN :startDate AND :endDate " +
+          "AND d.donationType.isDeleted = :deleted " +
           "AND d.isDeleted = :deleted " +
           "GROUP BY d.venue, do.gender, d.donationType, d.bloodAbo, d.bloodRh " +
           "ORDER BY d.venue, do.gender, d.donationType, d.bloodAbo, d.bloodRh";
