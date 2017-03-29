@@ -23,11 +23,11 @@ public class PatientFactoryTests extends UnitTestSuite {
   
   @InjectMocks
   private PatientFactory patientFactory;
-  private UUID uuid = UUID.randomUUID();
   
   @Test
   public void testCreatePatientViewModel_shouldReturnViewModelWithCorrectState() {
     // Set up fixtures
+    UUID uuid = UUID.randomUUID();
     LocalDate dateOfBirth = new LocalDate(1970, 05, 22);
     Patient patient = aPatient()
         .withId(uuid)
@@ -64,6 +64,7 @@ public class PatientFactoryTests extends UnitTestSuite {
   @Test
   public void testCreatePatientViewModelWithNoBloodGroup_shouldReturnEmptyStringForBloodGroup() {
     // Set up fixtures
+    UUID uuid = UUID.randomUUID();
     LocalDate dateOfBirth = new LocalDate(1970, 05, 22);
     Patient patient = aPatient()
         .withId(uuid)
@@ -88,6 +89,7 @@ public class PatientFactoryTests extends UnitTestSuite {
   @Test
   public void testCreatePatientEntity_shouldReturnEntityWithCorrectState() {
     // Set up fixtures
+    UUID uuid = UUID.randomUUID();
     LocalDate dateOfBirth = new LocalDate(1970, 05, 22);
     PatientBackingForm patientBackingForm = aPatientBackingForm()
         .withId(uuid)
