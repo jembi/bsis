@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.AdverseEventBackingForm;
 import org.jembi.bsis.backingform.DonationBackingForm;
@@ -122,7 +123,7 @@ public class DonationFactoryTests {
     boolean irrelevantIsBackEntryPermission = true;
     boolean irrelevantCanEditPackTypePermission = true;
 
-    Long irrelevantAdverseEventId = 11L;
+    UUID irrelevantAdverseEventId = UUID.randomUUID();
     Date donationDate = new Date();
     String donationIdentificationNumber = "0000001";
     String donorNumber = "000001";
@@ -227,7 +228,7 @@ public class DonationFactoryTests {
   @Test
   public void testCreateDonationViewModelsWithPermissions_shouldReturnViewModelsWithCorrectDonationAndPermissions() {
 
-    Long irrelevantAdverseEventId = 11L;
+    UUID irrelevantAdverseEventId = UUID.randomUUID();
     AdverseEvent adverseEvent = anAdverseEvent().withId(irrelevantAdverseEventId).build();
     PackType packType = aPackType().withId(IRRELEVANT_PACKTYPE_ID).build();
     PackTypeFullViewModel packTypeFullViewModel = aPackTypeViewFullModel().withId(IRRELEVANT_PACKTYPE_ID).build();

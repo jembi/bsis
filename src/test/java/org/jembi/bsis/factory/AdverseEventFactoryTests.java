@@ -11,6 +11,8 @@ import static org.jembi.bsis.helpers.matchers.AdverseEventMatcher.hasSameStateAs
 import static org.jembi.bsis.helpers.matchers.AdverseEventViewModelMatcher.hasSameStateAsAdverseEventViewModel;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.AdverseEventBackingForm;
 import org.jembi.bsis.backingform.AdverseEventTypeBackingForm;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
@@ -37,10 +39,13 @@ public class AdverseEventFactoryTests {
   @Test
   public void testCreateEntity_shouldReturnCorrectEntity() {
     // Set up data
+    UUID irrelevantAdverseEventId = UUID.randomUUID();
     AdverseEventTypeBackingForm typeForm = anAdverseEventTypeBackingForm().withId(1L).build();
-    AdverseEventBackingForm form = anAdverseEventBackingForm().withId(1L).withComment("comment").withType(typeForm).build();
+    AdverseEventBackingForm form = anAdverseEventBackingForm()
+        .withId(irrelevantAdverseEventId).withComment("comment").withType(typeForm).build();
     AdverseEventType type = anAdverseEventType().withId(1L).build();
-    AdverseEvent expectedEntity = anAdverseEvent().withId(1L).withComment("comment").withType(type).build();
+    AdverseEvent expectedEntity = anAdverseEvent()
+        .withId(irrelevantAdverseEventId).withComment("comment").withType(type).build();
     
     // Set up mocks
     when(adverseEventTypeRepository.findById(1L)).thenReturn(type);
@@ -56,7 +61,7 @@ public class AdverseEventFactoryTests {
   @Test
   public void testCreateAdverseEventTypeViewModel_shouldReturnViewModelWithTheCorrectState() {
 
-    Long irrelevantAdverseEventId = 77L;
+    UUID irrelevantAdverseEventId = UUID.randomUUID();
     Long irrelevantAdverseEventTypeId = 89L;
     String irrelevantComment = "test";
 
