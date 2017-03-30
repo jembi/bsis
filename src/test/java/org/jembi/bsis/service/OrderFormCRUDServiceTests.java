@@ -130,6 +130,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
   public void testUpdateIssueOrderForm_shouldUpdateFieldsCorrectly() {
     // Fixture
     Date createdDate = new Date();
+    Date orderDate = new Date();
     Location dispatchedFrom = aDistributionSite().build();
     Location dispatchedTo = aUsageSite().build();
     Component component = aComponent().build();
@@ -137,6 +138,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withCreatedDate(createdDate).build();
     OrderForm orderForm = anOrderForm()
         .withId(ORDER_FORM_ID)
+        .withOrderDate(orderDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
         .withOrderType(OrderType.ISSUE)
         .withDispatchedFrom(dispatchedFrom)
@@ -145,7 +147,8 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .build();
     OrderForm expectedOrderForm = anOrderForm()
         .withId(ORDER_FORM_ID)
-        .withCreatedDate(createdDate)
+        .withCreatedDate(createdDate) // cannot be updated
+        .withOrderDate(orderDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
         .withOrderType(OrderType.ISSUE)
         .withDispatchedFrom(dispatchedFrom)
