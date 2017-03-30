@@ -130,7 +130,7 @@
     <donationtype id="3" donationType="Autologous" isDeleted="0"></donationtype>
     <donationtype id="4" donationType="Other" isDeleted="0"></donationtype>
 
-    <DonationBatch id="1" batchNumber="B0314000000"
+    <DonationBatch id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" batchNumber="B0314000000"
                    isDeleted="0" isClosed="0" createdDate="2014-02-22 20:18:17" donationBatchDate="2014-02-22 20:18:17"
                    lastUpdated="2014-02-21 17:31:59"
                    notes="Notes" venue_Id="1"
@@ -142,7 +142,7 @@
               donorWeight="60.00" haemoglobinCount="14.00"
               isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
               notes="notes" ttiStatus="NOT_DONE" packType_id="2"
-              donationBatch_id="1" venue_Id="1"
+              donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" venue_Id="1"
               donationCreatedBy_id="1" donationType_id="2" donor_id="1"
               createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
               donorPulse="60" ineligibleDonor="0" released="0"/>

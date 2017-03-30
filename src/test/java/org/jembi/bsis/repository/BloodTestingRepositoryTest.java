@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -192,11 +193,11 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
   @Test
   public void testGetTestResultsForDonationBatchesByBloodTestType() {
-    ArrayList<Long> donationBatchIds = new ArrayList<Long>();
-    donationBatchIds.add(2l);
+    UUID donationBatchId = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870682");
+    ArrayList<UUID> donationBatchIds = new ArrayList<UUID>();
+    donationBatchIds.add(donationBatchId);
     List<BloodTestingRuleResult> results = bloodTestingRepository
-        .getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds,
-        BloodTestType.BASIC_TTI);
+        .getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, BloodTestType.BASIC_TTI);
 
     // donation id = 2 is the only donation in batch id = 2
     BloodTestingRuleResult result = results.get(0);

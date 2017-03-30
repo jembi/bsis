@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.component.Component;
@@ -42,6 +43,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 public class ComponentStatusCalculatorTests extends UnitTestSuite {
+
+  private static final UUID DONATION_BATCH_ID = UUID.randomUUID();
 
   @InjectMocks
   private ComponentStatusCalculator componentStatusCalculator;
@@ -700,7 +703,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testUpdateComponentStatusQuarantinedBloodGroupingPendingTestsTTISafe_shouldNotChangeStatus() throws Exception {
     // set up data
     TestBatch testBatch = aReleasedTestBatch().withId(1L).build();
-    DonationBatch donationBatch = aDonationBatch().withId(1L).withTestBatch(testBatch).build();
+    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
     Long donationId = Long.valueOf(1234);
     Donation donation = aDonation()
         .withId(donationId)
@@ -734,7 +737,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up data
     Long donationId = Long.valueOf(1234);
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).withId(1L).build();
-    DonationBatch donationBatch = aDonationBatch().withId(1L).withTestBatch(testBatch).build();
+    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
     Donation donation = aDonation()
         .withId(donationId)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
@@ -767,7 +770,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up data
     Long donationId = Long.valueOf(1234);
     TestBatch testBatch = aReleasedTestBatch().withId(1L).build();
-    DonationBatch donationBatch = aDonationBatch().withId(1L).withTestBatch(testBatch).build();
+    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
     Donation donation = aDonation()
         .withId(donationId)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
@@ -1035,7 +1038,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     // set up data
     Long donationId = Long.valueOf(1234);
     TestBatch testBatch = aReleasedTestBatch().withId(1L).build();
-    DonationBatch donationBatch = aDonationBatch().withId(1L).withTestBatch(testBatch).build();
+    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
     Donation donation = aDonation()
         .withId(donationId)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)

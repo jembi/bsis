@@ -1,5 +1,9 @@
 package org.jembi.bsis.service;
 
+import java.util.UUID;
+
+import javax.persistence.NoResultException;
+
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -8,8 +12,6 @@ import org.jembi.bsis.repository.DonationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.NoResultException;
 
 @Transactional
 @Service
@@ -27,7 +29,7 @@ public class DonationBatchCRUDService {
   @Autowired
   private DateGeneratorService dateService;
 
-  public void deleteDonationBatch(Long donationBatchId) throws IllegalStateException, NoResultException {
+  public void deleteDonationBatch(UUID donationBatchId) throws IllegalStateException, NoResultException {
 
     if (!donationBatchConstraintChecker.canDeleteDonationBatch(donationBatchId)) {
       throw new IllegalStateException("Cannot delete donation batch with constraints");

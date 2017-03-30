@@ -1,14 +1,15 @@
 package org.jembi.bsis.viewmodel;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
-import java.util.Date;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class DonationBatchViewModel {
 
-  private Long id;
+  private UUID id;
   private String batchNumber;
   private String notes;
   private Date lastUpdatedDate;
@@ -32,11 +33,11 @@ public class DonationBatchViewModel {
     this.donationBatchDate = donationBatchDate;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

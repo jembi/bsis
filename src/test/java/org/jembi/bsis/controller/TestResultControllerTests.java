@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -42,6 +43,9 @@ import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.mockito.Mockito.when;
 
 public class TestResultControllerTests extends UnitTestSuite {
+  
+  private static final UUID DONATION_BATCH_ID = UUID.randomUUID();
+  
   @Spy
   @InjectMocks
   private TestResultController testResultController;
@@ -59,7 +63,7 @@ public class TestResultControllerTests extends UnitTestSuite {
 
     Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
         aDonationBatch()
-            .withId(1L)
+            .withId(DONATION_BATCH_ID)
             .withBatchNumber("123")
             .withDonationBatchDate(new Date())
             .build()
@@ -132,7 +136,7 @@ public class TestResultControllerTests extends UnitTestSuite {
 
     Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
         aDonationBatch()
-            .withId(1L)
+            .withId(DONATION_BATCH_ID)
             .withBatchNumber("123")
             .withDonationBatchDate(new Date())
             .build()
@@ -222,7 +226,7 @@ public class TestResultControllerTests extends UnitTestSuite {
 
     Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
         aDonationBatch()
-            .withId(1L)
+            .withId(DONATION_BATCH_ID)
             .withBatchNumber("123")
             .withDonationBatchDate(new Date())
             .build()
@@ -289,7 +293,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
     Set<DonationBatch> donationBatches = new HashSet<>(
-        Arrays.asList(aDonationBatch().withId(1L).withBatchNumber("123").withDonationBatchDate(new Date()).build()));
+        Arrays.asList(aDonationBatch().withId(DONATION_BATCH_ID).withBatchNumber("123").withDonationBatchDate(new Date()).build()));
 
     TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
@@ -340,7 +344,7 @@ public class TestResultControllerTests extends UnitTestSuite {
 
     Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
         aDonationBatch()
-            .withId(1L)
+            .withId(DONATION_BATCH_ID)
             .withBatchNumber("123")
             .withDonationBatchDate(new Date())
             .build()

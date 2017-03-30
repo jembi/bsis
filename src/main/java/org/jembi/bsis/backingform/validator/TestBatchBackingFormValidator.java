@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform.validator;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -24,9 +25,9 @@ public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackin
   @Override
   public void validateForm(TestBatchBackingForm form, Errors errors) {
     // Validate donation batches
-    List<Long> donationBatchIds = form.getDonationBatchIds();
+    List<UUID> donationBatchIds = form.getDonationBatchIds();
     if (donationBatchIds != null && !donationBatchIds.isEmpty()) {
-      for (Long donationBatchId : donationBatchIds) {
+      for (UUID donationBatchId : donationBatchIds) {
         DonationBatch db = donationBatchRepository.findDonationBatchById(donationBatchId);
         if (db.getTestBatch() != null) {
           if (form.getId() == null || !form.getId().equals(db.getTestBatch().getId())) {

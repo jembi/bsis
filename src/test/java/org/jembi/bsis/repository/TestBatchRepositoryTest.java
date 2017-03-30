@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -111,8 +112,9 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   public void testSaveTestBatch() throws Exception {
     TestBatch testBatch = new TestBatch();
+    UUID donationBatchId = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870683");
     Set<DonationBatch> donationBatches = new HashSet<>();
-    donationBatches.add(donationBatchRepository.findDonationBatchById(3l));
+    donationBatches.add(donationBatchRepository.findDonationBatchById(donationBatchId));
     testBatch.setDonationBatches(donationBatches);
     Location location = locationRepository.getLocation(2l);
     testBatch.setLocation(location);
@@ -122,7 +124,7 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
     Assert.assertNotNull("Saved TestBatch is found", retrievedTestBatch);
     Assert.assertEquals("TestBatch status is correct", TestBatchStatus.OPEN, retrievedTestBatch.getStatus());
     Assert.assertEquals("TestBatch batchNumber is correct", "123456", retrievedTestBatch.getBatchNumber());
-    DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(3l);
+    DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
     Assert.assertNotNull("DonationBatch was linked to TestBatch", updatedDonationBatch.getTestBatch());
   }
 

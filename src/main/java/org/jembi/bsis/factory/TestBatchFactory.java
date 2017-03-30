@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
@@ -56,7 +57,7 @@ public class TestBatchFactory {
     testBatch.setStatus(backingForm.getStatus());
     testBatch.setCreatedDate(backingForm.getCreatedDate());
     Set<DonationBatch> donationBatches = new HashSet<>();
-    for (long donationBatchId : backingForm.getDonationBatchIds()) {
+    for (UUID donationBatchId : backingForm.getDonationBatchIds()) {
       donationBatches.add(donationBatchRepository.findDonationBatchById(donationBatchId));
     }
     testBatch.setDonationBatches(donationBatches);
