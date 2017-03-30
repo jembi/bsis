@@ -20,19 +20,19 @@
            donorStatus="NORMAL" firstName="Sample" gender="male" isDeleted="false"
            lastName="Donor" createdDate="2015-02-02 03:41:29.0" lastUpdated="2015-02-18 07:51:56.0"
            notes="" venue_id="1" createdBy_id="1" lastUpdatedBy_id="1"
-           preferredLanguage_id="1" title="Mr" addressId="1" contactId="1"/>
+           preferredLanguage_id="1" title="Mr" addressId="1" contact_id="1"/>
     <Donor id="2" birthDate="1950-01-12" dateOfLastDonation="2015-02-02 00:00:00.0"
            donorHash="fe5eeb11d9b9c772b44a3daf38de6d39" donorNumber="000002"
            donorStatus="NORMAL" firstName="John" gender="male" isDeleted="false"
            lastName="Henry" createdDate="2015-02-18 07:53:29.0" lastUpdated="2015-02-18 07:53:57.0"
            venue_id="1" createdBy_id="1" lastUpdatedBy_id="1"
-           preferredLanguage_id="1" title="Mr" addressId="2" contactId="2"/>
+           preferredLanguage_id="1" title="Mr" addressId="2" contact_id="2"/>
     <Donor id="3" birthDate="1976-02-19" donorHash="11a101ad63921b9db94a476fb4a86bcd"
            donorNumber="000003" donorStatus="NORMAL" firstName="Donor" gender="female"
            isDeleted="false" lastName="Five" createdDate="2015-02-09 03:45:49.0"
            lastUpdated="2015-06-29 05:24:35.0" venue_id="1" createdBy_id="1"
            lastUpdatedBy_id="1" preferredLanguage_id="1" title="Mrs" addressId="3"
-           contactId="3"/>
+           contact_id="3"/>
 
     <DeferralReason id="1" isDeleted="false" reason="High risk behaviour"
                     defaultDuration="30" durationType="TEMPORARY" type="NORMAL"/>
