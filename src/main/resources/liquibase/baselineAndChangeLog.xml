@@ -101,4 +101,5 @@
   <include file="liquibase/updates/uuid/2873-implement-uuids-for-inventory-section-patient.xml"/>
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-adverse-event.xml"/>
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-adverse-event-type.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-contact.xml"/>
 </databaseChangeLog>

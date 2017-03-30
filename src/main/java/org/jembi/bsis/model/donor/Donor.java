@@ -193,8 +193,7 @@ public class Donor extends BaseModificationTrackerEntity {
 
   @NotAudited
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  @JoinColumn(name = "contactId")
+  @ManyToOne(optional = false, cascade = CascadeType.ALL)
   private Contact contact;
 
   @NotAudited

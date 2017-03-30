@@ -1,0 +1,11 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170330-1013" author="lauravignoli">
+    <renameColumn tableName="Donor" oldColumnName="contactId" newColumnName="contact_id" columnDataType="bigint(20)"/>
+    <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="Donor" constraintName="fk_Donor_contact"
+      referencedColumnNames="id" referencedTableName="Contact" />
+  </changeSet>
+
+</databaseChangeLog>
