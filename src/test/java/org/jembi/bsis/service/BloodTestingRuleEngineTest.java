@@ -55,6 +55,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
 
   private IDatabaseConnection getConnection() throws SQLException {
     IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
+    connection.getConfig().setFeature("http://www.dbunit.org/features/allowEmptyFields", true);
     DatabaseConfig config = connection.getConfig();
     config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
     return connection;
