@@ -78,7 +78,6 @@ public class OrderFormFactoryTests extends UnitTestSuite {
 
   @Mock
   private OrderFormConstraintChecker orderFormConstraintChecker;
-  private UUID uuid = UUID.randomUUID();
  
   private Location getBaseDispatchedFromLocation() {
     return aDistributionSite().withName("LocFrom").withId(1l).build();
@@ -311,6 +310,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
   
   @Test
   public void testConvertEntitiesToOrderFormViewModels_shouldReturnExpectedViewModels() {
+    UUID uuid = UUID.randomUUID();
     Location dispatchedFrom = getBaseDispatchedFromLocation();
     Location dispatchedTo = getBaseDispatchedToLocation();
     Patient patient = aPatient().withId(uuid).build();
@@ -356,6 +356,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
   
   @Test
   public void testConvertPatientRequestEntitiesToOrderFormViewModel_shouldReturnExpectedViewModel() {
+    UUID uuid = UUID.randomUUID();
     Location dispatchedFrom = getBaseDispatchedFromLocation();
     Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate1 = new Date();

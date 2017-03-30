@@ -7,6 +7,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
+import org.jembi.bsis.util.TestConstants;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
   private boolean backEntry;
   private ComponentBatch componentBatch;
   private Date lastUpdatedDate;
-  private Date donationBatchDate = new Date();
+  private Date donationBatchDate = TestConstants.DATE;
 
   public DonationBatchBuilder withId(Long id) {
     this.id = id;

@@ -18,5 +18,5 @@ public class TransfusionReactionTypeNamedQueryConstants {
       "SELECT count(t) = 0 " +
           "FROM TransfusionReactionType t " +
           "WHERE t.name = :reactionTypeName " +
-          "AND t.id != :id ";
+          "AND (:includeId = false OR t.id != :id) ";
 }

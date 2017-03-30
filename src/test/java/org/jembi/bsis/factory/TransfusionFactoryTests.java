@@ -74,7 +74,6 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   private TransfusionReactionTypeFactory transfusionReactionTypeFactory;
   @Mock
   private LocationFactory locationFactory;
-  private UUID uuid = UUID.randomUUID();
 
   @Test
   public void testCreateEntityWithReaction_shouldReturnEntityInCorrectState() {
@@ -82,8 +81,9 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     String din = "123456";
     Date transfusionDate = new Date();
     UUID transfusionReactionTypeId = UUID.randomUUID();
+    UUID patientId = UUID.randomUUID();
 
-    PatientBackingForm patientForm = aPatientBackingForm().withId(uuid).build();
+    PatientBackingForm patientForm = aPatientBackingForm().withId(patientId).build();
     TransfusionReactionTypeBackingForm transfusionReactionTypeForm = aTransfusionReactionTypeBackingForm().withId(transfusionReactionTypeId).build();
     LocationBackingForm receivedFromForm = aUsageSiteBackingForm().withId(1L).build();
     UUID transfusionId = UUID.randomUUID();
@@ -99,7 +99,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withDateTransfused(transfusionDate)
         .build();
 
-    Patient patient = aPatient().withId(uuid).build();
+    Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(transfusionReactionTypeId).build();
     Location receivedFrom = aLocation().withId(1L).build();
     Transfusion expectedEntity = aTransfusion()
@@ -127,8 +127,8 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Date transfusionDate = new Date();
     String donationIdentificationNumber = "1234567";
     UUID transfusionReactionTypeId = UUID.randomUUID();
-    
-    Patient patient = aPatient().withId(uuid).build();
+    UUID patientId = UUID.randomUUID();
+    Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(transfusionReactionTypeId).build();
     Component component = aComponent()
         .withId(1L)
@@ -157,7 +157,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
     
     LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
-    PatientViewModel patientViewModel = aPatientViewModel().withId(uuid).build();
+    PatientViewModel patientViewModel = aPatientViewModel().withId(patientId).build();
     TransfusionReactionTypeViewModel transfusionReactionTypeViewModel = aTransfusionReactionTypeViewModel()
         .withId(transfusionReactionTypeId)
         .build();
@@ -192,8 +192,9 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Date transfusionDate = new Date();
     String donationIdentificationNumber = "1234567";
     UUID transfusionReactionTypeId = UUID.randomUUID();
+    UUID patientId = UUID.randomUUID();
 
-    Patient patient = aPatient().withId(uuid).build();
+    Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(transfusionReactionTypeId).build();
     Component component = aComponent()
         .withId(1L)
@@ -223,7 +224,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
 
     LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
-    PatientViewModel patientViewModel = aPatientViewModel().withId(uuid).build();
+    PatientViewModel patientViewModel = aPatientViewModel().withId(patientId).build();
     TransfusionReactionTypeViewModel transfusionReactionTypeViewModel = aTransfusionReactionTypeViewModel()
         .withId(transfusionReactionTypeId)
         .build();
@@ -258,8 +259,9 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   public void testCreateFullViewModels_returnsCollection() {
     Date transfusionDate = new Date();
     String donationIdentificationNumber = "1234567";
+    UUID patientId = UUID.randomUUID();
     
-    Patient patient = aPatient().withId(uuid).build();
+    Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(UUID.randomUUID()).build();
     Component component = aComponent()
         .withId(1L)
@@ -363,7 +365,9 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   public void testCreateTransfusionViewModels_returnsCollection() {
     Date transfusionDate = new Date();
     String donationIdentificationNumber = "1234567";
-    Patient patient = aPatient().withId(uuid).build();
+    UUID patientId = UUID.randomUUID();
+
+    Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(UUID.randomUUID()).build();
 
     Donation donation = DonationBuilder.aDonation()
