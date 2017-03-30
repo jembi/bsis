@@ -11,7 +11,7 @@ import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.utils.CustomDateFormatter;
 
-public class DonationViewModel extends BaseViewModel {
+public class DonationViewModel extends BaseViewModel<Long> {
 
   private Date donationDate;
   private String donationIdentificationNumber;

@@ -77,7 +77,7 @@ public class ComponentTypeCombinationRepositoryTests extends SecurityContextDepe
     // Set up data
     ComponentTypeCombination componentTypeCombination = aComponentTypeCombination()
         .withComponentType(ComponentTypeBuilder.aComponentType().build())
-        .withSourceComponentType(ComponentTypeBuilder.aComponentType().build())
+        .withSourceComponentType(ComponentTypeBuilder.aComponentType().buildAndPersist(entityManager))
         .buildAndPersist(entityManager);
 
     // Run test

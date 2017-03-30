@@ -8,7 +8,7 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class OrderFormViewModel extends BaseViewModel {
+public class OrderFormViewModel extends BaseViewModel<Long> {
 
   private Date orderDate;
 

@@ -1,6 +1,6 @@
 package org.jembi.bsis.viewmodel;
 
-public class ComponentTypeViewModel extends BaseViewModel {
+public class ComponentTypeViewModel extends BaseViewModel<Long> {
 
   private String componentTypeName;
   private String componentTypeCode;

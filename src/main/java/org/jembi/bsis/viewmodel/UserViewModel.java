@@ -2,7 +2,7 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.List;
 
-public class UserViewModel extends BaseViewModel {
+public class UserViewModel extends BaseViewModel<Long> {
 
   private String username;
   private String firstName;
