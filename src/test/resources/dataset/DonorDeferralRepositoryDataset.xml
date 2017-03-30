@@ -34,30 +34,30 @@
            lastUpdatedBy_id="1" preferredLanguage_id="1" title="Mrs" addressId="3"
            contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"/>
 
-    <DeferralReason id="1" isDeleted="false" reason="High risk behaviour"
+    <DeferralReason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" isDeleted="false" reason="High risk behaviour"
                     defaultDuration="30" durationType="TEMPORARY" type="NORMAL"/>
-    <DeferralReason id="2" isDeleted="false" reason="Low weight"
+    <DeferralReason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" isDeleted="false" reason="Low weight"
                     defaultDuration="30" durationType="TEMPORARY" type="NORMAL"/>
-    <DeferralReason id="3" isDeleted="false" reason="TTI Unsafe"
+    <DeferralReason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" isDeleted="false" reason="TTI Unsafe"
                     durationType="PERMANENT" type="AUTOMATED_TTI_UNSAFE"/>
 
     <DonorDeferral id="1" deferredDonor_id="1" deferredUntil="2014-12-29" 
-                   deferralReason_id="1" createdDate="2015-01-29 11:49:06.0"
+                   deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" createdDate="2015-01-29 11:49:06.0"
                    lastUpdated="2015-01-29 11:49:06.0" venue_id="1"
                    createdBy_id="1" lastUpdatedBy_id="1" isVoided="false" 
                    deferralDate="2015-01-29 11:49:06.0"/>
     <DonorDeferral id="2" deferredDonor_id="1" deferredUntil="2015-08-29"
-                   deferralReason_id="2" createdDate="2015-01-29 11:49:06.0"
+                   deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdDate="2015-01-29 11:49:06.0"
                    lastUpdated="2015-01-29 11:49:06.0" venue_id="1"
                    createdBy_id="1" lastUpdatedBy_id="1" isVoided="false"
                    deferralDate="2015-01-29 11:49:06.0"/>
     <DonorDeferral id="3" deferredDonor_id="2" deferredUntil="2014-12-29"
-                   deferralReason_id="2" createdDate="2015-10-13 09:30:23.0"
+                   deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdDate="2015-10-13 09:30:23.0"
                    lastUpdated="2015-01-29 11:53:42.0" venue_id="1"
                    createdBy_id="1" lastUpdatedBy_id="1" isVoided="false"
                    deferralDate="2015-10-13 09:30:23.0"/>
     <DonorDeferral id="4" deferredDonor_id="3" deferredUntil="2100-01-01"
-                   deferralReason_id="3" createdDate="2015-02-16 14:47:02.0"
+                   deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" createdDate="2015-02-16 14:47:02.0"
                    lastUpdated="2015-02-16 14:47:02.0" venue_id="1"
                    createdBy_id="1" lastUpdatedBy_id="1" isVoided="false"
                    deferralDate="2015-02-16 14:47:02.0"/>

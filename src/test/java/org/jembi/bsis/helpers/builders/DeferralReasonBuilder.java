@@ -1,19 +1,21 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DeferralReasonType;
 import org.jembi.bsis.model.donordeferral.DurationType;
 
 public class DeferralReasonBuilder extends AbstractEntityBuilder<DeferralReason> {
 
-  private Long id;
+  private UUID id;
   private DeferralReasonType type = DeferralReasonType.NORMAL;
   private Boolean deleted;
   private DurationType durationType = DurationType.TEMPORARY;
   private Integer defaultDuration;
   private String reason;
 
-  public DeferralReasonBuilder withId(Long id) {
+  public DeferralReasonBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

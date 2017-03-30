@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DeferralBackingForm;
 import org.jembi.bsis.backingform.DeferralReasonBackingForm;
@@ -133,10 +134,11 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
     Date deferralDate = new Date();
     Date deferredUntilDate = new Date();
     String deferralReasonText = "testing123";
+    UUID deferralReasonId = UUID.randomUUID();
     
     DonorBackingForm donorForm = aDonorBackingForm().withId(1L).build();
     LocationBackingForm locationForm = aVenueBackingForm().withId(1L).build();
-    DeferralReasonBackingForm deferralReasonForm = aDeferralReasonBackingForm().withId(1L).build();
+    DeferralReasonBackingForm deferralReasonForm = aDeferralReasonBackingForm().withId(deferralReasonId).build();
 
     DeferralBackingForm deferralForm = aDeferralBackingForm()
         .withDeferralDate(deferralDate)
@@ -161,7 +163,7 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
         .build();
     
     // set up mocks
-    when(deferralReasonRepository.getDeferralReasonById(1L)).thenReturn(deferralReason);
+    when(deferralReasonRepository.getDeferralReasonById(deferralReasonId)).thenReturn(deferralReason);
     when(donorRepository.findDonorById(1L)).thenReturn(donor);
     when(locationRepository.getLocation(1L)).thenReturn(location);
     
