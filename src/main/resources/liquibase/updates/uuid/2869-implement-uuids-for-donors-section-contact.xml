@@ -4,6 +4,7 @@
 
   <changeSet id="20170330-1013" author="lauravignoli">
     <renameColumn tableName="Donor" oldColumnName="contactId" newColumnName="contact_id" columnDataType="bigint(20)"/>
+    <renameColumn tableName="Donor_AUD" oldColumnName="contactId" newColumnName="contact_id" columnDataType="bigint(20)"/>
     <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="Donor" constraintName="fk_Donor_contact"
       referencedColumnNames="id" referencedTableName="Contact" />
   </changeSet>
