@@ -22,7 +22,8 @@ public class OrderFormMatcher extends AbstractTypeSafeMatcher<OrderForm> {
         .appendText("\nDispatched From: ").appendValue(orderForm.getDispatchedFrom())
         .appendText("\nDispatched To: ").appendValue(orderForm.getDispatchedTo())
         .appendText("\nItems: ").appendValue(orderForm.getItems())
-        .appendText("\nComponents: ").appendValue(orderForm.getComponents());
+        .appendText("\nComponents: ").appendValue(orderForm.getComponents())
+        .appendText("\nIs deleted: ").appendValue(orderForm.getIsDeleted());
   }
   
   @Override
