@@ -39,16 +39,18 @@ public class AdverseEventFactoryTests {
   @Test
   public void testCreateEntity_shouldReturnCorrectEntity() {
     // Set up data
+    UUID irrelevantAdveseEventTypeId = UUID.randomUUID();
     UUID irrelevantAdverseEventId = UUID.randomUUID();
-    AdverseEventTypeBackingForm typeForm = anAdverseEventTypeBackingForm().withId(1L).build();
+    AdverseEventTypeBackingForm typeForm = anAdverseEventTypeBackingForm()
+        .withId(irrelevantAdveseEventTypeId).build();
     AdverseEventBackingForm form = anAdverseEventBackingForm()
         .withId(irrelevantAdverseEventId).withComment("comment").withType(typeForm).build();
-    AdverseEventType type = anAdverseEventType().withId(1L).build();
+    AdverseEventType type = anAdverseEventType().withId(irrelevantAdveseEventTypeId).build();
     AdverseEvent expectedEntity = anAdverseEvent()
         .withId(irrelevantAdverseEventId).withComment("comment").withType(type).build();
     
     // Set up mocks
-    when(adverseEventTypeRepository.findById(1L)).thenReturn(type);
+    when(adverseEventTypeRepository.findById(irrelevantAdveseEventTypeId)).thenReturn(type);
     
     // Run test
     AdverseEvent createdEntity = adverseEventFactory.createEntity(form);
@@ -62,7 +64,7 @@ public class AdverseEventFactoryTests {
   public void testCreateAdverseEventTypeViewModel_shouldReturnViewModelWithTheCorrectState() {
 
     UUID irrelevantAdverseEventId = UUID.randomUUID();
-    Long irrelevantAdverseEventTypeId = 89L;
+    UUID irrelevantAdverseEventTypeId = UUID.randomUUID();
     String irrelevantComment = "test";
 
     AdverseEventType adverseEventType = anAdverseEventType().withId(irrelevantAdverseEventTypeId).build();

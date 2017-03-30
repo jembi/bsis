@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.AdverseEventTypeBackingForm;
 import org.jembi.bsis.backingform.validator.AdverseEventTypeBackingFormValidator;
@@ -44,11 +45,11 @@ public class AdverseEventTypeBackingFormValidatorTests {
 
     String irrelevantName = "name";
     AdverseEventTypeBackingForm backingForm = anAdverseEventTypeBackingForm()
-        .withId(86L)
+        .withId(UUID.randomUUID())
         .withName(irrelevantName)
         .build();
 
-    when(adverseEventTypeRepository.findIdsByName(irrelevantName)).thenReturn(Arrays.asList(123L));
+    when(adverseEventTypeRepository.findIdsByName(irrelevantName)).thenReturn(Arrays.asList(UUID.randomUUID()));
 
     BindException errors = new BindException(backingForm, "AdverseEventType");
     adverseEventTypeBackingFormValidator.validate(backingForm, errors);
@@ -62,14 +63,14 @@ public class AdverseEventTypeBackingFormValidatorTests {
   @Test
   public void testValidateWithExistingAdverseEventType_shouldHaveNoErrors() {
 
-    Long irrelevantId = 74L;
+    UUID irrelevantAdverseEventTypeId = UUID.randomUUID();
     String irrelevantName = "name";
     AdverseEventTypeBackingForm backingForm = anAdverseEventTypeBackingForm()
-        .withId(irrelevantId)
+        .withId(irrelevantAdverseEventTypeId)
         .withName(irrelevantName)
         .build();
 
-    when(adverseEventTypeRepository.findIdsByName(irrelevantName)).thenReturn(Arrays.asList(irrelevantId));
+    when(adverseEventTypeRepository.findIdsByName(irrelevantName)).thenReturn(Arrays.asList(irrelevantAdverseEventTypeId));
 
     BindException errors = new BindException(backingForm, "AdverseEventType");
     adverseEventTypeBackingFormValidator.validate(backingForm, errors);

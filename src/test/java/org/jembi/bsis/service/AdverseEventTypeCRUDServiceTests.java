@@ -8,10 +8,11 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.AdverseEventTypeBackingForm;
 import org.jembi.bsis.model.adverseevent.AdverseEventType;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
-import org.jembi.bsis.service.AdverseEventTypeCRUDService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -50,7 +51,7 @@ public class AdverseEventTypeCRUDServiceTests {
 
   @Test
   public void testUpdateAdverseEventType_shouldUpdateAndReturnAdverseEventTypeWithTheCorrectFields() {
-    long irrelevantId = 7L;
+    UUID irrelevantId = UUID.randomUUID();
     String irrelevantName = "some name";
     String irrelevantDescription = "irrelevant description";
 

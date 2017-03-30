@@ -14,9 +14,9 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.AdverseEventTypeBackingForm;
-import org.jembi.bsis.controller.AdverseEventController;
 import org.jembi.bsis.factory.AdverseEventTypeViewModelFactory;
 import org.jembi.bsis.model.adverseevent.AdverseEventType;
 import org.jembi.bsis.repository.AdverseEventTypeRepository;
@@ -45,12 +45,12 @@ public class AdverseEventControllerTests {
 
     List<AdverseEventTypeViewModel> expectedViewModels = Arrays.asList(
         anAdverseEventTypeViewModel()
-            .withId(7L)
+            .withId(UUID.randomUUID())
             .withName("irrelevant.name")
             .withDescription("irrelevant.description")
             .build(),
         anAdverseEventTypeViewModel()
-            .withId(86L)
+            .withId(UUID.randomUUID())
             .withName("another.irrelevant.name")
             .withDescription("another.irrelevant.description")
             .build()
@@ -65,7 +65,7 @@ public class AdverseEventControllerTests {
 
   @Test
   public void testCreateAdverseEventType_shouldCreateAndReturnAdverseEventType() {
-    Long irrelevantId = 2L;
+    UUID irrelevantId = UUID.randomUUID();
     String irrelevantName = "test name";
     String irrelevantDescription = "test description";
 
@@ -100,7 +100,7 @@ public class AdverseEventControllerTests {
 
   @Test
   public void testUpdateAdverseEventType_shouldUpdateAndReturnAdverseEventType() {
-    Long irrelevantId = 8L;
+    UUID irrelevantId = UUID.randomUUID();
     String irrelevantName = "test name";
     String irrelevantDescription = "test description";
 
@@ -136,7 +136,7 @@ public class AdverseEventControllerTests {
 
   @Test
   public void testFindAdverseEventTypeById_shouldFindAndReturnAdverseEventType() {
-    Long irrelevantId = 2L;
+    UUID irrelevantId = UUID.randomUUID();
     String irrelevantName = "test name";
     String irrelevantDescription = "test description";
 

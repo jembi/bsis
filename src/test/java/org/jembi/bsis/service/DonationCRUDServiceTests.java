@@ -534,7 +534,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     PackType irrelevantPackType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).withCountAsDonation(true).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
-    Long irrelevantAdverseEventTypeId = 8L;
+    UUID irrelevantAdverseEventTypeId = UUID.randomUUID();
     UUID irrelevantAdverseEventId = UUID.randomUUID();
     AdverseEvent irrelevantAdverseEvent = anAdverseEvent()
         .withId(irrelevantAdverseEventId)
