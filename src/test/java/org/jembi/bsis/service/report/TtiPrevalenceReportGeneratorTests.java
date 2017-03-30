@@ -71,15 +71,6 @@ public class TtiPrevalenceReportGeneratorTests extends UnitTestSuite {
             .withEndDate(irrelevantEndDate)
             .withValue(2L)
             .withLocation(venueViewModel)
-            .withCohort(aCohort().withCategory(CohortConstants.BLOOD_TEST_CATEGORY).withComparator(Comparator.EQUALS).withOption("HCV").build())
-            .withCohort(aCohort().withCategory(CohortConstants.BLOOD_TEST_RESULT_CATEGORY).withComparator(Comparator.EQUALS).withOption("POS").build())
-            .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.female).build())
-            .build(),
-        aDataValue()
-            .withStartDate(irrelevantStartDate)
-            .withEndDate(irrelevantEndDate)
-            .withValue(2L)
-            .withLocation(venueViewModel)
             .withId("totalUnitsTested")
             .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.female).build())
             .build(),
@@ -89,6 +80,15 @@ public class TtiPrevalenceReportGeneratorTests extends UnitTestSuite {
             .withValue(2L)
             .withLocation(venueViewModel)
             .withId("totalUnsafeUnitsTested")
+            .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.female).build())
+            .build(),
+        aDataValue()
+            .withStartDate(irrelevantStartDate)
+            .withEndDate(irrelevantEndDate)
+            .withValue(2L)
+            .withLocation(venueViewModel)
+            .withCohort(aCohort().withCategory(CohortConstants.BLOOD_TEST_CATEGORY).withComparator(Comparator.EQUALS).withOption("HCV").build())
+            .withCohort(aCohort().withCategory(CohortConstants.BLOOD_TEST_RESULT_CATEGORY).withComparator(Comparator.EQUALS).withOption("POS").build())
             .withCohort(aCohort().withCategory(CohortConstants.GENDER_CATEGORY).withComparator(Comparator.EQUALS).withOption(Gender.female).build())
             .build()
     );

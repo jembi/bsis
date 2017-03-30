@@ -118,7 +118,23 @@ public class ReportsController {
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return collectedDonationsReportGenerator.generateCollectedDonationsReport(startDate, endDate);
   }
+
+  @RequestMapping(value = "/collecteddonations/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
+  public Map<String, Object> getCollectedDonationsReportFormFields() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("donationTypes", reportsControllerService.getDonationTypes());
+    return map;
+  }
   
+  @RequestMapping(value = "/ttiprevalence/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.TTI_REPORTING + "')")
+  public Map<String, Object> getActiveTTIBloodTestsReportForm() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("ttiBloodTests", reportsControllerService.getEnabledTTIBloodTests());
+    return map;
+  }
+
   @RequestMapping(value = "/ttiprevalence/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.TTI_REPORTING + "')")
   public Report getTTIPrevalenceReport(

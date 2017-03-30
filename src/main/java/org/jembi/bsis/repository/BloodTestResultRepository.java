@@ -56,6 +56,7 @@ public class BloodTestResultRepository extends AbstractRepository<BloodTestResul
         .setParameter("endDate", endDate)
         .setParameter("donationDeleted", false)
         .setParameter("testOutcomeDeleted", false)
+        .setParameter("bloodTestDeleted", false)
         .setParameter("released", true)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
         .getResultList();
