@@ -106,4 +106,20 @@ public class TransfusionReactionTypeRepositoryTests extends ContextDependentTest
    
     assertThat(unique, is(false));
   }
+
+  @Test
+  public void testIsUniqueTransfusionReactionTypeNameForNew_shouldReturnFalse() {
+    aTransfusionReactionType().withName("reactionTypeName1").buildAndPersist(entityManager);
+    
+    // Test
+    boolean unique = transfusionReactionTypeRepository.isUniqueTransfusionReactionTypeName(null, "reactionTypeName1");
+   
+    assertThat(unique, is(false));
+  }
+
+  @Test
+  public void testIsUniqueTransfusionReactionTypeNameForNew_shouldReturnTrue() {   
+    boolean unique = transfusionReactionTypeRepository.isUniqueTransfusionReactionTypeName(null, "reactionTypeName1");
+    assertThat(unique, is(true));
+  }
 }
