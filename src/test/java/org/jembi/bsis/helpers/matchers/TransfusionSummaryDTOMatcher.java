@@ -7,8 +7,6 @@ import org.jembi.bsis.dto.TransfusionSummaryDTO;
 
 public class TransfusionSummaryDTOMatcher extends AbstractTypeSafeMatcher<TransfusionSummaryDTO> {
 
-  private TransfusionSummaryDTO expected;
-
   public TransfusionSummaryDTOMatcher(TransfusionSummaryDTO expected) {
     this.expected = expected;
   }

@@ -7,8 +7,6 @@ import org.jembi.bsis.viewmodel.ReturnFormViewModel;
 
 public class ReturnFormViewModelMatcher extends AbstractTypeSafeMatcher<ReturnFormViewModel> {
 
-  private ReturnFormViewModel expected;
-
   public ReturnFormViewModelMatcher(ReturnFormViewModel expected) {
     this.expected = expected;
   }

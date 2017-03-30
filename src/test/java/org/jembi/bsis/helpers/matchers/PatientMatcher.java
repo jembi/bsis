@@ -8,8 +8,6 @@ import org.jembi.bsis.model.patient.Patient;
 
 public class PatientMatcher extends AbstractTypeSafeMatcher<Patient> {
 
-  private Patient expected;
-
   public PatientMatcher(Patient expected) {
     this.expected = expected;
   }

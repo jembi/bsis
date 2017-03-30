@@ -7,7 +7,6 @@ import org.hamcrest.Description;
 import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 
 public class InventoryFullViewModelMatcher extends AbstractTypeSafeMatcher<InventoryFullViewModel> {
-  private InventoryFullViewModel expected;
 
   public InventoryFullViewModelMatcher(InventoryFullViewModel expected) {
     this.expected = expected;

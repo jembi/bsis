@@ -7,8 +7,6 @@ import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
 
 public class TransfusionFullViewModelMatcher extends AbstractTypeSafeMatcher<TransfusionFullViewModel> {
 
-  private TransfusionFullViewModel expected;
-
   public TransfusionFullViewModelMatcher (TransfusionFullViewModel expected) {
     this.expected = expected;
   }

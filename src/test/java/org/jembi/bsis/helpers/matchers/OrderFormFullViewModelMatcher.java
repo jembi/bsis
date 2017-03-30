@@ -7,8 +7,6 @@ import org.jembi.bsis.viewmodel.OrderFormFullViewModel;
 
 public class OrderFormFullViewModelMatcher extends AbstractTypeSafeMatcher<OrderFormFullViewModel> {
 
-  private OrderFormFullViewModel expected;
-
   public OrderFormFullViewModelMatcher(OrderFormFullViewModel expected) {
     this.expected = expected;
   }

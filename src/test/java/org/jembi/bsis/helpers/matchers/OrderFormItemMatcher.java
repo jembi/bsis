@@ -6,8 +6,6 @@ import org.hamcrest.Description;
 import org.jembi.bsis.model.order.OrderFormItem;
 
 public class OrderFormItemMatcher extends AbstractTypeSafeMatcher<OrderFormItem> {
-  
-  private OrderFormItem expected;
 
   public OrderFormItemMatcher(OrderFormItem expected) {
     this.expected = expected;
