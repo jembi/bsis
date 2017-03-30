@@ -669,17 +669,6 @@ public class DonorBackingForm {
   }
 
   @JsonIgnore
-  public String getContactId() {
-    if (contact.getId() != null)
-      return contact.getId().toString();
-    return "";
-  }
-
-  public void setContactId(String contactId) {
-    contact.setId(Long.parseLong(contactId));
-  }
-
-  @JsonIgnore
   public String getAddressId() {
     if (address.getId() != null)
       return address.getId().toString();
