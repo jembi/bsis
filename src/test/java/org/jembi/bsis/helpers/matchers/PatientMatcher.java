@@ -3,11 +3,10 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.patient.Patient;
 
 
-public class PatientMatcher extends TypeSafeMatcher<Patient> {
+public class PatientMatcher extends AbstractTypeSafeMatcher<Patient> {
 
   private Patient expected;
 
@@ -16,18 +15,18 @@ public class PatientMatcher extends TypeSafeMatcher<Patient> {
   }
 
   @Override
-  public void describeTo(Description description) {
+  public void appendDescription(Description description, Patient patient) {
     description.appendText("A Patient with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nName one: ").appendValue(expected.getName1())
-        .appendText("\nName two: ").appendValue(expected.getName2())
-        .appendText("\nGender: ").appendValue(expected.getGender())
-        .appendText("\nPatient number: ").appendValue(expected.getPatientNumber())
-        .appendText("\nDate of birth: ").appendValue(expected.getDateOfBirth())
-        .appendText("\nHospital blood bank number: ").appendValue(expected.getHospitalBloodBankNumber())
-        .appendText("\n:Hospital ward number: ").appendValue(expected.getHospitalWardNumber())
-        .appendText("\nBloodAbo: ").appendValue(expected.getBloodAbo())
-        .appendText("\nBloodRh: ").appendValue(expected.getBloodRh());
+        .appendText("\nId: ").appendValue(patient.getId())
+        .appendText("\nName one: ").appendValue(patient.getName1())
+        .appendText("\nName two: ").appendValue(patient.getName2())
+        .appendText("\nGender: ").appendValue(patient.getGender())
+        .appendText("\nPatient number: ").appendValue(patient.getPatientNumber())
+        .appendText("\nDate of birth: ").appendValue(patient.getDateOfBirth())
+        .appendText("\nHospital blood bank number: ").appendValue(patient.getHospitalBloodBankNumber())
+        .appendText("\n:Hospital ward number: ").appendValue(patient.getHospitalWardNumber())
+        .appendText("\nBloodAbo: ").appendValue(patient.getBloodAbo())
+        .appendText("\nBloodRh: ").appendValue(patient.getBloodRh());
   }
 
   @Override

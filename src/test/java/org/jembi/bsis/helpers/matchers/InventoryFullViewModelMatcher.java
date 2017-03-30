@@ -4,10 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 
-public class InventoryFullViewModelMatcher extends TypeSafeMatcher<InventoryFullViewModel> {
+public class InventoryFullViewModelMatcher extends AbstractTypeSafeMatcher<InventoryFullViewModel> {
   private InventoryFullViewModel expected;
 
   public InventoryFullViewModelMatcher(InventoryFullViewModel expected) {
@@ -15,20 +14,20 @@ public class InventoryFullViewModelMatcher extends TypeSafeMatcher<InventoryFull
   }
 
   @Override
-  public void describeTo(Description description) {
+  public void appendDescription(Description description, InventoryFullViewModel inventoryFullViewModel) {
     description.appendText("An InventoryFullViewModel with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nComponentCode: ").appendValue(expected.getComponentCode())
-        .appendText("\nComponentType: ").appendValue(expected.getComponentType())
-        .appendText("\nInventoryStatus: ").appendValue(expected.getInventoryStatus())
-        .appendText("\nLocation: ").appendValue(expected.getLocation())
-        .appendText("\ncreatedOn: ").appendValue(expected.getCreatedOn())
-        .appendText("\ndonationIdentificationNumber: ").appendValue(expected.getDonationIdentificationNumber())
-        .appendText("\nexpiryStatus: ").appendValue(expected.getExpiryStatus())
-        .appendText("\nBloodGroup: ").appendValue(expected.getBloodGroup())
-        .appendText("\nexpiresOn: ").appendValue(expected.getExpiresOn())
-        .appendText("\nOrderForms: ").appendValue(expected.getOrderForms())
-        .appendText("\ncomponentStatus: ").appendValue(expected.getComponentStatus());
+        .appendText("\nId: ").appendValue(inventoryFullViewModel.getId())
+        .appendText("\nComponentCode: ").appendValue(inventoryFullViewModel.getComponentCode())
+        .appendText("\nComponentType: ").appendValue(inventoryFullViewModel.getComponentType())
+        .appendText("\nInventoryStatus: ").appendValue(inventoryFullViewModel.getInventoryStatus())
+        .appendText("\nLocation: ").appendValue(inventoryFullViewModel.getLocation())
+        .appendText("\ncreatedOn: ").appendValue(inventoryFullViewModel.getCreatedOn())
+        .appendText("\ndonationIdentificationNumber: ").appendValue(inventoryFullViewModel.getDonationIdentificationNumber())
+        .appendText("\nexpiryStatus: ").appendValue(inventoryFullViewModel.getExpiryStatus())
+        .appendText("\nBloodGroup: ").appendValue(inventoryFullViewModel.getBloodGroup())
+        .appendText("\nexpiresOn: ").appendValue(inventoryFullViewModel.getExpiresOn())
+        .appendText("\nOrderForms: ").appendValue(inventoryFullViewModel.getOrderForms())
+        .appendText("\ncomponentStatus: ").appendValue(inventoryFullViewModel.getComponentStatus());
   }
 
   @Override

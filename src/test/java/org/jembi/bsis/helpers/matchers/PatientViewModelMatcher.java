@@ -3,10 +3,9 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.PatientViewModel;
 
-public class PatientViewModelMatcher extends TypeSafeMatcher<PatientViewModel> {
+public class PatientViewModelMatcher extends AbstractTypeSafeMatcher<PatientViewModel> {
 
   private PatientViewModel expected;
 
@@ -15,17 +14,17 @@ public class PatientViewModelMatcher extends TypeSafeMatcher<PatientViewModel> {
   }
 
   @Override
-  public void describeTo(Description description) {
+  public void appendDescription(Description description, PatientViewModel patientViewModel) {
     description.appendText("A PatientViewModel with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nName one: ").appendValue(expected.getName1())
-        .appendText("\nName two: ").appendValue(expected.getName2())
-        .appendText("\nGender: ").appendValue(expected.getGender())
-        .appendText("\nPatient number: ").appendValue(expected.getPatientNumber())
-        .appendText("\nDate of birth: ").appendValue(expected.getDateOfBirth())
-        .appendText("\nHospital blood bank number: ").appendValue(expected.getHospitalBloodBankNumber())
-        .appendText("\nHospital ward number: ").appendValue(expected.getHospitalWardNumber())
-        .appendText("\nBloodGroup: ").appendValue(expected.getBloodGroup());
+        .appendText("\nId: ").appendValue(patientViewModel.getId())
+        .appendText("\nName one: ").appendValue(patientViewModel.getName1())
+        .appendText("\nName two: ").appendValue(patientViewModel.getName2())
+        .appendText("\nGender: ").appendValue(patientViewModel.getGender())
+        .appendText("\nPatient number: ").appendValue(patientViewModel.getPatientNumber())
+        .appendText("\nDate of birth: ").appendValue(patientViewModel.getDateOfBirth())
+        .appendText("\nHospital blood bank number: ").appendValue(patientViewModel.getHospitalBloodBankNumber())
+        .appendText("\nHospital ward number: ").appendValue(patientViewModel.getHospitalWardNumber())
+        .appendText("\nBloodGroup: ").appendValue(patientViewModel.getBloodGroup());
   }
 
   @Override

@@ -3,10 +3,9 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.ReturnFormViewModel;
 
-public class ReturnFormViewModelMatcher extends TypeSafeMatcher<ReturnFormViewModel> {
+public class ReturnFormViewModelMatcher extends AbstractTypeSafeMatcher<ReturnFormViewModel> {
 
   private ReturnFormViewModel expected;
 
@@ -15,13 +14,13 @@ public class ReturnFormViewModelMatcher extends TypeSafeMatcher<ReturnFormViewMo
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("An order form entity with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nStatus: ").appendValue(expected.getStatus())
-        .appendText("\nReturn Date: ").appendValue(expected.getReturnDate())
-        .appendText("\nReturned From: ").appendValue(expected.getReturnedFrom())
-        .appendText("\nReturned To: ").appendValue(expected.getReturnedTo());
+  public void appendDescription(Description description, ReturnFormViewModel returnFormViewModel) {
+    description.appendText("An ReturnFormViewModel with the following state:")
+        .appendText("\nId: ").appendValue(returnFormViewModel.getId())
+        .appendText("\nStatus: ").appendValue(returnFormViewModel.getStatus())
+        .appendText("\nReturn Date: ").appendValue(returnFormViewModel.getReturnDate())
+        .appendText("\nReturned From: ").appendValue(returnFormViewModel.getReturnedFrom())
+        .appendText("\nReturned To: ").appendValue(returnFormViewModel.getReturnedTo());
   }
   
   @Override

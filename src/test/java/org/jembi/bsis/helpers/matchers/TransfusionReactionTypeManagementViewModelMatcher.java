@@ -3,10 +3,9 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeManagementViewModel;
 
-public class TransfusionReactionTypeManagementViewModelMatcher extends TypeSafeMatcher<TransfusionReactionTypeManagementViewModel> {
+public class TransfusionReactionTypeManagementViewModelMatcher extends AbstractTypeSafeMatcher<TransfusionReactionTypeManagementViewModel> {
 
   private TransfusionReactionTypeManagementViewModel expected;
 
@@ -15,12 +14,12 @@ public class TransfusionReactionTypeManagementViewModelMatcher extends TypeSafeM
   }
 
   @Override
-  public void describeTo(Description description) {
+  public void appendDescription(Description description, TransfusionReactionTypeManagementViewModel transfusionReactionTypeManagementViewModel) {
     description.appendText("A TransfusionReactionTypeManagementViewModel with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nName: ").appendValue(expected.getName())
-        .appendText("\nIsDeleted: ").appendValue(expected.getIsDeleted())
-        .appendText("\nDescription: ").appendValue(expected.getDescription());
+        .appendText("\nId: ").appendValue(transfusionReactionTypeManagementViewModel.getId())
+        .appendText("\nName: ").appendValue(transfusionReactionTypeManagementViewModel.getName())
+        .appendText("\nIsDeleted: ").appendValue(transfusionReactionTypeManagementViewModel.getIsDeleted())
+        .appendText("\nDescription: ").appendValue(transfusionReactionTypeManagementViewModel.getDescription());
   }
 
   @Override

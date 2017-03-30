@@ -3,10 +3,9 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 
-public class TransfusionReactionTypeMatcher extends TypeSafeMatcher<TransfusionReactionType> {
+public class TransfusionReactionTypeMatcher extends AbstractTypeSafeMatcher<TransfusionReactionType> {
 
   private TransfusionReactionType expected;
 
@@ -15,16 +14,16 @@ public class TransfusionReactionTypeMatcher extends TypeSafeMatcher<TransfusionR
   }
   
   @Override
-  public void describeTo(Description description) {
-    description.appendText("A transfusion reaction type with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nName: ").appendValue(expected.getName())
-        .appendText("\nDescription: ").appendValue(expected.getDescription())
-        .appendText("\nDeleted: ").appendValue(expected.getIsDeleted())
-        .appendText("\nCreated By: ").appendValue(expected.getCreatedBy())
-        .appendText("\nCreated Date: ").appendValue(expected.getCreatedDate())
-        .appendText("\nLast Updated By: ").appendValue(expected.getLastUpdatedBy())
-        .appendText("\nLast Updated Date: ").appendValue(expected.getLastUpdated());
+  public void appendDescription(Description description, TransfusionReactionType transfusionReactionType) {
+    description.appendText("A TransfusionReactionType with the following state:")
+        .appendText("\nId: ").appendValue(transfusionReactionType.getId())
+        .appendText("\nName: ").appendValue(transfusionReactionType.getName())
+        .appendText("\nDescription: ").appendValue(transfusionReactionType.getDescription())
+        .appendText("\nDeleted: ").appendValue(transfusionReactionType.getIsDeleted())
+        .appendText("\nCreated By: ").appendValue(transfusionReactionType.getCreatedBy())
+        .appendText("\nCreated Date: ").appendValue(transfusionReactionType.getCreatedDate())
+        .appendText("\nLast Updated By: ").appendValue(transfusionReactionType.getLastUpdatedBy())
+        .appendText("\nLast Updated Date: ").appendValue(transfusionReactionType.getLastUpdated());
   }
   
   @Override

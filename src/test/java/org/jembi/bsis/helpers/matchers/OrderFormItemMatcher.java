@@ -3,10 +3,9 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.order.OrderFormItem;
 
-public class OrderFormItemMatcher extends TypeSafeMatcher<OrderFormItem> {
+public class OrderFormItemMatcher extends AbstractTypeSafeMatcher<OrderFormItem> {
   
   private OrderFormItem expected;
 
@@ -15,13 +14,13 @@ public class OrderFormItemMatcher extends TypeSafeMatcher<OrderFormItem> {
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("An order form item with the following state:")
-      .appendText("\nId: ").appendValue(expected.getId())
-      .appendText("\nBloodAbo: ").appendValue(expected.getBloodAbo())
-      .appendText("\nBloodRh: ").appendValue(expected.getBloodRh())
-      .appendText("\nComponentType: ").appendValue(expected.getComponentType())
-      .appendText("\nNumberOfUnits: ").appendValue(expected.getNumberOfUnits());
+  public void appendDescription(Description description, OrderFormItem orderFormItem) {
+    description.appendText("An OrderFormItem with the following state:")
+      .appendText("\nId: ").appendValue(orderFormItem.getId())
+      .appendText("\nBloodAbo: ").appendValue(orderFormItem.getBloodAbo())
+      .appendText("\nBloodRh: ").appendValue(orderFormItem.getBloodRh())
+      .appendText("\nComponentType: ").appendValue(orderFormItem.getComponentType())
+      .appendText("\nNumberOfUnits: ").appendValue(orderFormItem.getNumberOfUnits());
   }
 
   @Override

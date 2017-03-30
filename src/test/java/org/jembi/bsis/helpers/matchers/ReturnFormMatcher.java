@@ -3,10 +3,9 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.returnform.ReturnForm;
 
-public class ReturnFormMatcher extends TypeSafeMatcher<ReturnForm> {
+public class ReturnFormMatcher extends AbstractTypeSafeMatcher<ReturnForm> {
 
   private ReturnForm expected;
 
@@ -15,16 +14,16 @@ public class ReturnFormMatcher extends TypeSafeMatcher<ReturnForm> {
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("An order form entity with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nCreated Date: ").appendValue(expected.getCreatedDate())
-        .appendText("\nStatus: ").appendValue(expected.getStatus())
-        .appendText("\nReturn Date: ").appendValue(expected.getReturnDate())
-        .appendText("\nReturned From: ").appendValue(expected.getReturnedFrom())
-        .appendText("\nReturned To: ").appendValue(expected.getReturnedTo())
-        .appendText("\nComponents: ").appendValue(expected.getComponents())
-        .appendText("\nDeleted: ").appendValue(expected.getIsDeleted());
+  public void appendDescription(Description description, ReturnForm returnForm) {
+    description.appendText("An ReturnForm with the following state:")
+        .appendText("\nId: ").appendValue(returnForm.getId())
+        .appendText("\nCreated Date: ").appendValue(returnForm.getCreatedDate())
+        .appendText("\nStatus: ").appendValue(returnForm.getStatus())
+        .appendText("\nReturn Date: ").appendValue(returnForm.getReturnDate())
+        .appendText("\nReturned From: ").appendValue(returnForm.getReturnedFrom())
+        .appendText("\nReturned To: ").appendValue(returnForm.getReturnedTo())
+        .appendText("\nComponents: ").appendValue(returnForm.getComponents())
+        .appendText("\nDeleted: ").appendValue(returnForm.getIsDeleted());
   }
   
   @Override

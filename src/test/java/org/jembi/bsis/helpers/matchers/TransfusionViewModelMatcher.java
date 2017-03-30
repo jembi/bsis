@@ -3,10 +3,9 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.TransfusionViewModel;
 
-public class TransfusionViewModelMatcher extends TypeSafeMatcher<TransfusionViewModel> {
+public class TransfusionViewModelMatcher extends AbstractTypeSafeMatcher<TransfusionViewModel> {
 
   private TransfusionViewModel expected;
 
@@ -15,15 +14,15 @@ public class TransfusionViewModelMatcher extends TypeSafeMatcher<TransfusionView
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("A transfusion view model with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nDIN: ").appendValue(expected.getDonationIdentificationNumber())
-        .appendText("\nReceived From: ").appendValue(expected.getReceivedFrom())
-        .appendText("\nTransfusion Outcome: ").appendValue(expected.getTransfusionOutcome())
-        .appendText("\nDate Transfused: ").appendValue(expected.getDateTransfused())
-        .appendText("\nComponentCode: ").appendValue(expected.getComponentCode())
-        .appendText("\nComponentType: ").appendValue(expected.getComponentType());
+  public void appendDescription(Description description, TransfusionViewModel transfusionViewModel) {
+    description.appendText("A TransfusionViewModel with the following state:")
+        .appendText("\nId: ").appendValue(transfusionViewModel.getId())
+        .appendText("\nDIN: ").appendValue(transfusionViewModel.getDonationIdentificationNumber())
+        .appendText("\nReceived From: ").appendValue(transfusionViewModel.getReceivedFrom())
+        .appendText("\nTransfusion Outcome: ").appendValue(transfusionViewModel.getTransfusionOutcome())
+        .appendText("\nDate Transfused: ").appendValue(transfusionViewModel.getDateTransfused())
+        .appendText("\nComponentCode: ").appendValue(transfusionViewModel.getComponentCode())
+        .appendText("\nComponentType: ").appendValue(transfusionViewModel.getComponentType());
   }
 
   @Override
