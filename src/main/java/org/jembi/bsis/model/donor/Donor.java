@@ -179,7 +179,6 @@ public class Donor extends BaseModificationTrackerEntity {
 
   @Audited(targetAuditMode = NOT_AUDITED)
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @JoinColumn(name = "addressId")
   private Address address;
 
   @Audited(targetAuditMode = NOT_AUDITED)

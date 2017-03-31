@@ -1,0 +1,87 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170330-1103" author="micnice">
+    <renameColumn tableName="Donor" oldColumnName="addressId" newColumnName="address_id" columnDataType="bigint(20)"/>
+    <renameColumn tableName="Donor_AUD" oldColumnName="addressId" newColumnName="address_id" columnDataType="bigint(20)"/>
+  </changeSet>
+
+  <changeSet id="20170329-1530"  author="micnice">
+    <comment>This change set migrates the Address table from an integer id primary key
+      to a UUID of type BINARY(16). </comment>
+
+    <addColumn tableName="Address">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE Address
+      SET id_temp = id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="Address"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="Address"/>
+
+    <modifyDataType columnName="address_id" newDataType="BINARY(16)" tableName="Donor" />
+
+    <modifyDataType columnName="address_id" newDataType="BINARY(16)" tableName="Donor_AUD" />
+
+    <sql>
+      UPDATE Address
+      SET id = GENERATEBINARYUUID();
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Address ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-',
+      HEX(SUBSTR(id,  1, 4)),
+      HEX(SUBSTR(id,  5, 2)),
+      HEX(SUBSTR(id,  7, 2)),
+      HEX(SUBSTR(id,  9, 2)),
+      HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Donor_AUD ADD address_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-',
+      HEX(SUBSTR(address_id, 1, 4)),
+      HEX(SUBSTR(address_id, 5, 2)),
+      HEX(SUBSTR(address_id, 7, 2)),
+      HEX(SUBSTR(address_id, 9, 2)),
+      HEX(SUBSTR(address_id, 11)) )))
+      VIRTUAL AFTER address_id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Donor ADD address_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-',
+      HEX(SUBSTR(address_id, 1, 4)),
+      HEX(SUBSTR(address_id, 5, 2)),
+      HEX(SUBSTR(address_id, 7, 2)),
+      HEX(SUBSTR(address_id, 9, 2)),
+      HEX(SUBSTR(address_id, 11)) )))
+      VIRTUAL AFTER address_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor AS updateTable
+      LEFT JOIN Address AS joinedTable ON (updateTable.address_id_text = joinedTable.id_text)
+      SET updateTable.address_id =
+      joinedTable.id
+      WHERE joinedTable.id IS NOT null;
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD AS updateTable
+      LEFT JOIN Address AS joinedTable ON (updateTable.address_id_text = joinedTable.id_text)
+      SET updateTable.address_id =
+      joinedTable.id
+      WHERE joinedTable.id IS NOT null;
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="Address"/>
+
+  </changeSet>
+
+</databaseChangeLog>

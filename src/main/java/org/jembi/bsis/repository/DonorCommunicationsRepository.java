@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -52,7 +53,7 @@ public class DonorCommunicationsRepository {
 
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Donor> cq = cb.createQuery(Donor.class);
-    Subquery<Long> donorDeferral = cq.subquery(Long.class);
+    Subquery<UUID> donorDeferral = cq.subquery(UUID.class);
     Root<Donor> root = cq.from(Donor.class);
     Root<DonorDeferral> rootdonorDeferral = donorDeferral.from(DonorDeferral.class);
 
@@ -74,7 +75,7 @@ public class DonorCommunicationsRepository {
     if (!StringUtils.isBlank(clinicDate)) {
       venuePredicates.add(cb.lessThanOrEqualTo(root.get("dueToDonate").as(Date.class), CustomDateFormatter.parse(clinicDate)));
       if (!StringUtils.isBlank(clinicDateToCheckdeferredDonor)) {
-        donorDeferral.select(rootdonorDeferral.get("id").as(Long.class)).where(cb.equal(rootdonorDeferral.get("deferredDonor"), root),
+        donorDeferral.select(rootdonorDeferral.get("id").as(UUID.class)).where(cb.equal(rootdonorDeferral.get("deferredDonor"), root),
             cb.greaterThanOrEqualTo(rootdonorDeferral.get("deferredUntil").as(Date.class), CustomDateFormatter.parse(clinicDateToCheckdeferredDonor)));
         venuePredicates.add(cb.not(cb.exists(donorDeferral)));
       }
@@ -82,7 +83,8 @@ public class DonorCommunicationsRepository {
     }
     // If Clinic Date is not specified, Donors should not be currently deferred
     else {
-      donorDeferral.select(rootdonorDeferral.get("id").as(Long.class)).where(cb.equal(rootdonorDeferral.get("deferredDonor"), root),
+      donorDeferral.select(rootdonorDeferral.get("id").as(UUID.class)).where(
+          cb.equal(rootdonorDeferral.get("deferredDonor"), root),
           cb.greaterThanOrEqualTo(rootdonorDeferral.get("deferredUntil").as(Date.class), new Date()));
       venuePredicates.add(cb.not(cb.exists(donorDeferral)));
     }
