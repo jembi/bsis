@@ -25,6 +25,7 @@ import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.jembi.bsis.helpers.matchers.ComponentStatusChangeMatcher.hasSameStateAsComponentStatusChange;
 import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
+import static org.jembi.bsis.helpers.matchers.LocationMatcher.hasSameStateAsLocation;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
@@ -208,7 +209,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Component component = componentCRUDService.createInitialComponent(donation);
     
     // Verify
-    assertThat(component.getLocation(), is(componentBatchProcessingSite));
+    assertThat(component.getLocation(), hasSameStateAsLocation(componentBatchProcessingSite));
   }
   
   @Test
@@ -241,7 +242,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Component component = componentCRUDService.createInitialComponent(donation);
     
     // Verify
-    assertThat(component.getLocation(), is(donationBatchVenue));
+    assertThat(component.getLocation(), hasSameStateAsLocation(donationBatchVenue));
   }
 
   @Test
