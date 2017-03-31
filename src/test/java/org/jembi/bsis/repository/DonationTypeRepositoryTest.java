@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -48,7 +49,8 @@ public class DonationTypeRepositoryTest extends DBUnitContextDependentTestSuite 
 
   @Test
   public void testGetDonationTypeById() throws Exception {
-    DonationType one = donationTypeRepository.getDonationTypeById(1l);
+    UUID donationTypeId = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870681");
+    DonationType one = donationTypeRepository.getDonationTypeById(donationTypeId);
     Assert.assertNotNull("There is a donation types with id 1", one);
     Assert.assertEquals("There is a donation type named 'Voluntary'", "Voluntary", one.getDonationType());
   }
@@ -61,11 +63,12 @@ public class DonationTypeRepositoryTest extends DBUnitContextDependentTestSuite 
 
   @Test
   public void testUpdateDonationType() throws Exception {
-    DonationType two = donationTypeRepository.getDonationTypeById(1l);
+    UUID donationTypeId = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870682");
+    DonationType two = donationTypeRepository.getDonationTypeById(donationTypeId);
     Assert.assertNotNull("There is a donationType named 'Voluntary'", two);
     two.setIsDeleted(true);
     donationTypeRepository.update(two);
-    DonationType savedTwo = donationTypeRepository.getDonationTypeById(1l);
+    DonationType savedTwo = donationTypeRepository.getDonationTypeById(donationTypeId);
     Assert.assertTrue("donation type is deleted", savedTwo.getIsDeleted());
   }
 

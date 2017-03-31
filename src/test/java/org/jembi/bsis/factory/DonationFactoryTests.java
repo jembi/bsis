@@ -124,10 +124,12 @@ public class DonationFactoryTests {
     boolean irrelevantCanEditPackTypePermission = true;
 
     UUID irrelevantAdverseEventId = UUID.randomUUID();
+    UUID donationTypeId = UUID.randomUUID();
+    
     Date donationDate = new Date();
     String donationIdentificationNumber = "0000001";
     String donorNumber = "000001";
-    DonationType donationType = aDonationType().withId(23L).build();
+    DonationType donationType = aDonationType().withId(donationTypeId).build();
     PackType packType = aPackType().withId(IRRELEVANT_PACKTYPE_ID).build();
     PackTypeFullViewModel packTypeFullViewModel = aPackTypeViewFullModel().withId(IRRELEVANT_PACKTYPE_ID).build();
     String notes = "some notes";
@@ -175,7 +177,7 @@ public class DonationFactoryTests {
         .build();
 
     AdverseEventViewModel adverseEventViewModel = anAdverseEventViewModel().withId(irrelevantAdverseEventId).build();
-    DonationTypeViewModel donationTypeViewModel = aDonationTypeViewModel().withId(23L).build();
+    DonationTypeViewModel donationTypeViewModel = aDonationTypeViewModel().withId(donationTypeId).build();
     LocationViewModel venueViewModel = aLocationViewModel().withId(venue.getId()).build();
 
     DonationViewModel expectedDonationViewModel = aDonationViewModel()
@@ -229,10 +231,12 @@ public class DonationFactoryTests {
   public void testCreateDonationViewModelsWithPermissions_shouldReturnViewModelsWithCorrectDonationAndPermissions() {
 
     UUID irrelevantAdverseEventId = UUID.randomUUID();
+    UUID donationTypeId = UUID.randomUUID();
+
     AdverseEvent adverseEvent = anAdverseEvent().withId(irrelevantAdverseEventId).build();
     PackType packType = aPackType().withId(IRRELEVANT_PACKTYPE_ID).build();
     PackTypeFullViewModel packTypeFullViewModel = aPackTypeViewFullModel().withId(IRRELEVANT_PACKTYPE_ID).build();
-    DonationType donationType = aDonationType().withId(23L).build();
+    DonationType donationType = aDonationType().withId(donationTypeId).build();
     Donation donation1 = aDonation().withId(IRRELEVANT_DONATION_ID)
         .withDonor(aDonor().withId(IRRELEVANT_DONOR_ID).build())
         .withDonationBatch(aDonationBatch().thatIsBackEntry().build())
@@ -249,7 +253,7 @@ public class DonationFactoryTests {
     List<Donation> donations = Arrays.asList(new Donation[]{donation1, donation2});
 
     AdverseEventViewModel adverseEventViewModel = anAdverseEventViewModel().withId(irrelevantAdverseEventId).build();
-    DonationTypeViewModel donationTypeViewModel = aDonationTypeViewModel().withId(23L).build();
+    DonationTypeViewModel donationTypeViewModel = aDonationTypeViewModel().withId(donationTypeId).build();
 
     DonationViewModel expectedDonation1ViewModel = aDonationViewModel()
         .withId(IRRELEVANT_DONATION_ID)

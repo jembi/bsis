@@ -182,10 +182,10 @@
 		isDeleted="0"   
 		newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
 
-	<DonationType id="1" donationType="Voluntary" isDeleted="false" />
-	<DonationType id="2" donationType="Family" isDeleted="false" />
-	<DonationType id="3" donationType="Autologous" isDeleted="false" />
-	<DonationType id="4" donationType="Other" isDeleted="false" />
+	<DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType="Voluntary" isDeleted="false" />
+	<DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType="Family" isDeleted="false" />
+	<DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" donationType="Autologous" isDeleted="false" />
+	<DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" donationType="Other" isDeleted="false" />
 	<ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeCode="0011"
@@ -343,7 +343,7 @@
 		donorWeight="80.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-06 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
@@ -352,14 +352,14 @@
 		donationIdentificationNumber="1212129" isDeleted="0"
 		createdDate="2015-02-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"
-		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="3" bloodAbo="" bloodRh="" bloodTypingStatus="NOT_DONE"
 		donationDate="2015-06-26 00:00:00.0" donationIdentificationNumber="9090908"
 		isDeleted="0" createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"
-		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="1" bleedStartTime="1970-01-01 11:24:30.0" bleedEndTime="1970-01-01 11:44:30.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="4" bloodAbo="B" bloodRh="+"
@@ -367,7 +367,7 @@
 		donationIdentificationNumber="123123" isDeleted="0"
 		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="5" bloodAbo="A" bloodRh="-"
@@ -375,7 +375,7 @@
 		donationIdentificationNumber="124124" isDeleted="0"
 		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="6" bloodAbo="" bloodRh=""
@@ -383,13 +383,13 @@
 		donationIdentificationNumber="125125" isDeleted="0"
 		createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
 	<Donation id="7" bloodAbo="" bloodRh="" donationDate="2015-04-05 00:00:00.0"
 		donationIdentificationNumber="126126"
 		isDeleted="0" createdDate="2015-04-18 07:53:57.0" lastUpdated="2015-04-24 04:43:20.0"
-		packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType_id="1" donor_id="2"
+		packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="2"
 		createdBy_id="1" lastUpdatedBy_id="1" venue_id="2" bleedStartTime="1970-01-01 14:53:37.0"
 		bleedEndTime="1970-01-01 14:53:37.0" ineligibleDonor="0" released="0" />
 	<Donation id="8" bloodAbo="O"
@@ -398,7 +398,7 @@
 		donorWeight="50.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
@@ -408,7 +408,7 @@
 		donorWeight="50.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
@@ -418,7 +418,7 @@
 		donorWeight="50.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
@@ -428,7 +428,7 @@
 		donorWeight="50.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-01-26 03:42:04.0" lastUpdated="2016-01-26 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
 		bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0" />
@@ -437,7 +437,7 @@
 		donationIdentificationNumber="126226"
 		isDeleted="0" createdDate="2016-04-18 07:53:57.0" lastUpdated="2016-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		ineligibleDonor="0" released="0" />
 	<Donation id="13" bloodAbo="" bloodRh="" bloodTypingStatus="NOT_DONE"
@@ -445,7 +445,7 @@
 		donationIdentificationNumber="126326"
 		isDeleted="0" createdDate="2016-04-18 07:53:57.0" lastUpdated="2016-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		ineligibleDonor="0" released="0" />
 	<Donation id="14" bloodAbo="" bloodRh="" bloodTypingStatus="NOT_DONE"
@@ -453,7 +453,7 @@
 		donationIdentificationNumber="126426"
 		isDeleted="0" createdDate="2016-04-18 07:53:57.0" lastUpdated="2016-04-24 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		ineligibleDonor="0" released="0" />
 	<Donation id="15" bloodAbo="" bloodRh="" bloodTypingStatus="COMPLETE"
@@ -461,7 +461,7 @@
 		donationIdentificationNumber="126526"
 		isDeleted="0" createdDate="2016-05-05 07:53:57.0" lastUpdated="2016-05-05 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		ineligibleDonor="0" released="0" />
 	<Donation id="16" bloodAbo="A" bloodRh="+" bloodTypingStatus="COMPLETE"
@@ -469,7 +469,7 @@
 		donationIdentificationNumber="126826"
 		isDeleted="0" createdDate="2016-05-05 07:53:57.0" lastUpdated="2016-05-05 04:43:20.0"
 		ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
 		venue_id="2" bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
 		ineligibleDonor="0" released="0" />
 	<Donation id="17" bloodAbo="O"
@@ -478,7 +478,7 @@
 		donorWeight="80.00" haemoglobinCount="15.70"
 		isDeleted="0" createdDate="2016-02-02 03:42:04.0" lastUpdated="2016-02-06 02:09:30.0"
 		ttiStatus="NOT_DONE" packType_id="3" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-		donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
+		donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
 		bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
 		bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
 		bloodTypingMatchStatus="RESOLVED" ineligibleDonor="0" released="0" />

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -814,7 +815,7 @@ public class DonationBackingFormValidatorTest {
   
   private DonationBackingForm createBasicBackingForm(Location venue) throws Exception {
     PackType packType = PackTypeBuilder.aPackType().withId(1L).withPackType("Single").build();
-    DonationTypeBackingForm donationType = aDonationTypeBackingForm().withId(1L).withDonationType("Voluntary").build();
+    DonationTypeBackingForm donationType = aDonationTypeBackingForm().withId(UUID.randomUUID()).withDonationType("Voluntary").build();
 
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()
         .withBatchNumber("DB123")

@@ -62,7 +62,7 @@
            preferredLanguage_id="1" title="Mr" addressId="6" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'"
            dueToDonate="2015-05-03"/>
 
-    <DonationType id="1" donationType="Voluntary" isDeleted="false"/>
+    <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType="Voluntary" isDeleted="false"/>
 
     <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
@@ -125,7 +125,7 @@
               haemoglobinCount="15.70" isDeleted="0"
               createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-06 02:09:30.0"
               ttiStatus="TTI_SAFE" packType_id="3" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-              donationType_id="1" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
+              donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
               bloodPressureDiastolic="80" donorPulse="70" venue_id="1"
               bleedStartTime="1970-01-01 10:26:36.0" bleedEndTime="1970-01-01 10:41:36.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
@@ -133,7 +133,7 @@
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1212129"
               isDeleted="0" createdDate="2015-02-18 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
-              packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType_id="1" donor_id="2"
+              packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="2"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
               bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
@@ -141,7 +141,7 @@
               donationIdentificationNumber="9090908" isDeleted="0"
               createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
               ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"
-              donationType_id="1" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
+              donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="3" createdBy_id="1" lastUpdatedBy_id="1"
               venue_id="1" bleedStartTime="1970-01-01 11:24:30.0"
               bleedEndTime="1970-01-01 11:44:30.0"
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
@@ -149,7 +149,7 @@
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1412129"
               isDeleted="0" createdDate="2015-02-02 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
-              packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType_id="1" donor_id="4"
+              packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="4"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
               bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
@@ -157,7 +157,7 @@
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1512129"
               isDeleted="0" createdDate="2015-02-02 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
-              packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType_id="1" donor_id="5"
+              packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="5"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
               bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
@@ -165,7 +165,7 @@
               donationDate="2015-02-02 00:00:00.0" donationIdentificationNumber="1612129"
               isDeleted="0" createdDate="2015-02-02 07:53:57.0"
               lastUpdated="2015-04-24 04:43:20.0" ttiStatus="TTI_SAFE"
-              packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType_id="1" donor_id="6"
+              packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="6"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="2"
               bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>

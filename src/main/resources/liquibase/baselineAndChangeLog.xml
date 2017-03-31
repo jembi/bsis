@@ -104,4 +104,5 @@
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-contact.xml"/>
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-deferral-reason.xml"/>
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-donation-batch.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-donation-type.xml"/>
 </databaseChangeLog>
