@@ -9,12 +9,12 @@
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'"/>
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'"/>
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'"/>
-    <Address id="1"/>
-    <Address id="2"/>
-    <Address id="3"/>
-    <Address id="4"/>
-    <Address id="5"/>
-    <Address id="6"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'"/>
     <PreferredLanguage id="1" preferredLanguage="English"/>
 
     <Donor id="1" birthDate="1980-01-12" bloodAbo="O" bloodRh="+"
@@ -23,7 +23,7 @@
            isDeleted="false" lastName="Donor" createdDate="2015-02-02 03:41:29.0"
            lastUpdated="2015-02-18 07:51:56.0" notes="" createdBy_id="1"
            lastUpdatedBy_id="1" dateOfFirstDonation="2015-02-02"
-           preferredLanguage_id="1" title="Mr" addressId="1" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
+           preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
            dueToDonate="2015-05-03"/>
     <Donor id="2" birthDate="1950-01-12" bloodAbo="A" bloodRh="-"
            dateOfLastDonation="2015-02-02 00:00:00.0" donorHash="fe5eeb11d9b9c772b44a3daf38de6d39"
@@ -31,20 +31,20 @@
            isDeleted="false" lastName="Henry" createdDate="2015-02-18 07:53:29.0"
            lastUpdated="2015-02-18 07:53:57.0" createdBy_id="1" lastUpdatedBy_id="1"
            dateOfFirstDonation="2015-02-02" preferredLanguage_id="1" title="Mr"
-           addressId="3" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" dueToDonate="2015-05-03"/>
+           address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" dueToDonate="2015-05-03"/>
     <Donor id="3" birthDate="1976-02-19" bloodAbo="" bloodRh=""
            dateOfLastDonation="2015-06-26 00:00:00.0" donorHash="11a101ad63921b9db94a476fb4a86bcd"
            donorNumber="000003" donorStatus="NORMAL" firstName="Donor" gender="female"
            isDeleted="false" lastName="Five" createdDate="2015-02-09 03:45:49.0"
            lastUpdated="2015-06-29 05:24:35.0" createdBy_id="1" lastUpdatedBy_id="1"
            dateOfFirstDonation="2015-06-26" preferredLanguage_id="1" title="Mrs"
-           addressId="2" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" dueToDonate="2015-09-24"/>
+           address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" dueToDonate="2015-09-24"/>
     <Donor id="4" birthDate="1977-08-22" bloodAbo="A" bloodRh="-"
            dateOfLastDonation="2015-02-02 00:00:00.0" donorNumber="000004"
            donorStatus="NORMAL" firstName="Raymond" gender="male" isDeleted="false"
            lastName="Smith" createdDate="2015-02-18 07:53:29.0" lastUpdated="2015-02-18 07:53:57.0"
            createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-02-02"
-           preferredLanguage_id="1" title="Mr" addressId="4" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'"
+           preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'"
            dueToDonate="2015-05-03"/>
     <Donor id="5" birthDate="1983-06-03" bloodAbo="O" bloodRh="-"
            dateOfLastDonation="2015-02-02 00:00:00.0" donorNumber="000005"
@@ -52,14 +52,14 @@
            lastName="Petzold" createdDate="2015-02-18 07:53:29.0"
            lastUpdated="2015-02-18 07:53:57.0"
            createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-02-02"
-           preferredLanguage_id="1" title="Mrs" addressId="5" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'"
+           preferredLanguage_id="1" title="Mrs" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'"
            dueToDonate="2015-05-03"/>
     <Donor id="6" birthDate="1947-11-18" bloodAbo="AB" bloodRh="+"
            dateOfLastDonation="2015-02-02 00:00:00.0" donorNumber="000006"
            donorStatus="NORMAL" firstName="Carl" gender="male" isDeleted="false"
            lastName="Holla" createdDate="2015-02-18 07:53:29.0" lastUpdated="2015-02-18 07:53:57.0"
            createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-02-02"
-           preferredLanguage_id="1" title="Mr" addressId="6" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'"
+           preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'"
            dueToDonate="2015-05-03"/>
 
     <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType="Voluntary" isDeleted="false"/>

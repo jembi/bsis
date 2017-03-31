@@ -6,11 +6,11 @@
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
     <Location isTestingSite="1" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="false"
               isMobileSite="false" isUsageSite="false" name="Testing" notes=""/>
-    <Address id="1"/>
-    <Address id="2"/>
-    <Address id="3"/>
-    <Address id="4"/>
-    <Address id="5"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'"/>
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"/>
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"/>
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"/>
@@ -23,14 +23,14 @@
            isDeleted="false" lastName="Smith" createdDate="2015-08-11 09:05:10.0"
            lastUpdated="2015-08-11 09:06:27.0" venue_id="1" createdBy_id="1"
            lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
-           preferredLanguage_id="1" title="Mr" addressId="1" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
+           preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
            dueToDonate="2015-11-09"/>
     <Donor id="2" birthDate="1977-08-22" bloodAbo="A" bloodRh="-"
            dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000002"
            donorStatus="NORMAL" firstName="Raymond" gender="male" isDeleted="false"
            lastName="Smith" createdDate="2015-08-11 07:53:29.0" lastUpdated="2015-08-11 07:53:57.0"
            createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
-           preferredLanguage_id="1" title="Mr" addressId="2" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"
+           preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"
            dueToDonate="2015-11-09"/>
     <Donor id="3" birthDate="1983-06-03" bloodAbo="O" bloodRh="-"
            dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000003"
@@ -38,7 +38,7 @@
            lastName="Billens" createdDate="2015-08-11 07:53:29.0"
            lastUpdated="2015-08-11 07:53:57.0"
            createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
-           preferredLanguage_id="1" title="Mrs" addressId="3" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"
+           preferredLanguage_id="1" title="Mrs" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"
            dueToDonate="2015-11-09"/>
     <Donor id="4" birthDate="1983-06-03" bloodAbo="AB" bloodRh="+"
            dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000004"
@@ -46,14 +46,14 @@
            lastName="Lombard" createdDate="2015-08-11 07:53:29.0"
            lastUpdated="2015-08-11 07:53:57.0"
            createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
-           preferredLanguage_id="1" title="Mr" addressId="4" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'"
+           preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'"
            dueToDonate="2015-11-09"/>
     <Donor id="5" birthDate="1965-06-03" bloodAbo="AB" bloodRh="+"
            dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000005"
            donorStatus="NORMAL" firstName="Brendan" gender="male" isDeleted="false"
            lastName="Fassie" createdDate="2015-08-11 07:53:29.0" lastUpdated="2015-08-11 07:53:57.0"
            createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
-           preferredLanguage_id="1" title="Mr" addressId="5" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'"
+           preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'"
            dueToDonate="2015-11-09"/>
     <TestBatch id="1" batchNumber="000000" isDeleted="false" location_id="2"
                createdDate="2015-08-11 05:44:40.0" lastUpdated="2015-08-11 05:44:40.0"

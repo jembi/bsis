@@ -669,17 +669,6 @@ public class DonorBackingForm {
   }
 
   @JsonIgnore
-  public String getAddressId() {
-    if (address.getId() != null)
-      return address.getId().toString();
-    return "";
-  }
-
-  public void setAddressId(String addressId) {
-    address.setId(Long.parseLong(addressId));
-  }
-
-  @JsonIgnore
   public void setPermissions(Map<String, Boolean> permissions) {
     // Ignore
   }

@@ -22,8 +22,6 @@ import org.jembi.bsis.model.donor.DonorStatus;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.util.BloodGroup;
-import org.jembi.bsis.repository.DonorCommunicationsRepository;
-import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.junit.Test;
@@ -460,22 +458,4 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
     return pagingParams;
   }
 
-  private long getDonorListSizeWithoutAnyCriteria() throws ParseException {
-    List<Location> venue = new ArrayList<Location>();
-    List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
-    String clinicDate = "";
-    String clinicDateToCheckdeferredDonor = "";
-    String lastDonationFromDate = "";
-    String lastDonationToDate = "";
-    boolean anyBloodGroup = true;
-    boolean noBloodGroup = false;
-    Map<String, Object> pagingParams = createPagingParamsMap();
-
-    List<Donor> results = new ArrayList<Donor>();
-    results = donorCommunicationsRepository.findDonors(venue,
-        clinicDate, lastDonationFromDate, lastDonationToDate,
-        bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDateToCheckdeferredDonor);
-
-    return (long) results.size();
-  }
 }

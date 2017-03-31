@@ -2,6 +2,7 @@ package org.jembi.bsis.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -85,12 +86,12 @@ public class DonorDeferralCRUDService {
     return donorDeferral;
   }
 
-  public DonorDeferral findDeferralById(Long donorDeferralId) throws IllegalStateException, NoResultException {
+  public DonorDeferral findDeferralById(UUID donorDeferralId) throws IllegalStateException, NoResultException {
     DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
     return donorDeferral;
   }
 
-  public void deleteDeferral(Long donorDeferralId) throws IllegalStateException, NoResultException {
+  public void deleteDeferral(UUID donorDeferralId) throws IllegalStateException, NoResultException {
     DonorDeferral donorDeferral = findDeferralById(donorDeferralId);
     if (donorDeferral == null) {
       throw new IllegalStateException("DonorDeferral with id " + donorDeferralId
@@ -114,7 +115,7 @@ public class DonorDeferralCRUDService {
     return donorDeferralRepository.update(existingDeferral);
   }
 
-  public DonorDeferral endDeferral(Long donorDeferralId, String comment) {
+  public DonorDeferral endDeferral(UUID donorDeferralId, String comment) {
     if (!deferralConstraintChecker.canEndDonorDeferral(donorDeferralId)) {
       throw new IllegalStateException("Cannot end deferral with constraints");
     }
