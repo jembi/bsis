@@ -14,8 +14,8 @@
     <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D5'" contactMethodType="Mail" isDeleted="0"/>
     <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D6'" contactMethodType="Do not Contact" isDeleted="0"/>
 
-    <AddressType id="1" preferredAddressType="Home Address"/>
-    <AddressType id="2" preferredAddressType="Work Address"/>
+    <AddressType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" preferredAddressType="Home Address"/>
+    <AddressType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" preferredAddressType="Work Address"/>
 
     <address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" homeAddressLine1="homeaddress1" homeAddressLine2="homeaddress2"
              homeAddressCity="homecity"

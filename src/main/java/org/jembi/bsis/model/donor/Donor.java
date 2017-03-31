@@ -187,7 +187,6 @@ public class Donor extends BaseModificationTrackerEntity {
 
   @Audited(targetAuditMode = NOT_AUDITED)
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(nullable = true, name = "addressTypeId")
   private AddressType addressType;
 
   @Audited(targetAuditMode = NOT_AUDITED)

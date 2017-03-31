@@ -51,6 +51,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
+  private static final UUID ADDRESS_TYPE_ID_1 = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870681");
+  private static final UUID ADDRESS_TYPE_ID_2 = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870682");
+
   @Autowired
   DonorRepository donorRepository;
   private User user;
@@ -528,7 +531,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     Location l = new Location();
     l.setId(Long.parseLong("1"));
     AddressType a = new AddressType();
-    a.setId(Long.parseLong("1"));
+    a.setId(ADDRESS_TYPE_ID_1);
     donorBirthdate = CustomDateFormatter.getDateFromString("1991-06-11");
     donorBackingForm.setAddress(new Address());
     donorBackingForm.setContact(new Contact());
@@ -579,7 +582,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     Location l = new Location();
     l.setId(Long.parseLong("2"));
     AddressType a = new AddressType();
-    a.setId(Long.parseLong("2"));
+    a.setId(ADDRESS_TYPE_ID_2);
     donorBackingForm.setHomeAddressLine1("address_update");
     donorBackingForm.setFirstName("firstName_update");
     donorBackingForm.setMiddleName("middlename_update");
