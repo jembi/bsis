@@ -1,5 +1,11 @@
 package org.jembi.bsis.helpers.builders;
 
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.DonationBatchPersister;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
@@ -7,12 +13,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
+import org.jembi.bsis.util.RandomTestDate;
 
 public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
 
@@ -27,7 +28,7 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
   private boolean backEntry;
   private ComponentBatch componentBatch;
   private Date lastUpdatedDate;
-  private Date donationBatchDate = new Date();
+  private Date donationBatchDate = new RandomTestDate();
 
   public DonationBatchBuilder withId(Long id) {
     this.id = id;

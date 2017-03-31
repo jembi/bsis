@@ -170,6 +170,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdatePatientRequestOrderForm_shouldUpdateFieldsCorrectly() {
     // Fixture
+    Date orderDate = new Date();
     Date createdDate = new Date();
     Location dispatchedFrom = aDistributionSite().build();
     Location dispatchedTo = aUsageSite().build();
@@ -179,6 +180,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     OrderForm orderForm = anOrderForm()
         .withId(ORDER_FORM_ID)
         .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderDate(orderDate)
         .withOrderType(OrderType.PATIENT_REQUEST)
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
@@ -188,6 +190,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withId(ORDER_FORM_ID)
         .withCreatedDate(createdDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderDate(orderDate)
         .withOrderType(OrderType.PATIENT_REQUEST)
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
