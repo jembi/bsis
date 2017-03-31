@@ -293,7 +293,7 @@
 		createdBy_id="1" lastUpdatedBy_id="1" isClosed="false" venue_id="1" backEntry="false" />
 
 	<Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" />
-	<Address id="1" />
+	<Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" />
 	<PreferredLanguage id="1" preferredLanguage="English" />
 
 	<Donor id="1" birthDate="1980-01-12" bloodAbo="O" bloodRh="+"

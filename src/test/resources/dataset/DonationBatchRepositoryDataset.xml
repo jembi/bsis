@@ -73,9 +73,9 @@
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"/>
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"/>
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"/>
-    <Address id="1"/>
-    <Address id="2"/>
-    <Address id="3"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"/>
+    <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"/>
     <PreferredLanguage id="1" preferredLanguage="English"/>
 
     <Donor id="1" birthDate="1980-01-12" bloodAbo="O" bloodRh="+"

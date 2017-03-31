@@ -73,7 +73,6 @@
            donorStatus="MERGED" firstName="Karin" gender="female" isDeleted="0"
            lastName="Smith" createdDate="2014-01-01 20:18:17" lastUpdated="2014-02-21 17:31:59"
            idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" venue_id="1"
-
            createdBy_id="1" lastUpdatedBy_id="1" dueToDonate="${yesterday}"/>
 
     <deferralreason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" isDeleted="0" reason="High risk behaviour" defaultDuration="30"
