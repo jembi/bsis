@@ -2,6 +2,7 @@ package org.jembi.bsis.backingform;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class DeferralBackingForm {
 
-  private Long id;
+  private UUID id;
 
   private DonorBackingForm deferredDonor;
 
@@ -69,11 +70,11 @@ public class DeferralBackingForm {
     return deferralDate;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
