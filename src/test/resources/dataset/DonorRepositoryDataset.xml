@@ -7,12 +7,12 @@
     <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="2" name="location 2" isVenue="true"/>
     <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="3" name="location 3" isVenue="true"/>
 
-    <contactmethodtype id="1" contactMethodType="None" isDeleted="0"/>
-    <contactmethodtype id="2" contactMethodType="Phone" isDeleted="0"/>
-    <contactmethodtype id="3" contactMethodType="SMS" isDeleted="0"/>
-    <contactmethodtype id="4" contactMethodType="Email" isDeleted="0"/>
-    <contactmethodtype id="5" contactMethodType="Mail" isDeleted="0"/>
-    <contactmethodtype id="6" contactMethodType="Do not Contact" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D1'" contactMethodType="None" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D2'" contactMethodType="Phone" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D3'" contactMethodType="SMS" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D4'" contactMethodType="Email" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D5'" contactMethodType="Mail" isDeleted="0"/>
+    <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D6'" contactMethodType="Do not Contact" isDeleted="0"/>
 
     <AddressType id="1" preferredAddressType="Home Address"/>
     <AddressType id="2" preferredAddressType="Work Address"/>
