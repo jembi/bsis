@@ -195,8 +195,8 @@
 
     <PreferredLanguage id="1" preferredLanguage="English"/>
     <PreferredLanguage id="2" preferredLanguage="English"/>
-    <IdType id="1" idType="Passport" regExp=""/>
-    <IdType id="2" idType="National ID" regExp=""/>
+    <IdType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" idType="Passport" regExp=""/>
+    <IdType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" idType="National ID" regExp=""/>  
 
     <!--        <IdNumber id="1" donorId="1" idType="1" idNumber="123"/>-->
 
