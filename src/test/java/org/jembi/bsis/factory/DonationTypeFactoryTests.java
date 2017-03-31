@@ -11,6 +11,7 @@ import static org.jembi.bsis.helpers.matchers.DonationTypeMatcher.hasSameStateAs
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DonationTypeBackingForm;
 import org.jembi.bsis.model.donationtype.DonationType;
@@ -27,14 +28,16 @@ public class DonationTypeFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
+    UUID donationTypeId = UUID.randomUUID();
+
     DonationType donationType = aDonationType()
-        .withId(1L)
+        .withId(donationTypeId)
         .withName("Voluntary")
         .thatIsNotDeleted()
         .build();
 
     DonationTypeViewModel donationTypeViewModel = aDonationTypeViewModel()
-        .withId(1L)
+        .withId(donationTypeId)
         .withType("Voluntary")
         .thatIsNotDeleted()
         .build();
@@ -68,14 +71,16 @@ public class DonationTypeFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntity_shouldReturnEntity() {
     // Set up fixtures
+    UUID donationTypeId = UUID.randomUUID();
+
     DonationTypeBackingForm form = aDonationTypeBackingForm()
-        .withId(1L)
+        .withId(donationTypeId)
         .withDonationType("type")
         .thatIsNotDeleted()
         .build();
 
     DonationType expectedDonationType = aDonationType()
-        .withId(1L)
+        .withId(donationTypeId)
         .withName("type")
         .thatIsNotDeleted()
         .build();

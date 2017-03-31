@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.user.User;
@@ -30,15 +31,16 @@ public class DonationTypeCRUDServiceTests extends UnitTestSuite {
     User user = aUser().withId(1L).build();
     Date createdDate = new Date();
     Date lastUpdated = new Date();
+    UUID donationTypeId = UUID.randomUUID();
     
     DonationType donationType = aDonationType()
-        .withId(1L)
+        .withId(donationTypeId)
         .withName("New Name")
         .thatIsNotDeleted()
         .build();
 
     DonationType existingDonationType = aDonationType()
-        .withId(1L)
+        .withId(donationTypeId)
         .withName("Name")
         .withCreatedBy(user)
         .withCreatedDate(createdDate)
@@ -48,7 +50,7 @@ public class DonationTypeCRUDServiceTests extends UnitTestSuite {
         .build();
 
     DonationType expectedDonationType = aDonationType()
-        .withId(1L)
+        .withId(donationTypeId)
         .withName("New Name")
         .withCreatedBy(user)
         .withCreatedDate(createdDate)
@@ -57,7 +59,7 @@ public class DonationTypeCRUDServiceTests extends UnitTestSuite {
         .thatIsNotDeleted()
         .build();
 
-    when(donationTypeRepository.getDonationTypeById(1L)).thenReturn(existingDonationType);
+    when(donationTypeRepository.getDonationTypeById(donationTypeId)).thenReturn(existingDonationType);
     when(donationTypeRepository.update(argThat(hasSameStateAsDonationType(expectedDonationType)))).thenReturn(
         expectedDonationType);
 

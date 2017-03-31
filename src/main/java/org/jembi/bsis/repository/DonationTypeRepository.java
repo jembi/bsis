@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -46,7 +47,7 @@ public class DonationTypeRepository extends AbstractRepository<DonationType> {
     return query.getResultList();
   }
 
-  public DonationType getDonationTypeById(Long donationTypeId) throws NoResultException {
+  public DonationType getDonationTypeById(UUID donationTypeId) throws NoResultException {
     TypedQuery<DonationType> query;
     query = entityManager.createQuery("SELECT d from DonationType d " +
         "where d.id=:id", DonationType.class);
