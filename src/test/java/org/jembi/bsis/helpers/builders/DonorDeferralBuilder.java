@@ -9,7 +9,6 @@ import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DonorDeferral;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.util.TestConstants;
 
 public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
 
@@ -20,7 +19,7 @@ public class DonorDeferralBuilder extends AbstractEntityBuilder<DonorDeferral> {
   private Boolean voided;
   private String deferralReasonText;
   private Location venue = LocationBuilder.aLocation().build();
-  private Date deferralDate = TestConstants.DATE;
+  private Date deferralDate = new Date();
   private User createdBy;
   private Date createdDate;
 

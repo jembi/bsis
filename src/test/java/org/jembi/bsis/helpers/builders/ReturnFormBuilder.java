@@ -13,13 +13,12 @@ import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.returnform.ReturnForm;
 import org.jembi.bsis.model.returnform.ReturnStatus;
-import org.jembi.bsis.util.TestConstants;
 
 public class ReturnFormBuilder extends AbstractEntityBuilder<ReturnForm> {
 
   private UUID id;
   private boolean isDeleted = false;
-  private Date returnDate = TestConstants.DATE;
+  private Date returnDate = new Date();
   private Location returnedFrom = aLocation().build();
   private Location returnedTo = aLocation().build();
   private ReturnStatus status = ReturnStatus.CREATED;

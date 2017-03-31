@@ -26,7 +26,6 @@ import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.util.TestConstants;
 
 public class DonationBuilder extends AbstractEntityBuilder<Donation> {
 
@@ -55,7 +54,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private BloodTypingMatchStatus bloodTypingMatchStatus;
   private BloodTypingStatus bloodTypingStatus;
   private DonationBatch donationBatch = aDonationBatch().build();
-  private Date createdDate = TestConstants.DATE;
+  private Date createdDate = new Date();
   private boolean released;
   private boolean ineligibleDonor;
   private List<Component> components = new ArrayList<>();

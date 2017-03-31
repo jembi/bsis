@@ -16,12 +16,11 @@ import org.jembi.bsis.model.order.OrderFormItem;
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
 import org.jembi.bsis.model.patient.Patient;
-import org.jembi.bsis.util.TestConstants;
 
 public class OrderFormBuilder extends AbstractEntityBuilder<OrderForm> {
   
   private UUID id;
-  private Date orderDate = TestConstants.DATE;
+  private Date orderDate = new Date();
   private Location dispatchedFrom = aLocation().build();
   private Location dispatchedTo = aLocation().build();
   private OrderStatus status = OrderStatus.CREATED;
