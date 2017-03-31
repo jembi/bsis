@@ -1,5 +1,7 @@
 package org.jembi.bsis.model.donor;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -28,13 +30,13 @@ public class DuplicateDonorBackup extends BaseEntity {
   private Long donationId;
 
   @Column(name = "donorDeferral_id")
-  private Long donorDeferralId;
+  private UUID donorDeferralId;
 
   public DuplicateDonorBackup() {
     super();
   }
 
-  public DuplicateDonorBackup(String newDonorId, String mergedDonorId, Long donationId, Long deferralId) {
+  public DuplicateDonorBackup(String newDonorId, String mergedDonorId, Long donationId, UUID deferralId) {
     super();
     this.newDonorNumber = newDonorId;
     this.mergedDonorNumber = mergedDonorId;
@@ -66,11 +68,11 @@ public class DuplicateDonorBackup extends BaseEntity {
     this.donationId = donationId;
   }
 
-  public Long getDonorDeferralId() {
+  public UUID getDonorDeferralId() {
     return donorDeferralId;
   }
 
-  public void setDonorDeferralId(Long deferralId) {
+  public void setDonorDeferralId(UUID deferralId) {
     this.donorDeferralId = deferralId;
   }
 

@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -720,9 +721,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void addMergedDonor() throws Exception {
+    UUID donorDeferralId = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870681");
     List<DuplicateDonorBackup> backupLogs = new ArrayList<DuplicateDonorBackup>();
     backupLogs.add(new DuplicateDonorBackup("1234567", "000001", 1l, null));
-    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, 1l));
+    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, donorDeferralId));
     Donor oldDonor = donorRepository.findDonorByDonorNumber("000001", false);
     List<Donor> donorsToMerge = new ArrayList<Donor>();
     donorsToMerge.add(oldDonor);

@@ -1,5 +1,6 @@
 package org.jembi.bsis.service;
 
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -7,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.dto.DuplicateDonorDTO;
 import org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder;
@@ -29,23 +31,20 @@ import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.SequenceNumberRepository;
-import org.jembi.bsis.service.BloodTestsService;
-import org.jembi.bsis.service.DonorService;
-import org.jembi.bsis.service.DuplicateDonorService;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import scala.actors.threadpool.Arrays;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DuplicateDonorServiceTest {
+public class DuplicateDonorServiceTest extends UnitTestSuite {
+
+  private static final UUID DONOR_DEFERRAL_ID = UUID.randomUUID();
 
   @InjectMocks
   private DuplicateDonorService service;
@@ -63,7 +62,7 @@ public class DuplicateDonorServiceTest {
   private DonorService donorService;
 
   @Test
-  public void testFindDuplicateDonors() throws Exception {
+  public void testFindDuplicateDonors() {
     when(donorRepository.getDuplicateDonors()).thenReturn(new ArrayList<DuplicateDonorDTO>());
     List<DuplicateDonorDTO> duplicateDonors = service.findDuplicateDonors();
     Assert.assertTrue("No matching donors", duplicateDonors.isEmpty());
@@ -79,14 +78,14 @@ public class DuplicateDonorServiceTest {
   }
 
   @Test
-  public void testMergeDuplicateDonorsNull() throws Exception {
+  public void testMergeDuplicateDonorsNull() {
     List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), (List<Donor>) null);
     Assert.assertNotNull("backupLogs returned", backupLogs);
     Assert.assertEquals("No backups necessary", 0, backupLogs.size());
   }
 
   @Test
-  public void testMergeDuplicateDonorsEmptyList() throws Exception {
+  public void testMergeDuplicateDonorsEmptyList() {
     List<DuplicateDonorBackup> backupLogs = service.mergeDonors(new Donor(), new ArrayList<Donor>());
     Assert.assertNotNull("backupLogs returned", backupLogs);
     Assert.assertEquals("No backups necessary", 0, backupLogs.size());
@@ -95,21 +94,17 @@ public class DuplicateDonorServiceTest {
   @Test
   public void testMergeDuplicateDonors() throws Exception {
     // create donors
-    String donorNumber1 = "1";
-    String donorNumber2 = "2";
-    List<String> donorNumbers = Arrays.asList(new String[]{donorNumber1, donorNumber2});
-
     List<Donor> donors = new ArrayList<Donor>();
-    Donor david1 = DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David").withLastName("Smith")
+    Donor david1 = DonorBuilder.aDonor().withDonorNumber("1").withFirstName("David").withLastName("Smith")
         .withGender(Gender.male).withBirthDate("1977-10-20").build();
-    Donor david2 = DonorBuilder.aDonor().withDonorNumber(donorNumber2).withFirstName("David").withLastName("Smith")
+    Donor david2 = DonorBuilder.aDonor().withDonorNumber("2").withFirstName("David").withLastName("Smith")
         .withGender(Gender.male).withBirthDate("1977-10-20").build();
     donors.add(david1);
     donors.add(david2);
 
     // create donations (david1)
-    Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).build();
-    Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).build();
+    Donation donation1 = aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).build();
+    Donation donation2 = aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).build();
     List<Donation> donations = new ArrayList<Donation>();
     donations.add(donation1);
     donations.add(donation2);
@@ -118,7 +113,7 @@ public class DuplicateDonorServiceTest {
     // create deferrals (david2)
     DeferralReason deferralReason1 = DeferralReasonBuilder.aDeferralReason()
         .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
-    DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferredDonor(david2)
+    DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(DONOR_DEFERRAL_ID).withDeferredDonor(david2)
         .withDeferralReason(deferralReason1).build();
     List<DonorDeferral> deferrals = new ArrayList<DonorDeferral>();
     deferrals.add(deferral1);
@@ -136,7 +131,8 @@ public class DuplicateDonorServiceTest {
     Assert.assertEquals("Donation and Deferral backups necessary", 3, backupLogs.size());
     Assert.assertTrue("1st DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 1l, null)));
     Assert.assertTrue("2nd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 2l, null)));
-    Assert.assertTrue("3rd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "2", null, 1l)));
+    Assert.assertTrue("3rd DuplicateDonorBackup",
+        backupLogs.contains(new DuplicateDonorBackup("3", "2", null, DONOR_DEFERRAL_ID)));
     Assert.assertNull("Donations were moved", david1.getDonations());
     Assert.assertNull("Deferrals were moved", david2.getDeferrals());
     Assert.assertEquals("Donations were moved", 2, david3.getDonations().size());
@@ -172,7 +168,7 @@ public class DuplicateDonorServiceTest {
     // create deferrals (david2)
     DeferralReason deferralReason1 = DeferralReasonBuilder.aDeferralReason()
         .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
-    DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferredDonor(david2)
+    DonorDeferral deferral1 = DonorDeferralBuilder.aDonorDeferral().withId(DONOR_DEFERRAL_ID).withDeferredDonor(david2)
         .withDeferralReason(deferralReason1).build();
     List<DonorDeferral> deferrals = new ArrayList<DonorDeferral>();
     deferrals.add(deferral1);
@@ -221,13 +217,14 @@ public class DuplicateDonorServiceTest {
             .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
 
     Date dd1DeferralDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-01-01");
-    DonorDeferral dd1 =
-        DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralReason(deferralReason)
-            .withDeferredUntil(new Date()).withDeferralDate(dd1DeferralDate).build();
+    DonorDeferral dd1 = DonorDeferralBuilder.aDonorDeferral().withId(DONOR_DEFERRAL_ID)
+        .withDeferralReason(deferralReason)
+        .withDeferredUntil(new Date()).withDeferralDate(dd1DeferralDate).build();
 
+    UUID donorDeferralId2 = UUID.randomUUID();
     Date dd2DeferralDate = new SimpleDateFormat("yyyy-MM-dd").parse("2014-01-01");
-    DonorDeferral dd2 =
-        DonorDeferralBuilder.aDonorDeferral().withId(2l).withDeferralReason(deferralReason)
+    DonorDeferral dd2 = DonorDeferralBuilder.aDonorDeferral().withId(donorDeferralId2)
+        .withDeferralReason(deferralReason)
         .withDeferredUntil(new Date()).withDeferralDate(dd2DeferralDate).build();
 
     Donor d1 =
@@ -250,8 +247,8 @@ public class DuplicateDonorServiceTest {
     // check results
     Assert.assertNotNull("List was returned", deferrals);
     Assert.assertEquals("Correct number of Deferrals in the list", 2, deferrals.size());
-    Assert.assertEquals("Deferrals in the correct order", Long.valueOf(2), deferrals.get(0).getId());
-    Assert.assertEquals("Deferrals in the correct order", Long.valueOf(1), deferrals.get(1).getId());
+    Assert.assertEquals("Deferrals in the correct order", donorDeferralId2, deferrals.get(0).getId());
+    Assert.assertEquals("Deferrals in the correct order", DONOR_DEFERRAL_ID, deferrals.get(1).getId());
   }
 
   @Test
@@ -259,7 +256,7 @@ public class DuplicateDonorServiceTest {
     // create test data
     String donorNumber1 = "1000001";
     String donorNumber2 = "1000002";
-    List<String> donorNumbers = Arrays.asList(new String[]{donorNumber1, donorNumber2});
+    List<String> donorNumbers = Arrays.asList(new String[] {donorNumber1, donorNumber2});
 
     PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
     Donation d1 = DonationBuilder.aDonation().withId(1l).withPackType(packType)

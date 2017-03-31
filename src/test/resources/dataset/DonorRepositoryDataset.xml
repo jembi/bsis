@@ -174,22 +174,22 @@
                isAutoGeneratable="1" isHidable="0" isRequired="1" isTimeField="0"
                maxLength="15" useCurrentTime="0"/>
 
-    <donordeferral id="1" deferralReasonText="" createdDate="${DateDeferredOn}" deferralDate="${DateDeferredOn}"
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" deferralReasonText="" createdDate="${DateDeferredOn}" deferralDate="${DateDeferredOn}"
                    deferredUntil="${DateDeferredUnit}" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="1" venue_id="1"
                    deferredDonor_id="1" isVoided="false"/>
-    <donordeferral id="2" deferralReasonText="" createdDate="2014-03-01" deferralDate="${DateDeferredOn}"
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" deferralReasonText="" createdDate="2014-03-01" deferralDate="${DateDeferredOn}"
                    deferredUntil="2014-05-14" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="1" venue_id="1"
                    deferredDonor_id="1" isVoided="false"/>
-    <donordeferral id="3" deferralReasonText="" createdDate="2014-01-11" deferralDate="${DateDeferredOn}"
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" deferralReasonText="" createdDate="2014-01-11" deferralDate="${DateDeferredOn}"
                    deferredUntil="2014-08-22" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="1" venue_id="1"
                    deferredDonor_id="1" isVoided="false"/>
-    <donordeferral id="4" deferralReasonText="" createdDate="2014-01-11" deferralDate="${DateDeferredOn}"
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" deferralReasonText="" createdDate="2014-01-11" deferralDate="${DateDeferredOn}"
                    deferredUntil="2014-02-22" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="1" venue_id="1"
                    deferredDonor_id="4" isVoided="false"/>
-    <donordeferral id="5" deferralReasonText="" deferralDate="${DateDeferredOn}" venue_id="1"
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" deferralReasonText="" deferralDate="${DateDeferredOn}" venue_id="1"
                    createdDate="${DateDeferredOn}" deferredUntil="${DateDeferredOn}"
                    deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="1" deferredDonor_id="4" isVoided="false"/>
-    <donordeferral id="6" deferralReasonText="" deferralDate="${DateDeferredOn}" venue_id="1"
+    <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'" deferralReasonText="" deferralDate="${DateDeferredOn}" venue_id="1"
                    createdDate="${DateDeferredOn}" deferredUntil="${DateDeferredUnit}"
                    deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="1" deferredDonor_id="6" isVoided="false"/>
 
