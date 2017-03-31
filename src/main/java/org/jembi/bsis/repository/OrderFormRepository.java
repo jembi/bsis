@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class OrderFormRepository extends AbstractRepository<OrderForm> {
 
-  public OrderForm findById(long id) throws NoResultException {
+  public OrderForm findById(UUID id) throws NoResultException {
     TypedQuery<OrderForm> query = entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BY_ID, OrderForm.class);
     query.setParameter("id", id);
     query.setParameter("isDeleted", false);
@@ -74,9 +75,10 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
         .getResultList();
   }
 
-  public boolean isComponentInAnotherOrderForm(Long id, Long componentId) {
+  public boolean isComponentInAnotherOrderForm(UUID id, Long componentId) {
     return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_IS_COMPONENT_IN_ANOTHER_ORDER_FORM, Boolean.class)
         .setParameter("id", id)
+        .setParameter("includeId", id != null)
         .setParameter("componentId", componentId)
         .setParameter("orderStatus", OrderStatus.CREATED)
         .setParameter("isDeleted", false)

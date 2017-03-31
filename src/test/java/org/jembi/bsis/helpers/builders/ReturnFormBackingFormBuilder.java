@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
@@ -11,14 +12,14 @@ import org.jembi.bsis.model.returnform.ReturnStatus;
 
 public class ReturnFormBackingFormBuilder extends AbstractBuilder<ReturnFormBackingForm> {
 
-  private Long id;
+  private UUID id;
   private Date returnDate;
   private LocationBackingForm returnedFrom;
   private LocationBackingForm returnedTo;
   private ReturnStatus status = ReturnStatus.CREATED;
   private List<ComponentBackingForm> components = new ArrayList<>();
 
-  public ReturnFormBackingFormBuilder withId(Long id) {
+  public ReturnFormBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

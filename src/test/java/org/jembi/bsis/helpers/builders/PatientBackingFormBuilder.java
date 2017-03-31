@@ -1,13 +1,14 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.PatientBackingForm;
 import org.jembi.bsis.model.util.Gender;
 
 public class PatientBackingFormBuilder extends AbstractBuilder<PatientBackingForm> {
   
-  private Long id;
+  private UUID id;
   private String name1;
   private String name2;
   private Date dateOfBirth;
@@ -17,7 +18,7 @@ public class PatientBackingFormBuilder extends AbstractBuilder<PatientBackingFor
   private String hospitalWard;
   private String bloodGroup;
   
-  public PatientBackingFormBuilder withId(Long id) {
+  public PatientBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

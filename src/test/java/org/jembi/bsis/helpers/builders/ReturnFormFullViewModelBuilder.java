@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.returnform.ReturnStatus;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
@@ -13,7 +14,7 @@ import org.jembi.bsis.viewmodel.ReturnFormFullViewModel;
 
 public class ReturnFormFullViewModelBuilder extends AbstractBuilder<ReturnFormFullViewModel> {
 
-  private Long id;
+  private UUID id;
   private Date returnDate;
   private LocationFullViewModel returnedFrom;
   private LocationFullViewModel returnedTo;
@@ -21,7 +22,7 @@ public class ReturnFormFullViewModelBuilder extends AbstractBuilder<ReturnFormFu
   private List<ComponentFullViewModel> components = new ArrayList<>();
   private Map<String, Boolean> permissions = new HashMap<>();
 
-  public ReturnFormFullViewModelBuilder withId(Long id) {
+  public ReturnFormFullViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

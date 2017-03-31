@@ -3,6 +3,7 @@ package org.jembi.bsis.controller;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -72,7 +73,7 @@ public class OrderFormController {
 
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_ORDER_FORM + "')")
-  public ResponseEntity<Map<String, Object>> updateOrderForm(@PathVariable("id") Long orderFormId,
+  public ResponseEntity<Map<String, Object>> updateOrderForm(@PathVariable("id") UUID orderFormId,
       @Valid @RequestBody OrderFormBackingForm backingForm) {
     
     // Use the id parameter from the path
@@ -85,7 +86,7 @@ public class OrderFormController {
   
   @RequestMapping(method = RequestMethod.GET, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ORDER_FORM + "')")
-  public ResponseEntity<Map<String, Object>> getOrderForm(@PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> getOrderForm(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<>();
     map.put("orderForm", orderFormControllerService.findOrderForm(id));
     return new ResponseEntity<>(map, HttpStatus.OK);
@@ -108,7 +109,7 @@ public class OrderFormController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_ORDER_FORM + "')")
-  public void deleteDonation(@PathVariable Long id) {
+  public void deleteOrderForm(@PathVariable UUID id) {
     orderFormControllerService.deleteOrderForm(id);
   }
 }

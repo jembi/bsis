@@ -58,7 +58,7 @@ public class OrderFormNamedQueryConstants {
       "SELECT count(o) > 0 " +
           "FROM OrderForm o " +
           "INNER JOIN o.components c " +
-          "WHERE (:id = null OR o.id <> :id) " +
+          "WHERE (:includeId = false OR o.id <> :id) " +
           "AND c.id = :componentId " +
           "AND o.status = :orderStatus " +
           "AND o.isDeleted = :isDeleted";

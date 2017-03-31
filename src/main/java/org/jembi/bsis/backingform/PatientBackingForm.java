@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class PatientBackingForm {
   
-  private Long id;
+  private UUID id;
   
   @NotNull
   private String name1;
@@ -26,11 +27,11 @@ public class PatientBackingForm {
   private String hospitalWardNumber;
   private String bloodGroup;
   
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

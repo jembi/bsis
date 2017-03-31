@@ -3,6 +3,7 @@ package org.jembi.bsis.controller;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -63,7 +64,7 @@ public class TransfusionController {
 
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TRANSFUSION_DATA+"')")
-  public Map<String, Object> updateTransfusion(@PathVariable("id") Long transfusionId,
+  public Map<String, Object> updateTransfusion(@PathVariable("id") UUID transfusionId,
       @Valid @RequestBody TransfusionBackingForm backingForm) {
 
     backingForm.setId(transfusionId);
@@ -99,7 +100,7 @@ public class TransfusionController {
   
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TRANSFUSION_DATA + "')")
-  public Map<String, Object> getTransfusion(@PathVariable Long id) {
+  public Map<String, Object> getTransfusion(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<>();
     map.put("transfusion", transfusionControllerService.getTransfusion(id));
     return map;
@@ -108,7 +109,7 @@ public class TransfusionController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_TRANSFUSION_DATA + "')")
-  public void deleteTransfusion(@PathVariable Long id) {
+  public void deleteTransfusion(@PathVariable UUID id) {
     transfusionControllerService.deleteTransfusion(id);
   }
 }

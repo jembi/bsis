@@ -1,5 +1,7 @@
 package org.jembi.bsis.service;
 
+import java.util.UUID;
+
 import javax.transaction.Transactional;
 
 import org.jembi.bsis.model.component.Component;
@@ -62,7 +64,7 @@ public class OrderFormCRUDService {
     return orderFormRepository.update(existingOrderForm);
   }
 
-  public OrderForm deleteOrderForm(long id) {
+  public OrderForm deleteOrderForm(UUID id) {
     OrderForm existingOrderForm = orderFormRepository.findById(id);
     
     // Check that OrderForm can be edited

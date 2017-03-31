@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
@@ -108,7 +109,7 @@ public class TransfusionCRUDService {
     return transfusionRepository.update(existingTransfusion);
   }
 
-  public void deleteTransfusion(Long transfusionId) throws IllegalStateException, NoResultException {
+  public void deleteTransfusion(UUID transfusionId) throws IllegalStateException, NoResultException {
     Transfusion transfusion = transfusionRepository.findTransfusionById(transfusionId);
     if (transfusion == null) {
       throw new IllegalStateException("Transfusion with id " + transfusionId

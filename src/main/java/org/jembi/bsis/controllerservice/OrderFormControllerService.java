@@ -2,6 +2,7 @@ package org.jembi.bsis.controllerservice;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -56,7 +57,7 @@ public class OrderFormControllerService {
     return orderFormFactory.createViewModels(orderForms);
   }
   
-  public OrderFormFullViewModel findOrderForm(long id) {
+  public OrderFormFullViewModel findOrderForm(UUID id) {
     OrderForm orderForm = orderFormRepository.findById(id);
     return orderFormFactory.createFullViewModel(orderForm);
   }
@@ -88,7 +89,7 @@ public class OrderFormControllerService {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypesThatCanBeIssued());
   }
 
-  public void deleteOrderForm(long id) {
+  public void deleteOrderForm(UUID id) {
     orderFormCRUDService.deleteOrderForm(id);
   }
 }

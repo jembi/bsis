@@ -1,15 +1,17 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 
 public class TransfusionReactionTypeBuilder extends AbstractEntityBuilder<TransfusionReactionType> {
 
-  private Long id;
+  private UUID id;
   private String name = "default.transfusionreactiontype.name";
   private String description = "default description";
   private boolean isDeleted = false;
 
-  public TransfusionReactionTypeBuilder withId(long id) {
+  public TransfusionReactionTypeBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
@@ -11,7 +12,7 @@ import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 
 public class TransfusionBackingFormBuilder extends AbstractBuilder<TransfusionBackingForm> {
 
-  private Long id;
+  private UUID id;
   private String donationIdentificationNumber;
   private PatientBackingForm patient;
   private String componentCode;
@@ -22,7 +23,7 @@ public class TransfusionBackingFormBuilder extends AbstractBuilder<TransfusionBa
   private Date dateTransfused;
   private String notes;
   
-  public TransfusionBackingFormBuilder withId(Long id) {
+  public TransfusionBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

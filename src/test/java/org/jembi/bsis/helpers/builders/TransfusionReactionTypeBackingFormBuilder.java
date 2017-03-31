@@ -1,15 +1,17 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
 
 public class TransfusionReactionTypeBackingFormBuilder extends AbstractBuilder<TransfusionReactionTypeBackingForm> {
 
-  private Long id;
+  private UUID id;
   private String name;
   private String description;
   private Boolean isDeleted = false;
 
-  public TransfusionReactionTypeBackingFormBuilder withId(long id) {
+  public TransfusionReactionTypeBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
@@ -121,14 +122,14 @@ public class OrderFormFactoryTests extends UnitTestSuite {
     Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
 
-    OrderFormItem expectedItem1 = anOrderItemForm().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    OrderFormItem expectedItem1 = anOrderItemForm().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     OrderForm expectedEntity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate)
         .withOrderFormItem(expectedItem1).build();
     
-    OrderFormItemBackingForm item1 = anOrderFormItemBackingForm().withId(1L).withBloodGroup("A+").build();
+    OrderFormItemBackingForm item1 = anOrderFormItemBackingForm().withId(UUID.randomUUID()).withBloodGroup("A+").build();
     OrderFormBackingForm backingForm = anOrderFormBackingForm()
         .withDispatchedFrom(getBaseDispatchedFromLocationBackingForm())
         .withDispatchedTo(getBaseDispatchedToLocationBackingForm())
@@ -151,18 +152,19 @@ public class OrderFormFactoryTests extends UnitTestSuite {
     Location dispatchedFrom = getBaseDispatchedFromLocation();
     Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
+    UUID orderFormId = UUID.randomUUID();
 
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withOrderDate(orderDate)
         .withPermission("canDispatch", true).withPermission("canEdit", true).withPermission("canDelete", true)
-        .withId(1L).build();
+        .withId(orderFormId).build();
 
     OrderForm entity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
-        .withOrderDate(orderDate).withId(1L).build();
+        .withOrderDate(orderDate).withId(orderFormId).build();
 
     // Setup mock
     when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
@@ -181,6 +183,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
     Location dispatchedFrom = getBaseDispatchedFromLocation();
     Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
+    UUID orderFormId = UUID.randomUUID();
 
     OrderFormItemViewModel expectedItem1 = anOrderFormItemViewModel().withBloodGroup("A+").build();
     OrderFormItemViewModel expectedItem2 = anOrderFormItemViewModel().withBloodGroup("B+").build();
@@ -188,7 +191,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withPermission("canDispatch", true).withPermission("canEdit", true).withPermission("canDelete", true)
-        .withOrderDate(orderDate).withId(1L)
+        .withOrderDate(orderDate).withId(orderFormId)
         .withItem(expectedItem1).withItem(expectedItem2).build();
 
     OrderFormItem item1 = anOrderItemForm().withBloodAbo("A").withBloodRh("+").build();
@@ -197,7 +200,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate)
-        .withId(1L).withOrderFormItem(item1).withOrderFormItem(item2).build();
+        .withId(orderFormId).withOrderFormItem(item1).withOrderFormItem(item2).build();
 
     // Setup mock
     when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
@@ -248,6 +251,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
     Location dispatchedFrom = getBaseDispatchedFromLocation();
     Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
+    UUID orderFormId = UUID.randomUUID();
 
     Component component = aComponent().withId(1L).withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(dispatchedFrom).build();
     InventoryViewModel inventoryViewModel = anInventoryViewModel().withId(1L)
@@ -256,14 +260,14 @@ public class OrderFormFactoryTests extends UnitTestSuite {
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withPermission("canDispatch", true).withPermission("canEdit", true).withPermission("canDelete", true)
-        .withOrderDate(orderDate).withId(1L)
+        .withOrderDate(orderDate).withId(orderFormId)
         .withComponent(inventoryViewModel).build();
 
     OrderForm entity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
         .withOrderDate(orderDate)
-        .withId(1L).withComponent(component).build();
+        .withId(orderFormId).withComponent(component).build();
     
     // Setup mock
     when(inventoryFactory.createViewModels(entity.getComponents())).thenReturn(expectedViewModel.getComponents());
@@ -283,16 +287,17 @@ public class OrderFormFactoryTests extends UnitTestSuite {
     Location dispatchedFrom = getBaseDispatchedFromLocation();
     Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
+    UUID orderFormId = UUID.randomUUID();
 
     OrderFormViewModel expectedViewModel = anOrderFormViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
-        .withOrderDate(orderDate).withId(1L).build();
+        .withOrderDate(orderDate).withId(orderFormId).build();
 
     OrderForm entity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
-        .withOrderDate(orderDate).withId(1L).build();
+        .withOrderDate(orderDate).withId(orderFormId).build();
 
     // Setup mock
     when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());
@@ -305,34 +310,37 @@ public class OrderFormFactoryTests extends UnitTestSuite {
   
   @Test
   public void testConvertEntitiesToOrderFormViewModels_shouldReturnExpectedViewModels() {
+    UUID uuid = UUID.randomUUID();
     Location dispatchedFrom = getBaseDispatchedFromLocation();
     Location dispatchedTo = getBaseDispatchedToLocation();
-    Patient patient = aPatient().withId(1L).build();
+    Patient patient = aPatient().withId(uuid).build();
     Date orderDate1 = new Date();
     Date orderDate2 = new Date();
-    PatientViewModel patientViewModel = aPatientViewModel().withId(1L).build();
+    PatientViewModel patientViewModel = aPatientViewModel().withId(uuid).build();
+    UUID orderFormId1 = UUID.randomUUID();
+    UUID orderFormId2 = UUID.randomUUID();
 
     OrderFormViewModel expectedViewModel1 = anOrderFormViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withPatient(patientViewModel)
-        .withOrderDate(orderDate1).withId(1L).build();
+        .withOrderDate(orderDate1).withId(orderFormId1).build();
     
     OrderFormViewModel expectedViewModel2 = anOrderFormViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
-        .withOrderDate(orderDate2).withId(2L).build();
+        .withOrderDate(orderDate2).withId(orderFormId2).build();
 
     OrderForm entity1 = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
-        .withOrderDate(orderDate1).withId(1L)
+        .withOrderDate(orderDate1).withId(orderFormId1)
         .withPatient(patient).build();
     
     OrderForm entity2 = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
-        .withOrderDate(orderDate2).withId(2L).build();
+        .withOrderDate(orderDate2).withId(orderFormId2).build();
     
     // Setup mock
     when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel1.getDispatchedFrom());
@@ -348,24 +356,26 @@ public class OrderFormFactoryTests extends UnitTestSuite {
   
   @Test
   public void testConvertPatientRequestEntitiesToOrderFormViewModel_shouldReturnExpectedViewModel() {
+    UUID uuid = UUID.randomUUID();
     Location dispatchedFrom = getBaseDispatchedFromLocation();
     Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate1 = new Date();
+    UUID orderFormId = UUID.randomUUID();
 
     OrderFormViewModel expectedViewModel =
         anOrderFormViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
         .withOrderType(OrderType.PATIENT_REQUEST)
-        .withPatient(aPatientViewModel().withId(1L).build())
-        .withOrderDate(orderDate1).withId(1L).build();
+        .withPatient(aPatientViewModel().withId(uuid).build())
+        .withOrderDate(orderDate1).withId(orderFormId).build();
 
     OrderForm entity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
-        .withOrderDate(orderDate1).withId(1L)
+        .withOrderDate(orderDate1).withId(orderFormId)
         .withOrderType(OrderType.PATIENT_REQUEST)
-        .withPatient(aPatient().withId(1L).build()).build();
+        .withPatient(aPatient().withId(uuid).build()).build();
     
     // Setup mock
     when(locationFactory.createFullViewModel(dispatchedFrom)).thenReturn(expectedViewModel.getDispatchedFrom());

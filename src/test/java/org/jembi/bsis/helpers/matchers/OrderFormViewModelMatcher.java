@@ -3,25 +3,22 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.OrderFormViewModel;
 
-public class OrderFormViewModelMatcher extends TypeSafeMatcher<OrderFormViewModel> {
-
-  private OrderFormViewModel expected;
+public class OrderFormViewModelMatcher extends AbstractTypeSafeMatcher<OrderFormViewModel> {
 
   public OrderFormViewModelMatcher(OrderFormViewModel expected) {
     this.expected = expected;
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("An order form view model with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nOrder Date: ").appendValue(expected.getOrderDate())
-        .appendText("\nDispatched From: ").appendValue(expected.getDispatchedFrom())
-        .appendText("\nDispatched To: ").appendValue(expected.getDispatchedTo())
-        .appendText("\nPatient: ").appendValue(expected.getPatient());
+  public void appendDescription(Description description, OrderFormViewModel orderFormViewModel) {
+    description.appendText("An OrderFormViewModel with the following state:")
+        .appendText("\nId: ").appendValue(orderFormViewModel.getId())
+        .appendText("\nOrder Date: ").appendValue(orderFormViewModel.getOrderDate())
+        .appendText("\nDispatched From: ").appendValue(orderFormViewModel.getDispatchedFrom())
+        .appendText("\nDispatched To: ").appendValue(orderFormViewModel.getDispatchedTo())
+        .appendText("\nPatient: ").appendValue(orderFormViewModel.getPatient());
   }
 
   @Override

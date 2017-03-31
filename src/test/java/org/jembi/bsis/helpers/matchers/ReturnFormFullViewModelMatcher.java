@@ -3,27 +3,24 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.ReturnFormFullViewModel;
 
-public class ReturnFormFullViewModelMatcher extends TypeSafeMatcher<ReturnFormFullViewModel> {
-
-  private ReturnFormFullViewModel expected;
+public class ReturnFormFullViewModelMatcher extends AbstractTypeSafeMatcher<ReturnFormFullViewModel> {
 
   public ReturnFormFullViewModelMatcher(ReturnFormFullViewModel expected) {
     this.expected = expected;
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("An order form entity with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nStatus: ").appendValue(expected.getStatus())
-        .appendText("\nReturn Date: ").appendValue(expected.getReturnDate())
-        .appendText("\nReturned From: ").appendValue(expected.getReturnedFrom())
-        .appendText("\nReturned To: ").appendValue(expected.getReturnedTo())
-        .appendText("\nComponents: ").appendValue(expected.getComponents())
-        .appendText("\nPermissions: ").appendValue(expected.getPermissions());
+  public void appendDescription(Description description, ReturnFormFullViewModel returnFormFullViewModel) {
+    description.appendText("An ReturnFormFullViewModel with the following state:")
+        .appendText("\nId: ").appendValue(returnFormFullViewModel.getId())
+        .appendText("\nStatus: ").appendValue(returnFormFullViewModel.getStatus())
+        .appendText("\nReturn Date: ").appendValue(returnFormFullViewModel.getReturnDate())
+        .appendText("\nReturned From: ").appendValue(returnFormFullViewModel.getReturnedFrom())
+        .appendText("\nReturned To: ").appendValue(returnFormFullViewModel.getReturnedTo())
+        .appendText("\nComponents: ").appendValue(returnFormFullViewModel.getComponents())
+        .appendText("\nPermissions: ").appendValue(returnFormFullViewModel.getPermissions());
   }
   
   @Override

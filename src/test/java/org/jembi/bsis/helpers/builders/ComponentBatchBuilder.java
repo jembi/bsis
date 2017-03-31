@@ -15,12 +15,13 @@ import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentbatch.ComponentBatchStatus;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.util.RandomTestDate;
 
 public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch> {
 
   private Long id;
-  private Date deliveryDate = new Date();
-  private Date collectionDate = new Date();
+  private Date deliveryDate = new RandomTestDate();
+  private Date collectionDate = new RandomTestDate();
   private Set<Component> components = new HashSet<>();
   private Set<BloodTransportBox> bloodTransportBoxes = new HashSet<>();
   private ComponentBatchStatus status = ComponentBatchStatus.OPEN;

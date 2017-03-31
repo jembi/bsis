@@ -3,34 +3,31 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.transfusion.Transfusion;
 
-public class TransfusionMatcher extends TypeSafeMatcher<Transfusion> {
-
-  private Transfusion expected;
+public class TransfusionMatcher extends AbstractTypeSafeMatcher<Transfusion> {
 
   public TransfusionMatcher(Transfusion expected) {
     this.expected = expected;
   }
   
   @Override
-  public void describeTo(Description description) {
-    description.appendText("A transfusion with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nDeleted: ").appendValue(expected.getIsDeleted())
-        .appendText("\nCreated By: ").appendValue(expected.getCreatedBy())
-        .appendText("\nCreated Date: ").appendValue(expected.getCreatedDate())
-        .appendText("\nLast Updated By: ").appendValue(expected.getLastUpdatedBy())
-        .appendText("\nLast Updated Date: ").appendValue(expected.getLastUpdated())
-        .appendText("\nPatient: ").appendValue(expected.getPatient())
-        .appendText("\nComponent: ").appendValue(expected.getComponent())
-        .appendText("\nNotes: ").appendValue(expected.getNotes())
-        .appendText("\nReceived From: ").appendValue(expected.getReceivedFrom())
-        .appendText("\ntTransfusion Reaction Type: ").appendValue(expected.getTransfusionReactionType())
-        .appendText("\nTransfusion Outcome: ").appendValue(expected.getTransfusionOutcome())
-        .appendText("\nDate Transfused: ").appendValue(expected.getDateTransfused())
-        .appendText("\nReaction Type: ").appendValue(expected.getTransfusionReactionType());
+  public void appendDescription(Description description, Transfusion transfusion) {
+    description.appendText("A Transfusion with the following state:")
+        .appendText("\nId: ").appendValue(transfusion.getId())
+        .appendText("\nDeleted: ").appendValue(transfusion.getIsDeleted())
+        .appendText("\nCreated By: ").appendValue(transfusion.getCreatedBy())
+        .appendText("\nCreated Date: ").appendValue(transfusion.getCreatedDate())
+        .appendText("\nLast Updated By: ").appendValue(transfusion.getLastUpdatedBy())
+        .appendText("\nLast Updated Date: ").appendValue(transfusion.getLastUpdated())
+        .appendText("\nPatient: ").appendValue(transfusion.getPatient())
+        .appendText("\nComponent: ").appendValue(transfusion.getComponent())
+        .appendText("\nNotes: ").appendValue(transfusion.getNotes())
+        .appendText("\nReceived From: ").appendValue(transfusion.getReceivedFrom())
+        .appendText("\ntTransfusion Reaction Type: ").appendValue(transfusion.getTransfusionReactionType())
+        .appendText("\nTransfusion Outcome: ").appendValue(transfusion.getTransfusionOutcome())
+        .appendText("\nDate Transfused: ").appendValue(transfusion.getDateTransfused())
+        .appendText("\nReaction Type: ").appendValue(transfusion.getTransfusionReactionType());
   }
   
   @Override

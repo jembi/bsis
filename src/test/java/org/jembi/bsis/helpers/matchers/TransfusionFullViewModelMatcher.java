@@ -3,29 +3,26 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.TransfusionFullViewModel;
 
-public class TransfusionFullViewModelMatcher extends TypeSafeMatcher<TransfusionFullViewModel> {
-
-  private TransfusionFullViewModel expected;
+public class TransfusionFullViewModelMatcher extends AbstractTypeSafeMatcher<TransfusionFullViewModel> {
 
   public TransfusionFullViewModelMatcher (TransfusionFullViewModel expected) {
     this.expected = expected;
   }
   
   @Override
-  public void describeTo(Description description) {
-    description.appendText("A transfusion view model with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nNotes: ").appendValue(expected.getNotes())
-        .appendText("\nDIN: ").appendValue(expected.getDonationIdentificationNumber())
-        .appendText("\nPatient: ").appendValue(expected.getPatient())
-        .appendText("\nReceived From: ").appendValue(expected.getReceivedFrom())
-        .appendText("\nTransfusion Reaction Type: ").appendValue(expected.getTransfusionReactionType())
-        .appendText("\nTransfusion Outcome: ").appendValue(expected.getTransfusionOutcome())
-        .appendText("\nDate Transfused: ").appendValue(expected.getDateTransfused())
-        .appendText("\nComponent: ").appendValue(expected.getComponent());
+  public void appendDescription(Description description, TransfusionFullViewModel transfusionFullViewModel) {
+    description.appendText("A TransfusionFullViewModel with the following state:")
+        .appendText("\nId: ").appendValue(transfusionFullViewModel.getId())
+        .appendText("\nNotes: ").appendValue(transfusionFullViewModel.getNotes())
+        .appendText("\nDIN: ").appendValue(transfusionFullViewModel.getDonationIdentificationNumber())
+        .appendText("\nPatient: ").appendValue(transfusionFullViewModel.getPatient())
+        .appendText("\nReceived From: ").appendValue(transfusionFullViewModel.getReceivedFrom())
+        .appendText("\nTransfusion Reaction Type: ").appendValue(transfusionFullViewModel.getTransfusionReactionType())
+        .appendText("\nTransfusion Outcome: ").appendValue(transfusionFullViewModel.getTransfusionOutcome())
+        .appendText("\nDate Transfused: ").appendValue(transfusionFullViewModel.getDateTransfused())
+        .appendText("\nComponent: ").appendValue(transfusionFullViewModel.getComponent());
   }
   
   @Override
