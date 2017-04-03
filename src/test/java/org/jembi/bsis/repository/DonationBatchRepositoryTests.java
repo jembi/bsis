@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.nullValue;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 
@@ -114,12 +115,10 @@ public class DonationBatchRepositoryTests extends ContextDependentTestSuite {
         .withDonationBatchDate(new DateTime().plusDays(7).toDate())
         .buildAndPersist(entityManager);
 
-    List<DonationBatch> expectedDonationBatches =
-        Arrays.asList(donationBatchDateInRange, anotherDonationBatchDateInRange);
-
     List<DonationBatch> returnedDonationBatches = donationBatchRepository.findDonationBatches(null, Collections.<Long>emptyList(), dateRangeStart, dateRangeEnd);
 
-    assertThat(returnedDonationBatches, is(expectedDonationBatches));
+    assertThat(returnedDonationBatches, hasItem(donationBatchDateInRange));
+    assertThat(returnedDonationBatches, hasItem(anotherDonationBatchDateInRange));
   }
 
 }
