@@ -113,4 +113,5 @@
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-donor.xml"/>
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-pack-type.xml"/>
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-PostDonationCounselling.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-PreferredLanguage.xml"/>
 </databaseChangeLog>
