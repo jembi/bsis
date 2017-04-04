@@ -27,7 +27,6 @@ import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -499,7 +498,6 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     assertThat(returnedPostDonationCounsellingList, is(expectedPostDonationCounsellingList));
   }
 
-  @Ignore
   @Test(expected = NoResultException.class)
   public void testFindFlaggedPostDonationCounsellingForDonorWithNoPostDonationCounselling_shouldThrow() {
 
@@ -508,7 +506,6 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     postDonationCounsellingRepository.findPostDonationCounsellingForDonor(donor.getId());
   }
 
-  @Ignore
   @Test
   public void testFindFlaggedPostDonationCounsellingForDonor_shouldReturnFirstFlaggedPostDonationCounsellingForDonor() {
 
@@ -558,8 +555,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
 
     assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
   }
-
-  @Ignore
+  
   @Test
   public void testCountFlaggedPostDonationCounsellingsForDonorWithNoPostDonationCounsellings_shouldReturnZero() {
 
@@ -570,7 +566,6 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     assertThat(returnedCount, is(0));
   }
 
-  @Ignore
   @Test
   public void testCountFlaggedPostDonationCounsellingsForDonor_shouldReturnCorrectCount() {
 
@@ -615,7 +610,6 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
     assertThat(returnedCount, is(2));
   }
 
-  @Ignore
   @Test
   public void testCountNotFlaggedPostDonationCounsellingsForDonor_shouldReturnCorrectCount() {
     Donor donor = aDonor().build();

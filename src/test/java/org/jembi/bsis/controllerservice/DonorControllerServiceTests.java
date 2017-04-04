@@ -24,8 +24,6 @@ import org.mockito.Mock;
 
 public class DonorControllerServiceTests extends UnitTestSuite {
   
- // private static final long DONOR_ID = 17L;
-
   @InjectMocks
   private DonorControllerService donorControllerService;
   @Mock

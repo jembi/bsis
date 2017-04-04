@@ -52,7 +52,6 @@ public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSu
     assertThat(returnedCount, is(1));
   }
   
-  @Ignore
   @Test
   public void testCountCurrentDonorDeferralsForDonor_shouldReturnCorrectCount() {
 
@@ -119,7 +118,6 @@ public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSu
     assertThat(returnedCount, is(2));
   }
 
-  @Ignore
   @Test
   public void testFindDonorDeferralsForDonorByDeferralReason_shouldReturnCorrectResults() {
 
@@ -158,7 +156,6 @@ public class DonorDeferralRepositoryTests extends SecurityContextDependentTestSu
     assertThat(returnedDeferrals, is(expectedDeferrals));
   }
 
-  @Ignore
   @Test
   public void testCountDonorDeferralsForDonorOnDate_shouldReturnCorrectResults() {
 

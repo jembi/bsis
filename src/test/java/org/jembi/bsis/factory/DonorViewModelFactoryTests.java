@@ -37,8 +37,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class DonorViewModelFactoryTests {
 
-  //private static final long IRRELEVANT_DONOR_ID = 865;
-
   @InjectMocks
   private DonorViewModelFactory donorViewModelFactory;
   @Mock
