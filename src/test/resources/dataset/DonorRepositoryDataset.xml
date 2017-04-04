@@ -195,8 +195,8 @@
                    deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" createdBy_id="1" 
                    deferredDonor_id="uuid'11e715ee-e76a-1733-9763-28f10e1b4906'" isVoided="false"/>
 
-    <PreferredLanguage id="1" preferredLanguage="English"/>
-    <PreferredLanguage id="2" preferredLanguage="English"/>
+    <PreferredLanguage id="uuid'11e71397-acc9-b7da-8cc5-34e6d78706f1'" preferredLanguage="English"/>
+    <PreferredLanguage id="uuid'11e71397-acc9-b7da-8cc5-34e6d78706f2'" preferredLanguage="English"/>
     <IdType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" idType="Passport" regExp=""/>
     <IdType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" idType="National ID" regExp=""/>  
 
