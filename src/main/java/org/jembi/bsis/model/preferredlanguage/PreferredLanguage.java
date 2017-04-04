@@ -9,14 +9,14 @@ package org.jembi.bsis.model.preferredlanguage;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import org.jembi.bsis.model.BaseUUIDEntity;
+import org.jembi.bsis.model.BaseEntity;
 
 /**
  * Entity that defines the various languages that can be selected as the Donor's preferred
  * language.
  */
 @Entity
-public class PreferredLanguage extends BaseUUIDEntity {
+public class PreferredLanguage extends BaseEntity {
 
   private static final long serialVersionUID = 1L;
 

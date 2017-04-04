@@ -1,15 +1,13 @@
 package org.jembi.bsis.helpers.builders;
 
-import java.util.UUID;
-
 import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
 
 public class PreferredLanguageBuilder extends AbstractEntityBuilder<PreferredLanguage> {
 
-  private UUID id;
+  private Long id;
   private String language;
 
-  public PreferredLanguageBuilder withId(UUID id) {
+  public PreferredLanguageBuilder withId(Long id) {
     this.id = id;
     return this;
   }
