@@ -1,5 +1,7 @@
 package org.jembi.bsis.service;
 
+import java.util.UUID;
+
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.model.donor.Donor;
@@ -17,7 +19,7 @@ public class DonorCRUDService {
   @Autowired
   private DonorConstraintChecker donorConstraintChecker;
 
-  public void deleteDonor(long donorId) throws IllegalStateException, NoResultException {
+  public void deleteDonor(UUID donorId) throws IllegalStateException, NoResultException {
 
     if (!donorConstraintChecker.canDeleteDonor(donorId)) {
       throw new IllegalStateException("Cannot delete donor with constraints");

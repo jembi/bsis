@@ -823,7 +823,7 @@ public class DonationBackingFormValidatorTest {
         .withDonations(new ArrayList<Donation>())
         .build();
     
-    Donor donor = DonorBuilder.aDonor().withId(1L).withFirstName("David").withLastName("Smith").withDonorNumber("DN123").build();
+    Donor donor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("David").withLastName("Smith").withDonorNumber("DN123").build();
     
     DonationBackingForm form = new DonationBackingForm();
     form.setDonorNumber("DN123");

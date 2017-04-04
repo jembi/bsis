@@ -86,8 +86,9 @@ public class DonationFactoryTests {
   @Test
   public void testCreateEntity_shouldReturnCorrectEntity() {
     // Set up data
+    UUID donorId = UUID.randomUUID();
     AdverseEventBackingForm adverseEventForm = anAdverseEventBackingForm().build();
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(donorId).build();
     PackType packType = PackTypeBuilder.aPackType().withId(1L).build();
     DonationBackingForm donationForm = aDonationBackingForm()
         .withAdverseEvent(adverseEventForm)
@@ -104,7 +105,7 @@ public class DonationFactoryTests {
 
     // Set up mocks
     when(packTypeRepository.getPackTypeById(1L)).thenReturn(packType);
-    when(donorRepository.findDonorById(1L)).thenReturn(donor);
+    when(donorRepository.findDonorById(donorId)).thenReturn(donor);
     when(adverseEventFactory.createEntity(adverseEventForm)).thenReturn(adverseEvent);
 
     // Run test
@@ -125,6 +126,7 @@ public class DonationFactoryTests {
 
     UUID irrelevantAdverseEventId = UUID.randomUUID();
     UUID donationTypeId = UUID.randomUUID();
+    UUID irrelevantDonorId = UUID.randomUUID();
     
     Date donationDate = new Date();
     String donationIdentificationNumber = "0000001";
@@ -151,7 +153,7 @@ public class DonationFactoryTests {
     AdverseEvent adverseEvent = anAdverseEvent().withId(irrelevantAdverseEventId).build();
 
     Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID)
-        .withDonor(aDonor().withId(IRRELEVANT_DONOR_ID).withDonorNumber(donorNumber).build())
+        .withDonor(aDonor().withId(irrelevantDonorId).withDonorNumber(donorNumber).build())
         .withDonationBatch(aDonationBatch().thatIsBackEntry().withBatchNumber(batchNumber).build())
         .withAdverseEvent(adverseEvent)
         .withPackType(packType)
@@ -215,7 +217,7 @@ public class DonationFactoryTests {
     when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanDeletePermission);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(irrelevantCanUpdatePermission);
     when(donationConstraintChecker.canEditPackType(donation)).thenReturn(irrelevantCanEditPackTypePermission);
-    when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(irrelevantCanDonatePermission);
+    when(donorConstraintChecker.isDonorEligibleToDonate(irrelevantDonorId)).thenReturn(irrelevantCanDonatePermission);
     when(adverseEventFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
     when(locationFactory.createViewModel(venue)).thenReturn(venueViewModel);
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
@@ -232,20 +234,22 @@ public class DonationFactoryTests {
 
     UUID irrelevantAdverseEventId = UUID.randomUUID();
     UUID donationTypeId = UUID.randomUUID();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    UUID anotherIrrelevantDonorId = UUID.randomUUID();
 
     AdverseEvent adverseEvent = anAdverseEvent().withId(irrelevantAdverseEventId).build();
     PackType packType = aPackType().withId(IRRELEVANT_PACKTYPE_ID).build();
     PackTypeFullViewModel packTypeFullViewModel = aPackTypeViewFullModel().withId(IRRELEVANT_PACKTYPE_ID).build();
     DonationType donationType = aDonationType().withId(donationTypeId).build();
     Donation donation1 = aDonation().withId(IRRELEVANT_DONATION_ID)
-        .withDonor(aDonor().withId(IRRELEVANT_DONOR_ID).build())
+        .withDonor(aDonor().withId(irrelevantDonorId).build())
         .withDonationBatch(aDonationBatch().thatIsBackEntry().build())
         .withAdverseEvent(adverseEvent)
         .withPackType(packType)
         .withDonationType(donationType)
         .build();
     Donation donation2 = aDonation().withId(ANOTHER_IRRELEVANT_DONATION_ID)
-        .withDonor(aDonor().withId(ANOTHER_IRRELEVANT_DONOR_ID).build())
+        .withDonor(aDonor().withId(anotherIrrelevantDonorId).build())
         .withDonationBatch(aDonationBatch().build())
         .withPackType(packType)
         .withDonationType(donationType)
@@ -280,14 +284,14 @@ public class DonationFactoryTests {
     when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(donation1)).thenReturn(true);
-    when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(true);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONATION_ID)).thenReturn(false);
+    when(donorConstraintChecker.isDonorEligibleToDonate(irrelevantDonorId)).thenReturn(true);
+    when(donorConstraintChecker.isDonorDeferred(irrelevantDonorId)).thenReturn(false);
     when(adverseEventFactory.createAdverseEventViewModel(adverseEvent)).thenReturn(adverseEventViewModel);
     when(donationConstraintChecker.canDeleteDonation(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditBleedTimes(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(donation2)).thenReturn(false);
-    when(donorConstraintChecker.isDonorEligibleToDonate(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
-    when(donorConstraintChecker.isDonorDeferred(ANOTHER_IRRELEVANT_DONATION_ID)).thenReturn(true);
+    when(donorConstraintChecker.isDonorEligibleToDonate(anotherIrrelevantDonorId)).thenReturn(true);
+    when(donorConstraintChecker.isDonorDeferred(anotherIrrelevantDonorId)).thenReturn(true);
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
     when(donationTypeFactory.createViewModel(donationType)).thenReturn(donationTypeViewModel);
 

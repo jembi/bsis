@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.factory.BloodTestingRuleResultViewModelFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
@@ -588,7 +589,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
 
     // Setup existing test results for that donation
@@ -627,7 +628,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).build();
 
     // Setup existing test results for that donation
@@ -664,7 +665,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).withBloodAbo("B").withBloodRh("+").build();
 
     // Setup existing test results for that donation
@@ -703,7 +704,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
 
     // Setup existing test results for that donation
@@ -745,7 +746,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
 
     // Setup existing test results for that donation
@@ -787,7 +788,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
 
     // Setup existing test results for that donation
@@ -829,7 +830,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)

@@ -30,7 +30,7 @@ import org.springframework.validation.MapBindingResult;
 public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   
   private static final Date DEFERRED_UNTIL = new DateTime().plusDays(1).toDate();
-  private static final Long DEFERRED_DONOR_ID = 88L;
+  private static final UUID DEFERRED_DONOR_ID = UUID.randomUUID();
   private static final UUID DEFERRAL_REASON_ID = UUID.randomUUID();
   
   @InjectMocks

@@ -1,12 +1,14 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.DonorBackingForm;
 
 public class DonorBackingFormBuilder {
 
-  private Long id;
+  private UUID id;
 
-  public DonorBackingFormBuilder withId(Long id) {
+  public DonorBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

@@ -29,6 +29,7 @@ import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.address.Address;
 import org.jembi.bsis.model.address.AddressType;
 import org.jembi.bsis.model.address.Contact;
@@ -62,7 +63,7 @@ import org.jembi.bsis.utils.DonorUtils;
 })
 @Entity
 @Audited
-public class Donor extends BaseModificationTrackerEntity {
+public class Donor extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

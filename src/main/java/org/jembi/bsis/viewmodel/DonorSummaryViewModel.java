@@ -1,6 +1,7 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.DonorRepository;
@@ -11,7 +12,7 @@ import org.jembi.bsis.utils.CustomDateFormatter;
  */
 public class DonorSummaryViewModel {
 
-  private long id;
+  private UUID id;
   private String firstName;
   private String lastName;
   private Gender gender;
@@ -28,7 +29,7 @@ public class DonorSummaryViewModel {
    *
    * @see {@link DonorRepository#findDonorSummaryByDonorNumber(String)}
    */
-  public DonorSummaryViewModel(long id, String firstName, String lastName, Gender gender, Date birthDate) {
+  public DonorSummaryViewModel(UUID id, String firstName, String lastName, Gender gender, Date birthDate) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -36,11 +37,11 @@ public class DonorSummaryViewModel {
     this.birthDate = birthDate;
   }
 
-  public long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

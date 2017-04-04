@@ -48,7 +48,7 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         .intValue();
   }
 
-  public int countCurrentDonorDeferralsForDonor(long donorId) {
+  public int countCurrentDonorDeferralsForDonor(UUID donorId) {
 
     return entityManager.createNamedQuery(
         DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
@@ -61,7 +61,7 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         .intValue();
   }
 
-  public int countDonorDeferralsForDonorOnDate(long donorId, Date date) {
+  public int countDonorDeferralsForDonorOnDate(UUID donorId, Date date) {
 
     return entityManager.createNamedQuery(
         DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,

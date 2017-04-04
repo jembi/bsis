@@ -1,6 +1,7 @@
 package org.jembi.bsis.controllerservice;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.factory.DonorDeferralFactory;
@@ -24,12 +25,12 @@ public class DonorControllerService {
   @Autowired
   private DonorDeferralFactory donorDeferralFactory;
   
-  public List<DonationViewModel> findDonationsForDonor(long donorId) {
+  public List<DonationViewModel> findDonationsForDonor(UUID donorId) {
     Donor donor = donorRepository.findDonorById(donorId);
     return donationFactory.createDonationViewModelsWithPermissions(donor.getDonations());
   }
 
-  public DonorDeferralViewModel getLastDeferral(long donorId) {
+  public DonorDeferralViewModel getLastDeferral(UUID donorId) {
     DonorDeferral lastDonorDeferral = donorRepository.getLastDonorDeferral(donorId);
     if (lastDonorDeferral != null) {
       return donorDeferralFactory.createDonorDeferralViewModel(lastDonorDeferral);

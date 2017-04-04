@@ -62,7 +62,7 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
 
     // create test data
     UUID donorDeferralId = UUID.randomUUID();
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("Sample").withLastName("Donor").build();
     DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(donorDeferralId)
         .withDeferralDate(new Date())
         .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
@@ -94,7 +94,7 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
     UUID donorDeferralId1 = UUID.randomUUID();
     UUID donorDeferralId2 = UUID.randomUUID();
     UUID donorDeferralId3 = UUID.randomUUID();
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("Sample").withLastName("Donor").build();
     List<DonorDeferral> donorDeferrals = new ArrayList<DonorDeferral>();
     DonorDeferral donorDeferral1 = DonorDeferralBuilder.aDonorDeferral().withId(donorDeferralId1)
         .withDeferralDate(new Date())
@@ -138,8 +138,9 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
     Date deferredUntilDate = new Date();
     String deferralReasonText = "testing123";
     UUID deferralReasonId = UUID.randomUUID();
+    UUID donorId = UUID.randomUUID();
     
-    DonorBackingForm donorForm = aDonorBackingForm().withId(1L).build();
+    DonorBackingForm donorForm = aDonorBackingForm().withId(donorId).build();
     LocationBackingForm locationForm = aVenueBackingForm().withId(1L).build();
     DeferralReasonBackingForm deferralReasonForm = aDeferralReasonBackingForm().withId(deferralReasonId).build();
 
@@ -167,7 +168,7 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
     
     // set up mocks
     when(deferralReasonRepository.getDeferralReasonById(deferralReasonId)).thenReturn(deferralReason);
-    when(donorRepository.findDonorById(1L)).thenReturn(donor);
+    when(donorRepository.findDonorById(donorId)).thenReturn(donor);
     when(locationRepository.getLocation(1L)).thenReturn(location);
     
     // run test

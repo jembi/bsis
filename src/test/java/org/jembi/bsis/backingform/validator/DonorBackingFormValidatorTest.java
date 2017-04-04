@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DonorBackingForm;
 import org.jembi.bsis.helpers.builders.FormFieldBuilder;
@@ -49,7 +50,7 @@ public class DonorBackingFormValidatorTest {
     preferredLanguage.setPreferredLanguage("English");
     Date validBirthDate = CustomDateFormatter.getDateFromString("1977-10-20");
     DonorBackingForm donorForm = new DonorBackingForm();
-    donorForm.setId(1l);
+    donorForm.setId(UUID.randomUUID());
     donorForm.setBirthDate(validBirthDate);
     donorForm.setDonorNumber("DIN123");
     donorForm.setFirstName("First");
@@ -82,7 +83,7 @@ public class DonorBackingFormValidatorTest {
     DonorBackingForm donorForm = getBaseDonorBackingForm();
 
     Donor donor = new Donor();
-    donor.setId(2l);
+    donor.setId(UUID.randomUUID());
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("donor")).thenReturn(Arrays.asList(requiredFields));
@@ -104,7 +105,7 @@ public class DonorBackingFormValidatorTest {
     donorForm.setDonorNumber("");
 
     Donor donor = new Donor();
-    donor.setId(2l);
+    donor.setId(UUID.randomUUID());
 
     FormField donorNumberFormField = FormFieldBuilder.aFormField().withAutoGenerate(true).build();
 

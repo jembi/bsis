@@ -147,7 +147,7 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testFindDeferralById() throws Exception {
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
         .withType(DeferralReasonType.NORMAL).build();
     DonorDeferral donorDeferral =
@@ -168,7 +168,7 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testDeleteDeferral() throws Exception {
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
         .withType(DeferralReasonType.NORMAL).build();
     DonorDeferral donorDeferral =
@@ -210,7 +210,7 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateDeferral_shouldUpdateCorrectly() throws Exception {
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason originalDeferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
         .withType(DeferralReasonType.NORMAL).withReason("test1").build();
     Date createdDate = new Date();
@@ -240,7 +240,7 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testEndDeferral() throws Exception {
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("Sample").withLastName("Donor").build();
     Date newDeferredUntil = new SimpleDateFormat("yyyy-MM-dd").parse("2020-10-20");
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
         .withType(DeferralReasonType.NORMAL).withReason("test2").build();
@@ -263,7 +263,7 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
   @Test(expected = java.lang.IllegalStateException.class)
   public void testEndDeferralWithConstraints() throws Exception {
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("Sample").withLastName("Donor").build();
     Date newDeferredUntil = new SimpleDateFormat("yyyy-MM-dd").parse("2020-10-20");
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
         .withType(DeferralReasonType.NORMAL).withReason("test2").build();

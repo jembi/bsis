@@ -33,14 +33,14 @@ public class FormFieldRepositoryTest extends DBUnitContextDependentTestSuite {
     return null;
   }
 
-  @Test
+  @Test()
   public void testFindFormFieldById() throws Exception {
     FormField one = formFieldRepository.findFormFieldById(1l);
     Assert.assertNotNull("There is a FormField with id 1", one);
     Assert.assertEquals("The Form field matches what was expected", "Donor", one.getForm());
   }
 
-  @Test
+  @Test()
   public void testFindFormFieldByIdUnknown() throws Exception {
     FormField one = formFieldRepository.findFormFieldById(1111l);
     Assert.assertNull("There is no FormField with id 1111", one);

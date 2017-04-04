@@ -34,7 +34,8 @@ public class DeferralConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanEditDonorDeferral() {
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    UUID donorId = UUID.randomUUID();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(donorId).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
         .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
     DonorDeferral donorDeferral =
@@ -54,7 +55,8 @@ public class DeferralConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanEditDonorDeferralTemporary() {
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    UUID donorId = UUID.randomUUID();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(donorId).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
         .withType(DeferralReasonType.NORMAL).build();
     DonorDeferral donorDeferral =
@@ -74,7 +76,8 @@ public class DeferralConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanEditDonorDeferralPermanent() {
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    UUID donorId = UUID.randomUUID();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(donorId).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
         .withType(DeferralReasonType.NORMAL).build();
     DonorDeferral donorDeferral =
@@ -95,8 +98,9 @@ public class DeferralConstraintCheckerTests extends UnitTestSuite {
   public void testCanEndDonorDeferral() {
     // create test data
     Calendar deferralEndDate = Calendar.getInstance();
+    UUID donorId = UUID.randomUUID();
     deferralEndDate.add(Calendar.DAY_OF_YEAR, 90);
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(donorId).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
         .withType(DeferralReasonType.AUTOMATED_TTI_UNSAFE).build();
     DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(DONOR_DEFERRAL_ID)
@@ -118,8 +122,9 @@ public class DeferralConstraintCheckerTests extends UnitTestSuite {
   public void testCanEndDonorDeferralTemporary() {
     // create test data
     Calendar deferralEndDateCal = Calendar.getInstance();
+    UUID donorId = UUID.randomUUID();
     deferralEndDateCal.add(Calendar.DAY_OF_YEAR, 90);
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(donorId).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
         .withType(DeferralReasonType.NORMAL).build();
     DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(DONOR_DEFERRAL_ID)
@@ -141,8 +146,9 @@ public class DeferralConstraintCheckerTests extends UnitTestSuite {
   public void testCanEndDonorDeferralTemporaryThatsOver() {
     // create test data
     Calendar deferralEndDate = Calendar.getInstance();
+    UUID donorId = UUID.randomUUID();
     deferralEndDate.add(Calendar.DAY_OF_YEAR, -90);
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(donorId).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.TEMPORARY)
         .withType(DeferralReasonType.NORMAL).build();
     DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(DONOR_DEFERRAL_ID)
@@ -165,7 +171,9 @@ public class DeferralConstraintCheckerTests extends UnitTestSuite {
     // create test data
     Calendar deferralEndDate = Calendar.getInstance();
     deferralEndDate.add(Calendar.DAY_OF_YEAR, 90);
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    UUID donorId = UUID.randomUUID();
+    
+    Donor deferredDonor = DonorBuilder.aDonor().withId(donorId).withFirstName("Sample").withLastName("Donor").build();
     DeferralReason deferralReason = DeferralReasonBuilder.aDeferralReason().withDurationType(DurationType.PERMANENT)
         .withType(DeferralReasonType.NORMAL).build();
     DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(DONOR_DEFERRAL_ID)

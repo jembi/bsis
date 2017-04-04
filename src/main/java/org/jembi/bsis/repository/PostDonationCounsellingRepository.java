@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -41,7 +42,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
         .getResultList();
   }
 
-  public PostDonationCounselling findPostDonationCounsellingForDonor(Long donorId) throws NoResultException {
+  public PostDonationCounselling findPostDonationCounsellingForDonor(UUID donorId) throws NoResultException {
 
     return entityManager.createNamedQuery(
         PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONOR,
@@ -52,7 +53,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
         .getSingleResult();
   }
 
-  public int countFlaggedPostDonationCounsellingsForDonor(Long donorId) {
+  public int countFlaggedPostDonationCounsellingsForDonor(UUID donorId) {
 
     return entityManager.createNamedQuery(
         PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
@@ -64,7 +65,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
         .intValue();
   }
 
-  public int countNotFlaggedPostDonationCounsellingsForDonor(Long donorId) {
+  public int countNotFlaggedPostDonationCounsellingsForDonor(UUID donorId) {
 
     return entityManager.createNamedQuery(
         PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,

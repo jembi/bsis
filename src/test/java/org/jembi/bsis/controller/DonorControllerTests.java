@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -76,8 +77,8 @@ public class DonorControllerTests extends UnitTestSuite {
   public void testFindDonorsWithDonationIdentificationNumber_shouldFindDonorByDonationIdentificationNumber() {
     // Set up
     String donationIdentificationNumber = "1000001";
-    Donor donor = aDonor().withId(2L).build();
-    List<DonorSummaryViewModel> donorViewModels = Arrays.asList(aDonorSummaryViewModel().withId(2L).build());
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
+    List<DonorSummaryViewModel> donorViewModels = Arrays.asList(aDonorSummaryViewModel().withId(UUID.randomUUID()).build());
     
     when(donorRepository.findDonorByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(donor);
     when(donorViewModelFactory.createDonorSummaryViewModels(Arrays.asList(donor))).thenReturn(donorViewModels);

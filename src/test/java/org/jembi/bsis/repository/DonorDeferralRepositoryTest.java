@@ -55,7 +55,8 @@ public class DonorDeferralRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testCountDonorDeferralsForDonor() {
-    Donor donor = donorRepository.findDonorById(1l);
+    UUID donorId = UUID.fromString("11e7161c-b6f7-8931-8b6b-28f10e1b4951");
+    Donor donor = donorRepository.findDonorById(donorId);
     int count = donorDeferralRepository.countDonorDeferralsForDonor(donor);
     Assert.assertEquals("Donor has 2 deferrals", 2, count);
   }

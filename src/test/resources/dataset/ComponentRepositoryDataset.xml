@@ -17,7 +17,7 @@
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'"/>
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'"/>
     <PreferredLanguage id="1" preferredLanguage="English"/>
-    <Donor id="1" birthDate="1979-09-20" bloodAbo="" bloodRh=""
+    <Donor id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4921'" birthDate="1979-09-20" bloodAbo="" bloodRh=""
            dateOfLastDonation="2015-08-11 09:05:56.0" donorHash="0e17076f53dbb49ff3678eee94bb9f70"
            donorNumber="000001" donorStatus="NORMAL" firstName="John" gender="male"
            isDeleted="false" lastName="Smith" createdDate="2015-08-11 09:05:10.0"
@@ -25,14 +25,14 @@
            lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
            preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
            dueToDonate="2015-11-09"/>
-    <Donor id="2" birthDate="1977-08-22" bloodAbo="A" bloodRh="-"
+    <Donor id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4922'" birthDate="1977-08-22" bloodAbo="A" bloodRh="-"
            dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000002"
            donorStatus="NORMAL" firstName="Raymond" gender="male" isDeleted="false"
            lastName="Smith" createdDate="2015-08-11 07:53:29.0" lastUpdated="2015-08-11 07:53:57.0"
            createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
            preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"
            dueToDonate="2015-11-09"/>
-    <Donor id="3" birthDate="1983-06-03" bloodAbo="O" bloodRh="-"
+    <Donor id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4923'" birthDate="1983-06-03" bloodAbo="O" bloodRh="-"
            dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000003"
            donorStatus="NORMAL" firstName="Rosemarie" gender="female" isDeleted="false"
            lastName="Billens" createdDate="2015-08-11 07:53:29.0"
@@ -40,7 +40,7 @@
            createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
            preferredLanguage_id="1" title="Mrs" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"
            dueToDonate="2015-11-09"/>
-    <Donor id="4" birthDate="1983-06-03" bloodAbo="AB" bloodRh="+"
+    <Donor id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4924'" birthDate="1983-06-03" bloodAbo="AB" bloodRh="+"
            dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000004"
            donorStatus="NORMAL" firstName="Carl" gender="male" isDeleted="false"
            lastName="Lombard" createdDate="2015-08-11 07:53:29.0"
@@ -48,7 +48,7 @@
            createdBy_id="1" lastUpdatedBy_id="1" dateOfFirstDonation="2015-08-11"
            preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'"
            dueToDonate="2015-11-09"/>
-    <Donor id="5" birthDate="1965-06-03" bloodAbo="AB" bloodRh="+"
+    <Donor id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4925'" birthDate="1965-06-03" bloodAbo="AB" bloodRh="+"
            dateOfLastDonation="2015-08-11 00:00:00.0" donorNumber="000005"
            donorStatus="NORMAL" firstName="Brendan" gender="male" isDeleted="false"
            lastName="Fassie" createdDate="2015-08-11 07:53:29.0" lastUpdated="2015-08-11 07:53:57.0"
@@ -88,7 +88,7 @@
               donationIdentificationNumber="1111111" donorWeight="85.00" isDeleted="false"
               createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
               ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-              donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="1" createdBy_id="1" lastUpdatedBy_id="1"
+              donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4921'" createdBy_id="1" lastUpdatedBy_id="1"
               venue_id="1" bleedStartTime="2015-08-11 09:06:11.0"
               bleedEndTime="2015-08-11 09:16:11.0"
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
@@ -96,7 +96,7 @@
               donationIdentificationNumber="22222222" donorWeight="85.00" isDeleted="false"
               createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
               ttiStatus="TTI_SAFE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-              donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="2" createdBy_id="1" lastUpdatedBy_id="1"
+              donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4922'" createdBy_id="1" lastUpdatedBy_id="1"
               venue_id="1" bleedStartTime="2015-08-11 09:06:11.0"
               bleedEndTime="2015-08-11 09:16:11.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
@@ -104,7 +104,8 @@
               donationDate="2015-08-11 09:05:56.0" donationIdentificationNumber="3333333"
               donorWeight="55.00" isDeleted="false" createdDate="2015-08-11 09:06:27.0"
               lastUpdated="2015-08-11 09:06:27.0" ttiStatus="NOT_DONE"
-              packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="3"
+              packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" 
+              donor_id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4923'"
               createdBy_id="1" lastUpdatedBy_id="1" venue_id="1"
               bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
@@ -112,7 +113,8 @@
               donationIdentificationNumber="4444444"
               isDeleted="0" createdDate="2015-08-11 07:53:57.0" lastUpdated="2015-08-11 04:43:20.0"
               ttiStatus="NOT_DONE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-              donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="4" createdBy_id="1" lastUpdatedBy_id="1"
+              donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4924'" 
+              createdBy_id="1" lastUpdatedBy_id="1"
               venue_id="1" bleedStartTime="2015-08-11 14:53:37.0"
               bleedEndTime="2015-08-11 14:53:37.0"
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
@@ -120,7 +122,7 @@
               donationIdentificationNumber="55555555" donorWeight="85.00" isDeleted="false"
               createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
               ttiStatus="TTI_UNSAFE" packType_id="1" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-              donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="5" createdBy_id="1" lastUpdatedBy_id="1"
+              donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4925'" createdBy_id="1" lastUpdatedBy_id="1"
               venue_id="1" bleedStartTime="2015-08-11 09:06:11.0"
               bleedEndTime="2015-08-11 09:16:11.0"
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>

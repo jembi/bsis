@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
@@ -67,7 +68,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
 
     boolean canRemoveStatus = true;
-    long donorId = 21L;
+    UUID donorId = UUID.randomUUID();
     long donationId = 87L;
     long postDonationCounsellingId = 32L;
     long referralSiteId = 12L;
@@ -116,7 +117,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsFalse() {
 
     boolean canRemoveStatus = false;
-    long donorId = 21L;
+    UUID donorId = UUID.randomUUID();
     long donationId = 87L;
     long postDonationCounsellingId = 32L;
     
@@ -156,7 +157,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateViewModelWithReceivedCounsellingStatus_shouldReturnCorrectViewModel() {
 
-    long donorId = 21L;
+    UUID donorId = UUID.randomUUID();
     long donationId = 87L;
     long postDonationCounsellingId = 32L;
     Date counsellingDate = new Date();
@@ -204,7 +205,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateViewModelWithRefusedCounsellingStatus_shouldReturnCorrectViewModel() {
 
-    long donorId = 21L;
+    UUID donorId = UUID.randomUUID();
     long donationId = 87L;
     long postDonationCounsellingId = 32L;
     CounsellingStatus counsellingStatus = CounsellingStatus.REFUSED_COUNSELLING;
@@ -313,7 +314,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateSummaryViewModels_shouldReturnCorrectViewModels() {
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling entity1 = aPostDonationCounselling().withId(1L).withDonation(donation).build();
     PostDonationCounselling entity2 = aPostDonationCounselling().withId(2L).withDonation(donation).build();
@@ -333,7 +334,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModel_shouldReturnCorrectViewModel() {
     Donor donor = aDonor()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonorNumber("123456")
         .withBirthDate(new Date())
         .withGender(Gender.female)
@@ -390,7 +391,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereReferredIsNull_shouldSetReferredToEmpty() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
         .withId(1L)
@@ -407,7 +408,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereReferredIsTrue_shouldSetReferredToY() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
         .withId(1L)
@@ -424,7 +425,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereReferredIsFalse_shouldSetReferredToN() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
         .withId(1L)
@@ -441,7 +442,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereStatusIsNull_shouldSetCouselledToEmpty() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
         .withId(1L)
@@ -458,7 +459,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereStatusIsReceivedCounselling_shouldSetCouselledToY() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
         .withId(1L)
@@ -475,7 +476,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereStatusIsRefusedCounselling_shouldSetCouselledToR() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
         .withId(1L)
@@ -492,7 +493,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereStatusIsDidNotReceiveCounselling_shouldSetCouselledToN() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
         .withId(1L)

@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -75,7 +76,7 @@ public class DonorBackingForm {
     return donor.equals(obj);
   }
 
-  public Long getId() {
+  public UUID getId() {
     return donor.getId();
   }
 
@@ -165,7 +166,7 @@ public class DonorBackingForm {
     return donor.hashCode();
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     donor.setId(id);
   }
 

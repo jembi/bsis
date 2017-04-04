@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.dbunit.dataset.IDataSet;
@@ -249,6 +250,7 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
     long[] id = {1, 3};
     //Search with  BloodGroup 'A+' and 'O+'
     String[] bloodGroupStrArray = {"A+", "O+"};
+    UUID donorId = UUID.fromString("11e715ee-e76a-1cfd-9763-28f10e1b490f5");
 
     //Specify date of last donation period
     String lastDonationFromDate = "";
@@ -265,10 +267,10 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
         lastDonationToDate, bloodGroups, anyBloodGroup, noBloodGroup, pagingParams, clinicDate);
 
     for (Donor donor : donors) {
-      // Donor with ID=5 is set as deleted
+      // Donor with ID = donorId is set as deleted
       assertFalse(
           "Deleted Donor should not be included in the list of donor results.",
-          donor.getId() == 5 ? true : false);
+          donor.getId() == donorId ? true : false);
       assertFalse("Donors included in the list of donor results should not be marked as deleted.",
           donor.getIsDeleted());
     }
@@ -276,12 +278,13 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
 
   @Test
   public void findDonors_shouldNotReturnMergedDonors() throws ParseException {
+    UUID donorId = UUID.fromString("11e715ee-e76a-1cfd-9763-28f10e1b490f6");
     List<Donor> donors = donorCommunicationsRepository.findDonors(createVenueList(new long[]{1, 3}), "", "", "",
         createBloodGroupList(new String[]{"A+", "O+"}), false, false, createPagingParamsMap(), "");
 
     for (Donor donor : donors) {
       // Donor with ID=6 is set as status merged
-      assertFalse("Merged Donor should not be included in the list of donor results.", donor.getId() == 6 ? true
+      assertFalse("Merged Donor should not be included in the list of donor results.", donor.getId() == donorId ? true
           : false);
       assertFalse("Donors included in the list of donor results should not be merged.",
           donor.getDonorStatus() == DonorStatus.MERGED);

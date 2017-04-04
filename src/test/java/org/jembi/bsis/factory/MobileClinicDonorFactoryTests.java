@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
@@ -44,8 +45,10 @@ public class MobileClinicDonorFactoryTests {
   public void testCreateMobileClinicDonor() throws Exception {
     Location venue = LocationBuilder.aLocation().withName("test").build();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    UUID donorId = UUID.randomUUID();
+    
     MobileClinicDonorDTO donor = MobileClinicDonorBuilder.aMobileClinicDonor()
-        .withId(1L)
+        .withId(donorId)
         .withDonorNumber("D1")
         .withFirstName("Test")
         .withLastName("DonorOne")
@@ -75,8 +78,11 @@ public class MobileClinicDonorFactoryTests {
   public void testCreateMobileClinicDonors() throws Exception {
     Location venue = LocationBuilder.aLocation().withName("test").build();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    UUID donorId1 = UUID.randomUUID();
+    UUID donorId2 = UUID.randomUUID();
+    
     MobileClinicDonorDTO donor1 = MobileClinicDonorBuilder.aMobileClinicDonor()
-        .withId(1L)
+        .withId(donorId1)
         .withDonorNumber("D1")
         .withFirstName("Test")
         .withLastName("DonorOne")
@@ -87,7 +93,7 @@ public class MobileClinicDonorFactoryTests {
         .thatIsNotDeleted()
         .build();
     MobileClinicDonorDTO donor2 = MobileClinicDonorBuilder.aMobileClinicDonor()
-        .withId(2L)
+        .withId(donorId2)
         .withDonorNumber("D2")
         .withFirstName("Test")
         .withLastName("DonorTwo")
@@ -104,8 +110,8 @@ public class MobileClinicDonorFactoryTests {
 
     Date mobileClinicDate = new Date();
 
-    when(donorConstraintChecker.isDonorEligibleToDonateOnDate(1L, mobileClinicDate)).thenReturn(true);
-    when(donorConstraintChecker.isDonorEligibleToDonateOnDate(2L, mobileClinicDate)).thenReturn(true);
+    when(donorConstraintChecker.isDonorEligibleToDonateOnDate(donorId1, mobileClinicDate)).thenReturn(true);
+    when(donorConstraintChecker.isDonorEligibleToDonateOnDate(donorId2, mobileClinicDate)).thenReturn(true);
 
     List<MobileClinicLookUpDonorViewModel> returnedViewModels = mobileClinicDonorModelFactory.createMobileClinicDonorViewModels(donors, mobileClinicDate);
 
@@ -123,7 +129,7 @@ public class MobileClinicDonorFactoryTests {
   @Test
   public void testCreateMobileClinicExportDonorViewModel_shouldReturnViewModelWithTheCorrectState() throws Exception {
 
-    Long id = -1L;
+    UUID donorId = UUID.randomUUID();
     String donorNumber = "12345";
     String firstName = "aFirstName";
     String lastName = "aLastName";
@@ -135,13 +141,13 @@ public class MobileClinicDonorFactoryTests {
     Location venue = LocationBuilder.aLocation().withName(venueName).build();
 
     MobileClinicDonorDTO mobileClinicDonor =
-        aMobileClinicDonor().withId(id).withDonorNumber(donorNumber).withFirstName(firstName).withLastName(lastName)
+        aMobileClinicDonor().withId(donorId).withDonorNumber(donorNumber).withFirstName(firstName).withLastName(lastName)
             .withGender(Gender.female).withBloodAbo(bloodAbo).withBloodRh(bloodRh).withBirthDate(birthDate)
             .withVenue(venue).withDonorStatus(DonorStatus.NORMAL).thatIsNotDeleted().build();
 
     LocationViewModel venueViewModel = aLocationViewModel().withName(venueName).build();
     MobileClinicExportDonorViewModel expectedMobileClinicExportDonorViewModel = aMobileClinicExportDonorViewModel()
-        .withId(id).withDonorNumber(donorNumber).withFirstName(firstName).withLastName(lastName)
+        .withId(donorId).withDonorNumber(donorNumber).withFirstName(firstName).withLastName(lastName)
         .withGender(Gender.female.name()).withBloodType(bloodAbo + bloodRh).withBirthDate(birthDateString)
         .withVenue(venueViewModel).withDonorStatus(DonorStatus.NORMAL).thatIsNotDeleted().thatIsEligible().build();
 
@@ -161,16 +167,18 @@ public class MobileClinicDonorFactoryTests {
   @Test
   public void testCreateMobileClinicDonorExportViewModels_shouldReturnExpectedViewModels() {
     // Set up fixture
-    MobileClinicDonorDTO firstDonor = aMobileClinicDonor().withId(1L).withGender(Gender.male).build();
-    MobileClinicDonorDTO secondDonor = aMobileClinicDonor().withId(7L).withGender(Gender.male).build();
+    UUID firstDonorId = UUID.randomUUID();
+    UUID secondDonorId = UUID.randomUUID();
+    MobileClinicDonorDTO firstDonor = aMobileClinicDonor().withId(firstDonorId).withGender(Gender.male).build();
+    MobileClinicDonorDTO secondDonor = aMobileClinicDonor().withId(secondDonorId).withGender(Gender.male).build();
 
     List<MobileClinicDonorDTO> donors = Arrays.asList(firstDonor, secondDonor);
 
     MobileClinicExportDonorViewModel expectedMobileClinicExportDonorViewModel1 = aMobileClinicExportDonorViewModel()
-        .withId(1L).withBloodType("").withBirthDate("").withGender(Gender.male.name()).thatIsEligible().build();
+        .withId(firstDonorId).withBloodType("").withBirthDate("").withGender(Gender.male.name()).thatIsEligible().build();
 
     MobileClinicExportDonorViewModel expectedMobileClinicExportDonorViewModel2 = aMobileClinicExportDonorViewModel()
-        .withId(7L).withBloodType("").withBirthDate("").withGender(Gender.male.name()).thatIsEligible().build();
+        .withId(secondDonorId).withBloodType("").withBirthDate("").withGender(Gender.male.name()).thatIsEligible().build();
 
     Date clinicDate = new Date();
 

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -56,7 +57,7 @@ public class DonorRepository {
     em.flush();
   }
 
-  public Donor findDonorById(Long donorId) throws NoResultException {
+  public Donor findDonorById(UUID donorId) throws NoResultException {
     String queryString = "SELECT d FROM Donor d LEFT JOIN FETCH d.donations WHERE d.id = :donorId and d.isDeleted = :isDeleted and d.donorStatus not in :donorStatus";
     TypedQuery<Donor> query = em.createQuery(queryString, Donor.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -220,7 +221,7 @@ public class DonorRepository {
     return query.getResultList();
   }
 
-  public List<DonorDeferral> getDonorDeferrals(Long donorId) throws NoResultException {
+  public List<DonorDeferral> getDonorDeferrals(UUID donorId) throws NoResultException {
     String queryString = "SELECT d from DonorDeferral d WHERE "
         + " d.deferredDonor.id=:donorId AND d.isVoided=:isVoided";
     TypedQuery<DonorDeferral> query = em.createQuery(queryString, DonorDeferral.class);
@@ -229,7 +230,7 @@ public class DonorRepository {
     return query.getResultList();
   }
 
-  public Date getLastDonorDeferralDate(Long donorId) {
+  public Date getLastDonorDeferralDate(UUID donorId) {
     List<DonorDeferral> deferrals = getDonorDeferrals(donorId);
 
     if (deferrals == null || deferrals.isEmpty()) {
@@ -245,7 +246,7 @@ public class DonorRepository {
     return lastDeferredUntil;
   }
 
-  public DonorDeferral getLastDonorDeferral(Long donorId) {
+  public DonorDeferral getLastDonorDeferral(UUID donorId) {
     List<DonorDeferral> deferrals = getDonorDeferrals(donorId);
 
     if (deferrals == null || deferrals.isEmpty()) {
@@ -343,7 +344,7 @@ public class DonorRepository {
         .getResultList();
 }
   
-  public boolean verifyDonorExists(Long id) {
+  public boolean verifyDonorExists(UUID id) {
     Long count = em.createNamedQuery(DonorNamedQueryConstants.NAME_COUNT_DONOR_WITH_ID, Long.class)
         .setParameter("id", id)
         .setParameter("excludedStatuses", Arrays.asList(DonorStatus.MERGED))
