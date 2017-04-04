@@ -110,4 +110,5 @@
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-id-type.xml"/>
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-donor-deferral.xml"/>
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-address-type.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-donor.xml"/>
 </databaseChangeLog>
