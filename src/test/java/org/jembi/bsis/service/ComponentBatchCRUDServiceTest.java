@@ -58,10 +58,12 @@ public class ComponentBatchCRUDServiceTest extends UnitTestSuite {
   
   @Test
   public void testCreateComponentBatch() throws Exception {
-    // set up data        
+    // set up data
+    UUID packTypeId = UUID.randomUUID();
+    
     ComponentType componentType1 = aComponentType().build();
     ComponentType componentType2 = aComponentType().build();
-    PackType packType = aPackType().withId(1L).withComponentType(componentType1).build();
+    PackType packType = aPackType().withId(packTypeId).withComponentType(componentType1).build();
     
     Donation donation1 = aDonation().withId(1L).withPackType(packType).build();
     Component component1 = aComponent().withId(1L).withComponentType(componentType1).withDonation(donation1).build();
@@ -102,10 +104,11 @@ public class ComponentBatchCRUDServiceTest extends UnitTestSuite {
   
   @Test
   public void testUpdateComponentBatch() throws Exception {
-    // set up data        
+    // set up data
+    UUID packTypeId = UUID.randomUUID();
     ComponentType componentType1 = aComponentType().build();
     ComponentType componentType2 = aComponentType().build();
-    PackType packType = aPackType().withId(1L).withComponentType(componentType1).build();
+    PackType packType = aPackType().withId(packTypeId).withComponentType(componentType1).build();
     
     Donation donation1 = aDonation().withId(1L).withPackType(packType).build();
     Component component1 = aComponent().withId(1L).withComponentType(componentType1).withDonation(donation1).build();

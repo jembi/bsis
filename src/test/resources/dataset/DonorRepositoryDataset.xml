@@ -118,11 +118,11 @@
            idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
            venue_id="3" createdBy_id="1" lastUpdatedBy_id="1"/>
 
-    <packtype id="1" packType="Single" canPool="" testSampleProduced="true" countAsDonation="true"
+    <packtype id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" packType="Single" canPool="" testSampleProduced="true" countAsDonation="true"
               canSplit="" isDeleted="0"></packtype>
-    <packtype id="2" packType="Triple" canPool="" testSampleProduced="true" countAsDonation="true"
+    <packtype id="uuid'a60fc65c-8877-45d3-b31b-a374e43019a3'" packType="Triple" canPool="" testSampleProduced="true" countAsDonation="true"
               canSplit="" isDeleted="0"></packtype>
-    <packtype id="3" packType="Pedi" canPool="" testSampleProduced="true" countAsDonation="true"
+    <packtype id="uuid'52b78158-af2d-42af-bf98-64e9d8911249'" packType="Pedi" canPool="" testSampleProduced="true" countAsDonation="true"
               canSplit="" isDeleted="0"></packtype>
 
     <donationtype id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType="Voluntary" isDeleted="0"></donationtype>
@@ -141,7 +141,7 @@
               donationDate="2014-03-25 00:00:00" donationIdentificationNumber="000001"
               donorWeight="60.00" haemoglobinCount="14.00"
               isDeleted="0" createdDate="2014-03-27 15:00:51" lastUpdated="2014-03-27 15:00:51"
-              notes="notes" ttiStatus="NOT_DONE" packType_id="2"
+              notes="notes" ttiStatus="NOT_DONE" packType_id="uuid'a60fc65c-8877-45d3-b31b-a374e43019a3'"
               donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" venue_Id="1"
               donationCreatedBy_id="1" donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donor_id="uuid'11e715ee-e76a-1733-9763-28f10e1b4901'"
               createdBy_id="1" lastUpdatedBy_id="1" bloodPressureDiastolic="55"
@@ -199,8 +199,5 @@
     <PreferredLanguage id="2" preferredLanguage="English"/>
     <IdType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" idType="Passport" regExp=""/>
     <IdType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" idType="National ID" regExp=""/>  
-
-    <!--        <IdNumber id="1" donorId="1" idType="1" idNumber="123"/>-->
-
 
 </dataset>

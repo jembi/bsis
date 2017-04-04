@@ -60,9 +60,7 @@ public class DonationFactoryTests {
 
   private static final long IRRELEVANT_DONATION_ID = 89;
   private static final long ANOTHER_IRRELEVANT_DONATION_ID = 90;
-  private static final long IRRELEVANT_DONOR_ID = 89;
-  private static final long ANOTHER_IRRELEVANT_DONOR_ID = 90;
-  private static final long IRRELEVANT_PACKTYPE_ID = 99;
+  private static final UUID IRRELEVANT_PACKTYPE_ID = UUID.randomUUID();
 
   @InjectMocks
   private DonationFactory donationFactory;
@@ -89,7 +87,8 @@ public class DonationFactoryTests {
     UUID donorId = UUID.randomUUID();
     AdverseEventBackingForm adverseEventForm = anAdverseEventBackingForm().build();
     Donor donor = aDonor().withId(donorId).build();
-    PackType packType = PackTypeBuilder.aPackType().withId(1L).build();
+    PackType packType = PackTypeBuilder.aPackType().withId(IRRELEVANT_PACKTYPE_ID).build();
+
     DonationBackingForm donationForm = aDonationBackingForm()
         .withAdverseEvent(adverseEventForm)
         .withDonor(donor)
@@ -104,7 +103,7 @@ public class DonationFactoryTests {
         .build();
 
     // Set up mocks
-    when(packTypeRepository.getPackTypeById(1L)).thenReturn(packType);
+    when(packTypeRepository.getPackTypeById(IRRELEVANT_PACKTYPE_ID)).thenReturn(packType);
     when(donorRepository.findDonorById(donorId)).thenReturn(donor);
     when(adverseEventFactory.createEntity(adverseEventForm)).thenReturn(adverseEvent);
 

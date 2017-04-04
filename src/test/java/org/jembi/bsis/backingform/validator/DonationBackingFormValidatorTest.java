@@ -814,7 +814,8 @@ public class DonationBackingFormValidatorTest {
   }
   
   private DonationBackingForm createBasicBackingForm(Location venue) throws Exception {
-    PackType packType = PackTypeBuilder.aPackType().withId(1L).withPackType("Single").build();
+    UUID packTypeId = UUID.randomUUID();
+    PackType packType = PackTypeBuilder.aPackType().withId(packTypeId).withPackType("Single").build();
     DonationTypeBackingForm donationType = aDonationTypeBackingForm().withId(UUID.randomUUID()).withDonationType("Voluntary").build();
 
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()

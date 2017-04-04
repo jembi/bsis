@@ -2,6 +2,8 @@ package org.jembi.bsis.helpers.builders;
 
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 
+import java.util.UUID;
+
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.PackTypePersister;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -9,7 +11,7 @@ import org.jembi.bsis.model.packtype.PackType;
 
 public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
 
-  private Long id;
+  private UUID id;
   private String type;
   private Boolean countAsDonation = Boolean.TRUE;;
   private int periodBetweenDonations;
@@ -22,7 +24,7 @@ public class PackTypeBuilder extends AbstractEntityBuilder<PackType> {
   private Boolean canPool;
   private Boolean canSplit;
 
-  public PackTypeBuilder withId(Long id) {
+  public PackTypeBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
