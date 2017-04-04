@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   <changeSet id="20170404-1147"  author="tumijacob">
-    <comment>This change set migrates the Donor table from an integer id primary key
+    <comment>This change set migrates the PostDonationCounselling table from an integer id primary key
         to a UUID of type BINARY(16). </comment>
         
    
