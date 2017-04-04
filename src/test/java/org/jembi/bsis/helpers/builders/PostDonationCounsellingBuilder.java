@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.PostDonationCounsellingPersister;
@@ -14,7 +15,7 @@ import org.jembi.bsis.model.user.User;
 
 public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDonationCounselling> {
 
-  private Long id;
+  private UUID id;
   private Donation donation = aDonation().build();
   private boolean flaggedForCounselling;
   private CounsellingStatus counsellingStatus;
@@ -29,7 +30,7 @@ public class PostDonationCounsellingBuilder extends AbstractEntityBuilder<PostDo
   private Location referralSite;
 
 
-  public PostDonationCounsellingBuilder withId(Long id) {
+  public PostDonationCounsellingBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

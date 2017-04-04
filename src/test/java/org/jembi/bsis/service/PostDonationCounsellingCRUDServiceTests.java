@@ -12,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
@@ -77,7 +78,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
 
   @Test(expected = IllegalArgumentException.class)
   public void testUpdatePostDonationCounsellingWithNoExistingPostDonationCounselling_shouldThrow() {
-    long postDonationCounsellingId = 75;
+    UUID postDonationCounsellingId = UUID.randomUUID();
     PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
         .withId(postDonationCounsellingId)
         .build();
@@ -90,7 +91,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdatePostDonationCounselling_shouldUpdateAndReturnPostDonationCounselling() {
 
-    long postDonationCounsellingId = 75;
+    UUID postDonationCounsellingId = UUID.randomUUID();
     long donationId = 55;
     CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
     Date existingCounsellingDate = new DateTime().minusDays(1).toDate();
