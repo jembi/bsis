@@ -46,6 +46,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -87,6 +88,9 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 
 public class ComponentCRUDServiceTests extends UnitTestSuite {
+  private static final UUID DONATION_ID_1 = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
+  private static final UUID DONATION_ID_2 = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a2");
+  private static final UUID DONATION_ID_3 = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a3");
 
   @Spy
   @InjectMocks
@@ -248,7 +252,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testRemoveComponentFromStock_shouldReturnComponentREMOVED() {
     Location location = aLocation().withId(1L).build();
-    Donation donation = aDonation().withId(1L).build();
+    Donation donation = aDonation().withId(DONATION_ID_1).build();
 
     Component component = aComponent()
         .withId(1L)
@@ -279,9 +283,9 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testMarkComponentsBelongingToDonorAsUnsafe_shouldMarkComponentsAsUnsafe() {
     // Set up fixture
-    Donation firstDonation = aDonation().withId(1L).build();
-    Donation secondDonation = aDonation().withId(2L).build();
-    Donation deletedDonation = aDonation().thatIsDeleted().withId(3L).build();
+    Donation firstDonation = aDonation().withId(DONATION_ID_1).build();
+    Donation secondDonation = aDonation().withId(DONATION_ID_2).build();
+    Donation deletedDonation = aDonation().thatIsDeleted().withId(DONATION_ID_3).build();
     Donor donor = aDonor()
         .withDonation(firstDonation)
         .withDonation(secondDonation)
@@ -304,7 +308,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testDeleteComponent_shouldDeleteAComponent() {
     // Set up fixture
     Location location = aLocation().withId(1L).build();
-    Donation donation = aDonation().withId(1L).build();
+    Donation donation = aDonation().withId(DONATION_ID_1).build();
     Component component = aComponent()
         .withId(1L)
         .withDonation(donation)
@@ -451,7 +455,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withExpiresAfterUnits(ComponentTypeTimeUnits.YEARS)
         .build();
     Date donationDate = new Date(); 
-    Donation donation = aDonation().withId(1L)
+    Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .build();
@@ -570,7 +574,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
         .build();
     Date donationDate = new Date(); 
-    Donation donation = aDonation().withId(1L)
+    Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .build();
@@ -640,7 +644,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withMaxTimeSinceDonation(24)
         .build();
     Date donationDate = new Date(); 
-    Donation donation = aDonation().withId(1L)
+    Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .withBleedStartTime(new Date())
@@ -735,7 +739,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up data
     Location location = LocationBuilder.aLocation().build();
     Date donationDate = new Date(); 
-    Donation donation = aDonation().withId(1L)
+    Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .withBleedStartTime(new Date())
@@ -852,7 +856,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Location location = LocationBuilder.aLocation().build();
     Date donationDate = new Date();
     Date processedOn = new Date();
-    Donation donation = aDonation().withId(1L)
+    Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .build();
@@ -962,7 +966,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up data
     Location location = LocationBuilder.aLocation().build();
     Date donationDate = new Date(); 
-    Donation donation = aDonation().withId(1L)
+    Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .build();
@@ -1044,7 +1048,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withComponentTypeName("#1")
         .build();
     Date donationDate = new Date(); 
-    Donation donation = aDonation().withId(1L)
+    Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .build();
@@ -1084,7 +1088,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withComponentTypeName("#1")
         .build();
     Date donationDate = new Date(); 
-    Donation donation = aDonation().withId(1L)
+    Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .build();
@@ -1124,7 +1128,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withComponentTypeName("#1")
         .build();
     Date donationDate = new Date(); 
-    Donation donation = aDonation().withId(1L)
+    Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .build();
@@ -2107,7 +2111,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .build();
 
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID_1)
         .withComponents(Arrays.asList(firstComponent, secondComponent, thirdComponent, deletedComponent))
         .build();
 
@@ -2217,7 +2221,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up data
     Location location = LocationBuilder.aLocation().build();
     Date donationDate = new Date();
-    Donation donation = aDonation().withId(1L)
+    Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .withBleedStartTime(new DateTime().toDate())
@@ -2349,7 +2353,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Location location = LocationBuilder.aLocation().build();
     Date donationDate = new Date();
     Date processedOn = new DateTime().plusHours(20).toDate();
-    Donation donation = aDonation().withId(1L)
+    Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .build();

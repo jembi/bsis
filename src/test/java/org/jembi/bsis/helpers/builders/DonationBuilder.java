@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.DonationPersister;
@@ -30,7 +31,7 @@ import org.jembi.bsis.util.RandomTestDate;
 
 public class DonationBuilder extends AbstractEntityBuilder<Donation> {
 
-  private Long id;
+  private UUID id;
   private Donor donor = aDonor().build();
   private Date donationDate;
   private Location venue = LocationBuilder.aVenue().build();
@@ -67,7 +68,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     this.titre = titre;
     return this;
   }
-  public DonationBuilder withId(Long id) {
+  public DonationBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

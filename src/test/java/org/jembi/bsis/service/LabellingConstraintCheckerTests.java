@@ -22,7 +22,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 public class LabellingConstraintCheckerTests extends UnitTestSuite {
-  
+  private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
+
   @InjectMocks
   private LabellingConstraintChecker labellingConstraintChecker;
   @Mock
@@ -31,7 +32,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   @Test(expected = IllegalStateException.class)
   public void testCanPrintPackLabelWithConsistencyChecksWithUnsafeDonation_shouldThrow() {
     // Set up
-    Donation unsafeDonation = aDonation().withId(1L).withTTIStatus(TTIStatus.TTI_UNSAFE).build();
+    Donation unsafeDonation = aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.TTI_UNSAFE).build();
     Component component = aComponent()
         .withId(1L)
         .withDonation(unsafeDonation)
@@ -47,7 +48,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   @Test(expected = IllegalStateException.class)
   public void testCanPrintPackLabelWithConsistencyChecksWithUnreleasedDonation_shouldThrow() {
     // Set up
-    Donation unreleasedDonation = aDonation().withId(1L).withTTIStatus(TTIStatus.TTI_SAFE).thatIsNotReleased().build();
+    Donation unreleasedDonation = aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.TTI_SAFE).thatIsNotReleased().build();
     Component component = aComponent()
         .withId(1L)
         .withDonation(unreleasedDonation)
@@ -64,7 +65,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintPackLabelWithConsistencyChecksWithDonorWithNoBloodAbo_shouldThrow() {
     // Set up
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo(null).withBloodRh("+").build())
@@ -85,7 +86,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintPackLabelWithConsistencyChecksWithDonorWithNoBloodRh_shouldThrow() {
     // Set up
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh(null).build())
@@ -106,7 +107,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintPackLabelWithConsistencyChecksWithNonMatchingBloodAbo_shouldThrow() {
     // Set up
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo("B").withBloodRh("+").build())
@@ -129,7 +130,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintPackLabelWithConsistencyChecksWithNonMatchingBloodRh_shouldThrow() {
     // Set up
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("-").build())
@@ -153,7 +154,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Donor deferredDonor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .withDonor(deferredDonor)
@@ -180,7 +181,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .withDonor(donor)
@@ -213,7 +214,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .withDonor(donor)

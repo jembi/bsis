@@ -64,12 +64,12 @@ public class ComponentBatchCRUDServiceTest extends UnitTestSuite {
     ComponentType componentType1 = aComponentType().build();
     ComponentType componentType2 = aComponentType().build();
     PackType packType = aPackType().withId(packTypeId).withComponentType(componentType1).build();
-    
-    Donation donation1 = aDonation().withId(1L).withPackType(packType).build();
+
+    Donation donation1 = aDonation().withId(UUID.randomUUID()).withPackType(packType).build();
     Component component1 = aComponent().withId(1L).withComponentType(componentType1).withDonation(donation1).build();
     donation1.setComponents(Arrays.asList(component1));
 
-    Donation donation2 = aDonation().withId(2L).withPackType(packType).build();
+    Donation donation2 = aDonation().withId(UUID.randomUUID()).withPackType(packType).build();
     Component component2 = aComponent().withId(2L).withComponentType(componentType1).withDonation(donation2).build();
     Component component3 = aComponent().withId(2L).withComponentType(componentType2).withDonation(donation2).build();
     donation2.setComponents(Arrays.asList(component2, component3));
@@ -110,11 +110,11 @@ public class ComponentBatchCRUDServiceTest extends UnitTestSuite {
     ComponentType componentType2 = aComponentType().build();
     PackType packType = aPackType().withId(packTypeId).withComponentType(componentType1).build();
     
-    Donation donation1 = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation1 = aDonation().withId(UUID.randomUUID()).withPackType(packType).build();
     Component component1 = aComponent().withId(1L).withComponentType(componentType1).withDonation(donation1).build();
     donation1.setComponents(Arrays.asList(component1));
 
-    Donation donation2 = aDonation().withId(2L).withPackType(packType).build();
+    Donation donation2 = aDonation().withId(UUID.randomUUID()).withPackType(packType).build();
     Component component2 = aComponent().withId(2L).withComponentType(componentType1).withDonation(donation2).build();
     Component component3 = aComponent().withId(2L).withComponentType(componentType2).withDonation(donation2).build();
     donation2.setComponents(Arrays.asList(component2, component3));

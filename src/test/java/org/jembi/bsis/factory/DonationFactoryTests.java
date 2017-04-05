@@ -58,8 +58,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class DonationFactoryTests {
 
-  private static final long IRRELEVANT_DONATION_ID = 89;
-  private static final long ANOTHER_IRRELEVANT_DONATION_ID = 90;
+  private static final UUID IRRELEVANT_DONATION_ID = UUID.randomUUID();
+  private static final UUID ANOTHER_IRRELEVANT_DONATION_ID = UUID.randomUUID();
   private static final UUID IRRELEVANT_PACKTYPE_ID = UUID.randomUUID();
 
   @InjectMocks

@@ -27,7 +27,7 @@ public class DuplicateDonorBackup extends BaseUUIDEntity {
   private String mergedDonorNumber;
 
   @Column(name = "donation_id")
-  private Long donationId;
+  private UUID donationId;
 
   @Column(name = "donorDeferral_id")
   private UUID donorDeferralId;
@@ -36,7 +36,7 @@ public class DuplicateDonorBackup extends BaseUUIDEntity {
     super();
   }
 
-  public DuplicateDonorBackup(String newDonorId, String mergedDonorId, Long donationId, UUID deferralId) {
+  public DuplicateDonorBackup(String newDonorId, String mergedDonorId, UUID donationId, UUID deferralId) {
     super();
     this.newDonorNumber = newDonorId;
     this.mergedDonorNumber = mergedDonorId;
@@ -60,11 +60,11 @@ public class DuplicateDonorBackup extends BaseUUIDEntity {
     this.mergedDonorNumber = mergedDonorId;
   }
 
-  public Long getDonationId() {
+  public UUID getDonationId() {
     return donationId;
   }
 
-  public void setDonationId(Long donationId) {
+  public void setDonationId(UUID donationId) {
     this.donationId = donationId;
   }
 

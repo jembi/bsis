@@ -1,16 +1,18 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 
 public class BloodTypingResolutionBackingFormBuilder extends AbstractBuilder<BloodTypingResolutionBackingForm> {
   
-  private long donationId;
+  private UUID donationId;
   private BloodTypingMatchStatus status;
   private String bloodAbo;
   private String bloodRh;
 
-  public BloodTypingResolutionBackingFormBuilder withDonationId(long donationId) {
+  public BloodTypingResolutionBackingFormBuilder withDonationId(UUID donationId) {
     this.donationId = donationId;
     return this;
   }

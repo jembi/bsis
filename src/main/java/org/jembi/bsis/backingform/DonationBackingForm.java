@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -87,7 +88,7 @@ public class DonationBackingForm {
     return donation.equals(obj);
   }
 
-  public Long getId() {
+  public UUID getId() {
     return donation.getId();
   }
 
@@ -140,7 +141,7 @@ public class DonationBackingForm {
     return donation.hashCode();
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     donation.setId(id);
   }
 

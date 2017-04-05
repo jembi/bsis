@@ -49,7 +49,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
     // Update test 17 to POS and check that the reEntryRequired field is updated to true only
     // for that test. All tests are NEG to start with.
-    Donation donation = donationRepository.findDonationById(8l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a8");
+    Donation donation = donationRepository.findDonationById(donationId);
     Map<Long, String> stringResults = new HashMap<Long, String>();
     stringResults.put(17L, "POS");
     stringResults.put(20L, "NEG");
@@ -78,7 +79,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   
   @Test
   public void testReEntrySequences() throws Exception {
-    Donation donation = donationRepository.findDonationById(8l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a8");
+    Donation donation = donationRepository.findDonationById(donationId);
     Map<Long, String> testResults = new HashMap<Long, String>();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
@@ -132,7 +134,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
   @Test
   public void testDonationTTIStatusUpdateOnlyOnReEntry() throws Exception {
-    Donation donation = donationRepository.findDonationById(8l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a8");
+    Donation donation = donationRepository.findDonationById(donationId);
     Map<Long, String> testResults = new HashMap<Long, String>();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
@@ -143,13 +146,13 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
     testResults.put(17L, "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
-    donation = donationRepository.findDonationById(8l);
+    donation = donationRepository.findDonationById(donationId);
     Assert.assertTrue("Re-entry is false, so tti status remains as NOT_DONE",
         donation.getTTIStatus().equals(TTIStatus.NOT_DONE));
 
     testResults.put(17L, "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
-    donation = donationRepository.findDonationById(8l);
+    donation = donationRepository.findDonationById(donationId);
     Assert.assertTrue("Re-entry is true, so tti status is updated to TTI_UNSAFE",
         donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE));
 
@@ -157,7 +160,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
   @Test
   public void testBloodTestResultCreationReEntryImplemented() throws Exception {
-    Donation donation = donationRepository.findDonationById(9l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a9");
+    Donation donation = donationRepository.findDonationById(donationId);
     Map<Long, String> testResults = new HashMap<Long, String>();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
@@ -175,7 +179,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
   @Test
   public void testBloodTestResultCreationReEntryNotImplemented() throws Exception {
-    Donation donation = donationRepository.findDonationById(9l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a9");
+    Donation donation = donationRepository.findDonationById(donationId);
     Map<Long, String> testResults = new HashMap<Long, String>();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
@@ -209,7 +214,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   public void testGetRecentTestResultsForDonationWithActiveAndUnDeletedBloodTest_shouldReturnABloodTestResult() {
     
     //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(9l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a9");
+    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donationId);
     BloodTestResult result = returnedResults.get(28l);
     assertThat(returnedResults.size(), is(1));
     assertThat(result.getBloodTest().getIsActive(), is(true));
@@ -220,7 +226,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   public void testGetRecentTestResultsForDonationWithActiveAndDeletedBloodTest_shouldNotReturnABloodTestResult() {
 
     //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(10l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b0");
+    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donationId);
     assertThat(returnedResults.size(), is(0));
   }
   
@@ -228,7 +235,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   public void testGetRecentTestResultsForDonationWithInactiveAndUnDeletedBloodTest_shouldNotReturnABloodTestResult() {
   
     //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(11l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b1");
+    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donationId);
     assertThat(returnedResults.size(), is(0));
   }
 }

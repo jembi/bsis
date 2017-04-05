@@ -155,7 +155,7 @@ public class DonationBackingFormValidatorTest {
     // set up data
     Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
-    form.setId(1L);
+    form.setId(UUID.randomUUID());
     form.setDonationIdentificationNumber("DIN5247");
 
     // set up mocks
@@ -180,7 +180,7 @@ public class DonationBackingFormValidatorTest {
     // set up data
     Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
-    Donation otherDonation = DonationBuilder.aDonation().withId(2L).build();
+    Donation otherDonation = DonationBuilder.aDonation().withId(UUID.randomUUID()).build();
 
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("DIN1234")).thenReturn(otherDonation);
@@ -742,7 +742,7 @@ public class DonationBackingFormValidatorTest {
     Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     Donation donation = form.getDonation();
-    donation.setId(1L);
+    donation.setId(UUID.randomUUID());
 
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("DIN1234")).thenReturn(form.getDonation());

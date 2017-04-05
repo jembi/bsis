@@ -57,7 +57,7 @@ public class DonationRepository {
     return em.merge(donation);
   }
 
-  public Donation findDonationById(Long donationId) throws NoResultException {
+  public Donation findDonationById(UUID donationId) throws NoResultException {
     String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.id = :donationId and c.isDeleted = :isDeleted";
     TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -245,10 +245,10 @@ public class DonationRepository {
     return results.isEmpty() ? null : results.get(0);
   }
 
-  public Map<Long, BloodTestingRuleResult> filterDonationsWithBloodTypingResults(
+  public Map<UUID, BloodTestingRuleResult> filterDonationsWithBloodTypingResults(
       Collection<Donation> donations) {
     Iterator<Donation> iter = donations.iterator();
-    Map<Long, BloodTestingRuleResult> statusMap = new HashMap<Long, BloodTestingRuleResult>();
+    Map<UUID, BloodTestingRuleResult> statusMap = new HashMap<UUID, BloodTestingRuleResult>();
     while (iter.hasNext()) {
       Donation c = iter.next();
       BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();

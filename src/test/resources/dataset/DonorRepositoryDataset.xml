@@ -136,7 +136,7 @@
                    notes="Notes" venue_Id="1"
                    createdBy_id="1" lastUpdatedBy_id="1" backEntry="false"/>
 
-    <Donation id="1" bloodAbo=""
+    <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" bloodAbo=""
               bloodPressureSystolic="43" bloodRh="" bloodTypingStatus="NOT_DONE"
               donationDate="2014-03-25 00:00:00" donationIdentificationNumber="000001"
               donorWeight="60.00" haemoglobinCount="14.00"

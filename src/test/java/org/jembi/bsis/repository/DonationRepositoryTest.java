@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
 
+  private static final UUID DONATION_ID_1 = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
   @Autowired
   DonationRepository donationRepository;
 
@@ -35,7 +37,7 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testFindDonationById() throws Exception {
-    Donation donation = donationRepository.findDonationById(1L);
+    Donation donation = donationRepository.findDonationById(DONATION_ID_1);
     Assert.assertNotNull("There is a donation with id 1", donation);
     Assert.assertEquals("The donation has a DIN of 1234567", "1234567", donation.getDonationIdentificationNumber());
   }
@@ -56,7 +58,7 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindDonationByIdUnknown() throws Exception {
-    donationRepository.findDonationById(123L);
+    donationRepository.findDonationById(UUID.randomUUID());
   }
 
   @Test
@@ -146,10 +148,10 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   public void testFilterDonationsWithBloodTypingResults() throws Exception {
     List<Donation> donations = new ArrayList<Donation>();
-    donations.add(donationRepository.findDonationById(1L));
-    donations.add(donationRepository.findDonationById(2L));
-    donations.add(donationRepository.findDonationById(3L));
-    Map<Long, BloodTestingRuleResult> result = donationRepository.filterDonationsWithBloodTypingResults(donations);
+    donations.add(donationRepository.findDonationById(UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1")));
+    donations.add(donationRepository.findDonationById(UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a2")));
+    donations.add(donationRepository.findDonationById(UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a3")));
+    Map<UUID, BloodTestingRuleResult> result = donationRepository.filterDonationsWithBloodTypingResults(donations);
     Assert.assertEquals("There are two donations with completed tests", 2, result.size());
     for (BloodTestingRuleResult r : result.values()) {
       if (r.getDonation().getDonationIdentificationNumber().equals("1234567")) {
@@ -163,7 +165,7 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   public void testAddDonation() throws Exception {
     Donation newDonation = new Donation();
-    Donation existingDonation = donationRepository.findDonationById(1L);
+    Donation existingDonation = donationRepository.findDonationById(DONATION_ID_1);
     newDonation.setId(existingDonation.getId());
     newDonation.copy(existingDonation);
     newDonation.setId(null); // don't want to override, just save time with the copy
@@ -182,7 +184,7 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test(expected = javax.persistence.PersistenceException.class)
   public void testAddDonationWithSameDIN_shouldThrow() throws Exception {
     Donation updatedDonation = new Donation();
-    Donation existingDonation = donationRepository.findDonationById(1L);
+    Donation existingDonation = donationRepository.findDonationById(DONATION_ID_1);
     updatedDonation.setId(existingDonation.getId());
     updatedDonation.copy(existingDonation);
     updatedDonation.setId(null); // don't want to override, just save time with the copy
@@ -192,10 +194,10 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testUpdateDonation() throws Exception {
-    Donation existingDonation = donationRepository.findDonationById(1L);
+    Donation existingDonation = donationRepository.findDonationById(DONATION_ID_1);
     existingDonation.setDonorWeight(new BigDecimal(123));
     donationRepository.updateDonation(existingDonation);
-    Donation updatedDonation = donationRepository.findDonationById(1L);
+    Donation updatedDonation = donationRepository.findDonationById(DONATION_ID_1);
     Assert.assertEquals("donor weight was updataed", new BigDecimal(123), updatedDonation.getDonorWeight());
   }
 

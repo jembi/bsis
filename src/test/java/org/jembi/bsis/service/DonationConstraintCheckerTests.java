@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.AdverseEventBuilder;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
@@ -38,7 +39,7 @@ import org.mockito.Mock;
 
 public class DonationConstraintCheckerTests extends UnitTestSuite {
 
-  private static final long IRRELEVANT_DONATION_ID = 17;
+  private static final UUID IRRELEVANT_DONATION_ID = UUID.randomUUID();
 
   @InjectMocks
   private DonationConstraintChecker donationConstraintChecker;

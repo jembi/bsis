@@ -26,6 +26,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
+  
+  private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
 
   @InjectMocks
   private PostDonationCounsellingCRUDService postDonationCounsellingCRUDService;
@@ -36,7 +38,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
 
   @Test
   public void testCreatePostDonationCounselling_shouldPersistAndReturnAFlaggedPostDonationCounsellingForDonation() {
-    Donation donation = aDonation().withId(23L).build();
+    Donation donation = aDonation().withId(DONATION_ID).build();
 
     PostDonationCounselling expectedPostDonationCounselling = aPostDonationCounselling()
         .withId(null)
@@ -58,7 +60,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
 
   @Test
   public void testCreatePostDonationCounsellingWithExistingCounselling_shouldReturnExistingCounselling() {
-    Donation donation = aDonation().withId(23L).build();
+    Donation donation = aDonation().withId(DONATION_ID).build();
 
     PostDonationCounselling existingPostDonationCounselling = aPostDonationCounselling()
         .thatIsFlaggedForCounselling()
@@ -92,7 +94,6 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
   public void testUpdatePostDonationCounselling_shouldUpdateAndReturnPostDonationCounselling() {
 
     UUID postDonationCounsellingId = UUID.randomUUID();
-    long donationId = 55;
     CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
     Date existingCounsellingDate = new DateTime().minusDays(1).toDate();
     Date counsellingDate = new Date();
@@ -121,7 +122,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
         .withCounsellingStatus(null)
         .thatIsNotReferred()
         .withDonation(aDonation()
-            .withId(donationId)
+            .withId(DONATION_ID)
             .build())
         .build();
 
@@ -134,7 +135,7 @@ public class PostDonationCounsellingCRUDServiceTests extends UnitTestSuite {
         .thatIsReferred()
         .withReferralSite(referralSite)
         .withDonation(aDonation()
-            .withId(donationId)
+            .withId(DONATION_ID)
             .build())
         .withNotes(notes)
         .build();
