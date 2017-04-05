@@ -10,7 +10,7 @@ import org.jembi.bsis.viewmodel.PostDonationCounsellingSummaryViewModel;
 public class PostDonationCounsellingSummaryViewModelBuilder
     extends AbstractBuilder<PostDonationCounsellingSummaryViewModel> {
 
-  private long id;
+  private UUID id;
   private String counselled;
   private String referred;
   private Date counsellingDate;
@@ -25,7 +25,7 @@ public class PostDonationCounsellingSummaryViewModelBuilder
   private LocationViewModel venue;
   private UUID donorId;
   
-  public PostDonationCounsellingSummaryViewModelBuilder withId(long id) {
+  public PostDonationCounsellingSummaryViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

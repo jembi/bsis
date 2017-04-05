@@ -70,7 +70,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     boolean canRemoveStatus = true;
     UUID donorId = UUID.randomUUID();
     long donationId = 87L;
-    long postDonationCounsellingId = 32L;
+    UUID postDonationCounsellingId = UUID.randomUUID();
     long referralSiteId = 12L;
     
     Donor donor = aDonor().withId(donorId).build();
@@ -119,7 +119,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     boolean canRemoveStatus = false;
     UUID donorId = UUID.randomUUID();
     long donationId = 87L;
-    long postDonationCounsellingId = 32L;
+    UUID postDonationCounsellingId = UUID.randomUUID();
     
     Donor donor = aDonor().withId(donorId).build();
     Donation donation = aDonation().withId(donationId).withDonor(donor).build();
@@ -159,7 +159,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
     UUID donorId = UUID.randomUUID();
     long donationId = 87L;
-    long postDonationCounsellingId = 32L;
+    UUID postDonationCounsellingId = UUID.randomUUID();
     Date counsellingDate = new Date();
     CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
     String notes = "Given counselling";
@@ -207,7 +207,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
     UUID donorId = UUID.randomUUID();
     long donationId = 87L;
-    long postDonationCounsellingId = 32L;
+    UUID postDonationCounsellingId = UUID.randomUUID();
     CounsellingStatus counsellingStatus = CounsellingStatus.REFUSED_COUNSELLING;
     String notes = "Did not have time to talk to us";
 
@@ -252,9 +252,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntityThatIsNotReferred_shouldReturnEntityInCorrectState() {
     Date counsellingDate = new Date();
+    UUID postDonationCounsellingId = UUID.randomUUID();
 
     PostDonationCounsellingBackingForm form = aPostDonationCounsellingBackingForm()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withCounsellingDate(counsellingDate)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
@@ -263,7 +264,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .build();
 
     PostDonationCounselling expectedEntity = aPostDonationCounselling()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withCounsellingDate(counsellingDate)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
@@ -281,10 +282,11 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   public void testCreateEntityThatIsReferred_shouldReturnEntityInCorrectState() {
     Date counsellingDate = new Date();
     Long locationId = 1L;
+    UUID postDonationCounsellingId = UUID.randomUUID(); 
 
     LocationBackingForm referralSiteForm = aReferralSiteBackingForm().withId(locationId).withName("Care").build();
     PostDonationCounsellingBackingForm form = aPostDonationCounsellingBackingForm()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withCounsellingDate(counsellingDate)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
@@ -295,7 +297,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
     Location referralSite = aReferralSite().withId(locationId).withName("Care").build();
     PostDonationCounselling expectedEntity = aPostDonationCounselling()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withCounsellingDate(counsellingDate)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
@@ -316,9 +318,9 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   public void testCreateSummaryViewModels_shouldReturnCorrectViewModels() {
     Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
-    PostDonationCounselling entity1 = aPostDonationCounselling().withId(1L).withDonation(donation).build();
-    PostDonationCounselling entity2 = aPostDonationCounselling().withId(2L).withDonation(donation).build();
-    PostDonationCounselling entity3 = aPostDonationCounselling().withId(3L).withDonation(donation).build();
+    PostDonationCounselling entity1 = aPostDonationCounselling().withId(UUID.randomUUID()).withDonation(donation).build();
+    PostDonationCounselling entity2 = aPostDonationCounselling().withId(UUID.randomUUID()).withDonation(donation).build();
+    PostDonationCounselling entity3 = aPostDonationCounselling().withId(UUID.randomUUID()).withDonation(donation).build();
 
     List<PostDonationCounselling> entities = Arrays.asList(entity1, entity2, entity3);
 
@@ -333,8 +335,9 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateSummaryViewModel_shouldReturnCorrectViewModel() {
+    UUID postDonationCounsellingId = UUID.randomUUID();
     Donor donor = aDonor()
-        .withId(UUID.randomUUID())
+        .withId(postDonationCounsellingId)
         .withDonorNumber("123456")
         .withBirthDate(new Date())
         .withGender(Gender.female)
@@ -352,7 +355,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .build();
 
     PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withDonation(donation)
         .thatIsNotFlaggedForCounselling()
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
@@ -364,7 +367,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     LocationViewModel venueViewModel = LocationViewModelBuilder.aLocationViewModel().withId(1L).build();
     
     PostDonationCounsellingSummaryViewModel expectedSummary = aPostDonationCounsellingSummaryViewModel()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withBirthDate(donor.getBirthDate())
         .withBloodGroup(donation.getBloodAbo() + donation.getBloodRh())
         .withDonorId(donor.getId())
@@ -394,7 +397,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withReferred(null)
         .build();
@@ -411,7 +414,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withReferred(true)
         .build();
@@ -428,7 +431,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withReferred(false)
         .build();
@@ -445,7 +448,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withCounsellingStatus(null)
         .build();
@@ -462,7 +465,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .build();
@@ -479,7 +482,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withCounsellingStatus(CounsellingStatus.REFUSED_COUNSELLING)
         .build();
@@ -496,7 +499,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withCounsellingStatus(CounsellingStatus.DID_NOT_RECEIVE_COUNSELLING)
         .build();

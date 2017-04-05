@@ -7,7 +7,7 @@ import org.jembi.bsis.model.util.Gender;
 
 public class PostDonationCounsellingSummaryViewModel {
 
-  private long id;
+  private UUID id;
   private String counselled;
   private String referred;
   private Date counsellingDate;
@@ -22,11 +22,11 @@ public class PostDonationCounsellingSummaryViewModel {
   private LocationViewModel venue;
   private UUID donorId;
 
-  public long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

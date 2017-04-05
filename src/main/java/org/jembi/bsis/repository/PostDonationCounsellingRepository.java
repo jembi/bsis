@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class PostDonationCounsellingRepository extends AbstractRepository<PostDonationCounselling> {
 
-  public PostDonationCounselling findById(long id) {
+  public PostDonationCounselling findById(UUID id) {
     return entityManager.find(PostDonationCounselling.class, id);
   }
 

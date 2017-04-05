@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,7 +13,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 public class PostDonationCounsellingBackingForm {
 
   @NotNull
-  private Long id;
+  private UUID id;
   private CounsellingStatus counsellingStatus;
   private Date counsellingDate;
   private String notes;
@@ -20,11 +21,11 @@ public class PostDonationCounsellingBackingForm {
   private Boolean referred;
   private LocationBackingForm referralSite;
   
-  public long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -43,7 +44,7 @@ public class PostDonationCounsellingController {
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
   public PostDonationCounsellingViewModel updatePostDonationCounselling(
       @Valid @RequestBody PostDonationCounsellingBackingForm backingForm,
-      @PathVariable Long id) {
+      @PathVariable UUID id) {
 
     return postDonationCounsellingControllerService.update(backingForm);
   }
