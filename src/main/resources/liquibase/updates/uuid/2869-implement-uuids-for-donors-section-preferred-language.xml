@@ -25,6 +25,11 @@
       SET id_temp = id;
     </sql>
 
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="preferredlanguage_id_temp_index" tableName="PreferredLanguage" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
     <sql>
       UPDATE Donor_AUD 
       SET preferredLanguage_id_temp = preferredLanguage_id;
