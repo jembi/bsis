@@ -83,5 +83,5 @@
     <PackType id="uuid'fd44ac9b-19b8-4a48-9d14-1155e4c56c3a'" packType="Deleted" testSampleProduced="true"
               isDeleted="true" countAsDonation="false" periodBetweenDonations="0"/>
     <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="1" name="location 1" isVenue="true"/>
-    <Donation ineligibleDonor="0" released="0" venue_id="1"/>
+    <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" ineligibleDonor="0" released="0" venue_id="1"/>
 </dataset>

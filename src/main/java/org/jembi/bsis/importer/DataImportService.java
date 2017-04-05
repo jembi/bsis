@@ -75,6 +75,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -134,7 +135,7 @@ public class DataImportService {
   private EntityManager entityManager;
 
   private Map<String, Donor> externalDonorIdToBsisDonor = new HashMap<>();
-  private Map<String, Long> donationIdentificationNumberToDonationId = new HashMap<>();
+  private Map<String, UUID> donationIdentificationNumberToDonationId = new HashMap<>();
 
   private boolean validationOnly;
   private String action;
@@ -1103,7 +1104,7 @@ public class DataImportService {
       BindException errors = new BindException(testOutcomeBackingForm, "TestResultBackingForm");
 
       Date testedOn = null;
-      Long donationId = null;
+      UUID donationId = null;
       BloodTest bloodTest = null;
       String outcome = null;
       Map<Long, String> testResults = new HashMap<>();

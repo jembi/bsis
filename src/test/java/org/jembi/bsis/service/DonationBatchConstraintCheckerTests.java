@@ -26,6 +26,7 @@ import org.mockito.Mock;
 public class DonationBatchConstraintCheckerTests extends UnitTestSuite {
 
   private static final UUID DONATION_BATCH_ID = UUID.randomUUID();
+  private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
 
   @InjectMocks
   private DonationBatchConstraintChecker donationBatchConstraintChecker;
@@ -59,7 +60,7 @@ public class DonationBatchConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanDeleteDonationBatchWithDonations() {
     List<Donation> donations = new ArrayList<Donation>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(DONATION_ID).build());
     DonationBatch donationBatch = new DonationBatchBuilder().withId(DONATION_BATCH_ID).withDonations(donations).build();
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID)).thenReturn(donationBatch);
@@ -133,7 +134,7 @@ public class DonationBatchConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanCloseDonationBatch() {
     List<Donation> donations = new ArrayList<Donation>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(DONATION_ID).build());
     DonationBatch donationBatch = new DonationBatchBuilder().withId(DONATION_BATCH_ID).withDonations(donations).build();
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID)).thenReturn(donationBatch);
@@ -146,7 +147,7 @@ public class DonationBatchConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanCloseClosedDonationBatch() {
     List<Donation> donations = new ArrayList<Donation>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(DONATION_ID).build());
     DonationBatch donationBatch =
         new DonationBatchBuilder().withId(DONATION_BATCH_ID).withDonations(donations)
         .thatIsClosed().build();
@@ -184,7 +185,7 @@ public class DonationBatchConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanReopenDonationBatch() {
     List<Donation> donations = new ArrayList<Donation>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(DONATION_ID).build());
     DonationBatch donationBatch =
         new DonationBatchBuilder().withId(DONATION_BATCH_ID).withDonations(donations)
         .thatIsClosed().build();
@@ -199,7 +200,7 @@ public class DonationBatchConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanReopenDonationBatchWithTestBatch() {
     List<Donation> donations = new ArrayList<Donation>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(DONATION_ID).build());
     TestBatch testBatch = new TestBatchBuilder().build();
     DonationBatch donationBatch = new DonationBatchBuilder().withId(DONATION_BATCH_ID).withDonations(donations)
         .withTestBatch(testBatch).thatIsClosed().build();
@@ -214,7 +215,7 @@ public class DonationBatchConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanReopenOpenDonationBatch() {
     List<Donation> donations = new ArrayList<Donation>();
-    donations.add(new DonationBuilder().withId(1l).build());
+    donations.add(new DonationBuilder().withId(DONATION_ID).build());
     DonationBatch donationBatch = new DonationBatchBuilder().withId(DONATION_BATCH_ID).withDonations(donations).build();
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID)).thenReturn(donationBatch);

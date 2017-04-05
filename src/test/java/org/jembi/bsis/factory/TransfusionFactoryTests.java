@@ -128,12 +128,13 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     String donationIdentificationNumber = "1234567";
     UUID transfusionReactionTypeId = UUID.randomUUID();
     UUID patientId = UUID.randomUUID();
+    UUID donationId = UUID.randomUUID();
     Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(transfusionReactionTypeId).build();
     Component component = aComponent()
         .withId(1L)
         .withDonation(aDonation()
-            .withId(1L)
+            .withId(donationId)
             .withDonationIdentificationNumber(donationIdentificationNumber)
             .build())
         .build();
@@ -193,13 +194,14 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     String donationIdentificationNumber = "1234567";
     UUID transfusionReactionTypeId = UUID.randomUUID();
     UUID patientId = UUID.randomUUID();
+    UUID donationId = UUID.randomUUID();
 
     Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(transfusionReactionTypeId).build();
     Component component = aComponent()
         .withId(1L)
         .withDonation(aDonation()
-            .withId(1L)
+            .withId(donationId)
             .withDonationIdentificationNumber(donationIdentificationNumber)
             .build())
         .build();
@@ -260,13 +262,14 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Date transfusionDate = new Date();
     String donationIdentificationNumber = "1234567";
     UUID patientId = UUID.randomUUID();
+    UUID donationId = UUID.randomUUID();
     
     Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(UUID.randomUUID()).build();
     Component component = aComponent()
         .withId(1L)
         .withDonation(aDonation()
-            .withId(1L)
+            .withId(donationId)
             .withDonationIdentificationNumber(donationIdentificationNumber)
             .build())
         .build();

@@ -164,7 +164,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
         .withVenue(venue)
         .build();
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonationIdentificationNumber("DIN1234")
         .withDonationBatch(donationBatch)
         .build();

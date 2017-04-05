@@ -741,7 +741,8 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
   public void addMergedDonor() throws Exception {
     List<DuplicateDonorBackup> backupLogs = new ArrayList<DuplicateDonorBackup>();
     UUID deferralId = UUID.randomUUID();
-    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", 1l, null));
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
+    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", donationId, null));
     backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, deferralId));
     Donor oldDonor = donorRepository.findDonorByDonorNumber("000001", false);
     List<Donor> donorsToMerge = new ArrayList<Donor>();

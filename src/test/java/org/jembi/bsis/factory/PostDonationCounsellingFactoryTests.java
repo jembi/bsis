@@ -69,7 +69,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
     boolean canRemoveStatus = true;
     UUID donorId = UUID.randomUUID();
-    long donationId = 87L;
+    UUID donationId = UUID.randomUUID();
     UUID postDonationCounsellingId = UUID.randomUUID();
     long referralSiteId = 12L;
     
@@ -118,7 +118,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
     boolean canRemoveStatus = false;
     UUID donorId = UUID.randomUUID();
-    long donationId = 87L;
+    UUID donationId = UUID.randomUUID();
     UUID postDonationCounsellingId = UUID.randomUUID();
     
     Donor donor = aDonor().withId(donorId).build();
@@ -158,7 +158,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   public void testCreateViewModelWithReceivedCounsellingStatus_shouldReturnCorrectViewModel() {
 
     UUID donorId = UUID.randomUUID();
-    long donationId = 87L;
+    UUID donationId = UUID.randomUUID();
     UUID postDonationCounsellingId = UUID.randomUUID();
     Date counsellingDate = new Date();
     CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
@@ -206,7 +206,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   public void testCreateViewModelWithRefusedCounsellingStatus_shouldReturnCorrectViewModel() {
 
     UUID donorId = UUID.randomUUID();
-    long donationId = 87L;
+    UUID donationId = UUID.randomUUID();
     UUID postDonationCounsellingId = UUID.randomUUID();
     CounsellingStatus counsellingStatus = CounsellingStatus.REFUSED_COUNSELLING;
     String notes = "Did not have time to talk to us";
@@ -345,7 +345,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withLastName("Last")
         .build();
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonor(donor)
         .withDonationIdentificationNumber("9000000")
         .withBloodAbo("A")

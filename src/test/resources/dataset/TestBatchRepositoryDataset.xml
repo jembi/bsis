@@ -64,7 +64,7 @@
     <PackType id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" packType="Single" isDeleted="false" testSampleProduced="true"
               componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>
     <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType="Voluntary" isDeleted="false"/>
-    <Donation id="1" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 09:05:56.0"
+    <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 09:05:56.0"
               donationIdentificationNumber="1234567" donorWeight="85.00" isDeleted="false"
               createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
               ttiStatus="NOT_DONE" packType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
@@ -72,7 +72,7 @@
               venue_id="1" bleedStartTime="2015-08-11 09:06:11.0"
               bleedEndTime="2015-08-11 09:16:11.0"
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
-    <Donation id="2" bloodTypingStatus="NOT_DONE" donationDate="2015-08-12 03:36:07.0"
+    <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'" bloodTypingStatus="NOT_DONE" donationDate="2015-08-12 03:36:07.0"
               donationIdentificationNumber="2222222" isDeleted="false"
               createdDate="2015-08-12 03:36:37.0" lastUpdated="2015-08-12 03:36:37.0"
               ttiStatus="NOT_DONE" packType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"
@@ -80,7 +80,7 @@
               venue_id="1" bleedStartTime="2015-08-12 03:36:19.0"
               bleedEndTime="2015-08-12 03:41:19.0"
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
-    <Donation id="3" bloodTypingStatus="NOT_DONE" donationDate="2015-06-26 00:00:00.0"
+    <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a3'" bloodTypingStatus="NOT_DONE" donationDate="2015-06-26 00:00:00.0"
               donationIdentificationNumber="9090908" isDeleted="0"
               createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
               ttiStatus="NOT_DONE" packType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'"

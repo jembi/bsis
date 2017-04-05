@@ -62,7 +62,7 @@ import org.mockito.Mock;
 
 public class DonationCRUDServiceTests extends UnitTestSuite {
 
-  private static final long IRRELEVANT_DONATION_ID = 2;
+  private static final UUID IRRELEVANT_DONATION_ID = UUID.randomUUID();
   private static final long IRRELEVANT_COMPONENT_ID = 22;
   private static final UUID IRRELEVANT_DONATION_BATCH_ID = UUID.randomUUID();
   private static final long IRRELEVANT_TEST_BATCH_ID = 64;

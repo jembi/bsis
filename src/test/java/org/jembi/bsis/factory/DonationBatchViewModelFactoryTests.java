@@ -91,7 +91,7 @@ public class DonationBatchViewModelFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDonationBatchFullViewModel() {
     // set up test data
-    Long donationId = new Long(1);
+    UUID donationId = UUID.randomUUID();
     Donation donation = aDonation().withId(donationId).build();
     UUID donationBatchId = UUID.randomUUID();
     DonationBatch donationBatch = aDonationBatch().withId(donationBatchId).withDonation(donation).build();
@@ -133,11 +133,11 @@ public class DonationBatchViewModelFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDonationBatchFullViewModelExcludingDonationsWithoutTestSamples() {
     // set up test data
-    Long donation1Id = new Long(1);
+    UUID donation1Id = UUID.randomUUID();
     Donation donation1 = aDonation().withId(donation1Id)
         .withPackType(aPackType().withTestSampleProduced(true).build())
         .build();
-    Long donation2Id = new Long(2);
+    UUID donation2Id = UUID.randomUUID();
     Donation donation2 = aDonation().withId(donation2Id)
         .withPackType(aPackType().withTestSampleProduced(false).build())
         .build();

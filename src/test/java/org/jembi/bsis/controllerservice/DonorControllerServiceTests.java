@@ -36,16 +36,19 @@ public class DonorControllerServiceTests extends UnitTestSuite {
     // Setup
     UUID userId = UUID.randomUUID();
     UUID donorId = UUID.randomUUID();
+    UUID donationId1 = UUID.randomUUID();
+    UUID donationId2 = UUID.randomUUID();
+
     List<Donation> donations = Arrays.asList(
-        aDonation().withId(1L).build(),
-        aDonation().withId(8L).build()
+        aDonation().withId(donationId1).build(),
+        aDonation().withId(donationId2).build()
     );
     Donor donor = aDonor().withId(userId).withDonations(donations).build();
     
     // Expectations
     List<DonationViewModel> expectedViewModels = Arrays.asList(
-        aDonationViewModel().withId(1L).build(),
-        aDonationViewModel().withId(8L).build()
+        aDonationViewModel().withId(donationId1).build(),
+        aDonationViewModel().withId(donationId2).build()
     );
     
     when(donorRepository.findDonorById(donorId)).thenReturn(donor);

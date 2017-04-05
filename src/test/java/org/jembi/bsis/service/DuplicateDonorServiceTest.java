@@ -45,6 +45,10 @@ import scala.actors.threadpool.Arrays;
 public class DuplicateDonorServiceTest extends UnitTestSuite {
 
   private static final UUID DONOR_DEFERRAL_ID = UUID.randomUUID();
+  private static final UUID DONATION_ID_1 = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
+  private static final UUID DONATION_ID_2 = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a2");
+  private static final UUID DONATION_ID_3 = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a3");
+  private static final UUID DONATION_ID_4 = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a4");
 
   @InjectMocks
   private DuplicateDonorService service;
@@ -103,8 +107,8 @@ public class DuplicateDonorServiceTest extends UnitTestSuite {
     donors.add(david2);
 
     // create donations (david1)
-    Donation donation1 = aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).build();
-    Donation donation2 = aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).build();
+    Donation donation1 = aDonation().withId(DONATION_ID_1).withDonor(david1).withDonationDate(new Date()).build();
+    Donation donation2 = aDonation().withId(DONATION_ID_2).withDonor(david1).withDonationDate(new Date()).build();
     List<Donation> donations = new ArrayList<Donation>();
     donations.add(donation1);
     donations.add(donation2);
@@ -129,8 +133,8 @@ public class DuplicateDonorServiceTest extends UnitTestSuite {
     // verify test
     Assert.assertNotNull("backupLogs returned", backupLogs);
     Assert.assertEquals("Donation and Deferral backups necessary", 3, backupLogs.size());
-    Assert.assertTrue("1st DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 1l, null)));
-    Assert.assertTrue("2nd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", 2l, null)));
+    Assert.assertTrue("1st DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", DONATION_ID_1, null)));
+    Assert.assertTrue("2nd DuplicateDonorBackup", backupLogs.contains(new DuplicateDonorBackup("3", "1", DONATION_ID_2, null)));
     Assert.assertTrue("3rd DuplicateDonorBackup",
         backupLogs.contains(new DuplicateDonorBackup("3", "2", null, DONOR_DEFERRAL_ID)));
     Assert.assertNull("Donations were moved", david1.getDonations());
@@ -158,8 +162,8 @@ public class DuplicateDonorServiceTest extends UnitTestSuite {
 
     // create donations (david1)
     PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
-    Donation donation1 = DonationBuilder.aDonation().withId(1l).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
-    Donation donation2 = DonationBuilder.aDonation().withId(2l).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
+    Donation donation1 = DonationBuilder.aDonation().withId(DONATION_ID_1).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
+    Donation donation2 = DonationBuilder.aDonation().withId(DONATION_ID_2).withDonor(david1).withDonationDate(new Date()).withPackType(packType).build();
     List<Donation> donations = new ArrayList<Donation>();
     donations.add(donation1);
     donations.add(donation2);
@@ -259,13 +263,13 @@ public class DuplicateDonorServiceTest extends UnitTestSuite {
     List<String> donorNumbers = Arrays.asList(new String[] {donorNumber1, donorNumber2});
 
     PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
-    Donation d1 = DonationBuilder.aDonation().withId(1l).withPackType(packType)
+    Donation d1 = DonationBuilder.aDonation().withId(DONATION_ID_1).withPackType(packType)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-07-01")).build();
-    Donation d2 = DonationBuilder.aDonation().withId(2l).withPackType(packType)
+    Donation d2 = DonationBuilder.aDonation().withId(DONATION_ID_2).withPackType(packType)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01")).build();
-    Donation d3 = DonationBuilder.aDonation().withId(3l).withPackType(packType)
+    Donation d3 = DonationBuilder.aDonation().withId(DONATION_ID_3).withPackType(packType)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-09-01")).build();
-    Donation d4 = DonationBuilder.aDonation().withId(4l).withPackType(packType)
+    Donation d4 = DonationBuilder.aDonation().withId(DONATION_ID_4).withPackType(packType)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-05-01")).build();
 
     Donor david = DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David").withLastName("Smith").withGender(Gender.male)
@@ -292,10 +296,10 @@ public class DuplicateDonorServiceTest extends UnitTestSuite {
 
     Assert.assertNotNull("List was returned", donations);
     Assert.assertEquals("Correct number of Deferrals in the list", 4, donations.size());
-    Assert.assertEquals("Donations in the correct order", Long.valueOf(2), donations.get(0).getId());
-    Assert.assertEquals("Donations in the correct order", Long.valueOf(4), donations.get(1).getId());
-    Assert.assertEquals("Donations in the correct order", Long.valueOf(1), donations.get(2).getId());
-    Assert.assertEquals("Donations in the correct order", Long.valueOf(3), donations.get(3).getId());
+    Assert.assertEquals("Donations in the correct order", DONATION_ID_2, donations.get(0).getId());
+    Assert.assertEquals("Donations in the correct order", DONATION_ID_4, donations.get(1).getId());
+    Assert.assertEquals("Donations in the correct order", DONATION_ID_1, donations.get(2).getId());
+    Assert.assertEquals("Donations in the correct order", DONATION_ID_3, donations.get(3).getId());
   }
   
   @Test
@@ -308,13 +312,13 @@ public class DuplicateDonorServiceTest extends UnitTestSuite {
 
     PackType packType = PackTypeBuilder.aPackType().withPeriodBetweenDonations(90).build();
     PackType packTypeNoTestSamples = PackTypeBuilder.aPackType().withTestSampleProduced(false).withPeriodBetweenDonations(90).build();
-    Donation d1 = DonationBuilder.aDonation().withId(1l).withPackType(packType)
+    Donation d1 = DonationBuilder.aDonation().withId(DONATION_ID_1).withPackType(packType)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-07-01")).build();
-    Donation d2NoTestSamples = DonationBuilder.aDonation().withId(2l).withPackType(packTypeNoTestSamples)
+    Donation d2NoTestSamples = DonationBuilder.aDonation().withId(DONATION_ID_2).withPackType(packTypeNoTestSamples)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01")).build();
-    Donation d3NoTestSamples = DonationBuilder.aDonation().withId(3l).withPackType(packTypeNoTestSamples)
+    Donation d3NoTestSamples = DonationBuilder.aDonation().withId(DONATION_ID_3).withPackType(packTypeNoTestSamples)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-09-01")).build();
-    Donation d4 = DonationBuilder.aDonation().withId(4l).withPackType(packType)
+    Donation d4 = DonationBuilder.aDonation().withId(DONATION_ID_4).withPackType(packType)
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2015-05-01")).build();
 
     Donor david = DonorBuilder.aDonor().withDonorNumber(donorNumber1).withFirstName("David").withLastName("Smith").withGender(Gender.male)
@@ -339,9 +343,9 @@ public class DuplicateDonorServiceTest extends UnitTestSuite {
 
     Assert.assertNotNull("List was returned", donations);
     Assert.assertEquals("Correct number of Donations in the list", 4, donations.size());
-    Assert.assertEquals("Donations in the correct order", Long.valueOf(2), donations.get(0).getId());
-    Assert.assertEquals("Donations in the correct order", Long.valueOf(4), donations.get(1).getId());
-    Assert.assertEquals("Donations in the correct order", Long.valueOf(1), donations.get(2).getId());
-    Assert.assertEquals("Donations in the correct order", Long.valueOf(3), donations.get(3).getId());
+    Assert.assertEquals("Donations in the correct order", DONATION_ID_2, donations.get(0).getId());
+    Assert.assertEquals("Donations in the correct order", DONATION_ID_4, donations.get(1).getId());
+    Assert.assertEquals("Donations in the correct order", DONATION_ID_1, donations.get(2).getId());
+    Assert.assertEquals("Donations in the correct order", DONATION_ID_3, donations.get(3).getId());
   }
 }

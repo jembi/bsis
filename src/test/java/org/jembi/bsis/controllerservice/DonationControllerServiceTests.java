@@ -8,6 +8,8 @@ import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
@@ -18,7 +20,7 @@ import org.mockito.Mock;
 
 public class DonationControllerServiceTests extends UnitTestSuite {
   
-  private static final long DONATION_ID = 90L;
+  private static final UUID DONATION_ID = UUID.randomUUID();
   
   @InjectMocks
   private DonationControllerService donationControllerService;

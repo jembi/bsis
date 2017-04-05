@@ -1,5 +1,7 @@
 package org.jembi.bsis.service;
 
+import java.util.UUID;
+
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.model.component.Component;
@@ -35,7 +37,7 @@ public class DonationConstraintChecker {
   @Autowired
   private BloodTestsService bloodTestsService;
 
-  public boolean canDeleteDonation(long donationId) throws NoResultException {
+  public boolean canDeleteDonation(UUID donationId) throws NoResultException {
 
     Donation donation = donationRepository.findDonationById(donationId);
 
@@ -62,7 +64,7 @@ public class DonationConstraintChecker {
     return true;
   }
 
-  public boolean canEditBleedTimes(long donationId) {
+  public boolean canEditBleedTimes(UUID donationId) {
 
     // Check for recorded test results
     if (bloodTestResultRepository.countBloodTestResultsForDonation(donationId) > 0) {

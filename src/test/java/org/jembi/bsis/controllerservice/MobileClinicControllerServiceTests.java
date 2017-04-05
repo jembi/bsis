@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.factory.DonorOutcomesViewModelFactory;
@@ -61,7 +62,7 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
     Date endDate = new DateTime().minusDays(7).toDate();
 
     Location donorVenue = aVenue().withId(1L).build();
-    List<Donation> donations = Arrays.asList(aDonation().withId(1L).build(), aDonation().withId(2L).build());
+    List<Donation> donations = Arrays.asList(aDonation().withId(UUID.randomUUID()).build(), aDonation().withId(UUID.randomUUID()).build());
 
     // Set up expectations
     List<DonorOutcomesViewModel> expectedViewModels = Arrays.asList(

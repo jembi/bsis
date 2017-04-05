@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -120,7 +121,7 @@ public class DonationController {
   
   @RequestMapping(value = "{id}/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
-  public ResponseEntity<Map<String, Object>> getEditDonationForm(@PathVariable("id") long donationId) {
+  public ResponseEntity<Map<String, Object>> getEditDonationForm(@PathVariable("id") UUID donationId) {
     Map<String, Object> map = new HashMap<>();
     map.put("testBatchStatus", donationControllerService.getTestBatchStatusForDonation(donationId));
     map.put("packTypes", packTypeFactory.createFullViewModels(packTypeRepository.getAllEnabledPackTypes()));
@@ -131,7 +132,7 @@ public class DonationController {
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DONATION + "')")
   public ResponseEntity<Map<String, Object>> updateDonation(
-      @PathVariable("id") long donationId,
+      @PathVariable("id") UUID donationId,
       @RequestBody @Valid DonationBackingForm donationBackingForm) {
 
     donationBackingForm.setId(donationId);
@@ -144,13 +145,13 @@ public class DonationController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_DONATION + "')")
-  public void deleteDonation(@PathVariable Long id) {
+  public void deleteDonation(@PathVariable UUID id) {
     donationCRUDService.deleteDonation(id);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONATION + "')")
-  public Map<String, Object> getDonation(@PathVariable("id") long donationId) {
+  public Map<String, Object> getDonation(@PathVariable("id") UUID donationId) {
     
     Map<String, Object> map = new HashMap<>();
     map.put("donation", donationControllerService.findDonationById(donationId));
