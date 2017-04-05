@@ -25,6 +25,11 @@
       SET id_temp = id;
     </sql>
 
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="postdonationcounselling_id_temp_index" tableName="PostDonationCounselling" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
     <sql>
       UPDATE PostDonationCounselling_AUD 
       SET id_temp = id;

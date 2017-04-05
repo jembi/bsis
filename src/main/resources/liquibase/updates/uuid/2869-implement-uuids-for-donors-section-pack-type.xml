@@ -32,6 +32,11 @@
       SET id_temp = id;
     </sql>
 
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="packtype_id_temp_index" tableName="PackType" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
     <sql>
       UPDATE Donation_AUD 
       SET packType_id_temp = packType_id;

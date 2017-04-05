@@ -31,6 +31,11 @@
       SET id_temp = id;
     </sql>
 
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="adverseeventtype_id_temp_index" tableName="AdverseEventType" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
     <sql>
       UPDATE AdverseEventType_AUD 
       SET id_temp = id;

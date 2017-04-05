@@ -29,6 +29,11 @@
       SET id_temp = id;
     </sql>
 
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="deferralreason_id_temp_index" tableName="DeferralReason" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
     <sql>
       UPDATE DeferralReason_AUD 
       SET id_temp = id;
