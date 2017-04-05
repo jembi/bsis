@@ -38,6 +38,10 @@
       SET id_temp = id;
     </sql>
 
+    <createIndex indexName="donor_id_temp_index" tableName="Donor" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
     <sql>
       UPDATE Donor_AUD 
       SET id_temp = id;
