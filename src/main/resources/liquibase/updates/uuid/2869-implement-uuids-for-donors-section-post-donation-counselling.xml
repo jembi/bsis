@@ -2,6 +2,11 @@
   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+  <changeSet id="20170405-1218" author="timler">
+      <comment>Drop foreign key constraint in PostDonationCounselling_AUD table</comment>
+      <dropForeignKeyConstraint baseTableName="PostDonationCounselling_AUD" constraintName="FK_POST_DONATION_COUNSELLING_AUD_DONATION_ID"/>
+  </changeSet>
+
   <changeSet id="20170404-1445"  author="tumijacob">
     <comment>This change set migrates the PostDonationCounselling table from an integer id primary key
         to a UUID of type BINARY(16). </comment>

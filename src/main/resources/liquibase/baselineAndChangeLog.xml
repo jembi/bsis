@@ -113,6 +113,6 @@
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-donor.xml"/>
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-pack-type.xml"/>
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-duplicate-donor-backup.xml"/>
-  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-PostDonationCounselling.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-post-donation-counselling.xml"/>
   <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-preferred-language.xml"/>
 </databaseChangeLog>
