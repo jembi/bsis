@@ -60,7 +60,7 @@ public class DonorViewModelFactoryTests {
   public void testCreateDonorViewModelWithPermissions_shouldReturnViewModelWithCorrectDonorAndPermissions() {
 
     boolean irrelevantCanDeletePermission = true;
-    UUID irrelevantDonorId = UUID.fromString("11e71397-0000-0000-0000-0000000AA865");
+    UUID irrelevantDonorId = UUID.randomUUID();
 
     Donor donor = aDonor().withId(irrelevantDonorId).build();
 

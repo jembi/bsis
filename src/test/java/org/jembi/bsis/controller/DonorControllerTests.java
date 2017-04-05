@@ -77,8 +77,9 @@ public class DonorControllerTests extends UnitTestSuite {
   public void testFindDonorsWithDonationIdentificationNumber_shouldFindDonorByDonationIdentificationNumber() {
     // Set up
     String donationIdentificationNumber = "1000001";
-    Donor donor = aDonor().withId(UUID.randomUUID()).build();
-    List<DonorSummaryViewModel> donorViewModels = Arrays.asList(aDonorSummaryViewModel().withId(UUID.randomUUID()).build());
+    UUID donorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(donorId).build();
+    List<DonorSummaryViewModel> donorViewModels = Arrays.asList(aDonorSummaryViewModel().withId(donorId).build());
     
     when(donorRepository.findDonorByDonationIdentificationNumber(donationIdentificationNumber)).thenReturn(donor);
     when(donorViewModelFactory.createDonorSummaryViewModels(Arrays.asList(donor))).thenReturn(donorViewModels);
