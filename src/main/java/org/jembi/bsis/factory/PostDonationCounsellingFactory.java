@@ -109,6 +109,7 @@ public class PostDonationCounsellingFactory {
     viewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
     viewModel.setDonationDate(donation.getDonationDate());
     viewModel.setVenue(locationFactory.createViewModel(donation.getVenue()));
+    
     viewModel.setDonorId(donor.getId());
     return viewModel;
   }

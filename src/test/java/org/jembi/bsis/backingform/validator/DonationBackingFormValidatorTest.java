@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -154,7 +155,7 @@ public class DonationBackingFormValidatorTest {
     // set up data
     Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
-    form.setId(1L);
+    form.setId(UUID.randomUUID());
     form.setDonationIdentificationNumber("DIN5247");
 
     // set up mocks
@@ -179,7 +180,7 @@ public class DonationBackingFormValidatorTest {
     // set up data
     Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
-    Donation otherDonation = DonationBuilder.aDonation().withId(2L).build();
+    Donation otherDonation = DonationBuilder.aDonation().withId(UUID.randomUUID()).build();
 
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("DIN1234")).thenReturn(otherDonation);
@@ -741,7 +742,7 @@ public class DonationBackingFormValidatorTest {
     Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     Donation donation = form.getDonation();
-    donation.setId(1L);
+    donation.setId(UUID.randomUUID());
 
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("DIN1234")).thenReturn(form.getDonation());
@@ -813,8 +814,9 @@ public class DonationBackingFormValidatorTest {
   }
   
   private DonationBackingForm createBasicBackingForm(Location venue) throws Exception {
-    PackType packType = PackTypeBuilder.aPackType().withId(1L).withPackType("Single").build();
-    DonationTypeBackingForm donationType = aDonationTypeBackingForm().withId(1L).withDonationType("Voluntary").build();
+    UUID packTypeId = UUID.randomUUID();
+    PackType packType = PackTypeBuilder.aPackType().withId(packTypeId).withPackType("Single").build();
+    DonationTypeBackingForm donationType = aDonationTypeBackingForm().withId(UUID.randomUUID()).withDonationType("Voluntary").build();
 
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()
         .withBatchNumber("DB123")
@@ -822,7 +824,7 @@ public class DonationBackingFormValidatorTest {
         .withDonations(new ArrayList<Donation>())
         .build();
     
-    Donor donor = DonorBuilder.aDonor().withId(1L).withFirstName("David").withLastName("Smith").withDonorNumber("DN123").build();
+    Donor donor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("David").withLastName("Smith").withDonorNumber("DN123").build();
     
     DonationBackingForm form = new DonationBackingForm();
     form.setDonorNumber("DN123");

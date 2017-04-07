@@ -1,5 +1,7 @@
 package org.jembi.bsis.service;
 
+import java.util.UUID;
+
 import javax.transaction.Transactional;
 
 import org.jembi.bsis.backingform.AdverseEventTypeBackingForm;
@@ -24,7 +26,7 @@ public class AdverseEventTypeCRUDService {
     return adverseEventType;
   }
 
-  public AdverseEventType updateAdverseEventType(Long id, AdverseEventTypeBackingForm backingForm) {
+  public AdverseEventType updateAdverseEventType(UUID id, AdverseEventTypeBackingForm backingForm) {
     AdverseEventType adverseEventType = adverseEventTypeRepository.findById(id);
     adverseEventType.setName(backingForm.getName());
     adverseEventType.setDescription(backingForm.getDescription());

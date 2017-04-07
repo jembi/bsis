@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -56,7 +57,7 @@ public class DonationRepository {
     return em.merge(donation);
   }
 
-  public Donation findDonationById(Long donationId) throws NoResultException {
+  public Donation findDonationById(UUID donationId) throws NoResultException {
     String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.id = :donationId and c.isDeleted = :isDeleted";
     TypedQuery<Donation> query = em.createQuery(queryString, Donation.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -197,7 +198,7 @@ public class DonationRepository {
         .intValue();
   }
 
-  public Date findDateOfFirstDonationForDonor(long donorId) {
+  public Date findDateOfFirstDonationForDonor(UUID donorId) {
     List<Date> results = em.createNamedQuery(
         DonationNamedQueryConstants.NAME_FIND_ASCENDING_DONATION_DATES_FOR_DONOR,
         Date.class)
@@ -209,7 +210,7 @@ public class DonationRepository {
     return results.isEmpty() ? null : results.get(0);
   }
 
-  public Date findDateOfLastDonationForDonor(long donorId) {
+  public Date findDateOfLastDonationForDonor(UUID donorId) {
     List<Date> results = em.createNamedQuery(
         DonationNamedQueryConstants.NAME_FIND_DESCENDING_DONATION_DATES_FOR_DONOR,
         Date.class)
@@ -231,7 +232,7 @@ public class DonationRepository {
         .getResultList();
   }
 
-  public Date findLatestDueToDonateDateForDonor(long donorId) {
+  public Date findLatestDueToDonateDateForDonor(UUID donorId) {
 
     List<Date> results = em.createNamedQuery(
         DonationNamedQueryConstants.NAME_FIND_LATEST_DUE_TO_DONATE_DATE_FOR_DONOR,
@@ -244,10 +245,10 @@ public class DonationRepository {
     return results.isEmpty() ? null : results.get(0);
   }
 
-  public Map<Long, BloodTestingRuleResult> filterDonationsWithBloodTypingResults(
+  public Map<UUID, BloodTestingRuleResult> filterDonationsWithBloodTypingResults(
       Collection<Donation> donations) {
     Iterator<Donation> iter = donations.iterator();
-    Map<Long, BloodTestingRuleResult> statusMap = new HashMap<Long, BloodTestingRuleResult>();
+    Map<UUID, BloodTestingRuleResult> statusMap = new HashMap<UUID, BloodTestingRuleResult>();
     while (iter.hasNext()) {
       Donation c = iter.next();
       BloodTypingStatus bloodTypingStatus = c.getBloodTypingStatus();

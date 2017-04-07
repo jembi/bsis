@@ -2,6 +2,7 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 public class DonorDeferralViewModel {
 
   private Map<String, Boolean> permissions;
-  private Long id;
+  private UUID id;
   private Date deferredUntil;
   private DeferralReasonViewModel deferralReason;
   private String createdBy;
@@ -28,11 +29,11 @@ public class DonorDeferralViewModel {
     this.permissions = permissions;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

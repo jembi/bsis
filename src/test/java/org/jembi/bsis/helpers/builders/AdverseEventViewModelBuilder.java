@@ -1,15 +1,17 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.viewmodel.AdverseEventTypeViewModel;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
 
 public class AdverseEventViewModelBuilder extends AbstractBuilder<AdverseEventViewModel> {
 
-  private Long id;
+  private UUID id;
   private AdverseEventTypeViewModel type;
   private String comment;
 
-  public AdverseEventViewModelBuilder withId(Long id) {
+  public AdverseEventViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

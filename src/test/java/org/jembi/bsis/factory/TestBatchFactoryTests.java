@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
@@ -470,15 +471,17 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateEntity_shouldSetCorrectFields() {
+    UUID donationBatchId1 = UUID.randomUUID();
+    UUID donationBatchId2 = UUID.randomUUID();
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(IRRELEVANT_ID);
     backingForm.setStatus(TestBatchStatus.OPEN);
     backingForm.setCreatedDate(IRRELEVANT_CREATED_DATE);
-    backingForm.setDonationBatchIds(Arrays.asList(1L, 2L));
+    backingForm.setDonationBatchIds(Arrays.asList(donationBatchId1, donationBatchId2));
     backingForm.setLocation(aTestingSiteBackingForm().withId(7L).build());
     
-    DonationBatch firstDonationBatch = aDonationBatch().withId(1L).build();
-    DonationBatch secondDonationBatch = aDonationBatch().withId(2L).build();
+    DonationBatch firstDonationBatch = aDonationBatch().withId(donationBatchId1).build();
+    DonationBatch secondDonationBatch = aDonationBatch().withId(donationBatchId2).build();
     Location location = aTestingSite().withId(7L).build();
     
     TestBatch expectedTestBatch = aTestBatch()
@@ -489,8 +492,8 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withLocation(location)
         .build();
     
-    when(donationBatchRepository.findDonationBatchById(1L)).thenReturn(firstDonationBatch);
-    when(donationBatchRepository.findDonationBatchById(2L)).thenReturn(secondDonationBatch);
+    when(donationBatchRepository.findDonationBatchById(donationBatchId1)).thenReturn(firstDonationBatch);
+    when(donationBatchRepository.findDonationBatchById(donationBatchId2)).thenReturn(secondDonationBatch);
     when(locationRepository.getLocation(7L)).thenReturn(location);
     
     TestBatch returnedTestBatch = testBatchFactory.createEntity(backingForm);

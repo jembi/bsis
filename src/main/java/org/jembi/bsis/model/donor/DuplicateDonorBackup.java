@@ -1,9 +1,11 @@
 package org.jembi.bsis.model.donor;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseUUIDEntity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -14,7 +16,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  */
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class DuplicateDonorBackup extends BaseEntity {
+public class DuplicateDonorBackup extends BaseUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -25,16 +27,16 @@ public class DuplicateDonorBackup extends BaseEntity {
   private String mergedDonorNumber;
 
   @Column(name = "donation_id")
-  private Long donationId;
+  private UUID donationId;
 
   @Column(name = "donorDeferral_id")
-  private Long donorDeferralId;
+  private UUID donorDeferralId;
 
   public DuplicateDonorBackup() {
     super();
   }
 
-  public DuplicateDonorBackup(String newDonorId, String mergedDonorId, Long donationId, Long deferralId) {
+  public DuplicateDonorBackup(String newDonorId, String mergedDonorId, UUID donationId, UUID deferralId) {
     super();
     this.newDonorNumber = newDonorId;
     this.mergedDonorNumber = mergedDonorId;
@@ -58,19 +60,19 @@ public class DuplicateDonorBackup extends BaseEntity {
     this.mergedDonorNumber = mergedDonorId;
   }
 
-  public Long getDonationId() {
+  public UUID getDonationId() {
     return donationId;
   }
 
-  public void setDonationId(Long donationId) {
+  public void setDonationId(UUID donationId) {
     this.donationId = donationId;
   }
 
-  public Long getDonorDeferralId() {
+  public UUID getDonorDeferralId() {
     return donorDeferralId;
   }
 
-  public void setDonorDeferralId(Long deferralId) {
+  public void setDonorDeferralId(UUID deferralId) {
     this.donorDeferralId = deferralId;
   }
 

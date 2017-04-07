@@ -1,6 +1,7 @@
 package org.jembi.bsis.dto;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.donor.DonorStatus;
 import org.jembi.bsis.model.location.Location;
@@ -8,7 +9,7 @@ import org.jembi.bsis.model.util.Gender;
 
 public class MobileClinicDonorDTO {
 
-  private Long id;
+  private UUID id;
   private String donorNumber;
   private String firstName;
   private String lastName;
@@ -24,7 +25,7 @@ public class MobileClinicDonorDTO {
     super();
   }
   
-  public MobileClinicDonorDTO(Long id, String donorNumber, String firstName, String lastName, Gender gender, String bloodAbo,
+  public MobileClinicDonorDTO(UUID id, String donorNumber, String firstName, String lastName, Gender gender, String bloodAbo,
       String bloodRh, DonorStatus donorStatus, Date birthDate, Location venue, Boolean isDeleted) {
     super();
     this.id = id;
@@ -40,11 +41,11 @@ public class MobileClinicDonorDTO {
     this.isDeleted = isDeleted;
   }
   
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

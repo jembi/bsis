@@ -7,9 +7,9 @@ import static org.jembi.bsis.helpers.builders.AdverseEventTypeViewModelBuilder.a
 import static org.jembi.bsis.helpers.matchers.AdverseEventTypeViewModelMatcher.hasSameStateAsAdverseEventTypeViewModel;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.adverseevent.AdverseEventType;
-import org.jembi.bsis.repository.AdverseEventTypeRepository;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.jembi.bsis.viewmodel.AdverseEventTypeViewModel;
 import org.junit.Test;
@@ -76,7 +76,7 @@ public class AdverseEventTypeRepositoryTests extends ContextDependentTestSuite {
         .withName(matchingName)
         .buildAndPersist(entityManager);
 
-    List<Long> returnedAdverseEventTypeIds = adverseEventTypeRepository.findIdsByName(matchingName);
+    List<UUID> returnedAdverseEventTypeIds = adverseEventTypeRepository.findIdsByName(matchingName);
 
     assertThat(returnedAdverseEventTypeIds.size(), is(1));
     assertThat(returnedAdverseEventTypeIds.get(0), is(expectedAdverseEventType.getId()));

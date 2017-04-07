@@ -99,4 +99,21 @@
   <include file="liquibase/updates/uuid/2873-implement-uuids-for-inventory-section-transfusion-reaction-type.xml"/>
   <include file="liquibase/updates/uuid/2873-implement-uuids-for-inventory-section-transfusion.xml"/>
   <include file="liquibase/updates/uuid/2873-implement-uuids-for-inventory-section-patient.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-adverse-event.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-adverse-event-type.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-contact.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-address.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-deferral-reason.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-donation-batch.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-donation-type.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-contact-method-type.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-id-type.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-donor-deferral.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-address-type.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-donor.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-pack-type.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-duplicate-donor-backup.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-post-donation-counselling.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-preferred-language.xml"/>
+  <include file="liquibase/updates/uuid/2869-implement-uuids-for-donors-section-donation.xml"/>
 </databaseChangeLog>

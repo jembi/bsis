@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -462,7 +463,8 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
 
   @Test
   public void testVerifyDonorExistsWithInvalidId_shouldNotExist() {
-    Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(123L));
+    UUID donorId = new UUID(12345678,12345678);
+    Assert.assertFalse("Donor does not exist", donorRepository.verifyDonorExists(donorId));
   }
 
   @Test

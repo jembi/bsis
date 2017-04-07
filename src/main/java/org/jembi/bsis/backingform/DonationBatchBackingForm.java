@@ -1,7 +1,11 @@
 package org.jembi.bsis.backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.validation.Valid;
 
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -9,11 +13,8 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.Valid;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class DonationBatchBackingForm {
 
@@ -33,11 +34,11 @@ public class DonationBatchBackingForm {
     this.donationBatch = donationBatch;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     donationBatch.setId(id);
   }
 
-  public Long getId() {
+  public UUID getId() {
     return donationBatch.getId();
   }
 

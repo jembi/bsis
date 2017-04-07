@@ -1,10 +1,12 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.donor.DonorStatus;
 
 public class MobileClinicExportDonorViewModel {
 
-  private Long id;
+  private UUID id;
   private String donorNumber;
   private String firstName;
   private String lastName;
@@ -16,11 +18,11 @@ public class MobileClinicExportDonorViewModel {
   private Boolean isDeleted;
   private Boolean eligibility;
   
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

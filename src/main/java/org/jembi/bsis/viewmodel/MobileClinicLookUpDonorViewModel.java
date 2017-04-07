@@ -1,5 +1,7 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.model.util.Gender;
@@ -19,11 +21,11 @@ public class MobileClinicLookUpDonorViewModel {
     this.mobileClinicDonorDTO = mobileClinicDonorDTO;
   }
 
-  public long getId() {
+  public UUID getId() {
     return mobileClinicDonorDTO.getId();
   }
 
-  public void setId(long id) {
+  public void setId(UUID id) {
     mobileClinicDonorDTO.setId(id);
   }
 

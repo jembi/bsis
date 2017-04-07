@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.adverseevent.AdverseEventType;
 import org.jembi.bsis.repository.constant.AdverseEventTypeNamedQueryConstants;
@@ -18,14 +19,13 @@ public class AdverseEventTypeRepository extends AbstractRepository<AdverseEventT
         .getResultList();
   }
 
-  public AdverseEventType findById(Long id) {
+  public AdverseEventType findById(UUID id) {
     return entityManager.find(AdverseEventType.class, id);
   }
 
-  public List<Long> findIdsByName(String name) {
+  public List<UUID> findIdsByName(String name) {
     return entityManager.createNamedQuery(
-        AdverseEventTypeNamedQueryConstants.NAME_FIND_ADVERSE_EVENT_TYPE_IDS_BY_NAME,
-        Long.class)
+        AdverseEventTypeNamedQueryConstants.NAME_FIND_ADVERSE_EVENT_TYPE_IDS_BY_NAME, UUID.class)
         .setParameter("name", name)
         .getResultList();
   }

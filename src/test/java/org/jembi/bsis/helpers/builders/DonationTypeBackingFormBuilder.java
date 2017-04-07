@@ -1,14 +1,16 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.DonationTypeBackingForm;
 
 public class DonationTypeBackingFormBuilder extends AbstractBuilder<DonationTypeBackingForm> {
 
-  private Long id;
+  private UUID id;
   private String donationType;
   private boolean isDeleted = false;
 
-  public DonationTypeBackingFormBuilder withId(Long id) {
+  public DonationTypeBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

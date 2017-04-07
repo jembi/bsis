@@ -9,6 +9,8 @@ import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.donation.Donation;
@@ -20,7 +22,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 public class LabellingConstraintCheckerTests extends UnitTestSuite {
-  
+  private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
+
   @InjectMocks
   private LabellingConstraintChecker labellingConstraintChecker;
   @Mock
@@ -29,7 +32,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   @Test(expected = IllegalStateException.class)
   public void testCanPrintPackLabelWithConsistencyChecksWithUnsafeDonation_shouldThrow() {
     // Set up
-    Donation unsafeDonation = aDonation().withId(1L).withTTIStatus(TTIStatus.TTI_UNSAFE).build();
+    Donation unsafeDonation = aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.TTI_UNSAFE).build();
     Component component = aComponent()
         .withId(1L)
         .withDonation(unsafeDonation)
@@ -45,7 +48,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   @Test(expected = IllegalStateException.class)
   public void testCanPrintPackLabelWithConsistencyChecksWithUnreleasedDonation_shouldThrow() {
     // Set up
-    Donation unreleasedDonation = aDonation().withId(1L).withTTIStatus(TTIStatus.TTI_SAFE).thatIsNotReleased().build();
+    Donation unreleasedDonation = aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.TTI_SAFE).thatIsNotReleased().build();
     Component component = aComponent()
         .withId(1L)
         .withDonation(unreleasedDonation)
@@ -62,10 +65,10 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintPackLabelWithConsistencyChecksWithDonorWithNoBloodAbo_shouldThrow() {
     // Set up
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
-        .withDonor(aDonor().withId(1L).withBloodAbo(null).withBloodRh("+").build())
+        .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo(null).withBloodRh("+").build())
         .build();
     Component component = aComponent()
         .withId(1L)
@@ -83,10 +86,10 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintPackLabelWithConsistencyChecksWithDonorWithNoBloodRh_shouldThrow() {
     // Set up
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
-        .withDonor(aDonor().withId(1L).withBloodAbo("A").withBloodRh(null).build())
+        .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh(null).build())
         .build();
     Component component = aComponent()
         .withId(1L)
@@ -104,10 +107,10 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintPackLabelWithConsistencyChecksWithNonMatchingBloodAbo_shouldThrow() {
     // Set up
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
-        .withDonor(aDonor().withId(1L).withBloodAbo("B").withBloodRh("+").build())
+        .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo("B").withBloodRh("+").build())
         .withBloodAbo("A")
         .withBloodRh("+")
         .build();
@@ -127,10 +130,10 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintPackLabelWithConsistencyChecksWithNonMatchingBloodRh_shouldThrow() {
     // Set up
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
-        .withDonor(aDonor().withId(1L).withBloodAbo("A").withBloodRh("-").build())
+        .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("-").build())
         .withBloodAbo("A")
         .withBloodRh("+")
         .build();
@@ -149,9 +152,9 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   @Test(expected = IllegalStateException.class)
   public void testCanPrintPackLabelWithConsistencyChecksWithDeferredDonor_shouldThrow() {
     // Set up
-    Donor deferredDonor = aDonor().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    Donor deferredDonor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .withDonor(deferredDonor)
@@ -176,9 +179,9 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanPrintPackLabelWithConsistencyChecksWithAvailableComponent_shouldReturnTrue() {
     // Set up
-    Donor donor = aDonor().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .withDonor(donor)
@@ -209,9 +212,9 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanPrintPackLabelWithConsistencyChecksWithUnavailableComponent_shouldReturnFalse() {
     // Set up
-    Donor donor = aDonor().withId(1L).withBloodAbo("A").withBloodRh("+").build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .withDonor(donor)

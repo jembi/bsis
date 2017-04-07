@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.model.donor.DonorStatus;
@@ -11,7 +12,7 @@ import org.jembi.bsis.model.util.Gender;
 
 public class MobileClinicDonorBuilder extends AbstractBuilder<MobileClinicDonorDTO> {
 
-  private Long id;
+  private UUID id;
   private String donorNumber;
   private String firstName;
   private String lastName;
@@ -23,7 +24,7 @@ public class MobileClinicDonorBuilder extends AbstractBuilder<MobileClinicDonorD
   private String bloodAbo;
   private String bloodRh;
 
-  public MobileClinicDonorBuilder withId(Long id) {
+  public MobileClinicDonorBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

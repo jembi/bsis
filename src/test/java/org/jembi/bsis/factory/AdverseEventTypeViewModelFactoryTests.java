@@ -5,7 +5,8 @@ import static org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder.anAdverseE
 import static org.jembi.bsis.helpers.builders.AdverseEventTypeViewModelBuilder.anAdverseEventTypeViewModel;
 import static org.jembi.bsis.helpers.matchers.AdverseEventTypeViewModelMatcher.hasSameStateAsAdverseEventTypeViewModel;
 
-import org.jembi.bsis.factory.AdverseEventTypeViewModelFactory;
+import java.util.UUID;
+
 import org.jembi.bsis.model.adverseevent.AdverseEventType;
 import org.jembi.bsis.viewmodel.AdverseEventTypeViewModel;
 import org.junit.Test;
@@ -21,7 +22,7 @@ public class AdverseEventTypeViewModelFactoryTests {
 
   @Test
   public void testCreateAdverseEventViewModel_shouldReturnViewModelWithTheCorrectState() {
-    Long irrelevantId = 1L;
+    UUID irrelevantId = UUID.randomUUID();
     String irrelevantName = "name";
     String irrelevantDescription = "description";
 

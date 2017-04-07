@@ -48,6 +48,7 @@ public class SequenceNumberRepositoryTest extends AbstractTransactionalJUnit4Spr
   private IDatabaseConnection getConnection() throws SQLException {
     IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
     DatabaseConfig config = connection.getConfig();
+    config.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, true);
     config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
     return connection;
   }

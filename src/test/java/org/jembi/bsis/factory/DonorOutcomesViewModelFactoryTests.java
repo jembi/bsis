@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.donation.Donation;
@@ -100,8 +101,8 @@ public class DonorOutcomesViewModelFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDonorOutcomeViewModels_shouldDelegateToCreateDonorOutcomesViewModel() {
     // Set up fixture
-    Donation firstDonation = aDonation().withId(1L).build();
-    Donation secondDonation = aDonation().withId(2L).build();
+    Donation firstDonation = aDonation().withId(UUID.randomUUID()).build();
+    Donation secondDonation = aDonation().withId(UUID.randomUUID()).build();
     
     // Set up expectations
     DonorOutcomesViewModel firstViewModel = aDonorOutcomesViewModel().build();

@@ -1,6 +1,7 @@
 package org.jembi.bsis.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -55,7 +56,7 @@ public class AdverseEventController {
 
   @RequestMapping(value = "/types/{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ADVERSE_EVENTS + "')")
-  public AdverseEventTypeViewModel findAdverseEventTypeById(@PathVariable("id") Long id) {
+  public AdverseEventTypeViewModel findAdverseEventTypeById(@PathVariable("id") UUID id) {
     AdverseEventType adverseEventType = adverseEventTypeRepository.findById(id);
     return adverseEventTypeViewModelFactory.createAdverseEventTypeViewModel(adverseEventType);
   }
@@ -63,7 +64,7 @@ public class AdverseEventController {
   @RequestMapping(value = "/types/{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ADVERSE_EVENTS + "')")
   public AdverseEventTypeViewModel updateAdverseEventType(
-      @PathVariable("id") Long id,
+      @PathVariable("id") UUID id,
       @Valid @RequestBody AdverseEventTypeBackingForm backingForm) {
     AdverseEventType adverseEventType = adverseEventTypeCRUDService.updateAdverseEventType(id, backingForm);
     return adverseEventTypeViewModelFactory.createAdverseEventTypeViewModel(adverseEventType);

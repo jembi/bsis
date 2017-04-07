@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -43,7 +44,7 @@ public class PackTypeRepository {
     return result;
   }
 
-  public PackType getPackTypeById(Long packTypeId) {
+  public PackType getPackTypeById(UUID packTypeId) {
     TypedQuery<PackType> query;
     query = em.createQuery("SELECT b from PackType b " +
         "where b.id=:id", PackType.class);

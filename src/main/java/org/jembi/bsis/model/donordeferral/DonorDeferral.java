@@ -12,7 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.user.User;
@@ -38,7 +38,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class DonorDeferral extends BaseModificationTrackerEntity {
+public class DonorDeferral extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

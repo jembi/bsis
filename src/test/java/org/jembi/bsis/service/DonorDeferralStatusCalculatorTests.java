@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -91,7 +92,7 @@ public class DonorDeferralStatusCalculatorTests {
   @Test
   public void testIsDonorCurrentlyDeferredWithCurrentDeferrals_shouldReturnTrue() {
 
-    Long donorId = 1L;
+    UUID donorId = UUID.randomUUID();
 
     when(donorDeferralRepository.countCurrentDonorDeferralsForDonor(donorId)).thenReturn(1);
 
@@ -103,7 +104,7 @@ public class DonorDeferralStatusCalculatorTests {
   @Test
   public void testIsDonorCurrentlyDeferredWithNoCurrentDeferrals_shouldReturnFalse() {
 
-    Long donorId = 1L;
+    UUID donorId = UUID.randomUUID();
 
     when(donorDeferralRepository.countCurrentDonorDeferralsForDonor(donorId)).thenReturn(0);
 
@@ -116,7 +117,7 @@ public class DonorDeferralStatusCalculatorTests {
   public void testIsDonorDeferredWithNoCurrentDeferralsOnDate_shouldReturnFalse() {
 
     Date futureMobileClinicDate = new DateTime().plusDays(7).toDate();
-    Long donorId = 1L;
+    UUID donorId = UUID.randomUUID();
 
     when(donorDeferralRepository.countDonorDeferralsForDonorOnDate(donorId, futureMobileClinicDate)).thenReturn(0);
 

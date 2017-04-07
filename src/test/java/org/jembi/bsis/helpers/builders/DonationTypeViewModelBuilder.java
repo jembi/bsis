@@ -1,14 +1,15 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 
 public class DonationTypeViewModelBuilder extends AbstractBuilder<DonationTypeViewModel> {
 
-  private Long id;
+  private UUID id;
   private String type;
   private Boolean isDeleted;
 
-  public DonationTypeViewModelBuilder withId(Long id) {
+  public DonationTypeViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

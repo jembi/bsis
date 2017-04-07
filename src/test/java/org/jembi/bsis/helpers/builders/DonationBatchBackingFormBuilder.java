@@ -1,12 +1,13 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DonationBatchBackingForm;
 
 public class DonationBatchBackingFormBuilder extends AbstractBuilder<DonationBatchBackingForm> {
 
-  private Long id;
+  private UUID id;
   private String batchNumber;
   private String notes;
   private Long venue;
@@ -14,7 +15,7 @@ public class DonationBatchBackingFormBuilder extends AbstractBuilder<DonationBat
   private boolean backEntry;
   private Date donationBatchDate;
 
-  public DonationBatchBackingFormBuilder withId(Long id) {
+  public DonationBatchBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

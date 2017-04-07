@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -137,7 +138,7 @@ public class TestResultController {
 
   protected List<BloodTestingRuleResult> getBloodTestingRuleResults(BloodTestType bloodTestType, TestBatch testBatch) {
     Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
-    List<Long> donationBatchIds = new ArrayList<Long>();
+    List<UUID> donationBatchIds = new ArrayList<UUID>();
     for (DonationBatch donationBatch : donationBatches) {
       donationBatchIds.add(donationBatch.getId());
     }

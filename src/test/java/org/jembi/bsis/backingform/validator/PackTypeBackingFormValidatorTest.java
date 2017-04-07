@@ -5,6 +5,7 @@ import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.model.packtype.PackType;
@@ -79,7 +80,7 @@ public class PackTypeBackingFormValidatorTest {
   @Test
   public void testValidUpdate() throws Exception {
     // set up data
-    Long packTypeId = 1L;
+    UUID packTypeId = UUID.randomUUID();
     String packTypeName = "PACKTYPE";
 
     PackType packType = aPackType()
@@ -110,8 +111,9 @@ public class PackTypeBackingFormValidatorTest {
   @Test
   public void testValidBlankPackType() throws Exception {
     // set up data
+    UUID packTypeId = UUID.randomUUID();
     PackTypeBackingForm form = aPackTypeBackingForm()
-        .withId(1L)
+        .withId(packTypeId)
         .withPackType("")
         .withCountAsDonation(false)
         .withTestSampleProduced(true)
@@ -128,16 +130,21 @@ public class PackTypeBackingFormValidatorTest {
   @Test
   public void testInvalidDuplicate() throws Exception {
     // set up data
+    UUID packTypeId = UUID.randomUUID();
+    UUID duplicatePackTypeId = UUID.randomUUID();
     String packTypeName = "PACKTYPE";
 
     PackTypeBackingForm form = aPackTypeBackingForm()
-        .withId(1L)
+        .withId(packTypeId)
         .withPackType(packTypeName)
         .withCountAsDonation(false)
         .withTestSampleProduced(true)
         .build();
 
-    PackType duplicatePackType = aPackType().withId(2l).withPackType(packTypeName).build();
+    PackType duplicatePackType = aPackType()
+        .withId(duplicatePackTypeId)
+        .withPackType(packTypeName)
+        .build();
 
     // set up mocks
     when(packTypeRepository.findPackTypeByName(packTypeName)).thenReturn(duplicatePackType);
@@ -154,10 +161,11 @@ public class PackTypeBackingFormValidatorTest {
   @Test
   public void testInvalidNoTestSampleDonation() throws Exception {
     // set up data
+    UUID packTypeId = UUID.randomUUID();
     String packTypeName = "PACKTYPE";
 
     PackTypeBackingForm form = aPackTypeBackingForm()
-        .withId(1L)
+        .withId(packTypeId)
         .withPackType(packTypeName)
         .withCountAsDonation(true)
         .withTestSampleProduced(false)

@@ -1,10 +1,11 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
 import org.jembi.bsis.model.donordeferral.DurationType;
 
 public class DeferralReasonViewModel {
 
-  private Long id;
+  private UUID id;
   private String reason;
   private Integer defaultDuration;
   private DurationType durationType;
@@ -13,7 +14,7 @@ public class DeferralReasonViewModel {
   public DeferralReasonViewModel() {
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
@@ -33,7 +34,7 @@ public class DeferralReasonViewModel {
     return durationType;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

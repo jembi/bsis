@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.UUID;
 
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -84,15 +85,15 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   public void testCanReleaseTestBatchWithVariousDonations_shouldReturnCorrectCounts() {
 
     Donation donationWithDiscrepancies = aDonation()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withPackType(aPackType().withTestSampleProduced(true).build())
         .build();
     Donation donationWithoutDiscrepancies = aDonation()
-        .withId(2L)
+        .withId(UUID.randomUUID())
         .withPackType(aPackType().withTestSampleProduced(true).build())
         .build();
     Donation donationWithoutTestSample = aDonation()
-        .withId(3L)
+        .withId(UUID.randomUUID())
         .withPackType(aPackType().withTestSampleProduced(false).build())
         .build();
 

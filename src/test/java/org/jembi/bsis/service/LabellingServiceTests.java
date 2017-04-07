@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
@@ -42,6 +43,7 @@ public class LabellingServiceTests extends UnitTestSuite {
   private static final String PREPARATION_INFO = "Prepared from 450 ±50ml";
   private static final String STORAGE_INFO = "Store below -30°C";
   private static final String TRANSPORT_INFO = "Transport below -25°C";
+  private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
 
   @Spy
   @InjectMocks
@@ -204,7 +206,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     Long componentId = Long.valueOf(1);
     String donationIdentificationNumber = "1234567";
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .build();
     Component component = aComponent()
@@ -245,13 +247,12 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Test
   public void testPrintPackLabelWithPositiveRhBlood_shouldReturnZPLContainingText() throws Exception {
     // set up data
-    Long donationId = Long.valueOf(1);
     String bloodAbo = "A";
     String bloodRh = "+";
     String donationIdentificationNumber = "1234567";
     Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(donationId)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
@@ -313,13 +314,12 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Test
   public void testPrintPackLabelWithNegativeRhBlood_shouldReturnZPLContainingText() throws Exception {
     // set up data
-    Long donationId = Long.valueOf(1);
     String bloodAbo = "A";
     String bloodRh = "-";
     String donationIdentificationNumber = "1234567";
     Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(donationId)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
@@ -381,13 +381,12 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Test
   public void testPrintPackLabelWithInStockComponent_shouldMarkAsNotInStock() throws Exception {
     // set up data
-    Long donationId = Long.valueOf(1);
     String bloodAbo = "A";
     String bloodRh = "-";
     String donationIdentificationNumber = "1234567";
     Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(donationId)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
@@ -667,7 +666,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     String bloodRh = "-";
     Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber("3000505")
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
@@ -710,14 +709,13 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Test
   public void testPrintPackLabelWithFlagCharacters34AndCheckCharacterY_shouldReturnZPLContainingText() throws Exception {
     // set up data
-    Long donationId = Long.valueOf(1);
     String bloodAbo = "A";
     String bloodRh = "+";
     String donationIdentificationNumber = "123456789102345678";
     String flagCharacters = "34";
     Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(donationId)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)

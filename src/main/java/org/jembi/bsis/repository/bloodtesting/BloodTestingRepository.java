@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -112,12 +113,11 @@ public class BloodTestingRepository {
     return btResult;
   }
 
-  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(
-      List<Long> donationBatchIds) {
+  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(List<UUID> donationBatchIds) {
 
     List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<BloodTestingRuleResult>();
 
-    for (Long donationBatchId : donationBatchIds) {
+    for (UUID donationBatchId : donationBatchIds) {
       List<Donation> donations = donationBatchRepository.findDonationsInBatch(donationBatchId);
 
       for (Donation donation : donations) {
@@ -136,7 +136,7 @@ public class BloodTestingRepository {
     return bloodTestingRuleResults;
   }
 
-  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatchesByBloodTestType(List<Long> donationBatchIds,
+  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatchesByBloodTestType(List<UUID> donationBatchIds,
                                                                                          BloodTestType bloodTestType) {
 
     List<BloodTestingRuleResult> bloodTestingRuleResults = getAllTestsStatusForDonationBatches(donationBatchIds);
@@ -158,7 +158,7 @@ public class BloodTestingRepository {
   }
 
   public BloodTestingRuleResult getAllTestsStatusForDonation(
-      Long donationId) {
+      UUID donationId) {
     Donation donation = donationRepository
         .findDonationById(donationId);
     return ruleEngine.applyBloodTests(donation,
@@ -166,7 +166,7 @@ public class BloodTestingRepository {
   }
 
   public Map<Long, BloodTestResult> getRecentTestResultsForDonation(
-      Long donationId) {
+      UUID donationId) {
     String queryStr = "SELECT btr FROM BloodTestResult btr WHERE "
         + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
         + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted";

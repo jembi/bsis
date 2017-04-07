@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.viewmodel.LocationViewModel;
@@ -9,7 +10,7 @@ import org.jembi.bsis.viewmodel.PostDonationCounsellingSummaryViewModel;
 public class PostDonationCounsellingSummaryViewModelBuilder
     extends AbstractBuilder<PostDonationCounsellingSummaryViewModel> {
 
-  private long id;
+  private UUID id;
   private String counselled;
   private String referred;
   private Date counsellingDate;
@@ -22,9 +23,9 @@ public class PostDonationCounsellingSummaryViewModelBuilder
   private String donationIdentificationNumber;
   private Date donationDate;
   private LocationViewModel venue;
-  private long donorId;
+  private UUID donorId;
   
-  public PostDonationCounsellingSummaryViewModelBuilder withId(long id) {
+  public PostDonationCounsellingSummaryViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
@@ -90,7 +91,7 @@ public class PostDonationCounsellingSummaryViewModelBuilder
     return this;
   }
 
-  public PostDonationCounsellingSummaryViewModelBuilder withDonorId(long donorId) {
+  public PostDonationCounsellingSummaryViewModelBuilder withDonorId(UUID donorId) {
     this.donorId = donorId;
     return this;
   }

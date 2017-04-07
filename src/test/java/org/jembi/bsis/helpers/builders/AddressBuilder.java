@@ -2,9 +2,11 @@ package org.jembi.bsis.helpers.builders;
 
 import org.jembi.bsis.model.address.Address;
 
+import java.util.UUID;
+
 public class AddressBuilder extends AbstractEntityBuilder<Address> {
 
-  private Long id;
+  private UUID id;
 
   private String homeAddressLine1;
   private String homeAddressLine2;
@@ -33,7 +35,7 @@ public class AddressBuilder extends AbstractEntityBuilder<Address> {
   private String postalAddressState;
   private String postalAddressZipcode;
 
-  public AddressBuilder withId(Long id) {
+  public AddressBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

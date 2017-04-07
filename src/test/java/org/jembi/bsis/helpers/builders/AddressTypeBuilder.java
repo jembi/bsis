@@ -1,13 +1,15 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.address.AddressType;
 
 public class AddressTypeBuilder extends AbstractEntityBuilder<AddressType> {
 
-  private Long id;
+  private UUID id;
   private String preferredAddressType;
 
-  public AddressTypeBuilder withId(Long id) {
+  public AddressTypeBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

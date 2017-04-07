@@ -1,6 +1,7 @@
 package org.jembi.bsis.controllerservice;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.factory.PackTypeFactory;
@@ -24,7 +25,7 @@ public class PackTypeControllerService {
     return packTypeFactory.createFullViewModels(packTypeRepository.getAllPackTypes());
   }
   
-  public PackTypeFullViewModel getPackTypeById(long id) {
+  public PackTypeFullViewModel getPackTypeById(UUID id) {
     PackType packType = packTypeRepository.getPackTypeById(id);
     return packTypeFactory.createFullViewModel(packType);
   }

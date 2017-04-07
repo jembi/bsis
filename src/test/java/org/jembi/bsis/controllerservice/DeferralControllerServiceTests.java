@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.factory.DeferralReasonFactory;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
@@ -30,15 +31,16 @@ public class DeferralControllerServiceTests extends UnitTestSuite {
 
   @Test
   public void testGetDeferralReasons_shouldReuturnDeferralReasonViewModels() {
+    UUID deferralReasonId = UUID.randomUUID();
     
     List<DeferralReason> deferralReasons = Arrays.asList(
         aDeferralReason()
-            .withId(1L)
+            .withId(deferralReasonId)
             .withReason("Test out comes")
             .thatIsNotDeleted()
             .build(),
         aDeferralReason()
-            .withId(1L)
+            .withId(deferralReasonId)
             .withReason("Test outcomes")
             .thatIsNotDeleted()
             .build()
@@ -46,11 +48,11 @@ public class DeferralControllerServiceTests extends UnitTestSuite {
     
     List<DeferralReasonViewModel> deferralReasonViewModels = Arrays.asList(
         aDeferralReasonViewModel()
-            .withId(1L)
+            .withId(deferralReasonId)
             .withReason("Low weight")
             .build(),
             aDeferralReasonViewModel()
-            .withId(1L)
+            .withId(deferralReasonId)
             .withReason("Test outcomes")
             .build()
     );

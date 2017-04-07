@@ -1,6 +1,7 @@
 package org.jembi.bsis.service;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -18,7 +19,7 @@ public class DeferralConstraintChecker {
   @Autowired
   private DonorDeferralRepository donorDeferralRepository;
 
-  public boolean canEditDonorDeferral(long donorDeferralId) throws NoResultException {
+  public boolean canEditDonorDeferral(UUID donorDeferralId) throws NoResultException {
     DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
 
     if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {
@@ -29,7 +30,7 @@ public class DeferralConstraintChecker {
     return true;
   }
 
-  public boolean canEndDonorDeferral(long donorDeferralId) throws NoResultException {
+  public boolean canEndDonorDeferral(UUID donorDeferralId) throws NoResultException {
     DonorDeferral donorDeferral = donorDeferralRepository.findDonorDeferralById(donorDeferralId);
 
     if (donorDeferral.getDeferralReason().getType().isAutomatedDeferral()) {

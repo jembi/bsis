@@ -14,9 +14,9 @@ import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aReleasedTestBatch;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
+import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static org.jembi.bsis.helpers.matchers.DonorMatcher.hasSameStateAsDonor;
-import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.helpers.builders.BloodTestResultBuilder;
@@ -61,12 +62,11 @@ import org.mockito.Mock;
 
 public class DonationCRUDServiceTests extends UnitTestSuite {
 
-  private static final long IRRELEVANT_DONATION_ID = 2;
+  private static final UUID IRRELEVANT_DONATION_ID = UUID.randomUUID();
   private static final long IRRELEVANT_COMPONENT_ID = 22;
-  private static final long IRRELEVANT_DONOR_ID = 7;
-  private static final long IRRELEVANT_DONATION_BATCH_ID = 27;
+  private static final UUID IRRELEVANT_DONATION_BATCH_ID = UUID.randomUUID();
   private static final long IRRELEVANT_TEST_BATCH_ID = 64;
-  private static final long IRRELEVANT_PACK_TYPE_ID = 5009;
+  private static final UUID IRRELEVANT_PACK_TYPE_ID = UUID.randomUUID();
   private static final Date IRRELEVANT_DATE_OF_FIRST_DONATION = new DateTime().minusDays(7).toDate();
   private static final Date IRRELEVANT_DATE_OF_LAST_DONATION = new DateTime().minusDays(2).toDate();
   private static final Date IRRELEVANT_CURRENT_DATE = new DateTime().toDate();
@@ -116,9 +116,10 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   public void testDeleteDonationWithFirstDonation_shouldSoftDeleteDonationAndUpdateDonorFirstDonationDate() {
 
     // Set up fixture
-    PackType packType = aPackType().withId(7L).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    PackType packType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build();
     Donor existingDonor = aDonor()
-        .withId(IRRELEVANT_DONOR_ID)
+        .withId(irrelevantDonorId)
         .withDateOfFirstDonation(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .withDateOfLastDonation(IRRELEVANT_DATE_OF_LAST_DONATION)
         .build();
@@ -139,14 +140,14 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
     Date expectedDateOfFirstDonation = new Date();
     Donor expectedDonor = aDonor()
-        .withId(IRRELEVANT_DONOR_ID)
+        .withId(irrelevantDonorId)
         .withDateOfFirstDonation(expectedDateOfFirstDonation)
         .withDateOfLastDonation(IRRELEVANT_DATE_OF_LAST_DONATION)
         .build();
 
     when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
-    when(donationRepository.findDateOfFirstDonationForDonor(IRRELEVANT_DONOR_ID)).thenReturn(expectedDateOfFirstDonation);
+    when(donationRepository.findDateOfFirstDonationForDonor(irrelevantDonorId)).thenReturn(expectedDateOfFirstDonation);
 
     // Exercise SUT
     donationCRUDService.deleteDonation(IRRELEVANT_DONATION_ID);
@@ -160,9 +161,10 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testDeleteDonationWithComponents_shouldAlsoDeleteRelatedComponents() {
     // Set up fixture
-    PackType packType = aPackType().withId(7L).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    PackType packType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build();
     Donor existingDonor = aDonor()
-        .withId(IRRELEVANT_DONOR_ID)
+        .withId(irrelevantDonorId)
         .withDateOfFirstDonation(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .withDateOfLastDonation(IRRELEVANT_DATE_OF_LAST_DONATION)
         .build();
@@ -212,9 +214,10 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   public void testDeleteDonationWithLastDonation_shouldSoftDeleteDonationAndUpdateDonorLastDonationDate() {
 
     // Set up fixture
-    PackType packType = aPackType().withId(7L).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    PackType packType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build();
     Donor existingDonor = aDonor()
-        .withId(IRRELEVANT_DONOR_ID)
+        .withId(irrelevantDonorId)
         .withDateOfFirstDonation(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .withDateOfLastDonation(IRRELEVANT_DATE_OF_LAST_DONATION)
         .build();
@@ -235,14 +238,14 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
     Date expectedDateOfLastDonation = new Date();
     Donor expectedDonor = aDonor()
-        .withId(IRRELEVANT_DONOR_ID)
+        .withId(irrelevantDonorId)
         .withDateOfFirstDonation(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .withDateOfLastDonation(expectedDateOfLastDonation)
         .build();
 
     when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
-    when(donationRepository.findDateOfLastDonationForDonor(IRRELEVANT_DONOR_ID)).thenReturn(expectedDateOfLastDonation);
+    when(donationRepository.findDateOfLastDonationForDonor(irrelevantDonorId)).thenReturn(expectedDateOfLastDonation);
 
     // Exercise SUT
     donationCRUDService.deleteDonation(IRRELEVANT_DONATION_ID);
@@ -302,13 +305,16 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test(expected = IllegalArgumentException.class)
   public void testUpdateDonationWithDifferentPackTypeThatCantEditPackType_shouldThrow() {
     // Set up fixture 
-    PackType newPackType = aPackType().withId(2L).build();
+    UUID newPackTypeId = UUID.randomUUID();
+    UUID oldPackTypeId = UUID.randomUUID();
+    PackType newPackType = aPackType().withId(newPackTypeId).build();
+    PackType oldPackType = aPackType().withId(oldPackTypeId).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
 
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
-        .withPackType(aPackType().withId(1L).build())
+        .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .build();
@@ -330,7 +336,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   
   @Test
   public void testUpdateDonationWithSamePackType_shouldNotCheckCanEditPackType() {
-    // Set up fixture 
+    // Set up fixture
     PackType packType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
@@ -370,13 +376,16 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test(expected = IllegalArgumentException.class)
   public void testUpdateDonationWithDifferentPackTypeThatCantEditToNewPackType_shouldThrow() {
     // Set up fixture 
-    PackType newPackType = aPackType().withId(2L).build();
+    UUID newPackTypeId = UUID.randomUUID();
+    UUID oldPackTypeId = UUID.randomUUID();
+    PackType newPackType = aPackType().withId(newPackTypeId).build();
+    PackType oldPackType = aPackType().withId(oldPackTypeId).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
 
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
-        .withPackType(aPackType().withId(1L).build())
+        .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .build();
@@ -400,15 +409,19 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test(expected = IllegalArgumentException.class)
   public void testUpdateDonationWithDifferentPackTypeAndDeferredDonor_shouldThrow() {
     // Set up fixture 
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
-    PackType newPackType = aPackType().withId(2L).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
+    UUID newPackTypeId = UUID.randomUUID();
+    UUID oldPackTypeId = UUID.randomUUID();
+    PackType newPackType = aPackType().withId(newPackTypeId).build();
+    PackType oldPackType = aPackType().withId(oldPackTypeId).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
 
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
-        .withPackType(aPackType().withId(1L).build())
+        .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .build();
@@ -424,7 +437,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(true);
+    when(donorConstraintChecker.isDonorDeferred(irrelevantDonorId)).thenReturn(true);
     when(donationRepository.updateDonation(existingDonation)).thenAnswer(returnsFirstArg());
     
     // Exercise SUT
@@ -435,7 +448,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   // Regression test for BSIS-1534
   public void testUpdateDonationWithSamePackType_shouldNotCheckDonorDeferralStatus() {
     // Set up fixture 
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
     PackType packType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
@@ -457,23 +471,26 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation returnedDonation = donationCRUDService.updateDonation(donation);
     
     // Verify
-    verify(donorConstraintChecker, never()).isDonorDeferred(IRRELEVANT_DONOR_ID);
+    verify(donorConstraintChecker, never()).isDonorDeferred(irrelevantDonorId);
     assertThat(returnedDonation, hasSameStateAsDonation(donation));
   }
   
   @Test
   public void testUpdateDonationWithDifferentPackTypeThatDoesntProduceTestSamples_shouldDeleteExistingTestOutcomes() {
     // Set up fixture 
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
-    PackType packType = aPackType().withId(1L).withTestSampleProduced(false).withCountAsDonation(false).build();
-    PackType newPackType = aPackType().withId(2L).withTestSampleProduced(false).withCountAsDonation(false).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
+    UUID newPackTypeId = UUID.randomUUID();
+    UUID oldPackTypeId = UUID.randomUUID();
+    PackType newPackType = aPackType().withId(newPackTypeId).withTestSampleProduced(false).withCountAsDonation(false).build();
+    PackType oldPackType = aPackType().withId(oldPackTypeId).withTestSampleProduced(false).withCountAsDonation(false).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
 
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
-        .withPackType(packType)
+        .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withTTIStatus(TTIStatus.TTI_SAFE)
@@ -508,7 +525,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(donorConstraintChecker.isDonorDeferred(irrelevantDonorId)).thenReturn(false);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenAnswer(returnsFirstArg());
     when(bloodTestResultRepository.getTestOutcomes(existingDonation)).thenReturn(bloodTestResultList);
     
@@ -523,6 +540,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateDonation_shouldRetrieveAndUpdateDonation() {
     // Set up fixture
+    UUID irrelevantDonorId = UUID.randomUUID();
     Integer irrelevantDonorPulse = 80;
     BigDecimal irrelevantHaemoglobinCount = new BigDecimal(2);
     HaemoglobinLevel irrelevantHaemoglobinLevel = HaemoglobinLevel.FAIL;
@@ -533,14 +551,14 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     PackType irrelevantPackType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).withCountAsDonation(true).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
-    Long irrelevantAdverseEventTypeId = 8L;
-    Long irrelevantAdverseEventId = 7L;
+    UUID irrelevantAdverseEventTypeId = UUID.randomUUID();
+    UUID irrelevantAdverseEventId = UUID.randomUUID();
     AdverseEvent irrelevantAdverseEvent = anAdverseEvent()
         .withId(irrelevantAdverseEventId)
         .withType(anAdverseEventType().withId(irrelevantAdverseEventTypeId).build())
         .build();
 
-    Donor expectedDonor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    Donor expectedDonor = aDonor().withId(irrelevantDonorId).build();
 
     Component component = ComponentBuilder.aComponent().build();
     Donation existingDonation = aDonation()
@@ -589,8 +607,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenReturn(expectedDonation);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
-    when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(expectedDonor);
+    when(donorConstraintChecker.isDonorDeferred(irrelevantDonorId)).thenReturn(false);
+    when(donorRepository.findDonorById(irrelevantDonorId)).thenReturn(expectedDonor);
     when(componentCRUDService.createInitialComponent(existingDonation)).thenReturn(component);
 
     // Exercise SUT
@@ -604,7 +622,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDonationWithDonationWithEligibleDonor_shouldAddDonation() {
 
-    long donorId = 993L;
+    UUID donorId = UUID.randomUUID();
     PackType packTypeThatCountsAsDonation = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).withCountAsDonation(true).build();
     Donation donation = aDonation()
         .withDonationDate(new Date())
@@ -626,7 +644,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDonationWithDonationWithPackTypeThatDoesNotCountAsDonation_shouldAddDonation() {
 
-    long donorId = 993L;
+    UUID donorId = UUID.randomUUID();
     PackType packTypeThatDoesNotCountAsDonation = aPackType().withCountAsDonation(false).build();
 
     Donation donation = aDonation()
@@ -648,7 +666,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test(expected = IllegalArgumentException.class)
   public void testCreateDonationWithDonationWithIneligibleDonorAndNotBackEntry_shouldThrow() {
 
-    long donorId = 993L;
+    UUID donorId = UUID.randomUUID();
     String donationBatchNumber = "000001";
     DonationBatch donationBatch = aDonationBatch().withBatchNumber(donationBatchNumber).build();
 
@@ -672,7 +690,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDonationWithDonationWithIneligibleDonorAndBackEntry_shouldAddDonationAndDiscardComponents() {
 
-    long donorId = 993L;
+    UUID donorId = UUID.randomUUID();
     String donationBatchNumber = "000001";
     DonationBatch donationBatch = aDonationBatch().withBatchNumber(donationBatchNumber).thatIsBackEntry().build();
     PackType packTypeThatCountsAsDonation = aPackType().withCountAsDonation(true).build();
@@ -699,7 +717,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   
   @Test
   public void testUpdateDonationsBloodTypingResolutions_withResolvedStatus() {
-    PackType packType = aPackType().withId(7L).build();
+    PackType packType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build();
     BloodTypingResolutionBackingForm bloodTypingResolutionBackingForm = aBloodTypingResolutionBackingForm()
         .withDonationId(IRRELEVANT_DONATION_ID)
         .withStatus(BloodTypingMatchStatus.RESOLVED)
@@ -742,7 +760,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .build();
     DonationBatch donationBatch = aDonationBatch().withTestBatch(aTestBatch().build()).build();
-    PackType packType = aPackType().withId(7L).build();
+    PackType packType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build();
     Donation donation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
@@ -769,7 +787,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDonationWithPackTypeThatProducesComponents_shouldCreateNewInitialComponent() {
     // Set up fixture 
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
     PackType packType = aPackType().withCountAsDonation(true).build();
     String donationBatchNumber = "000001";
     Donation donation = aDonation()
@@ -782,7 +801,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     // Set up expectations
     when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donation.getDonationBatch());
-    when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(true);
+    when(donorConstraintChecker.isDonorEligibleToDonate(irrelevantDonorId)).thenReturn(true);
     when(componentCRUDService.createInitialComponent(donation)).thenReturn(ComponentBuilder.aComponent().build());
     when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");
 
@@ -798,7 +817,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDonationWithPackTypeThatDoesntProduceComponents_shouldNotAddComponent() {
     // Set up fixture 
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
     PackType packType = aPackType().withCountAsDonation(false).build();
     String donationBatchNumber = "000001";
     Donation donation = aDonation()
@@ -810,7 +830,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
 
     // Exercise SUT
-    when(donorConstraintChecker.isDonorEligibleToDonate(IRRELEVANT_DONOR_ID)).thenReturn(true);
+    when(donorConstraintChecker.isDonorEligibleToDonate(irrelevantDonorId)).thenReturn(true);
     when(donationBatchRepository.findDonationBatchByBatchNumber(donationBatchNumber)).thenReturn(donation.getDonationBatch());
     when(componentCRUDService.createInitialComponent(donation)).thenReturn(null);
     when(checkCharacterService.calculateFlagCharacters(donation.getDonationIdentificationNumber())).thenReturn("11");
@@ -825,17 +845,21 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithNewPackTypeThatDoesntCountAsDonation_shouldDeleteInitialComponent() {
     // Set up fixture
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
-    
-    PackType packType = aPackType()
+
+    UUID oldPackTypeId = UUID.randomUUID();
+    PackType oldPackType = aPackType()
+        .withId(oldPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(true)
         .build();
-    
+
+    UUID newPackTypeId = UUID.randomUUID();
     PackType newPackType = aPackType()
-        .withId(2L)
+        .withId(newPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(false)
         .build();
@@ -844,7 +868,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
-        .withPackType(packType) 
+        .withPackType(oldPackType) 
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withComponent(initialComponent)
@@ -889,15 +913,20 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     // Set up fixture
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
     Component initialComponent = ComponentBuilder.aComponent().build();
-    PackType packType = aPackType()
+
+    UUID oldPackTypeId = UUID.randomUUID();
+    PackType oldPackType = aPackType()
+        .withId(oldPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(false)
         .build();
-    
+
+    UUID newPackTypeId = UUID.randomUUID();
     PackType newPackType = aPackType()
-        .withId(2L)
+        .withId(newPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(true)
         .build();
@@ -905,7 +934,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
-        .withPackType(packType)
+        .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .build();
@@ -932,7 +961,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(donorConstraintChecker.isDonorDeferred(irrelevantDonorId)).thenReturn(false);
     when(componentCRUDService.createInitialComponent(updatedDonation)).thenReturn(initialComponent);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation))))
         .thenAnswer(returnsFirstArg());
@@ -953,19 +982,23 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     // Set up fixture
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
     Component initialComponent = ComponentBuilder.aComponent().build();
     DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
     TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withDonationBatch(donationBatch).withStatus(TestBatchStatus.RELEASED).build();
     donationBatch.setTestBatch(testBatch);
 
-    PackType packType = aPackType()
+    UUID oldPackTypeId = UUID.randomUUID();
+    PackType oldPackType = aPackType()
+        .withId(oldPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(false)
         .build();
 
+    UUID newPackTypeId = UUID.randomUUID();
     PackType newPackType = aPackType()
-        .withId(2L)
+        .withId(newPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(true)
         .build();
@@ -973,7 +1006,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
-        .withPackType(packType)
+        .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withDonationBatch(donationBatch)
@@ -1003,7 +1036,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(donorConstraintChecker.isDonorDeferred(irrelevantDonorId)).thenReturn(false);
     when(componentCRUDService.createInitialComponent(updatedDonation)).thenReturn(initialComponent);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenAnswer(returnsFirstArg());
 
@@ -1020,19 +1053,23 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     // Set up fixture
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
     Component initialComponent = ComponentBuilder.aComponent().build();
     DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
     TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withDonationBatch(donationBatch).withStatus(TestBatchStatus.CLOSED).build();
     donationBatch.setTestBatch(testBatch);
 
-    PackType packType = aPackType()
+    UUID oldPackTypeId = UUID.randomUUID();
+    PackType oldPackType = aPackType()
+        .withId(oldPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(false)
         .build();
 
+    UUID newPackTypeId = UUID.randomUUID();
     PackType newPackType = aPackType()
-        .withId(2L)
+        .withId(newPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(true)
         .build();
@@ -1040,7 +1077,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
-        .withPackType(packType)
+        .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withDonationBatch(donationBatch)
@@ -1070,7 +1107,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(donorConstraintChecker.isDonorDeferred(irrelevantDonorId)).thenReturn(false);
     when(componentCRUDService.createInitialComponent(updatedDonation)).thenReturn(initialComponent);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenAnswer(returnsFirstArg());
 
@@ -1087,17 +1124,21 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     // Set up fixture
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
     Component initialComponent = ComponentBuilder.aComponent().build();
     DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
 
-    PackType packType = aPackType()
+    UUID oldPackTypeId = UUID.randomUUID();
+    PackType oldPackType = aPackType()
+        .withId(oldPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(false)
         .build();
 
+    UUID newPackTypeId = UUID.randomUUID();
     PackType newPackType = aPackType()
-        .withId(2L)
+        .withId(newPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(true)
         .build();
@@ -1105,7 +1146,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
-        .withPackType(packType)
+        .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withDonationBatch(donationBatch)
@@ -1135,7 +1176,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(donorConstraintChecker.isDonorDeferred(irrelevantDonorId)).thenReturn(false);
     when(componentCRUDService.createInitialComponent(updatedDonation)).thenReturn(initialComponent);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenAnswer(returnsFirstArg());
 
@@ -1152,7 +1193,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     // Set up fixture
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
     Component initialComponent = ComponentBuilder.aComponent().build();
 
     DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
@@ -1163,13 +1205,16 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
     donationBatch.setTestBatch(testBatch);
 
-    PackType packType = aPackType()
+    UUID oldPackTypeId = UUID.randomUUID();
+    PackType oldPackType = aPackType()
+        .withId(oldPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(false)
         .build();
 
+    UUID newPackTypeId = UUID.randomUUID();
     PackType newPackType = aPackType()
-        .withId(2L)
+        .withId(newPackTypeId)
         .withTestSampleProduced(true)
         .withCountAsDonation(true)
         .build();
@@ -1177,7 +1222,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
-        .withPackType(packType)
+        .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withDonationBatch(donationBatch)
@@ -1207,7 +1252,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(donorConstraintChecker.isDonorDeferred(irrelevantDonorId)).thenReturn(false);
     when(componentCRUDService.createInitialComponent(updatedDonation)).thenReturn(initialComponent);
     when(donationRepository.updateDonation(argThat(hasSameStateAsDonation(expectedDonation)))).thenAnswer(returnsFirstArg());
 
@@ -1221,12 +1266,23 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   
   @Test
   public void testUpdateDonationWithNewPackTypeThatCountsAsDonation_shouldUpdateExistingComponent() {
-    Donor donor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    UUID irrelevantDonorId = UUID.randomUUID();
+    Donor donor = aDonor().withId(irrelevantDonorId).build();
     Date irrelevantBleedStartTime = new DateTime().minusMinutes(30).toDate();
     Date irrelevantBleedEndTime = new DateTime().minusMinutes(5).toDate();
     Date expiresOn = new DateTime().plusMonths(1).toDate();
-    PackType packType = aPackType().withTestSampleProduced(true).withCountAsDonation(true).build();
-    PackType newPackType = aPackType().withId(2L).withTestSampleProduced(true).withCountAsDonation(true).build();
+    UUID oldPackTypeId = UUID.randomUUID();
+    PackType oldPackType = aPackType()
+        .withId(oldPackTypeId)
+        .withTestSampleProduced(true)
+        .withCountAsDonation(true)
+        .build();
+    UUID newPackTypeId = UUID.randomUUID();
+    PackType newPackType = aPackType()
+        .withId(newPackTypeId)
+        .withTestSampleProduced(true)
+        .withCountAsDonation(true)
+        .build();
   
     ComponentType componentType = aComponentType().build();
     Component existingComponent = ComponentBuilder.aComponent()
@@ -1238,7 +1294,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(donor)
-        .withPackType(packType)
+        .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withComponent(existingComponent)
@@ -1262,7 +1318,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationConstraintChecker.canEditPackType(existingDonation)).thenReturn(true);
     when(donationConstraintChecker.canEditToNewPackType(existingDonation, newPackType)).thenReturn(true);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(donorConstraintChecker.isDonorDeferred(irrelevantDonorId)).thenReturn(false);
     when(componentCRUDService.updateComponentWithNewPackType(existingComponent, newPackType)).thenReturn(updatedComponent);
     when(donationRepository.updateDonation(expectedDonation)).thenReturn(expectedDonation);
     
@@ -1282,6 +1338,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     DateTime newBleedEndTime = new DateTime().minusMinutes(120);
     DateTime expectedCreatedOn = new DateTime(donationDate.getYear(), donationDate.getMonthOfYear(), donationDate.getDayOfMonth(), 
         newBleedStartTime.getHourOfDay(), newBleedStartTime.getMinuteOfHour());
+    UUID irrelevantDonorId = UUID.randomUUID();
 
     ComponentType irrelevantComponentType = aComponentType().build();
     Component initialComponent = aComponent()
@@ -1295,7 +1352,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withCreatedOn(createdOn.toDate())
         .build();
 
-    Donor irrelevantDonor = aDonor().withId(IRRELEVANT_DONOR_ID).build();
+    Donor irrelevantDonor = aDonor().withId(irrelevantDonorId).build();
     PackType irrelevantPackType = aPackType().build();
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
@@ -1318,7 +1375,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
     when(donationConstraintChecker.canEditBleedTimes(IRRELEVANT_DONATION_ID)).thenReturn(true);
-    when(donorConstraintChecker.isDonorDeferred(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(donorConstraintChecker.isDonorDeferred(irrelevantDonorId)).thenReturn(false);
     when(donationRepository.updateDonation(expectedDonation)).thenReturn(expectedDonation);
     when(dateGeneratorService.generateDateTime(createdOn.toDate(), newBleedStartTime.toDate())).thenReturn(expectedCreatedOn.toDate());
 

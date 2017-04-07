@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -139,7 +140,7 @@ public class ComponentStatusCalculator {
       return false;
     }
 
-    Long donationId = component.getDonation().getId();
+    UUID donationId = component.getDonation().getId();
     Donation donation = donationRepository.findDonationById(donationId);
     BloodTypingStatus bloodTypingStatus = donation.getBloodTypingStatus();
     TTIStatus ttiStatus = donation.getTTIStatus();

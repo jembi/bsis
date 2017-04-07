@@ -9,6 +9,7 @@ import static org.jembi.bsis.helpers.matchers.BloodTestingRuleResultMatcher.hasS
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
@@ -24,7 +25,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
-  
+
+  private static final UUID DONATION_ID = UUID.randomUUID();
+
   @InjectMocks
   BloodTestingRuleResultViewModelFactory bloodTestingRuleResultViewModelFactory;
 
@@ -38,7 +41,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
   public void testCreateBloodTestResultViewModelWithHighTitre_shouldCreateCorrectResultSet() throws Exception {    
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
@@ -60,7 +63,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
   public void testCreateBloodTestResultViewModelWithLowTitre_shouldCreateCorrectResultSet() throws Exception {    
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
@@ -82,7 +85,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
   public void testCreateBloodTestResultViewModelWithNTTitre_shouldCreateCorrectResultSet() throws Exception {    
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
@@ -104,7 +107,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
   public void testCreateBloodTestResultViewModelWithUpdatedTitre_shouldCreateCorrectResultSet() throws Exception {    
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).withTitre(Titre.HIGH).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withTitre(Titre.HIGH).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
@@ -126,7 +129,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
   public void testCreateBloodTestResultViewModelWithUpdatedNTTitre_shouldCreateCorrectResultSet() throws Exception {    
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).withTitre(Titre.HIGH).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withTitre(Titre.HIGH).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
