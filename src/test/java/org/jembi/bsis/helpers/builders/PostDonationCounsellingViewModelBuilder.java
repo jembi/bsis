@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.viewmodel.DonationViewModel;
@@ -12,7 +13,7 @@ import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 
 public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<PostDonationCounsellingViewModel> {
 
-  private long id;
+  private UUID id;
   private boolean flaggedForCounselling = false;
   private CounsellingStatus counsellingStatus;
   private Date counsellingDate;
@@ -23,7 +24,7 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
   private Boolean referred;
   private LocationViewModel referralSite;
   
-  public PostDonationCounsellingViewModelBuilder withId(long id) {
+  public PostDonationCounsellingViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

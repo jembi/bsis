@@ -1,8 +1,8 @@
 package org.jembi.bsis.viewmodel;
 
-public class AdverseEventTypeViewModel {
+import java.util.UUID;
 
-  private Long id;
+public class AdverseEventTypeViewModel extends BaseViewModel<UUID> {
   private String name;
   private String description;
   private boolean isDeleted;
@@ -11,19 +11,11 @@ public class AdverseEventTypeViewModel {
     // Default constructor
   }
 
-  public AdverseEventTypeViewModel(Long id, String name, String description, boolean isDeleted) {
-    this.id = id;
+  public AdverseEventTypeViewModel(UUID id, String name, String description, boolean isDeleted) {
+    this.setId(id);
     this.name = name;
     this.description = description;
     this.isDeleted = isDeleted;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getName() {

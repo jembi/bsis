@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
@@ -8,7 +9,7 @@ import org.jembi.bsis.model.counselling.CounsellingStatus;
 
 public class PostDonationCounsellingBackingFormBuilder extends AbstractBuilder<PostDonationCounsellingBackingForm> {
 
-  private Long id;
+  private UUID id;
   private Date counsellingDate;
   private CounsellingStatus counsellingStatus;
   private boolean flaggedForCounselling;
@@ -16,7 +17,7 @@ public class PostDonationCounsellingBackingFormBuilder extends AbstractBuilder<P
   private String notes;
   private LocationBackingForm referralSite;
   
-  public PostDonationCounsellingBackingFormBuilder withId(Long id) {
+  public PostDonationCounsellingBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

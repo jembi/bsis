@@ -6,12 +6,12 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.AssertTrue;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.componenttype.ComponentType;
 
 @Entity
 @Audited
-public class PackType extends BaseModificationTrackerEntity {
+public class PackType extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

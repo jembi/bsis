@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DeferralReasonBuilder.aDeferralReason;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -90,7 +91,7 @@ public class DeferralReasonRepositoryTests extends ContextDependentTestSuite {
   
   @Test
   public void testVerifyDeferralReasonExistsWithNoDeferralReason_shouldReturnFalse() {
-    boolean result = deferralReasonRepository.verifyDeferralReasonExists(37L);
+    boolean result = deferralReasonRepository.verifyDeferralReasonExists(UUID.randomUUID());
     
     assertThat(result, is(false));
   }

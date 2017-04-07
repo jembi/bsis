@@ -11,6 +11,8 @@ import static org.jembi.bsis.helpers.matchers.AdverseEventMatcher.hasSameStateAs
 import static org.jembi.bsis.helpers.matchers.AdverseEventViewModelMatcher.hasSameStateAsAdverseEventViewModel;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.AdverseEventBackingForm;
 import org.jembi.bsis.backingform.AdverseEventTypeBackingForm;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
@@ -37,13 +39,18 @@ public class AdverseEventFactoryTests {
   @Test
   public void testCreateEntity_shouldReturnCorrectEntity() {
     // Set up data
-    AdverseEventTypeBackingForm typeForm = anAdverseEventTypeBackingForm().withId(1L).build();
-    AdverseEventBackingForm form = anAdverseEventBackingForm().withId(1L).withComment("comment").withType(typeForm).build();
-    AdverseEventType type = anAdverseEventType().withId(1L).build();
-    AdverseEvent expectedEntity = anAdverseEvent().withId(1L).withComment("comment").withType(type).build();
+    UUID irrelevantAdveseEventTypeId = UUID.randomUUID();
+    UUID irrelevantAdverseEventId = UUID.randomUUID();
+    AdverseEventTypeBackingForm typeForm = anAdverseEventTypeBackingForm()
+        .withId(irrelevantAdveseEventTypeId).build();
+    AdverseEventBackingForm form = anAdverseEventBackingForm()
+        .withId(irrelevantAdverseEventId).withComment("comment").withType(typeForm).build();
+    AdverseEventType type = anAdverseEventType().withId(irrelevantAdveseEventTypeId).build();
+    AdverseEvent expectedEntity = anAdverseEvent()
+        .withId(irrelevantAdverseEventId).withComment("comment").withType(type).build();
     
     // Set up mocks
-    when(adverseEventTypeRepository.findById(1L)).thenReturn(type);
+    when(adverseEventTypeRepository.findById(irrelevantAdveseEventTypeId)).thenReturn(type);
     
     // Run test
     AdverseEvent createdEntity = adverseEventFactory.createEntity(form);
@@ -56,8 +63,8 @@ public class AdverseEventFactoryTests {
   @Test
   public void testCreateAdverseEventTypeViewModel_shouldReturnViewModelWithTheCorrectState() {
 
-    Long irrelevantAdverseEventId = 77L;
-    Long irrelevantAdverseEventTypeId = 89L;
+    UUID irrelevantAdverseEventId = UUID.randomUUID();
+    UUID irrelevantAdverseEventTypeId = UUID.randomUUID();
     String irrelevantComment = "test";
 
     AdverseEventType adverseEventType = anAdverseEventType().withId(irrelevantAdverseEventTypeId).build();

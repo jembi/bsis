@@ -1,11 +1,13 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 
 public class PackTypeFullViewModelBuilder extends AbstractBuilder<PackTypeFullViewModel> {
 
-  private Long id;
+  private UUID id;
   private String packType;
   private Boolean countAsDonation;
   private int periodBetweenDonations;
@@ -16,7 +18,7 @@ public class PackTypeFullViewModelBuilder extends AbstractBuilder<PackTypeFullVi
   private Integer minWeight;
   private Integer lowVolumeWeight;
 
-  public PackTypeFullViewModelBuilder withId(Long id) {
+  public PackTypeFullViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

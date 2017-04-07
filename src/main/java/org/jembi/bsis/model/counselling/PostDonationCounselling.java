@@ -13,7 +13,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.PostDonationCounsellingNamedQueryConstants;
@@ -36,7 +36,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class PostDonationCounselling extends BaseModificationTrackerEntity {
+public class PostDonationCounselling extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

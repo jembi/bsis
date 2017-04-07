@@ -1,12 +1,13 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.util.Gender;
 
 public class PostDonationCounsellingSummaryViewModel {
 
-  private long id;
+  private UUID id;
   private String counselled;
   private String referred;
   private Date counsellingDate;
@@ -19,13 +20,13 @@ public class PostDonationCounsellingSummaryViewModel {
   private String donationIdentificationNumber;
   private Date donationDate;
   private LocationViewModel venue;
-  private long donorId;
+  private UUID donorId;
 
-  public long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
@@ -125,11 +126,11 @@ public class PostDonationCounsellingSummaryViewModel {
     this.venue = venue;
   }
 
-  public long getDonorId() {
+  public UUID getDonorId() {
     return donorId;
   }
 
-  public void setDonorId(long donorId) {
+  public void setDonorId(UUID donorId) {
     this.donorId = donorId;
   }
 

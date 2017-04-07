@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.builders.DeferralReasonBuilder.aDeferralRea
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DeferralReasonBackingForm;
 import org.jembi.bsis.backingform.validator.DeferralReasonBackingFormValidator;
@@ -32,11 +33,11 @@ public class DeferralReasonBackingFormValidatorTests {
   @Test
   public void testValidateWithDeferralReasonBackingFormWithDuplicateDeferralReason_shouldHaveErrors() {
     DeferralReason deferralReason = aDeferralReason()
-        .withId(1l)
+        .withId(UUID.randomUUID())
         .withReason("test")
         .build();
     DeferralReason deferralReasonDuplicate = aDeferralReason()
-        .withId(2l)
+        .withId(UUID.randomUUID())
         .withReason("test")
         .build();
     DeferralReasonBackingForm backingForm = aDeferralReasonBackingForm()

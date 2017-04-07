@@ -35,7 +35,7 @@ public class BSISUUIDGenerator implements IdentifierGenerator {
     }
   }
 
-  private Serializable getVersion1UUIDFromDatabase(SessionImplementor session) {
+  protected Serializable getVersion1UUIDFromDatabase(SessionImplementor session) {
     final String sql = "select GENERATEBINARYUUID() as uuid";
     try {
       PreparedStatement st =
@@ -62,25 +62,6 @@ public class BSISUUIDGenerator implements IdentifierGenerator {
   }
 
   /**
-   * This method for generator a UUD is only to be used for testing purposes.
-   * 
-   * @return
-   */
-  private Serializable getUUIDForHSQLTestingOnly() {
-    UUID hsqlUUID = UUID.randomUUID();
-    Long uuidLSB = hsqlUUID.getLeastSignificantBits();
-    Long uuidMSB = hsqlUUID.getMostSignificantBits();
-    // This sets the MSB to the current time so that any ordering based on the UUID will be
-    // chronologically sequential.
-    uuidMSB = System.currentTimeMillis();
-    // UUIDs are compared by it's long value. This means that the MSB
-    // leading bit is a sign bit. This will affect the ordering, and so is removed. This should
-    // suffice for purposes of testing i.e. the UUID will still be unique.
-    uuidMSB = uuidMSB & 0x7FFFFFFFL;
-    return new UUID(uuidMSB, uuidLSB);
-  }
-
-  /**
    * This method takes a UUID represented as a 16 byte array and converts it to the java.util.UUID
    * type.
    * 
@@ -96,4 +77,39 @@ public class BSISUUIDGenerator implements IdentifierGenerator {
     long secondLong = bb.getLong();
     return new UUID(firstLong, secondLong);
   }
+
+
+  /**
+   * This method for generator a UUID is only to be used for testing purposes.
+   * 
+   * @return
+   */
+  private Serializable getUUIDForHSQLTestingOnly() {
+    UUID hsqlUUID = UUID.randomUUID();
+    Long uuidLSBits = hsqlUUID.getLeastSignificantBits();
+    Long uuidMSBits = hsqlUUID.getMostSignificantBits();
+    // This sets the MSB to the current time so that any ordering based on the UUID will be
+    // chronologically sequential.
+    uuidMSBits = System.currentTimeMillis();
+    // UUIDs are compared by it's long value. This means that the MSB
+    // leading bit is a sign bit. This will affect the ordering, and so is removed. This should
+    // suffice for purposes of testing i.e. the UUID will still be unique.
+    uuidMSBits = uuidMSBits & 0x7FFFFFFFFFFFFFFFL;
+
+    // cater for different UUIDs generated on the same millisecond. Add a sequential counter
+    // to the Most Significant part of the Least Signficant bits. This will ensure sequential
+    // ordering based on UUIDs
+    uuidLSBits = uuidLSBits & 0x007FFFFFFFFFFFFFL;
+    synchronized (BSISUUIDGenerator.class) {
+      long bitmask = (testUUIDCounter << 55L);
+      uuidLSBits = uuidLSBits | (bitmask);
+      // allow for 0-254 increments of the counter before wrapping around.
+      testUUIDCounter = ++testUUIDCounter % 0xFEL;
+    }
+
+    return new UUID(uuidMSBits, uuidLSBits);
+  }
+
+  // counter to ensure unique Test UUIDs on the same millisecond.
+  public static long testUUIDCounter = 0L;
 }

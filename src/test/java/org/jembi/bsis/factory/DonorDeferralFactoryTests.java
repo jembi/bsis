@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DeferralBackingForm;
 import org.jembi.bsis.backingform.DeferralReasonBackingForm;
@@ -60,20 +61,22 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
   public void testCreateDonorDeferralViewModel() throws Exception {
 
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
-    DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralDate(new Date())
+    UUID donorDeferralId = UUID.randomUUID();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("Sample").withLastName("Donor").build();
+    DonorDeferral donorDeferral = DonorDeferralBuilder.aDonorDeferral().withId(donorDeferralId)
+        .withDeferralDate(new Date())
         .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
 
     // set up mocks
-    when(deferralConstraintChecker.canEndDonorDeferral(1L)).thenReturn(true);
-    when(deferralConstraintChecker.canEditDonorDeferral(1L)).thenReturn(true);
+    when(deferralConstraintChecker.canEndDonorDeferral(donorDeferralId)).thenReturn(true);
+    when(deferralConstraintChecker.canEditDonorDeferral(donorDeferralId)).thenReturn(true);
 
     // run tests
     DonorDeferralViewModel donorDeferralViewModel = donorDeferralFactory.createDonorDeferralViewModel(donorDeferral);
 
     // asserts
     Assert.assertNotNull("DonorDeferralViewModel exists", donorDeferralViewModel);
-    Assert.assertEquals("DonorDeferral matches", new Long(1), donorDeferralViewModel.getId());
+    Assert.assertEquals("DonorDeferral matches", donorDeferralId, donorDeferralViewModel.getId());
     Assert.assertNotNull("Permissions have been defined", donorDeferralViewModel.getPermissions());
     Assert.assertEquals("Permissions have been defined", 2, donorDeferralViewModel.getPermissions().size());
     Boolean canEdit = donorDeferralViewModel.getPermissions().get("canEdit");
@@ -88,25 +91,31 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
   public void testCreateDonorDeferralViewModels() throws Exception {
 
     // create test data
-    Donor deferredDonor = DonorBuilder.aDonor().withId(1l).withFirstName("Sample").withLastName("Donor").build();
+    UUID donorDeferralId1 = UUID.randomUUID();
+    UUID donorDeferralId2 = UUID.randomUUID();
+    UUID donorDeferralId3 = UUID.randomUUID();
+    Donor deferredDonor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("Sample").withLastName("Donor").build();
     List<DonorDeferral> donorDeferrals = new ArrayList<DonorDeferral>();
-    DonorDeferral donorDeferral1 = DonorDeferralBuilder.aDonorDeferral().withId(1l).withDeferralDate(new Date())
+    DonorDeferral donorDeferral1 = DonorDeferralBuilder.aDonorDeferral().withId(donorDeferralId1)
+        .withDeferralDate(new Date())
         .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
     donorDeferrals.add(donorDeferral1);
-    DonorDeferral donorDeferral2 = DonorDeferralBuilder.aDonorDeferral().withId(2l).withDeferralDate(new Date())
+    DonorDeferral donorDeferral2 = DonorDeferralBuilder.aDonorDeferral().withId(donorDeferralId2)
+        .withDeferralDate(new Date())
         .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
     donorDeferrals.add(donorDeferral2);
-    DonorDeferral donorDeferral3 = DonorDeferralBuilder.aDonorDeferral().withId(3l).withDeferralDate(new Date())
+    DonorDeferral donorDeferral3 = DonorDeferralBuilder.aDonorDeferral().withId(donorDeferralId3)
+        .withDeferralDate(new Date())
         .withDeferredDonor(deferredDonor).withDeferredUntil(new Date()).build();
     donorDeferrals.add(donorDeferral3);
 
     // set up mocks
-    when(deferralConstraintChecker.canEditDonorDeferral(1L)).thenReturn(true);
-    when(deferralConstraintChecker.canEndDonorDeferral(1L)).thenReturn(true);
-    when(deferralConstraintChecker.canEditDonorDeferral(2L)).thenReturn(true);
-    when(deferralConstraintChecker.canEndDonorDeferral(2L)).thenReturn(true);
-    when(deferralConstraintChecker.canEditDonorDeferral(3L)).thenReturn(true);
-    when(deferralConstraintChecker.canEndDonorDeferral(3L)).thenReturn(true);
+    when(deferralConstraintChecker.canEditDonorDeferral(donorDeferralId1)).thenReturn(true);
+    when(deferralConstraintChecker.canEndDonorDeferral(donorDeferralId1)).thenReturn(true);
+    when(deferralConstraintChecker.canEditDonorDeferral(donorDeferralId2)).thenReturn(true);
+    when(deferralConstraintChecker.canEndDonorDeferral(donorDeferralId2)).thenReturn(true);
+    when(deferralConstraintChecker.canEditDonorDeferral(donorDeferralId3)).thenReturn(true);
+    when(deferralConstraintChecker.canEndDonorDeferral(donorDeferralId3)).thenReturn(true);
 
     // run tests
     List<DonorDeferralViewModel> donorDeferralViewModels = donorDeferralFactory.createDonorDeferralViewModels(donorDeferrals);
@@ -114,17 +123,12 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
     // asserts
     Assert.assertNotNull("DonorDeferralViewModels returned", donorDeferralViewModels);
     Assert.assertEquals("DonorDeferralViewModels returned", 3, donorDeferralViewModels.size());
-    boolean[] matches = {false, false, false};
     for (DonorDeferralViewModel donorDeferralViewModel : donorDeferralViewModels) {
       Assert.assertNotNull("DonorDeferralViewModel exists", donorDeferralViewModel);
       Assert.assertNotNull("DonorDeferralViewModel id defined", donorDeferralViewModel.getId());
-      matches[(int) (donorDeferralViewModel.getId() - 1)] = true;
       Assert.assertNotNull("Permissions have been defined", donorDeferralViewModel.getPermissions());
       Assert.assertEquals("Permissions have been defined", 2, donorDeferralViewModel.getPermissions().size());
     }
-    Assert.assertTrue("DonorDeferrals defined", matches[0]);
-    Assert.assertTrue("DonorDeferrals defined", matches[1]);
-    Assert.assertTrue("DonorDeferrals defined", matches[2]);
   }
   
   @Test
@@ -133,10 +137,12 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
     Date deferralDate = new Date();
     Date deferredUntilDate = new Date();
     String deferralReasonText = "testing123";
+    UUID deferralReasonId = UUID.randomUUID();
+    UUID donorId = UUID.randomUUID();
     
-    DonorBackingForm donorForm = aDonorBackingForm().withId(1L).build();
+    DonorBackingForm donorForm = aDonorBackingForm().withId(donorId).build();
     LocationBackingForm locationForm = aVenueBackingForm().withId(1L).build();
-    DeferralReasonBackingForm deferralReasonForm = aDeferralReasonBackingForm().withId(1L).build();
+    DeferralReasonBackingForm deferralReasonForm = aDeferralReasonBackingForm().withId(deferralReasonId).build();
 
     DeferralBackingForm deferralForm = aDeferralBackingForm()
         .withDeferralDate(deferralDate)
@@ -161,8 +167,8 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
         .build();
     
     // set up mocks
-    when(deferralReasonRepository.getDeferralReasonById(1L)).thenReturn(deferralReason);
-    when(donorRepository.findDonorById(1L)).thenReturn(donor);
+    when(deferralReasonRepository.getDeferralReasonById(deferralReasonId)).thenReturn(deferralReason);
+    when(donorRepository.findDonorById(donorId)).thenReturn(donor);
     when(locationRepository.getLocation(1L)).thenReturn(location);
     
     // run test

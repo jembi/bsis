@@ -7,6 +7,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -17,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -95,6 +98,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Should fail when donor is missing required fields. saveDonor(Donor)
    */
   public void saveDonor_shouldPersist() throws ParseException {
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4900");
     donorBackingForm = new DonorBackingForm();
     setBackingFormValue(donorBackingForm);
     // New DonorNumber(000005) which is assigned to Donor Persist Object
@@ -102,7 +106,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     donorRepository.saveDonor(donorBackingForm.getDonor());
     assertTrue(
         "Donor's Id should not zero. Once Donor object should persist,new Id is generated and assigned to Donor.",
-        donorBackingForm.getDonor().getId() == 0 ? false : true);
+        donorBackingForm.getDonor().getId() == donorId ? false : true);
   }
 
   @Test
@@ -111,12 +115,12 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   public void findDonorById_shouldReturnDonor() {
     // 1 is Donor's ID.
-    Donor findDonor = donorRepository.findDonorById(1l);
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4901");
+    Donor findDonor = donorRepository.findDonorById(donorId);
     assertNotNull(
         "Donor Object should not null.Donor Id is exist into Donor's table.",
         findDonor);
-    assertTrue("Donor's id value should be 1.",
-        findDonor.getId() == 1 ? true : false);
+    assertThat(findDonor.getId(), is(donorId));
   }
 
 
@@ -125,8 +129,9 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   @Test(expected = NoResultException.class)
   public void findDonorById_shouldExpectNoResultException() {
-    // 18 ID is not exist into Donor table.
-    donorRepository.findDonorById(18l);
+    // This ID does not exist in Donor table.
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4918");
+    donorRepository.findDonorById(donorId);
   }
 
 
@@ -135,8 +140,9 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   @Test(expected = NoResultException.class)
   public void findDonorById_shouldExpectNoResultExceptionWhenDonorIsDeleted() {
-    // 2 is Deleted Donor's ID.
-    donorRepository.findDonorById(2l);
+    // Deleted Donor's ID.
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4902");
+    donorRepository.findDonorById(donorId);
   }
 
   @Test
@@ -246,14 +252,15 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
   public void findAnyDonor_deleteObjectShouldNotPartOfList() {
     String donorFirstName = "fir";
     String donorLastName = "";
-
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4902");
+    
     List<Donor> listDonor = donorRepository.findAnyDonor(donorFirstName, donorLastName, true);
 
     for (Donor donor : listDonor) {
       // 2 is deleted donor id
       assertFalse(
           "Donor's id 2 is deleted from database. so Deleted Donor should not included in the list.",
-          donor.getId() == 2 ? true : false);
+          donor.getId() == donorId ? true : false);
     }
   }
 
@@ -263,14 +270,16 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   public void addDonor_shouldPersist() {
     // 1 is Donor's Id.
-    Donor createNewDonorFromExistDonor = donorRepository.findDonorById(1l);
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4901");
+    UUID zeroDonorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4900");
+    Donor createNewDonorFromExistDonor = donorRepository.findDonorById(donorId);
     Donor newDonor = this.copyDonor(createNewDonorFromExistDonor);
     // New DonorNumber(000006) which is assigned to Donor Persist Object.
     newDonor.setDonorNumber("000006");
     donorRepository.addDonor(newDonor);
     assertTrue(
         "Donor's Id should not zero. Once Donor should persist,new Id is generated and assigned to Donor.",
-        newDonor.getId() == 0 ? false : true);
+        newDonor.getId() == zeroDonorId ? false : true);
   }
 
   @Test
@@ -279,7 +288,8 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   public void updateDonor_shouldReturnNotNull() {
     // 1 is Donor Id.
-    Donor editDonor = donorRepository.findDonorById(1l);
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4901");
+    Donor editDonor = donorRepository.findDonorById(donorId);
     donorBackingForm = new DonorBackingForm(editDonor);
     setBackingUpdateFormValue(donorBackingForm);
     assertNotNull("Donor Object should update.",
@@ -294,8 +304,9 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   @Test(expected = NoResultException.class)
   public void updateDonor_shouldExpectNoResultException() {
+    UUID irrelevantDonorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4900");
     Donor editDonor = new Donor();
-    editDonor.setId(-1l);
+    editDonor.setId(irrelevantDonorId);
     donorBackingForm = new DonorBackingForm(editDonor);
     setBackingUpdateFormValue(donorBackingForm);
     donorRepository.updateDonorDetails(donorBackingForm.getDonor());
@@ -426,9 +437,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   public void getDonorDeferrals_listSizeShouldZero() {
     // 2 is Donor ID
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4902");
     assertEquals(
         "Deferral Donor is not found base on donor id so,List size should be zero.",
-        0, donorRepository.getDonorDeferrals(2l).size());
+        0, donorRepository.getDonorDeferrals(donorId).size());
 
   }
 
@@ -438,14 +450,14 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   public void getDonorDeferrals_listSizeShouldNotZero() {
     // 1 is Donor ID
+    UUID deferralDonorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4901");
     List<DonorDeferral> listDonorDeferral = donorRepository
-        .getDonorDeferrals(1l);
+        .getDonorDeferrals(deferralDonorId);
     assertNotSame(
         "Deferral Donor is found base on donor id so,List size should not zero.",
         0, listDonorDeferral.size());
     for (DonorDeferral donorDeferral : listDonorDeferral) {
-      assertTrue("DonorDeferral's Donor Id should be 1.", donorDeferral
-          .getDeferredDonor().getId() == 1 ? true : false);
+      assertThat(donorDeferral.getDeferredDonor().getId(), is(deferralDonorId));
     }
 
   }
@@ -457,8 +469,9 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   public void getLastDonorDeferralDate_shouldReturnlastDeferredUntil() {
     // 4 is Donor ID
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4906");
     Date currentDate = DateUtils.addDays(new Date(), (2));
-    Date date = donorRepository.getLastDonorDeferralDate(6l);
+    Date date = donorRepository.getLastDonorDeferralDate(donorId);
     assertNotNull("should return last donor derferral date", date);
     String str = dateFormat.format(date);
     String str_currentDate = dateFormat.format(currentDate);
@@ -473,7 +486,8 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
   public void getLastDonorDeferral_shouldReturnOnlyDonorDeferral() {
     Date latestDeferralDate = DateUtils.addDays(new Date(), (2));
-    DonorDeferral lastDonorDeferral = donorRepository.getLastDonorDeferral(1l);
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4901");
+    DonorDeferral lastDonorDeferral = donorRepository.getLastDonorDeferral(donorId);
     String str = dateFormat.format(lastDonorDeferral.getDeferredUntil());
     String str_latestDeferralDate = dateFormat.format(latestDeferralDate);
     assertTrue("Should equal latest deferral Date: " + str_latestDeferralDate, str.equals(str_latestDeferralDate));
@@ -486,7 +500,8 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
   public void getLastDonorDeferral_shouldReturnLastDonorDeferral() {
     Date latestDeferralDate = DateUtils.addDays(new Date(), (2));
-    DonorDeferral lastDonorDeferral = donorRepository.getLastDonorDeferral(6l);
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4906");
+    DonorDeferral lastDonorDeferral = donorRepository.getLastDonorDeferral(donorId);
     String str = dateFormat.format(lastDonorDeferral.getDeferredUntil());
     String str_latestDeferralDate = dateFormat.format(latestDeferralDate);
     assertTrue("Should equal latest deferral Date: " + str_latestDeferralDate, str.equals(str_latestDeferralDate));
@@ -498,7 +513,8 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
 
   public void getLastDonorDeferral_shouldReturnNull() {
-    DonorDeferral lastDonorDeferral = donorRepository.getLastDonorDeferral(3l);
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4903");
+    DonorDeferral lastDonorDeferral = donorRepository.getLastDonorDeferral(donorId);
     assertNull("should return null when donor has no deferral", lastDonorDeferral);
   }
 
@@ -525,9 +541,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   public void setBackingFormValue(DonorBackingForm donorBackingForm) throws ParseException {
     Location l = new Location();
+    
     l.setId(Long.parseLong("1"));
-    AddressType a = new AddressType();
-    a.setId(Long.parseLong("1"));
+    AddressType addressType = new AddressType();
+    addressType.setId(UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870681"));
     donorBirthdate = CustomDateFormatter.getDateFromString("1991-06-11");
     donorBackingForm.setAddress(new Address());
     donorBackingForm.setContact(new Contact());
@@ -549,7 +566,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     donorBackingForm.setNotes("Notes");
     donorBackingForm.setMobileNumber("9999999999");
     donorBackingForm.setWorkNumber("8888888888");
-    donorBackingForm.setPreferredAddressType(a);
+    donorBackingForm.setPreferredAddressType(addressType);
     donorBackingForm.setHomeAddressProvince("Province");
     donorBackingForm.setHomeAddressState("State");
     donorBackingForm.setHomeAddressZipcode("361001");
@@ -577,8 +594,8 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
     Location l = new Location();
     l.setId(Long.parseLong("2"));
-    AddressType a = new AddressType();
-    a.setId(Long.parseLong("2"));
+    AddressType addressType = new AddressType();
+    addressType.setId(UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870682"));
     donorBackingForm.setHomeAddressLine1("address_update");
     donorBackingForm.setFirstName("firstName_update");
     donorBackingForm.setMiddleName("middlename_update");
@@ -594,7 +611,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     donorBackingForm.setNotes("Notes_update");
     donorBackingForm.setMobileNumber("9878787878");
     donorBackingForm.setWorkNumber("874525452");
-    donorBackingForm.setPreferredAddressType(a);
+    donorBackingForm.setPreferredAddressType(addressType);
     donorBackingForm.setHomeAddressProvince("Province_update");
     donorBackingForm.setHomeAddressState("State_update");
     donorBackingForm.setHomeAddressZipcode("361001");
@@ -643,8 +660,9 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Test passes on retrieving address of donor
    */
   public void getDonorAddress_ShouldReturnNotNull() {
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4901");
     assertNotNull("Expected : Address Type  but Found : NULL",
-        donorRepository.findDonorById(1l).getAddress());
+        donorRepository.findDonorById(donorId).getAddress());
   }
 
   @Test
@@ -652,8 +670,9 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    * Test passes on retrieving Contact of donor
    */
   public void getDonorContact_ShouldReturnNotNull() {
+    UUID donorId = UUID.fromString("11e715ee-e76a-1733-9763-28f10e1b4901");
     assertNotNull("Expected : Contact Type but Found : NULL",
-        donorRepository.findDonorById(1l).getContact());
+        donorRepository.findDonorById(donorId).getContact());
   }
 
 //    @Test
@@ -721,8 +740,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   public void addMergedDonor() throws Exception {
     List<DuplicateDonorBackup> backupLogs = new ArrayList<DuplicateDonorBackup>();
-    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", 1l, null));
-    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, 1l));
+    UUID deferralId = UUID.randomUUID();
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
+    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", donationId, null));
+    backupLogs.add(new DuplicateDonorBackup("1234567", "000001", null, deferralId));
     Donor oldDonor = donorRepository.findDonorByDonorNumber("000001", false);
     List<Donor> donorsToMerge = new ArrayList<Donor>();
     donorsToMerge.add(oldDonor);

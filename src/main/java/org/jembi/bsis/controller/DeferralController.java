@@ -2,6 +2,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -60,7 +61,7 @@ public class DeferralController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DEFERRAL + "')")
-  public Map<String, Object> getDonorDeferrals(@PathVariable Long id) {
+  public Map<String, Object> getDonorDeferrals(@PathVariable UUID id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     DonorDeferral donorDeferral = donorDeferralCRUDService.findDeferralById(id);
@@ -81,7 +82,8 @@ public class DeferralController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
-  public ResponseEntity<Map<String, Object>> updateDeferral(@Valid @RequestBody DeferralBackingForm deferralBackingForm, @PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> updateDeferral(@Valid @RequestBody DeferralBackingForm deferralBackingForm,
+      @PathVariable UUID id) {
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();
@@ -101,13 +103,14 @@ public class DeferralController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_DEFERRAL + "')")
-  public void deleteDonorDeferral(@PathVariable Long id) {
+  public void deleteDonorDeferral(@PathVariable UUID id) {
     donorDeferralCRUDService.deleteDeferral(id);
   }
 
   @RequestMapping(value = "{id}/end", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_DEFERRAL + "')")
-  public ResponseEntity<Map<String, Object>> endDeferral(@RequestBody EndDeferralBackingForm endDeferralBackingForm, @PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> endDeferral(@RequestBody EndDeferralBackingForm endDeferralBackingForm,
+      @PathVariable UUID id) {
 
     HttpStatus httpStatus = HttpStatus.OK;
     Map<String, Object> map = new HashMap<String, Object>();

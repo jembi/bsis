@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -107,7 +108,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
   }
 
   // TODO: Test
-  public int countChangedComponentsForDonation(long donationId) {
+  public int countChangedComponentsForDonation(UUID donationId) {
     return em.createNamedQuery(
         ComponentNamedQueryConstants.NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION,
         Number.class)

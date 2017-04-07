@@ -7,6 +7,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.service.DonorCRUDService;
@@ -20,8 +22,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class DonorCRUDServiceTests {
 
-  private static final Long IRRELEVANT_DONOR_ID = 99L;
-
   @InjectMocks
   private DonorCRUDService donorCRUDService;
   @Mock
@@ -31,28 +31,30 @@ public class DonorCRUDServiceTests {
 
   @Test(expected = IllegalStateException.class)
   public void testDeleteDonorWithDonorWithConstraints_shouldThrow() {
+    UUID irrelavantDonorId = UUID.randomUUID();
 
-    when(donorConstraintChecker.canDeleteDonor(IRRELEVANT_DONOR_ID)).thenReturn(false);
+    when(donorConstraintChecker.canDeleteDonor(irrelavantDonorId)).thenReturn(false);
 
-    donorCRUDService.deleteDonor(IRRELEVANT_DONOR_ID);
+    donorCRUDService.deleteDonor(irrelavantDonorId);
 
-    verify(donorConstraintChecker).canDeleteDonor(IRRELEVANT_DONOR_ID);
+    verify(donorConstraintChecker).canDeleteDonor(irrelavantDonorId);
     verifyNoMoreInteractions(donorConstraintChecker, donorRepository);
   }
 
   @Test
   public void testDeleteDonor_shouldSoftDeleteDonor() {
 
+    UUID irrelaventDonorId = UUID.randomUUID();
     Donor existingDonor = aDonor().withNotes("").build();
     Donor expectedDonor = aDonor().thatIsDeleted().withNotes("").build();
 
-    when(donorConstraintChecker.canDeleteDonor(IRRELEVANT_DONOR_ID)).thenReturn(true);
-    when(donorRepository.findDonorById(IRRELEVANT_DONOR_ID)).thenReturn(existingDonor);
+    when(donorConstraintChecker.canDeleteDonor(irrelaventDonorId)).thenReturn(true);
+    when(donorRepository.findDonorById(irrelaventDonorId)).thenReturn(existingDonor);
 
-    donorCRUDService.deleteDonor(IRRELEVANT_DONOR_ID);
+    donorCRUDService.deleteDonor(irrelaventDonorId);
 
-    verify(donorConstraintChecker).canDeleteDonor(IRRELEVANT_DONOR_ID);
-    verify(donorRepository).findDonorById(IRRELEVANT_DONOR_ID);
+    verify(donorConstraintChecker).canDeleteDonor(irrelaventDonorId);
+    verify(donorRepository).findDonorById(irrelaventDonorId);
     verify(donorRepository).updateDonor(argThat(hasSameStateAsDonor(expectedDonor)));
     verifyNoMoreInteractions(donorConstraintChecker, donorRepository);
   }

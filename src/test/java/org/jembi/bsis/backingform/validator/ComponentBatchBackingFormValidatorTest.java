@@ -7,27 +7,26 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.BloodTransportBoxBackingForm;
 import org.jembi.bsis.backingform.ComponentBatchBackingForm;
 import org.jembi.bsis.backingform.DonationBatchBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
-import org.jembi.bsis.backingform.validator.BloodTransportBoxBackingFormValidator;
-import org.jembi.bsis.backingform.validator.ComponentBatchBackingFormValidator;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
 import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.MapBindingResult;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ComponentBatchBackingFormValidatorTest {
+public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
+
+  private static final UUID DONATION_BATCH_ID = UUID.randomUUID();
 
   @InjectMocks
   private ComponentBatchBackingFormValidator validator;
@@ -47,9 +46,10 @@ public class ComponentBatchBackingFormValidatorTest {
   @Test
   public void testValidate_hasNoErrors() throws Exception {
     // set up data
+    UUID donationBatchId = UUID.randomUUID();
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     form.setDonationBatch(new DonationBatchBackingForm());
-    form.getDonationBatch().setId(1L);
+    form.getDonationBatch().setId(donationBatchId);
     form.setDeliveryDate(new Date());
     form.setBloodTransportBoxes(new ArrayList<BloodTransportBoxBackingForm>());
     form.getBloodTransportBoxes().add(new BloodTransportBoxBackingForm());
@@ -59,7 +59,7 @@ public class ComponentBatchBackingFormValidatorTest {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
-    when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
+    when(donationBatchRepository.verifyDonationBatchExists(donationBatchId)).thenReturn(true);
     when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
     
     // run test
@@ -115,14 +115,14 @@ public class ComponentBatchBackingFormValidatorTest {
     // set up data
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     form.setDonationBatch(new DonationBatchBackingForm());
-    form.getDonationBatch().setId(1L);
+    form.getDonationBatch().setId(DONATION_BATCH_ID);
     LocationBackingForm locationForm = new LocationBackingForm();
     locationForm.setId(1L);
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
-    when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(false);
+    when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(false);
     when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
     
     // run test
@@ -138,11 +138,11 @@ public class ComponentBatchBackingFormValidatorTest {
     // set up data
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     form.setDonationBatch(new DonationBatchBackingForm());
-    form.getDonationBatch().setId(1L);
+    form.getDonationBatch().setId(DONATION_BATCH_ID);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
-    when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
+    when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(true);
     when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
     
     // run test
@@ -158,13 +158,13 @@ public class ComponentBatchBackingFormValidatorTest {
     // set up data
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     form.setDonationBatch(new DonationBatchBackingForm());
-    form.getDonationBatch().setId(1L);
+    form.getDonationBatch().setId(DONATION_BATCH_ID);
     LocationBackingForm locationForm = new LocationBackingForm();
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
-    when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
+    when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(true);
     when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
     
     // run test
@@ -180,14 +180,14 @@ public class ComponentBatchBackingFormValidatorTest {
     // set up data
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     form.setDonationBatch(new DonationBatchBackingForm());
-    form.getDonationBatch().setId(1L);
+    form.getDonationBatch().setId(DONATION_BATCH_ID);
     LocationBackingForm locationForm = new LocationBackingForm();
     locationForm.setId(1L);
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
-    when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
+    when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(true);
     when(locationRepository.getLocation(1L)).thenReturn(null);
     
     // run test
@@ -203,14 +203,14 @@ public class ComponentBatchBackingFormValidatorTest {
     // set up data
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     form.setDonationBatch(new DonationBatchBackingForm());
-    form.getDonationBatch().setId(1L);
+    form.getDonationBatch().setId(DONATION_BATCH_ID);
     LocationBackingForm locationForm = new LocationBackingForm();
     locationForm.setId(1L);
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
-    when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
+    when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(true);
     when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().thatIsDeleted().withId(1L).build());
     
     // run test
@@ -226,14 +226,14 @@ public class ComponentBatchBackingFormValidatorTest {
     // set up data
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     form.setDonationBatch(new DonationBatchBackingForm());
-    form.getDonationBatch().setId(1L);
+    form.getDonationBatch().setId(DONATION_BATCH_ID);
     LocationBackingForm locationForm = new LocationBackingForm();
     locationForm.setId(1L);
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
-    when(donationBatchRepository.verifyDonationBatchExists(1L)).thenReturn(true);
+    when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(true);
     when(locationRepository.getLocation(1L)).thenReturn(aVenue().withId(1L).build());
     
     // run test

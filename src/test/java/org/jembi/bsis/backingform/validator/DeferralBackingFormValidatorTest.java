@@ -10,10 +10,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DeferralBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
-import org.jembi.bsis.backingform.validator.DeferralBackingFormValidator;
 import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
@@ -30,8 +30,8 @@ import org.springframework.validation.MapBindingResult;
 public class DeferralBackingFormValidatorTest extends UnitTestSuite {
   
   private static final Date DEFERRED_UNTIL = new DateTime().plusDays(1).toDate();
-  private static final Long DEFERRED_DONOR_ID = 88L;
-  private static final long DEFERRAL_REASON_ID = 115L;
+  private static final UUID DEFERRED_DONOR_ID = UUID.randomUUID();
+  private static final UUID DEFERRAL_REASON_ID = UUID.randomUUID();
   
   @InjectMocks
   private DeferralBackingFormValidator deferralBackingFormValidator;

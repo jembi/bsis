@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
@@ -67,9 +68,9 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsTrue() {
 
     boolean canRemoveStatus = true;
-    long donorId = 21L;
-    long donationId = 87L;
-    long postDonationCounsellingId = 32L;
+    UUID donorId = UUID.randomUUID();
+    UUID donationId = UUID.randomUUID();
+    UUID postDonationCounsellingId = UUID.randomUUID();
     long referralSiteId = 12L;
     
     Donor donor = aDonor().withId(donorId).build();
@@ -116,9 +117,9 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   public void testCreateViewModel_shouldReturnViewModelWithCorrectDonorAndPermissionsFalse() {
 
     boolean canRemoveStatus = false;
-    long donorId = 21L;
-    long donationId = 87L;
-    long postDonationCounsellingId = 32L;
+    UUID donorId = UUID.randomUUID();
+    UUID donationId = UUID.randomUUID();
+    UUID postDonationCounsellingId = UUID.randomUUID();
     
     Donor donor = aDonor().withId(donorId).build();
     Donation donation = aDonation().withId(donationId).withDonor(donor).build();
@@ -156,9 +157,9 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateViewModelWithReceivedCounsellingStatus_shouldReturnCorrectViewModel() {
 
-    long donorId = 21L;
-    long donationId = 87L;
-    long postDonationCounsellingId = 32L;
+    UUID donorId = UUID.randomUUID();
+    UUID donationId = UUID.randomUUID();
+    UUID postDonationCounsellingId = UUID.randomUUID();
     Date counsellingDate = new Date();
     CounsellingStatus counsellingStatus = CounsellingStatus.RECEIVED_COUNSELLING;
     String notes = "Given counselling";
@@ -204,9 +205,9 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateViewModelWithRefusedCounsellingStatus_shouldReturnCorrectViewModel() {
 
-    long donorId = 21L;
-    long donationId = 87L;
-    long postDonationCounsellingId = 32L;
+    UUID donorId = UUID.randomUUID();
+    UUID donationId = UUID.randomUUID();
+    UUID postDonationCounsellingId = UUID.randomUUID();
     CounsellingStatus counsellingStatus = CounsellingStatus.REFUSED_COUNSELLING;
     String notes = "Did not have time to talk to us";
 
@@ -251,9 +252,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntityThatIsNotReferred_shouldReturnEntityInCorrectState() {
     Date counsellingDate = new Date();
+    UUID postDonationCounsellingId = UUID.randomUUID();
 
     PostDonationCounsellingBackingForm form = aPostDonationCounsellingBackingForm()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withCounsellingDate(counsellingDate)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
@@ -262,7 +264,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .build();
 
     PostDonationCounselling expectedEntity = aPostDonationCounselling()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withCounsellingDate(counsellingDate)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
@@ -280,10 +282,11 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   public void testCreateEntityThatIsReferred_shouldReturnEntityInCorrectState() {
     Date counsellingDate = new Date();
     Long locationId = 1L;
+    UUID postDonationCounsellingId = UUID.randomUUID(); 
 
     LocationBackingForm referralSiteForm = aReferralSiteBackingForm().withId(locationId).withName("Care").build();
     PostDonationCounsellingBackingForm form = aPostDonationCounsellingBackingForm()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withCounsellingDate(counsellingDate)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
@@ -294,7 +297,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
     Location referralSite = aReferralSite().withId(locationId).withName("Care").build();
     PostDonationCounselling expectedEntity = aPostDonationCounselling()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withCounsellingDate(counsellingDate)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .thatIsNotFlaggedForCounselling()
@@ -313,11 +316,11 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateSummaryViewModels_shouldReturnCorrectViewModels() {
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
-    PostDonationCounselling entity1 = aPostDonationCounselling().withId(1L).withDonation(donation).build();
-    PostDonationCounselling entity2 = aPostDonationCounselling().withId(2L).withDonation(donation).build();
-    PostDonationCounselling entity3 = aPostDonationCounselling().withId(3L).withDonation(donation).build();
+    PostDonationCounselling entity1 = aPostDonationCounselling().withId(UUID.randomUUID()).withDonation(donation).build();
+    PostDonationCounselling entity2 = aPostDonationCounselling().withId(UUID.randomUUID()).withDonation(donation).build();
+    PostDonationCounselling entity3 = aPostDonationCounselling().withId(UUID.randomUUID()).withDonation(donation).build();
 
     List<PostDonationCounselling> entities = Arrays.asList(entity1, entity2, entity3);
 
@@ -332,8 +335,9 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateSummaryViewModel_shouldReturnCorrectViewModel() {
+    UUID postDonationCounsellingId = UUID.randomUUID();
     Donor donor = aDonor()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withDonorNumber("123456")
         .withBirthDate(new Date())
         .withGender(Gender.female)
@@ -341,7 +345,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withLastName("Last")
         .build();
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonor(donor)
         .withDonationIdentificationNumber("9000000")
         .withBloodAbo("A")
@@ -351,7 +355,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .build();
 
     PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withDonation(donation)
         .thatIsNotFlaggedForCounselling()
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
@@ -363,7 +367,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     LocationViewModel venueViewModel = LocationViewModelBuilder.aLocationViewModel().withId(1L).build();
     
     PostDonationCounsellingSummaryViewModel expectedSummary = aPostDonationCounsellingSummaryViewModel()
-        .withId(1L)
+        .withId(postDonationCounsellingId)
         .withBirthDate(donor.getBirthDate())
         .withBloodGroup(donation.getBloodAbo() + donation.getBloodRh())
         .withDonorId(donor.getId())
@@ -390,10 +394,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereReferredIsNull_shouldSetReferredToEmpty() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withReferred(null)
         .build();
@@ -407,10 +411,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereReferredIsTrue_shouldSetReferredToY() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withReferred(true)
         .build();
@@ -424,10 +428,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereReferredIsFalse_shouldSetReferredToN() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withReferred(false)
         .build();
@@ -441,10 +445,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereStatusIsNull_shouldSetCouselledToEmpty() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withCounsellingStatus(null)
         .build();
@@ -458,10 +462,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereStatusIsReceivedCounselling_shouldSetCouselledToY() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withCounsellingStatus(CounsellingStatus.RECEIVED_COUNSELLING)
         .build();
@@ -475,10 +479,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereStatusIsRefusedCounselling_shouldSetCouselledToR() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withCounsellingStatus(CounsellingStatus.REFUSED_COUNSELLING)
         .build();
@@ -492,10 +496,10 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateSummaryViewModelWhereStatusIsDidNotReceiveCounselling_shouldSetCouselledToN() {
 
-    Donor donor = aDonor().withId(1L).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
     Donation donation = aDonation().withDonor(donor).build();
     PostDonationCounselling counselling = aPostDonationCounselling()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDonation(donation)
         .withCounsellingStatus(CounsellingStatus.DID_NOT_RECEIVE_COUNSELLING)
         .build();

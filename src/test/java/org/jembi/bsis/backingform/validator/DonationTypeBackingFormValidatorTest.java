@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.jembi.bsis.helpers.builders.DonationTypeBackingFormBuilder.aDonationTypeBackingForm;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DonationTypeBackingForm;
 import org.jembi.bsis.backingform.validator.DonationTypeBackingFormValidator;
@@ -49,12 +50,13 @@ public class DonationTypeBackingFormValidatorTest {
   @Test
   public void testValidUpdate() throws Exception {
     // set up data
+    UUID donationTypeId = UUID.randomUUID();
     DonationType donationType = DonationTypeBuilder.aDonationType()
-        .withId(1l)
+        .withId(donationTypeId)
         .withName("DONATIONTYPE")
         .build();
 
-    DonationTypeBackingForm form = aDonationTypeBackingForm().withId(1l).withDonationType("DONATIONTYPE").build();
+    DonationTypeBackingForm form = aDonationTypeBackingForm().withId(donationTypeId).withDonationType("DONATIONTYPE").build();
 
     // set up mocks
     when(donationTypeRepository.getDonationType("DONATIONTYPE")).thenReturn(donationType);
@@ -70,7 +72,8 @@ public class DonationTypeBackingFormValidatorTest {
   @Test
   public void testValidBlankType() throws Exception {
     // set up data
-    DonationTypeBackingForm form = aDonationTypeBackingForm().withId(1l).withDonationType("").build();
+    UUID donationTypeId = UUID.randomUUID();
+    DonationTypeBackingForm form = aDonationTypeBackingForm().withId(donationTypeId).withDonationType("").build();
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donationType");
@@ -83,11 +86,13 @@ public class DonationTypeBackingFormValidatorTest {
   @Test
   public void testInvalidDuplicate() throws Exception {
     // set up data
+    UUID donationTypeId1 = UUID.randomUUID();
+    UUID donationTypeId2 = UUID.randomUUID();
     DonationType duplicate = DonationTypeBuilder.aDonationType()
-        .withId(2l)
+        .withId(donationTypeId2)
         .build();
 
-    DonationTypeBackingForm form = aDonationTypeBackingForm().withId(1l).withDonationType("DONATIONTYPE").build();
+    DonationTypeBackingForm form = aDonationTypeBackingForm().withId(donationTypeId1).withDonationType("DONATIONTYPE").build();
 
     // set up mocks
     when(donationTypeRepository.getDonationType("DONATIONTYPE")).thenReturn(duplicate);

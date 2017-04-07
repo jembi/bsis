@@ -1,10 +1,12 @@
 package org.jembi.bsis.backingform;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 
 public class BloodTypingResolutionBackingForm {
   
-  private long donationId;
+  private UUID donationId;
 
   private String bloodAbo;
 
@@ -16,11 +18,11 @@ public class BloodTypingResolutionBackingForm {
     super();
   }
 
-  public long getDonationId() {
+  public UUID getDonationId() {
     return donationId;
   }
 
-  public void setDonationId(long donationId) {
+  public void setDonationId(UUID donationId) {
     this.donationId = donationId;
   }
 

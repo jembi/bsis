@@ -555,7 +555,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
 
     assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
   }
-
+  
   @Test
   public void testCountFlaggedPostDonationCounsellingsForDonorWithNoPostDonationCounsellings_shouldReturnZero() {
 

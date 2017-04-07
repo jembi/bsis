@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.sql.DataSource;
 
@@ -56,6 +57,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   private IDatabaseConnection getConnection() throws SQLException {
     IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
     DatabaseConfig config = connection.getConfig();
+    config.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, true);
     config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
     return connection;
   }
@@ -86,7 +88,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   @Test
   public void testBloodTestingRuleEngineWithDonation1_RepeatDonorCompleteTTISafe() throws Exception {
     // Donation 1 (donor 1) is for a repeat donor with matching blood tests and TTI safe tests
-    Donation donation = donationRepository.findDonationById(1l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
@@ -108,7 +111,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   @Test
   public void testBloodTestingRuleEngineWithDonation2_RepeatDonorCompleteTTISafe() throws Exception {
     // Donation 2 (donor 2) is for a repeat donor with matching blood tests and all TTI tests are safe 
-    Donation donation = donationRepository.findDonationById(2l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a2");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
@@ -132,7 +136,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   @Test
   public void testBloodTestingRuleEngineWithDonation3_RepeatDonorWithNoTestResults() throws Exception {
     // Donation 3 (donor 3) is for a repeat donor with no stored test results
-    Donation donation = donationRepository.findDonationById(3l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a3");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is NOT_DONE", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NOT_DONE, result.getBloodTypingStatus());
@@ -147,7 +152,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   @Test
   public void testBloodTestingRuleEngineWithDonation3_RepeatDonorWithAdditionalTTIResults() throws Exception {
     // Donation 3 (donor 3) is for a repeat donor with no stored test results
-    Donation donation = donationRepository.findDonationById(3l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a3");
+    Donation donation = donationRepository.findDonationById(donationId);
     Map<Long, String> ttiTests = new HashMap<Long, String>();
     ttiTests.put(17l, "NEG");
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
@@ -164,7 +170,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   @Test
   public void testBloodTestingRuleEngineWithDonation3AndBloodTestResults_RepeatDonorWithAdditionalABOTestResults() throws Exception {
     // Donation 3 (donor 3) is for a repeat donor and doesn't have any test results recorded
-    Donation donation = donationRepository.findDonationById(3l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a3");
+    Donation donation = donationRepository.findDonationById(donationId);
     Map<Long, String> ttiTests = new HashMap<Long, String>();
     ttiTests.put(1l, "A");
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, ttiTests);
@@ -181,7 +188,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   @Test
   public void testBloodTestingRuleEngineWithDonation4_RepeatDonorAmbiguousBloodTyping() throws Exception {
     // Donation 4 (donor d) is for a repeat donor with an mismatching serology outcome and no TTI tests done
-    Donation donation = donationRepository.findDonationById(4l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a4");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is AMBIGUOUS", BloodTypingMatchStatus.AMBIGUOUS, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
@@ -202,7 +210,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   @Test
   public void testBloodTestingRuleEngineWithDonation5_RepeatDonorTTIUnsafe() throws Exception {
     // Donation 5 (donor 2) is for a repeat donor with a donation matching ABO/Rh and one POS TTI test
-    Donation donation = donationRepository.findDonationById(5l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a5");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
@@ -225,8 +234,9 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
 
   @Test
   public void testBloodTestingRuleEngineWithDonation6_RepeatDonorUninterpretableABORHAndNoTTITests() throws Exception {
-    // donation 6 (donor 2) is for a repeat donor. the ABO test result is invalid and there are no TTI tests 
-    Donation donation = donationRepository.findDonationById(6l);
+    // donation 6 (donor 2) is for a repeat donor. the ABO test result is invalid and there are no TTI tests
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a6");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.NOT_DONE, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NOT_DONE, result.getBloodTypingStatus());
@@ -245,7 +255,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
 
   @Test
   public void testBloodTestingRuleEngineTTIReEntryRequiredList() throws Exception {
-    Donation donation = donationRepository.findDonationById(14l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b4");
+    Donation donation = donationRepository.findDonationById(donationId);
     Map<Long, String> testResults = new HashMap<Long, String>();
     testResults.put(17L, "POS");
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, testResults);
@@ -265,7 +276,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   @Test
   public void testBloodTestingRuleEngineWithDonation8_1stTimeDonorInitial() throws Exception {
     // donation 8 is for a 1st time donor who has only had initial outcomes entered for ABO/Rh
-    Donation donation = donationRepository.findDonationById(8l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a8");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.NO_MATCH, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.NOT_DONE, result.getBloodTypingStatus());
@@ -278,7 +290,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   @Test
   public void testBloodTestingRuleEngineWithDonation9_1stTimeDonorInitialAndRepeat() throws Exception {
     // donation 9 is for a 1st time donor who has had initial and repeat outcomes entered for ABO/Rh
-    Donation donation = donationRepository.findDonationById(9l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a9");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
@@ -291,7 +304,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   @Test
   public void testBloodTestingRuleEngineWithDonation10_1stTimeDonorInitialAndNoRepeat() throws Exception {
     // donation 10 is for a 1st time donor who has had initial, but no repeat outcomes entered for ABO/Rh
-    Donation donation = donationRepository.findDonationById(10l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b0");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.NO_MATCH, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.PENDING_TESTS, result.getBloodTypingStatus());
@@ -304,7 +318,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   @Test
   public void testBloodTestingRuleEngineWithDonation11_1stTimeDonorInitialAndMismatchedRepeat() throws Exception {
     // donation 11 is for a 1st time donor who has had initial and repeat outcomes entered for ABO/Rh, but the repeat outcome does not match
-    Donation donation = donationRepository.findDonationById(11l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b1");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is set", BloodTypingMatchStatus.AMBIGUOUS, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
@@ -316,7 +331,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
 
   @Test
   public void testBloodTestingRuleEngineWithDonation12_TTIUnsafeAndFirstEntry() throws Exception {
-    Donation donation = donationRepository.findDonationById(12l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b2");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("TTIStatus is NOT_DONE", TTIStatus.NOT_DONE, result.getTTIStatus());
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
@@ -324,7 +340,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   
   @Test
   public void testBloodTestingRuleEngineWithDonation12_TTIUnsafeAndFirstEntryAndPendingReEntry() throws Exception {
-    Donation donation = donationRepository.findDonationById(12l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b2");
+    Donation donation = donationRepository.findDonationById(donationId);
     Map<Long, String> newTtiTestResults = new HashMap<>();
     newTtiTestResults.put(17L, "POS");
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, newTtiTestResults);
@@ -334,7 +351,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   
   @Test
   public void testBloodTestingRuleEngineWithDonation13_TTIUnsafeAndReEntry() throws Exception {
-    Donation donation = donationRepository.findDonationById(13l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b3");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
     Assert.assertEquals("Pending TTI tests", 2, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
@@ -342,7 +360,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   
   @Test
   public void testBloodTestingRuleEngineWithDonation15_BloodTypingMatchStatusNoTypeDetermined() throws Exception {
-    Donation donation = donationRepository.findDonationById(15l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b5");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("BloodTypingMatchStatus is NO_TYPE_DETERMINED", BloodTypingMatchStatus.NO_TYPE_DETERMINED, result.getBloodTypingMatchStatus());
     Assert.assertTrue("Blood ABO not set", StringUtils.isBlank(result.getBloodAbo()));
@@ -351,7 +370,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   
   @Test
   public void testBloodTestingRuleEngineWithDonation16_BloodTypingMatchStatusResolved() throws Exception {
-    Donation donation = donationRepository.findDonationById(16l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b6");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("BloodTypingMatchStatus is RESOLVED", BloodTypingMatchStatus.RESOLVED, result.getBloodTypingMatchStatus());
     Assert.assertEquals("Blood ABO not set", "A", result.getBloodAbo());
@@ -360,7 +380,8 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
   
   @Test
   public void testBloodTestingRuleEngineWithDonation17_BloodTypingMatchStatusResolvedAndTTIUnsafe() throws Exception {
-    Donation donation = donationRepository.findDonationById(17l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b7");
+    Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("BloodTypingMatchStatus is RESOLVED", BloodTypingMatchStatus.RESOLVED, result.getBloodTypingMatchStatus());
     Assert.assertEquals("Blood ABO not set", "O", result.getBloodAbo());

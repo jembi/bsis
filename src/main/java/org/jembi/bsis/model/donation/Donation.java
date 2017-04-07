@@ -26,7 +26,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Range;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.component.Component;
@@ -70,7 +70,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Donation extends BaseModificationTrackerEntity implements Comparable<Donation> {
+public class Donation extends BaseModificationTrackerUUIDEntity implements Comparable<Donation> {
 
   private static final long serialVersionUID = 1L;
 
@@ -340,12 +340,7 @@ public class Donation extends BaseModificationTrackerEntity implements Comparabl
    */
   @Override
   public int compareTo(Donation c) {
-    Long diff = (this.getId() - c.getId());
-    if (diff < 0)
-      return -1;
-    if (diff > 0)
-      return 1;
-    return 0;
+    return this.getId().compareTo(c.getId());
   }
 
   public TTIStatus getTTIStatus() {

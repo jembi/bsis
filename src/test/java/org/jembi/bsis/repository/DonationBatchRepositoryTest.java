@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -31,6 +32,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite {
 
+  private static final UUID DONATION_BATCH_ID_1 = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870681");
+  private static final UUID DONATION_BATCH_ID_2 = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870682");
+  private static final UUID DONATION_BATCH_ID_5 = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870685");
+  private static final UUID NON_EXISTANT_DONATION_BATCH_ID = UUID.fromString("99e71397-acc9-b7da-8cc5-34e6d7870681");
+
   @Autowired
   DonationBatchRepository donationBatchRepository;
 
@@ -45,14 +51,14 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testFindDonationBatchById() throws Exception {
-    DonationBatch one = donationBatchRepository.findDonationBatchById(1l);
+    DonationBatch one = donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1);
     Assert.assertNotNull("There is a donation batch with the id 1", one);
     Assert.assertEquals("The donation batch has the number 'B0215000000'", "B0215000000", one.getBatchNumber());
   }
 
   @Test
   public void testFindDonationBatchByIdEmpty() throws Exception {
-    DonationBatch five = donationBatchRepository.findDonationBatchById(5l);
+    DonationBatch five = donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_5);
     Assert.assertNotNull("There is a donation batch with the id 5", five);
     Assert.assertEquals("The donation batch has the number 'B0215000005'", "B0215000005", five.getBatchNumber());
   }
@@ -74,7 +80,7 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testFindDonationsInBatch() throws Exception {
-    List<Donation> donations = donationBatchRepository.findDonationsInBatch(1l);
+    List<Donation> donations = donationBatchRepository.findDonationsInBatch(DONATION_BATCH_ID_1);
     Assert.assertNotNull("There donations in the batch with id 1", donations);
     Assert.assertEquals("There is 1 donation in the batch with id 1", 1, donations.size());
   }
@@ -174,20 +180,20 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testDonationBatchHasComponentBatch() throws Exception {
-    DonationBatch one = donationBatchRepository.findDonationBatchById(1l);
+    DonationBatch one = donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1);
     ComponentBatch componentBatch = one.getComponentBatch();
     Assert.assertEquals("ComponentBatch is there", Long.valueOf(1), componentBatch.getId());
   }
   
   @Test
   public void testVerifyDonationBatchExists() throws Exception {
-    boolean exists = donationBatchRepository.verifyDonationBatchExists(1L);
+    boolean exists = donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID_1);
     Assert.assertTrue("DonationBatch exists", exists);
   }
   
   @Test
   public void testVerifyDonationBatchDoesntExist() throws Exception {
-    boolean exists = donationBatchRepository.verifyDonationBatchExists(11111111L);
+    boolean exists = donationBatchRepository.verifyDonationBatchExists(NON_EXISTANT_DONATION_BATCH_ID);
     Assert.assertFalse("DonationBatch doesn't exist", exists);
   }
   
@@ -201,8 +207,8 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
   @Test
   public void findUnassignedDonationBatchesForComponentBatchWithComponents() throws Exception {
     // create test data
-    DonationBatch donationBatch1 = donationBatchRepository.findDonationBatchById(1L);
-    DonationBatch donationBatch2 = donationBatchRepository.findDonationBatchById(2L);
+    DonationBatch donationBatch1 = donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1);
+    DonationBatch donationBatch2 = donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2);
     Donation donation1 = donationBatch1.getDonations().get(0);
     Donation donation2 = donationBatch2.getDonations().get(0);
     Donation donation3 = donationBatch2.getDonations().get(1);
@@ -223,6 +229,6 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     Assert.assertNotNull("TShould not return a null list", unassigned);
     Assert.assertEquals("There is 1 unassigned donation batch", 1, unassigned.size());
     DonationBatch donationBatch = unassigned.get(0);
-    Assert.assertEquals("Correct unassigned donation batch", Long.valueOf(2), donationBatch.getId());
+    Assert.assertEquals("Correct unassigned donation batch", DONATION_BATCH_ID_2, donationBatch.getId());
   }
 }

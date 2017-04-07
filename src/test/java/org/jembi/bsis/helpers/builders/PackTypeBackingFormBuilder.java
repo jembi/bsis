@@ -1,11 +1,13 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.PackTypeBackingForm;
 
 public class PackTypeBackingFormBuilder extends AbstractBuilder<PackTypeBackingForm> {
   
-  private Long id;
+  private UUID id;
   private String packType;
   private ComponentTypeBackingForm componentType;
   private Boolean canPool;
@@ -18,7 +20,7 @@ public class PackTypeBackingFormBuilder extends AbstractBuilder<PackTypeBackingF
   private Integer minWeight;
   private Integer lowVolumeWeight;
 
-  public PackTypeBackingFormBuilder withId(Long id) {
+  public PackTypeBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

@@ -1,9 +1,11 @@
 
 package org.jembi.bsis.backingform;
 
+import java.util.UUID;
+
 public class DonationTypeBackingForm {
 
-  private Long id;
+  private UUID id;
   private String type;
   private Boolean isDeleted = false;
 
@@ -11,7 +13,7 @@ public class DonationTypeBackingForm {
     return type;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
@@ -23,7 +25,7 @@ public class DonationTypeBackingForm {
     this.type = donationType;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

@@ -1,6 +1,7 @@
 package org.jembi.bsis.controllerservice;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -26,7 +27,7 @@ public class DonationTypeControllerService {
   @Autowired
   DonationTypeFactory donationTypeFactory;
 
-  public DonationTypeViewModel getDonationType(Long id) {
+  public DonationTypeViewModel getDonationType(UUID id) {
     return donationTypeFactory.createViewModel(donationTypeRepository.getDonationTypeById(id));
   }
 
@@ -34,7 +35,7 @@ public class DonationTypeControllerService {
     return donationTypeFactory.createViewModels(donationTypeRepository.getAllDonationTypes(true));
   }
 
-  public DonationTypeViewModel updateDonationType(Long id, DonationTypeBackingForm backingForm) {
+  public DonationTypeViewModel updateDonationType(UUID id, DonationTypeBackingForm backingForm) {
     DonationType donationType = donationTypeFactory.createEntity(backingForm);
     donationType.setId(id);
     donationTypeCRUDService.updateDonationType(donationType);

@@ -83,6 +83,7 @@ public abstract class DBUnitContextDependentTestSuite extends ContextDependentTe
     IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
     DatabaseConfig config = connection.getConfig();
     config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
+    config.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, true);
     return connection;
   }
 

@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.factory.BloodTestingRuleResultViewModelFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
@@ -40,6 +41,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 public class BloodTestingRuleEngineTests extends UnitTestSuite {
+  private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b1");
 
   @InjectMocks
   private BloodTestingRuleEngine bloodTestingRuleEngine;
@@ -164,7 +166,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
 
     // Setup existing test results for that donation
     BloodTestResult result1 = aBloodTestResult().withBloodTest(hivBloodTest).withResult("NT").withReEntryRequired(false).build();
@@ -204,7 +206,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     // Setup existing test results for that donation
     BloodTestResult result1 = aBloodTestResult().withBloodTest(hivBloodTest).withResult("NEG").withReEntryRequired(false).build();
@@ -243,7 +245,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     // Setup existing test results for that donation
     BloodTestResult result1 = aBloodTestResult().withBloodTest(hivBloodTest).withResult("POS").withReEntryRequired(false).build();
@@ -282,7 +284,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     // Setup existing test results for that donation
     BloodTestResult result1 = aBloodTestResult().withBloodTest(hivBloodTest).withResult("POS").withReEntryRequired(false).build();
@@ -321,7 +323,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     // Setup existing test results for that donation
     BloodTestResult result1 = aBloodTestResult().withBloodTest(hivBloodTest).withResult("NEG").withReEntryRequired(false).build();
@@ -360,7 +362,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
 
     // Setup existing test results for that donation
     BloodTestResult result1 =
@@ -402,7 +404,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
 
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -438,7 +440,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
 
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -476,7 +478,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
 
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -514,7 +516,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
 
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -550,7 +552,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
 
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -588,8 +590,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).withBloodAbo("A").withBloodRh("+").build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
 
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -627,8 +629,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).withBloodAbo("A").withBloodRh("+").build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withDonor(donor).build();
 
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -664,8 +666,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).withBloodAbo("A").withBloodRh("+").build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).withBloodAbo("B").withBloodRh("+").build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withDonor(donor).withBloodAbo("B").withBloodRh("+").build();
 
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -703,8 +705,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
 
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -745,8 +747,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
 
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -787,8 +789,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withDonor(donor).withBloodAbo("A").withBloodRh("+").build();
 
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -829,8 +831,8 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donor donor = aDonor().withId(1L).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).withDonor(donor)
+    Donor donor = aDonor().withId(UUID.randomUUID()).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withDonor(donor)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .build();
@@ -869,7 +871,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -907,7 +909,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();
@@ -943,7 +945,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
 
     // Setup donation
     PackType packType = aPackType().withTestSampleProduced(true).build();
-    Donation donation = aDonation().withId(1L).withPackType(packType).build();
+    Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     // Setup existing test results for that donation
     Map<Long, BloodTestResult> resultsMap = new HashMap<Long, BloodTestResult>();

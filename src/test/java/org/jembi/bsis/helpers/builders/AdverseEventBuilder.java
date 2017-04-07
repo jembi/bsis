@@ -2,6 +2,8 @@ package org.jembi.bsis.helpers.builders;
 
 import static org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
 
+import java.util.UUID;
+
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.AdverseEventPersister;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
@@ -9,11 +11,11 @@ import org.jembi.bsis.model.adverseevent.AdverseEventType;
 
 public class AdverseEventBuilder extends AbstractEntityBuilder<AdverseEvent> {
 
-  private Long id;
+  private UUID id;
   private AdverseEventType type = anAdverseEventType().build();
   private String comment;
 
-  public AdverseEventBuilder withId(Long id) {
+  public AdverseEventBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

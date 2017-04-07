@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
@@ -19,7 +20,7 @@ public class TestBatchBackingForm {
   private Date lastUpdated;
 
   private LocationBackingForm location;
-  private List<Long> donationBatchIds = null;
+  private List<UUID> donationBatchIds = null;
 
   public TestBatchBackingForm() {
   }
@@ -49,11 +50,11 @@ public class TestBatchBackingForm {
     this.createdDate = createdDate;
   }
 
-  public List<Long> getDonationBatchIds() {
+  public List<UUID> getDonationBatchIds() {
     return donationBatchIds;
   }
 
-  public void setDonationBatchIds(List<Long> donationBatchIds) {
+  public void setDonationBatchIds(List<UUID> donationBatchIds) {
     this.donationBatchIds = donationBatchIds;
   }
   

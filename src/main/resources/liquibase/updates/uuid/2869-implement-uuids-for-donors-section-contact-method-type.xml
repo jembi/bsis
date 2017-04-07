@@ -1,0 +1,147 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170330-1618" author="rowanpi">
+    <dropForeignKeyConstraint baseTableName="Donor" constraintName="fk_Donor_ContactMethodType"/>
+
+    <addColumn tableName="ContactMethodType">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="ContactMethodType_AUD">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor">
+      <column name="contactMethodType_id_temp" type="BIGINT" afterColumn="contactMethodType_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor_AUD">
+      <column name="contactMethodType_id_temp" type="BIGINT" afterColumn="contactMethodType_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE ContactMethodType 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="contactmethodtype_id_temp_index" tableName="ContactMethodType" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE ContactMethodType_AUD 
+      SET id_temp = id;
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD 
+      SET contactMethodType_id_temp = contactMethodType_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor 
+      SET contactMethodType_id_temp = contactMethodType_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="ContactMethodType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ContactMethodType"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ContactMethodType_AUD"/>
+
+    <modifyDataType columnName="contactMethodType_id" newDataType="BINARY(16)" tableName="Donor"/>
+
+    <modifyDataType columnName="contactMethodType_id" newDataType="BINARY(16)" tableName="Donor_AUD"/>
+
+    <sql>
+      UPDATE ContactMethodType 
+      SET id = GENERATEBINARYUUID();
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ContactMethodType ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE ContactMethodType_AUD ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Donor_AUD ADD contactMethodType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(contactMethodType_id,  1, 4)),
+        HEX(SUBSTR(contactMethodType_id,  5, 2)),
+        HEX(SUBSTR(contactMethodType_id,  7, 2)),
+        HEX(SUBSTR(contactMethodType_id,  9, 2)),
+        HEX(SUBSTR(contactMethodType_id, 11)) )))
+      VIRTUAL AFTER contactMethodType_id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Donor ADD contactMethodType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(contactMethodType_id,  1, 4)),
+        HEX(SUBSTR(contactMethodType_id,  5, 2)),
+        HEX(SUBSTR(contactMethodType_id,  7, 2)),
+        HEX(SUBSTR(contactMethodType_id,  9, 2)),
+        HEX(SUBSTR(contactMethodType_id, 11)) )))
+      VIRTUAL AFTER contactMethodType_id;
+    </sql>
+
+    <sql>
+      UPDATE ContactMethodType_AUD AS updateTable
+        LEFT JOIN ContactMethodType AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
+      SET updateTable.id = joinTable.id
+      WHERE joinTable.id IS NOT null; 
+    </sql>
+
+    <!-- Delete orphaned rows from Audit table. These values uuids cannot be found since the rows were deleted in the original table-->
+    <sql>
+      DELETE ContactMethodType_AUD
+      FROM ContactMethodType_AUD
+        LEFT JOIN ContactMethodType AS joinTable ON (ContactMethodType_AUD.id = joinTable.id)
+      WHERE joinTable.id IS null
+    </sql>
+
+    <sql>
+      UPDATE Donor AS updateTable
+        LEFT JOIN ContactMethodType AS joinedTable ON (updateTable.contactMethodType_id_temp = joinedTable.id_temp)
+      SET updateTable.contactMethodType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD AS updateTable
+        LEFT JOIN ContactMethodType AS joinedTable ON (updateTable.contactMethodType_id_temp = joinedTable.id_temp)
+      SET updateTable.contactMethodType_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="ContactMethodType"/>
+
+    <dropColumn columnName="id_temp" tableName="ContactMethodType_AUD"/>
+
+    <dropColumn columnName="contactMethodType_id_temp" tableName="Donor"/>
+
+    <dropColumn columnName="contactMethodType_id_temp" tableName="Donor_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="contactMethodType_id" baseTableName="Donor" constraintName="fk_Donor_ContactMethodType"
+      referencedColumnNames="id" referencedTableName="ContactMethodType"/>
+
+  </changeSet>
+
+</databaseChangeLog>

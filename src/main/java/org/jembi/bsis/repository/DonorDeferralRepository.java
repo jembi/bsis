@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
 
-  public DonorDeferral findDonorDeferralById(Long donorDeferralId) throws NoResultException {
+  public DonorDeferral findDonorDeferralById(UUID donorDeferralId) throws NoResultException {
     return entityManager.createNamedQuery(
         DonorDeferralNamedQueryConstants.NAME_FIND_DONOR_DEFERRAL_BY_ID,
         DonorDeferral.class)
@@ -47,7 +48,7 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         .intValue();
   }
 
-  public int countCurrentDonorDeferralsForDonor(long donorId) {
+  public int countCurrentDonorDeferralsForDonor(UUID donorId) {
 
     return entityManager.createNamedQuery(
         DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
@@ -60,7 +61,7 @@ public class DonorDeferralRepository extends AbstractRepository<DonorDeferral> {
         .intValue();
   }
 
-  public int countDonorDeferralsForDonorOnDate(long donorId, Date date) {
+  public int countDonorDeferralsForDonorOnDate(UUID donorId, Date date) {
 
     return entityManager.createNamedQuery(
         DonorDeferralNamedQueryConstants.NAME_COUNT_CURRENT_DONOR_DEFERRALS_FOR_DONOR,
