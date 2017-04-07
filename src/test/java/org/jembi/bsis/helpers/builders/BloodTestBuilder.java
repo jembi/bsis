@@ -4,7 +4,8 @@ import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
-public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
+
+public class BloodTestBuilder extends AbstractModificationTrackerEntityBuilder<BloodTest> {
   
   // static counter that is used to create a unique default test name
   private static int UNIQUE_INCREMENT = 0;
