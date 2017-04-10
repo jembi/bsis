@@ -32,6 +32,6 @@ public class BloodTestCRUDService {
     existingBloodTest.setRankInCategory(bloodTest.getRankInCategory());
     existingBloodTest.setFlagComponentsForDiscard(bloodTest.isFlagComponentsForDiscard());
     existingBloodTest.setFlagComponentsContainingPlasmaForDiscard(bloodTest.getFlagComponentsContainingPlasmaForDiscard());
-    return bloodTestRepository.update(existingBloodTest);
+    return bloodTestRepository.update(bloodTest);
   }
 }
