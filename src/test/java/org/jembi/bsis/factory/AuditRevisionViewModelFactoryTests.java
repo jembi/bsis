@@ -48,15 +48,17 @@ public class AuditRevisionViewModelFactoryTests extends UnitTestSuite {
     String irrelevantUsername = "irrelevant.username";
     int irrelevantAuditRevisionId = 78;
     Date irrelevantRevisionDate = new DateTime().minusDays(7).toDate();
+    UUID entityModificationId1 = UUID.randomUUID();
+    UUID entityModificationId2 = UUID.randomUUID();
 
     List<EntityModification> entityModifications = Arrays.asList(
         anEntityModification()
-            .withId(88l)
+            .withId(entityModificationId1)
             .withRevisionType(RevisionType.MOD)
             .withEntityName(Donor.class.getSimpleName())
             .build(),
         anEntityModification()
-            .withId(107l)
+            .withId(entityModificationId2)
             .withRevisionType(RevisionType.ADD)
             .withEntityName(Donation.class.getSimpleName())
             .build()
