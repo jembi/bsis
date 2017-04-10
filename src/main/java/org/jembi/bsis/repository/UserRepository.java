@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -45,7 +46,7 @@ public class UserRepository extends AbstractRepository<User> {
     return em.merge(existingUser);
   }
 
-  public User findUserById(Long id) throws NoResultException, NonUniqueResultException {
+  public User findUserById(UUID id) throws NoResultException, NonUniqueResultException {
     if (id == null)
       return null;
     String queryString = "SELECT u FROM User u WHERE u.id = :userId and u.isDeleted = :isDeleted";

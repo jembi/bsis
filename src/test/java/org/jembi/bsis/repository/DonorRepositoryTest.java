@@ -55,8 +55,6 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Autowired
   DonorRepository donorRepository;
-  private User user;
-  private Long userDbId = 1l;
   private DonorBackingForm donorBackingForm;
   Date donorBirthdate = null;
   ApplicationContext applicationContext = null;
@@ -558,8 +556,8 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     donorBackingForm.setHomeAddressCity("City");
     donorBackingForm.setHomeAddressCountry("country");
     donorBackingForm.setHomeAddressLine1("homeAddressLine1");
-    user = new User();
-    user.setId(userDbId);
+    User user = new User();
+    user.setId(UUID.randomUUID());
     donorBackingForm.setHomeAddressDistrict("District");
     donorBackingForm.setVenue(aLocationBackingForm().withId(1L).build());
     donorBackingForm.setIdNumber("1111");

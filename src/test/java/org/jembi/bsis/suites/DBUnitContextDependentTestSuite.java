@@ -1,6 +1,7 @@
 package org.jembi.bsis.suites;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.sql.DataSource;
@@ -48,7 +49,7 @@ public abstract class DBUnitContextDependentTestSuite extends ContextDependentTe
   protected User getLoggedInUser() throws Exception {
     User user;
     try {
-      user = userRepository.findUserById(1l);
+      user = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
     } catch (NoResultException e) {
       throw new RuntimeException("Could not find a user with id '1'. Please add a user to the DBUnit dataset XML or override `getLoggedInUser`.", e);
     }

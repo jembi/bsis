@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.envers.RevisionType;
 import org.jembi.bsis.model.audit.AuditRevision;
@@ -68,13 +69,15 @@ public class AuditRevisionViewModelFactoryTests extends UnitTestSuite {
         .withEntityModifications(new HashSet<>(entityModifications))
         .build();
 
+    UUID autidRevisionUserId = UUID.randomUUID();
+
     User auditRevisionUser = aUser()
-        .withId(56l)
+        .withId(autidRevisionUserId)
         .withUsername(irrelevantUsername)
         .build();
 
     UserViewModel auditRevisionUserViewModel = aUserViewModel()
-        .withId(56L)
+        .withId(autidRevisionUserId)
         .withUsername(irrelevantUsername)
         .build();
 
