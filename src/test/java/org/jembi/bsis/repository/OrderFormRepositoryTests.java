@@ -200,15 +200,19 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   public void testFindOrderFormsByPeriodAndLocation_shouldReturnRightOrders() {
     // Set up
     DateTime now = new DateTime();
+    Date today = now.toDate();
     Date aDayAgo = now.minusDays(1).toDate();
     Date twoDaysAgo = now.minusDays(2).toDate();
     Date threeDaysAgo = now.minusDays(3).toDate();
     Location dispatchedFrom = LocationBuilder.aDistributionSite().withName("site1").build();
     Location dispatchedTo = LocationBuilder.aDistributionSite().withName("site2").build();
     OrderForm orderForm = anOrderForm()
-        .withOrderDate(aDayAgo).withOrderDate(twoDaysAgo)
-        .withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo).buildAndPersist(entityManager);
-    anOrderForm().withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo).buildAndPersist(entityManager);
+        .withOrderDate(twoDaysAgo)
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .buildAndPersist(entityManager);
+    anOrderForm().withOrderDate(today).withDispatchedFrom(dispatchedFrom).withDispatchedTo(dispatchedTo)
+        .buildAndPersist(entityManager);
     anOrderForm().withOrderDate(threeDaysAgo).buildAndPersist(entityManager);
 
     // Test
