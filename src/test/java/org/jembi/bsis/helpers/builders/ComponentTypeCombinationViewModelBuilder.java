@@ -1,14 +1,16 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.viewmodel.ComponentTypeCombinationViewModel;
 
 public class ComponentTypeCombinationViewModelBuilder extends AbstractBuilder<ComponentTypeCombinationViewModel> {
   
-  private Long id;
+  private UUID id;
   private boolean isDeleted = false;
   private String combinationName;
 
-  public ComponentTypeCombinationViewModelBuilder withId(Long id) {
+  public ComponentTypeCombinationViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

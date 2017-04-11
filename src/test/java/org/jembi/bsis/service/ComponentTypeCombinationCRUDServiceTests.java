@@ -12,10 +12,10 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
-import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 import org.jembi.bsis.repository.ComponentTypeCombinationRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class ComponentTypeCombinationCRUDServiceTests extends UnitTestSuite {
     );
     
     ComponentTypeCombination expectedCombination = aComponentTypeCombination() 
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withCombinationName("CombinationName")
         .withSourceComponentTypes(new HashSet<>(Arrays.asList(sourceComponent)))
         .withComponentTypes(producedComponentTypes)
@@ -63,7 +63,7 @@ public class ComponentTypeCombinationCRUDServiceTests extends UnitTestSuite {
  
   @Test
   public void testUpdateComponentTypeCombinations_shouldSetCorrectFieldsAndUpdate() {
-    long componentCombinationId = 789L;
+    UUID componentCombinationId = UUID.randomUUID();
     ComponentType sourceComponent = aComponentType()
         .withId(1L)
         .build();

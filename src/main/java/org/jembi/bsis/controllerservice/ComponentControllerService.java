@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -155,8 +156,8 @@ public class ComponentControllerService {
     return componentViewModels;
   }
 
-  public Map<Long, List<ComponentTypeViewModel>> getProducedComponentTypesByCombinationId() {
-    Map<Long, List<ComponentTypeViewModel>> map = new HashMap<Long, List<ComponentTypeViewModel>>();
+  public Map<UUID, List<ComponentTypeViewModel>> getProducedComponentTypesByCombinationId() {
+    Map<UUID, List<ComponentTypeViewModel>> map = new HashMap<UUID, List<ComponentTypeViewModel>>();
     for (ComponentTypeCombination combination : componentTypeCombinationRepository
         .getAllComponentTypeCombinations(false)) {
       map.put(combination.getId(), componentTypeFactory.createViewModels(combination.getComponentTypes()));

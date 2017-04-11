@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -42,16 +43,20 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
   ComponentTypeRepository componentTypeRepository;
   @Mock
   private ComponentTypeFactory componentTypeFactory;
+  
+  private static final UUID COMPONENT_TYPE_COMBINATION_ID_1 = UUID.randomUUID();
+  private static final UUID COMPONENT_TYPE_COMBINATION_ID_2 = UUID.randomUUID();
 
   @Test
   public void testCreateComponentTypeCombinationViewModel_shouldReturnCorrectViewModel() {
+    
     ComponentTypeCombination combination = aComponentTypeCombination()
-        .withId(1L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_1)
         .withCombinationName("combination")
         .build();
 
     ComponentTypeCombinationViewModel expectedCombinationViewModel = aComponentTypeCombinationViewModel()
-        .withId(1L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_1)
         .withCombinationName("combination")
         .build();
 
@@ -65,23 +70,23 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
   public void testCreateComponentTypeCombinationViewModels_shouldReturnCorrectViewModels() {
 
     ComponentTypeCombination combination1 = aComponentTypeCombination()
-        .withId(1L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_1)
         .withCombinationName("combination1")
         .build();
 
     ComponentTypeCombination combination2 = aComponentTypeCombination()
-        .withId(2L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_2)
         .withCombinationName("combination2")
         .thatIsDeleted()
         .build();
     
     ComponentTypeCombinationViewModel expectedCombinationViewModel1 = aComponentTypeCombinationViewModel()
-        .withId(1L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_1)
         .withCombinationName("combination1")
         .build();
     
     ComponentTypeCombinationViewModel expectedCombinationViewModel2 = aComponentTypeCombinationViewModel()
-        .withId(2L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_2)
         .withCombinationName("combination2")
         .thatIsDeleted()
         .build();
@@ -120,7 +125,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
         .withCombinationName("Whole Blood")
         .withComponentTypes(Arrays.asList(producedComponentType))
         .withSourceComponents(new HashSet<>(Arrays.asList(sourceComponentType)))
-        .withId(1L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_1)
         .build();
 
     //the Source Component Type will be updated by the createEntity operation
@@ -138,7 +143,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
         .withId(producedComponentType.getId()).build()))
         .withSourceComponentTypes(new HashSet<>(Arrays.asList(aComponentTypeBackingForm()
         .withId(sourceComponentType.getId()).build())))
-        .withId(1L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_1)
         .build();
 
     // Setup mock
@@ -176,7 +181,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
         .withCombinationName("Whole Blood")
         .withComponentTypes(Arrays.asList(producedComponentType))
         .withSourceComponents(new HashSet<>(Arrays.asList(sourceComponentType, sourceComponentType2)))
-        .withId(1L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_1)
         .build();
 
     //the Source Component Type will be updated by the createEntity operation
@@ -200,7 +205,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
         .withSourceComponentTypes(new HashSet<>(Arrays.asList(
             aComponentTypeBackingForm().withId(sourceComponentType.getId()).build(),
             aComponentTypeBackingForm().withId(sourceComponentType2.getId()).build())))
-        .withId(1L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_1)
         .build();
 
     // Setup mock
@@ -246,7 +251,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
         .withCombinationName("Whole Blood")
         .withComponentTypes(Arrays.asList(producedComponentType, producedComponentType2))
         .withSourceComponents(new HashSet<>(Arrays.asList(sourceComponentType)))
-        .withId(1L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_1)
         .build();
 
     //the Source Component Type will be updated by the createEntity operation
@@ -265,7 +270,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
             aComponentTypeBackingForm().withId(producedComponentType2.getId()).build()))
         .withSourceComponentTypes(new HashSet<>(Arrays.asList(
             aComponentTypeBackingForm().withId(sourceComponentType.getId()).build())))
-        .withId(1L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_1)
         .build();
 
     // Setup mock
@@ -301,7 +306,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
         aComponentType().withId(3L).build()
     );
     ComponentTypeCombination combination = aComponentTypeCombination()
-        .withId(2L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_2)
         .withCombinationName("combination")
         .withSourceComponentType(sourceComponentTypes.get(0))
         .withComponentTypes(producedComponentTypes)
@@ -317,7 +322,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
     );
 
     ComponentTypeCombinationFullViewModel expectedCombinationViewModel = aComponentTypeCombinationFullViewModel()
-        .withId(2L)
+        .withId(COMPONENT_TYPE_COMBINATION_ID_2)
         .withCombinationName("combination")
         .withSourceComponentType(sourceComponentTypeViewModels.get(0))
         .withComponentTypes(producedComponentTypeViewModels)

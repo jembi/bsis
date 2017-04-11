@@ -1,26 +1,26 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-    <ComponentTypeCombination id="1" combinationName="Whole Blood"
+    <ComponentTypeCombination id="uuid'11e71e97-883e-83d0-9fc7-28f10e1b4901'" combinationName="Whole Blood"
                               isDeleted="false"/>
-    <ComponentTypeCombination id="2" combinationName="PRC-CPDA, FFP"
+    <ComponentTypeCombination id="uuid'11e71e97-883e-83d0-9fc7-28f10e1b4902'" combinationName="PRC-CPDA, FFP"
                               isDeleted="false"/>
-    <ComponentTypeCombination id="3" combinationName="PRC-CPDA, FP"
+    <ComponentTypeCombination id="uuid'11e71e97-883e-83d0-9fc7-28f10e1b4903'" combinationName="PRC-CPDA, FP"
                               isDeleted="false"/>
-    <ComponentTypeCombination id="4"
+    <ComponentTypeCombination id="uuid'11e71e97-883e-83d0-9fc7-28f10e1b4904'"
                               combinationName="WB Poor Platelets, PC-24H" isDeleted="false"/>
-    <ComponentTypeCombination id="5" combinationName="PRC-SAGM, FFP, PC"
+    <ComponentTypeCombination id="uuid'11e71e97-883e-83d0-9fc7-28f10e1b4905'" combinationName="PRC-SAGM, FFP, PC"
                               isDeleted="false"/>
-    <ComponentTypeCombination id="6" combinationName="PRC-SAGM, FFP"
+    <ComponentTypeCombination id="uuid'11e71e97-883e-83d0-9fc7-28f10e1b4906'" combinationName="PRC-SAGM, FFP"
                               isDeleted="false"/>
-    <ComponentTypeCombination id="7" combinationName="PRC-SAGM, FP"
+    <ComponentTypeCombination id="uuid'11e71e97-883e-83d0-9fc7-28f10e1b4907'" combinationName="PRC-SAGM, FP"
                               isDeleted="false"/>
-    <ComponentTypeCombination id="8"
+    <ComponentTypeCombination id="uuid'11e71e97-883e-83d0-9fc7-28f10e1b4908'"
                               combinationName="3 X PRC-Paed-CPDA, FFP" isDeleted="false"/>
-    <ComponentTypeCombination id="9"
+    <ComponentTypeCombination id="uuid'11e71e97-883e-83d0-9fc7-28f10e1b4909'"
                               combinationName="FFP-Apheresis, PC-Apheresis" isDeleted="false"/>
-    <ComponentTypeCombination id="10"
+    <ComponentTypeCombination id="uuid'11e71e97-883e-83d0-9fc7-28f10e1b4910'"
                               combinationName="FFP Apheresis, 2 X PC-Apheresis" isDeleted="false"/>
-    <ComponentTypeCombination id="11" combinationName="Ignore me"
+    <ComponentTypeCombination id="uuid'11e71e97-883e-83d0-9fc7-28f10e1b4911'" combinationName="Ignore me"
                               isDeleted="true"/>
     <ComponentType canBeIssued="true" id="14" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"

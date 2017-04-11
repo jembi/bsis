@@ -16,6 +16,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
@@ -97,7 +98,10 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
 
   @Test
   public void testSingleFullComponentType_shouldReturnExpectedViewModel() {
-    ComponentTypeCombination producedComponentTypeCombination = aComponentTypeCombination().withId(1L).build();
+    UUID componentTypeCombinationId = UUID.randomUUID();
+    ComponentTypeCombination producedComponentTypeCombination = aComponentTypeCombination()
+        .withId(componentTypeCombinationId)
+        .build();
     ComponentType entity = ComponentTypeBuilder.aComponentType()
         .withId(1L)
         .withComponentTypeName("name")
@@ -116,7 +120,7 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
         .withMaxTimeSinceDonation(5)
         .build();
 
-    ComponentTypeCombinationViewModel combinationViewModel = aComponentTypeCombinationViewModel().withId(1L).build();
+    ComponentTypeCombinationViewModel combinationViewModel = aComponentTypeCombinationViewModel().withId(componentTypeCombinationId).build();
 
     when(componentTypeCombinationFactory.createViewModels(Arrays.asList(producedComponentTypeCombination)))
         .thenReturn(Arrays.asList(combinationViewModel));

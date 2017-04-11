@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
@@ -33,10 +34,11 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
   private ComponentRepository componentRepository;
   
   private static Date processedOn = new Date();
+  UUID componentTypeCombinationId = UUID.randomUUID();
 
   private RecordComponentBackingForm getBaseBackingForm() {
     ComponentTypeCombinationBackingForm combinationBackingForm =
-        aComponentTypeCombinationBackingForm().withId(1L).build();
+        aComponentTypeCombinationBackingForm().withId(componentTypeCombinationId).build();
 
     return aRecordComponentBackingForm()
         .withParentComponentId(1L)
@@ -55,7 +57,7 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
-    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(1L)).thenReturn(true);
+    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
     when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
 
@@ -71,7 +73,7 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
     RecordComponentBackingForm backingForm = getBaseBackingForm();
     backingForm.setProcessedOn(null);
 
-    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(1L)).thenReturn(true);
+    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
     when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "RecordComponentBackingForm");
@@ -93,7 +95,7 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
-    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(1L)).thenReturn(true);
+    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
     when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
 
@@ -116,7 +118,7 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
-    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(1L)).thenReturn(true);
+    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
     when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
 
@@ -138,7 +140,7 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
-    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(1L)).thenReturn(true);
+    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
     when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
 
@@ -159,7 +161,7 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
-    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(1L)).thenReturn(true);
+    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
     when(componentRepository.verifyComponentExists(1L)).thenReturn(false);
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
 
@@ -181,7 +183,7 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
-    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(1L)).thenReturn(true);
+    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
     when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
 
@@ -205,7 +207,7 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
-    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(1L)).thenReturn(true);
+    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
     when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
 
@@ -226,7 +228,7 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
                                 .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
                                 .build();
 
-    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(1L)).thenReturn(false);
+    when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(false);
     when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
     when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
 

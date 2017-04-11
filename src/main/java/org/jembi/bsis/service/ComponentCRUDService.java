@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -218,7 +219,7 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component processComponent(long parentComponentId, long componentTypeCombinationId, Date processedOn) {
+  public Component processComponent(long parentComponentId, UUID componentTypeCombinationId, Date processedOn) {
 
     Component parentComponent = componentRepository.findComponentById(parentComponentId);
     parentComponent.setProcessedOn(processedOn);

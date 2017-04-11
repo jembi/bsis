@@ -2,6 +2,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -47,7 +48,7 @@ public class ComponentTypeCombinationController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
-  public ResponseEntity<Map<String, Object>> getComponentTypeCombinationById(@PathVariable long id) {
+  public ResponseEntity<Map<String, Object>> getComponentTypeCombinationById(@PathVariable UUID id) {
 
     Map<String, Object> map = new HashMap<>();
     map.put("componentTypeCombination", componentTypeCombinationControllerService.findComponentTypeCombinationById(id));
@@ -74,7 +75,7 @@ public class ComponentTypeCombinationController {
 
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_COMBINATIONS + "')")
-  public ResponseEntity<Map<String, Object>> updateComponentTypeCombination(@PathVariable("id") Long componentTypeCombinationBackingId,
+  public ResponseEntity<Map<String, Object>> updateComponentTypeCombination(@PathVariable("id") UUID componentTypeCombinationBackingId,
       @Valid @RequestBody ComponentTypeCombinationBackingForm backingForm) {
 
     // Use the id parameter from the path

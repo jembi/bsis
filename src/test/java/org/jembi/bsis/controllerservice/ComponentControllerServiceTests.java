@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
@@ -229,7 +230,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     );
     RecordComponentBackingForm form = new RecordComponentBackingForm();
     form.setParentComponentId(1L);
-    form.setComponentTypeCombination(aComponentTypeCombinationBackingForm().withId(1L).build());
+    form.setComponentTypeCombination(aComponentTypeCombinationBackingForm().withId(UUID.randomUUID()).build());
     form.setProcessedOn(processedOn);
     
     // setup mocks   
