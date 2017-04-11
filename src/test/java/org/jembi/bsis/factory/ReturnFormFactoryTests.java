@@ -57,10 +57,10 @@ public class ReturnFormFactoryTests {
   @Test
   public void testConvertBackingFormToReturnFormEntity_shouldReturnExpectedEntity() {
     // Set up data
-    UUID locationId_1 = UUID.randomUUID();
-    UUID locationId_2 = UUID.randomUUID();
-    Location returnedFrom = LocationBuilder.aUsageSite().withId(locationId_1).build();
-    Location returnedTo = LocationBuilder.aDistributionSite().withId(locationId_2).build();
+    UUID locationId1 = UUID.randomUUID();
+    UUID locationId2 = UUID.randomUUID();
+    Location returnedFrom = LocationBuilder.aUsageSite().withId(locationId1).build();
+    Location returnedTo = LocationBuilder.aDistributionSite().withId(locationId2).build();
     Component component = ComponentBuilder.aComponent().withId(1L).build();
     Date returnDate = new Date();
 
@@ -72,15 +72,15 @@ public class ReturnFormFactoryTests {
         .build();
     
     ReturnFormBackingForm backingForm = ReturnFormBackingFormBuilder.aReturnFormBackingForm()
-        .withReturnedFrom(LocationBackingFormBuilder.aUsageSiteBackingForm().withId(locationId_1).build())
-        .withReturnedTo(LocationBackingFormBuilder.aDistributionSiteBackingForm().withId(locationId_2).build())
+        .withReturnedFrom(LocationBackingFormBuilder.aUsageSiteBackingForm().withId(locationId1).build())
+        .withReturnedTo(LocationBackingFormBuilder.aDistributionSiteBackingForm().withId(locationId2).build())
         .withReturnDate(returnDate)
         .withComponent(ComponentBackingFormBuilder.aComponentBackingForm().withId(1L).build())
         .build();
 
     // Setup mock
-    when(locationRepository.getLocation(locationId_1)).thenReturn(returnedFrom);
-    when(locationRepository.getLocation(locationId_2)).thenReturn(returnedTo);
+    when(locationRepository.getLocation(locationId1)).thenReturn(returnedFrom);
+    when(locationRepository.getLocation(locationId2)).thenReturn(returnedTo);
     when(componentRepository.findComponent(1L)).thenReturn(component);
 
     // Run test
@@ -93,10 +93,10 @@ public class ReturnFormFactoryTests {
   @Test
   public void testConvertEntityToReturnFormViewModel_shouldReturnExpectedViewModel() {
     // Set up data
-    UUID locationId_1 = UUID.randomUUID();
-    UUID locationId_2 = UUID.randomUUID();
-    Location returnedFrom = LocationBuilder.aUsageSite().withId(locationId_1).build();
-    Location returnedTo = LocationBuilder.aDistributionSite().withId(locationId_2).build();
+    UUID locationId1 = UUID.randomUUID();
+    UUID locationId2 = UUID.randomUUID();
+    Location returnedFrom = LocationBuilder.aUsageSite().withId(locationId1).build();
+    Location returnedTo = LocationBuilder.aDistributionSite().withId(locationId2).build();
     Date returnDate = new Date();
 
     ReturnFormViewModel expectedViewModel = ReturnFormViewModelBuilder.aReturnFormViewModel()
@@ -125,10 +125,10 @@ public class ReturnFormFactoryTests {
   @Test
   public void testConvertEntityToReturnFormFullViewModel_shouldReturnExpectedViewModel() {
     // Set up data
-    UUID locationId_1 = UUID.randomUUID();
-    UUID locationId_2 = UUID.randomUUID();
-    Location returnedFrom = LocationBuilder.aUsageSite().withId(locationId_1).build();
-    Location returnedTo = LocationBuilder.aDistributionSite().withId(locationId_2).build();
+    UUID locationId1 = UUID.randomUUID();
+    UUID locationId2 = UUID.randomUUID();
+    Location returnedFrom = LocationBuilder.aUsageSite().withId(locationId1).build();
+    Location returnedTo = LocationBuilder.aDistributionSite().withId(locationId2).build();
     Date returnDate = new Date();
     Component component = ComponentBuilder.aComponent().withId(1L).build();
     ComponentFullViewModel componentFullViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel().withId(1L).build();
@@ -179,10 +179,10 @@ public class ReturnFormFactoryTests {
   @Test
   public void testConvertEntitiesToReturnFormViewModels_shouldReturnList() {
     // Set up data
-    UUID locationId_1 = UUID.randomUUID();
-    UUID locationId_2 = UUID.randomUUID();
-    Location returnedFrom1 = LocationBuilder.aUsageSite().withId(locationId_1).build();
-    Location returnedTo1 = LocationBuilder.aDistributionSite().withId(locationId_2).build();
+    UUID locationId1 = UUID.randomUUID();
+    UUID locationId2 = UUID.randomUUID();
+    Location returnedFrom1 = LocationBuilder.aUsageSite().withId(locationId1).build();
+    Location returnedTo1 = LocationBuilder.aDistributionSite().withId(locationId2).build();
     Date returnDate1 = new Date();
     ReturnFormViewModel expectedViewModel1 = ReturnFormViewModelBuilder.aReturnFormViewModel()
         .withReturnedFrom(new LocationFullViewModel(returnedFrom1))
@@ -195,8 +195,8 @@ public class ReturnFormFactoryTests {
         .withReturnDate(returnDate1)
         .build();
     
-    Location returnedFrom2 = LocationBuilder.aUsageSite().withId(locationId_1).build();
-    Location returnedTo2 = LocationBuilder.aDistributionSite().withId(locationId_2).build();
+    Location returnedFrom2 = LocationBuilder.aUsageSite().withId(locationId1).build();
+    Location returnedTo2 = LocationBuilder.aDistributionSite().withId(locationId2).build();
     Date returnDate2 = new Date();
     ReturnFormViewModel expectedViewModel2 = ReturnFormViewModelBuilder.aReturnFormViewModel()
         .withReturnedFrom(new LocationFullViewModel(returnedFrom2))

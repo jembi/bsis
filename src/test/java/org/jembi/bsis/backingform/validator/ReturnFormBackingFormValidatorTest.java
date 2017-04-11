@@ -54,12 +54,12 @@ public class ReturnFormBackingFormValidatorTest {
   @Mock
   private ComponentRepository componentRepository;
 
-  private static final UUID locationId_1 = UUID.randomUUID();
-  private static final UUID locationId_2 = UUID.randomUUID();
+  private static final UUID locationId1 = UUID.randomUUID();
+  private static final UUID locationId2 = UUID.randomUUID();
 
   private ReturnFormBackingForm getBaseReturnFormBackingForm() throws ParseException {
-    LocationBackingForm returnedFrom = aUsageSiteBackingForm().withName("LocFrom").withId(locationId_1).build();
-    LocationBackingForm returnedTo = aDistributionSiteBackingForm().withName("LocTo").withId(locationId_2).build();
+    LocationBackingForm returnedFrom = aUsageSiteBackingForm().withName("LocFrom").withId(locationId1).build();
+    LocationBackingForm returnedTo = aDistributionSiteBackingForm().withName("LocTo").withId(locationId2).build();
     ReturnFormBackingForm backingForm = aReturnFormBackingForm()
         .withReturnedFrom(returnedFrom)
         .withReturnedTo(returnedTo)
@@ -70,11 +70,11 @@ public class ReturnFormBackingFormValidatorTest {
   }
 
   private Location getBaseReturnedFrom() {
-    return aUsageSite().withName("LocFrom").withId(locationId_1).build();
+    return aUsageSite().withName("LocFrom").withId(locationId1).build();
   }
 
   private Location getBaseReturnedTo() {
-    return aDistributionSite().withName("LocTo").withId(locationId_2).build();
+    return aDistributionSite().withName("LocTo").withId(locationId2).build();
   }
 
   private ComponentBackingForm getBaseReturnFormComponentBackingForm() {
@@ -88,8 +88,8 @@ public class ReturnFormBackingFormValidatorTest {
     ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
 
     // set up mocks
-    when(locationRepository.getLocation(locationId_1)).thenReturn(getBaseReturnedFrom());
-    when(locationRepository.getLocation(locationId_2)).thenReturn(getBaseReturnedTo());
+    when(locationRepository.getLocation(locationId1)).thenReturn(getBaseReturnedFrom());
+    when(locationRepository.getLocation(locationId2)).thenReturn(getBaseReturnedTo());
     when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
 
     // run test
@@ -126,8 +126,8 @@ public class ReturnFormBackingFormValidatorTest {
     ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
 
     // set up mocks
-    when(locationRepository.getLocation(locationId_1)).thenThrow(NoResultException.class);
-    when(locationRepository.getLocation(locationId_2)).thenThrow(NoResultException.class);
+    when(locationRepository.getLocation(locationId1)).thenThrow(NoResultException.class);
+    when(locationRepository.getLocation(locationId2)).thenThrow(NoResultException.class);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ReturnForm");
@@ -144,12 +144,12 @@ public class ReturnFormBackingFormValidatorTest {
     ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
 
     // returnedFrom and to can't be a venue
-    Location venue1 = aVenue().withId(locationId_1).build();
-    Location venue2 = aVenue().withId(locationId_2).build();
+    Location venue1 = aVenue().withId(locationId1).build();
+    Location venue2 = aVenue().withId(locationId2).build();
 
     // set up mocks
-    when(locationRepository.getLocation(locationId_1)).thenReturn(venue1);
-    when(locationRepository.getLocation(locationId_2)).thenReturn(venue2);
+    when(locationRepository.getLocation(locationId1)).thenReturn(venue1);
+    when(locationRepository.getLocation(locationId2)).thenReturn(venue2);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ReturnForm");
@@ -168,8 +168,8 @@ public class ReturnFormBackingFormValidatorTest {
     backingForm.setReturnDate(null);
 
     // set up mocks
-    when(locationRepository.getLocation(locationId_1)).thenReturn(getBaseReturnedFrom());
-    when(locationRepository.getLocation(locationId_2)).thenReturn(getBaseReturnedTo());
+    when(locationRepository.getLocation(locationId1)).thenReturn(getBaseReturnedFrom());
+    when(locationRepository.getLocation(locationId2)).thenReturn(getBaseReturnedTo());
     when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
 
     // run test
@@ -197,8 +197,8 @@ public class ReturnFormBackingFormValidatorTest {
     backingForm.setComponents(Arrays.asList(getBaseReturnFormComponentBackingForm()));
 
     // set up mocks
-    when(locationRepository.getLocation(locationId_1)).thenReturn(getBaseReturnedFrom());
-    when(locationRepository.getLocation(locationId_2)).thenReturn(getBaseReturnedTo());
+    when(locationRepository.getLocation(locationId1)).thenReturn(getBaseReturnedFrom());
+    when(locationRepository.getLocation(locationId2)).thenReturn(getBaseReturnedTo());
     when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
     when(componentRepository.findComponent(1L)).thenReturn(component);
 
@@ -241,8 +241,8 @@ public class ReturnFormBackingFormValidatorTest {
     backingForm.setComponents(componentBackingForms);
 
     // set up mocks
-    when(locationRepository.getLocation(locationId_1)).thenReturn(getBaseReturnedFrom());
-    when(locationRepository.getLocation(locationId_2)).thenReturn(getBaseReturnedTo());
+    when(locationRepository.getLocation(locationId1)).thenReturn(getBaseReturnedFrom());
+    when(locationRepository.getLocation(locationId2)).thenReturn(getBaseReturnedTo());
     when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
     when(componentRepository.findComponent(1L)).thenReturn(component1);
     when(componentRepository.findComponent(2L)).thenReturn(component2);
@@ -274,8 +274,8 @@ public class ReturnFormBackingFormValidatorTest {
     backingForm.setComponents(Arrays.asList(getBaseReturnFormComponentBackingForm()));
 
     // set up mocks
-    when(locationRepository.getLocation(locationId_1)).thenReturn(getBaseReturnedFrom());
-    when(locationRepository.getLocation(locationId_2)).thenReturn(getBaseReturnedTo());
+    when(locationRepository.getLocation(locationId1)).thenReturn(getBaseReturnedFrom());
+    when(locationRepository.getLocation(locationId2)).thenReturn(getBaseReturnedTo());
     when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
     when(componentRepository.findComponent(1L)).thenReturn(null);
 
@@ -297,8 +297,8 @@ public class ReturnFormBackingFormValidatorTest {
     backingForm.setComponents(Arrays.asList(componentBackingForm));
 
     // set up mocks
-    when(locationRepository.getLocation(locationId_1)).thenReturn(getBaseReturnedFrom());
-    when(locationRepository.getLocation(locationId_2)).thenReturn(getBaseReturnedTo());
+    when(locationRepository.getLocation(locationId1)).thenReturn(getBaseReturnedFrom());
+    when(locationRepository.getLocation(locationId2)).thenReturn(getBaseReturnedTo());
     when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
 
     // run test

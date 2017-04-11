@@ -158,10 +158,10 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateComponentBatchViewModel_createOneComponentBatch() throws Exception {
     // set up data
-    UUID locationId_1 = UUID.randomUUID();
-    Location venue = aVenue().withId(locationId_1).withName("venue").build();
-    UUID locationId_2 = UUID.randomUUID();
-    Location location = aLocation().withId(locationId_2).withName("distribution site").thatIsUsageSite().build();
+    UUID locationId1 = UUID.randomUUID();
+    Location venue = aVenue().withId(locationId1).withName("venue").build();
+    UUID locationId2 = UUID.randomUUID();
+    Location location = aLocation().withId(locationId2).withName("distribution site").thatIsUsageSite().build();
     DonationBatch donationBatch = aDonationBatch()
         .withId(DONATION_BATCH_ID)
         .withBatchNumber("BN1234")

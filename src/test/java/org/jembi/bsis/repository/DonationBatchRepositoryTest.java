@@ -123,8 +123,8 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
     List<DonationBatch> unassigned = donationBatchRepository.findUnassignedDonationBatches();
     Assert.assertNotNull("Should not return a null list", unassigned);
     Assert.assertEquals("There are no unassigned donation batches", 0, unassigned.size());
-    UUID locationId_1 = UUID.fromString("55321456-eeee-1234-b5b1-123412348891");
-    Location venue = locationRepository.getLocation(locationId_1);
+    UUID locationId1 = UUID.fromString("55321456-eeee-1234-b5b1-123412348891");
+    Location venue = locationRepository.getLocation(locationId1);
 
     // create an unassigned batch
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()
@@ -163,8 +163,8 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
   public void testFindDonationBatches() throws Exception {
     List<UUID> locationIds = new ArrayList<UUID>();
 
-    UUID locationId_1 = UUID.fromString("55321456-eeee-1234-b5b1-123412348891");
-    locationIds.add(locationId_1);
+    UUID locationId1 = UUID.fromString("55321456-eeee-1234-b5b1-123412348891");
+    locationIds.add(locationId1);
     List<DonationBatch> batches = donationBatchRepository.findDonationBatches(true, locationIds, null, null);
     Assert.assertNotNull("There are batches in Maseru", batches);
     Assert.assertEquals("There are 1 donation batches in Maseru", 1, batches.size());
