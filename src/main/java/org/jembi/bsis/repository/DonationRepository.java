@@ -1,13 +1,8 @@
 package org.jembi.bsis.repository;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +22,6 @@ import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,86 +75,6 @@ public class DonationRepository {
       return new ArrayList<Donation>();
     }
     return donations;
-  }
-
-  // TODO this method is not used, therefore remove.
-  public Map<String, Map<Long, Long>> findNumberOfDonations(Date donationDateFrom,
-                                                            Date donationDateTo, String aggregationCriteria,
-                                                            List<String> venues, List<String> bloodGroups) throws ParseException {
-
-    List<UUID> venueIds = new ArrayList<UUID>();
-    if (venues != null) {
-      for (String venue : venues) {
-        venueIds.add(UUID.fromString(venue));
-      }
-    } else {
-      venueIds.add(UUID.randomUUID());
-    }
-
-    Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long, Long>>();
-    for (String bloodGroup : bloodGroups) {
-      resultMap.put(bloodGroup, new HashMap<Long, Long>());
-    }
-
-    TypedQuery<Object[]> query = em.createQuery(
-        "SELECT count(c), c.donationDate, c.bloodAbo, c.bloodRh FROM Donation c WHERE " +
-            "c.venue.id IN (:venueIds) AND " +
-            "c.donationDate BETWEEN :donationDateFrom AND " +
-            ":donationDateTo AND (c.isDeleted= :isDeleted) GROUP BY " +
-            "bloodAbo, bloodRh, donationDate", Object[].class);
-
-    query.setParameter("venueIds", venueIds);
-    query.setParameter("isDeleted", Boolean.FALSE);
-
-    query.setParameter("donationDateFrom", donationDateFrom);
-    query.setParameter("donationDateTo", donationDateTo);
-
-    DateFormat resultDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    int incrementBy = Calendar.DAY_OF_YEAR;
-    if (aggregationCriteria.equals("monthly")) {
-      incrementBy = Calendar.MONTH;
-      resultDateFormat = new SimpleDateFormat("MM/01/yyyy");
-    } else if (aggregationCriteria.equals("yearly")) {
-      incrementBy = Calendar.YEAR;
-      resultDateFormat = new SimpleDateFormat("01/01/yyyy");
-    }
-
-    List<Object[]> resultList = query.getResultList();
-
-    for (String bloodGroup : bloodGroups) {
-      Map<Long, Long> m = new HashMap<Long, Long>();
-      Calendar gcal = new GregorianCalendar();
-      Date lowerDate = resultDateFormat.parse(resultDateFormat.format(donationDateFrom));
-      Date upperDate = resultDateFormat.parse(resultDateFormat.format(donationDateTo));
-      gcal.setTime(lowerDate);
-      while (gcal.getTime().before(upperDate) || gcal.getTime().equals(upperDate)) {
-        m.put(gcal.getTime().getTime(), (long) 0);
-        gcal.add(incrementBy, 1);
-      }
-      resultMap.put(bloodGroup, m);
-    }
-
-    for (Object[] result : resultList) {
-      Date d = (Date) result[1];
-      String bloodAbo = (String) result[2];
-      String bloodRh = (String) result[3];
-      BloodGroup bloodGroup = new BloodGroup(bloodAbo, bloodRh);
-      Map<Long, Long> m = resultMap.get(bloodGroup.toString());
-      if (m == null)
-        continue;
-      Date formattedDate = null;
-      formattedDate = resultDateFormat.parse(resultDateFormat.format(d));
-      Long utcTime = formattedDate.getTime();
-      if (m.containsKey(utcTime)) {
-        Long newVal = m.get(utcTime) + (Long) result[0];
-        m.put(utcTime, newVal);
-      } else {
-        m.put(utcTime, (Long) result[0]);
-      }
-
-    }
-
-    return resultMap;
   }
 
   public Donation findDonationByDonationIdentificationNumber(
