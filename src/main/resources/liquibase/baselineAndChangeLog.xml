@@ -119,4 +119,5 @@
   <include file="liquibase/updates/2944-add-bloodtestresult-audit.xml"/>
   <include file="liquibase/updates/uuid/2970-implement-uuids-for-other-user.xml"/>
   <include file="liquibase/updates/uuid/2970-implement-uuids-for-other-entity-modification.xml"/>
+  <include file="liquibase/updates/uuid/2970-implement-uuids-for-other-location.xml"/>
 </databaseChangeLog>

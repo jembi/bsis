@@ -328,7 +328,7 @@ public class DonorRepository {
         .getResultList();
   }
 
-  public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenues(Set<Long> venueIds) throws NoResultException {
+  public List<MobileClinicDonorDTO> findMobileClinicDonorsByVenues(Set<UUID> venueIds) throws NoResultException {
     boolean includeAllVenues = venueIds == null || venueIds.isEmpty();
 
     // using empty list as a parameter causes a bad SQL Grammar exception. If the list is empty we have to

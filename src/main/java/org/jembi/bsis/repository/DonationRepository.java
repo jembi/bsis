@@ -83,17 +83,18 @@ public class DonationRepository {
     return donations;
   }
 
+  // TODO this method is not used, therefore remove.
   public Map<String, Map<Long, Long>> findNumberOfDonations(Date donationDateFrom,
                                                             Date donationDateTo, String aggregationCriteria,
                                                             List<String> venues, List<String> bloodGroups) throws ParseException {
 
-    List<Long> venueIds = new ArrayList<Long>();
+    List<UUID> venueIds = new ArrayList<UUID>();
     if (venues != null) {
       for (String venue : venues) {
-        venueIds.add(Long.parseLong(venue));
+        venueIds.add(UUID.fromString(venue));
       }
     } else {
-      venueIds.add((long) -1);
+      venueIds.add(UUID.randomUUID());
     }
 
     Map<String, Map<Long, Long>> resultMap = new HashMap<String, Map<Long, Long>>();

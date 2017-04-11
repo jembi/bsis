@@ -47,6 +47,8 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
   public void testValidate_hasNoErrors() throws Exception {
     // set up data
     UUID donationBatchId = UUID.randomUUID();
+    UUID locationId = UUID.randomUUID();
+
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     form.setDonationBatch(new DonationBatchBackingForm());
     form.getDonationBatch().setId(donationBatchId);
@@ -54,13 +56,13 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
     form.setBloodTransportBoxes(new ArrayList<BloodTransportBoxBackingForm>());
     form.getBloodTransportBoxes().add(new BloodTransportBoxBackingForm());
     LocationBackingForm locationForm = new LocationBackingForm();
-    locationForm.setId(1L);
+    locationForm.setId(locationId);
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(donationBatchId)).thenReturn(true);
-    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
+    when(locationRepository.getLocation(locationId)).thenReturn(aProcessingSite().withId(locationId).build());
     
     // run test
     validator.validate(form, errors);
@@ -74,12 +76,13 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
     // set up data
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     LocationBackingForm locationForm = new LocationBackingForm();
-    locationForm.setId(1L);
+    UUID locationId = UUID.randomUUID();
+    locationForm.setId(locationId);
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
-    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
+    when(locationRepository.getLocation(locationId)).thenReturn(aProcessingSite().withId(locationId).build());
     
     // run test
     validator.validate(form, errors);
@@ -95,12 +98,13 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     form.setDonationBatch(new DonationBatchBackingForm());
     LocationBackingForm locationForm = new LocationBackingForm();
-    locationForm.setId(1L);
+    UUID locationId = UUID.randomUUID();
+    locationForm.setId(locationId);
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
-    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
+    when(locationRepository.getLocation(locationId)).thenReturn(aProcessingSite().withId(locationId).build());
     
     // run test
     validator.validate(form, errors);
@@ -117,13 +121,14 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
     form.setDonationBatch(new DonationBatchBackingForm());
     form.getDonationBatch().setId(DONATION_BATCH_ID);
     LocationBackingForm locationForm = new LocationBackingForm();
-    locationForm.setId(1L);
+    UUID locationId = UUID.randomUUID();
+    locationForm.setId(locationId);
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(false);
-    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
+    when(locationRepository.getLocation(locationId)).thenReturn(aProcessingSite().withId(locationId).build());
     
     // run test
     validator.validate(form, errors);
@@ -136,6 +141,7 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
   @Test
   public void testValidate_hasNoLocation() throws Exception {
     // set up data
+    UUID locationId = UUID.randomUUID();
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     form.setDonationBatch(new DonationBatchBackingForm());
     form.getDonationBatch().setId(DONATION_BATCH_ID);
@@ -143,7 +149,7 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(true);
-    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
+    when(locationRepository.getLocation(locationId)).thenReturn(aProcessingSite().withId(locationId).build());
     
     // run test
     validator.validate(form, errors);
@@ -156,6 +162,7 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
   @Test
   public void testValidate_hasLocationNoId() throws Exception {
     // set up data
+    UUID locationId = UUID.randomUUID();
     ComponentBatchBackingForm form = new ComponentBatchBackingForm();
     form.setDonationBatch(new DonationBatchBackingForm());
     form.getDonationBatch().setId(DONATION_BATCH_ID);
@@ -165,7 +172,7 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(true);
-    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().withId(1L).build());
+    when(locationRepository.getLocation(locationId)).thenReturn(aProcessingSite().withId(locationId).build());
     
     // run test
     validator.validate(form, errors);
@@ -182,13 +189,14 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
     form.setDonationBatch(new DonationBatchBackingForm());
     form.getDonationBatch().setId(DONATION_BATCH_ID);
     LocationBackingForm locationForm = new LocationBackingForm();
-    locationForm.setId(1L);
+    UUID locationId = UUID.randomUUID();
+    locationForm.setId(locationId);
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(true);
-    when(locationRepository.getLocation(1L)).thenReturn(null);
+    when(locationRepository.getLocation(locationId)).thenReturn(null);
     
     // run test
     validator.validate(form, errors);
@@ -205,13 +213,15 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
     form.setDonationBatch(new DonationBatchBackingForm());
     form.getDonationBatch().setId(DONATION_BATCH_ID);
     LocationBackingForm locationForm = new LocationBackingForm();
-    locationForm.setId(1L);
+    UUID locationId = UUID.randomUUID();
+    locationForm.setId(locationId);
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(true);
-    when(locationRepository.getLocation(1L)).thenReturn(aProcessingSite().thatIsDeleted().withId(1L).build());
+    when(locationRepository.getLocation(locationId))
+        .thenReturn(aProcessingSite().thatIsDeleted().withId(locationId).build());
     
     // run test
     validator.validate(form, errors);
@@ -228,13 +238,14 @@ public class ComponentBatchBackingFormValidatorTest extends UnitTestSuite {
     form.setDonationBatch(new DonationBatchBackingForm());
     form.getDonationBatch().setId(DONATION_BATCH_ID);
     LocationBackingForm locationForm = new LocationBackingForm();
-    locationForm.setId(1L);
+    UUID locationId = UUID.randomUUID();
+    locationForm.setId(locationId);
     form.setLocation(locationForm);
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentBatch");
     
     // set up mocks
     when(donationBatchRepository.verifyDonationBatchExists(DONATION_BATCH_ID)).thenReturn(true);
-    when(locationRepository.getLocation(1L)).thenReturn(aVenue().withId(1L).build());
+    when(locationRepository.getLocation(locationId)).thenReturn(aVenue().withId(locationId).build());
     
     // run test
     validator.validate(form, errors);

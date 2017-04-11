@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -108,7 +109,7 @@ public class DonorCommunicationsController {
 
     for (String venueId : locations) {
       Location l = new Location();
-      l.setId(Long.parseLong(venueId));
+      l.setId(UUID.fromString(venueId));
       venues.add(l);
     }
 

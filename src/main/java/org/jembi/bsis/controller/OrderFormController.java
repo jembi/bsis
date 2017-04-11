@@ -97,8 +97,8 @@ public class OrderFormController {
   public ResponseEntity<Map<String, Object>> findComponentBatches(
       @RequestParam(value = "orderDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date orderDateFrom,
       @RequestParam(value = "orderDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date orderDateTo,
-      @RequestParam(value = "dispatchedFromId", required = false) Long dispatchedFromId,
-      @RequestParam(value = "dispatchedToId", required = false) Long dispatchedToId,
+      @RequestParam(value = "dispatchedFromId", required = false) UUID dispatchedFromId,
+      @RequestParam(value = "dispatchedToId", required = false) UUID dispatchedToId,
       @RequestParam(value = "type", required = false) OrderType type,
       @RequestParam(value = "status", required = false) OrderStatus status) {
     Map<String, Object> map = new HashMap<String, Object>();

@@ -71,7 +71,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
     UUID donorId = UUID.randomUUID();
     UUID donationId = UUID.randomUUID();
     UUID postDonationCounsellingId = UUID.randomUUID();
-    long referralSiteId = 12L;
+    UUID referralSiteId = UUID.randomUUID();
     
     Donor donor = aDonor().withId(donorId).build();
     Donation donation = aDonation().withId(donationId).withDonor(donor).build();
@@ -281,7 +281,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntityThatIsReferred_shouldReturnEntityInCorrectState() {
     Date counsellingDate = new Date();
-    Long locationId = 1L;
+    UUID locationId = UUID.randomUUID();
     UUID postDonationCounsellingId = UUID.randomUUID(); 
 
     LocationBackingForm referralSiteForm = aReferralSiteBackingForm().withId(locationId).withName("Care").build();
@@ -344,6 +344,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withFirstName("First")
         .withLastName("Last")
         .build();
+    UUID locationId = UUID.randomUUID();
     Donation donation = aDonation()
         .withId(UUID.randomUUID())
         .withDonor(donor)
@@ -351,7 +352,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withBloodAbo("A")
         .withBloodRh("+")
         .withDonationDate(new Date())
-        .withVenue(aLocation().withId(1L).build())
+        .withVenue(aLocation().withId(locationId).build())
         .build();
 
     PostDonationCounselling postDonationCounselling = aPostDonationCounselling()
@@ -364,7 +365,7 @@ public class PostDonationCounsellingFactoryTests extends UnitTestSuite {
         .withReferred(true)
         .build();
     
-    LocationViewModel venueViewModel = LocationViewModelBuilder.aLocationViewModel().withId(1L).build();
+    LocationViewModel venueViewModel = LocationViewModelBuilder.aLocationViewModel().withId(locationId).build();
     
     PostDonationCounsellingSummaryViewModel expectedSummary = aPostDonationCounsellingSummaryViewModel()
         .withId(postDonationCounsellingId)

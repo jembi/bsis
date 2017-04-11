@@ -4,9 +4,9 @@
           isAdmin="1" isDeleted="0" isStaff="1" username="admin"
           password="admin"/>
 
-    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="1" name="location 1"/>
-    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="2" name="location 2"/>
-    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="3" name="location 3"/>
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="uuid'55321456-eeee-1234-b5b1-123412348811'" name="location 1"/>
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="uuid'55321456-eeee-1234-b5b1-123412348812'" name="location 2"/>
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="uuid'55321456-eeee-1234-b5b1-123412348813'" name="location 3"/>
 
     <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D1'" contactMethodType="None" isDeleted="0"/>
     <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D2'" contactMethodType="Phone" isDeleted="0"/>
@@ -34,7 +34,7 @@
            gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
            createdDate="2014-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
            idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-           venue_id="3" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dueToDonate="${threeMonthsAhead}"/>
+           venue_id="uuid'55321456-eeee-1234-b5b1-123412348813'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dueToDonate="${threeMonthsAhead}"/>
     <donor ID="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4902'" age="50" birthDate="1991-06-10" birthDateEstimated="1"
            bloodAbo="O" bloodRh="-" callingName="callingName"
            dateOfLastDonation="${today}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -42,7 +42,7 @@
            gender="male" isDeleted="1" lastName="lastName" middleName="middleName"
            createdDate="2013-02-22 20:18:17" lastUpdated="2014-02-21 17:31:59"
            idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-           venue_id="3" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dueToDonate="${threeMonthsAhead}"/>
+           venue_id="uuid'55321456-eeee-1234-b5b1-123412348813'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dueToDonate="${threeMonthsAhead}"/>
     <donor ID="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4903'" age="50" birthDate="1991-06-10" birthDateEstimated="1"
            bloodAbo="A" bloodRh="+" callingName="callingName"
            dateOfLastDonation="${today}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -50,7 +50,7 @@
            gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
            createdDate="2014-03-01 20:18:17" lastUpdated="2014-02-21 17:31:59"
            idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-           venue_id="1" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dueToDonate="${threeMonthsAhead}"/>
+           venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dueToDonate="${threeMonthsAhead}"/>
     <donor ID="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4904'" age="50" birthDate="1991-06-10" birthDateEstimated="1"
            bloodAbo="A" bloodRh="+" callingName="callingName"
            dateOfLastDonation="${threeMonthsAgo}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -58,7 +58,7 @@
            gender="male" isDeleted="0" lastName="lastName" middleName="middleName"
            createdDate="2014-01-01 20:18:17" lastUpdated="2014-02-21 17:31:59"
            idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-           venue_id="1" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dueToDonate="${yesterday}"/>
+           venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dueToDonate="${yesterday}"/>
     <donor ID="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4905'" age="50" birthDate="1991-06-10" birthDateEstimated="1"
            bloodAbo="A" bloodRh="+" callingName="callingName"
            dateOfLastDonation="${threeMonthsAgo}" donorHash="1256c5cd51e6641c969573b0aa249dd6"
@@ -66,13 +66,13 @@
            gender="male" isDeleted="1" lastName="lastName" middleName="middleName"
            createdDate="2014-01-01 20:18:17" lastUpdated="2014-02-21 17:31:59"
            idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
-           venue_id="1" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dueToDonate="${yesterday}"/>
+           venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dueToDonate="${yesterday}"/>
     <donor ID="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4906'" age="38" birthDate="1977-10-20" birthDateEstimated="1"
            bloodAbo="A" bloodRh="+" dateOfLastDonation="${threeMonthsAgo}"
            donorHash="1256c5cd51e6641c969573b0aa249dd6" donorNumber="000006"
            donorStatus="MERGED" firstName="Karin" gender="female" isDeleted="0"
            lastName="Smith" createdDate="2014-01-01 20:18:17" lastUpdated="2014-02-21 17:31:59"
-           idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" venue_id="1"
+           idNumber="123" notes="notes" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'"
            createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dueToDonate="${yesterday}"/>
 
     <deferralreason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" isDeleted="0" reason="High risk behaviour" defaultDuration="30"
@@ -99,15 +99,15 @@
 
     <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" deferralReasonText="" createdDate="${today}" deferralDate="${today}"
                    deferredUntil="${sixMonthsAhead}" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-                   deferredDonor_id="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4901'" venue_id="1"/>
+                   deferredDonor_id="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4901'" venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'"/>
     <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" deferralReasonText="" createdDate="${oneMonthAgo}" deferralDate="${today}"
                    deferredUntil="${twoWeeksAgo}" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-                   deferredDonor_id="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4901'" venue_id="1"/>
+                   deferredDonor_id="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4901'" venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'"/>
     <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" deferralReasonText="" createdDate="${oneMonthAgo}" deferralDate="${today}"
                    deferredUntil="${twoWeeksAgo}" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-                   deferredDonor_id="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4903'" venue_id="1"/>
+                   deferredDonor_id="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4903'" venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'"/>
     <DonorDeferral id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" deferralReasonText="" createdDate="${oneMonthAgo}" deferralDate="${today}"
                    deferredUntil="${twoWeeksAgo}" deferralReason_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-                   deferredDonor_id="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4904'" venue_id="1"/>
+                   deferredDonor_id="uuid'11e715ee-e76a-1cfd-9763-28f10e1b4904'" venue_id="uuid'55321456-eeee-1234-b5b1-123412348811'"/>
 
 </dataset>

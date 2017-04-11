@@ -84,8 +84,8 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
     Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
     List<String> venues = new ArrayList<String>();
-    venues.add("1");
-    venues.add("2");
+    venues.add("77321456-eeee-1234-b5b1-123412348891");
+    venues.add("77321456-eeee-1234-b5b1-123412348892");
     List<String> bloodGroups = new ArrayList<String>();
     bloodGroups.add("A-");
     Map<String, Map<Long, Long>> results = donationRepository.findNumberOfDonations(donationDateFrom, donationDateTo,
@@ -103,8 +103,8 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
     Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-03-10");
     List<String> venues = new ArrayList<String>();
-    venues.add("1");
-    venues.add("2");
+    venues.add("77321456-eeee-1234-b5b1-123412348891");
+    venues.add("77321456-eeee-1234-b5b1-123412348892");
     List<String> bloodGroups = new ArrayList<String>();
     bloodGroups.add("A-");
     bloodGroups.add("A+");
@@ -128,8 +128,8 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     Date donationDateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
     Date donationDateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
     List<String> venues = new ArrayList<String>();
-    venues.add("1");
-    venues.add("2");
+    venues.add("77321456-eeee-1234-b5b1-123412348891");
+    venues.add("77321456-eeee-1234-b5b1-123412348892");
     List<String> bloodGroups = new ArrayList<String>();
     bloodGroups.add("AB-");
     bloodGroups.add("AB+");

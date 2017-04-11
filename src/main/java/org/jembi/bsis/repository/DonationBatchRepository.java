@@ -84,7 +84,7 @@ public class DonationBatchRepository {
   }
 
 
-  public List<DonationBatch> findDonationBatches(Boolean isClosed, List<Long> venueIds, Date startDate, Date endDate) {
+  public List<DonationBatch> findDonationBatches(Boolean isClosed, List<UUID> venueIds, Date startDate, Date endDate) {
     String queryStr = "SELECT distinct b from DonationBatch b LEFT JOIN FETCH b.donations WHERE b.isDeleted=:isDeleted ";
     if (!venueIds.isEmpty()) {
       queryStr += "AND b.venue.id IN (:venueIds) ";

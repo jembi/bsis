@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -40,14 +41,14 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testGetLocation() throws Exception {
-    Location one = locationRepository.getLocation(1l);
+    Location one = locationRepository.getLocation(UUID.fromString("55321456-eeee-1234-b5b1-123412348891"));
     Assert.assertNotNull("There is a Location", one);
     Assert.assertEquals("The Location matches", "Maseru", one.getName());
   }
 
   @Test
   public void testGetLocationDeleted() throws Exception {
-    Location one = locationRepository.getLocation(6l);
+    Location one = locationRepository.getLocation(UUID.fromString("55321456-eeee-1234-b5b1-123412348896"));
     Assert.assertNotNull("There is a Location", one);
     Assert.assertEquals("The Location matches", "Leribe Clinic", one.getName());
   }
@@ -68,8 +69,9 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testDeleteLocation() throws Exception {
-    locationRepository.deleteLocation(1L);
-    Location one = entityManager.find(Location.class, 1L);
+    UUID location1 = UUID.fromString("55321456-eeee-1234-b5b1-123412348891");
+    locationRepository.deleteLocation(location1);
+    Location one = entityManager.find(Location.class, location1);
     Assert.assertNotNull("There is a Location", one);
     Assert.assertEquals("The Location is marked as deleted", true, one.getIsDeleted());
   }
@@ -119,12 +121,14 @@ public class LocationRepositoryTest extends DBUnitContextDependentTestSuite {
   
   @Test
   public void testEntityExists() throws Exception {
-    Assert.assertTrue("Location exists", locationRepository.verifyLocationExists(1L));
+    Assert.assertTrue("Location exists",
+        locationRepository.verifyLocationExists(UUID.fromString("55321456-eeee-1234-b5b1-123412348891")));
   }
   
   @Test
   public void testEntityDoesNotExist() throws Exception {
-    Assert.assertFalse("Location does not exist", locationRepository.verifyLocationExists(123L));
+    Assert.assertFalse("Location does not exist",
+        locationRepository.verifyLocationExists(UUID.fromString("55321456-eeee-1234-b5b1-123412348999")));
   }
 
   @Test

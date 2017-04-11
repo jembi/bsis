@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.controllerservice.MobileClinicControllerService;
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
@@ -42,7 +43,8 @@ public class MobileClinicControllerTests extends UnitTestSuite {
   public void testGetMobileClinicFormFields() {
 
     List<LocationViewModel> venues = new ArrayList<>();
-    LocationViewModel venue1 = LocationViewModelBuilder.aLocationViewModel().withId(1L).withName("test").build();
+    UUID locationId = UUID.randomUUID();
+    LocationViewModel venue1 = LocationViewModelBuilder.aLocationViewModel().withId(locationId).withName("test").build();
     venues.add(venue1);
 
     when(mobileClinicControllerService.getMobileVenues()).thenReturn(venues);
@@ -87,9 +89,11 @@ public class MobileClinicControllerTests extends UnitTestSuite {
     clinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor1));
     clinicDonorsViewModels.add(new MobileClinicLookUpDonorViewModel(donor2));
 
-    when(mobileClinicControllerService.getMobileClinicDonorsByVenue(1L, clinicDate)).thenReturn(clinicDonorsViewModels);
+    UUID location1 = UUID.randomUUID();
+    when(mobileClinicControllerService.getMobileClinicDonorsByVenue(location1, clinicDate))
+        .thenReturn(clinicDonorsViewModels);
 
-    ResponseEntity<Map<String, Object>> response = mobileClinicController.getMobileClinicDonors(1L, clinicDate);
+    ResponseEntity<Map<String, Object>> response = mobileClinicController.getMobileClinicDonors(location1, clinicDate);
     Map<String, Object> map = response.getBody();
     Assert.assertNotNull("map is returned", map);
     Object donorsValue = map.get("donors");
@@ -119,8 +123,8 @@ public class MobileClinicControllerTests extends UnitTestSuite {
     List<MobileClinicExportDonorViewModel> clinicDonorsViewModels = new ArrayList<>();
     clinicDonorsViewModels.add(mobileClinicDonorViewModelD1);
     clinicDonorsViewModels.add(mobileClinicDonorViewModelD2);
-    Set<Long> venueIDs = new HashSet<>();
-    venueIDs.add(1L);
+    Set<UUID> venueIDs = new HashSet<>();
+    venueIDs.add(UUID.randomUUID());
     when(mobileClinicControllerService.getMobileClinicDonorsByVenues(venueIDs, clinicDate))
         .thenReturn(clinicDonorsViewModels);
     ResponseEntity<Map<String, Object>> response =

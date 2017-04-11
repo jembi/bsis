@@ -30,26 +30,38 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
         .getResultList();
   }
 
-  public List<OrderForm> findOrderForms(Date orderDateFrom, Date orderDateTo, Long dispatchedFromId,
-      Long dispatchedToId, OrderType type, OrderStatus status) {
-    boolean includeStatus = true, incudeType = true;
+  public List<OrderForm> findOrderForms(Date orderDateFrom, Date orderDateTo, UUID dispatchedFromId,
+      UUID dispatchedToId, OrderType type, OrderStatus status) {
+    boolean includeAllStatuses = false, incudeAllTypes = false;
     if (status == null) {
-      includeStatus = false;
+      includeAllStatuses = true;
     }
     if (type == null) {
-      incudeType = false;
+      incudeAllTypes = true;
     }
+
+    boolean includeAllDispatchFromLocations = false;
+    if (dispatchedFromId == null) {
+      includeAllDispatchFromLocations = true;
+    }
+    boolean includeAllDispatchToLocations = false;
+    if (dispatchedToId == null) {
+      includeAllDispatchToLocations = true;
+    }
+
     return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_ORDER_FORMS,
         OrderForm.class)
         .setParameter("isDeleted", false)
         .setParameter("orderDateFrom", orderDateFrom)
         .setParameter("orderDateTo", orderDateTo)
         .setParameter("dispatchedFromId", dispatchedFromId)
+        .setParameter("includeAllDispatchFromLocations", includeAllDispatchFromLocations)
         .setParameter("dispatchedToId", dispatchedToId)
+        .setParameter("includeAllDispatchToLocations", includeAllDispatchToLocations)
         .setParameter("type", type)
         .setParameter("status", status)
-        .setParameter("includeStatus", includeStatus)
-        .setParameter("incudeType", incudeType)
+        .setParameter("includeAllStatuses", includeAllStatuses)
+        .setParameter("incudeAllTypes", incudeAllTypes)
         .getResultList();
   }
 

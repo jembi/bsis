@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -36,7 +37,7 @@ public class InventoryCRUDService {
    * @return the list
    */
   public List<Component> findComponentsInStock(String donationIdentificationNumber, String componentCode,
-      Long locationId, Long componentTypeId, Date dueToExpireBy, List<String> bloodGroups) {
+      UUID locationId, Long componentTypeId, Date dueToExpireBy, List<String> bloodGroups) {
     
     // Check that if donationIdentificationNumber or componentCode are present, both are present
     boolean searchByCodeAndDIN = false;

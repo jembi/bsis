@@ -22,6 +22,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -239,7 +240,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithUnsafeDonationAndDonorToBeDeferred_shouldDeferDonorAndCreateCounsellingReferral() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
@@ -278,7 +279,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithNoTypeDeterminedBloodTyping_shouldNotSetBloodABORhOfDonor() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
@@ -314,7 +315,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithNoTypeDeterminedBloodTyping_shouldMarkComponentsAsUnsafe() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
@@ -348,7 +349,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithIndeterminateTTIStatus_shouldMarkComponentsAsUnsafe() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "A";
     String bloodRh = "+";
@@ -382,7 +383,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithIndeterminateBloodTyping_shouldNotSetBloodABORhOfDonor() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
@@ -419,7 +420,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithIndeterminateBloodTyping_shouldMarkComponentsAsUnsafe() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";

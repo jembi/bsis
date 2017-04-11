@@ -1,10 +1,12 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.location.Location;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class LocationFullViewModel extends BaseViewModel<Long> {
+public class LocationFullViewModel extends BaseViewModel<UUID> {
 
   @JsonIgnore
   private Location location;
@@ -18,7 +20,7 @@ public class LocationFullViewModel extends BaseViewModel<Long> {
   }
 
   @Override
-  public Long getId() {
+  public UUID getId() {
     return location.getId();
   }
 

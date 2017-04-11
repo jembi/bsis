@@ -201,8 +201,10 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
     UUID divisionId = UUID.randomUUID();
 
     Division divisionLevel3 = aDivision().withId(divisionId).withLevel(3).build();
+
+    UUID locationId = UUID.randomUUID();
     Location location = LocationBuilder.aLocation()
-        .withId(1l)
+        .withId(locationId)
         .withName("LOCATION")
         .thatIsVenue()
         .withDivisionLevel3(divisionLevel3)
@@ -210,7 +212,7 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
 
     DivisionBackingForm divisionForm = aDivisionBackingForm().withId(divisionId).withLevel(3).build();
     LocationBackingForm locationForm = aLocationBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName("LOCATION")
         .thatIsVenue()
         .withDivisionLevel3(divisionForm)
@@ -236,8 +238,10 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
     Division divisionLevel3 = aDivision().withId(divisionId).withLevel(3).build();
 
     DivisionBackingForm divisionForm = aDivisionBackingForm().withId(divisionId).withLevel(3).build();
+
+    UUID locationId = UUID.randomUUID();
     LocationBackingForm locationForm = aLocationBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName("")
         .thatIsVenue()
         .withDivisionLevel3(divisionForm)
@@ -261,8 +265,10 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
     UUID divisionId = UUID.randomUUID();
 
     Division divisionLevel3 = aDivision().withId(divisionId).withLevel(3).build();
+    UUID locationId_1 = UUID.randomUUID();
+    UUID locationId_2 = UUID.randomUUID();
     Location duplicate = LocationBuilder.aLocation()
-        .withId(2l)
+        .withId(locationId_2)
         .withName("LOCATION")
         .thatIsVenue()
         .withDivisionLevel3(divisionLevel3)
@@ -270,7 +276,7 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
 
     DivisionBackingForm divisionForm = aDivisionBackingForm().withId(divisionId).withLevel(3).build();
     LocationBackingForm locationForm = aLocationBackingForm()
-        .withId(1L)
+        .withId(locationId_1)
         .withName("LOCATION")
         .thatIsVenue()
         .withDivisionLevel3(divisionForm)
@@ -297,8 +303,9 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
     Division divisionLevel3 = aDivision().withId(divisionId).withLevel(3).build();
 
     DivisionBackingForm divisionForm = aDivisionBackingForm().withId(divisionId).withLevel(3).build();
+    UUID locationId = UUID.randomUUID();
     LocationBackingForm locationForm = aLocationBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName("LOCATION")
         .withDivisionLevel3(divisionForm)
         .build();
@@ -317,9 +324,9 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   @Test
   public void testValidateFormWithNoDivisionLevel3_shouldHaveFieldError() {
     // Set up fixture
-
+    UUID locationId = UUID.randomUUID();
     LocationBackingForm form = aVenueBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName("Location")
         .withDivisionLevel3(null)
         .build();
@@ -339,8 +346,9 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   @Test
   public void testValidateFormWithNoDivisionLevel3Id_shouldHaveFieldError() {
     // Set up fixture
+    UUID locationId = UUID.randomUUID();
     LocationBackingForm form = aVenueBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName("Location")
         .withDivisionLevel3(aDivisionBackingForm().withId(null).build())
         .build();
@@ -361,9 +369,9 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   public void testValidateFormWithNoExistingDivisionLevel3_shouldHaveFieldError() {
     // Set up fixture
     UUID divisionId = UUID.randomUUID();
-
+    UUID locationId = UUID.randomUUID();
     LocationBackingForm form = aVenueBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName("Location")
         .withDivisionLevel3(aDivisionBackingForm().withId(divisionId).build())
         .build();
@@ -385,9 +393,9 @@ public class LocationBackingFormValidatorTest extends UnitTestSuite {
   public void testValidateFormWithWrongDivisionLevel_shouldHaveFieldError() {
     // Set up fixture
     UUID divisionId = UUID.randomUUID();
-
+    UUID locationId = UUID.randomUUID();
     LocationBackingForm form = aVenueBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName("Location")
         .withDivisionLevel3(aDivisionBackingForm().withId(divisionId).build())
         .build();

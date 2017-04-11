@@ -3,6 +3,8 @@ package org.jembi.bsis.service.report;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.ComponentProductionDTO;
@@ -40,7 +42,7 @@ public class ComponentProductionReportGenerator {
    * @param endDate
    * The period end date for date range
    */
-  public Report generateComponentProductionReport(Long processingSiteId, Date startDate, Date endDate) {
+  public Report generateComponentProductionReport(UUID processingSiteId, Date startDate, Date endDate) {
     Report report = new Report();
     report.setStartDate(startDate);
     report.setEndDate(endDate);
@@ -49,7 +51,7 @@ public class ComponentProductionReportGenerator {
     return report;
   }
 
-  private List<DataValue> generateReportDataValues(Long processingSiteId, Date startDate, Date endDate) {
+  private List<DataValue> generateReportDataValues(UUID processingSiteId, Date startDate, Date endDate) {
     List<ComponentProductionDTO> dtos = componentRepository.findProducedComponentsByProcessingSite(
             processingSiteId, startDate, endDate);
 

@@ -2,9 +2,9 @@
 <dataset>
     <user id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" emailId="admin" firstName="admin" isactive="1"
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
-    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="uuid'77321456-eeee-1234-b5b1-123412348891'" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
-    <Location isTestingSite="1" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="false"
+    <Location isTestingSite="1" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="uuid'77321456-eeee-1234-b5b1-123412348892'" isDeleted="false" isVenue="false"
               isMobileSite="false" isUsageSite="false" name="Testing" notes=""/>
     <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"/>
     <Address id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"/>
@@ -21,7 +21,7 @@
            dateOfLastDonation="2015-08-11 09:05:56.0" donorHash="0e17076f53dbb49ff3678eee94bb9f70"
            donorNumber="000001" donorStatus="NORMAL" firstName="John" gender="male"
            isDeleted="false" lastName="Smith" createdDate="2015-08-11 09:05:10.0"
-           lastUpdated="2015-08-11 09:06:27.0" venue_id="1" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
+           lastUpdated="2015-08-11 09:06:27.0" venue_id="uuid'77321456-eeee-1234-b5b1-123412348891'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
            lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dateOfFirstDonation="2015-08-11"
            preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
            dueToDonate="2015-11-09"/>
@@ -55,15 +55,15 @@
            createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dateOfFirstDonation="2015-08-11"
            preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'"
            dueToDonate="2015-11-09"/>
-    <TestBatch id="1" batchNumber="000000" isDeleted="false" location_id="2"
+    <TestBatch id="1" batchNumber="000000" isDeleted="false" location_id="uuid'77321456-eeee-1234-b5b1-123412348892'"
                createdDate="2015-08-11 05:44:40.0" lastUpdated="2015-08-11 05:44:40.0"
                status="RELEASED" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
     <DonationBatch id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" batchNumber="000000" isDeleted="false"
                    createdDate="2015-08-11 09:05:56.0" donationBatchDate="2015-08-11 09:05:56.0" lastUpdated="2015-08-11 09:07:10.0"
-                   createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" isClosed="true" venue_id="1"
+                   createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" isClosed="true" venue_id="uuid'77321456-eeee-1234-b5b1-123412348891'"
                    backEntry="false"
                    testBatch_id="1"/>
-	<ComponentBatch id="1" location_id="1" 
+	<ComponentBatch id="1" location_id="uuid'77321456-eeee-1234-b5b1-123412348891'" 
                status="OPEN" isDeleted="0"
                collectionDate="2015-08-11 09:06:27.0" deliveryDate="2015-08-11 09:06:27.0"
                createdDate="2015-08-11 09:06:27.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" 
@@ -91,7 +91,7 @@
               createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
               ttiStatus="NOT_DONE" packType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
               donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4921'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-              venue_id="1" bleedStartTime="2015-08-11 09:06:11.0"
+              venue_id="uuid'77321456-eeee-1234-b5b1-123412348891'" bleedStartTime="2015-08-11 09:06:11.0"
               bleedEndTime="2015-08-11 09:16:11.0"
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
     <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'" bloodTypingStatus="COMPLETE" donationDate="2015-08-11 09:05:56.0"
@@ -99,7 +99,7 @@
               createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
               ttiStatus="TTI_SAFE" packType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
               donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4922'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-              venue_id="1" bleedStartTime="2015-08-11 09:06:11.0"
+              venue_id="uuid'77321456-eeee-1234-b5b1-123412348891'" bleedStartTime="2015-08-11 09:06:11.0"
               bleedEndTime="2015-08-11 09:16:11.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
     <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a3'" bloodAbo="AB" bloodRh="+" bloodTypingStatus="COMPLETE"
@@ -108,7 +108,7 @@
               lastUpdated="2015-08-11 09:06:27.0" ttiStatus="NOT_DONE"
               packType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" 
               donor_id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4923'"
-              createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" venue_id="1"
+              createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" venue_id="uuid'77321456-eeee-1234-b5b1-123412348891'"
               bleedStartTime="2015-08-11 09:06:11.0" bleedEndTime="2015-08-11 09:16:11.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
     <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a4'" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 00:00:00.0"
@@ -117,7 +117,7 @@
               ttiStatus="NOT_DONE" packType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
               donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4924'" 
               createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-              venue_id="1" bleedStartTime="2015-08-11 14:53:37.0"
+              venue_id="uuid'77321456-eeee-1234-b5b1-123412348891'" bleedStartTime="2015-08-11 14:53:37.0"
               bleedEndTime="2015-08-11 14:53:37.0"
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
     <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'" bloodTypingStatus="NOT_DONE" donationDate="2015-08-11 09:05:56.0"
@@ -125,44 +125,44 @@
               createdDate="2015-08-11 09:06:27.0" lastUpdated="2015-08-11 09:06:27.0"
               ttiStatus="TTI_UNSAFE" packType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" donationBatch_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"
               donationType_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donor_id="uuid'11e7161c-b6f7-8bde-8b6b-28f10e1b4925'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-              venue_id="1" bleedStartTime="2015-08-11 09:06:11.0"
+              venue_id="uuid'77321456-eeee-1234-b5b1-123412348891'" bleedStartTime="2015-08-11 09:06:11.0"
               bleedEndTime="2015-08-11 09:16:11.0"
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="1" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+    <Component location_id="uuid'77321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="1" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="PROCESSED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
                componentType_id="1" componentCode="1111111-0011"
                componentBatch_id="1" />
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="2" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
+    <Component location_id="uuid'77321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="2" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
                isDeleted="false" createdDate="2015-08-11 09:07:29.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="QUARANTINED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
                lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" parentComponent_id="1" componentType_id="6"
                componentCode="1111111-1001"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="3" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+    <Component location_id="uuid'77321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="3" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="PROCESSED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
                componentType_id="1" componentCode="2222222-0011"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="4" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
+    <Component location_id="uuid'77321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="4" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
                isDeleted="false" createdDate="2015-08-11 09:07:29.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="QUARANTINED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
                lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" parentComponent_id="3" componentType_id="6"
                componentCode="2222222-1001"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="5" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+    <Component location_id="uuid'77321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="5" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="PROCESSED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a3'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
                componentType_id="1" componentCode="3333333-0011"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="6" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
+    <Component location_id="uuid'77321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="6" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
                discardedOn="2015-08-11 16:13:00.0" isDeleted="false"
                createdDate="2015-08-11 09:07:29.0"
                lastUpdated="2015-08-11 09:07:29.0" status="DISCARDED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a3'"
                createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" parentComponent_id="5"
                componentType_id="6" componentCode="3333333-1001"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="7" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+    <Component location_id="uuid'77321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="7" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="QUARANTINED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"

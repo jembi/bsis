@@ -41,6 +41,10 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
   ApplicationContext applicationContext = null;
   UserDetailsService userDetailsService;
 
+  UUID locationId_1 = UUID.fromString("55321456-eeee-1234-b5b1-123412348811");
+  UUID locationId_2 = UUID.fromString("55321456-eeee-1234-b5b1-123412348812");
+  UUID locationId_3 = UUID.fromString("55321456-eeee-1234-b5b1-123412348813");
+
   @Override
   protected IDataSet getDataSet() throws Exception {
     File file = new File("src/test/resources/dataset/DonorCommunicationsRepositoryDataset.xml");
@@ -84,7 +88,9 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
     boolean anyBloodGroup = false;
     boolean noBloodGroup = false;
     //Search with venue id 4
-    long[] id = {4};
+    UUID locationId_4 = UUID.fromString("55321456-eeee-1234-b5b1-444444444444");
+
+    UUID[] id = {locationId_4};
     //Search with  BloodGroup 'AB-'
     String[] bloodGroupStrArray = {"AB-"};
     Map<String, Object> pagingParams = createPagingParamsMap();
@@ -117,7 +123,7 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
     boolean anyBloodGroup = false;
     boolean noBloodGroup = false;
     //Search with venue id 3 and 1
-    long[] id = {1, 3};
+    UUID[] id = {locationId_1, locationId_3};
     //Search with  BloodGroup 'A+' and 'O+'
     String[] bloodGroupStrArray = {"A+", "O+"};
     Map<String, Object> pagingParams = createPagingParamsMap();
@@ -133,7 +139,7 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
     boolean isvalid = true;
     for (Donor donor : results) {
       if (!((donor.getBloodAbo() + donor.getBloodRh()).equals("O+") || (donor.getBloodAbo() + donor.getBloodRh()).equals("A+"))
-          && (donor.getVenue().getId() == 3 || donor.getVenue().getId() == 1)) {
+          && (donor.getVenue().getId() == locationId_3 || donor.getVenue().getId() == locationId_1)) {
         isvalid = false;
         break;
       }
@@ -155,7 +161,7 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
     List<Location> venues = new ArrayList<Location>();
     List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
     //Search with venue id 3 and 1
-    long[] id = {1, 3};
+    UUID[] id = {locationId_1, locationId_3};
     //Search with  BloodGroup 'A+' and 'O+'
     String[] bloodGroupStrArray = {"A+", "O+"};
     //Search with clinicDate
@@ -202,7 +208,7 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
     String clinicDate = "";
     String clinicDateToCheckdeferredDonor = "";
     //Search with venue id 3 and 1
-    long[] id = {1, 3};
+    UUID[] id = {locationId_1, locationId_3};
     //Search with  BloodGroup 'A+' and 'O+'
     String[] bloodGroupStrArray = {"A+", "O+"};
 
@@ -247,7 +253,7 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
     List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
     String clinicDate = "";
     //Search with venue id 3 and 1
-    long[] id = {1, 3};
+    UUID[] id = {locationId_1, locationId_3};
     //Search with  BloodGroup 'A+' and 'O+'
     String[] bloodGroupStrArray = {"A+", "O+"};
     UUID donorId = UUID.fromString("11e715ee-e76a-1cfd-9763-28f10e1b490f5");
@@ -279,7 +285,8 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
   @Test
   public void findDonors_shouldNotReturnMergedDonors() throws ParseException {
     UUID donorId = UUID.fromString("11e715ee-e76a-1cfd-9763-28f10e1b490f6");
-    List<Donor> donors = donorCommunicationsRepository.findDonors(createVenueList(new long[]{1, 3}), "", "", "",
+    List<Donor> donors =
+        donorCommunicationsRepository.findDonors(createVenueList(new UUID[] {locationId_1, locationId_3}), "", "", "",
         createBloodGroupList(new String[]{"A+", "O+"}), false, false, createPagingParamsMap(), "");
 
     for (Donor donor : donors) {
@@ -305,7 +312,7 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
     List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
     String clinicDate = "";
     //Search with venue id 3 and 1
-    long[] id = {1, 3};
+    UUID[] id = {locationId_1, locationId_3};
     //Search with  BloodGroup 'A+' and 'O+'
     String[] bloodGroupStrArray = {"A+", "O+"};
 
@@ -351,7 +358,7 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
     List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
     String clinicDate = "";
     //Search with venue id 3 and 1
-    long[] id = {1, 3};
+    UUID[] id = {locationId_1, locationId_3};
     //Search with  BloodGroup 'A+' and 'O+'
     String[] bloodGroupStrArray = {"A+", "O+"};
 
@@ -397,7 +404,7 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
     List<BloodGroup> bloodGroups = new ArrayList<BloodGroup>();
     String clinicDate = CustomDateFormatter.format(DateUtils.addDays(new Date(), (60)));
     //Search with venue id 3 and 1
-    long[] id = {1, 3};
+    UUID[] id = {locationId_1, locationId_3};
     //Search with  BloodGroup 'A+' and 'O+'
     String[] bloodGroupStrArray = {"A+", "O+"};
 
@@ -428,10 +435,10 @@ public class DonorCommunicationsRepositoryTest extends DBUnitContextDependentTes
 
   }
 
-  private List<Location> createVenueList(long[] id) {
+  private List<Location> createVenueList(UUID[] id) {
     List<Location> venue = new ArrayList<Location>();
 
-    for (long locId : id) {
+    for (UUID locId : id) {
       Location location = new Location();
       location.setId(locId);
       venue.add(location);

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.controllerservice.LabellingControllerService;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -50,7 +51,7 @@ public class LabellingController {
   public Map<String, Object> findSafeComponents(@RequestParam(required = false) String donationIdentificationNumber, 
       @RequestParam(required = false) String componentCode, 
       @RequestParam(required = false) Long componentTypeId, 
-      @RequestParam(required = false) Long locationId,
+      @RequestParam(required = false) UUID locationId,
       @RequestParam(required = false) List<String> bloodGroups, 
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate, 
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate, 

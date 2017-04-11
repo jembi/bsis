@@ -20,7 +20,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
     return entityManager.find(PostDonationCounselling.class, id);
   }
 
-  public List<PostDonationCounselling> findPostDonationCounselling(Date startDate, Date endDate, Set<Long> venueIds, 
+  public List<PostDonationCounselling> findPostDonationCounselling(Date startDate, Date endDate, Set<UUID> venueIds,
       CounsellingStatus counsellingStatus, Boolean referred, Boolean notReferred, boolean flaggedForCounselling) {
     
     String counsellingStatusName = counsellingStatus != null ? counsellingStatus.name() : null;

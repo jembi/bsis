@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.constant.GeneralConfigConstants;
@@ -36,7 +37,7 @@ public class LabellingService {
   @Autowired
   private ComponentRepository componentRepository;
   
-  public List<Component> findSafeComponentsToLabel(String din, String componentCode, Long componentTypeId, Long locationId,
+  public List<Component> findSafeComponentsToLabel(String din, String componentCode, Long componentTypeId, UUID locationId,
       List<String> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
     List<Component> components = new ArrayList<>();
     // Search for safe components excluding initial ones, as those can't be labelled

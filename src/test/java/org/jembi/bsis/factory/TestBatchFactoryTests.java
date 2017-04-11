@@ -473,16 +473,17 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   public void testCreateEntity_shouldSetCorrectFields() {
     UUID donationBatchId1 = UUID.randomUUID();
     UUID donationBatchId2 = UUID.randomUUID();
+    UUID locationId = UUID.randomUUID();
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(IRRELEVANT_ID);
     backingForm.setStatus(TestBatchStatus.OPEN);
     backingForm.setCreatedDate(IRRELEVANT_CREATED_DATE);
     backingForm.setDonationBatchIds(Arrays.asList(donationBatchId1, donationBatchId2));
-    backingForm.setLocation(aTestingSiteBackingForm().withId(7L).build());
+    backingForm.setLocation(aTestingSiteBackingForm().withId(locationId).build());
     
     DonationBatch firstDonationBatch = aDonationBatch().withId(donationBatchId1).build();
     DonationBatch secondDonationBatch = aDonationBatch().withId(donationBatchId2).build();
-    Location location = aTestingSite().withId(7L).build();
+    Location location = aTestingSite().withId(locationId).build();
     
     TestBatch expectedTestBatch = aTestBatch()
         .withId(IRRELEVANT_ID)
@@ -494,7 +495,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     
     when(donationBatchRepository.findDonationBatchById(donationBatchId1)).thenReturn(firstDonationBatch);
     when(donationBatchRepository.findDonationBatchById(donationBatchId2)).thenReturn(secondDonationBatch);
-    when(locationRepository.getLocation(7L)).thenReturn(location);
+    when(locationRepository.getLocation(locationId)).thenReturn(location);
     
     TestBatch returnedTestBatch = testBatchFactory.createEntity(backingForm);
     

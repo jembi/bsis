@@ -230,7 +230,8 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
 
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())));
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs =
+        donorRepository.findMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue.getId())));
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(3));
 
@@ -284,7 +285,8 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsDeleted()
         .buildAndPersist(entityManager);
 
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())));
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs =
+        donorRepository.findMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue.getId())));
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(1));
     Assert.assertFalse("Deleted MobileClinicDonor not returned", mobileClinicDonorDTOs.contains(donor2));
@@ -307,7 +309,8 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
 
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())));
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs =
+        donorRepository.findMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue.getId())));
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(1));
     Assert.assertFalse("Deleted MobileClinicDonor not returned", mobileClinicDonorDTOs.contains(donor2));
@@ -330,7 +333,8 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
 
-    List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue1.getId())));
+    List<MobileClinicDonorDTO> mobileClinicDonorDTOs =
+        donorRepository.findMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue1.getId())));
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(1));
     for (MobileClinicDonorDTO d : mobileClinicDonorDTOs) {
@@ -779,7 +783,7 @@ public class DonorRepositoryTests extends SecurityContextDependentTestSuite {
         .withVenue(mobileVenue2)
         .thatIsNotDeleted()
         .buildAndPersist(entityManager);
-    Set<Long> venueIds = new HashSet<>();
+    Set<UUID> venueIds = new HashSet<>();
     List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(venueIds);
 
     assertThat("Correct number of MobileClinicDonors returned", mobileClinicDonorDTOs.size(), is(4));

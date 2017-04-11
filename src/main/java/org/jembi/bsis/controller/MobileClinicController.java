@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.controllerservice.MobileClinicControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -36,7 +37,7 @@ public class MobileClinicController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
   public @ResponseBody ResponseEntity<Map<String, Object>> getMobileClinicDonors(
-      @RequestParam(value = "venueId", required = true) Long venueId,
+      @RequestParam(value = "venueId", required = true) UUID venueId,
       @RequestParam(value = "clinicDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date clinicDate) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donors", mobileClinicControllerService.getMobileClinicDonorsByVenue(venueId, clinicDate));
@@ -46,7 +47,7 @@ public class MobileClinicController {
   @RequestMapping(value = "/export", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_MOBILE_CLINIC_EXPORT + "')")
   public @ResponseBody ResponseEntity<Map<String, Object>> getMobileClinicDonorsByVenues(
-      @RequestParam(value = "venueIds", required = false) Set<Long> venueIds,
+      @RequestParam(value = "venueIds", required = false) Set<UUID> venueIds,
       @RequestParam(value = "clinicDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date clinicDate) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donors", mobileClinicControllerService.getMobileClinicDonorsByVenues(venueIds, clinicDate));
@@ -65,7 +66,7 @@ public class MobileClinicController {
   @RequestMapping(value = "/donoroutcomes", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONOR_INFORMATION + "')")
   public @ResponseBody ResponseEntity<Map<String, Object>> getDonorOutcomes(
-      @RequestParam(value = "venueId", required = true) long venueId,
+      @RequestParam(value = "venueId", required = true) UUID venueId,
       @RequestParam(value = "startDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam(value = "endDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     Map<String, Object> map = new HashMap<>();
