@@ -6,6 +6,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.ComponentBatchPersister;
@@ -19,7 +20,7 @@ import org.jembi.bsis.util.RandomTestDate;
 
 public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch> {
 
-  private Long id;
+  private UUID id;
   private Date deliveryDate = new RandomTestDate();
   private Date collectionDate = new RandomTestDate();
   private Set<Component> components = new HashSet<>();
@@ -29,7 +30,7 @@ public class ComponentBatchBuilder extends AbstractEntityBuilder<ComponentBatch>
   private DonationBatch donationBatch = aDonationBatch().build();
   private Location location = aProcessingSite().build();
 
-  public ComponentBatchBuilder withId(Long id) {
+  public ComponentBatchBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

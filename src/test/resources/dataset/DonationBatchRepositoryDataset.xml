@@ -19,7 +19,7 @@
                createdDate="2015-04-24 04:42:17.0" lastUpdated="2015-04-24 04:42:17.0"
                status="OPEN" createdBy_id="1" lastUpdatedBy_id="1"/>
                
-    <ComponentBatch id="1" location_id="1" 
+    <ComponentBatch id="uuid'11e71ebf-1226-8bdb-9fc7-28f10e1b4901'" location_id="1" 
                status="OPEN" isDeleted="0"
                collectionDate="2015-08-11 09:06:27.0" deliveryDate="2015-08-11 09:06:27.0"
                createdDate="2015-08-11 09:06:27.0" createdBy_id="1" 
@@ -29,7 +29,7 @@
                    isDeleted="false" createdDate="2015-02-02 03:41:09.0" donationBatchDate="2015-02-02 03:41:09.0"
                    lastUpdated="2015-02-02 03:42:55.0"
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" testBatch_id="1"
-                   venue_id="1" backEntry="false" componentBatch_id="1" />
+                   venue_id="1" backEntry="false" componentBatch_id="uuid'11e71ebf-1226-8bdb-9fc7-28f10e1b4901'" />
     <DonationBatch id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" batchNumber="B0215000001"
                    isDeleted="false" createdDate="2015-02-02 03:43:00.0" donationBatchDate="2015-02-02 03:43:00.0"
                    lastUpdated="2015-04-24 04:42:09.0"

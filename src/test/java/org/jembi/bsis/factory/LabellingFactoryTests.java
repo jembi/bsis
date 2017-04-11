@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentTyp
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.service.LabellingConstraintChecker;
@@ -31,7 +32,7 @@ public class LabellingFactoryTests extends UnitTestSuite {
     Component component = aComponent()
         .withId(1L)
         .withComponentBatch(aComponentBatch()
-            .withId(1L)
+            .withId(UUID.randomUUID())
             .build())
         .withComponentType(aComponentType()
             .withComponentTypeName("name")

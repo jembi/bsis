@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.BloodTransportBoxBackingForm;
 import org.jembi.bsis.backingform.ComponentBatchBackingForm;
@@ -12,14 +13,14 @@ import org.jembi.bsis.model.componentbatch.ComponentBatchStatus;
 
 public class ComponentBatchBackingFormBuilder extends AbstractBuilder<ComponentBatchBackingForm> {
 
-  private Long id;
+  private UUID id;
   private Date deliveryDate;
   private ComponentBatchStatus status;
   private List<BloodTransportBoxBackingForm> bloodTransportBoxes = new ArrayList<>();
   private DonationBatchBackingForm donationBatch;
   private LocationBackingForm location;
 
-  public ComponentBatchBackingFormBuilder withId(Long id) {
+  public ComponentBatchBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

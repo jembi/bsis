@@ -43,7 +43,7 @@ public class ComponentBatchCRUDServiceTest extends UnitTestSuite {
   @Test
   public void testDeleteComponentBatch() throws Exception {
     // set up data
-    ComponentBatch componentBatch = aComponentBatch().withId(1L).withDeliveryDate(new Date()).build();
+    ComponentBatch componentBatch = aComponentBatch().withId(UUID.randomUUID()).withDeliveryDate(new Date()).build();
     
     // set up mocks
     Mockito.when(componentBatchRepository.findById(componentBatch.getId())).thenReturn(componentBatch);

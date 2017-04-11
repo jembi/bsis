@@ -119,5 +119,5 @@
   <include file="liquibase/updates/2944-add-bloodtestresult-audit.xml"/>
   <include file="liquibase/updates/uuid/2870-implement-uuids-for-components-section-component-status-change.xml"/>
   <include file="liquibase/updates/uuid/2870-implement-uuids-for-components-section-component-type-combination.xml"/>
-  
+  <include file="liquibase/updates/uuid/2870-implement-uuids-for-components-section-component-component-batch.xml"/>
 </databaseChangeLog>

@@ -10,6 +10,7 @@ import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.BloodTransportBoxBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBatchBuilder;
@@ -80,7 +81,7 @@ public class ComponentBatchRepositoryTests extends SecurityContextDependentTestS
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindById_cannotFindUnknownId() throws Exception {
-    componentBatchRepository.findById(1L);
+    componentBatchRepository.findById(UUID.randomUUID());
   }
   
   @Test

@@ -48,6 +48,7 @@ import org.mockito.Mock;
 public class ComponentBatchFactoryTests extends UnitTestSuite {
 
   private static final UUID DONATION_BATCH_ID = UUID.randomUUID();
+  private static final UUID COMPONENT_BATCH_ID = UUID.randomUUID();
 
   @InjectMocks
   ComponentBatchFactory componentBatchFactory;
@@ -65,7 +66,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
     DonationBatchBackingForm donationBatchBackingForm = aDonationBatchBackingForm().withId(DONATION_BATCH_ID).build();
     BloodTransportBoxBackingForm bloodTransportBoxBackingForm = aBloodTransportBoxBackingForm().withId(1L).build();
     ComponentBatchBackingForm form = aComponentBatchBackingForm()
-        .withId(1L)
+        .withId(COMPONENT_BATCH_ID)
         .withStatus(ComponentBatchStatus.OPEN)
         .withDeliveryDate(deliveryDate)
         .withLocation(locationForm)
@@ -77,7 +78,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).build();
     BloodTransportBox bloodTransportBox = aBloodTransportBox().withId(1L).build();
     ComponentBatch expectedComponentBatch = aComponentBatch()
-        .withId(1L)
+        .withId(COMPONENT_BATCH_ID)
         .withStatus(ComponentBatchStatus.OPEN)
         .withDeliveryDate(deliveryDate)
         .withCollectionDate(null)
@@ -97,7 +98,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
     DonationBatchBackingForm donationBatchBackingForm = aDonationBatchBackingForm().withId(DONATION_BATCH_ID).build();
     BloodTransportBoxBackingForm bloodTransportBoxBackingForm = aBloodTransportBoxBackingForm().withId(1L).build();
     ComponentBatchBackingForm form = aComponentBatchBackingForm()
-        .withId(1L)
+        .withId(COMPONENT_BATCH_ID)
         .withStatus(ComponentBatchStatus.OPEN)
         .withDeliveryDate(deliveryDate)
         .withLocation(null)
@@ -108,7 +109,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).build();
     BloodTransportBox bloodTransportBox = aBloodTransportBox().withId(1L).build();
     ComponentBatch expectedComponentBatch = aComponentBatch()
-        .withId(1L)
+        .withId(COMPONENT_BATCH_ID)
         .withStatus(ComponentBatchStatus.OPEN)
         .withDeliveryDate(deliveryDate)
         .withCollectionDate(null)
@@ -128,7 +129,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
     LocationBackingForm locationForm = aLocationBackingForm().withId(1L).build();
     BloodTransportBoxBackingForm bloodTransportBoxBackingForm = aBloodTransportBoxBackingForm().withId(1L).build();
     ComponentBatchBackingForm form = aComponentBatchBackingForm()
-        .withId(1L)
+        .withId(COMPONENT_BATCH_ID)
         .withStatus(ComponentBatchStatus.OPEN)
         .withDeliveryDate(deliveryDate)
         .withLocation(locationForm)
@@ -139,7 +140,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
     Location location = aLocation().withId(1L).build();
     BloodTransportBox bloodTransportBox = aBloodTransportBox().withId(1L).build();
     ComponentBatch expectedComponentBatch = aComponentBatch()
-        .withId(1L)
+        .withId(COMPONENT_BATCH_ID)
         .withStatus(ComponentBatchStatus.OPEN)
         .withDeliveryDate(deliveryDate)
         .withCollectionDate(null)
@@ -177,7 +178,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
     Date collectionDate = new Date();
     BloodTransportBox box = aBloodTransportBox().withId(1L).withTemperature(0.0).build();
     ComponentBatch componentBatch = aComponentBatch()
-        .withId(1L)
+        .withId(COMPONENT_BATCH_ID)
         .withStatus(ComponentBatchStatus.OPEN)
         .withBloodTransportBox(box)
         .withComponent(component)
@@ -209,7 +210,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
     
     // do asserts
     Assert.assertNotNull("View model returned", viewModel);
-    Assert.assertEquals("View model is correct", Long.valueOf(1), viewModel.getId());
+    Assert.assertEquals("View model is correct", COMPONENT_BATCH_ID, viewModel.getId());
     Assert.assertEquals("View model is correct", "OPEN", viewModel.getStatus());
     Assert.assertEquals("View model is correct", deliveryDate, viewModel.getDeliveryDate());
     Assert.assertEquals("View model is correct", collectionDate, viewModel.getCollectionDate());
@@ -236,9 +237,10 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateComponentBatchViewModels_ComponentBatchList() throws Exception {
     // set up data
+    UUID componentBatchId = UUID.randomUUID();
     List<ComponentBatch> componentBatches = new ArrayList<>();
-    componentBatches.add(aComponentBatch().withId(1L).build());
-    componentBatches.add(aComponentBatch().withId(2L).build());
+    componentBatches.add(aComponentBatch().withId(COMPONENT_BATCH_ID).build());
+    componentBatches.add(aComponentBatch().withId(componentBatchId).build());
     
     // set up mocks
     

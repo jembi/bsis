@@ -180,9 +180,10 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testDonationBatchHasComponentBatch() throws Exception {
+    UUID componentBatchId = UUID.fromString("11e71ebf-1226-8bdb-9fc7-28f10e1b4901");
     DonationBatch one = donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1);
     ComponentBatch componentBatch = one.getComponentBatch();
-    Assert.assertEquals("ComponentBatch is there", Long.valueOf(1), componentBatch.getId());
+    Assert.assertEquals("ComponentBatch is there", componentBatchId, componentBatch.getId());
   }
   
   @Test
