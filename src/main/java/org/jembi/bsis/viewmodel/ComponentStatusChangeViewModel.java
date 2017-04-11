@@ -1,5 +1,7 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
@@ -29,7 +31,7 @@ public class ComponentStatusChangeViewModel {
     this.componentStatusChange = componentStatusChange;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return componentStatusChange.getId();
   }
 

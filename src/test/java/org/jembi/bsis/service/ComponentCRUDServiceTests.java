@@ -635,6 +635,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up data
     Location location = LocationBuilder.aLocation().build();
     Long componentTypeId1 = Long.valueOf(1);
+    UUID componentStatusChangeId = UUID.randomUUID();
     ComponentType componentType1 = aComponentType().withId(componentTypeId1)
         .withComponentTypeCode("0001")
         .withComponentTypeName("#1")
@@ -653,7 +654,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
         .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS).build();
     ComponentStatusChange statusChange = aComponentStatusChange()
-        .withId(1L)
+        .withId(componentStatusChangeId)
         .withStatusChangedOn(new Date())
         .withStatusChangeReason(statusChangeReason).build();
     Long parentComponentId = Long.valueOf(1);
@@ -705,7 +706,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withExpiresOn(expiryCal1.getTime())
         .withLocation(location)
         .withComponentStatusChange(aComponentStatusChange()
-            .withId(1L)
+            .withId(componentStatusChangeId)
             .withStatusChangeReason(aComponentStatusChangeReason().withId(1L).build())
             .build())
         .build();
@@ -748,7 +749,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
         .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA).build();
     ComponentStatusChange statusChange = aComponentStatusChange()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withStatusChangedOn(new Date())
         .withStatusChangeReason(statusChangeReason)
         .build();
@@ -863,7 +864,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     ComponentStatusChangeReason statusChangeReason = anUnsafeReason()
         .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.LOW_WEIGHT).build();
     ComponentStatusChange statusChange = aComponentStatusChange()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withStatusChangedOn(new Date())
         .withStatusChangeReason(statusChangeReason)
         .build();
@@ -966,6 +967,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up data
     Location location = LocationBuilder.aLocation().build();
     Date donationDate = new Date(); 
+    UUID componentStatusChangeId1 = UUID.randomUUID();
+    UUID componentStatusChangeId2 = UUID.randomUUID();
     Donation donation = aDonation().withId(DONATION_ID_1)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
@@ -975,12 +978,12 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     ComponentStatusChangeReason statusChangeReasonTRCP = anUnsafeReason()
         .withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.TEST_RESULTS_CONTAINS_PLASMA).build();
     ComponentStatusChange statusChangeUP = aComponentStatusChange()
-        .withId(1L)
+        .withId(componentStatusChangeId1)
         .withStatusChangedOn(new Date())
         .withStatusChangeReason(statusChangeReasonUP)
         .build();
     ComponentStatusChange statusChangeTRCP = aComponentStatusChange()
-        .withId(2L)
+        .withId(componentStatusChangeId2)
         .withStatusChangedOn(new Date())
         .withStatusChangeReason(statusChangeReasonTRCP)
         .build();
@@ -1284,7 +1287,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withId(componentId)
         .withStatus(ComponentStatus.UNSAFE)
         .withComponentStatusChange(aComponentStatusChange()
-            .withId(1L)
+            .withId(UUID.randomUUID())
             .withStatusChangeReason(aComponentStatusChangeReason().withId(27L).build())
             .build())
         .withDonation(donation)
@@ -1313,6 +1316,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up data
     long componentId = 1L;
     Donation donation = aDonation().withPackType(aPackType().withLowVolumeWeight(350).withMinWeight(400).withMaxWeight(500).build()).build();
+    UUID componentStatusChangeId = UUID.randomUUID();
     Component oldComponent = aComponent()
         .withId(componentId)
         .withStatus(ComponentStatus.QUARANTINED)
@@ -1322,7 +1326,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withId(componentId)
         .withStatus(ComponentStatus.UNSAFE)
         .withComponentStatusChange(aComponentStatusChange()
-            .withId(1L)
+            .withId(componentStatusChangeId)
             .withStatusChangeReason(aComponentStatusChangeReason().withId(27L).build())
             .build())
         .withDonation(donation)
@@ -1359,7 +1363,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withId(componentId)
         .withStatus(ComponentStatus.UNSAFE)
         .withComponentStatusChange(aComponentStatusChange()
-            .withId(1L)
+            .withId(UUID.randomUUID())
             .withStatusChangeReason(aComponentStatusChangeReason().withId(27L).build())
             .build())
         .withDonation(donation)
@@ -1930,7 +1934,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     Date date = new Date();
     ComponentStatusChange expectedStatusChange = aComponentStatusChange()
-        .withId(6L)
+        .withId(UUID.randomUUID())
         .withStatusChangedOn(date)
         .withStatusChangeReason(statusChangeReason)
         .build();

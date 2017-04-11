@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aComponentStatusChangeReason;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.ComponentStatusChangePersister;
@@ -13,7 +14,7 @@ import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 
 public class ComponentStatusChangeBuilder extends AbstractEntityBuilder<ComponentStatusChange> {
   
-  private Long id;
+  private UUID id;
   private Date statusChangedOn;
   private ComponentStatusChangeReason statusChangeReason = aComponentStatusChangeReason().build();
   private ComponentStatus newStatus = ComponentStatus.AVAILABLE;
@@ -21,7 +22,7 @@ public class ComponentStatusChangeBuilder extends AbstractEntityBuilder<Componen
   private boolean isDeleted = false;
   private String statusChangeReasonText;
   
-  public ComponentStatusChangeBuilder withId(Long id) {
+  public ComponentStatusChangeBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
