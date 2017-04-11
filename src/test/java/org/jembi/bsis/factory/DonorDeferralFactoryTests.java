@@ -141,7 +141,9 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
     UUID donorId = UUID.randomUUID();
     
     DonorBackingForm donorForm = aDonorBackingForm().withId(donorId).build();
-    LocationBackingForm locationForm = aVenueBackingForm().withId(1L).build();
+
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm locationForm = aVenueBackingForm().withId(locationId).build();
     DeferralReasonBackingForm deferralReasonForm = aDeferralReasonBackingForm().withId(deferralReasonId).build();
 
     DeferralBackingForm deferralForm = aDeferralBackingForm()
@@ -169,7 +171,7 @@ public class DonorDeferralFactoryTests extends UnitTestSuite {
     // set up mocks
     when(deferralReasonRepository.getDeferralReasonById(deferralReasonId)).thenReturn(deferralReason);
     when(donorRepository.findDonorById(donorId)).thenReturn(donor);
-    when(locationRepository.getLocation(1L)).thenReturn(location);
+    when(locationRepository.getLocation(locationId)).thenReturn(location);
     
     // run test
     DonorDeferral createdEntity = donorDeferralFactory.createEntity(deferralForm);

@@ -88,7 +88,7 @@ public class TransfusionController {
   public Map<String, Object> findTransfusions(@RequestParam(required = false) String donationIdentificationNumber,
       @RequestParam(required = false) String componentCode, 
       @RequestParam(required = false) Long componentTypeId,
-      @RequestParam(required = false) Long receivedFromId,
+      @RequestParam(required = false) UUID receivedFromId,
       @RequestParam(required = false) TransfusionOutcome transfusionOutcome,
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate, 
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {

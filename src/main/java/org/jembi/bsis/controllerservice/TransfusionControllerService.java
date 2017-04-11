@@ -80,7 +80,7 @@ public class TransfusionControllerService {
   }
 
   public List<TransfusionViewModel> findTransfusions(String din, String componentCode, Long componentTypeId,
-      Long receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
+      UUID receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
     List<Transfusion> transfusions = transfusionCRUDService.findTransfusions(din, componentCode, componentTypeId,
         receivedFromId, transfusionOutcome, startDate, endDate);
     return transfusionFactory.createViewModels(transfusions);

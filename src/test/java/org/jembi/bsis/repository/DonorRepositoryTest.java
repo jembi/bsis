@@ -1,5 +1,7 @@
 package org.jembi.bsis.repository;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -7,8 +9,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -55,8 +55,6 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Autowired
   DonorRepository donorRepository;
-  private User user;
-  private Long userDbId = 1l;
   private DonorBackingForm donorBackingForm;
   Date donorBirthdate = null;
   ApplicationContext applicationContext = null;
@@ -541,8 +539,8 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
    */
   public void setBackingFormValue(DonorBackingForm donorBackingForm) throws ParseException {
     Location l = new Location();
-    
-    l.setId(Long.parseLong("1"));
+    UUID locationId = UUID.fromString("55321456-eeee-1234-b5b1-123412348811");
+    l.setId(locationId);
     AddressType addressType = new AddressType();
     addressType.setId(UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870681"));
     donorBirthdate = CustomDateFormatter.getDateFromString("1991-06-11");
@@ -558,10 +556,10 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     donorBackingForm.setHomeAddressCity("City");
     donorBackingForm.setHomeAddressCountry("country");
     donorBackingForm.setHomeAddressLine1("homeAddressLine1");
-    user = new User();
-    user.setId(userDbId);
+    User user = new User();
+    user.setId(UUID.randomUUID());
     donorBackingForm.setHomeAddressDistrict("District");
-    donorBackingForm.setVenue(aLocationBackingForm().withId(1L).build());
+    donorBackingForm.setVenue(aLocationBackingForm().withId(locationId).build());
     donorBackingForm.setIdNumber("1111");
     donorBackingForm.setNotes("Notes");
     donorBackingForm.setMobileNumber("9999999999");
@@ -593,7 +591,8 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     }
 
     Location l = new Location();
-    l.setId(Long.parseLong("2"));
+    UUID locationId = UUID.fromString("55321456-eeee-1234-b5b1-123412348812");
+    l.setId(locationId);
     AddressType addressType = new AddressType();
     addressType.setId(UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870682"));
     donorBackingForm.setHomeAddressLine1("address_update");
@@ -606,7 +605,7 @@ public class DonorRepositoryTest extends DBUnitContextDependentTestSuite {
     donorBackingForm.setHomeAddressCity("City_update");
     donorBackingForm.setHomeAddressCountry("country_update");
     donorBackingForm.setHomeAddressDistrict("District_update");
-    donorBackingForm.setVenue(aLocationBackingForm().withId(2L).build());
+    donorBackingForm.setVenue(aLocationBackingForm().withId(locationId).build());
     donorBackingForm.setIdNumber("1212");
     donorBackingForm.setNotes("Notes_update");
     donorBackingForm.setMobileNumber("9878787878");

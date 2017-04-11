@@ -30,7 +30,7 @@ public class TransfusionRepository extends AbstractRepository<Transfusion> {
         .getSingleResult();
   }
 
-  public List<Transfusion> findTransfusions(Long componentTypeId, Long receivedFromId,
+  public List<Transfusion> findTransfusions(Long componentTypeId, UUID receivedFromId,
       TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
 
     boolean includeTransfusionOutcome = true;
@@ -38,9 +38,15 @@ public class TransfusionRepository extends AbstractRepository<Transfusion> {
       includeTransfusionOutcome = false;
     }
 
+    boolean includeAllLocations = false;
+    if (receivedFromId == null) {
+      includeAllLocations = true;
+    }
+
     return entityManager.createNamedQuery(
         TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSIONS, Transfusion.class)
         .setParameter("componentTypeId", componentTypeId)
+        .setParameter("includeAllLocations", includeAllLocations)
         .setParameter("receivedFromId", receivedFromId)
         .setParameter("includeTransfusionOutcome", includeTransfusionOutcome)
         .setParameter("transfusionOutcome", transfusionOutcome)
@@ -50,9 +56,17 @@ public class TransfusionRepository extends AbstractRepository<Transfusion> {
         .getResultList();
   }
 
-  public List<TransfusionSummaryDTO> findTransfusionSummaryRecordedForUsageSiteForPeriod(Long receivedFromId, Date startDate, Date endDate) {
+  public List<TransfusionSummaryDTO> findTransfusionSummaryRecordedForUsageSiteForPeriod(UUID receivedFromId,
+      Date startDate, Date endDate) {
+    
+    boolean includeAllLocations = false;
+    if (receivedFromId == null) {
+      includeAllLocations = true;
+    }
+
     return entityManager.createNamedQuery(TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSION_SUMMARY_RECORDED_FOR_USAGE_SITE_FOR_PERIOD,
         TransfusionSummaryDTO.class)
+        .setParameter("includeAllLocations", includeAllLocations)
         .setParameter("receivedFromId", receivedFromId)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)

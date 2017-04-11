@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform.validator;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.backingform.DonationBatchBackingForm;
@@ -46,7 +47,7 @@ public class DonationBatchBackingFormValidator extends BaseValidator<DonationBat
           "Venue is required.");
     } else {
       venue = locationRepository.getLocation(venue.getId());
-      ArrayList<Long> venueIds = new ArrayList<>();
+      ArrayList<UUID> venueIds = new ArrayList<>();
       venueIds.add(venue.getId());
       if (venue.getIsVenue() == false) {
         errors.rejectValue("donationBatch.venue", "venue.invalid",
@@ -97,7 +98,7 @@ public class DonationBatchBackingFormValidator extends BaseValidator<DonationBat
     return false;
   }
 
-  private List<DonationBatch> findOpenDonationBatches(List<Long> venueIds) {
+  private List<DonationBatch> findOpenDonationBatches(List<UUID> venueIds) {
     return donationBatchRepository.findDonationBatches(false, venueIds, null, null);
   }
 

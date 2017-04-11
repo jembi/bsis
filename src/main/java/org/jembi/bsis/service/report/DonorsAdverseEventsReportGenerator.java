@@ -3,6 +3,7 @@ package org.jembi.bsis.service.report;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.DonorsAdverseEventsDTO;
@@ -24,7 +25,7 @@ public class DonorsAdverseEventsReportGenerator {
   @Autowired
   private LocationFactory locationFactory;
 
-  public Report generateDonorsAdverseEventsReport(Long venueId, Date startDate, Date endDate) {
+  public Report generateDonorsAdverseEventsReport(UUID venueId, Date startDate, Date endDate) {
     Report report = new Report();
 
     report.setStartDate(startDate);
@@ -35,7 +36,7 @@ public class DonorsAdverseEventsReportGenerator {
     return report;
   }
 
-  private List<DataValue> getAdverseEventsDataValues(Long venueId, Date startDate, Date endDate) {
+  private List<DataValue> getAdverseEventsDataValues(UUID venueId, Date startDate, Date endDate) {
     List<DonorsAdverseEventsDTO> dtos = adverseEventRepository.countAdverseEvents(venueId, startDate, endDate);
 
     List<DataValue> dataValues = new ArrayList<>(dtos.size());

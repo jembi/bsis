@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <user id="1" emailId="admin" firstName="admin" isactive="1" isAdmin="1" isDeleted="0" isStaff="1" username="admin"
+  <user id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" emailId="admin" firstName="admin" isactive="1" isAdmin="1" isDeleted="0" isStaff="1" username="admin"
     password="admin" createdDate="2017-01-15" />
 
-    <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType="Voluntary" isDeleted="false" createdDate="2017-01-23" createdBy_id="1"/>
-    <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType="Family" isDeleted="false" createdDate="2017-01-23" createdBy_id="1"/>
-    <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" donationType="Autologous" isDeleted="false" createdDate="2017-01-23" createdBy_id="1"/>
-    <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" donationType="Other" isDeleted="false" createdDate="2017-01-23" createdBy_id="1"/>
-    <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" donationType="Rubbish" isDeleted="true" createdDate="2017-01-23" createdBy_id="1"/>
+    <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType="Voluntary" isDeleted="false" createdDate="2017-01-23" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
+    <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType="Family" isDeleted="false" createdDate="2017-01-23" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
+    <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" donationType="Autologous" isDeleted="false" createdDate="2017-01-23" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
+    <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" donationType="Other" isDeleted="false" createdDate="2017-01-23" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
+    <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" donationType="Rubbish" isDeleted="true" createdDate="2017-01-23" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
 </dataset>

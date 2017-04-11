@@ -99,8 +99,8 @@ public class ReturnFormController {
   public ResponseEntity<Map<String, Object>> findReturnForms(
       @RequestParam(value = "returnDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date returnDateFrom,
       @RequestParam(value = "returnDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date returnDateTo,
-      @RequestParam(value = "returnedFromId", required = false) Long returnedFromId,
-      @RequestParam(value = "returnedToId", required = false) Long returnedToId,
+      @RequestParam(value = "returnedFromId", required = false) UUID returnedFromId,
+      @RequestParam(value = "returnedToId", required = false) UUID returnedToId,
       @RequestParam(value = "status", required = false) ReturnStatus status) {
 
     Map<String, Object> map = new HashMap<String, Object>();

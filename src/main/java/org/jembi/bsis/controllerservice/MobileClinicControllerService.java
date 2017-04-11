@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.dto.MobileClinicDonorDTO;
 import org.jembi.bsis.factory.DonorOutcomesViewModelFactory;
@@ -58,18 +59,18 @@ public class MobileClinicControllerService {
     return locationFactory.createViewModels(locationRepository.getMobileVenues());
   }
 
-  public List<MobileClinicLookUpDonorViewModel> getMobileClinicDonorsByVenue(Long venueId, Date clinicDate) {
+  public List<MobileClinicLookUpDonorViewModel> getMobileClinicDonorsByVenue(UUID venueId, Date clinicDate) {
     List<MobileClinicDonorDTO> mobileClinicDonorDTOs =
-        donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venueId)));
+        donorRepository.findMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venueId)));
     return mobileClinicDonorFactory.createMobileClinicDonorViewModels(mobileClinicDonorDTOs, clinicDate);
   }
 
-  public List<MobileClinicExportDonorViewModel> getMobileClinicDonorsByVenues(Set<Long> venueIds, Date clinicDate) {
+  public List<MobileClinicExportDonorViewModel> getMobileClinicDonorsByVenues(Set<UUID> venueIds, Date clinicDate) {
     List<MobileClinicDonorDTO> mobileClinicDonorDTOs = donorRepository.findMobileClinicDonorsByVenues(venueIds);
     return mobileClinicDonorFactory.createMobileClinicExportDonorViewModels(mobileClinicDonorDTOs, clinicDate);
   }
 
-  public List<DonorOutcomesViewModel> getDonorOutcomes(long venueId, Date startDate, Date endDate) {
+  public List<DonorOutcomesViewModel> getDonorOutcomes(UUID venueId, Date startDate, Date endDate) {
     Location donorVenue = locationRepository.getLocation(venueId);
     List<Donation> donations =
         donationRepository.findLastDonationsByDonorVenueAndDonationDate(donorVenue, startDate, endDate);

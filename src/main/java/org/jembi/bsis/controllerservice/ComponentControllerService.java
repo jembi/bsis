@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -101,7 +102,7 @@ public class ComponentControllerService {
   }
 
   public List<ComponentViewModel> findAnyComponent(List<Long> componentTypeIds,
-      ComponentStatus status, Date dateFrom, Date dateTo, Long locationId) {
+      ComponentStatus status, Date dateFrom, Date dateTo, UUID locationId) {
     List<Component> results = componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, locationId);
     List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
     return components;

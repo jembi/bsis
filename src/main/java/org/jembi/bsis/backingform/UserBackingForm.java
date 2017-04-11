@@ -2,12 +2,13 @@ package org.jembi.bsis.backingform;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserBackingForm {
 
-  private Long id;
+  private UUID id;
   private String username;
   private String password;
   private String firstName;
@@ -56,7 +57,7 @@ public class UserBackingForm {
     return firstName;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
@@ -158,7 +159,7 @@ public class UserBackingForm {
     this.firstName = firstName;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

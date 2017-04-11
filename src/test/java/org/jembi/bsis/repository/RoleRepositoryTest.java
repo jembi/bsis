@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -99,8 +100,8 @@ public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
     permissions.add(roleRepository.findPermissionByPermissionId(5));
     one.setPermissions(permissions);
     List<User> users = new ArrayList<User>();
-    users.add(userRepository.findUserById(1l));
-    users.add(userRepository.findUserById(2l));
+    users.add(userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81")));
+    users.add(userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a82")));
     one.setUsers(users);
     Role savedRole = roleRepository.addRole(one);
     Role retrievedRole = roleRepository.findRoleDetailById(savedRole.getId());

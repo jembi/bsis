@@ -20,8 +20,8 @@ public class ReturnFormRepository extends AbstractRepository<ReturnForm> {
     return query.getSingleResult();
   }
 
-  public List<ReturnForm> findReturnForms(Date returnDateFrom, Date returnDateTo, Long returnedFromId,
-      Long returnedToId, ReturnStatus status) {
+  public List<ReturnForm> findReturnForms(Date returnDateFrom, Date returnDateTo, UUID returnedFromId,
+      UUID returnedToId, ReturnStatus status) {
     String queryString = "SELECT r FROM ReturnForm r WHERE r.isDeleted = :isDeleted ";
 
     if (returnDateFrom != null) {

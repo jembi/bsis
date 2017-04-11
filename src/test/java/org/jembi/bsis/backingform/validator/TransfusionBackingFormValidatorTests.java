@@ -113,7 +113,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -165,7 +165,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     UUID transfusionId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
@@ -236,7 +236,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     UUID transfusionId = UUID.randomUUID();
     Long componentTypeId = 1L;
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
@@ -310,7 +310,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     UUID transfusionId = UUID.randomUUID();
     Long componentTypeId = 1L;
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
@@ -381,7 +381,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponents(components)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -438,7 +438,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponents(components)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -479,7 +479,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     String din = "12345";
     String componentCode = "1234";
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -515,7 +515,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     Date transfusedDate = (new DateTime()).minusDays(5).toDate();
     String componentCode = "1234";
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -556,7 +556,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponents(components)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -601,7 +601,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponents(components)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -663,7 +663,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponents(components)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -708,7 +708,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponents(components)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -750,7 +750,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponents(components)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -800,7 +800,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     Donation donation = aDonation().withDonationIdentificationNumber(din).withComponent(component).build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -847,7 +847,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponents(components)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -908,7 +908,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -961,7 +961,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponents(components)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1015,7 +1015,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1066,7 +1066,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1119,7 +1119,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1172,7 +1172,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1224,7 +1224,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1274,7 +1274,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1319,7 +1319,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     Donation donation = aDonation().withDonationIdentificationNumber(din).withComponent(component).build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1363,7 +1363,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1414,7 +1414,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1512,7 +1512,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long aProcessingSiteId = 1L;
+    UUID aProcessingSiteId = UUID.randomUUID();
     Location aProcessingSite = aProcessingSite().withId(aProcessingSiteId).build();
     LocationBackingForm aProcessingSiteForm = aProcessingSiteBackingForm().withId(aProcessingSiteId).build();
 
@@ -1565,7 +1565,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
     TransfusionBackingForm form = aTransfusionBackingForm()
@@ -1616,7 +1616,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1664,7 +1664,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -1716,7 +1716,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
         .withComponent(component)
         .build();
 
-    long usageSiteId = 1L;
+    UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 

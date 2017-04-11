@@ -1,11 +1,13 @@
 
 package org.jembi.bsis.backingform;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class LocationBackingForm {
 
-  private Long id;
+  private UUID id;
   private String name;
   private boolean isVenue;
   private boolean isMobileSite;
@@ -21,11 +23,11 @@ public class LocationBackingForm {
   public LocationBackingForm() {
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

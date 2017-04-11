@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -50,14 +51,14 @@ public class UserRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testFindUserById() throws Exception {
-    User user = userRepository.findUserById(1l);
+    User user = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
     Assert.assertNotNull("User is defined", user);
     Assert.assertEquals("User is correct", "superuser", user.getUsername());
   }
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindUserByIdUnknown() throws Exception {
-    userRepository.findUserById(123l);
+    userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79123"));
   }
 
   @Test
@@ -74,12 +75,12 @@ public class UserRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testUpdateBasicUserInfo() throws Exception {
-    User user = userRepository.findUserById(1l);
+    User user = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
     user.setFirstName("Test");
     user.setLastName("Tester");
     user.setEmailId("test@jembi.org");
     userRepository.updateBasicUserInfo(user, false);
-    User savedUser = userRepository.findUserById(1l);
+    User savedUser = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
     Assert.assertEquals("FirstName changed", "Test", savedUser.getFirstName());
     Assert.assertEquals("LastName changed", "Tester", savedUser.getLastName());
     Assert.assertEquals("Email changed", "test@jembi.org", savedUser.getEmailId());
@@ -88,18 +89,18 @@ public class UserRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testUpdateBasicUserInfoPassword() throws Exception {
-    User user = userRepository.findUserById(1l);
+    User user = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
     user.setPassword("newpassword");
     userRepository.updateBasicUserInfo(user, true);
-    User savedUser = userRepository.findUserById(1l);
+    User savedUser = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
     Assert.assertFalse("Password was changed", !user.getPassword().equals(savedUser.getPassword()));
   }
 
   @Test
   public void testUpdateLastLogin() throws Exception {
-    User user = userRepository.findUserById(1l);
+    User user = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
     userRepository.updateLastLogin(user);
-    User savedUser = userRepository.findUserById(1l);
+    User savedUser = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
     Assert.assertFalse("Last login was changed", !user.getLastLogin().equals(savedUser.getLastLogin()));
   }
 }

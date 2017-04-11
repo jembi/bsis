@@ -47,7 +47,6 @@ public class DonorBackingFormValidatorTest {
   private DonorBackingForm getBaseDonorBackingForm() throws ParseException {
     PreferredLanguage preferredLanguage = new PreferredLanguage();
     UUID preferredLanguageId = UUID.randomUUID();
-    
     preferredLanguage.setId(preferredLanguageId);
     preferredLanguage.setPreferredLanguage("English");
     Date validBirthDate = CustomDateFormatter.getDateFromString("1977-10-20");
@@ -58,7 +57,7 @@ public class DonorBackingFormValidatorTest {
     donorForm.setFirstName("First");
     donorForm.setLastName("Last");
     donorForm.setGender(Gender.female);
-    donorForm.setVenue(aLocationBackingForm().withId(1l).withName("Venue").thatIsVenue().build());
+    donorForm.setVenue(aLocationBackingForm().withId(UUID.randomUUID()).withName("Venue").thatIsVenue().build());
     donorForm.setPreferredLanguage(preferredLanguage);
     return donorForm;
   }

@@ -1,8 +1,8 @@
 package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
+
 import org.hamcrest.core.IsNull;
 import org.jembi.bsis.dto.TransfusionSummaryDTO;
 import org.jembi.bsis.model.component.Component;
@@ -32,8 +34,6 @@ import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.persistence.NoResultException;
 
 public class TransfusionRepositoryTests extends SecurityContextDependentTestSuite {
   
@@ -170,7 +170,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
           .buildAndPersist(entityManager))
       .buildAndPersist(entityManager);
     
-    Long receivedFromId = null;
+    UUID receivedFromId = null;
     
     List<TransfusionSummaryDTO> expectedTransfusionSummaryDTOs = new ArrayList<>();
     expectedTransfusionSummaryDTOs.add(aTransfusionSummaryDTO()

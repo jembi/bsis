@@ -58,7 +58,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Long componentTypeId = 1L;
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
     Component transfusedComponent = aComponent().withId(1L).withComponentType(componentType).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
     Transfusion transfusion = aTransfusion()
         .withId(UUID.randomUUID())
         .withComponent(transfusedComponent)
@@ -115,7 +115,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Patient patient = aPatient().withId(patientId).build();
     Long componentTypeId = 1L;
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
     UUID transfusionId = UUID.randomUUID();
     Transfusion transfusion = aTransfusion()
         .withId(transfusionId)
@@ -158,7 +158,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Patient patient = aPatient().withId(patientId).build();
     Long componentTypeId = 1L;
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
     Transfusion transfusion = aTransfusion()
         .withId(UUID.randomUUID())
         .withReceivedFrom(receivedFrom)
@@ -187,7 +187,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     String notes = "notes";
     UUID patientId = UUID.randomUUID();
     Patient patient = aPatient().withId(patientId).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
     UUID transfusionId = UUID.randomUUID();
     Transfusion transfusion = aTransfusion()
         .withId(transfusionId)
@@ -232,7 +232,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Patient patient = aPatient().withId(patientId).build();
     Long componentTypeId = 1L;
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
     Transfusion transfusion = aTransfusion()
         .withId(UUID.randomUUID())
         .withReceivedFrom(receivedFrom)

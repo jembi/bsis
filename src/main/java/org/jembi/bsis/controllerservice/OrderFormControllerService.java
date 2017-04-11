@@ -50,8 +50,8 @@ public class OrderFormControllerService {
   @Autowired
   private ComponentTypeFactory componentTypeFactory;
   
-  public List<OrderFormViewModel> findOrderForms(Date orderDateFrom, Date orderDateTo, Long dispatchedFromId,
-      Long dispatchedToId, OrderType type, OrderStatus status) {
+  public List<OrderFormViewModel> findOrderForms(Date orderDateFrom, Date orderDateTo, UUID dispatchedFromId,
+      UUID dispatchedToId, OrderType type, OrderStatus status) {
     List<OrderForm> orderForms = orderFormRepository.findOrderForms(orderDateFrom, orderDateTo, dispatchedFromId, 
         dispatchedToId, type, status);
     return orderFormFactory.createViewModels(orderForms);

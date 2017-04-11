@@ -28,7 +28,8 @@ public class DonationTypeCRUDServiceTests extends UnitTestSuite {
 
   @Test
   public void testUpdateDonationType_callsRepositoryWithCorrectEntity() throws Exception {
-    User user = aUser().withId(1L).build();
+    UUID userId = UUID.randomUUID();
+    User user = aUser().withId(userId).build();
     Date createdDate = new Date();
     Date lastUpdated = new Date();
     UUID donationTypeId = UUID.randomUUID();

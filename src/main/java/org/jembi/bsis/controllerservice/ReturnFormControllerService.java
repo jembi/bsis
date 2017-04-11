@@ -48,7 +48,7 @@ public class ReturnFormControllerService {
   }
 
   public List<ReturnFormViewModel> findReturnForms(Date returnDateFrom, Date returnDateTo, 
-      Long returnedFromId, Long returnedToId, ReturnStatus status) {
+      UUID returnedFromId, UUID returnedToId, ReturnStatus status) {
 
     List<ReturnForm> returnForms = returnFormRepository.findReturnForms(returnDateFrom, returnDateTo, 
         returnedFromId, returnedToId, status);

@@ -61,7 +61,8 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntity_createOneComponentBatch() throws Exception {
     Date deliveryDate = new Date();
-    LocationBackingForm locationForm = aLocationBackingForm().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm locationForm = aLocationBackingForm().withId(locationId).build();
     DonationBatchBackingForm donationBatchBackingForm = aDonationBatchBackingForm().withId(DONATION_BATCH_ID).build();
     BloodTransportBoxBackingForm bloodTransportBoxBackingForm = aBloodTransportBoxBackingForm().withId(1L).build();
     ComponentBatchBackingForm form = aComponentBatchBackingForm()
@@ -73,7 +74,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
         .withBloodTransportBox(bloodTransportBoxBackingForm)
         .build();
 
-    Location location = aLocation().withId(1L).build();
+    Location location = aLocation().withId(locationId).build();
     DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).build();
     BloodTransportBox bloodTransportBox = aBloodTransportBox().withId(1L).build();
     ComponentBatch expectedComponentBatch = aComponentBatch()
@@ -125,7 +126,8 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntityWithNoDonationBatch_createOneComponentBatch() throws Exception {
     Date deliveryDate = new Date();
-    LocationBackingForm locationForm = aLocationBackingForm().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationBackingForm locationForm = aLocationBackingForm().withId(locationId).build();
     BloodTransportBoxBackingForm bloodTransportBoxBackingForm = aBloodTransportBoxBackingForm().withId(1L).build();
     ComponentBatchBackingForm form = aComponentBatchBackingForm()
         .withId(1L)
@@ -136,7 +138,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
         .withBloodTransportBox(bloodTransportBoxBackingForm)
         .build();
 
-    Location location = aLocation().withId(1L).build();
+    Location location = aLocation().withId(locationId).build();
     BloodTransportBox bloodTransportBox = aBloodTransportBox().withId(1L).build();
     ComponentBatch expectedComponentBatch = aComponentBatch()
         .withId(1L)
@@ -156,8 +158,10 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateComponentBatchViewModel_createOneComponentBatch() throws Exception {
     // set up data
-    Location venue = aVenue().withId(1L).withName("venue").build();
-    Location location = aLocation().withId(2L).withName("distribution site").thatIsUsageSite().build();
+    UUID locationId1 = UUID.randomUUID();
+    Location venue = aVenue().withId(locationId1).withName("venue").build();
+    UUID locationId2 = UUID.randomUUID();
+    Location location = aLocation().withId(locationId2).withName("distribution site").thatIsUsageSite().build();
     DonationBatch donationBatch = aDonationBatch()
         .withId(DONATION_BATCH_ID)
         .withBatchNumber("BN1234")

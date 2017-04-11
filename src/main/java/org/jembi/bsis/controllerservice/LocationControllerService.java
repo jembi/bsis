@@ -1,6 +1,7 @@
 package org.jembi.bsis.controllerservice;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.factory.DivisionFactory;
@@ -44,12 +45,12 @@ public class LocationControllerService {
     return locationFactory.createFullViewModel(updatedLocation);
   }
 
-  public LocationFullViewModel getLocationById(long id) {
+  public LocationFullViewModel getLocationById(UUID id) {
     Location location = locationRepository.getLocation(id);
     return locationFactory.createFullViewModel(location);
   }
 
-  public void deleteLocation(long id) {
+  public void deleteLocation(UUID id) {
     locationRepository.deleteLocation(id);
   }
 
