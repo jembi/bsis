@@ -1,0 +1,41 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170413-1500" author="rowan-pi">
+    <comment>Update all null BloodTest tracking field to valid values.</comment>
+    <update tableName="BloodTest">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="BloodTest_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="BloodTest_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+	<update tableName="BloodTest">
+      <column name="createdBy_id" valueComputed="1" />
+      <where>createdBy_id is NULL</where>
+    </update>
+    <update tableName="BloodTest_AUD">
+      <column name="createdBy_id" valueComputed="1" />
+      <where>createdBy_id is NULL</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="lastUpdatedBy_id" valueComputed="1" />
+      <where>lastUpdatedBy_id is NULL</where>
+    </update>
+    <update tableName="BloodTest_AUD">
+      <column name="lastUpdatedBy_id" valueComputed="1" />
+      <where>lastUpdatedBy_id is NULL</where>
+    </update>
+  </changeSet>
+
+</databaseChangeLog>
