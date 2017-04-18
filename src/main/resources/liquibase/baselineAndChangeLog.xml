@@ -91,4 +91,5 @@
   <include file="liquibase/updates/2685-add-transfusion-summary-report.xml"/>
   <include file="liquibase/updates/2772-remove-usage-repository-and-component-usage.xml"/>
   <include file="liquibase/updates/2395-remove-unused.xml"/>
+  <include file="liquibase/updates/patch/3020-set-bloodtest-tracking-fields.xml"/>
 </databaseChangeLog>
