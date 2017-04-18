@@ -79,20 +79,23 @@ public class OrderFormFactoryTests extends UnitTestSuite {
   @Mock
   private OrderFormConstraintChecker orderFormConstraintChecker;
  
+  private static final UUID locationId1 = UUID.randomUUID();
+  private static final UUID locationId2 = UUID.randomUUID();
+
   private Location getBaseDispatchedFromLocation() {
-    return aDistributionSite().withName("LocFrom").withId(1l).build();
+    return aDistributionSite().withName("LocFrom").withId(locationId1).build();
   }
 
   private Location getBaseDispatchedToLocation() {
-    return aDistributionSite().withName("LocTo").withId(2l).build();
+    return aDistributionSite().withName("LocTo").withId(locationId2).build();
   }
 
   private LocationBackingForm getBaseDispatchedFromLocationBackingForm() {
-    return aDistributionSiteBackingForm().withName("LocFrom").withId(1l).build();
+    return aDistributionSiteBackingForm().withName("LocFrom").withId(locationId1).build();
   }
 
   private LocationBackingForm getBaseDispatchedToLocationBackingForm() {
-    return aDistributionSiteBackingForm().withName("LocTo").withId(2l).build();
+    return aDistributionSiteBackingForm().withName("LocTo").withId(locationId2).build();
   }
 
   @Test
@@ -108,8 +111,8 @@ public class OrderFormFactoryTests extends UnitTestSuite {
         .withDispatchedTo(getBaseDispatchedToLocationBackingForm()).withOrderDate(orderDate).build();
 
     // Setup mock
-    when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
-    when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
+    when(locationRepository.getLocation(locationId1)).thenReturn(dispatchedFrom);
+    when(locationRepository.getLocation(locationId2)).thenReturn(dispatchedTo);
 
     OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);
    
@@ -137,8 +140,8 @@ public class OrderFormFactoryTests extends UnitTestSuite {
         .withItem(item1).build();
 
     // Setup mock
-    when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
-    when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
+    when(locationRepository.getLocation(locationId1)).thenReturn(dispatchedFrom);
+    when(locationRepository.getLocation(locationId2)).thenReturn(dispatchedTo);
     when(orderFormItemFactory.createEntity(Mockito.any(OrderForm.class), Mockito.any(OrderFormItemBackingForm.class)))
       .thenReturn(expectedItem1);
 
@@ -238,8 +241,8 @@ public class OrderFormFactoryTests extends UnitTestSuite {
         .withOrderDate(orderDate).withComponent(componentBackingForm).build();
 
     // Setup mock
-    when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
-    when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
+    when(locationRepository.getLocation(locationId1)).thenReturn(dispatchedFrom);
+    when(locationRepository.getLocation(locationId2)).thenReturn(dispatchedTo);
     when(componentRepository.findComponent(componentId)).thenReturn(expectedComponent);
 
     OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);
@@ -257,7 +260,8 @@ public class OrderFormFactoryTests extends UnitTestSuite {
 
     Component component = aComponent().withId(componentId).withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(dispatchedFrom).build();
     InventoryViewModel inventoryViewModel = anInventoryViewModel().withId(componentId)
-        .withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(aLocationViewModel().withId(1L).build()).build();
+        .withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(aLocationViewModel().withId(locationId1).build()).build();
+
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))
         .withDispatchedTo(new LocationFullViewModel(dispatchedTo))
@@ -403,8 +407,8 @@ public class OrderFormFactoryTests extends UnitTestSuite {
         .withPatient(aPatientBackingForm().build()).build();
 
     // Setup mock
-    when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
-    when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
+    when(locationRepository.getLocation(locationId1)).thenReturn(dispatchedFrom);
+    when(locationRepository.getLocation(locationId2)).thenReturn(dispatchedTo);
     when(patientFactory.createEntity(backingForm.getPatient())).thenReturn(aPatient().build());
 
     OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);

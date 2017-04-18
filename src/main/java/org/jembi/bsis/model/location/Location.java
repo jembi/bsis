@@ -8,7 +8,7 @@ import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.repository.LocationNamedQueryConstants;
 
 /**
@@ -36,7 +36,7 @@ import org.jembi.bsis.repository.LocationNamedQueryConstants;
 })
 @Entity
 @Audited
-public class Location extends BaseModificationTrackerEntity {
+public class Location extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

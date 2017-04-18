@@ -33,7 +33,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
   private EntityManager em;
 
   public List<Component> findAnyComponent(List<Long> componentTypes, ComponentStatus status,
-      Date donationDateFrom, Date donationDateTo, Long locationId) {
+      Date donationDateFrom, Date donationDateTo, UUID locationId) {
 
     boolean includeComponentTypes = true, includeStatus = true;
     if (status == null) {
@@ -43,10 +43,16 @@ public class ComponentRepository extends AbstractRepository<Component> {
       includeComponentTypes = false;
     }
 
+    boolean includeAllLocations = false;
+    if (locationId == null) {
+      includeAllLocations = true;
+    }
+
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_ANY_COMPONENT, Component.class)
           .setParameter("isDeleted", Boolean.FALSE)
           .setParameter("status", status)
           .setParameter("locationId", locationId)
+          .setParameter("includeAllLocations", includeAllLocations)
           .setParameter("componentTypeIds", componentTypes)
           .setParameter("donationDateFrom", donationDateFrom)
           .setParameter("donationDateTo", donationDateTo)
@@ -157,18 +163,33 @@ public class ComponentRepository extends AbstractRepository<Component> {
     return new LinkedHashSet<>(componentExportDTOs);
   }
 
-  public List<DiscardedComponentDTO> findSummaryOfDiscardedComponentsByProcessingSite(Long processingSiteId, Date starDate, Date endDate) {
+  public List<DiscardedComponentDTO> findSummaryOfDiscardedComponentsByProcessingSite(UUID processingSiteId,
+      Date starDate, Date endDate) {
+
+    boolean includeAllProcessingSites = false;
+    if (processingSiteId == null) {
+      includeAllProcessingSites = true;
+    }
+
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE, DiscardedComponentDTO.class)
         .setParameter("processingSiteId", processingSiteId)
+        .setParameter("includeAllProcessingSites", includeAllProcessingSites)
         .setParameter("startDate", starDate)
         .setParameter("endDate", endDate)
         .getResultList();
   }
   
-  public List<ComponentProductionDTO> findProducedComponentsByProcessingSite(Long processingSiteId, Date startDate, Date endDate) {
+  public List<ComponentProductionDTO> findProducedComponentsByProcessingSite(UUID processingSiteId, Date startDate,
+      Date endDate) {
+
+    boolean includeAllProcessingSites = false;
+    if (processingSiteId == null) {
+      includeAllProcessingSites = true;
+    }
     return em.createNamedQuery(
         ComponentNamedQueryConstants.NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE, ComponentProductionDTO.class)
         .setParameter("processingSiteId", processingSiteId)
+        .setParameter("includeAllProcessingSites", includeAllProcessingSites)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("excludedStatuses", Arrays.asList(ComponentStatus.PROCESSED))
@@ -176,7 +197,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .getResultList();
   }
 
-  public List<Component> findSafeComponents(Long componentTypeId, Long locationId, List<BloodGroup> bloodGroups,
+  public List<Component> findSafeComponents(Long componentTypeId, UUID locationId, List<BloodGroup> bloodGroups,
       Date startDate, Date endDate, InventoryStatus inventoryStatus, boolean includeInitialComponents) {
     boolean includeBloodGroups = true;
     List<String> stringBloodGroups = null;
@@ -190,8 +211,14 @@ public class ComponentRepository extends AbstractRepository<Component> {
       }
     }
 
+    boolean includeAllLocations = false;
+    if (locationId == null) {
+      includeAllLocations = true;
+    }
+
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SAFE_COMPONENTS, Component.class)
         .setParameter("locationId", locationId)
+        .setParameter("includeAllLocations", includeAllLocations)
         .setParameter("componentTypeId", componentTypeId)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)

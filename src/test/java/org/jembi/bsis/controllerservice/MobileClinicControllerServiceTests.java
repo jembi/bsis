@@ -57,11 +57,11 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   @Test
   public void testGetDonorOutcomes_shouldReturnCorrectViewModels() {
     // Set up fixture
-    long venueId = 1;
+    UUID venueId = UUID.randomUUID();
     Date startDate = new DateTime().minusDays(30).toDate();
     Date endDate = new DateTime().minusDays(7).toDate();
 
-    Location donorVenue = aVenue().withId(1L).build();
+    Location donorVenue = aVenue().withId(venueId).build();
     List<Donation> donations = Arrays.asList(aDonation().withId(UUID.randomUUID()).build(), aDonation().withId(UUID.randomUUID()).build());
 
     // Set up expectations
@@ -112,7 +112,9 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   public void testGetMobileClinicDonorsByVenue() throws Exception {
     // Set up
     Date clinicDate = new Date();
-    Location venue = LocationBuilder.aLocation().withId(1L).withName("test").build();
+
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).withName("test").build();
     MobileClinicDonorDTO donor1 = MobileClinicDonorBuilder.aMobileClinicDonor()
         .withVenue(venue)
         .build();
@@ -130,7 +132,8 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
 
     //Mock
     when(mobileClinicControllerService.getMobileClinicDonorsByVenue(venue.getId(), clinicDate)).thenReturn(expectedClinicDonorsViewModels);
-    when(donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())))).thenReturn(clinicDonorDTOs);
+    when(donorRepository.findMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue.getId()))))
+        .thenReturn(clinicDonorDTOs);
     when(mobileClinicDonorFactory.createMobileClinicDonorViewModels(clinicDonorDTOs,clinicDate)).thenReturn(expectedClinicDonorsViewModels);
 
     // Exercise SUT
@@ -144,7 +147,8 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   public void testGetMobileClinicDonorsByVenues() throws Exception {
     // Set up
     Date clinicDate = new Date();
-    Location venue = LocationBuilder.aLocation().withId(1L).withName("test").build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).withName("test").build();
     MobileClinicDonorDTO donor1 = MobileClinicDonorBuilder.aMobileClinicDonor()
         .withVenue(venue)
         .build();
@@ -163,13 +167,16 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
         .add(mobileClinicDonorFactory.createMobileClinicExportDonorViewModel(donor2, clinicDate));
 
     //Mock
-    when(mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())), clinicDate)).thenReturn(expectedClinicDonorsViewModels);
-    when(donorRepository.findMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())))).thenReturn(clinicDonorDTOs);
+    when(mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue.getId())),
+        clinicDate)).thenReturn(expectedClinicDonorsViewModels);
+    when(donorRepository.findMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue.getId()))))
+        .thenReturn(clinicDonorDTOs);
     when(mobileClinicDonorFactory.createMobileClinicExportDonorViewModels(clinicDonorDTOs, clinicDate))
         .thenReturn(expectedClinicDonorsViewModels);
 
     // Exercise SUT
-    List<MobileClinicExportDonorViewModel> returnedClinicDonorsViewModels = mobileClinicControllerService.getMobileClinicDonorsByVenues(new HashSet<Long>(Arrays.asList(venue.getId())), clinicDate);
+    List<MobileClinicExportDonorViewModel> returnedClinicDonorsViewModels = mobileClinicControllerService
+        .getMobileClinicDonorsByVenues(new HashSet<UUID>(Arrays.asList(venue.getId())), clinicDate);
 
     // Verify
     assertThat(returnedClinicDonorsViewModels, is(expectedClinicDonorsViewModels));

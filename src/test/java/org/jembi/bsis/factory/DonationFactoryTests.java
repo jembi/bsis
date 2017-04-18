@@ -148,7 +148,8 @@ public class DonationFactoryTests {
     int bloodPressureDiastolic = 80;
     Date bleedStartTime = new Date();
     Date bleedEndTime = new Date();
-    Location venue = aVenue().withId(79L).build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = aVenue().withId(locationId).build();
     AdverseEvent adverseEvent = anAdverseEvent().withId(irrelevantAdverseEventId).build();
 
     Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID)

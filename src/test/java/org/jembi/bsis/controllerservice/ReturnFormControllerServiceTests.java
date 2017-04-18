@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.jembi.bsis.controllerservice.ReturnFormControllerService;
 import org.jembi.bsis.factory.ReturnFormFactory;
 import org.jembi.bsis.helpers.builders.ReturnFormBuilder;
 import org.jembi.bsis.helpers.builders.ReturnFormViewModelBuilder;
@@ -37,8 +36,8 @@ public class ReturnFormControllerServiceTests extends UnitTestSuite {
     // set up test data
     Date returnDateFrom = new Date();
     Date returnDateTo = new Date();
-    Long returnedFromId = 1L;
-    Long returnedToId = 2L;
+    UUID returnedFromId = UUID.randomUUID();
+    UUID returnedToId = UUID.randomUUID();
     UUID id1 = UUID.randomUUID();
     UUID id2 = UUID.randomUUID();
     ReturnStatus status = ReturnStatus.RETURNED;

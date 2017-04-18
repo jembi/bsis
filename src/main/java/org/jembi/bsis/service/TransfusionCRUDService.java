@@ -59,7 +59,7 @@ public class TransfusionCRUDService {
   }
 
   public List<Transfusion> findTransfusions(String din, String componentCode, Long componentTypeId,
-      Long receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
+      UUID receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
     List<Transfusion> transfusions = new ArrayList<>();
 
     if (StringUtils.isNotEmpty(din)) {

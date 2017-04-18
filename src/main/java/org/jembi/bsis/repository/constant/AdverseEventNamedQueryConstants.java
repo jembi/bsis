@@ -22,7 +22,7 @@ public class AdverseEventNamedQueryConstants {
       "AND d.adverseEvent.type.isDeleted = :adverseEventTypeDeleted " +
       "AND v.isDeleted = :venueDeleted " +
       "AND d.donationDate BETWEEN :startDate AND :endDate " +
-      "AND (v.id = :venueId OR :venueId = NULL) " +
+      "AND (v.id = :venueId OR :includeAllVenues is true) " +
       "GROUP BY d.adverseEvent.type,  v " +
       "ORDER BY v";
 }

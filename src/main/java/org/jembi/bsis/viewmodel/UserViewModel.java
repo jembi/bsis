@@ -1,8 +1,9 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.List;
+import java.util.UUID;
 
-public class UserViewModel extends BaseViewModel<Long> {
+public class UserViewModel extends BaseViewModel<UUID> {
 
   private String username;
   private String firstName;

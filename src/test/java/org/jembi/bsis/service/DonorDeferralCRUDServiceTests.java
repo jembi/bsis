@@ -54,7 +54,8 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDeferralForDonorWithDeferralReasonTypeWithPermanentDeferralReason_shouldCreateAndPersistDonorDeferral() {
 
-    Location irrelevantVenue = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    UUID locationId = UUID.randomUUID();
+    Location irrelevantVenue = LocationBuilder.aLocation().withId(locationId).withName("Test Location").build();
     DeferralReasonType irrelevantDeferralReasonType = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
     Donor donor = aDonor().build();
     DeferralReason deferralReason = aDeferralReason()
@@ -85,7 +86,8 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDeferralForDonorWithDeferralReasonTypeWithPermanentDeferralReasonAndExistingDeferral_shouldReturnExistingDonorDeferral() {
 
-    Location irrelevantVenue = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    UUID locationId = UUID.randomUUID();
+    Location irrelevantVenue = LocationBuilder.aLocation().withId(locationId).withName("Test Location").build();
     DeferralReasonType irrelevantDeferralReasonType = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
     Donor donor = aDonor().build();
     DeferralReason deferralReason = aDeferralReason()
@@ -114,7 +116,8 @@ public class DonorDeferralCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateDeferralForDonorWithDeferralReasonTypeWithTemporaryDeferralReason_shouldCreateAndPersistDonorDeferral() {
 
-    Location irrelevantVenue = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    UUID locationId = UUID.randomUUID();
+    Location irrelevantVenue = LocationBuilder.aLocation().withId(locationId).withName("Test Location").build();
     DeferralReasonType irrelevantDeferralReasonType = DeferralReasonType.AUTOMATED_TTI_UNSAFE;
     int irrelevantDuration = 7;
     Date now = new Date();

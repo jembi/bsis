@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,7 +24,7 @@ public class InventoryRepository {
   @PersistenceContext
   private EntityManager em;
 
-  public List<StockLevelDTO> findStockLevelsForLocation(Long locationId, InventoryStatus inventoryStatus) {
+  public List<StockLevelDTO> findStockLevelsForLocation(UUID locationId, InventoryStatus inventoryStatus) {
     return em.createNamedQuery(InventoryNamedQueryConstants.NAME_FIND_STOCK_LEVELS_FOR_LOCATION, StockLevelDTO.class)
         .setParameter("locationId", locationId)
         .setParameter("deleted", false)
@@ -47,7 +48,8 @@ public class InventoryRepository {
         .getSingleResult();
   }
 
-  public List<Component> findComponentsInStock(Long locationId, Long componentTypeId, Date dueToExpireBy, List<BloodGroup> bloodGroups) {
+  public List<Component> findComponentsInStock(UUID locationId, Long componentTypeId, Date dueToExpireBy,
+      List<BloodGroup> bloodGroups) {
 
     String queryString =
         "SELECT c FROM Component c WHERE c.isDeleted = :isDeleted AND c.inventoryStatus = :inventoryStatus ";

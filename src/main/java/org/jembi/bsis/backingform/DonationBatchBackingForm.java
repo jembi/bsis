@@ -67,7 +67,7 @@ public class DonationBatchBackingForm {
     donationBatch.setIsClosed(isClosed);
   }
 
-  public void setVenue(Long venueId) {
+  public void setVenue(UUID venueId) {
     Location venue = new Location();
     venue.setId(venueId);
     donationBatch.setVenue(venue);

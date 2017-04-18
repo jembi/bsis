@@ -1,18 +1,20 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
+
 import org.hibernate.envers.RevisionType;
 
 public class EntityModificationViewModel {
 
-  private Long id;
+  private UUID id;
   private RevisionType revisionType;
   private String entityName;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

@@ -254,7 +254,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
 
   @Test
   public void testRemoveComponentFromStock_shouldReturnComponentREMOVED() {
-    Location location = aLocation().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location location = aLocation().withId(locationId).build();
     Donation donation = aDonation().withId(DONATION_ID_1).build();
 
     Component component = aComponent()
@@ -310,7 +311,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testDeleteComponent_shouldDeleteAComponent() {
     // Set up fixture
-    Location location = aLocation().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location location = aLocation().withId(locationId).build();
     Donation donation = aDonation().withId(DONATION_ID_1).build();
     Component component = aComponent()
         .withId(COMPONENT_ID_1)

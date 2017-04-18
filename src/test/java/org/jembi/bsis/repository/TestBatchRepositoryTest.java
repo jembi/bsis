@@ -116,7 +116,8 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
     Set<DonationBatch> donationBatches = new HashSet<>();
     donationBatches.add(donationBatchRepository.findDonationBatchById(donationBatchId));
     testBatch.setDonationBatches(donationBatches);
-    Location location = locationRepository.getLocation(2l);
+    UUID locationId = UUID.fromString("55321456-eeee-1234-b5b1-123412348811");
+    Location location = locationRepository.getLocation(locationId);
     testBatch.setLocation(location);
     TestBatch savedTestBatch = testBatchRepository.saveTestBatch(testBatch, "123456");
     Assert.assertNotNull("Saved TestBatch has an id", savedTestBatch.getId());

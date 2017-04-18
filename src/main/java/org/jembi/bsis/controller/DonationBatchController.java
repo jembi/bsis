@@ -75,12 +75,12 @@ public class DonationBatchController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_DONATION_BATCH + "')")
   public ResponseEntity<Map<String, Object>> findDonationBatch(HttpServletRequest request,
       @RequestParam(value = "isClosed", required = false) Boolean isClosed,
-      @RequestParam(value = "venues", required = false) List<Long> venues,
+      @RequestParam(value = "venues", required = false) List<UUID> venues,
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
 
     if (venues == null) {
-      venues = new ArrayList<Long>();
+      venues = new ArrayList<UUID>();
     }
 
     List<DonationBatch> donationBatches =

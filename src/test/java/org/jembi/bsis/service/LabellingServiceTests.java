@@ -761,14 +761,14 @@ public class LabellingServiceTests extends UnitTestSuite {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("a+");
     bloodGroups.add("a-");
-    
+    UUID locationId = UUID.randomUUID();
     // set up mocks
-    when(componentRepository.findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null, false))
+    when(componentRepository.findSafeComponents(1L, locationId, BloodGroup.toBloodGroups(bloodGroups), null, null, null, false))
         .thenReturn(null);
     // run test
-    labellingService.findSafeComponentsToLabel(null, null, 1L, 1L, bloodGroups, null, null, null);
+    labellingService.findSafeComponentsToLabel(null, null, 1L, locationId, bloodGroups, null, null, null);
     // verify
-    verify(componentRepository).findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null,
+    verify(componentRepository).findSafeComponents(1L, locationId, BloodGroup.toBloodGroups(bloodGroups), null, null, null,
         false);
   }
 

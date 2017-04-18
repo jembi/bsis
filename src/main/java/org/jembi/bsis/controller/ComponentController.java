@@ -144,7 +144,7 @@ public class ComponentController {
       @RequestParam(value = "status", required = false) ComponentStatus status,
       @RequestParam(value = "donationDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateFrom,
       @RequestParam(value = "donationDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date donationDateTo,
-      @RequestParam(value = "locationId", required = false) Long locationId) {
+      @RequestParam(value = "locationId", required = false) UUID locationId) {
 
     List<ComponentViewModel> components;
     

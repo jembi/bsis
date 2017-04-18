@@ -72,7 +72,7 @@ public class LabellingControllerService {
   }
 
   public List<ComponentFullViewModel> findSafeComponentsToLabel(String din, String componentCode, Long componentTypeId,
-      Long locationId, List<String> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
+      UUID locationId, List<String> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
     List<Component> components = labellingService.findSafeComponentsToLabel(din, componentCode, componentTypeId, locationId,
         bloodGroups, startDate, endDate, inventoryStatus);
     return componentFactory.createComponentFullViewModels(components);

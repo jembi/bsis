@@ -10,7 +10,7 @@ public class DonationBatchBackingFormBuilder extends AbstractBuilder<DonationBat
   private UUID id;
   private String batchNumber;
   private String notes;
-  private Long venue;
+  private UUID venue;
   private boolean closed;
   private boolean backEntry;
   private Date donationBatchDate;
@@ -25,7 +25,7 @@ public class DonationBatchBackingFormBuilder extends AbstractBuilder<DonationBat
     return this;
   }
 
-  public DonationBatchBackingFormBuilder withVenue(Long venue) {
+  public DonationBatchBackingFormBuilder withVenue(UUID venue) {
     this.venue = venue;
     return this;
   }

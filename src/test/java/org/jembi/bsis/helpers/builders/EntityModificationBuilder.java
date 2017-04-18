@@ -1,15 +1,17 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.hibernate.envers.RevisionType;
 import org.jembi.bsis.model.audit.EntityModification;
 
 public class EntityModificationBuilder {
 
-  private Long id;
+  private UUID id;
   private RevisionType revisionType;
   private String entityName;
 
-  public EntityModificationBuilder withId(Long id) {
+  public EntityModificationBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

@@ -84,10 +84,11 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Date transfusionDate = new Date();
     UUID transfusionReactionTypeId = UUID.randomUUID();
     UUID patientId = UUID.randomUUID();
+    UUID locationId = UUID.randomUUID();
 
     PatientBackingForm patientForm = aPatientBackingForm().withId(patientId).build();
     TransfusionReactionTypeBackingForm transfusionReactionTypeForm = aTransfusionReactionTypeBackingForm().withId(transfusionReactionTypeId).build();
-    LocationBackingForm receivedFromForm = aUsageSiteBackingForm().withId(1L).build();
+    LocationBackingForm receivedFromForm = aUsageSiteBackingForm().withId(locationId).build();
     UUID transfusionId = UUID.randomUUID();
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withId(transfusionId)
@@ -103,7 +104,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
 
     Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(transfusionReactionTypeId).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Location receivedFrom = aLocation().withId(locationId).build();
     Transfusion expectedEntity = aTransfusion()
         .withId(transfusionId)
         .withReceivedFrom(receivedFrom)
@@ -115,7 +116,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .thatIsNotDeleted()
         .build();
     
-    when(locationRepository.getLocation(1L)).thenReturn(receivedFrom);
+    when(locationRepository.getLocation(locationId)).thenReturn(receivedFrom);
     when(patientFactory.createEntity(patientForm)).thenReturn(patient);
     when(transfusionReactionTypeRepository.findById(transfusionReactionTypeId)).thenReturn(transfusionReactionType);
 
@@ -140,7 +141,8 @@ public class TransfusionFactoryTests extends UnitTestSuite {
             .withDonationIdentificationNumber(donationIdentificationNumber)
             .build())
         .build();
-    Location receivedFrom = aUsageSite().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location receivedFrom = aUsageSite().withId(locationId).build();
     UUID transfusionId = UUID.randomUUID();
     Transfusion transfusion = aTransfusion()
         .withId(transfusionId)
@@ -159,7 +161,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .build();
     
-    LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel receivedFromViewModel = aLocationViewModel().withId(locationId).build();
     PatientViewModel patientViewModel = aPatientViewModel().withId(patientId).build();
     TransfusionReactionTypeViewModel transfusionReactionTypeViewModel = aTransfusionReactionTypeViewModel()
         .withId(transfusionReactionTypeId)
@@ -197,6 +199,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     UUID transfusionReactionTypeId = UUID.randomUUID();
     UUID patientId = UUID.randomUUID();
     UUID donationId = UUID.randomUUID();
+    UUID locationId = UUID.randomUUID();
 
     Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(transfusionReactionTypeId).build();
@@ -207,7 +210,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
             .withDonationIdentificationNumber(donationIdentificationNumber)
             .build())
         .build();
-    Location receivedFrom = aUsageSite().withId(1L).build();
+    Location receivedFrom = aUsageSite().withId(locationId).build();
     UUID transfusionId = UUID.randomUUID();
     Transfusion transfusion = aTransfusion()
         .withId(transfusionId)
@@ -227,7 +230,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .build();
 
-    LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel receivedFromViewModel = aLocationViewModel().withId(locationId).build();
     PatientViewModel patientViewModel = aPatientViewModel().withId(patientId).build();
     TransfusionReactionTypeViewModel transfusionReactionTypeViewModel = aTransfusionReactionTypeViewModel()
         .withId(transfusionReactionTypeId)
@@ -265,7 +268,8 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     String donationIdentificationNumber = "1234567";
     UUID patientId = UUID.randomUUID();
     UUID donationId = UUID.randomUUID();
-    
+    UUID locationId = UUID.randomUUID();
+
     Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(UUID.randomUUID()).build();
     Component component = aComponent()
@@ -275,7 +279,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
             .withDonationIdentificationNumber(donationIdentificationNumber)
             .build())
         .build();
-    Location receivedFrom = aUsageSite().withId(1L).build();
+    Location receivedFrom = aUsageSite().withId(locationId).build();
     List<Transfusion> transfusions = new ArrayList<>();
     transfusions.add(aTransfusion()
         .withId(UUID.randomUUID())
@@ -332,7 +336,8 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withDonation(donation)
         .build();
 
-    Location receivedFrom = aUsageSite().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location receivedFrom = aUsageSite().withId(locationId).build();
     UUID transfusionId = UUID.randomUUID();
     Transfusion transfusion = aTransfusion()
         .withId(transfusionId)
@@ -344,7 +349,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .build();
 
     // setup expectations
-    LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel receivedFromViewModel = aLocationViewModel().withId(locationId).build();
 
     TransfusionViewModel expectedViewModel = aTransfusionViewModel()
         .withId(transfusionId)
@@ -390,7 +395,8 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .withDonation(donation)
         .build();
 
-    Location receivedFrom = aUsageSite().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location receivedFrom = aUsageSite().withId(locationId).build();
     List<Transfusion> transfusions = new ArrayList<>();
     transfusions.add(aTransfusion()
         .withId(transfusionId1)
@@ -413,7 +419,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
         .thatIsNotDeleted()
         .build());
 
-    LocationViewModel receivedFromViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel receivedFromViewModel = aLocationViewModel().withId(locationId).build();
 
     TransfusionViewModel expectedViewModel1 = aTransfusionViewModel()
         .withId(transfusionId1)

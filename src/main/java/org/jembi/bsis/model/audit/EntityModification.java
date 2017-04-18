@@ -7,10 +7,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.envers.RevisionType;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseUUIDEntity;
 
 @Entity
-public class EntityModification extends BaseEntity {
+public class EntityModification extends BaseUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

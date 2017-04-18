@@ -45,8 +45,8 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateReturnForm_shouldPersist() {
     // Set up
-    Location returnedFrom = LocationBuilder.aUsageSite().withId(1L).build();
-    Location returnedTo = LocationBuilder.aDistributionSite().withId(2L).build();
+    Location returnedFrom = LocationBuilder.aUsageSite().withId(UUID.randomUUID()).build();
+    Location returnedTo = LocationBuilder.aDistributionSite().withId(UUID.randomUUID()).build();
     Date returnDate = new Date();
 
     ReturnForm returnForm = ReturnFormBuilder.aReturnForm()
@@ -193,8 +193,8 @@ public class ReturnFormCRUDServiceTests extends UnitTestSuite {
   public void testDeleteReturnForm_shouldUpdateReturnFormStatusToDeleted() {
     // Set up fixture
     UUID returnFormId = UUID.randomUUID();
-    Location returnedFrom = aDistributionSite().withId(7L).build();
-    Location returnedTo = aUsageSite().withId(55L).build();
+    Location returnedFrom = aDistributionSite().withId(UUID.randomUUID()).build();
+    Location returnedTo = aUsageSite().withId(UUID.randomUUID()).build();
     Date returnDate = new Date();
 
     ReturnForm existingReturnForm = aReturnForm()

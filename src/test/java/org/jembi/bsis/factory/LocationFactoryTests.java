@@ -49,7 +49,7 @@ public class LocationFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateLocationFullViewModel_shouldReturnViewModelWithTheCorrectState() {
-    Long venueId = 1L;
+    UUID venueId = UUID.randomUUID();
     String venueName = "location";
     Location allSiteLocation = aLocation()
         .withId(venueId)
@@ -83,8 +83,9 @@ public class LocationFactoryTests extends UnitTestSuite {
   
   @Test
   public void testCreateLocationReferralSiteFullViewModel_shouldReturnViewModelWithTheCorrectState() {
+    UUID locationId = UUID.randomUUID();
     Location referralSite = aReferralSite()
-        .withId(2L)
+        .withId(locationId)
         .withName("Referral Site")
         .thatIsReferralSite()
         .build();
@@ -103,7 +104,7 @@ public class LocationFactoryTests extends UnitTestSuite {
     Division divisionLevel1 = DivisionBuilder.aDivision().withId(divisionId1).build();
     Division divisionLevel2 = DivisionBuilder.aDivision().withId(divisionId2).build();
     Division divisionLevel3 = DivisionBuilder.aDivision().withId(divisionId3).build();
-    Long venueId = 1L;
+    UUID venueId = UUID.randomUUID();
     String venueName = "location";
     Location venue = aLocation().withId(venueId).withName(venueName).thatIsVenue()
         .withDivisionLevel1(divisionLevel1)
@@ -145,14 +146,14 @@ public class LocationFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateLocationViewModel_shouldReturnViewModelWithTheCorrectState() {
-    Long id = 1L;
+    UUID locationId = UUID.randomUUID();
     String name = "location";
-    Location location = aLocation().withId(id).withName(name).thatIsDeleted().build();
+    Location location = aLocation().withId(locationId).withName(name).thatIsDeleted().build();
     LocationViewModel venueViewModel = locationFactory.createViewModel(location);
     Assert.assertNotNull("location view model was created", venueViewModel);
     Assert.assertEquals("isDeleted is true", true, venueViewModel.getIsDeleted());
     Assert.assertEquals("name is correct", name, venueViewModel.getName());
-    Assert.assertEquals("id is correct", id, venueViewModel.getId());
+    Assert.assertEquals("id is correct", locationId, venueViewModel.getId());
   }
 
   @Test
@@ -172,8 +173,9 @@ public class LocationFactoryTests extends UnitTestSuite {
     UUID divisionId2 = UUID.randomUUID();
     UUID divisionId3 = UUID.randomUUID();
 
+    UUID locationId = UUID.randomUUID();
     LocationBackingForm backingForm = aVenueBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName("Venue")
         .withDivisionLevel3(aDivisionBackingForm().withId(divisionId3).build())
         .build();
@@ -184,7 +186,7 @@ public class LocationFactoryTests extends UnitTestSuite {
     
     // Set up expectations
     Location expectedLocation = aVenue()
-        .withId(1L)
+        .withId(locationId)
         .withName("Venue")
         .withDivisionLevel1(divisionLevel1)
         .withDivisionLevel2(divisionLevel2)
@@ -207,8 +209,9 @@ public class LocationFactoryTests extends UnitTestSuite {
     UUID divisionId2 = UUID.randomUUID();
     UUID divisionId3 = UUID.randomUUID();
 
+    UUID locationId = UUID.randomUUID();
     LocationBackingForm backingForm = aLocationBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName("Everything happens here")
         .thatIsVenue()
         .thatIsMobileSite()
@@ -226,7 +229,7 @@ public class LocationFactoryTests extends UnitTestSuite {
 
     // Set up expectations
     Location expectedLocation = aVenue()
-        .withId(1L)
+        .withId(locationId)
         .withName("Everything happens here")
         .thatIsVenue()
         .thatIsMobileSite()
@@ -252,7 +255,7 @@ public class LocationFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateManagementViewModel_shouldReturnViewModelWithTheCorrectState() {
    // data setUp
-    long locationId = 1L;
+    UUID locationId = UUID.randomUUID();
     UUID divisionId = UUID.randomUUID();
     String divisionName = "aDivision";
     String locationName = "aLocation";
@@ -303,15 +306,18 @@ public class LocationFactoryTests extends UnitTestSuite {
     String locationName2 = "aLocation2";
     String locationName3 = "aLocation3";
     
+    UUID locationId1 = UUID.randomUUID();
+    UUID locationId2 = UUID.randomUUID();
+    UUID locationId3 = UUID.randomUUID();
     List<Location> locations = Arrays.asList(
-        aLocation().withId(1L).withName(locationName1).withDivisionLevel3(divisionLevel3).build(),
-        aLocation().withId(2L).withName(locationName2).withDivisionLevel3(divisionLevel3).build(),
-        aLocation().withId(3L).withName(locationName3).withDivisionLevel3(divisionLevel3).build());
+        aLocation().withId(locationId1).withName(locationName1).withDivisionLevel3(divisionLevel3).build(),
+        aLocation().withId(locationId2).withName(locationName2).withDivisionLevel3(divisionLevel3).build(),
+        aLocation().withId(locationId3).withName(locationName3).withDivisionLevel3(divisionLevel3).build());
     
     List<LocationManagementViewModel> expectedLocations = Arrays.asList(
-        aLocationManagementViewModel().withId(1L).withName(locationName1).withDivisionLevel3(divisionLevel3ViewModel).build(),
-        aLocationManagementViewModel().withId(2L).withName(locationName2).withDivisionLevel3(divisionLevel3ViewModel).build(),
-        aLocationManagementViewModel().withId(3L).withName(locationName3).withDivisionLevel3(divisionLevel3ViewModel).build());
+        aLocationManagementViewModel().withId(locationId1).withName(locationName1).withDivisionLevel3(divisionLevel3ViewModel).build(),
+        aLocationManagementViewModel().withId(locationId2).withName(locationName2).withDivisionLevel3(divisionLevel3ViewModel).build(),
+        aLocationManagementViewModel().withId(locationId3).withName(locationName3).withDivisionLevel3(divisionLevel3ViewModel).build());
     
     when(divisionFactory.createDivisionViewModel(divisionLevel3, false)).thenReturn(divisionLevel3ViewModel);
     //Test

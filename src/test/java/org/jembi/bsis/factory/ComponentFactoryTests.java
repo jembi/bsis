@@ -2,7 +2,6 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
@@ -10,6 +9,7 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentTyp
 import static org.jembi.bsis.helpers.builders.ComponentTypeFullViewModelBuilder.aComponentTypeFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasSameStateAsComponentFullViewModel;
@@ -75,7 +75,8 @@ public class ComponentFactoryTests {
   public void createComponentFullViewModel_oneComponent() throws Exception {
     // set up data
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
-    Location location = aLocation().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location location = aLocation().withId(locationId).build();
 
     Component parentComponent = aComponent().withId(COMPONENT_ID_2).build();
     
@@ -90,7 +91,7 @@ public class ComponentFactoryTests {
           .withComponentTypeName(componentType.getComponentTypeName())
           .withComponentTypeCode(componentType.getComponentTypeCode())
           .build();
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     
     Component component = aComponent()
         .withId(COMPONENT_ID_1)
@@ -404,7 +405,8 @@ public class ComponentFactoryTests {
         .withFlagCharacters("09")
         .build();
     ComponentType componentType = aComponentType().build();
-    Location location = aLocation().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location location = aLocation().withId(locationId).build();
     Component component = aComponent()
         .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.AVAILABLE)
@@ -420,7 +422,7 @@ public class ComponentFactoryTests {
         .withId(1L)
         .build();
 
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     
     ComponentViewModel expectedViewModel = aComponentViewModel().withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.AVAILABLE)

@@ -2,6 +2,7 @@ package org.jembi.bsis.service.report;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.StockLevelDTO;
@@ -20,7 +21,7 @@ public class StockLevelsReportGenerator {
   @Autowired
   private InventoryRepository inventoryRepository;
 
-  public Report generateStockLevelsForLocationReport(Long locationId, InventoryStatus inventoryStatus) {
+  public Report generateStockLevelsForLocationReport(UUID locationId, InventoryStatus inventoryStatus) {
     Report report = new Report();
 
     List<StockLevelDTO> dtos = new ArrayList<>();

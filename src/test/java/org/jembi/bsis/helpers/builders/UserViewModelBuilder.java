@@ -2,13 +2,14 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.viewmodel.RoleViewModel;
 import org.jembi.bsis.viewmodel.UserViewModel;
 
 public class UserViewModelBuilder extends AbstractBuilder<UserViewModel> {
 
-  private Long id;
+  private UUID id;
   private String emailId;
   private String username;
   private boolean passwordReset;
@@ -17,7 +18,7 @@ public class UserViewModelBuilder extends AbstractBuilder<UserViewModel> {
   private String lastName;
   private List<RoleViewModel> roles;
 
-  public UserViewModelBuilder withId(Long id) {
+  public UserViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
