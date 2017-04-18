@@ -74,6 +74,8 @@ public class TransfusionFactoryTests extends UnitTestSuite {
   private TransfusionReactionTypeFactory transfusionReactionTypeFactory;
   @Mock
   private LocationFactory locationFactory;
+  
+  private static final UUID COMPONENT_ID = UUID.randomUUID();
 
   @Test
   public void testCreateEntityWithReaction_shouldReturnEntityInCorrectState() {
@@ -132,7 +134,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(transfusionReactionTypeId).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(aDonation()
             .withId(donationId)
             .withDonationIdentificationNumber(donationIdentificationNumber)
@@ -153,7 +155,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
 
     // setup expectations
     ComponentViewModel componentViewModel = aComponentViewModel()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .build();
     
@@ -199,7 +201,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(transfusionReactionTypeId).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(aDonation()
             .withId(donationId)
             .withDonationIdentificationNumber(donationIdentificationNumber)
@@ -221,7 +223,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
 
     // setup expectations
     ComponentViewModel componentViewModel = aComponentViewModel()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .build();
 
@@ -267,7 +269,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Patient patient = aPatient().withId(patientId).build();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType().withId(UUID.randomUUID()).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(aDonation()
             .withId(donationId)
             .withDonationIdentificationNumber(donationIdentificationNumber)
@@ -322,7 +324,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     Donation donation = DonationBuilder.aDonation()
         .withDonationIdentificationNumber(donationIdentificationNumber).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withComponentType(aComponentType()
             .withComponentTypeName(componentTypeName)
             .build())
@@ -380,7 +382,7 @@ public class TransfusionFactoryTests extends UnitTestSuite {
     UUID transfusionId1 = UUID.randomUUID();
     UUID transfusionId2 = UUID.randomUUID();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withComponentType(aComponentType()
             .withComponentTypeName(componentTypeName)
             .build())

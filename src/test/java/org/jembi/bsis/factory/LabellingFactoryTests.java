@@ -30,7 +30,7 @@ public class LabellingFactoryTests extends UnitTestSuite {
 
     // Setup
     Component component = aComponent()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withComponentBatch(aComponentBatch()
             .withId(UUID.randomUUID())
             .build())

@@ -1,5 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
@@ -8,7 +10,7 @@ import org.jembi.bsis.viewmodel.LocationViewModel;
 
 public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFullViewModel> {
 
-  private Long id;
+  private UUID id;
   private LocationViewModel location;
   private InventoryStatus inventoryStatus;
   private ComponentStatus status;
@@ -17,7 +19,7 @@ public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFull
   private ComponentTypeViewModel componentType;
   private boolean isInitialComponent = false;
 
-  public ComponentFullViewModelBuilder withId(Long id) {
+  public ComponentFullViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
@@ -56,6 +57,9 @@ public class InventoryFactoryTests {
 
   @Mock
   private OrderFormFactory orderFormFactory;
+  
+  private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
 
   @Test
   public void testCreateInventoryViewModel_shouldReturnViewModelWithTheCorrectStateAndNoExpiryStatus() {
@@ -136,7 +140,7 @@ public class InventoryFactoryTests {
     Date createdOn = new Date();
     ComponentType aComponentType = aComponentType().withId(1L).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withComponentType(aComponentType)
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
         .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
@@ -191,7 +195,7 @@ public class InventoryFactoryTests {
     Date createdOn = new Date();
     ComponentType aComponentType = aComponentType().withId(1L).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withComponentType(aComponentType)
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
         .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
@@ -236,10 +240,10 @@ public class InventoryFactoryTests {
 
     // Setup
     Component component1 = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .build();
     Component component2 = aComponent()
-        .withId(2L)
+        .withId(COMPONENT_ID_2)
         .build();
 
     // Run test

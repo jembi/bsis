@@ -63,7 +63,7 @@
                    createdBy_id="1" lastUpdatedBy_id="1" isClosed="true" venue_id="1"
                    backEntry="false"
                    testBatch_id="1"/>
-	<ComponentBatch id="1" location_id="1" 
+	<ComponentBatch id="uuid'11e72422-711c-d0d0-a2df-28f10e1b4901'" location_id="1" 
                status="OPEN" isDeleted="0"
                collectionDate="2015-08-11 09:06:27.0" deliveryDate="2015-08-11 09:06:27.0"
                createdDate="2015-08-11 09:06:27.0" createdBy_id="1" 
@@ -128,41 +128,41 @@
               venue_id="1" bleedStartTime="2015-08-11 09:06:11.0"
               bleedEndTime="2015-08-11 09:16:11.0"
               bloodTypingMatchStatus="NOT_DONE" ineligibleDonor="0" released="0"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="1" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4901'" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="PROCESSED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" createdBy_id="1" lastUpdatedBy_id="1"
                componentType_id="1" componentCode="1111111-0011"
-               componentBatch_id="1" />
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="2" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
+               componentBatch_id="uuid'11e72422-711c-d0d0-a2df-28f10e1b4901'" />
+    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4902'" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
                isDeleted="false" createdDate="2015-08-11 09:07:29.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="QUARANTINED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" createdBy_id="1"
-               lastUpdatedBy_id="1" parentComponent_id="1" componentType_id="6"
+               lastUpdatedBy_id="1" parentComponent_id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4901'" componentType_id="6"
                componentCode="1111111-1001"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="3" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4903'" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="PROCESSED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'" createdBy_id="1" lastUpdatedBy_id="1"
                componentType_id="1" componentCode="2222222-0011"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="4" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
+    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4904'" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
                isDeleted="false" createdDate="2015-08-11 09:07:29.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="QUARANTINED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'" createdBy_id="1"
-               lastUpdatedBy_id="1" parentComponent_id="3" componentType_id="6"
+               lastUpdatedBy_id="1" parentComponent_id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4903'" componentType_id="6"
                componentCode="2222222-1001"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="5" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4905'" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="PROCESSED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a3'" createdBy_id="1" lastUpdatedBy_id="1"
                componentType_id="1" componentCode="3333333-0011"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="6" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
+    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4906'" createdOn="2015-08-11 09:07:29.0" expiresOn="2015-09-15 09:05:56.0"
                discardedOn="2015-08-11 16:13:00.0" isDeleted="false"
                createdDate="2015-08-11 09:07:29.0"
                lastUpdated="2015-08-11 09:07:29.0" status="DISCARDED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a3'"
-               createdBy_id="1" lastUpdatedBy_id="1" parentComponent_id="5"
+               createdBy_id="1" lastUpdatedBy_id="1" parentComponent_id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4905'"
                componentType_id="6" componentCode="3333333-1001"/>
-    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="7" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
+    <Component location_id="1" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4907'" createdOn="2015-08-11 09:06:11.0" expiresOn="2015-09-15 09:06:11.0"
                isDeleted="false" createdDate="2015-08-11 09:06:27.0"
                lastUpdated="2015-08-11 09:07:29.0"
                status="QUARANTINED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'" createdBy_id="1" lastUpdatedBy_id="1"
@@ -175,7 +175,7 @@
     <ComponentStatusChangeReason id="11" category="SPLIT"
                                  isDeleted="false" statusChangeReason="Split"/>
     <ComponentStatusChange id="1" newStatus="DISCARDED" statusChangedOn="2015-08-11 16:13:00.0"
-                           changedBy_id="1" component_id="6" statusChangeReason_id="5"  isDeleted="0"/>
+                           changedBy_id="1" component_id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4906'" statusChangeReason_id="5"  isDeleted="0"/>
     <DataType id="4" dataType="boolean"/>
     <GeneralConfig id="1" name="components.createInitialComponents" value="true" dataType_id="4"/>
 </dataset>

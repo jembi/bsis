@@ -46,6 +46,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
 
   private static final UUID DONATION_BATCH_ID = UUID.randomUUID();
   private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
+  private static final UUID COMPONENT_ID = UUID.randomUUID();
 
   @InjectMocks
   private ComponentStatusCalculator componentStatusCalculator;
@@ -170,7 +171,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForInvalidWeightLowWeight_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(320)
         .withDonation(aDonation()
             .withPackType(aPackType()
@@ -191,7 +192,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForInvalidWeightHasLowWeightNoLowVolume_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(499)
         .withDonation(aDonation()
             .withPackType(aPackType()
@@ -212,7 +213,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForInvalidWeightHasInvalidWeightNoLowVolume_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(570)
         .withDonation(aDonation()
             .withPackType(aPackType()
@@ -233,7 +234,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForInvalidWeightHasValidWeightNoLowVolume_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(520)
         .withDonation(aDonation()
             .withPackType(aPackType()
@@ -254,7 +255,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForInvalidWeightHighWeight_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(520)
         .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMinWeight(420).withMaxWeight(500).build()).build())
         .build();
@@ -270,7 +271,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForLowWeightHasPlasmaMoreThanLowVolumeWeightMoreThanMinWeight_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(410)
         .withComponentType(aComponentType().thatContainsPlasma().build())
         .withDonation(aDonation()
@@ -293,7 +294,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForLowWeightHasPlasmaMoreThanLowVolumeWeightLessThanMinWeight_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(380)
         .withComponentType(aComponentType().thatContainsPlasma().build())
         .withDonation(aDonation()
@@ -316,7 +317,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForLowWeightHasPlasmaEqualToLowVolumeWeightLessThanMinWeight_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(370)
         .withComponentType(aComponentType().thatContainsPlasma().build())
         .withDonation(aDonation()
@@ -339,7 +340,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForLowWeightHasPlasmaEqualToMinWeight_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(400)
         .withComponentType(aComponentType().thatContainsPlasma().build())
         .withDonation(aDonation()
@@ -362,7 +363,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForInvalidWeightHasPlasmaLessThanLowVolumeWeightLessThanMinWeight_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(330)
         .withComponentType(aComponentType().thatContainsPlasma().build())
         .withDonation(aDonation()
@@ -385,7 +386,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForInvalidWeightNoPlasmaMoreThanLowVolumeWeightMoreThanMinWeight_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(410)
         .withComponentType(aComponentType().thatDoesntContainsPlasma().build())
         .withDonation(aDonation()
@@ -408,7 +409,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForInvalidWeightNoPlasmaLessThanLowVolumeWeightLessThanMinWeight_shouldReturnTrue() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(330)
         .withComponentType(aComponentType().thatDoesntContainsPlasma().build())
         .withDonation(aDonation()
@@ -431,7 +432,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForWeight_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(420)
         .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMinWeight(410).withMaxWeight(500).build()).build())
         .build();
@@ -447,7 +448,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForInvalidWeightChildComponent_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withParentComponent(aComponent().build())
         .withWeight(420)
         .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMaxWeight(500).build()).build())
@@ -464,7 +465,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForLowWeightChildComponent_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withParentComponent(aComponent().build())
         .withWeight(420)
         .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).withMaxWeight(500).build()).build())
@@ -481,7 +482,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForLowWeightHasNoPlasmaWeightMoreThanLowWeightLessThanMinWeight_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withComponentType(aComponentType().thatDoesntContainsPlasma().build())
         .withWeight(440)
         .withDonation(aDonation()
@@ -504,7 +505,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForLowWeightNoLowWeight_shouldReturnFalse() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withParentComponent(aComponent().build())
         .withWeight(420)
         .withDonation(aDonation()
@@ -526,7 +527,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentBeDiscardedForInvalidWeightNoLowMinAndMaxWeight_shouldThrowAnException() throws Exception {
     // set up data
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(420)
         .withDonation(aDonation().withPackType(aPackType().withLowVolumeWeight(400).build()).build())
         .build();
@@ -538,7 +539,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testUpdateComponentStatusProcessed_shouldNotChange() throws Exception {
     // set up data
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component component = aComponent().withId(COMPONENT_ID).withStatus(ComponentStatus.PROCESSED).build();
     
     // SUT
     componentStatusCalculator.updateComponentStatus(component);
@@ -550,7 +551,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testUpdateComponentStatusDiscarded_shouldNotChange() throws Exception {
     // set up data
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.DISCARDED).build();
+    Component component = aComponent().withId(COMPONENT_ID).withStatus(ComponentStatus.DISCARDED).build();
     
     // SUT
     componentStatusCalculator.updateComponentStatus(component);
@@ -562,7 +563,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testUpdateComponentStatusIssued_shouldNotChange() throws Exception {
     // set up data
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.ISSUED).build();
+    Component component = aComponent().withId(COMPONENT_ID).withStatus(ComponentStatus.ISSUED).build();
     
     // SUT
     componentStatusCalculator.updateComponentStatus(component);
@@ -574,7 +575,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testUpdateComponentStatusUsed_shouldNotChange() throws Exception {
     // set up data
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.TRANSFUSED).build();
+    Component component = aComponent().withId(COMPONENT_ID).withStatus(ComponentStatus.TRANSFUSED).build();
     
     // SUT
     componentStatusCalculator.updateComponentStatus(component);
@@ -592,7 +593,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
         .withTTIStatus(TTIStatus.NOT_DONE)
         .build();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(null)
         .withExpiresOn(new DateTime().plusDays(3).toDate())
         .withDonation(donation)
@@ -621,7 +622,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
     Date expiresOn = cal.getTime();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -650,7 +651,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
     Date expiresOn = cal.getTime();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -679,7 +680,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
     Date expiresOn = cal.getTime();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -711,7 +712,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
     Date expiresOn = cal.getTime();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -743,7 +744,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
     Date expiresOn = cal.getTime();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -775,7 +776,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
     Date expiresOn = cal.getTime();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -805,7 +806,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
     Date expiresOn = cal.getTime();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -834,7 +835,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, -10);
     Date expiresOn = cal.getTime();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -862,7 +863,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .thatIsReleased()
         .withIneligibleDonor(true)
         .build();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(new DateTime().plusDays(10).toDate())
         .withDonation(donation)
@@ -889,7 +890,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .build();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(new DateTime().plusDays(10).toDate())
         .withDonation(donation)
@@ -916,7 +917,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withTTIStatus(TTIStatus.TTI_SAFE)
         .thatIsReleased()
         .build();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(new DateTime().plusDays(10).toDate())
         .withDonation(donation)
@@ -945,7 +946,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, -10);
     Date expiresOn = cal.getTime();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.UNSAFE)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -975,7 +976,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
     Date expiresOn = cal.getTime();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -1002,7 +1003,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withTTIStatus(TTIStatus.INDETERMINATE)
         .thatIsReleased()
         .build();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(new DateTime().plusDays(90).toDate())
         .withDonation(donation)
@@ -1034,7 +1035,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
     Date expiresOn = cal.getTime();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.UNSAFE)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -1065,7 +1066,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     cal.add(Calendar.DAY_OF_YEAR, 90);
     Date expiresOn = cal.getTime();
     ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(new Date()).withStatusChangeReason(anUnsafeReason().build()).build();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -1097,7 +1098,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     cal.add(Calendar.DAY_OF_YEAR, 90);
     Date expiresOn = cal.getTime();
     ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(new Date()).withStatusChangeReason(aReturnReason().build()).build();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)
@@ -1130,7 +1131,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     Date expiresOn = cal.getTime();
     ComponentStatusChangeReason statusChangeReason = anUnsafeReason().withComponentStatusChangeReasonType(ComponentStatusChangeReasonType.INVALID_WEIGHT).build();
     ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangedOn(new Date()).withStatusChangeReason(statusChangeReason).thatIsDeleted().build();
-    Component component = aComponent().withId(1L)
+    Component component = aComponent().withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withExpiresOn(expiresOn)
         .withDonation(donation)

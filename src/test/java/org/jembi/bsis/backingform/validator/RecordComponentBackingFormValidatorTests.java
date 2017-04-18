@@ -35,13 +35,14 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
   
   private static Date processedOn = new Date();
   UUID componentTypeCombinationId = UUID.randomUUID();
+  private static final UUID COMPONENT_ID = UUID.randomUUID();
 
   private RecordComponentBackingForm getBaseBackingForm() {
     ComponentTypeCombinationBackingForm combinationBackingForm =
         aComponentTypeCombinationBackingForm().withId(componentTypeCombinationId).build();
 
     return aRecordComponentBackingForm()
-        .withParentComponentId(1L)
+        .withParentComponentId(COMPONENT_ID)
         .withComponentTypeCombination(combinationBackingForm)
         .withProcessedOn(processedOn)
         .build();
@@ -53,13 +54,13 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
     RecordComponentBackingForm backingForm = getBaseBackingForm();
 
     Component parentComponent = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
     when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
-    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID)).thenReturn(true);
+    when(componentRepository.findComponentById(COMPONENT_ID)).thenReturn(parentComponent);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "RecordComponentBackingForm");
     recordComponentBackingFormValidator.validateForm(backingForm, errors);
@@ -74,7 +75,7 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setProcessedOn(null);
 
     when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID)).thenReturn(true);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "RecordComponentBackingForm");
     recordComponentBackingFormValidator.validateForm(backingForm, errors);
@@ -91,13 +92,13 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setProcessedOn(future.toDate());
 
     Component parentComponent = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
     when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
-    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID)).thenReturn(true);
+    when(componentRepository.findComponentById(COMPONENT_ID)).thenReturn(parentComponent);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "RecordComponentBackingForm");
     recordComponentBackingFormValidator.validateForm(backingForm, errors);
@@ -114,13 +115,13 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setProcessedOn(dateBeforeCreatedOn.toDate());
 
     Component parentComponent = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
     when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
-    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID)).thenReturn(true);
+    when(componentRepository.findComponentById(COMPONENT_ID)).thenReturn(parentComponent);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "RecordComponentBackingForm");
     recordComponentBackingFormValidator.validateForm(backingForm, errors);
@@ -136,13 +137,13 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setParentComponentId(null);
 
     Component parentComponent = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
     when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
-    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID)).thenReturn(true);
+    when(componentRepository.findComponentById(COMPONENT_ID)).thenReturn(parentComponent);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "RecordComponentBackingForm");
     recordComponentBackingFormValidator.validateForm(backingForm, errors);
@@ -157,13 +158,13 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
     RecordComponentBackingForm backingForm = getBaseBackingForm();
 
     Component parentComponent = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
     when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(false);
-    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID)).thenReturn(false);
+    when(componentRepository.findComponentById(COMPONENT_ID)).thenReturn(parentComponent);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "RecordComponentBackingForm");
     recordComponentBackingFormValidator.validateForm(backingForm, errors);
@@ -179,13 +180,13 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setComponentTypeCombination(null);
 
     Component parentComponent = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
     when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
-    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID)).thenReturn(true);
+    when(componentRepository.findComponentById(COMPONENT_ID)).thenReturn(parentComponent);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "RecordComponentBackingForm");
     recordComponentBackingFormValidator.validateForm(backingForm, errors);
@@ -203,13 +204,13 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setComponentTypeCombination(combinationForm);
 
     Component parentComponent = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
         .build();
 
     when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
-    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID)).thenReturn(true);
+    when(componentRepository.findComponentById(COMPONENT_ID)).thenReturn(parentComponent);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "RecordComponentBackingForm");
     recordComponentBackingFormValidator.validateForm(backingForm, errors);
@@ -224,13 +225,13 @@ public class RecordComponentBackingFormValidatorTests extends UnitTestSuite {
     RecordComponentBackingForm backingForm = getBaseBackingForm();
 
     Component parentComponent = aComponent()
-                                .withId(1L)
+                                .withId(COMPONENT_ID)
                                 .withCreatedOn(new DateTime(processedOn).minusDays(5).toDate())
                                 .build();
 
     when(componentTypeCombinationRepository.verifyComponentTypeCombinationExists(componentTypeCombinationId)).thenReturn(false);
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
-    when(componentRepository.findComponentById(1L)).thenReturn(parentComponent);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID)).thenReturn(true);
+    when(componentRepository.findComponentById(COMPONENT_ID)).thenReturn(parentComponent);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "RecordComponentBackingForm");
     recordComponentBackingFormValidator.validateForm(backingForm, errors);

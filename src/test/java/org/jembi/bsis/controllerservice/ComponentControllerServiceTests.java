@@ -65,33 +65,34 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   private ComponentStatusChangeReasonRepository componentStatusChangeReasonRepository;
   @Mock
   private ComponentStatusChangeReasonFactory componentStatusChangeReasonFactory;
+  
+  private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
 
   @Test
   public void testFindComponentById_shouldCallRepositoryAndFactory() throws Exception {
     // setup data
-    Long componentId = 1L;
-    Component component = ComponentBuilder.aComponent().withId(componentId).build();
+    Component component = ComponentBuilder.aComponent().withId(COMPONENT_ID_1).build();
     ComponentFullViewModel componentFullViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel().build();
     
     // setup mocks
-    Mockito.when(componentRepository.findComponentById(componentId)).thenReturn(component);
+    Mockito.when(componentRepository.findComponentById(COMPONENT_ID_1)).thenReturn(component);
     Mockito.when(componentFactory.createComponentFullViewModel(component)).thenReturn(componentFullViewModel);
     
     // SUT
-    componentControllerService.findComponentById(1L);
+    componentControllerService.findComponentById(COMPONENT_ID_1);
     
     // verify
-    Mockito.verify(componentRepository).findComponentById(componentId);
+    Mockito.verify(componentRepository).findComponentById(COMPONENT_ID_1);
     Mockito.verify(componentFactory).createComponentFullViewModel(component);
   }
   
   @Test
   public void testFindComponentByCodeAndDIN_shouldCallRepositoryAndFactory() throws Exception {
     // setup data
-    Long componentId = 1L;
     String componentCode = "1234-01";
     String donationIdentificationNumber = "1234567";
-    Component component = ComponentBuilder.aComponent().withId(componentId).build();
+    Component component = ComponentBuilder.aComponent().withId(COMPONENT_ID_1).build();
     ComponentFullViewModel componentFullViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel().build();
     
     // setup mocks
@@ -110,9 +111,10 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   public void testFindManagementComponentsByDonationIdentificationNumber_shouldCallRepositoryAndFactory() throws Exception {
     // setup data
     String donationIdentificationNumber = "1234567";
+    
     List<Component> components = Arrays.asList(
-        ComponentBuilder.aComponent().withId(1L).build(),
-        ComponentBuilder.aComponent().withId(2L).build()
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_1).build(),
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_2).build()
     );
     List<ComponentManagementViewModel> componentViewModels = Arrays.asList(
         ComponentManagementViewModelBuilder.aComponentManagementViewModel().build(),
@@ -136,12 +138,12 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     // setup data
     String donationIdentificationNumber = "1234567";
     List<Component> components = Arrays.asList(
-        aComponent().withId(1L).build(),
-        aComponent().withId(2L).build()
+        aComponent().withId(COMPONENT_ID_1).build(),
+        aComponent().withId(COMPONENT_ID_2).build()
     );
     List<ComponentViewModel> componentViewModels = Arrays.asList(
-        aComponentViewModel().withId(1L).build(), 
-        aComponentViewModel().withId(2L).build()
+        aComponentViewModel().withId(COMPONENT_ID_1).build(), 
+        aComponentViewModel().withId(COMPONENT_ID_2).build()
     );
     
     // setup mocks
@@ -164,12 +166,12 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     String donationIdentificationNumber = "1234567";
     ComponentStatus status = ComponentStatus.DISCARDED;
     List<Component> components = Arrays.asList(
-        aComponent().withId(1L).withStatus(status).build(),
-        aComponent().withId(2L).withStatus(status).build()
+        aComponent().withId(COMPONENT_ID_1).withStatus(status).build(),
+        aComponent().withId(COMPONENT_ID_2).withStatus(status).build()
     );
     List<ComponentViewModel> componentViewModels = Arrays.asList(
-        aComponentViewModel().withId(1L).withStatus(status).build(),
-        aComponentViewModel().withId(2L).withStatus(status).build()
+        aComponentViewModel().withId(COMPONENT_ID_1).withStatus(status).build(),
+        aComponentViewModel().withId(COMPONENT_ID_2).withStatus(status).build()
     );
     
     // setup mocks
@@ -192,8 +194,8 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     Date dateFrom = new Date();
     Date dateTo = new Date();
     List<Component> components = Arrays.asList(
-        ComponentBuilder.aComponent().withId(1L).build(),
-        ComponentBuilder.aComponent().withId(2L).build()
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_1).build(),
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_2).build()
     );
     List<ComponentViewModel> componentViewModels = Arrays.asList(
         aComponentViewModel().build(),
@@ -219,17 +221,17 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     String donationIdentificationNumber = "1234567";
     Date processedOn = new Date();
     List<Component> components = Arrays.asList(
-        ComponentBuilder.aComponent().withId(1L)
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_1)
           .withDonation(DonationBuilder.aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
           .build(),
-        ComponentBuilder.aComponent().withId(2L).build()
+        ComponentBuilder.aComponent().withId(COMPONENT_ID_2).build()
     );
     List<ComponentManagementViewModel> componentViewModels = Arrays.asList(
         ComponentManagementViewModelBuilder.aComponentManagementViewModel().build(),
         ComponentManagementViewModelBuilder.aComponentManagementViewModel().build()
     );
     RecordComponentBackingForm form = new RecordComponentBackingForm();
-    form.setParentComponentId(1L);
+    form.setParentComponentId(COMPONENT_ID_1);
     form.setComponentTypeCombination(aComponentTypeCombinationBackingForm().withId(UUID.randomUUID()).build());
     form.setProcessedOn(processedOn);
     
@@ -311,7 +313,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   @Test
   public void testRecordComponentWeight_shouldCallServiceRepositoryAndFactory() throws Exception {
     // setup data
-    Long componentId = Long.valueOf(1);
+    UUID componentId = UUID.randomUUID();
     final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     Integer componentWeight = Integer.valueOf(123);
     ComponentPreProcessingBackingForm backingForm = aComponentBackingForm()
@@ -338,8 +340,8 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   @Test
   public void testUndiscardComponents_shouldUndiscardAndReturnComponents() {
     // Set up fixture
-    long firstComponentId = 1L;
-    long secondComponentId = 3L;
+    UUID firstComponentId = UUID.randomUUID();
+    UUID secondComponentId = UUID.randomUUID();
     
     Component firstComponent = aComponent().withId(firstComponentId).build();
     Component secondComponent = aComponent().withId(secondComponentId).build();
@@ -347,7 +349,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
     ComponentManagementViewModel firstComponentFullViewModel = aComponentManagementViewModel().withId(firstComponentId).build();
     ComponentManagementViewModel secondComponentFullViewModel = aComponentManagementViewModel().withId(secondComponentId).build();
 
-    List<Long> componentIds = Arrays.asList(firstComponentId, secondComponentId);
+    List<UUID> componentIds = Arrays.asList(firstComponentId, secondComponentId);
     
     // Set up expectations
     List<ComponentManagementViewModel> expectedViewModels = Arrays.asList(firstComponentFullViewModel, secondComponentFullViewModel);

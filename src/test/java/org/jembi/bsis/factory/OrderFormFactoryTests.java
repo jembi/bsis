@@ -220,11 +220,12 @@ public class OrderFormFactoryTests extends UnitTestSuite {
     Location dispatchedFrom = getBaseDispatchedFromLocation();
     Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
+    UUID componentId = UUID.randomUUID();
 
     Component expectedComponent =
         aComponent().withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withLocation(dispatchedFrom).withId(1L).build();
-    ComponentBackingForm componentBackingForm = aComponentBackingForm().withId(1L).build();
+        .withLocation(dispatchedFrom).withId(componentId).build();
+    ComponentBackingForm componentBackingForm = aComponentBackingForm().withId(componentId).build();
 
     OrderForm expectedEntity = anOrderForm()
         .withDispatchedFrom(dispatchedFrom)
@@ -239,7 +240,7 @@ public class OrderFormFactoryTests extends UnitTestSuite {
     // Setup mock
     when(locationRepository.getLocation(1l)).thenReturn(dispatchedFrom);
     when(locationRepository.getLocation(2l)).thenReturn(dispatchedTo);
-    when(componentRepository.findComponent(1L)).thenReturn(expectedComponent);
+    when(componentRepository.findComponent(componentId)).thenReturn(expectedComponent);
 
     OrderForm convertedEntity = orderFormFactory.createEntity(backingForm);
 
@@ -252,9 +253,10 @@ public class OrderFormFactoryTests extends UnitTestSuite {
     Location dispatchedTo = getBaseDispatchedToLocation();
     Date orderDate = new Date();
     UUID orderFormId = UUID.randomUUID();
+    UUID componentId = UUID.randomUUID();
 
-    Component component = aComponent().withId(1L).withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(dispatchedFrom).build();
-    InventoryViewModel inventoryViewModel = anInventoryViewModel().withId(1L)
+    Component component = aComponent().withId(componentId).withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(dispatchedFrom).build();
+    InventoryViewModel inventoryViewModel = anInventoryViewModel().withId(componentId)
         .withInventoryStatus(InventoryStatus.IN_STOCK).withLocation(aLocationViewModel().withId(1L).build()).build();
     OrderFormFullViewModel expectedViewModel = anOrderFormFullViewModel()
         .withDispatchedFrom(new LocationFullViewModel(dispatchedFrom))

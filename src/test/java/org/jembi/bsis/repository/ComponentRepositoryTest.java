@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -38,7 +39,8 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testFindComponentWithId() throws Exception {
-    Component one = componentRepository.findComponent(1l);
+    UUID componentId = UUID.fromString("11e71f4f-8efe-921b-9fc7-28f10e1b4901");
+    Component one = componentRepository.findComponent(componentId);
     Assert.assertNotNull("There is a Component with id 1", one);
     Assert.assertEquals("Component is linked to the correct Donation", "1111111", one.getDonationIdentificationNumber());
     Assert.assertNotNull("There is a ComponentBatch", one.getComponentBatch());
@@ -46,7 +48,8 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testFindComponentById() throws Exception {
-    Component one = componentRepository.findComponentById(1l);
+    UUID componentId = UUID.fromString("11e71f4f-8efe-921b-9fc7-28f10e1b4901");
+    Component one = componentRepository.findComponentById(componentId);
     Assert.assertNotNull("There is a Component with id 1", one);
     Assert.assertEquals("Component is linked to the correct Donation", "1111111", one.getDonationIdentificationNumber());
   }
@@ -54,7 +57,7 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   @Transactional
   public void testFindComponentByIdUnknown() throws Exception {
-    Component one = componentRepository.findComponent(1111l);
+    Component one = componentRepository.findComponent(UUID.randomUUID());
     Assert.assertNull("There is no Component with id 1111", one);
   }
 
@@ -107,10 +110,11 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testUpdateComponent() throws Exception {
-    Component componentToUpdate = componentRepository.findComponent(2l);
+    UUID componentId = UUID.fromString("11e71f4f-8efe-921b-9fc7-28f10e1b4902");
+    Component componentToUpdate = componentRepository.findComponent(componentId);
     componentToUpdate.setComponentCode("junit123");
     componentRepository.update(componentToUpdate);
-    Component updatedComponent = componentRepository.findComponent(2l);
+    Component updatedComponent = componentRepository.findComponent(componentId);
     Assert.assertEquals("Component has been updated", "junit123", updatedComponent.getComponentCode());
   }
 }

@@ -159,6 +159,8 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
     // set up data
     Location venue = aVenue().withId(1L).withName("venue").build();
     Location location = aLocation().withId(2L).withName("distribution site").thatIsUsageSite().build();
+    UUID componentId1 = UUID.randomUUID();
+    UUID componentId2 = UUID.randomUUID();
     DonationBatch donationBatch = aDonationBatch()
         .withId(DONATION_BATCH_ID)
         .withBatchNumber("BN1234")
@@ -171,7 +173,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
         .build();
     donationBatch.setDonation(Arrays.asList(donation));
     Component component = aComponent()
-        .withId(1L)
+        .withId(componentId1)
         .withDonation(donation)
         .build();
     Date deliveryDate = new Date();
@@ -183,7 +185,7 @@ public class ComponentBatchFactoryTests extends UnitTestSuite {
         .withBloodTransportBox(box)
         .withComponent(component)
         .withComponent(aComponent()
-            .withId(2L)
+            .withId(componentId2)
             .withDonation(donation)
             .withParentComponent(component)
             .build())

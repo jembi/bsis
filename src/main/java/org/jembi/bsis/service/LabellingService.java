@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.constant.GeneralConfigConstants;
@@ -52,7 +53,7 @@ public class LabellingService {
     return components;
   }
 
-  public boolean verifyPackLabel(long componentId, String prePrintedDIN, String packLabelDIN) {
+  public boolean verifyPackLabel(UUID componentId, String prePrintedDIN, String packLabelDIN) {
     Component component = componentCRUDService.findComponentById(componentId);
     if (!component.getStatus().equals(ComponentStatus.AVAILABLE)) {
       return false;
@@ -68,7 +69,7 @@ public class LabellingService {
     }
   }
   
-  public String printPackLabel(long componentId) {
+  public String printPackLabel(UUID componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
     Donation donation = component.getDonation();
     ComponentType componentType = component.getComponentType();
@@ -183,7 +184,7 @@ public class LabellingService {
     return labelZPL;
   }
 
-  public String printDiscardLabel(long componentId) {
+  public String printDiscardLabel(UUID componentId) {
     Component component = componentCRUDService.findComponentById(componentId);
 
     boolean canPrintDiscardLabel = labellingConstraintChecker.canPrintDiscardLabel(component);

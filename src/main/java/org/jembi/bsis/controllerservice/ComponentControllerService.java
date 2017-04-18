@@ -72,7 +72,7 @@ public class ComponentControllerService {
   @Autowired
   private LocationFactory locationFactory;
 
-  public ComponentFullViewModel findComponentById(Long id) {
+  public ComponentFullViewModel findComponentById(UUID id) {
     Component component = componentRepository.findComponentById(id);
     ComponentFullViewModel componentFullViewModel = componentFactory.createComponentFullViewModel(component);
     return componentFullViewModel;
@@ -141,15 +141,15 @@ public class ComponentControllerService {
         discardComponentsBackingForm.getDiscardReason().getId(), discardComponentsBackingForm.getDiscardReasonText());
   }
 
-  public ComponentManagementViewModel unprocessComponent(Long componentId) {
+  public ComponentManagementViewModel unprocessComponent(UUID componentId) {
     Component component = componentRepository.findComponentById(componentId);
     component = componentCRUDService.unprocessComponent(component);
     return componentFactory.createManagementViewModel(component);
   }
   
-  public List<ComponentManagementViewModel> undiscardComponents(List<Long> componentIds) {
+  public List<ComponentManagementViewModel> undiscardComponents(List<UUID> componentIds) {
     List<ComponentManagementViewModel> componentViewModels = new ArrayList<>();
-    for (Long componentId : componentIds) {
+    for (UUID componentId : componentIds) {
       Component undiscardedComponent = componentCRUDService.undiscardComponent(componentId);
       componentViewModels.add(componentFactory.createManagementViewModel(undiscardedComponent));
     }

@@ -2,6 +2,7 @@ package org.jembi.bsis.controllerservice;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.factory.ComponentFactory;
 import org.jembi.bsis.factory.ComponentTypeFactory;
@@ -58,15 +59,15 @@ public class LabellingControllerService {
     return labellingFactory.createViewModels(components);
   }
 
-  public String printPackLabel(long componentId) {
+  public String printPackLabel(UUID componentId) {
     return labellingService.printPackLabel(componentId);
   }
 
-  public String printDiscardLabel(long componentId) {
+  public String printDiscardLabel(UUID componentId) {
     return labellingService.printDiscardLabel(componentId);
   }
   
-  public boolean verifyPackLabel(long componentId, String prePrintedDIN, String packLabelDIN) {
+  public boolean verifyPackLabel(UUID componentId, String prePrintedDIN, String packLabelDIN) {
     return labellingService.verifyPackLabel(componentId, prePrintedDIN, packLabelDIN);
   }
 

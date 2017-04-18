@@ -1,0 +1,12 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  
+  <changeSet id="20170418-1206" author="tumijacob">
+   <comment> Drop and recreate componentBatch_id foreign key in Component Table</comment>
+   <dropForeignKeyConstraint baseTableName="Component" constraintName="fk_Compoment_ComponentBatch"/>
+   <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="Component" constraintName="fk_Component_ComponentBatch"
+      referencedColumnNames="id" referencedTableName="ComponentBatch"/>
+  </changeSet>
+</databaseChangeLog>

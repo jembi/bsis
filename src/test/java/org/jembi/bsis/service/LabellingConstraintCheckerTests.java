@@ -24,6 +24,7 @@ import org.mockito.Mock;
 public class LabellingConstraintCheckerTests extends UnitTestSuite {
   private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
   private static final UUID COMPONENT_BATCH_ID = UUID.randomUUID();
+  private static final UUID COMPONENT_ID = UUID.randomUUID();
   @InjectMocks
   private LabellingConstraintChecker labellingConstraintChecker;
   @Mock
@@ -34,7 +35,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Donation unsafeDonation = aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.TTI_UNSAFE).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(unsafeDonation)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -50,7 +51,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Donation unreleasedDonation = aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.TTI_SAFE).thatIsNotReleased().build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(unreleasedDonation)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -71,7 +72,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo(null).withBloodRh("+").build())
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -92,7 +93,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh(null).build())
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -115,7 +116,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withBloodRh("+")
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -138,7 +139,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withBloodRh("+")
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -162,7 +163,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withBloodRh("+")
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -189,7 +190,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withBloodRh("+")
         .build();
     Component component = aComponent()
-        .withId(1L).withDonation(donation)
+        .withId(COMPONENT_ID).withDonation(donation)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -222,7 +223,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
         .withBloodRh("+")
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withStatus(ComponentStatus.QUARANTINED)
         .withComponentType(aComponentType()
@@ -248,7 +249,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Donation donation = aDonation().thatIsNotReleased().build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withStatus(ComponentStatus.UNSAFE)
         .withComponentBatch(aComponentBatch()
@@ -268,7 +269,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Donation donation = aDonation().thatIsReleased().build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withStatus(ComponentStatus.UNSAFE)
         .withComponentBatch(aComponentBatch()
@@ -287,7 +288,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintDiscardLabelWithExpiredComponent_shouldReturnTrue() {
     // Set up
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -305,7 +306,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintDiscardLabelWithDiscardedComponent_shouldReturnTrue() {
     // Set up
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.DISCARDED)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -323,7 +324,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintDiscardLabelWithQuarantinedComponent_shouldReturnFalse() {
     // Set up
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.QUARANTINED)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -341,7 +342,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintDiscardLabelWithIssuedComponent_shouldReturnFalse() {
     // Set up
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.ISSUED)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -359,7 +360,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintDiscardLabelWithUsedComponent_shouldReturnFalse() {
     // Set up
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.TRANSFUSED)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -377,7 +378,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintDiscardLabelWithProcessedComponent_shouldReturnFalse() {
     // Set up
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.PROCESSED)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -395,7 +396,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintDiscardLabelWithAvailableComponent_shouldReturnFalse() {
     // Set up
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -413,7 +414,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintPackLabelWithComponentThatCanBeIssued_shouldReturnTrue() {
     // Set up
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -434,7 +435,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintPackLabelWithComponentThatCantBeIssued_shouldReturnFalse() {
     // Set up
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentBatch(aComponentBatch()
             .withId(COMPONENT_BATCH_ID)
@@ -455,7 +456,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintPackLabelWithComponentThatHasNoComponentBatch_shouldReturnFalse() {
     // Set up
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(aComponentType()
             .thatCanBeIssued()
@@ -473,7 +474,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   public void testCanPrintDiscardLabelWithComponentThatHasNoComponentBatch_shouldReturnFalse() {
     // Set up
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentType(aComponentType()
             .thatCanNotBeIssued()

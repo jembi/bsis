@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -104,7 +105,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
   @Test
   public void testEntityDoesNotExist() throws Exception {
-    Assert.assertFalse("Component does not exist", componentRepository.verifyComponentExists(1L));
+    Assert.assertFalse("Component does not exist", componentRepository.verifyComponentExists(UUID.randomUUID()));
   }
 
   @Test
@@ -440,6 +441,10 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
     Date expiresOn = new DateTime().plusDays(30).toDate();
     String notes = "It's green!";
     String discardReason = "Bad blood";
+    Component parentComponent = aComponent()
+        .withCreatedDate(new DateTime(createdDate).minusDays(1).toDate()) // Create parent before child
+        .withComponentCode(parentComponentCode)
+        .build();
     
     // Expected
     Component component = aComponent()
@@ -447,10 +452,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withComponentCode(componentCode)
         .withCreatedBy(aUser().withUsername(createdByUsername).build())
         .withCreatedDate(createdDate)
-        .withParentComponent(aComponent()
-                .withCreatedDate(new DateTime(createdDate).minusDays(1).toDate()) // Create parent before child
-                .withComponentCode(parentComponentCode)
-                .build())
+        .withParentComponent(parentComponent)
         .withCreatedOn(createdOn)
         .withStatus(status)
         .withLocation(aVenue().withName(locationName).build())
@@ -460,7 +462,8 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withExpiresOn(expiresOn)
         .withNotes(notes)
         .buildAndPersist(entityManager);
-
+    System.out.println(parentComponent.getId());
+    System.out.println(component.getId());
     // Excluded issued status change reason
     aComponentStatusChange()
         .withComponent(component)
@@ -487,7 +490,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
                 .withStatusChangeReason(discardReason)
                 .build())
         .buildAndPersist(entityManager);
-    
+/*    
     // Deleted discard status change reason
     aComponentStatusChange()
         .thatIsDeleted()
@@ -497,15 +500,21 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
                 .withStatusChangeReason("Deleted undiscard")
                 .build())
         .buildAndPersist(entityManager);
-    
+  */
     // Excluded by deleted
-    aComponent().thatIsDeleted().buildAndPersist(entityManager);
-    
+    Component c = aComponent().thatIsDeleted().buildAndPersist(entityManager);
+    System.out.println(c.getId());
     // Exercise SUT
     Set<ComponentExportDTO> returnedDTOs = componentRepository.findComponentsForExport();
     
+    System.out.println("Returned: ");
+    for(ComponentExportDTO a : returnedDTOs) {
+      System.out.println(a.getId());
+    }
     // Verify
     assertThat(returnedDTOs.size(), is(2));
+    //assertThat(returnedDTOs, hasItem(parentComponent));
+    //assertThat(returnedDTOs, not(hasItem(deletedComponent)));
     
     // Verify DTO parent state
     Iterator<ComponentExportDTO> iterator = returnedDTOs.iterator();

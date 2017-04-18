@@ -3,6 +3,7 @@ package org.jembi.bsis.viewmodel;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -10,7 +11,7 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ComponentManagementViewModel extends BaseViewModel<Long> {
+public class ComponentManagementViewModel extends BaseViewModel<UUID> {
 
   private ComponentTypeViewModel componentType;
   private Date createdOn;
@@ -26,7 +27,7 @@ public class ComponentManagementViewModel extends BaseViewModel<Long> {
   private Date donationDateTime;
   private Date bleedStartTime;
   private Date bleedEndTime;
-  private Long parentComponentId;
+  private UUID parentComponentId;
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getBleedStartTime() {
@@ -144,11 +145,11 @@ public class ComponentManagementViewModel extends BaseViewModel<Long> {
     this.donationDateTime = donationDateTime;
   }
 
-  public Long getParentComponentId() {
+  public UUID getParentComponentId() {
     return parentComponentId;
   }
 
-  public void setParentComponentId(Long parentComponentId) {
+  public void setParentComponentId(UUID parentComponentId) {
     this.parentComponentId = parentComponentId;
   }
 }

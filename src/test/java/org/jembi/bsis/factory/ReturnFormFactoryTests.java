@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.hamcrest.Matchers;
 import org.jembi.bsis.backingform.ReturnFormBackingForm;
@@ -52,13 +53,15 @@ public class ReturnFormFactoryTests {
   private ComponentFactory componentFactory;
   @Mock
   private ReturnFormConstraintChecker returnFormConstraintChecker;
-
+  
+  private static final UUID COMPONENT_ID = UUID.randomUUID();
+  
   @Test
   public void testConvertBackingFormToReturnFormEntity_shouldReturnExpectedEntity() {
     // Set up data
     Location returnedFrom = LocationBuilder.aUsageSite().withId(1L).build();
     Location returnedTo = LocationBuilder.aDistributionSite().withId(2L).build();
-    Component component = ComponentBuilder.aComponent().withId(1L).build();
+    Component component = ComponentBuilder.aComponent().withId(COMPONENT_ID).build();
     Date returnDate = new Date();
 
     ReturnForm expectedEntity = ReturnFormBuilder.aReturnForm()
@@ -72,13 +75,13 @@ public class ReturnFormFactoryTests {
         .withReturnedFrom(LocationBackingFormBuilder.aUsageSiteBackingForm().withId(1L).build())
         .withReturnedTo(LocationBackingFormBuilder.aDistributionSiteBackingForm().withId(2L).build())
         .withReturnDate(returnDate)
-        .withComponent(ComponentBackingFormBuilder.aComponentBackingForm().withId(1L).build())
+        .withComponent(ComponentBackingFormBuilder.aComponentBackingForm().withId(COMPONENT_ID).build())
         .build();
 
     // Setup mock
     when(locationRepository.getLocation(1l)).thenReturn(returnedFrom);
     when(locationRepository.getLocation(2l)).thenReturn(returnedTo);
-    when(componentRepository.findComponent(1L)).thenReturn(component);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component);
 
     // Run test
     ReturnForm convertedEntity = returnFormFactory.createEntity(backingForm);
@@ -123,8 +126,8 @@ public class ReturnFormFactoryTests {
     Location returnedFrom = LocationBuilder.aUsageSite().withId(1L).build();
     Location returnedTo = LocationBuilder.aDistributionSite().withId(2L).build();
     Date returnDate = new Date();
-    Component component = ComponentBuilder.aComponent().withId(1L).build();
-    ComponentFullViewModel componentFullViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel().withId(1L).build();
+    Component component = ComponentBuilder.aComponent().withId(COMPONENT_ID).build();
+    ComponentFullViewModel componentFullViewModel = ComponentFullViewModelBuilder.aComponentFullViewModel().withId(COMPONENT_ID).build();
 
     ReturnFormFullViewModel expectedViewModel = ReturnFormFullViewModelBuilder.aReturnFormFullViewModel()
         .withReturnedFrom(new LocationFullViewModel(returnedFrom))

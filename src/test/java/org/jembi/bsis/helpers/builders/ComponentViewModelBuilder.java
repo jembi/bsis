@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
@@ -9,7 +10,7 @@ import org.jembi.bsis.viewmodel.LocationViewModel;
 
 public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewModel> {
 
-  private Long id;
+  private UUID id;
   private ComponentTypeViewModel componentType;
   private Date createdOn;
   private Date expiresOn;
@@ -20,7 +21,7 @@ public class ComponentViewModelBuilder extends AbstractBuilder<ComponentViewMode
   private String componentCode;
   private LocationViewModel location;
 
-  public ComponentViewModelBuilder withId(Long id) {
+  public ComponentViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

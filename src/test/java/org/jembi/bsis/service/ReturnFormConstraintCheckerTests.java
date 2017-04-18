@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.builders.ReturnFormBuilder.aReturnForm;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -127,11 +128,12 @@ public class ReturnFormConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanDiscardWithReturnedReturnFormWithDiscardableComponents_shouldReturnTrue() {
     // Set up
-    Component componentThatCanBeDiscarded = aComponent().withId(8889L).withStatus(ComponentStatus.AVAILABLE).build();
+    UUID componentId = UUID.randomUUID();
+    Component componentThatCanBeDiscarded = aComponent().withId(componentId).withStatus(ComponentStatus.AVAILABLE).build();
     
     ReturnForm returnForm = aReturnForm()
         .withReturnStatus(ReturnStatus.RETURNED)
-        .withComponent(aComponent().withId(77L).withStatus(ComponentStatus.DISCARDED).build())
+        .withComponent(aComponent().withId(componentId).withStatus(ComponentStatus.DISCARDED).build())
         .withComponent(componentThatCanBeDiscarded)
         .build();
     

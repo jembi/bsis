@@ -71,11 +71,11 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .getResultList();
   }
 
-  public Component findComponent(Long componentId) {
+  public Component findComponent(UUID componentId) {
     return em.find(Component.class, componentId);
   }
 
-  public Component findComponentById(Long componentId) throws NoResultException {
+  public Component findComponentById(UUID componentId) throws NoResultException {
     String queryString = "SELECT c FROM Component c LEFT JOIN FETCH c.donation where c.id = :componentId AND c.isDeleted = :isDeleted";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -126,7 +126,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .getSingleResult();
   }
 
-  public boolean verifyComponentExists(Long id) {
+  public boolean verifyComponentExists(UUID id) {
     Long count = em.createNamedQuery(ComponentNamedQueryConstants.NAME_COUNT_COMPONENT_WITH_ID, Long.class)
         .setParameter("id", id).getSingleResult();
     if (count == 1) {

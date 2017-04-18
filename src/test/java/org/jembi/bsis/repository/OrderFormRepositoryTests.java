@@ -124,7 +124,7 @@ public class OrderFormRepositoryTests extends SecurityContextDependentTestSuite 
   @Test
   public void testFindOrderFormByComponentNoneExisting_shouldReturnNull() {
     //Test
-    List<OrderForm> returnedOrderForms = orderFormRepository.findByComponent(1l);
+    List<OrderForm> returnedOrderForms = orderFormRepository.findByComponent(UUID.randomUUID());
     Assert.assertNotNull("Order for list was returned", returnedOrderForms);
     Assert.assertEquals("Order form was not found", 0, returnedOrderForms.size());
   }
