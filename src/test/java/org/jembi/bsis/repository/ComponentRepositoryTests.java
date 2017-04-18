@@ -490,7 +490,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
                 .withStatusChangeReason(discardReason)
                 .build())
         .buildAndPersist(entityManager);
-/*    
+    
     // Deleted discard status change reason
     aComponentStatusChange()
         .thatIsDeleted()
@@ -500,22 +500,16 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
                 .withStatusChangeReason("Deleted undiscard")
                 .build())
         .buildAndPersist(entityManager);
-  */
+  
     // Excluded by deleted
     Component c = aComponent().thatIsDeleted().buildAndPersist(entityManager);
     System.out.println(c.getId());
     // Exercise SUT
     Set<ComponentExportDTO> returnedDTOs = componentRepository.findComponentsForExport();
     
-    System.out.println("Returned: ");
-    for(ComponentExportDTO a : returnedDTOs) {
-      System.out.println(a.getId());
-    }
     // Verify
     assertThat(returnedDTOs.size(), is(2));
-    //assertThat(returnedDTOs, hasItem(parentComponent));
-    //assertThat(returnedDTOs, not(hasItem(deletedComponent)));
-    
+       
     // Verify DTO parent state
     Iterator<ComponentExportDTO> iterator = returnedDTOs.iterator();
     assertThat(iterator.next().getComponentCode(), is(parentComponentCode));

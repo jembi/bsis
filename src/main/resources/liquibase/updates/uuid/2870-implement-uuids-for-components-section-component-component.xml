@@ -378,10 +378,10 @@
 
     <dropColumn columnName="component_id_temp" tableName="Transfusion_AUD"/>
 
-    <addForeignKeyConstraint baseColumnNames="parentComponent_id" baseTableName="Component" constraintName="FK50C664CFD946D0A0"
+    <addForeignKeyConstraint baseColumnNames="parentComponent_id" baseTableName="Component" constraintName="fk_parentComponent_Component"
       referencedColumnNames="id" referencedTableName="Component"/>
 
-    <addForeignKeyConstraint baseColumnNames="component_id" baseTableName="ComponentStatusChange" constraintName="FKCCE48CB1A8E71476"
+    <addForeignKeyConstraint baseColumnNames="component_id" baseTableName="ComponentStatusChange" constraintName="fk_ComponentStatusChange_Component"
       referencedColumnNames="id" referencedTableName="Component"/>
 
     <addForeignKeyConstraint baseColumnNames="component_id" baseTableName="OrderForm_Component" constraintName="fk_OrderForm_Component_Component"
