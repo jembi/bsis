@@ -3,6 +3,8 @@ package org.jembi.bsis.factory;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aComponentStatusChangeReason;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aDiscardReason;
 
+import java.util.UUID;
+
 import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
@@ -23,7 +25,7 @@ public class ComponentStatusChangeReasonFactoryTests {
   public void testCreateDiscardReasonViewModel_shouldReturnExpectedViewModel() {
     
     ComponentStatusChangeReason entity = aDiscardReason()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withStatusChangeReason("reason").build();
     
     DiscardReasonViewModel viewModel = componentStatusChangeReasonFactory.createDiscardReasonViewModel(entity);

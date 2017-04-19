@@ -1,17 +1,18 @@
 package org.jembi.bsis.repository;
 
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
-import org.jembi.bsis.repository.constant.ComponentStatusChangeReasonNamedQueryConstants;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import java.util.List;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
+import org.jembi.bsis.repository.constant.ComponentStatusChangeReasonNamedQueryConstants;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
@@ -42,7 +43,7 @@ public class DiscardReasonRepository {
     return result;
   }
 
-  public ComponentStatusChangeReason getDiscardReasonById(Long DiscardReasonId) {
+  public ComponentStatusChangeReason getDiscardReasonById(UUID DiscardReasonId) {
     TypedQuery<ComponentStatusChangeReason> query;
     query = em.createQuery("SELECT p from ComponentStatusChangeReason p " +
         "where p.id=:id AND p.category= :category", ComponentStatusChangeReason.class);
@@ -70,7 +71,7 @@ public class DiscardReasonRepository {
     return existingDiscardReason;
   }
   
-  public boolean verifyDiscardReasonExists(Long id) {
+  public boolean verifyDiscardReasonExists(UUID id) {
     Long count = em.createNamedQuery(ComponentStatusChangeReasonNamedQueryConstants.NAME_COUNT_DISCARD_REASON_WITH_ID, Long.class)
         .setParameter("id", id)
         .setParameter("category", ComponentStatusChangeReasonCategory.DISCARDED)

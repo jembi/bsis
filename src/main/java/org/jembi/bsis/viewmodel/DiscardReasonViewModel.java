@@ -1,5 +1,7 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 
 public class DiscardReasonViewModel {
@@ -10,7 +12,7 @@ public class DiscardReasonViewModel {
     this.discardReason = discardReason;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return discardReason.getId();
   }
 

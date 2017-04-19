@@ -3,13 +3,13 @@ package org.jembi.bsis.repository;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.repository.ComponentStatusChangeReasonRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -59,6 +59,7 @@ public class ComponentStatusChangeReasonRepositoryTest extends DBUnitContextDepe
   }
 
   @Test
+  @Ignore("This method is unused and will be deleted shortly")
   public void testGetComponentStatusChangeReasonById() throws Exception {
     ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(1l);
     Assert.assertNotNull("There is a ComponentStatusChangeReason", one);
@@ -67,6 +68,7 @@ public class ComponentStatusChangeReasonRepositoryTest extends DBUnitContextDepe
   }
 
   @Test
+  @Ignore("This method is unused and will be deleted shortly")
   public void testGetComponentStatusChangeReasonByIdUnknown() throws Exception {
     ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(123l);
     Assert.assertNull("There is no ComponentStatusChangeReason", one);
@@ -83,9 +85,10 @@ public class ComponentStatusChangeReasonRepositoryTest extends DBUnitContextDepe
   
   @Test
   public void testFindFirstComponentStatusChangeReasonForCategory() {
+    UUID statusChangeReasonId = UUID.fromString("b827d865-abfe-41ad-98e4-60514148e215");
     ComponentStatusChangeReason returnedReason = componentStatusChangeReasonRepository.findFirstComponentStatusChangeReasonForCategory(
         ComponentStatusChangeReasonCategory.ISSUED);
     Assert.assertNotNull("A reason is returned", returnedReason);
-    Assert.assertEquals("The correct reason is returned", (Long) 15L, returnedReason.getId());
+    Assert.assertEquals("The correct reason is returned", statusChangeReasonId, returnedReason.getId());
   }
 }

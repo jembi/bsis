@@ -1,11 +1,13 @@
 package org.jembi.bsis.backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DiscardReasonBackingForm {
 
@@ -26,7 +28,7 @@ public class DiscardReasonBackingForm {
     return discardReason.getStatusChangeReason();
   }
 
-  public Long getId() {
+  public UUID getId() {
     return discardReason.getId();
   }
 
@@ -34,7 +36,7 @@ public class DiscardReasonBackingForm {
     this.discardReason = discardReason;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     discardReason.setId(id);
   }
 

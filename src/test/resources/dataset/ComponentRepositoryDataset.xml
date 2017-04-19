@@ -170,14 +170,14 @@
                status="QUARANTINED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
                componentType_id="6" componentCode="5555555-0011"/>
     
-    <ComponentStatusChangeReason id="5" category="DISCARDED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e235'" category="DISCARDED"
                                  isDeleted="false" statusChangeReason="Storage Problems"/>
-    <ComponentStatusChangeReason id="7" category="RETURNED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e237'" category="RETURNED"
                                  isDeleted="false" statusChangeReason="Expired"/>
-    <ComponentStatusChangeReason id="11" category="SPLIT"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e211'" category="SPLIT"
                                  isDeleted="false" statusChangeReason="Split"/>
     <ComponentStatusChange id="1" newStatus="DISCARDED" statusChangedOn="2015-08-11 16:13:00.0"
-                           changedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" component_id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4906'" statusChangeReason_id="5"  isDeleted="0"/>
+                           changedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" component_id="uuid'11e71f4f-8efe-921b-9fc7-28f10e1b4906'" statusChangeReason_id="uuid'b827d865-abfe-41ad-98e4-60514148e235'"  isDeleted="0"/>
     <DataType id="4" dataType="boolean"/>
     <GeneralConfig id="1" name="components.createInitialComponents" value="true" dataType_id="4"/>
 </dataset>

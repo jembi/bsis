@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform.validator;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DiscardReasonBackingForm;
 import org.jembi.bsis.backingform.validator.DiscardReasonBackingFormValidator;
@@ -52,7 +53,7 @@ public class DiscardReasonBackingFormValidatorTest {
   public void testValidUpdate() throws Exception {
     // set up data
     ComponentStatusChangeReason discardReason = new ComponentStatusChangeReason();
-    discardReason.setId(1l);
+    discardReason.setId(UUID.randomUUID());
     discardReason.setStatusChangeReason("REASON");
 
     DiscardReasonBackingForm form = new DiscardReasonBackingForm();
@@ -90,11 +91,11 @@ public class DiscardReasonBackingFormValidatorTest {
   public void testInvalidDuplicate() throws Exception {
     // set up data
     ComponentStatusChangeReason discardReason = new ComponentStatusChangeReason();
-    discardReason.setId(1l);
+    discardReason.setId(UUID.randomUUID());
     discardReason.setStatusChangeReason("REASON");
 
     ComponentStatusChangeReason duplicate = new ComponentStatusChangeReason();
-    duplicate.setId(2l);
+    duplicate.setId(UUID.randomUUID());
     duplicate.setStatusChangeReason("REASON");
 
     DiscardReasonBackingForm form = new DiscardReasonBackingForm();
