@@ -1,12 +1,12 @@
 package org.jembi.bsis.backingform.validator;
 
+import static org.jembi.bsis.helpers.builders.DiscardReasonBackingFormBuilder.aDiscardReasonBackingForm;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 import org.jembi.bsis.backingform.DiscardReasonBackingForm;
-import org.jembi.bsis.backingform.validator.DiscardReasonBackingFormValidator;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.repository.DiscardReasonRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
@@ -32,11 +32,9 @@ public class DiscardReasonBackingFormValidatorTest {
   @Test
   public void testValid() throws Exception {
     // set up data
-    ComponentStatusChangeReason discardReason = new ComponentStatusChangeReason();
-    discardReason.setStatusChangeReason("REASON");
-
-    DiscardReasonBackingForm form = new DiscardReasonBackingForm();
-    form.setDiscardReason(discardReason);
+    DiscardReasonBackingForm form = aDiscardReasonBackingForm()
+        .withReason("REASON")
+        .build();
 
     // set up mocks
     when(discardReasonRepository.findDiscardReason("REASON")).thenReturn(null);
@@ -52,12 +50,15 @@ public class DiscardReasonBackingFormValidatorTest {
   @Test
   public void testValidUpdate() throws Exception {
     // set up data
+    UUID discardReasonId = UUID.randomUUID();
     ComponentStatusChangeReason discardReason = new ComponentStatusChangeReason();
-    discardReason.setId(UUID.randomUUID());
+    discardReason.setId(discardReasonId);
     discardReason.setStatusChangeReason("REASON");
 
-    DiscardReasonBackingForm form = new DiscardReasonBackingForm();
-    form.setDiscardReason(discardReason);
+    DiscardReasonBackingForm form = aDiscardReasonBackingForm()
+        .withId(discardReasonId)
+        .withReason("REASON")
+        .build();
 
     // set up mocks
     when(discardReasonRepository.findDiscardReason("REASON")).thenReturn(discardReason);
@@ -73,11 +74,9 @@ public class DiscardReasonBackingFormValidatorTest {
   @Test
   public void testValidBlankReason() throws Exception {
     // set up data
-    ComponentStatusChangeReason discardReason = new ComponentStatusChangeReason();
-    discardReason.setStatusChangeReason("");
-
-    DiscardReasonBackingForm form = new DiscardReasonBackingForm();
-    form.setDiscardReason(discardReason);
+    DiscardReasonBackingForm form = aDiscardReasonBackingForm()
+        .withReason("")
+        .build();
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "discardReason");
@@ -90,16 +89,14 @@ public class DiscardReasonBackingFormValidatorTest {
   @Test
   public void testInvalidDuplicate() throws Exception {
     // set up data
-    ComponentStatusChangeReason discardReason = new ComponentStatusChangeReason();
-    discardReason.setId(UUID.randomUUID());
-    discardReason.setStatusChangeReason("REASON");
-
     ComponentStatusChangeReason duplicate = new ComponentStatusChangeReason();
     duplicate.setId(UUID.randomUUID());
     duplicate.setStatusChangeReason("REASON");
 
-    DiscardReasonBackingForm form = new DiscardReasonBackingForm();
-    form.setDiscardReason(discardReason);
+    DiscardReasonBackingForm form = aDiscardReasonBackingForm()
+        .withId(UUID.randomUUID())
+        .withReason("REASON")
+        .build();
 
     // set up mocks
     when(discardReasonRepository.findDiscardReason("REASON")).thenReturn(duplicate);

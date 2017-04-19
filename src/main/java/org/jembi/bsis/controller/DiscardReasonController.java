@@ -62,26 +62,27 @@ public class DiscardReasonController {
   public ResponseEntity<Map<String, Object>> getDiscardReasonById(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<String, Object>();
     ComponentStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(id);
-    map.put("reason", new DiscardReasonViewModel(discardReason));
+    map.put("reason", componentStatusChangeReasonFactory.createDiscardReasonViewModel(discardReason));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
   public ResponseEntity<DiscardReasonViewModel> saveDiscardReason(@Valid @RequestBody DiscardReasonBackingForm formData) {
-    ComponentStatusChangeReason discardReason = formData.getDiscardReason();
+    ComponentStatusChangeReason discardReason = componentStatusChangeReasonFactory.createDiscardReasonEntity(formData);
     discardReason = discardReasonRepository.saveDiscardReason(discardReason);
-    return new ResponseEntity<>(new DiscardReasonViewModel(discardReason), HttpStatus.CREATED);
+    DiscardReasonViewModel viewModel = componentStatusChangeReasonFactory.createDiscardReasonViewModel(discardReason);
+    return new ResponseEntity<>(viewModel, HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DISCARD_REASONS + "')")
   public ResponseEntity<Map<String, Object>> updateDiscardReason(@Valid @RequestBody DiscardReasonBackingForm formData, @PathVariable UUID id) {
     Map<String, Object> map = new HashMap<String, Object>();
-    ComponentStatusChangeReason discardReason = formData.getDiscardReason();
+    ComponentStatusChangeReason discardReason = componentStatusChangeReasonFactory.createDiscardReasonEntity(formData);
     discardReason.setId(id);
     discardReason = discardReasonRepository.updateDiscardReason(discardReason);
-    map.put("reason", new DiscardReasonViewModel(discardReason));
+    map.put("reason", componentStatusChangeReasonFactory.createDiscardReasonViewModel(discardReason));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 }

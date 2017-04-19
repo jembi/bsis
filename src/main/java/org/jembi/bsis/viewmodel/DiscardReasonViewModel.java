@@ -2,25 +2,36 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.UUID;
 
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
-
 public class DiscardReasonViewModel {
 
-  private ComponentStatusChangeReason discardReason;
+  private UUID id;
+  private String reason;
+  private Boolean isDeleted;
 
-  public DiscardReasonViewModel(ComponentStatusChangeReason discardReason) {
-    this.discardReason = discardReason;
+  public DiscardReasonViewModel() {
   }
 
   public UUID getId() {
-    return discardReason.getId();
+    return id;
   }
 
   public String getReason() {
-    return discardReason.getStatusChangeReason();
+    return reason;
   }
 
   public Boolean getIsDeleted() {
-    return discardReason.getIsDeleted();
+    return isDeleted;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public void setReason(String reason) {
+    this.reason = reason;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 }

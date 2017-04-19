@@ -35,6 +35,16 @@ public class ComponentStatusChangeReasonBuilder extends AbstractEntityBuilder<Co
     return this;
   }
 
+  public ComponentStatusChangeReasonBuilder thatIsDeleted() {
+    this.isDeleted = Boolean.TRUE;
+    return this;
+  }
+
+  public ComponentStatusChangeReasonBuilder thatIsNotDeleted() {
+    this.isDeleted = Boolean.FALSE;
+    return this;
+  }
+
   @Override
   public ComponentStatusChangeReason build() {
     ComponentStatusChangeReason entity = new ComponentStatusChangeReason();
