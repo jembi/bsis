@@ -2,7 +2,6 @@ package org.jembi.bsis.repository;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
@@ -12,7 +11,6 @@ import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategor
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -56,31 +54,6 @@ public class ComponentStatusChangeReasonRepositoryTest extends DBUnitContextDepe
         .getComponentStatusChangeReasons(ComponentStatusChangeReasonCategory.ISSUED);
     Assert.assertNotNull("Doesn't return a null list", all);
     Assert.assertEquals("There is 1 ISSUED ComponentStatusChangeReason", 1, all.size());
-  }
-
-  @Test
-  @Ignore("This method is unused and will be deleted shortly")
-  public void testGetComponentStatusChangeReasonById() throws Exception {
-    ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(1l);
-    Assert.assertNotNull("There is a ComponentStatusChangeReason", one);
-    Assert.assertEquals("ComponentStatusChangeReason matches", ComponentStatusChangeReasonCategory.DISCARDED,
-        one.getCategory());
-  }
-
-  @Test
-  @Ignore("This method is unused and will be deleted shortly")
-  public void testGetComponentStatusChangeReasonByIdUnknown() throws Exception {
-    ComponentStatusChangeReason one = componentStatusChangeReasonRepository.getComponentStatusChangeReasonById(123l);
-    Assert.assertNull("There is no ComponentStatusChangeReason", one);
-  }
-
-  @Test
-  @Ignore("Bug - getAllComponentStatusChangeReasonsAsMap only returns one ComponentStatusChangeReason per ComponentStatusChangeReasonCategory")
-  public void testGetAllComponentStatusChangeReasonsAsMap() throws Exception {
-    Map<ComponentStatusChangeReasonCategory, ComponentStatusChangeReason> result = componentStatusChangeReasonRepository
-        .getAllComponentStatusChangeReasonsAsMap();
-    Assert.assertNotNull("Does not return a null map", result);
-    Assert.assertEquals("There are 3 ComponentStatusChangeReasonCategory with ComponentStatusChangeReason", 3, result.size());
   }
   
   @Test
