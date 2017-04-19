@@ -270,6 +270,5 @@
     <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="DonationBatch" constraintName="fk_DonationBatch_ComponentBatch"
       referencedColumnNames="id" referencedTableName="ComponentBatch"/>
 
-
   </changeSet>
 </databaseChangeLog>
