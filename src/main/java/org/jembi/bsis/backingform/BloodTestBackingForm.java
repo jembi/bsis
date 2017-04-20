@@ -6,8 +6,6 @@ import java.util.Set;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class BloodTestBackingForm {
   
   private Long id;
@@ -33,6 +31,8 @@ public class BloodTestBackingForm {
   private Boolean flagComponentsContainingPlasmaForDiscard;
   
   private Boolean flagComponentsForDiscard;
+  
+  private Integer rankInCategory;
 
   public Long getId() {
     return id;
@@ -130,9 +130,12 @@ public class BloodTestBackingForm {
     this.flagComponentsForDiscard = flagComponentsForDiscard;
   }
   
-  @JsonIgnore
-  public void setRankInCategory(int rankInCategory) {
-    // ignore
+  public Integer getRankInCategory() {
+    return rankInCategory;
+  }
+  
+  public void setRankInCategory(Integer rankInCategory) {
+    this.rankInCategory = rankInCategory;
   }
 
 }
