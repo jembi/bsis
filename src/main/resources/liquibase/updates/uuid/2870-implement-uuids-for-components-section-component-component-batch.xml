@@ -2,13 +2,19 @@
   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+  <changeSet id="20170418-1206" author="tumijacob">
+    <comment> Drop and recreate componentBatch_id foreign key in Component Table</comment>
+    <dropForeignKeyConstraint baseTableName="Component" constraintName="fk_Compoment_ComponentBatch" />
+    <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="Component"
+      constraintName="fk_Component_ComponentBatch" referencedColumnNames="id" referencedTableName="ComponentBatch" />
+  </changeSet>
+
   <changeSet id="20170411-1019"  author="tumijacob">
     <comment>This change set migrates the ComponentBatch table from an integer id primary key
         to a UUID of type BINARY(16). </comment>
 
-    <dropForeignKeyConstraint baseTableName="Component" constraintName="fk_Compoment_ComponentBatch"/>
     <dropForeignKeyConstraint baseTableName="BloodTransportBox" constraintName="fk_BloodTransportBox_ComponentBatch"/>
-    
+    <dropForeignKeyConstraint baseTableName="Component" constraintName="fk_Component_ComponentBatch"/>
     <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="fk_DonationBatch_ComponentBatch"/>
 
     <addColumn tableName="ComponentBatch">
@@ -105,7 +111,8 @@
 
     <sql>
       UPDATE ComponentBatch 
-      SET id = GENERATEBINARYUUID();
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
     </sql>
 
     <sql dbms="mysql">
@@ -263,7 +270,7 @@
 
     <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="BloodTransportBox" constraintName="fk_BloodTransportBox_ComponentBatch"
       referencedColumnNames="id" referencedTableName="ComponentBatch"/>
-  
+
     <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="Component" constraintName="fk_Component_ComponentBatch"
       referencedColumnNames="id" referencedTableName="ComponentBatch"/>
 
