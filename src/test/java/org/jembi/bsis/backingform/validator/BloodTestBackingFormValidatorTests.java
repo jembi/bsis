@@ -431,4 +431,24 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
     assertThat(errors.getErrorCount(), is(1));
     assertThat(errors.getFieldError("flagComponentsContainingPlasmaForDiscard").getCode(), is("errors.required"));
   }
+  
+  @Test
+  public void testValidateFormWithInvalidRankInCategory_shouldHaveOneError() {
+    
+ // Set up data
+    BloodTestBackingForm backingForm = getBaseBloodTestBackingForm();
+    backingForm.setRankInCategory(-1);
+
+    // Set up mocks
+    when(bloodTestRepository.isUniqueTestName(null, backingForm.getTestName())).thenReturn(true);
+
+    // Run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTest");
+    bloodTestBackingFormValidator.validateForm(backingForm, errors);
+
+    // Verify
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("RankInCategory").getCode(), is("errors.invalid"));
+    
+  }
 }
