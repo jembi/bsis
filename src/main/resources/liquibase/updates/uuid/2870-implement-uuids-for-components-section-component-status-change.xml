@@ -6,7 +6,6 @@
     <comment>This change set migrates the ComponentStatusChange table from an integer id primary key
         to a UUID of type BINARY(16). </comment>
 
-    
     <addColumn tableName="ComponentStatusChange">
       <column name="id_temp" type="BIGINT" afterColumn="id"/>
     </addColumn>
@@ -41,8 +40,7 @@
 
     <sql>
       UPDATE ComponentStatusChange 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      SET id = GENERATEBINARYUUID();
     </sql>
 
     <sql dbms="mysql">

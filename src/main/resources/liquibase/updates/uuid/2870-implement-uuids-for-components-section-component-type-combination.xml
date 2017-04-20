@@ -63,8 +63,7 @@
 
     <sql>
       UPDATE ComponentTypeCombination 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      SET id = GENERATEBINARYUUID();
     </sql>
 
     <sql dbms="mysql">
@@ -149,6 +148,6 @@
 
     <addForeignKeyConstraint baseColumnNames="producedComponentTypeCombinations_id" baseTableName="ComponentType_ComponentTypeCombination" constraintName="fk_ComponentType_ComponentTypeCombination_ComponentTypeComb"
       referencedColumnNames="id" referencedTableName="ComponentTypeCombination"/>
-
+   
   </changeSet>
 </databaseChangeLog>

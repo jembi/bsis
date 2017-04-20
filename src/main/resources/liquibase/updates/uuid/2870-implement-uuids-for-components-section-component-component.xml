@@ -6,7 +6,6 @@
     <comment>This change set migrates the Component table from an integer id primary key
         to a UUID of type BINARY(16). </comment>
 
-    <dropForeignKeyConstraint baseTableName="Component" constraintName="fk_Compoment_ComponentBatch"/>
     <dropForeignKeyConstraint baseTableName="Component" constraintName="FK50C664CFD946D0A0"/>
     <dropForeignKeyConstraint baseTableName="ComponentStatusChange" constraintName="FKCCE48CB1A8E71476"/>
     <dropForeignKeyConstraint baseTableName="OrderForm_Component" constraintName="fk_OrderForm_Component_Component"/>
@@ -22,7 +21,6 @@
     </addColumn>
 
     <addColumn tableName="Component">
-      <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
       <column name="parentComponent_id_temp" type="BIGINT" afterColumn="parentComponent_id"/>
     </addColumn>
 
@@ -43,7 +41,6 @@
     </addColumn>
 
     <addColumn tableName="Component_AUD">
-      <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
       <column name="parentComponent_id_temp" type="BIGINT" afterColumn="parentComponent_id"/>
     </addColumn>
 
@@ -80,11 +77,6 @@
 
     <sql>
       UPDATE Component_AUD 
-      SET componentBatch_id_temp = componentBatch_id;
-    </sql>
-
-    <sql>
-      UPDATE Component_AUD 
       SET parentComponent_id_temp = parentComponent_id;
     </sql>
 
@@ -106,11 +98,6 @@
     <sql>
       UPDATE Transfusion_AUD 
       SET component_id_temp = component_id;
-    </sql>
-
-    <sql>
-      UPDATE Component 
-      SET componentBatch_id_temp = componentBatch_id;
     </sql>
 
     <sql>
@@ -145,14 +132,12 @@
 
     <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="Component_AUD"/>
 
-    <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="Component"/>
     <modifyDataType columnName="parentComponent_id" newDataType="BINARY(16)" tableName="Component"/>
     <modifyDataType columnName="component_id" newDataType="BINARY(16)" tableName="ComponentStatusChange"/>
     <modifyDataType columnName="component_id" newDataType="BINARY(16)" tableName="OrderForm_Component"/>
     <modifyDataType columnName="component_id" newDataType="BINARY(16)" tableName="ReturnForm_Component"/>
     <modifyDataType columnName="component_id" newDataType="BINARY(16)" tableName="Transfusion"/>
 
-    <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="Component_AUD"/>
     <modifyDataType columnName="parentComponent_id" newDataType="BINARY(16)" tableName="Component_AUD"/>
     <modifyDataType columnName="component_id" newDataType="BINARY(16)" tableName="ComponentStatusChange_AUD"/>
     <modifyDataType columnName="component_id" newDataType="BINARY(16)" tableName="OrderForm_Component_AUD"/>
@@ -161,8 +146,7 @@
 
     <sql>
       UPDATE Component 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      SET id = GENERATEBINARYUUID();
     </sql>
 
     <sql dbms="mysql">
@@ -183,16 +167,6 @@
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
       VIRTUAL AFTER id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Component_AUD ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentBatch_id,  1, 4)),
-        HEX(SUBSTR(componentBatch_id,  5, 2)),
-        HEX(SUBSTR(componentBatch_id,  7, 2)),
-        HEX(SUBSTR(componentBatch_id,  9, 2)),
-        HEX(SUBSTR(componentBatch_id, 11)) )))
-      VIRTUAL AFTER componentBatch_id;
     </sql>
 
     <sql dbms="mysql">
@@ -243,16 +217,6 @@
         HEX(SUBSTR(component_id,  9, 2)),
         HEX(SUBSTR(component_id, 11)) )))
       VIRTUAL AFTER component_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Component ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentBatch_id,  1, 4)),
-        HEX(SUBSTR(componentBatch_id,  5, 2)),
-        HEX(SUBSTR(componentBatch_id,  7, 2)),
-        HEX(SUBSTR(componentBatch_id,  9, 2)),
-        HEX(SUBSTR(componentBatch_id, 11)) )))
-      VIRTUAL AFTER componentBatch_id;
     </sql>
 
     <sql dbms="mysql">
@@ -322,13 +286,6 @@
 
     <sql>
       UPDATE Component AS updateTable
-        LEFT JOIN Component AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
-      SET updateTable.componentBatch_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null; 
-    </sql>
-
-    <sql>
-      UPDATE Component AS updateTable
         LEFT JOIN Component AS joinedTable ON (updateTable.parentComponent_id_temp = joinedTable.id_temp)
       SET updateTable.parentComponent_id = joinedTable.id 
       WHERE joinedTable.id IS NOT null; 
@@ -359,13 +316,6 @@
       UPDATE Transfusion AS updateTable
         LEFT JOIN Component AS joinedTable ON (updateTable.component_id_temp = joinedTable.id_temp)
       SET updateTable.component_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null; 
-    </sql>
-
-    <sql>
-      UPDATE Component_AUD AS updateTable
-        LEFT JOIN Component AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
-      SET updateTable.componentBatch_id = joinedTable.id 
       WHERE joinedTable.id IS NOT null; 
     </sql>
 
@@ -408,8 +358,6 @@
 
     <dropColumn columnName="id_temp" tableName="Component_AUD"/>
 
-    <dropColumn columnName="componentBatch_id_temp" tableName="Component"/>
-
     <dropColumn columnName="parentComponent_id_temp" tableName="Component"/>
 
     <dropColumn columnName="component_id_temp" tableName="ComponentStatusChange"/>
@@ -419,8 +367,6 @@
     <dropColumn columnName="component_id_temp" tableName="ReturnForm_Component"/>
 
     <dropColumn columnName="component_id_temp" tableName="Transfusion"/>
-
-    <dropColumn columnName="componentBatch_id_temp" tableName="Component_AUD"/>
 
     <dropColumn columnName="parentComponent_id_temp" tableName="Component_AUD"/>
 
@@ -432,13 +378,10 @@
 
     <dropColumn columnName="component_id_temp" tableName="Transfusion_AUD"/>
 
-    <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="Component" constraintName="fk_Compoment_ComponentBatch"
+    <addForeignKeyConstraint baseColumnNames="parentComponent_id" baseTableName="Component" constraintName="fk_parentComponent_Component"
       referencedColumnNames="id" referencedTableName="Component"/>
 
-    <addForeignKeyConstraint baseColumnNames="parentComponent_id" baseTableName="Component" constraintName="FK50C664CFD946D0A0"
-      referencedColumnNames="id" referencedTableName="Component"/>
-
-    <addForeignKeyConstraint baseColumnNames="component_id" baseTableName="ComponentStatusChange" constraintName="FKCCE48CB1A8E71476"
+    <addForeignKeyConstraint baseColumnNames="component_id" baseTableName="ComponentStatusChange" constraintName="fk_ComponentStatusChange_Component"
       referencedColumnNames="id" referencedTableName="Component"/>
 
     <addForeignKeyConstraint baseColumnNames="component_id" baseTableName="OrderForm_Component" constraintName="fk_OrderForm_Component_Component"
