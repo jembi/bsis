@@ -6,9 +6,7 @@
     <comment>This change set migrates the ComponentBatch table from an integer id primary key
         to a UUID of type BINARY(16). </comment>
 
-    <dropForeignKeyConstraint baseTableName="Component" constraintName="fk_Compoment_ComponentBatch"/>
     <dropForeignKeyConstraint baseTableName="BloodTransportBox" constraintName="fk_BloodTransportBox_ComponentBatch"/>
-    
     <dropForeignKeyConstraint baseTableName="DonationBatch" constraintName="fk_DonationBatch_ComponentBatch"/>
 
     <addColumn tableName="ComponentBatch">
@@ -23,19 +21,11 @@
       <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
     </addColumn>
 
-    <addColumn tableName="Component">
-      <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
-    </addColumn>
-
     <addColumn tableName="DonationBatch">
       <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
     </addColumn>
 
     <addColumn tableName="BloodTransportBox_AUD">
-      <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
-    </addColumn>
-
-    <addColumn tableName="Component_AUD">
       <column name="componentBatch_id_temp" type="BIGINT" afterColumn="componentBatch_id"/>
     </addColumn>
 
@@ -64,22 +54,12 @@
     </sql>
 
     <sql>
-      UPDATE Component_AUD 
-      SET componentBatch_id_temp = componentBatch_id;
-    </sql>
-
-    <sql>
       UPDATE DonationBatch_AUD 
       SET componentBatch_id_temp = componentBatch_id;
     </sql>
 
     <sql>
       UPDATE BloodTransportBox 
-      SET componentBatch_id_temp = componentBatch_id;
-    </sql>
-
-    <sql>
-      UPDATE Component 
       SET componentBatch_id_temp = componentBatch_id;
     </sql>
 
@@ -96,16 +76,15 @@
     <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="ComponentBatch_AUD"/>
 
     <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="BloodTransportBox"/>
-    <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="Component"/>
     <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="DonationBatch"/>
 
     <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="BloodTransportBox_AUD"/>
-    <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="Component_AUD"/>
     <modifyDataType columnName="componentBatch_id" newDataType="BINARY(16)" tableName="DonationBatch_AUD"/>
 
     <sql>
       UPDATE ComponentBatch 
-      SET id = GENERATEBINARYUUID();
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
     </sql>
 
     <sql dbms="mysql">
@@ -139,16 +118,6 @@
     </sql>
 
     <sql dbms="mysql">
-      ALTER TABLE Component_AUD ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentBatch_id,  1, 4)),
-        HEX(SUBSTR(componentBatch_id,  5, 2)),
-        HEX(SUBSTR(componentBatch_id,  7, 2)),
-        HEX(SUBSTR(componentBatch_id,  9, 2)),
-        HEX(SUBSTR(componentBatch_id, 11)) )))
-      VIRTUAL AFTER componentBatch_id;
-    </sql>
-
-    <sql dbms="mysql">
       ALTER TABLE DonationBatch_AUD ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
         HEX(SUBSTR(componentBatch_id,  1, 4)),
         HEX(SUBSTR(componentBatch_id,  5, 2)),
@@ -160,16 +129,6 @@
 
     <sql dbms="mysql">
       ALTER TABLE BloodTransportBox ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentBatch_id,  1, 4)),
-        HEX(SUBSTR(componentBatch_id,  5, 2)),
-        HEX(SUBSTR(componentBatch_id,  7, 2)),
-        HEX(SUBSTR(componentBatch_id,  9, 2)),
-        HEX(SUBSTR(componentBatch_id, 11)) )))
-      VIRTUAL AFTER componentBatch_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Component ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
         HEX(SUBSTR(componentBatch_id,  1, 4)),
         HEX(SUBSTR(componentBatch_id,  5, 2)),
         HEX(SUBSTR(componentBatch_id,  7, 2)),
@@ -211,13 +170,6 @@
     </sql>
 
     <sql>
-      UPDATE Component AS updateTable
-        LEFT JOIN ComponentBatch AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
-      SET updateTable.componentBatch_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null; 
-    </sql>
-
-    <sql>
       UPDATE DonationBatch AS updateTable
         LEFT JOIN ComponentBatch AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
       SET updateTable.componentBatch_id = joinedTable.id 
@@ -226,13 +178,6 @@
 
     <sql>
       UPDATE BloodTransportBox_AUD AS updateTable
-        LEFT JOIN ComponentBatch AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
-      SET updateTable.componentBatch_id = joinedTable.id 
-      WHERE joinedTable.id IS NOT null; 
-    </sql>
-
-    <sql>
-      UPDATE Component_AUD AS updateTable
         LEFT JOIN ComponentBatch AS joinedTable ON (updateTable.componentBatch_id_temp = joinedTable.id_temp)
       SET updateTable.componentBatch_id = joinedTable.id 
       WHERE joinedTable.id IS NOT null; 
@@ -251,24 +196,18 @@
 
     <dropColumn columnName="componentBatch_id_temp" tableName="BloodTransportBox"/>
 
-    <dropColumn columnName="componentBatch_id_temp" tableName="Component"/>
-
     <dropColumn columnName="componentBatch_id_temp" tableName="DonationBatch"/>
 
     <dropColumn columnName="componentBatch_id_temp" tableName="BloodTransportBox_AUD"/>
-
-    <dropColumn columnName="componentBatch_id_temp" tableName="Component_AUD"/>
 
     <dropColumn columnName="componentBatch_id_temp" tableName="DonationBatch_AUD"/>
 
     <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="BloodTransportBox" constraintName="fk_BloodTransportBox_ComponentBatch"
       referencedColumnNames="id" referencedTableName="ComponentBatch"/>
-  
-    <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="Component" constraintName="fk_Component_ComponentBatch"
-      referencedColumnNames="id" referencedTableName="ComponentBatch"/>
 
     <addForeignKeyConstraint baseColumnNames="componentBatch_id" baseTableName="DonationBatch" constraintName="fk_DonationBatch_ComponentBatch"
       referencedColumnNames="id" referencedTableName="ComponentBatch"/>
+
 
   </changeSet>
 </databaseChangeLog>
