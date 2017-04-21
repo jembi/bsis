@@ -146,7 +146,8 @@
 
     <sql>
       UPDATE Component 
-      SET id = GENERATEBINARYUUID();
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
     </sql>
 
     <sql dbms="mysql">
@@ -392,6 +393,7 @@
 
     <addForeignKeyConstraint baseColumnNames="component_id" baseTableName="Transfusion" constraintName="fk_Transfusion_component"
       referencedColumnNames="id" referencedTableName="Component"/>
+
 
   </changeSet>
 </databaseChangeLog>

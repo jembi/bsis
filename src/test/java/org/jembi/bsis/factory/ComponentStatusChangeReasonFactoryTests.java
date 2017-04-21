@@ -1,9 +1,15 @@
 package org.jembi.bsis.factory;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aComponentStatusChangeReason;
 import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aDiscardReason;
+import static org.jembi.bsis.helpers.builders.DiscardReasonBackingFormBuilder.aDiscardReasonBackingForm;
+import static org.jembi.bsis.helpers.matchers.ComponentStatusChangeReasonMatcher.hasSameStateAsComponentStatusChangeReason;
 
-import org.jembi.bsis.factory.ComponentStatusChangeReasonFactory;
+import java.util.UUID;
+
+import org.jembi.bsis.backingform.DiscardReasonBackingForm;
+
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.jembi.bsis.viewmodel.DiscardReasonViewModel;
@@ -23,7 +29,7 @@ public class ComponentStatusChangeReasonFactoryTests {
   public void testCreateDiscardReasonViewModel_shouldReturnExpectedViewModel() {
     
     ComponentStatusChangeReason entity = aDiscardReason()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withStatusChangeReason("reason").build();
     
     DiscardReasonViewModel viewModel = componentStatusChangeReasonFactory.createDiscardReasonViewModel(entity);
@@ -41,5 +47,23 @@ public class ComponentStatusChangeReasonFactoryTests {
 
     componentStatusChangeReasonFactory.createDiscardReasonViewModel(entity);
 
+  }
+
+  @Test
+  public void testCreateDiscardReasonEntity_returnEntity() {
+    UUID discardReason = UUID.randomUUID();
+    DiscardReasonBackingForm form = aDiscardReasonBackingForm()
+        .withId(discardReason)
+        .withReason("REASON")
+        .thatIsNotDeleted()
+        .build();
+    ComponentStatusChangeReason expectedEntity = aDiscardReason()
+        .withId(discardReason)
+        .withStatusChangeReason("REASON")
+        .withComponentStatusChangeReasonCategory(ComponentStatusChangeReasonCategory.DISCARDED)
+        .thatIsNotDeleted()
+        .build();
+    ComponentStatusChangeReason entity = componentStatusChangeReasonFactory.createDiscardReasonEntity(form);
+    assertThat(entity, hasSameStateAsComponentStatusChangeReason(expectedEntity));
   }
 }

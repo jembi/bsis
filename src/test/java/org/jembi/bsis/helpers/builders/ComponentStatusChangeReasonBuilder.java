@@ -1,18 +1,20 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonType;
 
 public class ComponentStatusChangeReasonBuilder extends AbstractEntityBuilder<ComponentStatusChangeReason> {
 
-  private Long id;
+  private UUID id;
   private String statusChangeReason;
   private ComponentStatusChangeReasonCategory category;
   private Boolean isDeleted = false;
   private ComponentStatusChangeReasonType type = ComponentStatusChangeReasonType.INVALID_WEIGHT;
 
-  public ComponentStatusChangeReasonBuilder withId(Long id) {
+  public ComponentStatusChangeReasonBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
@@ -30,6 +32,16 @@ public class ComponentStatusChangeReasonBuilder extends AbstractEntityBuilder<Co
 
   public ComponentStatusChangeReasonBuilder withComponentStatusChangeReasonType(ComponentStatusChangeReasonType type) {
     this.type = type;
+    return this;
+  }
+
+  public ComponentStatusChangeReasonBuilder thatIsDeleted() {
+    this.isDeleted = Boolean.TRUE;
+    return this;
+  }
+
+  public ComponentStatusChangeReasonBuilder thatIsNotDeleted() {
+    this.isDeleted = Boolean.FALSE;
     return this;
   }
 

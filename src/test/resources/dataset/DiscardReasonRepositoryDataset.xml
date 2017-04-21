@@ -1,31 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-    <ComponentStatusChangeReason id="1" category="DISCARDED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e231'" category="DISCARDED"
                                  isDeleted="false" statusChangeReason="Incomplete Donation"/>
-    <ComponentStatusChangeReason id="2" category="DISCARDED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e232'" category="DISCARDED"
                                  isDeleted="false" statusChangeReason="Processing Problems"/>
-    <ComponentStatusChangeReason id="3" category="DISCARDED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e233'" category="DISCARDED"
                                  isDeleted="false" statusChangeReason="Passed Expiry Dates"/>
-    <ComponentStatusChangeReason id="4" category="DISCARDED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e234'" category="DISCARDED"
                                  isDeleted="false" statusChangeReason="Reactive FOR TTIs"/>
-    <ComponentStatusChangeReason id="5" category="DISCARDED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e235'" category="DISCARDED"
                                  isDeleted="false" statusChangeReason="Storage Problems"/>
-    <ComponentStatusChangeReason id="6" category="DISCARDED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e236'" category="DISCARDED"
                                  isDeleted="false" statusChangeReason="Transport Problems"/>
-    <ComponentStatusChangeReason id="7" category="RETURNED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e237'" category="RETURNED"
                                  isDeleted="false" statusChangeReason="Expired"/>
-    <ComponentStatusChangeReason id="8" category="RETURNED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e238'" category="RETURNED"
                                  isDeleted="false" statusChangeReason="Not required"/>
-    <ComponentStatusChangeReason id="9" category="RETURNED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e239'" category="RETURNED"
                                  isDeleted="false" statusChangeReason="Incorrect Component Sent"/>
-    <ComponentStatusChangeReason id="10" category="RETURNED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e210'" category="RETURNED"
                                  isDeleted="false"
                                  statusChangeReason="Did not crossmatch with patient sample"/>
-    <ComponentStatusChangeReason id="11" category="SPLIT"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e211'" category="SPLIT"
                                  isDeleted="false" statusChangeReason="Split"/>
-    <ComponentStatusChangeReason id="12" category="DISCARDED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e212'" category="DISCARDED"
                                  isDeleted="true" statusChangeReason="Deleted reason 1"/>
-    <ComponentStatusChangeReason id="13" category="DISCARDED"
+    <ComponentStatusChangeReason id="uuid'b827d865-abfe-41ad-98e4-60514148e213'" category="DISCARDED"
                                  isDeleted="true" statusChangeReason="Deleted reason 2"/>
                                   
 </dataset>

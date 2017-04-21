@@ -372,7 +372,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testDiscardComponent() throws Exception {
     // set up data
     Component component = aComponent().withId(COMPONENT_ID_1).build();
-    Long discardReasonId = 1L;
+    UUID discardReasonId = UUID.randomUUID();
     String reasonText = "junit";
     
     // set up mocks
@@ -380,7 +380,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.update(component)).thenReturn(component);
     
     // run test
-    componentCRUDService.discardComponent(COMPONENT_ID_1, 1L, reasonText);
+    componentCRUDService.discardComponent(COMPONENT_ID_1, discardReasonId, reasonText);
     
     // check asserts
     Assert.assertEquals("Component status is discarded", ComponentStatus.DISCARDED, component.getStatus());
@@ -400,7 +400,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Component component2 = aComponent().withStatus(ComponentStatus.DISCARDED).withId(COMPONENT_ID_2).build();
     Component component3 = aComponent().withStatus(ComponentStatus.DISCARDED).withId(COMPONENT_ID_3).build();
     List<UUID> componentIds = Arrays.asList(COMPONENT_ID_1,COMPONENT_ID_2,COMPONENT_ID_3);
-    Long discardReasonId = 1L;
+    UUID discardReasonId = UUID.randomUUID();
     String reasonText = "junit";
 
     // set up mocks (because we already tested discardComponent we use a "spy" mockup of
@@ -421,6 +421,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testDiscardInStockComponent() throws Exception {
     // set up data
+    UUID discardReasonId = UUID.randomUUID();
     Component component = aComponent().withId(COMPONENT_ID_1).withInventoryStatus(InventoryStatus.IN_STOCK).build();
     
     // set up mocks
@@ -428,7 +429,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentRepository.update(component)).thenReturn(component);
     
     // run test
-    componentCRUDService.discardComponent(COMPONENT_ID_1, 1L, "junit");
+    componentCRUDService.discardComponent(COMPONENT_ID_1, discardReasonId, "junit");
     
     // check asserts
     Assert.assertEquals("Component is now removed from stock", InventoryStatus.REMOVED, component.getInventoryStatus());
@@ -717,7 +718,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withLocation(location)
         .withComponentStatusChange(aComponentStatusChange()
             .withId(componentStatusChangeId)
-            .withStatusChangeReason(aComponentStatusChangeReason().withId(1L).build())
+            .withStatusChangeReason(aComponentStatusChangeReason()
+                .withId(UUID.randomUUID()).build())
             .build())
         .build();
     
@@ -1314,7 +1316,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withStatus(ComponentStatus.UNSAFE)
         .withComponentStatusChange(aComponentStatusChange()
             .withId(UUID.randomUUID())
-            .withStatusChangeReason(aComponentStatusChangeReason().withId(27L).build())
+            .withStatusChangeReason(aComponentStatusChangeReason()
+                .withId(UUID.randomUUID()).build())
             .build())
         .withDonation(donation)
         .build();
@@ -1352,7 +1355,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withStatus(ComponentStatus.UNSAFE)
         .withComponentStatusChange(aComponentStatusChange()
             .withId(componentStatusChangeId)
-            .withStatusChangeReason(aComponentStatusChangeReason().withId(27L).build())
+            .withStatusChangeReason(aComponentStatusChangeReason()
+                .withId(UUID.randomUUID()).build())
             .build())
         .withDonation(donation)
         .build();
@@ -1388,7 +1392,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withStatus(ComponentStatus.UNSAFE)
         .withComponentStatusChange(aComponentStatusChange()
             .withId(UUID.randomUUID())
-            .withStatusChangeReason(aComponentStatusChangeReason().withId(27L).build())
+            .withStatusChangeReason(aComponentStatusChangeReason()
+                .withId(UUID.randomUUID()).build())
             .build())
         .withDonation(donation)
         .build();

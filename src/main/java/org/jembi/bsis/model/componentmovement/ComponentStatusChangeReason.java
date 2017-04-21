@@ -8,7 +8,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseUUIDEntity;
 import org.jembi.bsis.repository.constant.ComponentStatusChangeReasonNamedQueryConstants;
 
 @NamedQueries({
@@ -21,7 +21,7 @@ import org.jembi.bsis.repository.constant.ComponentStatusChangeReasonNamedQueryC
 })
 @Entity
 @Audited
-public class ComponentStatusChangeReason extends BaseEntity {
+public class ComponentStatusChangeReason extends BaseUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

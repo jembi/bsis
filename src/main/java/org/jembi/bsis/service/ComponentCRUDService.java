@@ -333,7 +333,7 @@ public class ComponentCRUDService {
     }
   }
 
-  public void discardComponents(List<UUID> componentIds, Long discardReasonId, String discardReasonText) {
+  public void discardComponents(List<UUID> componentIds, UUID discardReasonId, String discardReasonText) {
     for (UUID id : componentIds) {
       discardComponent(id, discardReasonId, discardReasonText);
     }
@@ -346,7 +346,7 @@ public class ComponentCRUDService {
     return componentRepository.update(component);
   }
 
-  public Component discardComponent(UUID componentId, Long discardReasonId, String discardReasonText) {
+  public Component discardComponent(UUID componentId, UUID discardReasonId, String discardReasonText) {
     Component existingComponent = componentRepository.findComponentById(componentId);
     
     // update existing component status
