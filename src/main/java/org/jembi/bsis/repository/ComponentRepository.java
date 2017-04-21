@@ -32,7 +32,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
   @PersistenceContext
   private EntityManager em;
 
-  public List<Component> findAnyComponent(List<Long> componentTypes, ComponentStatus status,
+  public List<Component> findAnyComponent(List<UUID> componentTypes, ComponentStatus status,
       Date donationDateFrom, Date donationDateTo, UUID locationId) {
 
     boolean includeComponentTypes = true, includeStatus = true;
@@ -102,7 +102,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
     query.executeUpdate();
   }
 
-  public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, long componentTypeId) {
+  public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, UUID componentTypeId) {
     String queryStr = "SELECT c from Component c WHERE " +
         "(c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
         "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) AND " +
@@ -197,7 +197,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .getResultList();
   }
 
-  public List<Component> findSafeComponents(Long componentTypeId, UUID locationId, List<BloodGroup> bloodGroups,
+  public List<Component> findSafeComponents(UUID componentTypeId, UUID locationId, List<BloodGroup> bloodGroups,
       Date startDate, Date endDate, InventoryStatus inventoryStatus, boolean includeInitialComponents) {
     boolean includeBloodGroups = true;
     List<String> stringBloodGroups = null;
@@ -216,10 +216,16 @@ public class ComponentRepository extends AbstractRepository<Component> {
       includeAllLocations = true;
     }
 
+    boolean includeAllComponents = false;
+    if (componentTypeId == null) {
+      includeAllComponents = true;
+    }
+
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SAFE_COMPONENTS, Component.class)
         .setParameter("locationId", locationId)
         .setParameter("includeAllLocations", includeAllLocations)
         .setParameter("componentTypeId", componentTypeId)
+        .setParameter("includeAllComponents", includeAllComponents)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("includeBloodGroups", includeBloodGroups)

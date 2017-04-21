@@ -238,7 +238,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     UUID usageSiteId = UUID.randomUUID();
     UUID transfusionId = UUID.randomUUID();
-    Long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -311,7 +311,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     UUID usageSiteId = UUID.randomUUID();
     UUID transfusionId = UUID.randomUUID();
-    Long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
@@ -384,7 +384,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
-    long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withDonationIdentificationNumber(din)
         .withComponentType(aComponentTypeBackingForm().withId(componentTypeId).build())
@@ -421,7 +421,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     Date componentCreatedOnDate = (new DateTime()).minusDays(10).toDate();
 
-    long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
 
     List<Component> components = new ArrayList<Component>();
     components.add(aComponent()
@@ -559,7 +559,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
-    long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withDonationIdentificationNumber(din)
         .withComponentType(aComponentTypeBackingForm().withId(componentTypeId).build())
@@ -604,7 +604,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
-    long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withDonationIdentificationNumber(din)
         .withComponentType(aComponentTypeBackingForm().withId(componentTypeId).build())
@@ -667,7 +667,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
-    long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withDonationIdentificationNumber(din)
         .withComponentType(aComponentTypeBackingForm().withId(componentTypeId).build())
@@ -833,11 +833,12 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
 
     Date componentCreatedOnDate = (new DateTime()).minusDays(10).toDate();
 
+    UUID componetTypeId = UUID.randomUUID();
     List<Component> components = new ArrayList<Component>();
     components.add(aComponent()
         .withId(COMPONENT_ID)
         .withComponentCode(componentCode)
-        .withComponentType(aComponentType().withId(2L).build())
+        .withComponentType(aComponentType().withId(componetTypeId).build())
         .withStatus(ComponentStatus.ISSUED)
         .withCreatedOn(componentCreatedOnDate)
         .build());
@@ -850,11 +851,12 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     UUID usageSiteId = UUID.randomUUID();
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
+    UUID differentComponetTypeId = UUID.randomUUID();
 
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withDonationIdentificationNumber(din)
         .withComponentCode(componentCode)
-        .withComponentType(aComponentTypeBackingForm().withId(1L).build())
+        .withComponentType(aComponentTypeBackingForm().withId(differentComponetTypeId).build())
         .withDateTransfused(transfusedDate)
         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
         .withReceivedFrom(aUsageSite)
@@ -867,15 +869,15 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "transfusion");
 
     when(donationRepository.findDonationByDonationIdentificationNumber(din)).thenReturn(donation);
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
+    when(componentTypeRepository.verifyComponentTypeExists(differentComponetTypeId)).thenReturn(true);
     when(componentRepository.findComponentByCodeAndDIN(componentCode, din)).thenReturn(aComponent()
         .withId(COMPONENT_ID)
         .withComponentCode(componentCode)
-        .withComponentType(aComponentType().withId(1L).build())
+        .withComponentType(aComponentType().withId(differentComponetTypeId).build())
         .withStatus(ComponentStatus.ISSUED)
         .withCreatedOn(componentCreatedOnDate)
         .build());
-    when(componentRepository.findComponentsByDINAndType(din, 1L)).thenReturn(components);
+    when(componentRepository.findComponentsByDINAndType(din, differentComponetTypeId)).thenReturn(components);
     when(locationRepository.getLocation(usageSiteId)).thenReturn(aUsageSiteLocation);
     setupDateGeneratorServiceMocks(transfusedDate, componentCreatedOnDate);
 
@@ -965,7 +967,7 @@ public class TransfusionBackingFormValidatorTests extends UnitTestSuite {
     Location aUsageSiteLocation = aUsageSite().withId(usageSiteId).build();
     LocationBackingForm aUsageSite = aUsageSiteBackingForm().withId(usageSiteId).build();
 
-    long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
     TransfusionBackingForm form = aTransfusionBackingForm()
         .withDonationIdentificationNumber(din)
         .withComponentType(aComponentTypeBackingForm().withId(componentTypeId).build())

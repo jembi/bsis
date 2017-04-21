@@ -186,75 +186,75 @@
 	<DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType="Family" isDeleted="false" />
 	<DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" donationType="Autologous" isDeleted="false" />
 	<DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" donationType="Other" isDeleted="false" />
-	<ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a01'" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood Single Pack - CPDA" componentTypeCode="0011"
 		containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="2" description="" expiresAfter="35"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a02'" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood Double Pack - CPDA" componentTypeCode="0012"
 		containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="3" description="" expiresAfter="35"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a03'" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood Triple Pack - CPDA" componentTypeCode="0013"
 		containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="4" description="" expiresAfter="35"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a04'" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood Quad Pack - CPDA" componentTypeCode="0014"
 		containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="5" description="" expiresAfter="5"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a05'" description="" expiresAfter="5"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Apheresis" componentTypeCode="0021" containsPlasma="true"/>
-	<ComponentType canBeIssued="true" id="6" description="" expiresAfter="35"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a06'" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood - CPDA" componentTypeCode="1001"
 		containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="7" description="" expiresAfter="35"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Whole Blood Poor Platelets - CPDA"
 		componentTypeCode="1005" containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="8" description="" expiresAfter="35"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a08'" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Packed Red Cells - CPDA" componentTypeCode="2001"
 		containsPlasma="false" />
-	<ComponentType canBeIssued="true" id="9" description="" expiresAfter="42"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a09'" description="" expiresAfter="42"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Packed Red Cells - SAGM" componentTypeCode="2011"
 		containsPlasma="false" />
-	<ComponentType canBeIssued="true" id="10" description="" expiresAfter="365"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a10'" description="" expiresAfter="365"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Fresh Frozen Plasma - Whole Blood"
 		componentTypeCode="3001" containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="11" description="" expiresAfter="365"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a11'" description="" expiresAfter="365"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Frozen Plasma - Whole Blood" componentTypeCode="3002"
 		containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="12" description="" expiresAfter="5"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a12'" description="" expiresAfter="5"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Platelets Concentrate - Whole Blood"
 		componentTypeCode="4001" containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="13" description="" expiresAfter="1"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a13'" description="" expiresAfter="1"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Platelets Concentrate - Whole Blood - 24H"
 		componentTypeCode="4011" containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="14" description="" expiresAfter="35"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a14'" description="" expiresAfter="35"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Packed Red Cells - Paediatric - CPDA"
 		componentTypeCode="2101" containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="15" description="" expiresAfter="365"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a15'" description="" expiresAfter="365"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Fresh Frozen Plasma - Apheresis"
 		componentTypeCode="3011" containsPlasma="true" />
-	<ComponentType canBeIssued="true" id="16" description="" expiresAfter="5"
+	<ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a16'" description="" expiresAfter="5"
 		expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
 		componentTypeName="Platelets Concentrate - Apheresis"
 		componentTypeCode="4021" containsPlasma="true" />
 	<PackType id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" packType="Single" isDeleted="false" testSampleProduced="true"
-		componentType_id="1" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a01'" countAsDonation="true" periodBetweenDonations="90" />
 	<PackType id="uuid'a60fc65c-8877-45d3-b31b-a374e43019a3'" packType="Double" isDeleted="false" testSampleProduced="true"
-		componentType_id="2" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a02'" countAsDonation="true" periodBetweenDonations="90" />
 	<PackType id="uuid'52b78158-af2d-42af-bf98-64e9d8911249'" packType="Triple" isDeleted="false" testSampleProduced="true"
-		componentType_id="3" countAsDonation="true" periodBetweenDonations="90" />
+		componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a03'" countAsDonation="true" periodBetweenDonations="90" />
 
 	<Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="uuid'55321456-eeee-1234-b5b1-123412348891'" isDeleted="false" isVenue="true"
 		isMobileSite="false" isUsageSite="false" name="Maseru" notes="" />
@@ -705,29 +705,29 @@
 	<Component location_id="uuid'55321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4901'" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"
 		isDeleted="false" createdDate="2015-02-02 03:42:04.0" lastUpdated="2015-02-02 03:42:32.0"
 		status="PROCESSED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-		lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" componentType_id="3" componentCode="1234567-0013" />
+		lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a03'" componentCode="1234567-0013" />
 	<Component location_id="uuid'55321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4902'" createdOn="2015-02-02 03:42:31.0" expiresOn="2015-02-07 00:00:00.0"
 		isDeleted="false" createdDate="2015-02-07 00:06:53.0" lastUpdated="2015-02-06 02:09:23.0"
 		status="EXPIRED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-		lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" parentComponent_id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4901'" componentType_id="12"
+		lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" parentComponent_id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4901'" componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a12'"
 		componentCode="1234567-4001" />
 	<Component location_id="uuid'55321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4903'" createdOn="2015-02-02 03:42:31.0" expiresOn="2016-02-02 00:00:00.0"
 		isDeleted="false" createdDate="2015-02-02 03:42:31.0" lastUpdated="2015-02-06 02:09:23.0"
 		status="AVAILABLE" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-		lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" parentComponent_id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4901'" componentType_id="10"
+		lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" parentComponent_id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4901'" componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a10'"
 		componentCode="1234567-3001" />
 	<Component location_id="uuid'55321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4904'" createdOn="2015-02-02 03:42:32.0" discardedOn="2015-06-29 05:49:00.0"
 		expiresOn="2015-03-16 00:00:00.0" isDeleted="false" createdDate="2015-03-16 00:09:35.0"
 		lastUpdated="2015-06-29 05:49:00.0" status="DISCARDED"
 		donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-		parentComponent_id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4901'" componentType_id="9" componentCode="1234567-2011" />
+		parentComponent_id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4901'" componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a09'" componentCode="1234567-2011" />
 	<Component location_id="uuid'55321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4905'" createdOn="2015-02-02 14:53:37.0" expiresOn="2015-03-09 14:53:37.0"
 		isDeleted="false" createdDate="2015-02-18 07:53:57.0" lastUpdated="2015-04-24 04:42:49.0"
 		status="EXPIRED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-		lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" componentType_id="1" componentCode="1212129-0011" />
+		lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a01'" componentCode="1212129-0011" />
 	<Component location_id="uuid'55321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4906'" createdOn="2015-06-26 11:24:30.0" expiresOn="2015-07-31 11:24:30.0"
 		isDeleted="false" createdDate="2015-06-29 05:24:35.0" lastUpdated="2015-06-29 05:24:35.0"
 		status="QUARANTINED" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a3'" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
-		lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" componentType_id="1" componentCode="9090908-0011" />
+		lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a01'" componentCode="9090908-0011" />
 
 </dataset>

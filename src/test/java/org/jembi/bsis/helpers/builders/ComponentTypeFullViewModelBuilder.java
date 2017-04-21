@@ -2,6 +2,7 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 import org.jembi.bsis.viewmodel.ComponentTypeCombinationViewModel;
@@ -9,7 +10,7 @@ import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 
 public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<ComponentTypeFullViewModel> {
 
-  private Long Id;
+  private UUID Id;
   private String componentTypeName;
   private String componentTypeCode;
   private String description;
@@ -26,7 +27,7 @@ public class ComponentTypeFullViewModelBuilder extends AbstractBuilder<Component
   private List<ComponentTypeCombinationViewModel> producedComponentTypeCombinations = new ArrayList<>();
   private boolean containsPlasma = false;
 
-  public ComponentTypeFullViewModelBuilder withId(Long Id) {
+  public ComponentTypeFullViewModelBuilder withId(UUID Id) {
     this.Id = Id;
     return this;
   }

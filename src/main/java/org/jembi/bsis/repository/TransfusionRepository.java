@@ -30,7 +30,7 @@ public class TransfusionRepository extends AbstractRepository<Transfusion> {
         .getSingleResult();
   }
 
-  public List<Transfusion> findTransfusions(Long componentTypeId, UUID receivedFromId,
+  public List<Transfusion> findTransfusions(UUID componentTypeId, UUID receivedFromId,
       TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
 
     boolean includeTransfusionOutcome = true;
@@ -43,9 +43,15 @@ public class TransfusionRepository extends AbstractRepository<Transfusion> {
       includeAllLocations = true;
     }
 
+    boolean includeAllComponentTypes = false;
+    if (componentTypeId == null) {
+      includeAllComponentTypes = true;
+    }
+
     return entityManager.createNamedQuery(
         TransfusionNamedQueryConstants.NAME_FIND_TRANSFUSIONS, Transfusion.class)
         .setParameter("componentTypeId", componentTypeId)
+        .setParameter("includeAllComponentTypes", includeAllComponentTypes)
         .setParameter("includeAllLocations", includeAllLocations)
         .setParameter("receivedFromId", receivedFromId)
         .setParameter("includeTransfusionOutcome", includeTransfusionOutcome)

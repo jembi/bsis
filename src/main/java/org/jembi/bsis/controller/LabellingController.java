@@ -39,7 +39,7 @@ public class LabellingController {
   @RequestMapping(value = "/donations/{din}/components", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> findlotRelease(@PathVariable String din,
-      @RequestParam(required = true, value = "componentType") long componentTypeId) {
+      @RequestParam(required = true, value = "componentType") UUID componentTypeId) {
     Map<String, Object> componentMap = new HashMap<String, Object>();
     componentMap.put("donationNumber", din);
     componentMap.put("components", labellingControllerService.getComponentsForLabelling(din, componentTypeId));
@@ -50,7 +50,7 @@ public class LabellingController {
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public Map<String, Object> findSafeComponents(@RequestParam(required = false) String donationIdentificationNumber, 
       @RequestParam(required = false) String componentCode, 
-      @RequestParam(required = false) Long componentTypeId, 
+      @RequestParam(required = false) UUID componentTypeId, 
       @RequestParam(required = false) UUID locationId,
       @RequestParam(required = false) List<String> bloodGroups, 
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate, 

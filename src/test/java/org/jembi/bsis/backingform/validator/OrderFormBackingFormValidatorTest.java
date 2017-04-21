@@ -101,8 +101,9 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     backingForm.setBloodGroup("A+");
     backingForm.setNumberOfUnits(22);
+    UUID componentTypdId = UUID.randomUUID();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setId(1L);
+    componentType.setId(componentTypdId);
     backingForm.setComponentType(componentType);
     return backingForm;
   }

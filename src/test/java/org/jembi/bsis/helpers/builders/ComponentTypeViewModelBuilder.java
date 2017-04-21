@@ -1,17 +1,19 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 
 public class ComponentTypeViewModelBuilder extends AbstractBuilder<ComponentTypeViewModel> {
 
-  private Long id;
+  private UUID id;
   private String componentTypeName;
   private String componentTypeCode;
   private String description;
   private Integer maxBleedTime;
   private Integer maxTimeSinceDonation;
 
-  public ComponentTypeViewModelBuilder withId(Long id) {
+  public ComponentTypeViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

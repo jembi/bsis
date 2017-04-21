@@ -67,7 +67,8 @@ public class InventoryFactoryTests {
     // Setup
     Date createdOn = new Date();
     UUID locationId = UUID.randomUUID();
-    ComponentType aComponentType = aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentType aComponentType = aComponentType().withId(componentTypeId).build();
     Component component = aComponent()
         .withComponentType(aComponentType)
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
@@ -81,7 +82,7 @@ public class InventoryFactoryTests {
     when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
 
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
@@ -140,7 +141,8 @@ public class InventoryFactoryTests {
     // Setup
     Date createdOn = new Date();
     UUID locationId = UUID.randomUUID();
-    ComponentType aComponentType = aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentType aComponentType = aComponentType().withId(componentTypeId).build();
     Component component = aComponent()
         .withId(COMPONENT_ID_1)
         .withComponentType(aComponentType)
@@ -152,7 +154,7 @@ public class InventoryFactoryTests {
 
     // Setup mocks
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
 
     LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
@@ -196,7 +198,8 @@ public class InventoryFactoryTests {
     // Setup
     Date createdOn = new Date();
     UUID locationId = UUID.randomUUID();
-    ComponentType aComponentType = aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentType aComponentType = aComponentType().withId(componentTypeId).build();
     Component component = aComponent()
         .withId(COMPONENT_ID_1)
         .withComponentType(aComponentType)
@@ -209,7 +212,7 @@ public class InventoryFactoryTests {
     // Setup mocks
     LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
 
     InventoryFullViewModel expectedFullViewModel =

@@ -79,9 +79,9 @@ public class ComponentFactoryTests {
     Location location = aLocation().withId(locationId).build();
 
     Component parentComponent = aComponent().withId(COMPONENT_ID_2).build();
-    
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId)
         .withComponentTypeName("name")
         .withComponentTypeCode("0000")
         .build();
@@ -218,9 +218,10 @@ public class ComponentFactoryTests {
         .withDonation(donation)
         .withParentComponent(initialComponent)
         .build();
-    
+
+    UUID componentTypeId2 = UUID.randomUUID();
     ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
-        .withId(2L)
+        .withId(componentTypeId2)
         .build();
     
     ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
@@ -288,8 +289,9 @@ public class ComponentFactoryTests {
         .withParentComponent(initialComponent)
         .build();
 
+    UUID componentTypeId2 = UUID.randomUUID();
     ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
-        .withId(2L)
+        .withId(componentTypeId2)
         .build();
 
     ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
@@ -336,8 +338,9 @@ public class ComponentFactoryTests {
   @Test
   public void createManagementViewModelForInitialComponent_viewModelWithNullParentComponentIdReturned() throws Exception {
     // set up data
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
     Donation donation = aDonation().build();
     Component initialComponent = aComponent()
@@ -348,7 +351,7 @@ public class ComponentFactoryTests {
     donation.addComponent(initialComponent);
 
     ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
 
     ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
@@ -418,8 +421,9 @@ public class ComponentFactoryTests {
         .withLocation(location)
         .build();
     
+    UUID componentTypeId = UUID.randomUUID();
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
 
     LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();

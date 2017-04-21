@@ -2,6 +2,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -45,7 +46,7 @@ public class ComponentTypeController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_TYPES + "')")
-  public ResponseEntity<Map<String, Object>> getComponentTypeById(@PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> getComponentTypeById(@PathVariable UUID id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("componentType", componentTypeControllerService.getComponentType(id));
@@ -63,7 +64,7 @@ public class ComponentTypeController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_COMPONENT_TYPES + "')")
-  public ResponseEntity<Map<String, Object>> updateComponentType(@PathVariable Long id,
+  public ResponseEntity<Map<String, Object>> updateComponentType(@PathVariable UUID id,
       @Valid @RequestBody ComponentTypeBackingForm form) {
 
     // use the id from the path

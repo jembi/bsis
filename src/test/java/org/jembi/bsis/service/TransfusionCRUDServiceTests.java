@@ -57,7 +57,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     String notes = "notes";
     UUID patientId = UUID.randomUUID();
     Patient patient = aPatient().withId(patientId).build();
-    Long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
     Component transfusedComponent = aComponent().withId(COMPONENT_ID).withComponentType(componentType).build();
     Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
@@ -115,7 +115,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     String notes = "notes";
     UUID patientId = UUID.randomUUID();
     Patient patient = aPatient().withId(patientId).build();
-    Long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
     Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
     UUID transfusionId = UUID.randomUUID();
@@ -159,7 +159,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     UUID patientId = UUID.randomUUID();
     UUID componentId = UUID.randomUUID();
     Patient patient = aPatient().withId(patientId).build();
-    Long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
     Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
     Transfusion transfusion = aTransfusion()
@@ -233,7 +233,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     String notes = "notes";
     UUID patientId = UUID.randomUUID();
     Patient patient = aPatient().withId(patientId).build();
-    Long componentTypeId = 1L;
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
     Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
     Transfusion transfusion = aTransfusion()

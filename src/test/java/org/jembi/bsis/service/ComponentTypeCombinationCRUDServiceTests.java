@@ -33,15 +33,15 @@ public class ComponentTypeCombinationCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testCreateComponentTypeCombination_shouldSaveCombinationCorrectly() {
     ComponentType sourceComponent = aComponentType()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .build();
         
     List<ComponentType> producedComponentTypes = Arrays.asList(
         aComponentType()
-            .withId(2L)
+            .withId(UUID.randomUUID())
             .build(),
         aComponentType()
-            .withId(3L)
+            .withId(UUID.randomUUID())
             .build()
     );
     
@@ -65,14 +65,14 @@ public class ComponentTypeCombinationCRUDServiceTests extends UnitTestSuite {
   public void testUpdateComponentTypeCombinations_shouldSetCorrectFieldsAndUpdate() {
     UUID componentCombinationId = UUID.randomUUID();
     ComponentType sourceComponent = aComponentType()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .build();
     List<ComponentType> producedComponentTypes = Arrays.asList(
         aComponentType()
-            .withId(2L)
+            .withId(UUID.randomUUID())
             .build(),
         aComponentType()
-            .withId(3L)
+            .withId(UUID.randomUUID())
             .build()
     );
     

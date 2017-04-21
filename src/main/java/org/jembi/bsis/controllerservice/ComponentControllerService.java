@@ -101,7 +101,7 @@ public class ComponentControllerService {
     return componentFactory.createComponentViewModels(results);
   }
 
-  public List<ComponentViewModel> findAnyComponent(List<Long> componentTypeIds,
+  public List<ComponentViewModel> findAnyComponent(List<UUID> componentTypeIds,
       ComponentStatus status, Date dateFrom, Date dateTo, UUID locationId) {
     List<Component> results = componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, locationId);
     List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);

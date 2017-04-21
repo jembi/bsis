@@ -43,8 +43,9 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntity_shouldReturnExpectedEntity() {
     // Set up
+    UUID componentTypeId = UUID.randomUUID();
     ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm()
-        .withId(1L)
+        .withId(componentTypeId)
         .withComponentTypeName("componentTypeName")
         .withComponentTypeCode("componentTypeCode")
         .withExpiresAfter(20)
@@ -67,7 +68,7 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
         .build();
     
     ComponentType componentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId)
         .withComponentTypeName("componentTypeName")
         .withComponentTypeCode("componentTypeCode")
         .withExpiresAfter(20)
@@ -102,8 +103,9 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
     ComponentTypeCombination producedComponentTypeCombination = aComponentTypeCombination()
         .withId(componentTypeCombinationId)
         .build();
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType entity = ComponentTypeBuilder.aComponentType()
-        .withId(1L)
+        .withId(componentTypeId)
         .withComponentTypeName("name")
         .withComponentTypeCode("0001")
         .withDescription("descr")
@@ -128,7 +130,7 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
     ComponentTypeFullViewModel viewModel = componentTypeFactory.createFullViewModel(entity);
     
     Assert.assertNotNull("View Model was created", viewModel);
-    Assert.assertEquals("View Model correct", Long.valueOf(1), viewModel.getId());
+    Assert.assertEquals("View Model correct", componentTypeId, viewModel.getId());
     Assert.assertEquals("View Model correct", "name", viewModel.getComponentTypeName());
     Assert.assertEquals("View Model correct", "0001", viewModel.getComponentTypeCode());
     Assert.assertEquals("View Model correct", "descr", viewModel.getDescription());
@@ -149,8 +151,9 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateFullViewModelWithNewComponentType_shouldReturnExpected() {
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType entity = ComponentTypeBuilder.aComponentType()
-        .withId(1L)
+        .withId(componentTypeId)
         .withComponentTypeName("name")
         .withComponentTypeCode("0001")
         .build();
@@ -163,8 +166,9 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
   
   @Test
   public void testSingleSearchComponentType_shouldReturnExpectedViewModel() {
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType entity = ComponentTypeBuilder.aComponentType()
-        .withId(1L)
+        .withId(componentTypeId)
         .withComponentTypeName("name")
         .withComponentTypeCode("0001")
         .withDescription("descr")
@@ -175,7 +179,7 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
     ComponentTypeSearchViewModel viewModel = componentTypeFactory.createSearchViewModel(entity);
     
     Assert.assertNotNull("View Model was created", viewModel);
-    Assert.assertEquals("View Model correct", Long.valueOf(1), viewModel.getId());
+    Assert.assertEquals("View Model correct", componentTypeId, viewModel.getId());
     Assert.assertEquals("View Model correct", "name", viewModel.getComponentTypeName());
     Assert.assertEquals("View Model correct", "0001", viewModel.getComponentTypeCode());
     Assert.assertEquals("View Model correct", "descr", viewModel.getDescription());
@@ -187,8 +191,9 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
   
   @Test
   public void testSingleComponentType_shouldReturnExpectedViewModel() {
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType entity = ComponentTypeBuilder.aComponentType()
-        .withId(1L)
+        .withId(componentTypeId)
         .withComponentTypeName("name")
         .withComponentTypeCode("0001")
         .withDescription("descr")
@@ -197,7 +202,7 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
         .build();
     
     ComponentTypeViewModel expectedViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .withComponentTypeName("name")
         .withComponentTypeCode("0001")
         .withDescription("descr")
@@ -212,34 +217,41 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
   
   @Test
   public void testMultipleComponentType_shouldReturnExpectedEntities() {
-    ComponentType entity1 = ComponentTypeBuilder.aComponentType().withId(1L).withComponentTypeName("test1").build();
-    ComponentType entity2 = ComponentTypeBuilder.aComponentType().withId(2L).withComponentTypeName("test2").build();
+    UUID componentTypeId1 = UUID.randomUUID();
+    UUID componentTypeId2 = UUID.randomUUID();
+    ComponentType entity1 =
+        ComponentTypeBuilder.aComponentType().withId(componentTypeId1).withComponentTypeName("test1").build();
+    ComponentType entity2 =
+        ComponentTypeBuilder.aComponentType().withId(componentTypeId2).withComponentTypeName("test2").build();
 
     List<ComponentTypeViewModel> viewModels = componentTypeFactory.createViewModels(Arrays.asList(entity1, entity2));
     
     Assert.assertNotNull("View Models were created", viewModels);
     Assert.assertEquals("View Models were created", 2, viewModels.size());
-    Assert.assertEquals("View Model correct", Long.valueOf(1), viewModels.get(0).getId());
-    Assert.assertEquals("View Model correct", Long.valueOf(2), viewModels.get(1).getId());
+    Assert.assertEquals("View Model correct", componentTypeId1, viewModels.get(0).getId());
+    Assert.assertEquals("View Model correct", componentTypeId2, viewModels.get(1).getId());
   }
   
   @Test
   public void testMultipleComponentTypeSearch_shouldReturnExpectedViewModels() {
-    ComponentType entity1 = ComponentTypeBuilder.aComponentType().withId(1L).withComponentTypeName("test1").build();
-    ComponentType entity2 = ComponentTypeBuilder.aComponentType().withId(2L).withComponentTypeName("test2").build();
+    UUID componentTypeId1 = UUID.randomUUID();
+    UUID componentTypeId2 = UUID.randomUUID();
+    ComponentType entity1 = ComponentTypeBuilder.aComponentType().withId(componentTypeId1).withComponentTypeName("test1").build();
+    ComponentType entity2 = ComponentTypeBuilder.aComponentType().withId(componentTypeId2).withComponentTypeName("test2").build();
 
     List<ComponentTypeSearchViewModel> viewModels = componentTypeFactory.createSearchViewModels(Arrays.asList(entity1, entity2));
     
     Assert.assertNotNull("View Models were created", viewModels);
     Assert.assertEquals("View Models were created", 2, viewModels.size());
-    Assert.assertEquals("View Model correct", Long.valueOf(1), viewModels.get(0).getId());
-    Assert.assertEquals("View Model correct", Long.valueOf(2), viewModels.get(1).getId());
+    Assert.assertEquals("View Model correct", componentTypeId1, viewModels.get(0).getId());
+    Assert.assertEquals("View Model correct", componentTypeId2, viewModels.get(1).getId());
   }
   
   @Test
   public void testComponentTypeSearchViewModelWithContainsPlasma_shouldReturnExpectedViewModel() {
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId)
         .withComponentTypeCode("0000")
         .withComponentTypeName("name")
         .withDescription("description")
@@ -247,7 +259,7 @@ public class ComponentTypeFactoryTests extends UnitTestSuite {
         .build();
     
     ComponentTypeSearchViewModel expectedViewModel = aComponentTypeSearchViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .withComponentTypeCode("0000")
         .withComponentTypeName("name")
         .withDescription("description")

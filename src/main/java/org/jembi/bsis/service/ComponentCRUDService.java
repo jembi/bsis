@@ -459,7 +459,7 @@ public class ComponentCRUDService {
     return componentRepository.findComponentById(id);
   }
   
-  public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, Long componentTypeId) {
+  public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, UUID componentTypeId) {
     return componentRepository.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
   }
 

@@ -16,7 +16,7 @@ public class ComponentTypeQueryConstants {
       "SELECT count(ct) = 0 " +
           "FROM ComponentType ct " +
           "WHERE upper(ct.componentTypeName) = :componentTypeName " +
-          "AND ct.id != :id";
+          "AND (:isNewComponentType = true OR ct.id != :id)";
   
   public static final String NAME_FIND_COMPONENT_TYPE_BY_CODE =
       "ComponentType.findComponentTypeByCode";

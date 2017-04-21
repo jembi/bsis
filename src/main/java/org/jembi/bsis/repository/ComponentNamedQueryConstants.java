@@ -40,8 +40,8 @@ public class ComponentNamedQueryConstants {
       "SELECT DISTINCT c FROM Component c " +
       "WHERE c.status = 'AVAILABLE' " +
       "AND (:includeInitialComponents = true OR c.parentComponent is not null) " +
-      "AND (:componentTypeId is null OR c.componentType.id = :componentTypeId) " +
-      "AND (:includeAllLocations is true OR c.location.id = :locationId) " +
+      "AND (:includeAllComponents = true OR c.componentType.id = :componentTypeId) " +
+      "AND (:includeAllLocations = true OR c.location.id = :locationId) " +
       "AND (:startDate is null OR c.createdOn >= :startDate) " +
       "AND (:endDate is null OR c.createdOn <= :endDate) " +
       "AND (:includeBloodGroups = false OR CONCAT(c.donation.bloodAbo,c.donation.bloodRh) IN (:bloodGroups))"+

@@ -1,9 +1,9 @@
 package org.jembi.bsis.factory;
 
-import static org.mockito.Mockito.when;
 import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +29,7 @@ public class LabellingFactoryTests extends UnitTestSuite {
   public void testCreateLabellingViewModel_shouldReturnViewModelWithTheCorrectState() {
 
     // Setup
+    UUID componentTypeId = UUID.randomUUID();
     Component component = aComponent()
         .withId(UUID.randomUUID())
         .withComponentBatch(aComponentBatch()
@@ -36,7 +37,7 @@ public class LabellingFactoryTests extends UnitTestSuite {
             .build())
         .withComponentType(aComponentType()
             .withComponentTypeName("name")
-            .withId(1L)
+            .withId(componentTypeId)
             .withComponentTypeCode("code")
             .build())
         .build(); 

@@ -2,9 +2,9 @@ package org.jembi.bsis.controllerservice;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.ComponentPreProcessingBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentPreProcessingBackingFormBuilder.aComponentBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentTypeCombinationBackingFormBuilder.aComponentTypeCombinationBackingForm;
 import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
@@ -189,7 +189,7 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   @Test
   public void testFindAnyComponent_shouldCallRepositoryAndFactory() throws Exception {
     // setup data
-    List<Long> componentTypeIds = Arrays.asList(1L, 2L);
+    List<UUID> componentTypeIds = Arrays.asList(UUID.randomUUID(), UUID.randomUUID());
     ComponentStatus status = ComponentStatus.AVAILABLE;
     Date dateFrom = new Date();
     Date dateTo = new Date();
@@ -254,13 +254,15 @@ public class ComponentControllerServiceTests extends UnitTestSuite {
   @Test
   public void testGetComponentTypes_shouldCallRepositoryAndFactory() throws Exception {
     // setup data
+    UUID componentTypeId1 = UUID.randomUUID();
+    UUID componentTypeId2 = UUID.randomUUID();
     List<ComponentType> componentTypes = Arrays.asList(
-        ComponentTypeBuilder.aComponentType().withId(1L).build(),
-        ComponentTypeBuilder.aComponentType().withId(2L).build()
+        ComponentTypeBuilder.aComponentType().withId(componentTypeId1).build(),
+        ComponentTypeBuilder.aComponentType().withId(componentTypeId2).build()
     );
     List<ComponentTypeViewModel> componentTypeViewModels = Arrays.asList(
-        aComponentTypeViewModel().withId(1L).build(),
-        aComponentTypeViewModel().withId(2L).build()
+        aComponentTypeViewModel().withId(componentTypeId1).build(),
+        aComponentTypeViewModel().withId(componentTypeId2).build()
     );
     
     // setup mocks

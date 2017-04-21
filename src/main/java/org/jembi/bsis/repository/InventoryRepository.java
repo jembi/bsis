@@ -48,7 +48,7 @@ public class InventoryRepository {
         .getSingleResult();
   }
 
-  public List<Component> findComponentsInStock(UUID locationId, Long componentTypeId, Date dueToExpireBy,
+  public List<Component> findComponentsInStock(UUID locationId, UUID componentTypeId, Date dueToExpireBy,
       List<BloodGroup> bloodGroups) {
 
     String queryString =

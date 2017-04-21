@@ -70,16 +70,12 @@ public class TransfusionControllerService {
 
   public TransfusionFullViewModel updateTransfusion(TransfusionBackingForm backingForm) {
     Transfusion entity = transfusionFactory.createEntity(backingForm);
-    Long componentTypeId = null;
-    if (backingForm.getComponentType() != null) {
-      componentTypeId = backingForm.getComponentType().getId();
-    }
     entity = transfusionCRUDService.updateTransfusion(entity, backingForm.getDonationIdentificationNumber(),
-        backingForm.getComponentCode(), componentTypeId);
+        backingForm.getComponentCode());
     return transfusionFactory.createFullViewModel(entity);
   }
 
-  public List<TransfusionViewModel> findTransfusions(String din, String componentCode, Long componentTypeId,
+  public List<TransfusionViewModel> findTransfusions(String din, String componentCode, UUID componentTypeId,
       UUID receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
     List<Transfusion> transfusions = transfusionCRUDService.findTransfusions(din, componentCode, componentTypeId,
         receivedFromId, transfusionOutcome, startDate, endDate);

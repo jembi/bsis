@@ -107,92 +107,92 @@
     <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType="Family" isDeleted="false" createdDate="2017-01-16"/>
     <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" donationType="Autologous" isDeleted="false" createdDate="2017-01-17"/>
     <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" donationType="Other" isDeleted="false"/>
-    <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a01'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
                    componentTypeCode="0011" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="2" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a02'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Double Pack - CPDA"
                    componentTypeCode="0012" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="3" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a03'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Triple Pack - CPDA"
                    componentTypeCode="0013" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="4" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a04'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Quad Pack - CPDA"
                    componentTypeCode="0014" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="5" description="" expiresAfter="5"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a05'" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Apheresis" componentTypeCode="0021" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="6" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a06'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood - CPDA"
                    componentTypeCode="1001" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="7" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Poor Platelets - CPDA"
                    componentTypeCode="1005" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="8" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a08'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - CPDA"
                    componentTypeCode="2001" containsPlasma="false"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="9" description="" expiresAfter="42"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a09'" description="" expiresAfter="42"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - SAGM"
                    componentTypeCode="2011" containsPlasma="false"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="10" description="" expiresAfter="365"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a10'" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Fresh Frozen Plasma - Whole Blood"
                    componentTypeCode="3001" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="11" description="" expiresAfter="365"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a11'" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Frozen Plasma - Whole Blood"
                    componentTypeCode="3002" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="12" description="" expiresAfter="5"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a12'" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Whole Blood"
                    componentTypeCode="4001" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="13" description="" expiresAfter="1"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a13'" description="" expiresAfter="1"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Whole Blood - 24H"
                    componentTypeCode="4011" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="14" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a14'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - Paediatric - CPDA"
                    componentTypeCode="2101" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="15" description="" expiresAfter="365"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a15'" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Fresh Frozen Plasma - Apheresis"
                    componentTypeCode="3011" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
-    <ComponentType canBeIssued="true" id="16" description="" expiresAfter="5"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a16'" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Apheresis"
                    componentTypeCode="4021" containsPlasma="true"
                    createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
 
     <PackType id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" packType="Single" isDeleted="false" testSampleProduced="true"
-              componentType_id="1" countAsDonation="true" periodBetweenDonations="90" createdDate="2017-01-15"/>
+              componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a01'" countAsDonation="true" periodBetweenDonations="90" createdDate="2017-01-15"/>
     <PackType id="uuid'a60fc65c-8877-45d3-b31b-a374e43019a3'" packType="Double" isDeleted="false" testSampleProduced="true"
-              componentType_id="2" countAsDonation="true" periodBetweenDonations="90" createdDate="2017-01-15"/>
+              componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a02'" countAsDonation="true" periodBetweenDonations="90" createdDate="2017-01-15"/>
     <PackType id="uuid'52b78158-af2d-42af-bf98-64e9d8911249'" packType="Triple" isDeleted="false" testSampleProduced="true"
-              componentType_id="3" countAsDonation="true" periodBetweenDonations="90" createdDate="2017-01-15"/>
+              componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a03'" countAsDonation="true" periodBetweenDonations="90" createdDate="2017-01-15"/>
 
     <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" bloodAbo="O" bloodPressureSystolic="110"
               bloodRh="+" bloodTypingStatus="COMPLETE" donationDate="2015-02-02 00:00:00.0"

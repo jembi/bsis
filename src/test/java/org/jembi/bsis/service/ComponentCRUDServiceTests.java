@@ -438,7 +438,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testProcessComponent_shouldCreateChildComponents() throws Exception {
     // set up data
     Location location = LocationBuilder.aLocation().build();
-    Long componentTypeId1 = Long.valueOf(1);
+    UUID componentTypeId1 = UUID.randomUUID();
     UUID componentTypeCombinationId = UUID.randomUUID();
     ComponentType componentType1 = aComponentType().withId(componentTypeId1)
         .withComponentTypeCode("0001")
@@ -446,14 +446,14 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withExpiresAfter(90)
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
         .build();
-    Long componentTypeId2 = Long.valueOf(2);
+    UUID componentTypeId2 = UUID.randomUUID();
     ComponentType componentType2 = aComponentType().withId(componentTypeId2)
         .withComponentTypeCode("0002")
         .withComponentTypeName("#2")
         .withExpiresAfter(90)
         .withExpiresAfterUnits(ComponentTypeTimeUnits.HOURS)
         .build();
-    Long componentTypeId3 = Long.valueOf(3);
+    UUID componentTypeId3 = UUID.randomUUID();
     ComponentType componentType3 = aComponentType().withId(componentTypeId3)
         .withComponentTypeCode("0003")
         .withComponentTypeName("#3")
@@ -572,7 +572,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testProcessInStockComponent_shouldUpdateParentComponentToRemoved() throws Exception {
     // set up data
     Location location = LocationBuilder.aLocation().build();
-    Long componentTypeId1 = Long.valueOf(1);
+    UUID componentTypeId1 = UUID.randomUUID();
     UUID componentTypeCombinationId = UUID.randomUUID();
     ComponentType componentType1 = aComponentType().withId(componentTypeId1)
         .withComponentTypeCode("0001")
@@ -642,7 +642,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testProcessUnsafeComponent_shouldCreateUnsafeChildComponents() throws Exception {
     // set up data
     Location location = LocationBuilder.aLocation().build();
-    Long componentTypeId1 = Long.valueOf(1);
+    UUID componentTypeId1 = UUID.randomUUID();
     UUID componentStatusChangeId = UUID.randomUUID();
     UUID componentTypeCombinationId = UUID.randomUUID();
     ComponentType componentType1 = aComponentType().withId(componentTypeId1)
@@ -764,8 +764,10 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withStatusChangedOn(new Date())
         .withStatusChangeReason(statusChangeReason)
         .build();
+
+    UUID componentTypeId1 = UUID.randomUUID();
     ComponentType componentTypeThatContainsPlasma = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId1)
         .thatContainsPlasma()
         .withExpiresAfter(90)
         .withComponentTypeCode("0001")
@@ -773,7 +775,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withMaxBleedTime(20)
         .withMaxTimeSinceDonation(25)
         .build();
-    ComponentType componentTypeThatDoesntContainsPlasma = aComponentType().withId(2L)
+    UUID componentTypeId2 = UUID.randomUUID();
+    ComponentType componentTypeThatDoesntContainsPlasma = aComponentType().withId(componentTypeId2)
         .withExpiresAfter(90)
         .withComponentTypeCode("0002")
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
@@ -839,8 +842,9 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentRepository.findComponentById(COMPONENT_ID_1)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeThatContainsPlasma);
-    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentTypeThatDoesntContainsPlasma);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentTypeThatContainsPlasma);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId2))
+        .thenReturn(componentTypeThatDoesntContainsPlasma);
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId)).thenReturn(componentTypeCombination);
     doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
@@ -881,14 +885,16 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withStatusChangedOn(new Date())
         .withStatusChangeReason(statusChangeReason)
         .build();
+    UUID componentTypeId1 = UUID.randomUUID();
     ComponentType componentTypeThatContainsPlasma = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId1)
         .thatContainsPlasma()
         .withExpiresAfter(90)
         .withComponentTypeCode("0001")
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
         .build();
-    ComponentType componentTypeThatDoesntContainsPlasma = aComponentType().withId(2L)
+    UUID componentTypeId2 = UUID.randomUUID();
+    ComponentType componentTypeThatDoesntContainsPlasma = aComponentType().withId(componentTypeId2)
         .withExpiresAfter(90)
         .withComponentTypeCode("0002")
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
@@ -950,8 +956,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentRepository.findComponentById(COMPONENT_ID_1)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentTypeThatContainsPlasma);
-    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentTypeThatDoesntContainsPlasma);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentTypeThatContainsPlasma);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId2)).thenReturn(componentTypeThatDoesntContainsPlasma);
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId)).thenReturn(componentTypeCombination);
     doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(
         argThat(hasSameStateAsComponent(expectedComponentThatContainsPlasma)), eq(ComponentStatusChangeReasonType.UNSAFE_PARENT));
@@ -1002,14 +1008,16 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withStatusChangedOn(new Date())
         .withStatusChangeReason(statusChangeReasonTRCP)
         .build();
+    UUID componentTypeId1 = UUID.randomUUID();
     ComponentType componentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId1)
         .withExpiresAfter(90)
         .withComponentTypeCode("0001")
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
         .build();
+    UUID componentTypeId2 = UUID.randomUUID();
     ComponentType componentTypeThatDoesntContainsPlasma = aComponentType()
-        .withId(2L)
+        .withId(componentTypeId2)
         .withExpiresAfter(90)
         .withComponentTypeCode("0002")
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
@@ -1046,7 +1054,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentRepository.findComponentById(COMPONENT_ID_2)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
-    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentTypeThatDoesntContainsPlasma);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId2)).thenReturn(componentTypeThatDoesntContainsPlasma);
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId)).thenReturn(componentTypeCombination);
     
     // SUT
@@ -1061,7 +1069,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testProcessProcessedComponent_shouldNotCreateChildComponents() throws Exception {
     // set up data
     Location location = LocationBuilder.aLocation().build();
-    Long componentTypeId1 = Long.valueOf(1);
+    UUID componentTypeId1 = UUID.randomUUID();
     UUID componentTypeCombinationId = UUID.randomUUID();
     ComponentType componentType1 = aComponentType().withId(componentTypeId1)
         .withComponentTypeCode("0001")
@@ -1103,7 +1111,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testProcessDiscardedComponent_shouldNotCreateChildComponents() throws Exception {
     // set up data
     Location location = LocationBuilder.aLocation().build();
-    Long componentTypeId1 = Long.valueOf(1);
+    UUID componentTypeId1 = UUID.randomUUID();
     UUID componentTypeCombinationId = UUID.randomUUID();
     ComponentType componentType1 = aComponentType().withId(componentTypeId1)
         .withComponentTypeCode("0001")
@@ -1145,7 +1153,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testProcessComponent_shouldSetProcessedOnOnParent() {
     // set up data
     Location location = LocationBuilder.aLocation().build();
-    Long componentTypeId1 = Long.valueOf(1);
+    UUID componentTypeId1 = UUID.randomUUID();
     UUID componentTypeCombinationId = UUID.randomUUID();
     ComponentType componentType1 = aComponentType().withId(componentTypeId1)
         .withComponentTypeCode("0001")
@@ -1228,16 +1236,16 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testFindComponentsByDINAndType_shouldCallRepository() throws Exception {
     // set up data
     String din = String.valueOf("1234567");
-    Long id = Long.valueOf(1);
+    UUID componentTypeId = UUID.randomUUID();
     
     // mocks
-    when(componentRepository.findComponentsByDINAndType(din, id)).thenReturn(Arrays.asList(aComponent().build()));
+    when(componentRepository.findComponentsByDINAndType(din, componentTypeId)).thenReturn(Arrays.asList(aComponent().build()));
     
     // SUT
-    componentCRUDService.findComponentsByDINAndType(din, id);
+    componentCRUDService.findComponentsByDINAndType(din, componentTypeId);
     
     // check
-    verify(componentRepository).findComponentsByDINAndType(din, id);
+    verify(componentRepository).findComponentsByDINAndType(din, componentTypeId);
   }
   
   @Test
@@ -2183,16 +2191,18 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     Date createdOn = new Date();
     Date expiresOn = new Date();
 
+    UUID componentTypeId3 = UUID.randomUUID();
     ComponentType newComponentType = aComponentType()
-        .withId(3L)
+        .withId(componentTypeId3)
         .withComponentTypeCode(componentTypeCode)
         .withExpiresAfter(expiresAfterDays)
         .build();
     
     PackType newPackType = aPackType().withComponentType(newComponentType).build();
 
+    UUID componentTypeId2 = UUID.randomUUID();
     Component component = aComponent()
-        .withComponentType(aComponentType().withId(2L).build())
+        .withComponentType(aComponentType().withId(componentTypeId2).build())
         .withComponentCode("123")
         .withCreatedOn(createdOn)
         .withExpiresOn(expiresOn)
@@ -2236,26 +2246,30 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(new DateTime().toDate())
         .withBleedEndTime(new DateTime().plusMinutes(50).toDate())
         .build();
+    UUID componentTypeId1 = UUID.randomUUID();
     ComponentType parentComponentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId1)
         .withComponentTypeCode("0001")
         .build();
+    UUID componentTypeId2 = UUID.randomUUID();
     ComponentType componentTypeWithMaxBleedTimeEqualToDonationBleedTime = aComponentType()
-        .withId(2L)
+        .withId(componentTypeId2)
         .withExpiresAfter(90)
         .withComponentTypeCode("1000")
         .withMaxBleedTime(50)
         .withMaxTimeSinceDonation(20)
         .build();
+    UUID componentTypeId3 = UUID.randomUUID();
     ComponentType componentTypeWithMaxBleedTimeGreaterThanDonationBleedTime = aComponentType()
-        .withId(3L)
+        .withId(componentTypeId3)
         .withExpiresAfter(90)
         .withComponentTypeCode("1001")
         .withMaxBleedTime(51)
         .withMaxTimeSinceDonation(20)
         .build();
+    UUID componentTypeId4 = UUID.randomUUID();
     ComponentType componentTypeWithMaxBleedTimeLessThanDonationBleedTime = aComponentType()
-        .withId(4L)
+        .withId(componentTypeId4)
         .withExpiresAfter(90)
         .withComponentTypeCode("1002")
         .withMaxBleedTime(20)
@@ -2328,9 +2342,9 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentRepository.findComponentById(COMPONENT_ID_1)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
-    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentTypeWithMaxBleedTimeEqualToDonationBleedTime);
-    when(componentTypeRepository.getComponentTypeById(3L)).thenReturn(componentTypeWithMaxBleedTimeGreaterThanDonationBleedTime);
-    when(componentTypeRepository.getComponentTypeById(4L)).thenReturn(componentTypeWithMaxBleedTimeLessThanDonationBleedTime);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId2)).thenReturn(componentTypeWithMaxBleedTimeEqualToDonationBleedTime);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId3)).thenReturn(componentTypeWithMaxBleedTimeGreaterThanDonationBleedTime);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId4)).thenReturn(componentTypeWithMaxBleedTimeLessThanDonationBleedTime);
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId)).thenReturn(componentTypeCombination);
     when(bleedTimeService.getBleedTime(donation.getBleedStartTime(), donation.getBleedEndTime())).thenReturn(50L);
     doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(
@@ -2368,26 +2382,30 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .build();
+    UUID componentTypeId1 = UUID.randomUUID();
     ComponentType parentComponentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId1)
         .withComponentTypeCode("0001")
         .build();
+    UUID componentTypeId2 = UUID.randomUUID();
     ComponentType componentTypeMaxTimeSinceDonationLessThanTimeSinceDonation = aComponentType()
-        .withId(2L)
+        .withId(componentTypeId2)
         .withExpiresAfter(90)
         .withComponentTypeCode("1000")
         .withMaxBleedTime(20)
         .withMaxTimeSinceDonation(5)
         .build();
+    UUID componentTypeId3 = UUID.randomUUID();
     ComponentType componentTypeMaxTimeSinceDonationGreaterThanTimeSinceDonation = aComponentType()
-        .withId(3L)
+        .withId(componentTypeId3)
         .withExpiresAfter(90)
         .withComponentTypeCode("1001")
         .withMaxBleedTime(20)
         .withMaxTimeSinceDonation(21)
         .build();
+    UUID componentTypeId4 = UUID.randomUUID();
     ComponentType componentTypeMaxTimeSinceDonationEqualToTimeSinceDonation = aComponentType()
-        .withId(4L)
+        .withId(componentTypeId4)
         .withExpiresAfter(90)
         .withComponentTypeCode("1002")
         .withMaxBleedTime(20)
@@ -2463,9 +2481,9 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // set up mocks
     when(componentRepository.findComponentById(COMPONENT_ID_1)).thenReturn(parentComponent);
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
-    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(componentTypeMaxTimeSinceDonationLessThanTimeSinceDonation);
-    when(componentTypeRepository.getComponentTypeById(3L)).thenReturn(componentTypeMaxTimeSinceDonationGreaterThanTimeSinceDonation);
-    when(componentTypeRepository.getComponentTypeById(4L)).thenReturn(componentTypeMaxTimeSinceDonationEqualToTimeSinceDonation);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId2)).thenReturn(componentTypeMaxTimeSinceDonationLessThanTimeSinceDonation);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId3)).thenReturn(componentTypeMaxTimeSinceDonationGreaterThanTimeSinceDonation);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId4)).thenReturn(componentTypeMaxTimeSinceDonationEqualToTimeSinceDonation);
     when(componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId)).thenReturn(componentTypeCombination);
     when(bleedTimeService.getTimeSinceDonation(donation.getDonationDate(), processedOn)).thenReturn(20L);
     doReturn(mockedComponent).when(componentCRUDService).markComponentAsUnsafe(

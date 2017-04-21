@@ -28,7 +28,7 @@ public class TransfusionNamedQueryConstants {
   public static final String QUERY_FIND_TRANSFUSIONS =
       "SELECT t from Transfusion t " +
       "WHERE t.isDeleted = :isDeleted " +
-      "AND (:componentTypeId is null OR t.component.componentType.id = :componentTypeId) " +
+      "AND (:includeAllComponentTypes is true OR t.component.componentType.id = :componentTypeId) " +
       "AND (:includeTransfusionOutcome is false OR t.transfusionOutcome = :transfusionOutcome) " +
       "AND (:includeAllLocations is true OR t.receivedFrom.id = :receivedFromId) " +
       "AND (:startDate is null OR t.dateTransfused >= :startDate) " +

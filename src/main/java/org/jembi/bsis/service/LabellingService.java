@@ -37,7 +37,8 @@ public class LabellingService {
   @Autowired
   private ComponentRepository componentRepository;
   
-  public List<Component> findSafeComponentsToLabel(String din, String componentCode, Long componentTypeId, UUID locationId,
+  public List<Component> findSafeComponentsToLabel(String din, String componentCode, UUID componentTypeId,
+      UUID locationId,
       List<String> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
     List<Component> components = new ArrayList<>();
     // Search for safe components excluding initial ones, as those can't be labelled

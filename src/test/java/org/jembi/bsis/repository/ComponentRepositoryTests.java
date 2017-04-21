@@ -194,7 +194,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
         .withParentComponent(initialComponent)
         .buildAndPersist(entityManager);
 
-    List<Long> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
+    List<UUID> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findAnyComponent(componentTypes, ComponentStatus.DISCARDED, donationDateFrom, donationDateTo, location.getId());
@@ -229,7 +229,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
             .withParentComponent(initialComponent)
             .buildAndPersist(entityManager)
     );
-    List<Long> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
+    List<UUID> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findAnyComponent(componentTypes, ComponentStatus.DISCARDED, donationDateFrom, donationDateTo, null);
@@ -265,7 +265,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
             .withParentComponent(initialComponent)
             .buildAndPersist(entityManager)
     );
-    List<Long> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
+    List<UUID> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findAnyComponent(componentTypes, null, donationDateFrom, donationDateTo, location.getId());
@@ -300,7 +300,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
             .withParentComponent(initialComponent)
             .buildAndPersist(entityManager)
     );
-    List<Long> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
+    List<UUID> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findAnyComponent(componentTypes, ComponentStatus.DISCARDED, null, donationDateTo, null);
@@ -335,7 +335,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
             .withParentComponent(initialComponent)
             .buildAndPersist(entityManager)
     );
-    List<Long> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
+    List<UUID> componentTypes = Arrays.asList(componentType.getId(), secondComponentType.getId());
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findAnyComponent(componentTypes, ComponentStatus.DISCARDED, donationDateFrom, null, location.getId());

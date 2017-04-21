@@ -114,11 +114,13 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
 
   @Test
   public void testConvertComponentTypeCombinationBackingFormToComponentTypeCombinationEntity_shouldReturnExpectedEntity() {
+    UUID componentTypeId1 = UUID.randomUUID();
+    UUID componentTypeId2 = UUID.randomUUID();
     ComponentType producedComponentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId1)
         .build();
     ComponentType sourceComponentType = aComponentType()
-        .withId(2L)
+        .withId(componentTypeId2)
         .build();
 
     ComponentTypeCombination expectedComponentTypeCombination = aComponentTypeCombination()
@@ -131,7 +133,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
     //the Source Component Type will be updated by the createEntity operation
     Set<ComponentType> sourceComponentTypes = new HashSet<ComponentType>();
     ComponentType expectedSourceComponentType = aComponentType()
-        .withId(2L)
+        .withId(componentTypeId2)
         .withProducedComponentTypeCombination(expectedComponentTypeCombination)
         .build();
     sourceComponentTypes.add(expectedSourceComponentType);
@@ -147,8 +149,8 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
         .build();
 
     // Setup mock
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(producedComponentType);
-    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(sourceComponentType);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(producedComponentType);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId2)).thenReturn(sourceComponentType);
 
     ComponentTypeCombination convertedComponentTypeCombinationEntity =
         componentTypeCombinationFactory.createEntity(backingForm);
@@ -167,14 +169,17 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
   
   @Test
   public void testConvertComponentTypeCombinationBackingFormWithTwoSourceComponentsToComponentTypeCombinationEntity_shouldReturnExpectedEntity() {
+    UUID componentTypeId1 = UUID.randomUUID();
+    UUID componentTypeId2 = UUID.randomUUID();
+    UUID componentTypeId3 = UUID.randomUUID();
     ComponentType producedComponentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId1)
         .build();
     ComponentType sourceComponentType = aComponentType()
-        .withId(2L)
+        .withId(componentTypeId2)
         .build();
     ComponentType sourceComponentType2 = aComponentType()
-        .withId(3L)
+        .withId(componentTypeId3)
         .build();
 
     ComponentTypeCombination expectedComponentTypeCombination = aComponentTypeCombination()
@@ -187,11 +192,11 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
     //the Source Component Type will be updated by the createEntity operation
     Set<ComponentType> sourceComponentTypes = new HashSet<ComponentType>();
     ComponentType expectedSourceComponentType = aComponentType()
-        .withId(2L)
+        .withId(componentTypeId2)
         .withProducedComponentTypeCombination(expectedComponentTypeCombination)
         .build();
     ComponentType expectedSourceComponentType2 = aComponentType()
-        .withId(3L)
+        .withId(componentTypeId3)
         .withProducedComponentTypeCombination(expectedComponentTypeCombination)
         .build();
     sourceComponentTypes.add(expectedSourceComponentType);
@@ -209,9 +214,9 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
         .build();
 
     // Setup mock
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(producedComponentType);
-    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(sourceComponentType);
-    when(componentTypeRepository.getComponentTypeById(3L)).thenReturn(sourceComponentType2);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(producedComponentType);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId2)).thenReturn(sourceComponentType);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId3)).thenReturn(sourceComponentType2);
 
     ComponentTypeCombination convertedComponentTypeCombinationEntity =
         componentTypeCombinationFactory.createEntity(backingForm);
@@ -237,14 +242,17 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
   
   @Test
   public void testConvertComponentTypeCombinationBackingFormWithTwoProducedComponentsToComponentTypeCombinationEntity_shouldReturnExpectedEntity() {
+    UUID componentTypeId1 = UUID.randomUUID();
+    UUID componentTypeId2 = UUID.randomUUID();
+    UUID componentTypeId3 = UUID.randomUUID();
     ComponentType producedComponentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId1)
         .build();
     ComponentType producedComponentType2 = aComponentType()
-        .withId(2L)
+        .withId(componentTypeId2)
         .build();
     ComponentType sourceComponentType = aComponentType()
-        .withId(3L)
+        .withId(componentTypeId3)
         .build();
 
     ComponentTypeCombination expectedComponentTypeCombination = aComponentTypeCombination()
@@ -257,7 +265,7 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
     //the Source Component Type will be updated by the createEntity operation
     Set<ComponentType> sourceComponentTypes = new HashSet<ComponentType>();
     ComponentType expectedSourceComponentType = aComponentType()
-        .withId(3L)
+        .withId(componentTypeId3)
         .withProducedComponentTypeCombination(expectedComponentTypeCombination)
         .build();
     sourceComponentTypes.add(expectedSourceComponentType);
@@ -274,9 +282,9 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
         .build();
 
     // Setup mock
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(producedComponentType);
-    when(componentTypeRepository.getComponentTypeById(2L)).thenReturn(producedComponentType2);
-    when(componentTypeRepository.getComponentTypeById(3L)).thenReturn(sourceComponentType);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(producedComponentType);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId2)).thenReturn(producedComponentType2);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId3)).thenReturn(sourceComponentType);
 
     ComponentTypeCombination convertedComponentTypeCombinationEntity =
         componentTypeCombinationFactory.createEntity(backingForm);
@@ -297,13 +305,15 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateComponentTypeCombinationFullViewModel_shouldReturnCorrectViewModel() {
+    UUID componentTypeId1 = UUID.randomUUID();
+    UUID componentTypeId2 = UUID.randomUUID();
+    UUID componentTypeId3 = UUID.randomUUID();
     List<ComponentType> sourceComponentTypes = Arrays.asList(
-        aComponentType().withId(1L).build()
+        aComponentType().withId(componentTypeId1).build()
     );
     List<ComponentType> producedComponentTypes = Arrays.asList(
-        aComponentType().withId(2L).build(),
-        aComponentType().withId(2L).build(),
-        aComponentType().withId(3L).build()
+        aComponentType().withId(componentTypeId2).build(), aComponentType().withId(componentTypeId2).build(),
+        aComponentType().withId(componentTypeId3).build()
     );
     ComponentTypeCombination combination = aComponentTypeCombination()
         .withId(COMPONENT_TYPE_COMBINATION_ID_2)
@@ -313,12 +323,12 @@ public class ComponentTypeCombinationFactoryTests extends UnitTestSuite {
         .build();
 
     List<ComponentTypeViewModel> sourceComponentTypeViewModels = Arrays.asList(
-        aComponentTypeViewModel().withId(1L).build()
+        aComponentTypeViewModel().withId(componentTypeId1).build()
     );
     List<ComponentTypeViewModel> producedComponentTypeViewModels = Arrays.asList(
-        aComponentTypeViewModel().withId(2L).build(),
-        aComponentTypeViewModel().withId(2L).build(),
-        aComponentTypeViewModel().withId(3L).build()
+        aComponentTypeViewModel().withId(componentTypeId2).build(),
+        aComponentTypeViewModel().withId(componentTypeId2).build(),
+        aComponentTypeViewModel().withId(componentTypeId3).build()
     );
 
     ComponentTypeCombinationFullViewModel expectedCombinationViewModel = aComponentTypeCombinationFullViewModel()

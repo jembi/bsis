@@ -78,22 +78,24 @@ public class ComponentRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testFindComponentByDINAndComponentTypeId() throws Exception {
-    List<Component> one = componentRepository.findComponentsByDINAndType("1111111", 1);
+    List<Component> one = componentRepository.findComponentsByDINAndType("1111111",
+        UUID.fromString("99a61311-1234-4321-b3ea-39e11c2c5801"));
     Assert.assertNotNull("There is a Component with DIN 1111111", one.get(0));
     Assert.assertEquals("Component is linked to the correct Donation", "1111111", one.get(0).getDonationIdentificationNumber());
   }
 
   @Test
   public void testFindComponentByDINAndComponentTypeIdUnknown() throws Exception {
-    List<Component> one = componentRepository.findComponentsByDINAndType("1111112", 1);
+    List<Component> one = componentRepository.findComponentsByDINAndType("1111112",
+        UUID.fromString("99a61311-1234-4321-b3ea-39e11c2c5801"));
     Assert.assertEquals("There is no a Component with DIN 1111112", 0, one.size());
   }
 
   @Test
   public void testFindAnyComponentQuarantinedType1() throws Exception {
     ComponentStatus status = ComponentStatus.QUARANTINED;
-    List<Long> componentTypeIds = new ArrayList<Long>();
-    componentTypeIds.add(1l);
+    List<UUID> componentTypeIds = new ArrayList<UUID>();
+    componentTypeIds.add(UUID.fromString("99a61311-1234-4321-b3ea-39e11c2c5801"));
     List<Component> all = componentRepository.findAnyComponent(componentTypeIds, status, null, null, null);
     Assert.assertNotNull("There aren't matching components", all);
     Assert.assertTrue("There should be 0 components", all.isEmpty());

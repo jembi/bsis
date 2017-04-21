@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -38,24 +39,23 @@ public class ComponentTypeRepository {
     return query.getResultList();
   }
 
-  public boolean verifyComponentTypeExists(Long id) {
+  public boolean verifyComponentTypeExists(UUID id) {
     return em.createNamedQuery(ComponentTypeQueryConstants.NAME_VERIFY_COMPONENT_TYPE_WITH_ID_EXISTS, Boolean.class)
         .setParameter("id", id)
         .setParameter("deleted", false)
         .getSingleResult();
   }
 
-  public boolean isUniqueComponentTypeName(Long id, String componentTypeName) {
-    // passing null as the ID parameter does not work because the IDs in mysql are never null. So if
-    // id is null, the below rather uses -1 which achieves the same result in the case of this
-    // query.
+  public boolean isUniqueComponentTypeName(UUID id, String componentTypeName) {
+    boolean isNewComponentType = id == null;
     return em.createNamedQuery(ComponentTypeQueryConstants.NAME_VERIFY_UNIQUE_COMPONENT_TYPE_NAME, Boolean.class)
-        .setParameter("id", id != null ? id : -1L)
+        .setParameter("isNewComponentType", isNewComponentType)
+        .setParameter("id", id)
         .setParameter("componentTypeName", componentTypeName.toUpperCase())
         .getSingleResult();
   }
 
-  public ComponentType getComponentTypeById(Long id) throws NoResultException, NonUniqueResultException {
+  public ComponentType getComponentTypeById(UUID id) throws NoResultException, NonUniqueResultException {
     TypedQuery<ComponentType> query;
     query = em.createQuery("SELECT ct from ComponentType ct " +
         "where ct.id=:id", ComponentType.class);

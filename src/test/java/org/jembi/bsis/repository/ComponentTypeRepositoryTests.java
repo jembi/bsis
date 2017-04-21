@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
@@ -28,7 +29,7 @@ public class ComponentTypeRepositoryTests extends SecurityContextDependentTestSu
     aComponentType().withComponentTypeCode(componentTypeCode).withComponentTypeName(componentTypeName).buildAndPersist(entityManager);
     
     // Run test
-    boolean unique = componentTypeRepository.isUniqueComponentTypeName(2L, componentTypeName);
+    boolean unique = componentTypeRepository.isUniqueComponentTypeName(UUID.randomUUID(), componentTypeName);
     
     // Verify result
     assertThat(unique, is(false));
