@@ -40,6 +40,23 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
   }
 
   @Test
+  public void testGetBloodTypingTests_shouldReturnBloodTestsInCorrectOrder() {
+    // Set up data
+    BloodTest aboTest1 = aBasicBloodTypingBloodTest().withRankInCategory(null).buildAndPersist(entityManager);
+    BloodTest aboTest2 = aBasicBloodTypingBloodTest().withRankInCategory(2).buildAndPersist(entityManager);
+    BloodTest aboTest3 = aBasicBloodTypingBloodTest().withRankInCategory(1).buildAndPersist(entityManager);
+
+    // Test
+    List<BloodTest> bloodTypingTests = bloodTestRepository.getBloodTypingTests();
+
+    // Verify
+    assertThat(bloodTypingTests.size(), is(3));
+    assertThat(bloodTypingTests.get(0), is(aboTest3));
+    assertThat(bloodTypingTests.get(1), is(aboTest2));
+    assertThat(bloodTypingTests.get(2), is(aboTest1));
+  }
+
+  @Test
   public void testGetBloodTestsOfType_shouldReturnCorrectBloodTests() {
     // Set up data
     BloodTest aboTest = aBasicBloodTypingBloodTest().buildAndPersist(entityManager);
@@ -56,6 +73,23 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
     assertThat("2 tests returned", basicBloodTypingTests.size(), is(2));
     assertThat("aboTest is returned", basicBloodTypingTests.contains(aboTest));
     assertThat("rhTest is returned", basicBloodTypingTests.contains(rhTest));
+  }
+
+  @Test
+  public void testGetBloodTestsOfType_shouldReturnBloodTestsInCorrectOrder() {
+    // Set up data
+    BloodTest aboTest1 = aBasicBloodTypingBloodTest().withRankInCategory(null).buildAndPersist(entityManager);
+    BloodTest aboTest2 = aBasicBloodTypingBloodTest().withRankInCategory(1).buildAndPersist(entityManager);
+    BloodTest aboTest3 = aBasicBloodTypingBloodTest().withRankInCategory(2).buildAndPersist(entityManager);
+
+    // Test
+    List<BloodTest> basicBloodTypingTests = bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_BLOODTYPING);
+
+    // Verify
+    assertThat(basicBloodTypingTests.size(), is(3));
+    assertThat(basicBloodTypingTests.get(0), is(aboTest2));
+    assertThat(basicBloodTypingTests.get(1), is(aboTest3));
+    assertThat(basicBloodTypingTests.get(2), is(aboTest1));
   }
 
   @Test
@@ -90,6 +124,27 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
     assertThat("2 tests returned", activeBloodTests.size(), is(2));
     assertThat("ttiTest is returned", activeBloodTests.contains(ttiTest));
     assertThat("aboTest is returned", activeBloodTests.contains(aboTest));
+  }
+
+  @Test
+  public void testGetBloodTests_shouldReturnBloodTestsInCorrectOrder() {
+    // Set up data
+    BloodTest ttiTest1 = aBasicTTIBloodTest().withRankInCategory(1).buildAndPersist(entityManager);
+    BloodTest ttiTest2 = aBasicTTIBloodTest().withRankInCategory(2).buildAndPersist(entityManager);
+    BloodTest aboTest1 = aRepeatBloodTypingBloodTest().withRankInCategory(3).buildAndPersist(entityManager);
+    BloodTest aboTest2 = aBasicBloodTypingBloodTest().withRankInCategory(2).buildAndPersist(entityManager);
+    BloodTest aboTest3 = aBasicBloodTypingBloodTest().withRankInCategory(1).buildAndPersist(entityManager);
+    
+    // Test
+    List<BloodTest> activeBloodTests = bloodTestRepository.getBloodTests(false, false);
+
+    // Verify
+    assertThat(activeBloodTests.size(), is(5));
+    assertThat(activeBloodTests.get(0), is(aboTest3));
+    assertThat(activeBloodTests.get(1), is(aboTest2));
+    assertThat(activeBloodTests.get(2), is(aboTest1));
+    assertThat(activeBloodTests.get(3), is(ttiTest1));
+    assertThat(activeBloodTests.get(4), is(ttiTest2));
   }
 
   @Test
