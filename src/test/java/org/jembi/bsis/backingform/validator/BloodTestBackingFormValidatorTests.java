@@ -435,7 +435,7 @@ public class BloodTestBackingFormValidatorTests extends UnitTestSuite {
   @Test
   public void testValidateFormWithInvalidRankInCategory_shouldHaveOneError() {
     
- // Set up data
+    // Set up data
     BloodTestBackingForm backingForm = getBaseBloodTestBackingForm();
     backingForm.setRankInCategory(-1);
 
