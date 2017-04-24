@@ -12,7 +12,8 @@ public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestViewMode
   private BloodTestType bloodTestType;
   private Boolean isActive = Boolean.TRUE;
   private Boolean isDeleted = Boolean.FALSE;
-  
+  private Integer rankInCategory;
+
   public BloodTestViewModelBuilder withId(Long id) {
     this.id = id;
     return this;
@@ -33,6 +34,11 @@ public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestViewMode
     return this;
   }
 
+  public BloodTestViewModelBuilder withRankInCategory(Integer rankInCategory) {
+    this.rankInCategory = rankInCategory;
+    return this;
+  }
+
   public BloodTestViewModelBuilder thatIsDeleted() {
     this.isDeleted = Boolean.TRUE;
     return this;
@@ -50,6 +56,7 @@ public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestViewMode
     viewModel.setTestNameShort(testNameShort);
     viewModel.setCategory(category);
     viewModel.setBloodTestType(bloodTestType);
+    viewModel.setRankInCategory(rankInCategory);
     viewModel.setIsActive(isActive);
     viewModel.setIsDeleted(isDeleted);
     return viewModel;
