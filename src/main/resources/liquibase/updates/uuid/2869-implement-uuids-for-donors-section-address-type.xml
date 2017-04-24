@@ -55,7 +55,8 @@
 
     <sql>
       UPDATE AddressType 
-      SET id = GENERATEBINARYUUID();
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
     </sql>
 
     <sql dbms="mysql">
