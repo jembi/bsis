@@ -46,51 +46,51 @@
       <where>testName = 'Syphilis'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="5"/>
+      <column name="rankInCategory" valueNumeric="13"/>
       <where>testName = 'HIV Confirmatory'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="6"/>
+      <column name="rankInCategory" valueNumeric="14"/>
       <where>testName = 'HBV Confirmatory'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="7"/>
+      <column name="rankInCategory" valueNumeric="15"/>
       <where>testName = 'HCV Confirmatory'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="8"/>
+      <column name="rankInCategory" valueNumeric="16"/>
       <where>testName = 'Syphilis Confirmatory'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="9"/>
+      <column name="rankInCategory" valueNumeric="5"/>
       <where>testName = 'HIV Repeat 1'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="10"/>
+      <column name="rankInCategory" valueNumeric="6"/>
       <where>testName = 'HIV Repeat 2'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="11"/>
+      <column name="rankInCategory" valueNumeric="7"/>
       <where>testName = 'HBV Repeat 1'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="12"/>
+      <column name="rankInCategory" valueNumeric="8"/>
       <where>testName = 'HBV Repeat 2'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="13"/>
+      <column name="rankInCategory" valueNumeric="9"/>
       <where>testName = 'HCV Repeat 1'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="14"/>
+      <column name="rankInCategory" valueNumeric="10"/>
       <where>testName = 'HCV Repeat 2'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="15"/>
+      <column name="rankInCategory" valueNumeric="11"/>
       <where>testName = 'Syphilis Repeat 1'</where>
     </update>
     <update tableName="BloodTest">
-      <column name="rankInCategory" valueNumeric="16"/>
+      <column name="rankInCategory" valueNumeric="12"/>
       <where>testName = 'Syphilis Repeat 2'</where>
     </update>
   </changeSet>
