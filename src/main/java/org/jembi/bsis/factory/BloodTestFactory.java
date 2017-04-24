@@ -76,6 +76,7 @@ public class BloodTestFactory {
     bloodTest.setIsDeleted(bloodTestBackingForm.getIsDeleted());
     bloodTest.setFlagComponentsContainingPlasmaForDiscard(bloodTestBackingForm.getFlagComponentsContainingPlasmaForDiscard());
     bloodTest.setFlagComponentsForDiscard(bloodTestBackingForm.getFlagComponentsForDiscard());
+    bloodTest.setRankInCategory(bloodTestBackingForm.getRankInCategory());
     
     return bloodTest;
   }
