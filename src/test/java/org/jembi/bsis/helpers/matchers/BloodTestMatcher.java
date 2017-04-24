@@ -6,7 +6,7 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 
-public class BloodTestMatcher extends TypeSafeMatcher<BloodTest> {
+public class BloodTestMatcher extends AbstractTypeSafeMatcher<BloodTest> {
   
   private BloodTest expected;
 
@@ -15,21 +15,21 @@ public class BloodTestMatcher extends TypeSafeMatcher<BloodTest> {
   }
 
   @Override
-  public void describeTo(Description description) {
+  public void appendDescription(Description description, BloodTest bloodTest) {
     description.appendText("A BloodTest with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nTestName: ").appendValue(expected.getTestName())
-        .appendText("\nTestNameShort: ").appendValue(expected.getTestNameShort())
-        .appendText("\nCategory: ").appendValue(expected.getCategory())
-        .appendText("\nBloodTestType: ").appendValue(expected.getBloodTestType())
-        .appendText("\nValidResults: ").appendValue(expected.getValidResults())
-        .appendText("\nPositiveResults: ").appendValue(expected.getPositiveResults())
-        .appendText("\nNegativeResults: ").appendValue(expected.getNegativeResults())
-        .appendText("\nIsActive: ").appendValue(expected.getIsActive())
-        .appendText("\nIsDeleted: ").appendValue(expected.getIsDeleted())
-        .appendText("\nFlagComponentsContainingPlasmaForDiscard: ").appendValue(expected.getFlagComponentsContainingPlasmaForDiscard())
-        .appendText("\nFlagComponentsForDiscard: ").appendValue(expected.isFlagComponentsForDiscard())
-        .appendText("\nRankInCategory: ").appendValue(expected.getRankInCategory());
+        .appendText("\nId: ").appendValue(bloodTest.getId())
+        .appendText("\nTestName: ").appendValue(bloodTest.getTestName())
+        .appendText("\nTestNameShort: ").appendValue(bloodTest.getTestNameShort())
+        .appendText("\nCategory: ").appendValue(bloodTest.getCategory())
+        .appendText("\nBloodTestType: ").appendValue(bloodTest.getBloodTestType())
+        .appendText("\nValidResults: ").appendValue(bloodTest.getValidResults())
+        .appendText("\nPositiveResults: ").appendValue(bloodTest.getPositiveResults())
+        .appendText("\nNegativeResults: ").appendValue(bloodTest.getNegativeResults())
+        .appendText("\nIsActive: ").appendValue(bloodTest.getIsActive())
+        .appendText("\nIsDeleted: ").appendValue(bloodTest.getIsDeleted())
+        .appendText("\nFlagComponentsContainingPlasmaForDiscard: ").appendValue(bloodTest.getFlagComponentsContainingPlasmaForDiscard())
+        .appendText("\nFlagComponentsForDiscard: ").appendValue(bloodTest.isFlagComponentsForDiscard())
+        .appendText("\nRankInCategory: ").appendValue(bloodTest.getRankInCategory());
   }
 
   @Override
