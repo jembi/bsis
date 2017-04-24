@@ -50,6 +50,7 @@ public class BloodTestFactory {
     viewModel.setBloodTestType(bloodTest.getBloodTestType());
     viewModel.setIsActive(bloodTest.getIsActive());
     viewModel.setIsDeleted(bloodTest.getIsDeleted());
+    viewModel.setRankInCategory(bloodTest.getRankInCategory());
   }
 
   private void populateFullViewModelFields(BloodTest bloodTest, BloodTestFullViewModel viewModel) {
