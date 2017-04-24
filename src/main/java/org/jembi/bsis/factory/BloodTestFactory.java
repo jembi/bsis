@@ -57,7 +57,6 @@ public class BloodTestFactory {
     viewModel.setValidResults(bloodTest.getValidResultsSet());
     viewModel.setPositiveResults(bloodTest.getPositiveResultsSet());
     viewModel.setNegativeResults(bloodTest.getNegativeResultsSet());
-    viewModel.setRankInCategory(bloodTest.getRankInCategory());
     viewModel.setFlagComponentsForDiscard(bloodTest.isFlagComponentsForDiscard());
     viewModel.setFlagComponentsContainingPlasmaForDiscard(bloodTest.getFlagComponentsContainingPlasmaForDiscard());
   }
