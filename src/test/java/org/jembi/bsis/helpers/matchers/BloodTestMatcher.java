@@ -28,7 +28,8 @@ public class BloodTestMatcher extends TypeSafeMatcher<BloodTest> {
         .appendText("\nIsActive: ").appendValue(expected.getIsActive())
         .appendText("\nIsDeleted: ").appendValue(expected.getIsDeleted())
         .appendText("\nFlagComponentsContainingPlasmaForDiscard: ").appendValue(expected.getFlagComponentsContainingPlasmaForDiscard())
-        .appendText("\nFlagComponentsForDiscard: ").appendValue(expected.isFlagComponentsForDiscard());
+        .appendText("\nFlagComponentsForDiscard: ").appendValue(expected.isFlagComponentsForDiscard())
+        .appendText("\nRankInCategory: ").appendValue(expected.getRankInCategory());
   }
 
   @Override
@@ -44,7 +45,9 @@ public class BloodTestMatcher extends TypeSafeMatcher<BloodTest> {
         && Objects.equals(actual.getIsActive(), expected.getIsActive())
         && Objects.equals(actual.getIsDeleted(), expected.getIsDeleted())
         && Objects.equals(actual.getFlagComponentsContainingPlasmaForDiscard(), expected.getFlagComponentsContainingPlasmaForDiscard())
-        && Objects.equals(actual.isFlagComponentsForDiscard(), expected.isFlagComponentsForDiscard());
+        && Objects.equals(actual.isFlagComponentsForDiscard(), expected.isFlagComponentsForDiscard())
+        && Objects.equals(actual.getRankInCategory(), expected.getRankInCategory());
+    
   }
   
   public static BloodTestMatcher hasSameStateAsBloodTest(BloodTest expected) {

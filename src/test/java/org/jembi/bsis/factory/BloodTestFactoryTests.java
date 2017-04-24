@@ -157,6 +157,7 @@ public class BloodTestFactoryTests extends UnitTestSuite {
         .thatIsDeleted() 
         .thatShouldNotFlagComponentsContainingPlasmaForDiscard() 
         .thatShouldFlagComponentsForDiscard() 
+        .withRankInCategory(1)
         .build(); 
      
     // Exercise SUT 
