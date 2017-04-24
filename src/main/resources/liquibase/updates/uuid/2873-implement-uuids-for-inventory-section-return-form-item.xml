@@ -27,6 +27,11 @@
       UPDATE ReturnForm SET id_temp = id;
     </sql>
 
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="returnform_id_temp_index" tableName="ReturnForm" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
     <sql>
       UPDATE ReturnForm_AUD SET id_temp = id;
     </sql>

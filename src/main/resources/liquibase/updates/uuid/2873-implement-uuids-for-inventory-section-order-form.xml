@@ -36,6 +36,11 @@
       SET id_temp = id;
     </sql>
 
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="orderform_id_temp_index" tableName="OrderForm" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
     <sql>
       UPDATE OrderForm_AUD 
       SET id_temp = id;
