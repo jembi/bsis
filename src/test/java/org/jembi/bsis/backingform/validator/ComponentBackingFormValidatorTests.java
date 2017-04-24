@@ -5,6 +5,7 @@ import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.model.component.Component;
@@ -26,19 +27,21 @@ public class ComponentBackingFormValidatorTests {
 
   @Mock
   private ComponentRepository componentRepository;
+  
+  private static final UUID COMPONENT_ID = UUID.randomUUID();
 
   @Test
   public void testValidateComponentWithWeight_hasNoErrors() throws Exception {
     // set up data
     ComponentBackingForm form = aComponentBackingForm()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(333)
         .build();
     Component component = aComponent().build();
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "Component");
 
-    when(componentRepository.findComponent(1L)).thenReturn(component);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component);
 
     // run test
     validator.validate(form, errors);
@@ -51,13 +54,13 @@ public class ComponentBackingFormValidatorTests {
   public void testValidateComponentWithNoWeight_hasNoErrors() throws Exception {
     // set up data
     ComponentBackingForm form = aComponentBackingForm()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(null)
         .build();
     Component component = aComponent().build();
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "Component");
 
-    when(componentRepository.findComponent(1L)).thenReturn(component);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component);
 
     // run test
     validator.validate(form, errors);
@@ -70,13 +73,13 @@ public class ComponentBackingFormValidatorTests {
   public void testValidateComponentWithNegativeWeight_hasInvalidWeightError() throws Exception {
     // set up data
     ComponentBackingForm form = aComponentBackingForm()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(-4)
         .build();
     Component component = aComponent().build();
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "Component");
 
-    when(componentRepository.findComponent(1L)).thenReturn(component);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component);
 
     // run test
     validator.validate(form, errors);
@@ -91,13 +94,13 @@ public class ComponentBackingFormValidatorTests {
   public void testValidateComponentWithTooLargeWeight_hasInvalidWeightError() throws Exception {
     // set up data
     ComponentBackingForm form = aComponentBackingForm()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(1000)
         .build();
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "Component");
     Component component = aComponent().build();
 
-    when(componentRepository.findComponent(1L)).thenReturn(component);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component);
 
     // run test
     validator.validate(form, errors);
@@ -112,14 +115,14 @@ public class ComponentBackingFormValidatorTests {
   public void testValidateComponentWithWeightGreaterThanParentWeight_hasInvalidWeightError() {
     // set up data
     ComponentBackingForm form = aComponentBackingForm()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withWeight(500)
         .build();
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "Component");
-    Component parentComponent = aComponent().withId(1L).withWeight(450).build();
+    Component parentComponent = aComponent().withId(COMPONENT_ID).withWeight(450).build();
     Component component = aComponent().withParentComponent(parentComponent).build();
 
-    when(componentRepository.findComponent(1L)).thenReturn(component);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component);
 
     // run test
     validator.validate(form, errors);

@@ -64,25 +64,25 @@
 
     <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType="Voluntary" isDeleted="false"/>
 
-    <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a01'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
                    componentTypeCode="0011" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="2" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a02'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Double Pack - CPDA"
                    componentTypeCode="0012" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="3" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a03'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Triple Pack - CPDA"
                    componentTypeCode="0013" containsPlasma="true"/>
 
     <PackType id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" packType="Single" isDeleted="false" testSampleProduced="true"
-              componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>
+              componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a01'" countAsDonation="true" periodBetweenDonations="90"/>
     <PackType id="uuid'a60fc65c-8877-45d3-b31b-a374e43019a3'" packType="Double" isDeleted="false" testSampleProduced="true"
-              componentType_id="2" countAsDonation="true" periodBetweenDonations="90"/>
+              componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a02'" countAsDonation="true" periodBetweenDonations="90"/>
     <PackType id="uuid'52b78158-af2d-42af-bf98-64e9d8911249'" packType="Triple" isDeleted="false" testSampleProduced="true"
-              componentType_id="3" countAsDonation="true" periodBetweenDonations="90"/>
+              componentType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a03'" countAsDonation="true" periodBetweenDonations="90"/>
 
     <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="uuid'77321456-eeee-1234-b5b1-123412348891'" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
@@ -174,67 +174,5 @@
               createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" venue_id="uuid'77321456-eeee-1234-b5b1-123412348892'"
               bleedStartTime="1970-01-01 14:53:37.0" bleedEndTime="1970-01-01 14:53:37.0"
               bloodTypingMatchStatus="MATCH" ineligibleDonor="0" released="0"/>
-
-  <BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
-    isActive="1"
-    negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
-    testName="ABO" testNameShort="ABO" validResults="A,B,AB,O" flagComponentsForDiscard="0"
-    flagComponentsContainingPlasmaForDiscard="0" isDeleted="0" />
-  <BloodTestResult isDeleted="false" id="1" createdDate="2015-02-06 02:09:23.0"
-    lastUpdated="2015-02-06 02:09:23.0" notes="" result="O"
-    testedOn="2015-02-06 02:09:23.0" bloodTest_id="1" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1"
-    createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
-  <BloodTestResult isDeleted="false" id="2" createdDate="2015-04-24 04:43:06.0"
-    lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
-    testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2"
-    createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
-	<BloodTestingRule id="1" bloodTest_id="1" 
-		donationFieldChanged="BLOODABO"
-		isDeleted="0"  
-		newInformation="O" pattern="O" pendingTestsIds=""   />
-	<BloodTestingRule id="2" bloodTest_id="1" 
-		donationFieldChanged="BLOODABO"
-		isDeleted="0"  
-		newInformation="A" pattern="A" pendingTestsIds=""   />
-	<BloodTestingRule id="3" bloodTest_id="1" 
-		donationFieldChanged="BLOODABO"
-		isDeleted="0"  
-		newInformation="B" pattern="B" pendingTestsIds=""   />
-	<BloodTestingRule id="4" bloodTest_id="1" 
-		donationFieldChanged="BLOODABO"
-		isDeleted="0"  
-		newInformation="AB" pattern="AB" pendingTestsIds=""   />
-
-	<DataType id="1" dataType="text"/>
-	<DataType id="2" dataType="integer"/>
-	<DataType id="3" dataType="decimal"/>
-	<DataType id="4" dataType="boolean"/>
-	<GeneralConfig id="1" name="donation.hbNumericValue"
-		value="true" description="Allow capturing of numeric haemoglobin value"
-		dataType_id="4" />
-	<GeneralConfig id="2" name="donation.hbQualitativeValue"
-		value="false" description="Allow capturing of qualitative haemoglobin value"
-		dataType_id="4" />
-	<GeneralConfig id="3" name="donation.donor.bpSystolicMin"
-		value="70" description="Donation Donor bpSystolicMin" dataType_id="2" />
-	<GeneralConfig id="4" name="donation.donor.bpSystolicMax"
-		value="190" description="Donation Donor bpSystolicMax" dataType_id="2" />
-	<GeneralConfig id="5" name="donation.donor.bpDiastolicMin"
-		value="40" description="Donation Donor bpDiastolicMin" dataType_id="2" />
-	<GeneralConfig id="6" name="donation.donor.bpDiastolicMax"
-		value="100" description="Donation Donor bpDiastolicMax" dataType_id="2" />
-	<GeneralConfig id="7" name="donation.donor.hbMin" value="1"
-		description="Donation Donor hbMin" dataType_id="2" />
-	<GeneralConfig id="8" name="donation.donor.hbMax" value="25"
-		description="Donation Donor hbMax" dataType_id="2" />
-	<GeneralConfig id="9" name="donation.donor.weightMin"
-		value="30" description="Donation Donor weightMin" dataType_id="2" />
-	<GeneralConfig id="10" name="donation.donor.weightMax"
-		value="300" description="Donation Donor weightMax" dataType_id="2" />
-	<GeneralConfig id="11" name="donation.donor.pulseMin"
-		value="30" description="Donation Donor pulseMin" dataType_id="2" />
-	<GeneralConfig id="12" name="donation.donor.pulseMax"
-		value="200" description="Donation Donor pulseMax" dataType_id="2" />
-	<GeneralConfig id="13" name="components.createInitialComponents" value="true" dataType_id="4" />
 		
 </dataset>

@@ -501,11 +501,14 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanEditPackTypeWithProcessedComponent_shouldReturnFalse() {
     // Set up fixture
-    Component processedComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    UUID componentId1 = UUID.randomUUID();
+    UUID componentId2 = UUID.randomUUID();
+    UUID componentId3 = UUID.randomUUID();
+    Component processedComponent = aComponent().withId(componentId1).withStatus(ComponentStatus.PROCESSED).build();
     List<Component> components = Arrays.asList(
         processedComponent,
-        aComponent().withId(2L).withParentComponent(processedComponent).withStatus(ComponentStatus.QUARANTINED).build(),
-        aComponent().withId(3L).withParentComponent(processedComponent).withStatus(ComponentStatus.QUARANTINED).build()
+        aComponent().withId(componentId2).withParentComponent(processedComponent).withStatus(ComponentStatus.QUARANTINED).build(),
+        aComponent().withId(componentId3).withParentComponent(processedComponent).withStatus(ComponentStatus.QUARANTINED).build()
     );
     Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withComponents(components).build();
     
@@ -519,7 +522,8 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanEditPackTypeWithDiscardedComponent_shouldReturnFalse() {
     // Set up fixture
-    Component discardedComponent = aComponent().withId(1L).withStatus(ComponentStatus.DISCARDED).build();
+    UUID componentId = UUID.randomUUID();
+    Component discardedComponent = aComponent().withId(componentId).withStatus(ComponentStatus.DISCARDED).build();
     Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withComponent(discardedComponent).build();
     
     // Exercise SUT
@@ -532,8 +536,9 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanEditPackTypeWithLabelledComponent_shouldReturnFalse() {
     // Set up fixture
+    UUID componentId = UUID.randomUUID();
     Component discardedComponent = aComponent()
-        .withId(1L)
+        .withId(componentId)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
@@ -549,9 +554,11 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanEditPackTypeWithDeletedDiscardedComponent_shouldReturnTrue() {
     // Set up fixture
+    UUID componentId1 = UUID.randomUUID();
+    UUID componentId2 = UUID.randomUUID();
     List<Component> components = Arrays.asList(
-        aComponent().withId(1L).withStatus(ComponentStatus.DISCARDED).withIsDeleted(true).build(),
-        aComponent().withId(2L).withStatus(ComponentStatus.QUARANTINED).build()
+        aComponent().withId(componentId1).withStatus(ComponentStatus.DISCARDED).withIsDeleted(true).build(),
+        aComponent().withId(componentId2).withStatus(ComponentStatus.QUARANTINED).build()
     );
     Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withComponents(components).build();
     

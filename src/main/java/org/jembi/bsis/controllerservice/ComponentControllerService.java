@@ -72,7 +72,7 @@ public class ComponentControllerService {
   @Autowired
   private LocationFactory locationFactory;
 
-  public ComponentFullViewModel findComponentById(Long id) {
+  public ComponentFullViewModel findComponentById(UUID id) {
     Component component = componentRepository.findComponentById(id);
     ComponentFullViewModel componentFullViewModel = componentFactory.createComponentFullViewModel(component);
     return componentFullViewModel;
@@ -101,7 +101,7 @@ public class ComponentControllerService {
     return componentFactory.createComponentViewModels(results);
   }
 
-  public List<ComponentViewModel> findAnyComponent(List<Long> componentTypeIds,
+  public List<ComponentViewModel> findAnyComponent(List<UUID> componentTypeIds,
       ComponentStatus status, Date dateFrom, Date dateTo, UUID locationId) {
     List<Component> results = componentRepository.findAnyComponent(componentTypeIds, status, dateFrom, dateTo, locationId);
     List<ComponentViewModel> components = componentFactory.createComponentViewModels(results);
@@ -141,23 +141,23 @@ public class ComponentControllerService {
         discardComponentsBackingForm.getDiscardReason().getId(), discardComponentsBackingForm.getDiscardReasonText());
   }
 
-  public ComponentManagementViewModel unprocessComponent(Long componentId) {
+  public ComponentManagementViewModel unprocessComponent(UUID componentId) {
     Component component = componentRepository.findComponentById(componentId);
     component = componentCRUDService.unprocessComponent(component);
     return componentFactory.createManagementViewModel(component);
   }
   
-  public List<ComponentManagementViewModel> undiscardComponents(List<Long> componentIds) {
+  public List<ComponentManagementViewModel> undiscardComponents(List<UUID> componentIds) {
     List<ComponentManagementViewModel> componentViewModels = new ArrayList<>();
-    for (Long componentId : componentIds) {
+    for (UUID componentId : componentIds) {
       Component undiscardedComponent = componentCRUDService.undiscardComponent(componentId);
       componentViewModels.add(componentFactory.createManagementViewModel(undiscardedComponent));
     }
     return componentViewModels;
   }
 
-  public Map<Long, List<ComponentTypeViewModel>> getProducedComponentTypesByCombinationId() {
-    Map<Long, List<ComponentTypeViewModel>> map = new HashMap<Long, List<ComponentTypeViewModel>>();
+  public Map<UUID, List<ComponentTypeViewModel>> getProducedComponentTypesByCombinationId() {
+    Map<UUID, List<ComponentTypeViewModel>> map = new HashMap<UUID, List<ComponentTypeViewModel>>();
     for (ComponentTypeCombination combination : componentTypeCombinationRepository
         .getAllComponentTypeCombinations(false)) {
       map.put(combination.getId(), componentTypeFactory.createViewModels(combination.getComponentTypes()));

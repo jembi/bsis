@@ -37,7 +37,7 @@ public class InventoryCRUDService {
    * @return the list
    */
   public List<Component> findComponentsInStock(String donationIdentificationNumber, String componentCode,
-      UUID locationId, Long componentTypeId, Date dueToExpireBy, List<String> bloodGroups) {
+      UUID locationId, UUID componentTypeId, Date dueToExpireBy, List<String> bloodGroups) {
     
     // Check that if donationIdentificationNumber or componentCode are present, both are present
     boolean searchByCodeAndDIN = false;

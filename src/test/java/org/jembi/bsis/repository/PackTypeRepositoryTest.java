@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -71,7 +72,7 @@ public class PackTypeRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testSavePackType() throws Exception {
-    ComponentType componentType = componentTypeRepository.getComponentTypeById(1l);
+    ComponentType componentType = componentTypeRepository.getComponentTypeById(UUID.fromString("99a61311-1234-4321-b3ea-39e11c2c5801"));
     PackType toBeSaved = new PackType();
     toBeSaved.setPackType("Junit");
     toBeSaved.setPeriodBetweenDonations(123);

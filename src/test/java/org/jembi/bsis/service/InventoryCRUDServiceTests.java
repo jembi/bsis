@@ -32,7 +32,8 @@ public class InventoryCRUDServiceTests extends UnitTestSuite {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("A+");
     UUID locationId = UUID.randomUUID();
-    inventoryCRUDService.findComponentsInStock(IRRELEVANT_DONATION_DIN, IRRELEVANT_COMPONENT_CODE, locationId, 1L,
+    UUID componentTypeId = UUID.randomUUID();
+    inventoryCRUDService.findComponentsInStock(IRRELEVANT_DONATION_DIN, IRRELEVANT_COMPONENT_CODE, locationId, componentTypeId,
         new Date(),
         bloodGroups);
     verify(inventoryRepository).findComponentByCodeAndDINInStock(IRRELEVANT_COMPONENT_CODE, IRRELEVANT_DONATION_DIN);
@@ -43,7 +44,8 @@ public class InventoryCRUDServiceTests extends UnitTestSuite {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("A+");
     UUID locationId = UUID.randomUUID();
-    inventoryCRUDService.findComponentsInStock(null, IRRELEVANT_COMPONENT_CODE, locationId, 1L, new Date(),
+    UUID componentTypeId = UUID.randomUUID();
+    inventoryCRUDService.findComponentsInStock(null, IRRELEVANT_COMPONENT_CODE, locationId, componentTypeId, new Date(),
         bloodGroups);
   }
 
@@ -53,7 +55,8 @@ public class InventoryCRUDServiceTests extends UnitTestSuite {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("A+");
     UUID locationId = UUID.randomUUID();
-    inventoryCRUDService.findComponentsInStock(IRRELEVANT_DONATION_DIN, null, locationId, 1L, new Date(), bloodGroups);
+    UUID componentTypeId = UUID.randomUUID();
+    inventoryCRUDService.findComponentsInStock(IRRELEVANT_DONATION_DIN, null, locationId, componentTypeId, new Date(), bloodGroups);
   }
 
   @Test
@@ -64,8 +67,9 @@ public class InventoryCRUDServiceTests extends UnitTestSuite {
     List<BloodGroup> bloodGroupObjs = new ArrayList<>();
     bloodGroupObjs.add(new BloodGroup("A+"));
     UUID locationId = UUID.randomUUID();
-    inventoryCRUDService.findComponentsInStock(null, null, locationId, 1L, dueToExpireBy, bloodGroups);
-    verify(inventoryRepository).findComponentsInStock(locationId, 1L, dueToExpireBy, bloodGroupObjs);
+    UUID componentTypeId = UUID.randomUUID();
+    inventoryCRUDService.findComponentsInStock(null, null, locationId, componentTypeId, dueToExpireBy, bloodGroups);
+    verify(inventoryRepository).findComponentsInStock(locationId, componentTypeId, dueToExpireBy, bloodGroupObjs);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -73,7 +77,8 @@ public class InventoryCRUDServiceTests extends UnitTestSuite {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("WrongBloodGroup");
     UUID locationId = UUID.randomUUID();
-    inventoryCRUDService.findComponentsInStock(null, null, locationId, 1L, null, bloodGroups);
+    UUID componentTypeId = UUID.randomUUID();
+    inventoryCRUDService.findComponentsInStock(null, null, locationId, componentTypeId, null, bloodGroups);
   }
 
   @Test

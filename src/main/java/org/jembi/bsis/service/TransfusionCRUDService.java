@@ -41,7 +41,7 @@ public class TransfusionCRUDService {
    * @return Transfusion persisted record
    */
   public Transfusion createTransfusion(
-      Transfusion transfusion, String donationIdentificatioNumber, String transfusedComponentCode, Long transfusedComponentTypeId) {
+      Transfusion transfusion, String donationIdentificatioNumber, String transfusedComponentCode, UUID transfusedComponentTypeId) {
 
     // Transfusion data must be associated with a Component
     if (transfusion.getComponent() == null) {
@@ -58,7 +58,7 @@ public class TransfusionCRUDService {
     return transfusion;
   }
 
-  public List<Transfusion> findTransfusions(String din, String componentCode, Long componentTypeId,
+  public List<Transfusion> findTransfusions(String din, String componentCode, UUID componentTypeId,
       UUID receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
     List<Transfusion> transfusions = new ArrayList<>();
 
@@ -79,7 +79,7 @@ public class TransfusionCRUDService {
   }
 
   private Component getTransfusedComponent(
-      String donationIdentificationNumber, String transfusedComponentCode, Long transfusedComponentTypeId) {
+      String donationIdentificationNumber, String transfusedComponentCode, UUID transfusedComponentTypeId) {
     if (transfusedComponentCode != null) {
       // the user scanned a component code - we need to use that to get the component
       return componentRepository.findComponentByCodeAndDIN(
@@ -96,7 +96,7 @@ public class TransfusionCRUDService {
     return components.get(0);
   }
 
-  public Transfusion updateTransfusion(Transfusion transfusion,  String donationIdentificatioNumber, String transfusedComponentCode, Long transfusedComponentTypeId) {
+  public Transfusion updateTransfusion(Transfusion transfusion,  String donationIdentificatioNumber, String transfusedComponentCode) {
     Transfusion existingTransfusion = transfusionRepository.findTransfusionById(transfusion.getId());
 
     existingTransfusion.setDateTransfused(transfusion.getDateTransfused());

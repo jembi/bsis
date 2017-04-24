@@ -87,7 +87,7 @@ public class TransfusionController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TRANSFUSION_DATA + "')")
   public Map<String, Object> findTransfusions(@RequestParam(required = false) String donationIdentificationNumber,
       @RequestParam(required = false) String componentCode, 
-      @RequestParam(required = false) Long componentTypeId,
+      @RequestParam(required = false) UUID componentTypeId,
       @RequestParam(required = false) UUID receivedFromId,
       @RequestParam(required = false) TransfusionOutcome transfusionOutcome,
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate, 

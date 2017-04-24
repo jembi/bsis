@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -13,7 +14,7 @@ import org.jembi.bsis.viewmodel.OrderFormViewModel;
 
 public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFullViewModel>{
 
-  private Long id;
+  private UUID id;
   private ComponentTypeViewModel componentType;
   private Date createdOn;
   private String donationIdentificationNumber;
@@ -36,7 +37,7 @@ public class InventoryFullViewModelBuilder extends AbstractBuilder<InventoryFull
     return this;
   }
   
-  public InventoryFullViewModelBuilder withId(Long id) {
+  public InventoryFullViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

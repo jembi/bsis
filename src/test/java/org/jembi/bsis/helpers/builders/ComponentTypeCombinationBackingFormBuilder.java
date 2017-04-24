@@ -2,19 +2,20 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
 
 public class ComponentTypeCombinationBackingFormBuilder {
 
-  private Long id;
+  private UUID id;
   private String combinationName;
   private List<ComponentTypeBackingForm> componentTypes;
   private Set<ComponentTypeBackingForm> sourceComponentTypes;
   private boolean isDeleted = false;
 
-  public ComponentTypeCombinationBackingFormBuilder withId(Long id) {
+  public ComponentTypeCombinationBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

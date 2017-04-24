@@ -1,17 +1,18 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
 import org.jembi.bsis.backingform.RecordComponentBackingForm;
 
 public class RecordComponentBackingFormBuilder extends RecordComponentBackingForm {
   
-  private Long parentComponentId;
+  private UUID parentComponentId;
   private ComponentTypeCombinationBackingForm componentTypeCombination;
   private Date processedOn;
 
-  public RecordComponentBackingFormBuilder withParentComponentId(Long parentComponentId) {
+  public RecordComponentBackingFormBuilder withParentComponentId(UUID parentComponentId) {
     this.parentComponentId = parentComponentId;
     return this;
   }

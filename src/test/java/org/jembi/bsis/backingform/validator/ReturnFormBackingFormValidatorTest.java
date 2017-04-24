@@ -53,6 +53,8 @@ public class ReturnFormBackingFormValidatorTest {
 
   @Mock
   private ComponentRepository componentRepository;
+  
+  private static final UUID COMPONENT_ID = UUID.randomUUID();
 
   private static final UUID locationId1 = UUID.randomUUID();
   private static final UUID locationId2 = UUID.randomUUID();
@@ -78,7 +80,7 @@ public class ReturnFormBackingFormValidatorTest {
   }
 
   private ComponentBackingForm getBaseReturnFormComponentBackingForm() {
-    ComponentBackingForm component = aComponentBackingForm().withId(1L).build();
+    ComponentBackingForm component = aComponentBackingForm().withId(COMPONENT_ID).build();
     return component;
   }
 
@@ -192,7 +194,7 @@ public class ReturnFormBackingFormValidatorTest {
     // create component that can be returned: status ISSUED
     Component component = aComponent()
         .withStatus(ComponentStatus.ISSUED)
-        .withLocation(getBaseReturnedFrom()).withId(1L).build();
+        .withLocation(getBaseReturnedFrom()).withId(COMPONENT_ID).build();
  
     backingForm.setComponents(Arrays.asList(getBaseReturnFormComponentBackingForm()));
 
@@ -200,7 +202,7 @@ public class ReturnFormBackingFormValidatorTest {
     when(locationRepository.getLocation(locationId1)).thenReturn(getBaseReturnedFrom());
     when(locationRepository.getLocation(locationId2)).thenReturn(getBaseReturnedTo());
     when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
-    when(componentRepository.findComponent(1L)).thenReturn(component);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ReturnForm");
@@ -214,7 +216,13 @@ public class ReturnFormBackingFormValidatorTest {
   public void testValidateComponentWithStatusOtherThanIssued_getInvalidStatusErrors() throws Exception {
     // set up data
     ReturnFormBackingForm backingForm = getBaseReturnFormBackingForm();
-
+    UUID componentId2 = UUID.randomUUID();
+    UUID componentId3 = UUID.randomUUID();
+    UUID componentId4 = UUID.randomUUID();
+    UUID componentId5 = UUID.randomUUID();
+    UUID componentId6 = UUID.randomUUID();
+    UUID componentId7 = UUID.randomUUID();
+    UUID componentId8 = UUID.randomUUID();
     // create components with statuses QUARANTINED, AVAILABLE, EXPIRED, TRANSFUSED, UNSAFE, DISCARDED and PROCESSED
     Component component1 = aComponent().withStatus(ComponentStatus.QUARANTINED).withLocation(getBaseReturnedFrom()).build();
     Component component2 = aComponent().withStatus(ComponentStatus.AVAILABLE).withLocation(getBaseReturnedFrom()).build();
@@ -223,13 +231,13 @@ public class ReturnFormBackingFormValidatorTest {
     Component component6 = aComponent().withStatus(ComponentStatus.UNSAFE).withLocation(getBaseReturnedFrom()).build();
     Component component7 = aComponent().withStatus(ComponentStatus.DISCARDED).withLocation(getBaseReturnedFrom()).build();
     Component component8 = aComponent().withStatus(ComponentStatus.PROCESSED).withLocation(getBaseReturnedFrom()).build();
-    ComponentBackingForm componentBackingForm1 = aComponentBackingForm().withId(1L).build();
-    ComponentBackingForm componentBackingForm2 = aComponentBackingForm().withId(2L).build();
-    ComponentBackingForm componentBackingForm3 = aComponentBackingForm().withId(3L).build();
-    ComponentBackingForm componentBackingForm5 = aComponentBackingForm().withId(5L).build();
-    ComponentBackingForm componentBackingForm6 = aComponentBackingForm().withId(6L).build();
-    ComponentBackingForm componentBackingForm7 = aComponentBackingForm().withId(7L).build();
-    ComponentBackingForm componentBackingForm8 = aComponentBackingForm().withId(8L).build();
+    ComponentBackingForm componentBackingForm1 = aComponentBackingForm().withId(COMPONENT_ID).build();
+    ComponentBackingForm componentBackingForm2 = aComponentBackingForm().withId(componentId2).build();
+    ComponentBackingForm componentBackingForm3 = aComponentBackingForm().withId(componentId3).build();
+    ComponentBackingForm componentBackingForm5 = aComponentBackingForm().withId(componentId5).build();
+    ComponentBackingForm componentBackingForm6 = aComponentBackingForm().withId(componentId6).build();
+    ComponentBackingForm componentBackingForm7 = aComponentBackingForm().withId(componentId7).build();
+    ComponentBackingForm componentBackingForm8 = aComponentBackingForm().withId(componentId8).build();
     List<ComponentBackingForm> componentBackingForms = new ArrayList<>();
     componentBackingForms.add(componentBackingForm1);
     componentBackingForms.add(componentBackingForm2);
@@ -244,13 +252,13 @@ public class ReturnFormBackingFormValidatorTest {
     when(locationRepository.getLocation(locationId1)).thenReturn(getBaseReturnedFrom());
     when(locationRepository.getLocation(locationId2)).thenReturn(getBaseReturnedTo());
     when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
-    when(componentRepository.findComponent(1L)).thenReturn(component1);
-    when(componentRepository.findComponent(2L)).thenReturn(component2);
-    when(componentRepository.findComponent(3L)).thenReturn(component3);
-    when(componentRepository.findComponent(5L)).thenReturn(component5);
-    when(componentRepository.findComponent(6L)).thenReturn(component6);
-    when(componentRepository.findComponent(7L)).thenReturn(component7);
-    when(componentRepository.findComponent(8L)).thenReturn(component8);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component1);
+    when(componentRepository.findComponent(componentId2)).thenReturn(component2);
+    when(componentRepository.findComponent(componentId3)).thenReturn(component3);
+    when(componentRepository.findComponent(componentId5)).thenReturn(component5);
+    when(componentRepository.findComponent(componentId6)).thenReturn(component6);
+    when(componentRepository.findComponent(componentId7)).thenReturn(component7);
+    when(componentRepository.findComponent(componentId8)).thenReturn(component8);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ReturnForm");
@@ -277,7 +285,7 @@ public class ReturnFormBackingFormValidatorTest {
     when(locationRepository.getLocation(locationId1)).thenReturn(getBaseReturnedFrom());
     when(locationRepository.getLocation(locationId2)).thenReturn(getBaseReturnedTo());
     when(formFieldRepository.getRequiredFormFields("ReturnForm")).thenReturn(Arrays.asList(new String[] {"returnDate", "status"}));
-    when(componentRepository.findComponent(1L)).thenReturn(null);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(null);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ReturnForm");

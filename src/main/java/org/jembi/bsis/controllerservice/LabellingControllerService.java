@@ -54,24 +54,24 @@ public class LabellingControllerService {
     return componentTypeFactory.createViewModels(componentTypeRepository.getAllComponentTypes());
   }
   
-  public List<LabellingViewModel> getComponentsForLabelling(String donationIdentificationNumber, long componentTypeId) {
+  public List<LabellingViewModel> getComponentsForLabelling(String donationIdentificationNumber, UUID componentTypeId) {
     List<Component> components = componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
     return labellingFactory.createViewModels(components);
   }
 
-  public String printPackLabel(long componentId) {
+  public String printPackLabel(UUID componentId) {
     return labellingService.printPackLabel(componentId);
   }
 
-  public String printDiscardLabel(long componentId) {
+  public String printDiscardLabel(UUID componentId) {
     return labellingService.printDiscardLabel(componentId);
   }
   
-  public boolean verifyPackLabel(long componentId, String prePrintedDIN, String packLabelDIN) {
+  public boolean verifyPackLabel(UUID componentId, String prePrintedDIN, String packLabelDIN) {
     return labellingService.verifyPackLabel(componentId, prePrintedDIN, packLabelDIN);
   }
 
-  public List<ComponentFullViewModel> findSafeComponentsToLabel(String din, String componentCode, Long componentTypeId,
+  public List<ComponentFullViewModel> findSafeComponentsToLabel(String din, String componentCode, UUID componentTypeId,
       UUID locationId, List<String> bloodGroups, Date startDate, Date endDate, InventoryStatus inventoryStatus) {
     List<Component> components = labellingService.findSafeComponentsToLabel(din, componentCode, componentTypeId, locationId,
         bloodGroups, startDate, endDate, inventoryStatus);

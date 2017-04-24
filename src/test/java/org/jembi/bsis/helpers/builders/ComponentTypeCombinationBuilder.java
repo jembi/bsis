@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.ComponentTypeCombinationPersister;
@@ -12,13 +13,13 @@ import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 
 public class ComponentTypeCombinationBuilder  extends AbstractEntityBuilder<ComponentTypeCombination> {
 
-  private Long id;
+  private UUID id;
   private boolean isDeleted = false;
   private String combinationName = "combination";
   private List<ComponentType> componentTypes;
   private Set<ComponentType> sourceComponentTypes;
 
-  public ComponentTypeCombinationBuilder withId(Long id) {
+  public ComponentTypeCombinationBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

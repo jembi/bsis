@@ -1,13 +1,15 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.ComponentBackingForm;
 
 public class ComponentBackingFormBuilder extends AbstractBuilder<ComponentBackingForm> {
 
-  private Long id;
+  private UUID id;
   private Integer weight;
 
-  public ComponentBackingFormBuilder withId(Long id) {
+  public ComponentBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

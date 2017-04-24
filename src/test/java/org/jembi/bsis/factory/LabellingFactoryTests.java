@@ -1,12 +1,13 @@
 package org.jembi.bsis.factory;
 
-import static org.mockito.Mockito.when;
 import static org.jembi.bsis.helpers.builders.ComponentBatchBuilder.aComponentBatch;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.service.LabellingConstraintChecker;
@@ -28,14 +29,15 @@ public class LabellingFactoryTests extends UnitTestSuite {
   public void testCreateLabellingViewModel_shouldReturnViewModelWithTheCorrectState() {
 
     // Setup
+    UUID componentTypeId = UUID.randomUUID();
     Component component = aComponent()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withComponentBatch(aComponentBatch()
-            .withId(1L)
+            .withId(UUID.randomUUID())
             .build())
         .withComponentType(aComponentType()
             .withComponentTypeName("name")
-            .withId(1L)
+            .withId(componentTypeId)
             .withComponentTypeCode("code")
             .build())
         .build(); 

@@ -36,8 +36,8 @@ public class PackTypeFactoryTests extends UnitTestSuite {
   @Test
   public void testConvertEntityToPackTypeFullViewModel_shouldReturnExpectedViewModel() {
     UUID packTypeId = UUID.randomUUID();
-
-    ComponentType componentType = ComponentTypeBuilder.aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentType componentType = ComponentTypeBuilder.aComponentType().withId(componentTypeId).build();
     
     ComponentTypeViewModel componentTypeViewModel = ComponentTypeViewModelBuilder.aComponentTypeViewModel()
         .withId(componentType.getId())
@@ -80,7 +80,7 @@ public class PackTypeFactoryTests extends UnitTestSuite {
     // Set up fixture
     UUID packTypeId = UUID.randomUUID();
     String packTypeName = "Name";
-    Long componentTypeId = 98L;
+    UUID componentTypeId = UUID.randomUUID();
     Boolean canPool = true;
     Boolean canSplit = true;
     Boolean isDeleted = false;

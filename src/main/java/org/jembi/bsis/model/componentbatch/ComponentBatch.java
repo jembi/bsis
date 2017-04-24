@@ -20,7 +20,7 @@ import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
@@ -36,7 +36,7 @@ import org.jembi.bsis.repository.ComponentBatchNamedQueryConstants;
 })
 @Entity
 @Audited
-public class ComponentBatch extends BaseModificationTrackerEntity {
+public class ComponentBatch extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
   
