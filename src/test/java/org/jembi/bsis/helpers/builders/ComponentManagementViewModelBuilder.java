@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -11,7 +12,7 @@ import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 
 public class ComponentManagementViewModelBuilder extends AbstractBuilder<ComponentManagementViewModel> {
 
-  private Long id;
+  private UUID id;
   private ComponentTypeViewModel componentType;
   private Date createdOn;
   private Date expiresOn;
@@ -25,7 +26,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   private Date donationDateTime;
   private Date bleedStartTime;
   private Date bleedEndTime;
-  private Long parentComponentId;
+  private UUID parentComponentId;
 
   public ComponentManagementViewModelBuilder withDonationDateTime(Date donationDateTime) {
     this.donationDateTime = donationDateTime;
@@ -57,7 +58,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     return this;
   }
 
-  public ComponentManagementViewModelBuilder withId(Long id) {
+  public ComponentManagementViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
@@ -103,7 +104,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   }
 
 
-  public ComponentManagementViewModelBuilder withParentComponentId(Long parentComponentId) {
+  public ComponentManagementViewModelBuilder withParentComponentId(UUID parentComponentId) {
     this.parentComponentId = parentComponentId;
     return this;
   }

@@ -39,7 +39,7 @@ public class LabellingController {
   @RequestMapping(value = "/donations/{din}/components", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> findlotRelease(@PathVariable String din,
-      @RequestParam(required = true, value = "componentType") long componentTypeId) {
+      @RequestParam(required = true, value = "componentType") UUID componentTypeId) {
     Map<String, Object> componentMap = new HashMap<String, Object>();
     componentMap.put("donationNumber", din);
     componentMap.put("components", labellingControllerService.getComponentsForLabelling(din, componentTypeId));
@@ -50,7 +50,7 @@ public class LabellingController {
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public Map<String, Object> findSafeComponents(@RequestParam(required = false) String donationIdentificationNumber, 
       @RequestParam(required = false) String componentCode, 
-      @RequestParam(required = false) Long componentTypeId, 
+      @RequestParam(required = false) UUID componentTypeId, 
       @RequestParam(required = false) UUID locationId,
       @RequestParam(required = false) List<String> bloodGroups, 
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate, 
@@ -64,7 +64,7 @@ public class LabellingController {
 
   @RequestMapping(value = "/print/packlabel/{componentId}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> printLabel(@PathVariable long componentId) {
+  public ResponseEntity<Map<String, Object>> printLabel(@PathVariable UUID componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("labelZPL", labellingControllerService.printPackLabel(componentId));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -73,7 +73,7 @@ public class LabellingController {
   @RequestMapping(value = "/verify/packlabel", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public Map<String, Object> verifyLabel(
-      @RequestParam(required = true, value = "componentId") long componentId,
+      @RequestParam(required = true, value = "componentId") UUID componentId,
       @RequestParam(required = true, value = "prePrintedDIN") String prePrintedDIN,
       @RequestParam(required = true, value = "packLabelDIN") String packLabelDIN) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -83,7 +83,7 @@ public class LabellingController {
 
   @RequestMapping(value = "/print/discardlabel/{componentId}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> printDiscard(@PathVariable long componentId) {
+  public ResponseEntity<Map<String, Object>> printDiscard(@PathVariable UUID componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("labelZPL", labellingControllerService.printDiscardLabel(componentId));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);

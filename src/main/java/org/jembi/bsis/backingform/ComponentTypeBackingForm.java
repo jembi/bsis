@@ -1,13 +1,14 @@
 package org.jembi.bsis.backingform;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 
 public class ComponentTypeBackingForm {
   
-  private Long id;
+  private UUID id;
   private String componentTypeName;
   private String componentTypeCode;
   private Integer expiresAfter;
@@ -28,6 +29,14 @@ public class ComponentTypeBackingForm {
   private boolean containsPlasma = true;
   private Double gravity;
   private Set<ComponentTypeCombination> producedComponentTypeCombinations;
+
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
   /**
    * Returns the max bleed time in minutes
@@ -204,12 +213,4 @@ public class ComponentTypeBackingForm {
   public void setGravity(Double gravity) {
     this.gravity = gravity;
   }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  } 
 }

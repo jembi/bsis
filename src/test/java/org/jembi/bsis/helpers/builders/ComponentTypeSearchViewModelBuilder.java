@@ -1,11 +1,13 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 import org.jembi.bsis.viewmodel.ComponentTypeSearchViewModel;
 
 public class ComponentTypeSearchViewModelBuilder extends AbstractBuilder<ComponentTypeSearchViewModel> {
 
-  private Long id;
+  private UUID id;
   private int expiresAfter;
   private boolean canBeIssued = false;
   private boolean isDeleted = false;
@@ -15,7 +17,7 @@ public class ComponentTypeSearchViewModelBuilder extends AbstractBuilder<Compone
   private String componentTypeCode;
   private String description;
   
-  public ComponentTypeSearchViewModelBuilder withId(Long id) {
+  public ComponentTypeSearchViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

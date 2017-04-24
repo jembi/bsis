@@ -2,6 +2,7 @@ package org.jembi.bsis.backingform;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -12,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ComponentPreProcessingBackingForm {
 
-  private Long id;
+  private UUID id;
   private Integer weight;
   private Date bleedStartTime;
   private Date bleedEndTime;
@@ -33,11 +34,11 @@ public class ComponentPreProcessingBackingForm {
     this.bleedEndTime = bleedEndTime;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 

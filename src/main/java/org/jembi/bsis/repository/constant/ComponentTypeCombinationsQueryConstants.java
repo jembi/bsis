@@ -15,7 +15,7 @@ public class ComponentTypeCombinationsQueryConstants {
       "SELECT count(c) = 0 " +
           "FROM ComponentTypeCombination c " +
           "WHERE c.combinationName = :combinationName " +
-          "AND c.id != :id ";
+          "AND (:idIncluded is true OR c.id != :id) ";
 
   public static final String NAME_VERIFY_COMPONENT_TYPE_COMBINATION_WITH_ID_EXISTS =
       "ComponentTypeCombination.verifyExists";

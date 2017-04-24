@@ -4,8 +4,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
-import org.jembi.bsis.controllerservice.LabellingControllerService;
 import org.jembi.bsis.factory.ComponentTypeFactory;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
 import org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder;
@@ -30,13 +30,15 @@ public class LabellingControllerServiceTests extends UnitTestSuite {
 
   @Test
   public void testFindReturnForms_shouldCallRepositoryAndFactory() throws Exception {
+    UUID componentTypeId1 = UUID.randomUUID();
+    UUID componentTypeId2 = UUID.randomUUID();
     List<ComponentType> entities = Arrays.asList(
-        ComponentTypeBuilder.aComponentType().withId(1L).build(),
-        ComponentTypeBuilder.aComponentType().withId(2L).build()
+        ComponentTypeBuilder.aComponentType().withId(componentTypeId1).build(),
+        ComponentTypeBuilder.aComponentType().withId(componentTypeId2).build()
     );
     List<ComponentTypeViewModel> viewModels = Arrays.asList(
-        ComponentTypeViewModelBuilder.aComponentTypeViewModel().withId(1L).build(),
-        ComponentTypeViewModelBuilder.aComponentTypeViewModel().withId(2L).build()
+        ComponentTypeViewModelBuilder.aComponentTypeViewModel().withId(componentTypeId1).build(),
+        ComponentTypeViewModelBuilder.aComponentTypeViewModel().withId(componentTypeId2).build()
     );
     
     // set up mocks

@@ -1,6 +1,7 @@
 package org.jembi.bsis.controllerservice;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -40,7 +41,7 @@ public class ComponentTypeCombinationControllerService {
     return componentTypeCombinationFactory.createViewModels(componentTypeCombinationRepository.getAllComponentTypeCombinations(includeDeleted));
   }
 
-  public ComponentTypeCombinationFullViewModel findComponentTypeCombinationById(long id){
+  public ComponentTypeCombinationFullViewModel findComponentTypeCombinationById(UUID id){
     return componentTypeCombinationFactory.createFullViewModel
         (componentTypeCombinationRepository.findComponentTypeCombinationById(id));
   }

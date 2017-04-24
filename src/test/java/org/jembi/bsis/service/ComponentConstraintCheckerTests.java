@@ -11,6 +11,7 @@ import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -28,6 +29,10 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   
   @Mock
   private ComponentRepository componentRepository;
+  
+  private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_3 = UUID.randomUUID();
 
   @Test
   public void testCanDiscardWithQuarantinedComponent_shouldReturnTrue() {
@@ -475,8 +480,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
 
   @Test
   public void testCanUnprocessWithQuarantinedChildComponent_shouldReturnTrue() {  
-    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child = aComponent().withId(2L).withStatus(ComponentStatus.QUARANTINED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component parentComponent = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.QUARANTINED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child));
 
@@ -486,8 +491,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
 
   @Test
   public void testCanUnprocessWithAvailableChildComponent_shouldReturnTrue() {
-    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child = aComponent().withId(2L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component parentComponent = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child));
 
@@ -497,8 +502,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
 
   @Test
   public void testCanUnprocessWithUnsafeChildComponent_shouldReturnTrue() {
-    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child = aComponent().withId(2L).withStatus(ComponentStatus.UNSAFE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component parentComponent = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.UNSAFE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child));
 
@@ -508,8 +513,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
 
   @Test
   public void testCanUnprocessWithExpiredChildComponent_shouldReturnTrue() {
-    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child = aComponent().withId(2L).withStatus(ComponentStatus.EXPIRED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component parentComponent = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.EXPIRED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child));
 
@@ -519,8 +524,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
 
   @Test
   public void testCanUnprocessWithIssuedChildComponent_shouldReturnFalse() {
-    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child = aComponent().withId(2L).withStatus(ComponentStatus.ISSUED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component parentComponent = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.ISSUED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child));
 
@@ -530,8 +535,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
 
   @Test
   public void testCanUnprocessWithUsedChildComponent_shouldReturnFalse() {
-    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child = aComponent().withId(2L).withStatus(ComponentStatus.TRANSFUSED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component parentComponent = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.TRANSFUSED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child));
 
@@ -541,8 +546,8 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
 
   @Test
   public void testCanUnprocessWithDiscardedChildComponent_shouldReturnFalse() {
-    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child = aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component parentComponent = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.PROCESSED).build();
+    Component child = aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.DISCARDED).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child));
 
@@ -552,9 +557,9 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   
   @Test
   public void testCanUnprocessWithWrongLabelledChildComponent_shouldReturnFalse() {
-    Component parentComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
-    Component child1 = aComponent().withId(2L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.IN_STOCK).build();
-    Component child2 = aComponent().withId(3L).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
+    Component parentComponent = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.PROCESSED).build();
+    Component child1 = aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.IN_STOCK).build();
+    Component child2 = aComponent().withId(COMPONENT_ID_3).withStatus(ComponentStatus.AVAILABLE).withInventoryStatus(InventoryStatus.NOT_IN_STOCK).build();
 
     when(componentRepository.findChildComponents(parentComponent)).thenReturn(Arrays.asList(child1, child2));
 
@@ -565,7 +570,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanUndiscardComponentWithDiscardedStatusThatWasInStock_shouldReturnTrue() {
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.DISCARDED)
         .withInventoryStatus(InventoryStatus.REMOVED)
         .build();
@@ -578,7 +583,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanUndiscardComponentWithDiscardedStatusThatWasNotInStock_shouldReturnTrue() {
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.DISCARDED)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .build();
@@ -590,7 +595,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   
   @Test
   public void testCanUndiscardComponentWithQuarantinedStatus_shouldReturnFalse() {
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.QUARANTINED).build();
+    Component component = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.QUARANTINED).build();
     
     boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
     
@@ -599,7 +604,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   
   @Test
   public void testCanUndiscardComponentWithAvailableStatus_shouldReturnFalse() {
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).build();
+    Component component = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.AVAILABLE).build();
     
     boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
     
@@ -608,7 +613,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   
   @Test
   public void testCanUndiscardComponentWithExpiredStatus_shouldReturnFalse() {
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.EXPIRED).build();
+    Component component = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.EXPIRED).build();
     
     boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
     
@@ -617,7 +622,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   
   @Test
   public void testCanUndiscardComponentWithIssuedStatus_shouldReturnFalse() {
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.ISSUED).build();
+    Component component = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.ISSUED).build();
     
     boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
     
@@ -626,7 +631,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
  
   @Test
   public void testCanUndiscardComponentWithUsedStatus_shouldReturnFalse() {
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.TRANSFUSED).build();
+    Component component = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.TRANSFUSED).build();
     
     boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
     
@@ -635,7 +640,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   
   @Test
   public void testCanUndiscardComponentWithUnsafeStatus_shouldReturnFalse() {
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.UNSAFE).build();
+    Component component = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.UNSAFE).build();
     
     boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
     
@@ -644,7 +649,7 @@ public class ComponentConstraintCheckerTests extends UnitTestSuite {
   
   @Test
   public void testCanUndiscardComponentWithProcessedStatus_shouldReturnFalse() {
-    Component component = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    Component component = aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.PROCESSED).build();
     
     boolean canUndiscard = componentConstraintChecker.canUndiscard(component);
     

@@ -2,6 +2,7 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
@@ -12,7 +13,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   // static counter that is used to create a unique default name and code
   private static int UNIQUE_INCREMENT = 0;
 
-  private Long id;
+  private UUID id;
   private String componentTypeName = "Component Type " + ++UNIQUE_INCREMENT;
   private Boolean isDeleted = false;
   private int expiresAfter;
@@ -34,7 +35,7 @@ public class ComponentTypeBuilder extends AbstractEntityBuilder<ComponentType> {
   private Integer maxTimeSinceDonation;
   private Double gravity;
 
-  public ComponentTypeBuilder withId(Long id) {
+  public ComponentTypeBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

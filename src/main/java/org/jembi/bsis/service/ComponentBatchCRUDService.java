@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -28,11 +29,11 @@ public class ComponentBatchCRUDService {
   @Autowired
   private DonationBatchRepository donationBatchRepository;
 
-  public ComponentBatch getComponentBatchById(Long id) throws NoResultException {
+  public ComponentBatch getComponentBatchById(UUID id) throws NoResultException {
     return componentBatchRepository.findByIdEager(id);
   }
 
-  public void deleteComponentBatch(Long id) throws NoResultException {
+  public void deleteComponentBatch(UUID id) throws NoResultException {
     ComponentBatch componentBatch = componentBatchRepository.findById(id);
     componentBatch.setIsDeleted(true);
     componentBatch.setDonationBatch(null);

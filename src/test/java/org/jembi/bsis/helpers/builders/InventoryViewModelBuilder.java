@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -10,7 +11,7 @@ import org.jembi.bsis.viewmodel.LocationViewModel;
 
 public class InventoryViewModelBuilder extends AbstractBuilder<InventoryViewModel> {
 
-  private Long id;
+  private UUID id;
   private ComponentTypeViewModel componentType;
   private Date createdOn;
   private String donationIdentificationNumber;
@@ -22,7 +23,7 @@ public class InventoryViewModelBuilder extends AbstractBuilder<InventoryViewMode
   private String bloodGroup;
   private ComponentStatus componentStatus;
 
-  public InventoryViewModelBuilder withId(Long id) {
+  public InventoryViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

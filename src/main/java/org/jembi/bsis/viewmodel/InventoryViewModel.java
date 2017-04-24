@@ -1,6 +1,7 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class InventoryViewModel {
 
-  private Long id;
+  private UUID id;
 
   private String donationIdentificationNumber;
 
@@ -32,11 +33,11 @@ public class InventoryViewModel {
 
   private ComponentStatus status;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

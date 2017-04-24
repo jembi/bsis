@@ -5,6 +5,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.ComponentPersister;
@@ -20,7 +21,7 @@ import org.jembi.bsis.model.user.User;
 
 public class ComponentBuilder extends AbstractEntityBuilder<Component> {
 
-  private Long id;
+  private UUID id;
   private ComponentStatus status = ComponentStatus.QUARANTINED;
   private Donation donation = DonationBuilder.aDonation().build();
   private ComponentType componentType;
@@ -41,7 +42,7 @@ public class ComponentBuilder extends AbstractEntityBuilder<Component> {
   private User createdBy;
   private Date processedOn;
   
-  public ComponentBuilder withId(Long id) {
+  public ComponentBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

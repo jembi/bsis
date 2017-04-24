@@ -23,7 +23,7 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
     return query.getSingleResult();
   }
 
-  public List<OrderForm> findByComponent(long componentId) {
+  public List<OrderForm> findByComponent(UUID componentId) {
     return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_FIND_BY_COMPONENT, OrderForm.class)
         .setParameter("componentId", componentId)
         .setParameter("isDeleted", false)
@@ -87,7 +87,7 @@ public class OrderFormRepository extends AbstractRepository<OrderForm> {
         .getResultList();
   }
 
-  public boolean isComponentInAnotherOrderForm(UUID id, Long componentId) {
+  public boolean isComponentInAnotherOrderForm(UUID id, UUID componentId) {
     return entityManager.createNamedQuery(OrderFormNamedQueryConstants.NAME_IS_COMPONENT_IN_ANOTHER_ORDER_FORM, Boolean.class)
         .setParameter("id", id)
         .setParameter("includeId", id != null)

@@ -30,6 +30,8 @@ import org.mockito.Mockito;
 public class ComponentBatchCRUDServiceTest extends UnitTestSuite {
 
   private static final UUID DONATION_BATCH_ID = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
 
   @InjectMocks
   private ComponentBatchCRUDService service;
@@ -43,7 +45,7 @@ public class ComponentBatchCRUDServiceTest extends UnitTestSuite {
   @Test
   public void testDeleteComponentBatch() throws Exception {
     // set up data
-    ComponentBatch componentBatch = aComponentBatch().withId(1L).withDeliveryDate(new Date()).build();
+    ComponentBatch componentBatch = aComponentBatch().withId(UUID.randomUUID()).withDeliveryDate(new Date()).build();
     
     // set up mocks
     Mockito.when(componentBatchRepository.findById(componentBatch.getId())).thenReturn(componentBatch);
@@ -66,12 +68,12 @@ public class ComponentBatchCRUDServiceTest extends UnitTestSuite {
     PackType packType = aPackType().withId(packTypeId).withComponentType(componentType1).build();
 
     Donation donation1 = aDonation().withId(UUID.randomUUID()).withPackType(packType).build();
-    Component component1 = aComponent().withId(1L).withComponentType(componentType1).withDonation(donation1).build();
+    Component component1 = aComponent().withId(COMPONENT_ID_1).withComponentType(componentType1).withDonation(donation1).build();
     donation1.setComponents(Arrays.asList(component1));
 
     Donation donation2 = aDonation().withId(UUID.randomUUID()).withPackType(packType).build();
-    Component component2 = aComponent().withId(2L).withComponentType(componentType1).withDonation(donation2).build();
-    Component component3 = aComponent().withId(2L).withComponentType(componentType2).withDonation(donation2).build();
+    Component component2 = aComponent().withId(COMPONENT_ID_2).withComponentType(componentType1).withDonation(donation2).build();
+    Component component3 = aComponent().withId(COMPONENT_ID_2).withComponentType(componentType2).withDonation(donation2).build();
     donation2.setComponents(Arrays.asList(component2, component3));
     
     DonationBatch donationBatch = aDonationBatch()
@@ -111,12 +113,12 @@ public class ComponentBatchCRUDServiceTest extends UnitTestSuite {
     PackType packType = aPackType().withId(packTypeId).withComponentType(componentType1).build();
     
     Donation donation1 = aDonation().withId(UUID.randomUUID()).withPackType(packType).build();
-    Component component1 = aComponent().withId(1L).withComponentType(componentType1).withDonation(donation1).build();
+    Component component1 = aComponent().withId(COMPONENT_ID_1).withComponentType(componentType1).withDonation(donation1).build();
     donation1.setComponents(Arrays.asList(component1));
 
     Donation donation2 = aDonation().withId(UUID.randomUUID()).withPackType(packType).build();
-    Component component2 = aComponent().withId(2L).withComponentType(componentType1).withDonation(donation2).build();
-    Component component3 = aComponent().withId(2L).withComponentType(componentType2).withDonation(donation2).build();
+    Component component2 = aComponent().withId(COMPONENT_ID_2).withComponentType(componentType1).withDonation(donation2).build();
+    Component component3 = aComponent().withId(COMPONENT_ID_2).withComponentType(componentType2).withDonation(donation2).build();
     donation2.setComponents(Arrays.asList(component2, component3));
     
     DonationBatch donationBatch =

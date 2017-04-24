@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform.validator;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.NoResultException;
 
@@ -132,7 +133,8 @@ public class TransfusionBackingFormValidator extends BaseValidator<TransfusionBa
       // validate componentType is the same as componentCode if both are configured
       if (componentsFromDINAndComponentTypeList != null && componentsFromDINAndComponentTypeList.size() > 0) {
         if (component != null && 
-              component.getComponentType().getId() != componentsFromDINAndComponentTypeList.get(0).getComponentType().getId()) {
+            !Objects.equals(component.getComponentType().getId(),
+                componentsFromDINAndComponentTypeList.get(0).getComponentType().getId())) {
           errors.rejectValue("componentType", "errors.invalid",
               "ComponentType does not match the entered componentCode");
         }

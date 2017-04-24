@@ -27,6 +27,7 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.jembi.bsis.constraintvalidator.ComponentStatusIsConsistent;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -73,7 +74,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Audited
 @ComponentStatusIsConsistent
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Component extends BaseModificationTrackerEntity {
+public class Component extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -26,7 +27,7 @@ public class ComponentTypeCombinationRepository extends AbstractRepository<Compo
     return query.getResultList();
   }   
 
-  public ComponentTypeCombination findComponentTypeCombinationById(long id) {
+  public ComponentTypeCombination findComponentTypeCombinationById(UUID id) {
     ComponentTypeCombination combination = em.find(ComponentTypeCombination.class, id);
     if (combination == null) {
       throw new NoResultException();
@@ -34,17 +35,22 @@ public class ComponentTypeCombinationRepository extends AbstractRepository<Compo
     return combination;
   }
 
-  public boolean isUniqueCombinationName(Long id, String combinationName) {
+  public boolean isUniqueCombinationName(UUID id, String combinationName) {
     // passing null as the ID parameter does not work because the IDs in mysql are never null. So if
     // id is null, the below rather uses -1 which achieves the same result in the case of this
     // query.
+    boolean idIncluded = false;
+    if (id == null) {
+      idIncluded = true;
+    }
     return em.createNamedQuery(ComponentTypeCombinationsQueryConstants.NAME_VERIFY_UNIQUE_COMPONENT_TYPE_COMBINATION_NAME, Boolean.class)
-        .setParameter("id", id != null ? id : -1L)
+        .setParameter("idIncluded", idIncluded)
+        .setParameter("id", id)
         .setParameter("combinationName", combinationName)
         .getSingleResult();
   }
   
-  public boolean verifyComponentTypeCombinationExists(Long id) {
+  public boolean verifyComponentTypeCombinationExists(UUID id) {
     return em.createNamedQuery(ComponentTypeCombinationsQueryConstants.NAME_VERIFY_COMPONENT_TYPE_COMBINATION_WITH_ID_EXISTS, Boolean.class)
         .setParameter("id", id)
         .setParameter("deleted", false)

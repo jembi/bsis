@@ -63,14 +63,16 @@ import org.mockito.Mock;
 public class DonationCRUDServiceTests extends UnitTestSuite {
 
   private static final UUID IRRELEVANT_DONATION_ID = UUID.randomUUID();
-  private static final long IRRELEVANT_COMPONENT_ID = 22;
+  private static final UUID IRRELEVANT_COMPONENT_ID = UUID.randomUUID();
   private static final UUID IRRELEVANT_DONATION_BATCH_ID = UUID.randomUUID();
   private static final long IRRELEVANT_TEST_BATCH_ID = 64;
   private static final UUID IRRELEVANT_PACK_TYPE_ID = UUID.randomUUID();
   private static final Date IRRELEVANT_DATE_OF_FIRST_DONATION = new DateTime().minusDays(7).toDate();
   private static final Date IRRELEVANT_DATE_OF_LAST_DONATION = new DateTime().minusDays(2).toDate();
   private static final Date IRRELEVANT_CURRENT_DATE = new DateTime().toDate();
-
+  private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
+  
   @InjectMocks
   private DonationCRUDService donationCRUDService;
   @Mock
@@ -168,10 +170,10 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withDateOfFirstDonation(IRRELEVANT_DATE_OF_FIRST_DONATION)
         .withDateOfLastDonation(IRRELEVANT_DATE_OF_LAST_DONATION)
         .build();
-    Component existingComponent1 = aComponent().withId(1L).build();
-    Component existingComponent2 = aComponent().withId(2L).build();
-    Component deletedComponent1 = aComponent().withId(1L).thatIsDeleted().build();
-    Component deletedComponent2 = aComponent().withId(2L).thatIsDeleted().build();
+    Component existingComponent1 = aComponent().withId(COMPONENT_ID_1).build();
+    Component existingComponent2 = aComponent().withId(COMPONENT_ID_2).build();
+    Component deletedComponent1 = aComponent().withId(COMPONENT_ID_1).thatIsDeleted().build();
+    Component deletedComponent2 = aComponent().withId(COMPONENT_ID_2).thatIsDeleted().build();
     Donation existingDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(existingDonor)
@@ -198,16 +200,16 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     when(donationConstraintChecker.canDeleteDonation(IRRELEVANT_DONATION_ID)).thenReturn(true);
     when(donationRepository.findDonationById(IRRELEVANT_DONATION_ID)).thenReturn(existingDonation);
-    when(componentCRUDService.deleteComponent(1L)).thenReturn(deletedComponent1);
-    when(componentCRUDService.deleteComponent(2L)).thenReturn(deletedComponent2);
+    when(componentCRUDService.deleteComponent(COMPONENT_ID_1)).thenReturn(deletedComponent1);
+    when(componentCRUDService.deleteComponent(COMPONENT_ID_2)).thenReturn(deletedComponent2);
 
     // Exercise SUT
     donationCRUDService.deleteDonation(IRRELEVANT_DONATION_ID);
 
     // Verify
     verify(donationRepository).updateDonation(argThat(hasSameStateAsDonation(expectedDonation)));
-    verify(componentCRUDService).deleteComponent(1L);
-    verify(componentCRUDService).deleteComponent(2L);
+    verify(componentCRUDService).deleteComponent(COMPONENT_ID_1);
+    verify(componentCRUDService).deleteComponent(COMPONENT_ID_2);
   }
 
   @Test
