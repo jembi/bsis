@@ -6,8 +6,12 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicBloodTypingBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicTTIBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aConfirmatoryTTIBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aRepeatBloodTypingBloodTest;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aRepeatTTIBloodTest;
+import static org.jembi.bsis.helpers.matchers.BloodTestMatcher.hasSameStateAsBloodTest;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.jembi.bsis.model.bloodtesting.BloodTest;
@@ -15,6 +19,7 @@ import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 
 public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite {
   
@@ -273,5 +278,25 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
   public void testVerifyBloodTestExists_shouldReturnFalse() {
     boolean exists = bloodTestRepository.verifyBloodTestExists(1L);
     assertThat(exists, is(false));
+  }
+  
+  @Test
+  public void testGetBloodTestsThatAreActiveAndNotDeleted_shouldReturnBloodTestsInCorrectOrder() {
+    // Set up data
+    List<BloodTest> expectedBloodTest = Arrays.asList(
+        aConfirmatoryTTIBloodTest().withRankInCategory(3).buildAndPersist(entityManager), 
+        aRepeatTTIBloodTest().withRankInCategory(2).buildAndPersist(entityManager),
+        aBasicTTIBloodTest().withRankInCategory(1).buildAndPersist(entityManager)
+        
+    );
+       
+    // Test
+    List<BloodTest> activeBloodTests = bloodTestRepository.getBloodTests(false, false);
+
+    // Verify
+    assertThat(activeBloodTests.size(), is(3));
+    assertThat(activeBloodTests.get(0), hasSameStateAsBloodTest(expectedBloodTest.get(2)));
+    assertThat(activeBloodTests.get(1), hasSameStateAsBloodTest(expectedBloodTest.get(1)));
+    assertThat(activeBloodTests.get(2), hasSameStateAsBloodTest(expectedBloodTest.get(0)));
   }
 }

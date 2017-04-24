@@ -3,7 +3,6 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 
 public class BloodTestMatcher extends AbstractTypeSafeMatcher<BloodTest> {
