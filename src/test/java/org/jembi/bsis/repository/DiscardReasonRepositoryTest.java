@@ -50,8 +50,8 @@ public class DiscardReasonRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testGetDiscardReasonById() throws Exception {
-    UUID componentId = UUID.fromString("b827d865-abfe-41ad-98e4-60514148e231");
-    ComponentStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(componentId);
+    UUID discardReasonId = UUID.fromString("b827d865-abfe-41ad-98e4-60514148e231");
+    ComponentStatusChangeReason discardReason = discardReasonRepository.getDiscardReasonById(discardReasonId);
     Assert.assertNotNull("Discard reason with id 1 exists", discardReason);
   }
 
@@ -70,14 +70,14 @@ public class DiscardReasonRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testUpdateDeferralReason() throws Exception {
-    UUID componentId = UUID.fromString("b827d865-abfe-41ad-98e4-60514148e231");
-    ComponentStatusChangeReason reason = discardReasonRepository.getDiscardReasonById(componentId);
+    UUID discardReasonId = UUID.fromString("b827d865-abfe-41ad-98e4-60514148e231");
+    ComponentStatusChangeReason reason = discardReasonRepository.getDiscardReasonById(discardReasonId);
     Assert.assertNotNull("Discard reason exists", reason);
 
     reason.setStatusChangeReason("Junit");
     discardReasonRepository.updateDiscardReason(reason);
 
-    ComponentStatusChangeReason savedReason = discardReasonRepository.getDiscardReasonById(componentId);
+    ComponentStatusChangeReason savedReason = discardReasonRepository.getDiscardReasonById(discardReasonId);
     Assert.assertNotNull("Discard reason still exists", savedReason);
     Assert.assertEquals("Reason has been updated", "Junit", savedReason.getStatusChangeReason());
   }
@@ -96,8 +96,8 @@ public class DiscardReasonRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testDiscardReasonExists() throws Exception {
-    UUID componentId = UUID.fromString("b827d865-abfe-41ad-98e4-60514148e231");
-    Assert.assertTrue("DiscardReason exists", discardReasonRepository.verifyDiscardReasonExists(componentId));
+    UUID discardReasonId = UUID.fromString("b827d865-abfe-41ad-98e4-60514148e231");
+    Assert.assertTrue("DiscardReason exists", discardReasonRepository.verifyDiscardReasonExists(discardReasonId));
   }
 
   @Test
