@@ -7,8 +7,6 @@ import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 
 public class BloodTestMatcher extends AbstractTypeSafeMatcher<BloodTest> {
-  
-  private BloodTest expected;
 
   public BloodTestMatcher(BloodTest expected) {
     this.expected = expected;
