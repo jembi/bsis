@@ -37,7 +37,9 @@
                       tableName="Transfusion_AUD"/>
 
       <sql>
-          UPDATE Transfusion SET id = GENERATEBINARYUUID();
+          UPDATE Transfusion 
+          SET id = GENERATEBINARYUUID()
+          ORDER BY id_temp;
       </sql>
 
       <sql dbms="mysql">

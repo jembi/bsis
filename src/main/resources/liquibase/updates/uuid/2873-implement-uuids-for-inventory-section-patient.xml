@@ -77,7 +77,8 @@
 
     <sql>
       UPDATE Patient 
-      SET id = GENERATEBINARYUUID();
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
     </sql>
 
     <sql dbms="mysql">

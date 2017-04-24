@@ -51,7 +51,9 @@
     <modifyDataType columnName="returnForm_id" newDataType="BINARY(16)" tableName="ReturnForm_Component_AUD"/>
 
     <sql>
-      UPDATE ReturnForm SET id = GENERATEBINARYUUID();
+      UPDATE ReturnForm 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
     </sql>
 
     <sql dbms="mysql">
