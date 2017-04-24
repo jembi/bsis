@@ -8,7 +8,6 @@ public class BloodTestFullViewModel extends BloodTestViewModel {
   private Set<String> validResults;
   private Set<String> negativeResults;
   private Set<String> positiveResults;
-  private Integer rankInCategory;
   private boolean flagComponentsForDiscard = false;
   private boolean flagComponentsContainingPlasmaForDiscard = false;
 
@@ -28,10 +27,6 @@ public class BloodTestFullViewModel extends BloodTestViewModel {
     return positiveResults;
   }
 
-  public Integer getRankInCategory() {
-    return rankInCategory;
-  }
-
   public void setTestName(String testName) {
     this.testName = testName;
   }
@@ -46,10 +41,6 @@ public class BloodTestFullViewModel extends BloodTestViewModel {
 
   public void setPositiveResults(Set<String> positiveResults) {
     this.positiveResults = positiveResults;
-  }
-
-  public void setRankInCategory(Integer rankInCategory) {
-    this.rankInCategory = rankInCategory;
   }
 
   public boolean isFlagComponentsForDiscard() {

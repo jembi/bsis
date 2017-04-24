@@ -11,6 +11,7 @@ public class BloodTestViewModel extends BaseViewModel<Long> {
   private BloodTestType bloodTestType;
   private Boolean isActive;
   private Boolean isDeleted;
+  private Integer rankInCategory;
 
   public String getTestName() {
     return testName;
@@ -58,5 +59,13 @@ public class BloodTestViewModel extends BaseViewModel<Long> {
 
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public Integer getRankInCategory() {
+    return rankInCategory;
+  }
+
+  public void setRankInCategory(Integer rankInCategory) {
+    this.rankInCategory = rankInCategory;
   }
 }

@@ -79,7 +79,7 @@ public class BloodTestFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCreateViewModel_shouldReturnFullViewModelWithTheCorrectState() {
+  public void testCreateViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
     BloodTest bloodTest = BloodTestBuilder.aBasicBloodTypingBloodTest()
         .withId(1L)
@@ -95,6 +95,7 @@ public class BloodTestFactoryTests extends UnitTestSuite {
     BloodTestViewModel expectedViewModel = BloodTestViewModelBuilder.aBasicBloodTypingBloodTestViewModel()
         .withId(1L)
         .withTestNameShort("ABC")
+        .withRankInCategory(1)
         .build();
     
     // Exercise SUT
@@ -141,6 +142,7 @@ public class BloodTestFactoryTests extends UnitTestSuite {
         .thatIsDeleted() 
         .thatShouldNotFlagComponentsContainingPlasmaForDiscard() 
         .thatShouldFlagComponentsForDiscard() 
+        .withRankInCategory(1)
         .build(); 
      
     BloodTest expectedEntity = BloodTestBuilder.aBloodTest() 
@@ -156,6 +158,7 @@ public class BloodTestFactoryTests extends UnitTestSuite {
         .thatIsDeleted() 
         .thatShouldNotFlagComponentsContainingPlasmaForDiscard() 
         .thatShouldFlagComponentsForDiscard() 
+        .withRankInCategory(1)
         .build(); 
      
     // Exercise SUT 
@@ -164,5 +167,5 @@ public class BloodTestFactoryTests extends UnitTestSuite {
     // Verify 
     assertThat(returnedEntity, hasSameStateAsBloodTest(expectedEntity)); 
      
-  }  
+  } 
 }
