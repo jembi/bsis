@@ -59,7 +59,8 @@
 
     <sql>
       UPDATE ContactMethodType 
-      SET id = GENERATEBINARYUUID();
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
     </sql>
 
     <sql dbms="mysql">

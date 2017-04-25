@@ -18,6 +18,11 @@
           UPDATE Transfusion SET id_temp = id;
       </sql>
 
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="transfusion_id_temp_index" tableName="Transfusion" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
       <sql>
           UPDATE Transfusion_AUD SET id_temp = id;
       </sql>
@@ -37,7 +42,9 @@
                       tableName="Transfusion_AUD"/>
 
       <sql>
-          UPDATE Transfusion SET id = GENERATEBINARYUUID();
+          UPDATE Transfusion 
+          SET id = GENERATEBINARYUUID()
+          ORDER BY id_temp;
       </sql>
 
       <sql dbms="mysql">

@@ -37,6 +37,12 @@
       SET id_temp = id;
     </sql>
 
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="patient_id_temp_index" tableName="Patient" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+
     <sql>
       UPDATE Patient_AUD 
       SET id_temp = id;
@@ -77,7 +83,8 @@
 
     <sql>
       UPDATE Patient 
-      SET id = GENERATEBINARYUUID();
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
     </sql>
 
     <sql dbms="mysql">
