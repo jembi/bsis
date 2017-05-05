@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BleedTimeService {
+  private static final Logger LOGGER = Logger.getLogger(BleedTimeService.class);
 
   /**
    * Calculate bleed time from bleedStartTime and bleedEndTime in minutes
@@ -30,6 +32,13 @@ public class BleedTimeService {
    * @return the calculated time Since donation with type long
    */
   public long getTimeSinceDonation(Date donationDate, Date processedOn) {
+    
+    /**
+     * FIXME:This code is a temporary fix and should be possibly removed at a later date
+     */
+    if (processedOn == null) {
+      LOGGER.warn("Ignoring the time since donation check since the processedOn date is null");
+    }
     return TimeUnit.MILLISECONDS.toHours(processedOn.getTime() - donationDate.getTime());
   }
 }
