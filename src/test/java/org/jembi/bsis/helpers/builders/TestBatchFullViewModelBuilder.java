@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
@@ -11,7 +12,7 @@ import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 
 public class TestBatchFullViewModelBuilder extends AbstractBuilder<TestBatchFullViewModel> {
 
-  private Long id;
+  private UUID id;
   private TestBatchStatus status;
   private String batchNumber;
   private Date createdDate;
@@ -22,7 +23,7 @@ public class TestBatchFullViewModelBuilder extends AbstractBuilder<TestBatchFull
   private int readyForReleaseCount;
   private Integer numSamples;
 
-  public TestBatchFullViewModelBuilder withId(Long id) {
+  public TestBatchFullViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

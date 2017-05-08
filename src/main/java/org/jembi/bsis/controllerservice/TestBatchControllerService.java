@@ -2,6 +2,7 @@ package org.jembi.bsis.controllerservice;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.factory.DonationBatchViewModelFactory;
@@ -73,7 +74,7 @@ public class TestBatchControllerService {
     return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
   }
 
-  public TestBatchFullViewModel getTestBatchById(long id) {
+  public TestBatchFullViewModel getTestBatchById(UUID id) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
     return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
@@ -84,16 +85,16 @@ public class TestBatchControllerService {
     return testBatchFactory.createTestBatchBasicViewModels(testBatches);
   }
 
-  public void deleteTestBatch(long id) {
+  public void deleteTestBatch(UUID id) {
     testBatchCRUDService.deleteTestBatch(id);
   }
 
-  public List<DonationViewModel> getDonations(long id, BloodTypingMatchStatus bloodTypingMatchStatus) {
+  public List<DonationViewModel> getDonations(UUID id, BloodTypingMatchStatus bloodTypingMatchStatus) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
     return testBatchFactory.createDonationViewModels(testBatch, bloodTypingMatchStatus);
   }
 
-  public Date getTestBatchCreatedDate(long id) {
+  public Date getTestBatchCreatedDate(UUID id) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
     return testBatch.getCreatedDate();
   }

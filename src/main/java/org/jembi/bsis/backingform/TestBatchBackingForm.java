@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class TestBatchBackingForm {
 
-  private Long id;
+  private UUID id;
   private TestBatchStatus status;
   private Date createdDate;
   private Date lastUpdated;
@@ -25,11 +25,11 @@ public class TestBatchBackingForm {
   public TestBatchBackingForm() {
   }
   
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
   

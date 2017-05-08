@@ -65,7 +65,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   private static final UUID IRRELEVANT_DONATION_ID = UUID.randomUUID();
   private static final UUID IRRELEVANT_COMPONENT_ID = UUID.randomUUID();
   private static final UUID IRRELEVANT_DONATION_BATCH_ID = UUID.randomUUID();
-  private static final long IRRELEVANT_TEST_BATCH_ID = 64;
+  private static final UUID IRRELEVANT_TEST_BATCH_ID = UUID.randomUUID();
   private static final UUID IRRELEVANT_PACK_TYPE_ID = UUID.randomUUID();
   private static final Date IRRELEVANT_DATE_OF_FIRST_DONATION = new DateTime().minusDays(7).toDate();
   private static final Date IRRELEVANT_DATE_OF_LAST_DONATION = new DateTime().minusDays(2).toDate();

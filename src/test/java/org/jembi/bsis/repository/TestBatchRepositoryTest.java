@@ -49,14 +49,15 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testFindTestBatchById() throws Exception {
-    TestBatch testBatch = testBatchRepository.findTestBatchById(1l);
+    UUID testBatchId = UUID.fromString("640eb339-c815-48c6-81d7-0f225d3f2701");
+    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     Assert.assertNotNull("TestBatch defined", testBatch);
     Assert.assertEquals("TestBatch is correct", "000000", testBatch.getBatchNumber());
   }
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindTestBatchByIdUnknown() throws Exception {
-    testBatchRepository.findTestBatchById(123l);
+    testBatchRepository.findTestBatchById(UUID.randomUUID());
   }
 
   @Test
@@ -95,17 +96,19 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testDeleteTestBatch() throws Exception {
-    testBatchRepository.deleteTestBatch(1l);
-    TestBatch testBatch = testBatchRepository.findTestBatchById(1l);
+    UUID testBatchId = UUID.fromString("640eb339-c815-48c6-81d7-0f225d3f2701");
+    testBatchRepository.deleteTestBatch(testBatchId);
+    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     Assert.assertTrue("TestBatch is deleted", testBatch.getIsDeleted());
   }
 
   @Test
   public void testUpdateTestBatch() throws Exception {
-    TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
+    UUID testBatchId = UUID.fromString("640eb339-c815-48c6-81d7-0f225d3f2702");
+    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     testBatch.setStatus(TestBatchStatus.RELEASED);
     testBatchRepository.update(testBatch);
-    TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(2l);
+    TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(testBatchId);
     Assert.assertEquals("TestBatch status is correct", TestBatchStatus.RELEASED, updatedTestBatch.getStatus());
   }
 

@@ -71,7 +71,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     );
     
     TestBatch aTestBatch = aTestBatch()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withBatchNumber("00001")
         .withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN)
@@ -143,7 +143,7 @@ public class TestResultControllerTests extends UnitTestSuite {
       )
     );
     
-    TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
     
     BloodTestFullViewModel basicTTIBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
@@ -233,7 +233,7 @@ public class TestResultControllerTests extends UnitTestSuite {
       )
     );
     
-    TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
     
     BloodTestFullViewModel basicBloodTypingBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
@@ -295,7 +295,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     Set<DonationBatch> donationBatches = new HashSet<>(
         Arrays.asList(aDonationBatch().withId(DONATION_BATCH_ID).withBatchNumber("123").withDonationBatchDate(new Date()).build()));
 
-    TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
 
     Map<Long, BloodTestResultViewModel> recentTestResults = new HashMap<>();
@@ -351,7 +351,7 @@ public class TestResultControllerTests extends UnitTestSuite {
       )
     );
     
-    TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
     
     BloodTestFullViewModel basicBloodTypingBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
