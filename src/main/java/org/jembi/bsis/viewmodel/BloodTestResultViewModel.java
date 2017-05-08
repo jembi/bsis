@@ -2,12 +2,13 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class BloodTestResultViewModel extends BaseViewModel<Long> {
+public class BloodTestResultViewModel extends BaseViewModel<UUID> {
 
   private BloodTestFullViewModel bloodTest;
   private Boolean reEntryRequired;

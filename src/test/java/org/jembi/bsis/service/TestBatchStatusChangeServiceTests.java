@@ -43,7 +43,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
-
+  
+  private static final UUID FIRST_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  private static final UUID SECOND_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  
   @InjectMocks
   private TestBatchStatusChangeService testBatchStatusChangeService;
   @Mock
@@ -456,7 +459,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   public void testHandleReleaseWithContainsPlasma_shouldMarkComponentsAsUnsafeAndUpdateComponentsStatuses() {
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(111L)
+            .withId(FIRST_BLOOD_TEST_RESULT_ID)
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .thatShouldFlagComponentsContainingPlasmaForDiscard()
@@ -499,7 +502,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   public void testHandleReleaseWithContainsPlasmaAndTTIPos_shouldMarkComponentsAsUnsafeAndUpdateComponentsStatuses() {
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(111L)
+            .withId(FIRST_BLOOD_TEST_RESULT_ID)
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .thatShouldFlagComponentsContainingPlasmaForDiscard()
@@ -507,7 +510,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
                 .build())
             .build(),
         aBloodTestResult()
-            .withId(222L)
+            .withId(SECOND_BLOOD_TEST_RESULT_ID)
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(true)

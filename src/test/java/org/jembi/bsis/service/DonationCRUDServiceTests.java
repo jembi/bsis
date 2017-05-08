@@ -72,6 +72,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   private static final Date IRRELEVANT_CURRENT_DATE = new DateTime().toDate();
   private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
   private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
+  private static final UUID FIRST_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  private static final UUID SECOND_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
   
   @InjectMocks
   private DonationCRUDService donationCRUDService;
@@ -508,8 +510,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
     
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1L).withDonation(existingDonation).build());
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(2L).withDonation(existingDonation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withDonation(existingDonation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(SECOND_BLOOD_TEST_RESULT_ID).withDonation(existingDonation).build());
 
     // Set up expectations
     Donation expectedDonation = aDonation()

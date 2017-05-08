@@ -55,6 +55,10 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   private static final String IRRELEVANT_DONATION_DIN_1 = "1111111";
   private static final String IRRELEVANT_DONATION_DIN_2 = "2222222";
   private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b1");
+  private static final UUID FIRST_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  private static final UUID SECOND_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  private static final UUID THIRD_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  private static final UUID FOURTH_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
 
   @InjectMocks
   BloodTestsService service;
@@ -324,7 +328,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     bloodTestResults.put(1l, "AB");
     BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
         .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
@@ -375,7 +379,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     bloodTestResults.put(1l, "AB");
     BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
         .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
@@ -428,7 +432,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
 
     BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
         .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
@@ -478,7 +482,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     bloodTestResults.put(1l, "AB");
     BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
         .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
@@ -535,7 +539,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     bloodTestResults.put(1l, "AB");
     BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1))
@@ -578,10 +582,10 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // Set up data
     Donation donation = DonationBuilder.aDonation().build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1L).withDonation(donation).build());
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(2L).withDonation(donation).build());
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(3L).withDonation(donation).build());
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(4L).withDonation(donation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withDonation(donation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(SECOND_BLOOD_TEST_RESULT_ID).withDonation(donation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(THIRD_BLOOD_TEST_RESULT_ID).withDonation(donation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FOURTH_BLOOD_TEST_RESULT_ID).withDonation(donation).build());
 
     BloodTestResult deleted1 = bloodTestResultList.get(0);
     deleted1.setIsDeleted(true);

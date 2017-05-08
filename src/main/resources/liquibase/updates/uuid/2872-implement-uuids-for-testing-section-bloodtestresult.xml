@@ -4,8 +4,6 @@
   
   <changeSet id="20170508-1006"  author="patience-mpofu">
   
-  <comment>This change set migrates the BloodTestResult table from a long primary key to a UUID of type BINARY(16).</comment>
-  
     <addColumn tableName="BloodTestResult">
       <column name="id_temp" type="BIGINT" afterColumn="id"/>
     </addColumn>
@@ -36,11 +34,10 @@
 
     <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="BloodTestResult_AUD"/>
 
-
-
     <sql>
       UPDATE BloodTestResult 
-      SET id = GENERATEBINARYUUID();
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
     </sql>
 
     <sql dbms="mysql">
@@ -81,6 +78,7 @@
     <dropColumn columnName="id_temp" tableName="BloodTestResult"/>
 
     <dropColumn columnName="id_temp" tableName="BloodTestResult_AUD"/>
+
 
   </changeSet>
 </databaseChangeLog>

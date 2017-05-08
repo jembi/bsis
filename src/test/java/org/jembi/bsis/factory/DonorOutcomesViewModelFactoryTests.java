@@ -49,10 +49,12 @@ public class DonorOutcomesViewModelFactoryTests extends UnitTestSuite {
     Date birthDate = new DateTime().minusYears(40).toDate();
     String bloodAbo = "A";
     String bloodRh = "+";
+    UUID firstResultId = UUID.randomUUID();
+    UUID secondResultId = UUID.randomUUID();
     
     List<BloodTestResult> bloodTestResults = Arrays.asList(
-        aBloodTestResult().withId(1L).build(),
-        aBloodTestResult().withId(2L).build()
+        aBloodTestResult().withId(firstResultId).build(),
+        aBloodTestResult().withId(secondResultId).build()
     );
     
     Donation donation = aDonation()
@@ -72,8 +74,8 @@ public class DonorOutcomesViewModelFactoryTests extends UnitTestSuite {
     
     // Set up expectations
     List<BloodTestResultViewModel> bloodTestResultViewModels = Arrays.asList(
-        aBloodTestResultViewModel().withId(1L).build(),
-        aBloodTestResultViewModel().withId(2L).build()
+        aBloodTestResultViewModel().withId(firstResultId).build(),
+        aBloodTestResultViewModel().withId(secondResultId).build()
     );
 
     when(bloodTestResultFactory.createBloodTestResultViewModels(bloodTestResults)).thenReturn(bloodTestResultViewModels);

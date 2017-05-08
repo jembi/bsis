@@ -47,6 +47,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   private static final UUID DONATION_BATCH_ID = UUID.randomUUID();
   private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
   private static final UUID COMPONENT_ID = UUID.randomUUID();
+  private static final UUID FIRST_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
 
   @InjectMocks
   private ComponentStatusCalculator componentStatusCalculator;
@@ -57,7 +58,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithPositiveResult_shouldReturnTrue(){
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(FIRST_BLOOD_TEST_RESULT_ID)
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(false)
@@ -76,7 +77,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithNegativeResult_shouldReturnFalse(){
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(FIRST_BLOOD_TEST_RESULT_ID)
             .withResult("NEG")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(false)
@@ -95,7 +96,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithAllBloodTestResultsNotContainingPlasma_shouldReturnFalse(){
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(FIRST_BLOOD_TEST_RESULT_ID)
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(false)
@@ -115,7 +116,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(FIRST_BLOOD_TEST_RESULT_ID)
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(false)
@@ -134,7 +135,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(FIRST_BLOOD_TEST_RESULT_ID)
             .withResult("NEG")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(true)
@@ -153,7 +154,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(FIRST_BLOOD_TEST_RESULT_ID)
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(true)
