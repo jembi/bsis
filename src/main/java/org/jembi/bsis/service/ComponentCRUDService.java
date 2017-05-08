@@ -78,8 +78,6 @@ public class ComponentCRUDService {
   @Autowired
   private BleedTimeService bleedTimeService;
   
-  private Long timeSinceDonation;
-
   public Component createInitialComponent(Donation donation) {
 
     // Create initial component only if the countAsDonation is true and the config option is enabled
@@ -327,7 +325,8 @@ public class ComponentCRUDService {
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME);
     } else {
       if (initialComponent.getProcessedOn() == null) {
-        LOGGER.warn("Ignoring the time since donation check since the processedOn date is null");
+        LOGGER.warn("ProcessedOn date is null for donation Id:" +  donation.getId() +
+          " with DIN: " + donation.getDonationIdentificationNumber() + ", time since donation check is ignored");
       } else {
         long timeSinceDonation = bleedTimeService.getTimeSinceDonation(
             initialComponent.getCreatedOn(), initialComponent.getProcessedOn());
