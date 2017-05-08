@@ -15,7 +15,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
 
@@ -29,7 +29,7 @@ import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
       name = BloodTestingRuleNamedQueryConstants.NAME_FIND_BLOOD_TESTING_RULE_BY_ID,
       query = BloodTestingRuleNamedQueryConstants.QUERY_FIND_BLOOD_TESTING_RULE_BY_ID)
 })
-public class BloodTestingRule extends BaseModificationTrackerEntity {
+public class BloodTestingRule extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

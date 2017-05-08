@@ -57,7 +57,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateUpdateWithUnassignedDonationBatch() {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
+    backingForm.setId(UUID.randomUUID());
     backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
     backingForm.setCreatedDate(new Date());
 
@@ -76,11 +76,11 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateUpdateWithDonationBatchAssignedToAnotherBatch() {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
+    backingForm.setId(UUID.randomUUID());
     backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
     backingForm.setCreatedDate(new Date());
     TestBatch tb2 = new TestBatch();
-    tb2.setId(2l);
+    tb2.setId(UUID.randomUUID());
     Location venue = new Location();
     venue.setName("Test");
     DonationBatch db1 = new DonationBatch();
@@ -101,13 +101,13 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateUpdateWithDonationBatchAssignedToBatch() {
-
+    UUID testBatchId = UUID.randomUUID();
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
+    backingForm.setId(testBatchId);
     backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
     backingForm.setCreatedDate(new Date());
     TestBatch tb1 = new TestBatch();
-    tb1.setId(1l);
+    tb1.setId(testBatchId);
     Location venue = new Location();
     venue.setName("Test");
     DonationBatch db1 = new DonationBatch();
@@ -129,7 +129,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateWithNonExistentLocation() {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
+    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
     backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
 
@@ -151,7 +151,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateWithNonTestingSiteLocation() {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
+    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
     backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
 
@@ -173,7 +173,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateWithDeletedLocation() {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
+    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
     backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
 
@@ -195,7 +195,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   public void testValidateWithNoLocation() {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
+    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());

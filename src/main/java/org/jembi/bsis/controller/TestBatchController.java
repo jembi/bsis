@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -68,7 +69,7 @@ public class TestBatchController {
   @RequestMapping(value = "{id}",  method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
   @Transactional(readOnly = true)
-  public ResponseEntity<Map<String, Object>> getTestBatchById(@PathVariable long id){
+  public ResponseEntity<Map<String, Object>> getTestBatchById(@PathVariable UUID id){
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("testBatch", testBatchControllerService.getTestBatchById(id));
     return new ResponseEntity<>(map, HttpStatus.OK);
@@ -77,7 +78,7 @@ public class TestBatchController {
 
   @RequestMapping(value = "{id}",  method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
-  public ResponseEntity<TestBatchFullViewModel> updateTestBatch(@PathVariable long id,
+  public ResponseEntity<TestBatchFullViewModel> updateTestBatch(@PathVariable UUID id,
       @Valid @RequestBody TestBatchBackingForm form) {
     form.setId(id);
     return new ResponseEntity<>(testBatchControllerService.updateTestBatch(form), HttpStatus.OK);
@@ -98,13 +99,13 @@ public class TestBatchController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_TEST_BATCH + "')")
-  public void deleteTestBatchById(@PathVariable Long id) {
+  public void deleteTestBatchById(@PathVariable UUID id) {
     testBatchControllerService.deleteTestBatch(id);
   }
 
   @RequestMapping(value = "/{id}/donations", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TESTING_INFORMATION + "')")
-  public ResponseEntity<Map<String, Object>> getDonationsForTestBatch(@PathVariable long id,
+  public ResponseEntity<Map<String, Object>> getDonationsForTestBatch(@PathVariable UUID id,
       @RequestParam(value = "bloodTypingMatchStatus", required = false) BloodTypingMatchStatus bloodTypingMatchStatus) {
     Date testBatchCreatedDate = testBatchControllerService.getTestBatchCreatedDate(id);
     List<DonationViewModel> donationViewModels = testBatchControllerService.getDonations(id, bloodTypingMatchStatus);

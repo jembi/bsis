@@ -30,7 +30,7 @@ import org.mockito.Mock;
 
 public class TestBatchCRUDServiceTests extends UnitTestSuite {
 
-  private static final Long TEST_BATCH_ID = 7L;
+  private static final UUID TEST_BATCH_ID = UUID.randomUUID();
   private static final CanReleaseResult CAN_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(true);
   private static final CanReleaseResult CANT_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(false);
 

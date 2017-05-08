@@ -8,6 +8,8 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
@@ -46,13 +48,15 @@ public class BloodTestingRuleCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateBloodTestingRule_shouldUpdate() {
     // Set up data
+    UUID bloodTestingRuleId = UUID.randomUUID();
+
     BloodTest bloodTest = aBloodTest()
         .withTestNameShort("Rh")
         .withCategory(BloodTestCategory.BLOODTYPING)
         .build();
     
     BloodTestingRule existingBloodTestingRule = aBloodTestingRule()
-        .withId(1L)
+        .withId(bloodTestingRuleId)
         .withBloodTest(bloodTest)
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withNewInformation("+")
@@ -66,7 +70,7 @@ public class BloodTestingRuleCRUDServiceTests extends UnitTestSuite {
         .build();
     
     BloodTestingRule updatedBloodTestingRule = aBloodTestingRule()
-        .withId(1L)
+        .withId(bloodTestingRuleId)
         .withBloodTest(bloodTestUpdated)
         .withDonationFieldChanged(DonationField.TTISTATUS)
         .withNewInformation("-")
@@ -75,7 +79,7 @@ public class BloodTestingRuleCRUDServiceTests extends UnitTestSuite {
         .build();
     
     // Set up mocks
-    when(bloodTestingRuleRepository.findBloodTestingRuleById(1L)).thenReturn(existingBloodTestingRule);
+    when(bloodTestingRuleRepository.findBloodTestingRuleById(bloodTestingRuleId)).thenReturn(existingBloodTestingRule);
     when(bloodTestingRuleRepository.update(existingBloodTestingRule)).thenReturn(updatedBloodTestingRule);
 
     // Run test
