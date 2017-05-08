@@ -18,6 +18,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
@@ -49,13 +50,15 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
+    UUID bloodTestingRuleId = UUID.randomUUID();
+
     BloodTest bloodTest = aBloodTest()
         .withTestNameShort("Rh")
         .withCategory(BloodTestCategory.BLOODTYPING)
         .build();
     
     BloodTestingRule bloodTestingRule = aBloodTestingRule()
-        .withId(1L)
+        .withId(bloodTestingRuleId)
         .withBloodTest(bloodTest)
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withNewInformation("+")
@@ -64,7 +67,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
 
     // Set up expectations
     BloodTestingRuleViewModel expectedViewModel = aBloodTestingRuleViewModel()
-        .withId(1L)
+        .withId(bloodTestingRuleId)
         .withTestNameShort("Rh")
         .withBloodTestCategory(bloodTest.getCategory())
         .withDonationFieldChanged(DonationField.BLOODRH)
@@ -82,18 +85,21 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateViewModels_shouldReturnViewModelsWithTheCorrectState () {
     // Set up fixture
+    UUID bloodTestingRuleId1 = UUID.randomUUID();
+    UUID bloodTestingRuleId2 = UUID.randomUUID();
+
     List<BloodTestingRule> bloodTestingRules = Arrays.asList(
-        aBloodTestingRule().withId(1L).build(),
-        aBloodTestingRule().withId(2L).build());
+        aBloodTestingRule().withId(bloodTestingRuleId1).build(),
+        aBloodTestingRule().withId(bloodTestingRuleId2).build());
 
     // Set up expectations
     List<BloodTestingRuleViewModel> expectedViewModels = Arrays.asList(
         aBloodTestingRuleViewModel()
-            .withId(1L)
+            .withId(bloodTestingRuleId1)
             .withTestNameShort(bloodTestingRules.get(0).getBloodTest().getTestNameShort())
             .build(),
         aBloodTestingRuleViewModel()
-            .withId(2L)
+            .withId(bloodTestingRuleId2)
             .withTestNameShort(bloodTestingRules.get(1).getBloodTest().getTestNameShort())
             .build());
 
@@ -109,6 +115,8 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntity_shouldReturnExpectedEntity() {
     // Set up fixture
+    UUID bloodTestingRuleId = UUID.randomUUID();
+
     BloodTest bloodTest = aBloodTest()
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withTestNameShort("Rh")
@@ -122,7 +130,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .build();
     
     BloodTestingRuleBackingForm bloodTestingRuleBackingForm = aBloodTestingRuleBackingForm()
-        .withId(1L)
+        .withId(bloodTestingRuleId)
         .withBloodTest(bloodTestBackingForm)
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withPendingTests(new HashSet<>(Arrays.asList(
@@ -133,7 +141,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .build();
 
     BloodTestingRule expectedEntity = aBloodTestingRule()
-        .withId(1L)
+        .withId(bloodTestingRuleId)
         .withBloodTest(bloodTest)
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withPendingTestsIds("2, 3")
@@ -153,6 +161,8 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateFullViewModel_shouldReturnFullViewModelWithTheCorrectState() {
     // Set up fixture
+    UUID bloodTestingRuleId = UUID.randomUUID();
+
     BloodTest bloodTest = aBloodTest()
         .withId(1L) 
         .withTestNameShort("Rh")
@@ -161,7 +171,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .build();
     
     BloodTestingRule bloodTestingRule = aBloodTestingRule()
-        .withId(1L)
+        .withId(bloodTestingRuleId)
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withNewInformation("+")
         .withPattern("POS")
@@ -183,7 +193,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .build();
     
     BloodTestingRuleFullViewModel expectedFullViewModel = aBloodTestingRuleFullViewModel()
-        .withId(1L)
+        .withId(bloodTestingRuleId)
         .withTestNameShort("Rh")
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withNewInformation("+")
@@ -206,6 +216,9 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateFullViewModels_shouldReturnFullViewModelsWithTheCorrectState() {
     // Set up fixture
+    UUID bloodTestingRuleId1 = UUID.randomUUID();
+    UUID bloodTestingRuleId2 = UUID.randomUUID();
+
     BloodTest bloodTest = aBloodTest()
         .withId(1L)  
         .withTestNameShort("Rh")
@@ -233,7 +246,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
     
     List<BloodTestingRule> bloodTestingRules = Arrays.asList(
         aBloodTestingRule()
-            .withId(1L)
+            .withId(bloodTestingRuleId1)
             .withDonationFieldChanged(DonationField.BLOODRH)
             .withNewInformation("+")
             .withPattern("POS")
@@ -241,7 +254,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
             .withBloodTest(bloodTest)
             .build(),
         aBloodTestingRule()
-            .withId(2L)
+            .withId(bloodTestingRuleId2)
             .withDonationFieldChanged(DonationField.BLOODRH)
             .withNewInformation("+")
             .withPattern("NEG")
@@ -252,7 +265,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
     // Set up expectations
     List<BloodTestingRuleFullViewModel> expectedFullViewModels = Arrays.asList(
         aBloodTestingRuleFullViewModel()
-            .withId(1L)
+            .withId(bloodTestingRuleId1)
             .withTestNameShort("Rh")
             .withDonationFieldChanged(DonationField.BLOODRH)
             .withNewInformation("+")
@@ -262,7 +275,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
             .withBloodTestCategory(bloodTest.getCategory())
             .build(),
         aBloodTestingRuleFullViewModel()
-            .withId(2L)
+            .withId(bloodTestingRuleId2)
             .withTestNameShort("Rh")
             .withDonationFieldChanged(DonationField.BLOODRH)
             .withNewInformation("+")

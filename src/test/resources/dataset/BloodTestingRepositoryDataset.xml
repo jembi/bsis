@@ -98,99 +98,99 @@
                validResults="POS,NEG" flagComponentsForDiscard="0"
                flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
                
-    <BloodTestingRule id="1" bloodTest_id="1"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2701'" bloodTest_id="1"  
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"
                       newInformation="O" pattern="O" pendingTestsIds="" />
-    <BloodTestingRule id="2" bloodTest_id="1"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2702'" bloodTest_id="1"  
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"   newInformation="A"
                       pattern="A" pendingTestsIds=""  />
-    <BloodTestingRule id="3" bloodTest_id="1"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2703'" bloodTest_id="1"  
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"  
                       newInformation="B" pattern="B" pendingTestsIds=""  />
-    <BloodTestingRule id="4" bloodTest_id="1"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2704'" bloodTest_id="1"  
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"  
                       newInformation="AB" pattern="AB" pendingTestsIds=""  />
-    <BloodTestingRule id="5" bloodTest_id="2"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2705'" bloodTest_id="2"  
                       donationFieldChanged="BLOODRH"
                       isDeleted="0"  
                       newInformation="+" pattern="POS" pendingTestsIds=""  />
-    <BloodTestingRule id="6" bloodTest_id="2"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2706'" bloodTest_id="2"  
                       donationFieldChanged="BLOODRH"
                       isDeleted="0"  
                       newInformation="-" pattern="NEG" pendingTestsIds=""  />
-    <BloodTestingRule id="7" bloodTest_id="17" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2707'" bloodTest_id="17" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
-    <BloodTestingRule id="8" bloodTest_id="17" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2708'" bloodTest_id="17" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="18,19" />
-    <BloodTestingRule id="9" bloodTest_id="18" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2709'" bloodTest_id="18" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
-    <BloodTestingRule id="10" bloodTest_id="19" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2710'" bloodTest_id="19" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
-    <BloodTestingRule id="11" bloodTest_id="20" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2711'" bloodTest_id="20" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
-    <BloodTestingRule id="12" bloodTest_id="20" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2712'" bloodTest_id="20" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="21,22" />
-    <BloodTestingRule id="13" bloodTest_id="21" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2713'" bloodTest_id="21" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
-    <BloodTestingRule id="14" bloodTest_id="22" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2714'" bloodTest_id="22" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
-    <BloodTestingRule id="15" bloodTest_id="23" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2715'" bloodTest_id="23" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
-    <BloodTestingRule id="16" bloodTest_id="23" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2716'" bloodTest_id="23" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="24,25" />
-    <BloodTestingRule id="17" bloodTest_id="24" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2717'" bloodTest_id="24" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
-    <BloodTestingRule id="18" bloodTest_id="25" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2718'" bloodTest_id="25" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
-    <BloodTestingRule id="19" bloodTest_id="26" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2719'" bloodTest_id="26" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="NEG" pendingTestsIds="" />
-    <BloodTestingRule id="20" bloodTest_id="26" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2720'" bloodTest_id="26" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="27,28" />
-    <BloodTestingRule id="21" bloodTest_id="27" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2721'" bloodTest_id="27" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
-    <BloodTestingRule id="22" bloodTest_id="28" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2722'" bloodTest_id="28" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" pendingTestsIds="" />
-    <BloodTestingRule id="23" bloodTest_id="29" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2723'" bloodTest_id="29" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="POS" pendingTestsIds="" />
-    <BloodTestingRule id="24" bloodTest_id="30" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2724'" bloodTest_id="30" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="POS" pendingTestsIds="" />

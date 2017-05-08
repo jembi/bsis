@@ -2,6 +2,8 @@ package org.jembi.bsis.helpers.builders;
 
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 
+import java.util.UUID;
+
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.BloodTestingRulePersister;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
@@ -10,7 +12,7 @@ import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 
 public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingRule> {
   
-  private Long id;
+  private UUID id;
   private BloodTest bloodTest = aBloodTest().build();
   private String pattern;
   private String newInformation;
@@ -18,7 +20,7 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
   private String pendingTestsIds;
   private boolean isDeleted = false;
 
-  public BloodTestingRuleBuilder withId(Long id) {
+  public BloodTestingRuleBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
