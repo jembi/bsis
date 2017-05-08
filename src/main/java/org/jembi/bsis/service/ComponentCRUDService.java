@@ -77,6 +77,8 @@ public class ComponentCRUDService {
 
   @Autowired
   private BleedTimeService bleedTimeService;
+  
+  private Long timeSinceDonation;
 
   public Component createInitialComponent(Donation donation) {
 
@@ -320,15 +322,20 @@ public class ComponentCRUDService {
     }
 
     long bleedTime = bleedTimeService.getBleedTime(donation.getBleedStartTime(), donation.getBleedEndTime());
-    long timeSinceDonation = bleedTimeService.getTimeSinceDonation(
-        initialComponent.getCreatedOn(), initialComponent.getProcessedOn());
-
     if (component.getComponentType().getMaxBleedTime() != null
         && bleedTime >= component.getComponentType().getMaxBleedTime()) {
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME);
-    } else if (component.getComponentType().getMaxTimeSinceDonation() != null
-        && timeSinceDonation >= component.getComponentType().getMaxTimeSinceDonation()) {
-      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
+    } else {
+      if (initialComponent.getProcessedOn() == null) {
+        LOGGER.warn("Ignoring the time since donation check since the processedOn date is null");
+      } else {
+        long timeSinceDonation = bleedTimeService.getTimeSinceDonation(
+            initialComponent.getCreatedOn(), initialComponent.getProcessedOn());
+        if (component.getComponentType().getMaxTimeSinceDonation() != null
+              && timeSinceDonation >= component.getComponentType().getMaxTimeSinceDonation()) {
+          markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
+        }
+      }
     }
   }
 

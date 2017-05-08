@@ -39,18 +39,4 @@ public class BleedTimeServiceTests extends UnitTestSuite {
     //do asserts
     assertThat("Time since donation is correct", timeSinceDonation.equals(30L));
   }
-  
-  @Test(expected = NullPointerException.class)
-  public void testGetTimeSinceDonationWithNullProcessedOnDate_shouldIgnoreTimeSinceDonationCheck() {
-    // set up data
-    Date donationDate = new DateTime().minusHours(30).toDate();
-    Date processedOn = null;
-
-    //run test
-    Long timeSinceDonation = bleedTimeService.getTimeSinceDonation(donationDate, processedOn);
-    
-    //do asserts
-    assertThat("Time since is null", timeSinceDonation.equals(null));
-  }
-
 }
