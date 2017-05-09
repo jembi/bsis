@@ -4,6 +4,9 @@
   
   <changeSet id="20170508-1006"  author="patience-mpofu">
   
+    <comment>This change set migrates the BloodTestResult table from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+  
     <addColumn tableName="BloodTestResult">
       <column name="id_temp" type="BIGINT" afterColumn="id"/>
     </addColumn>
