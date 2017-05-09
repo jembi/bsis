@@ -1,11 +1,11 @@
 package org.jembi.bsis.model.donation;
 
 public enum TTIStatus {
-  NOT_DONE, TTI_SAFE, TTI_UNSAFE, INDETERMINATE;
-  
+  NOT_DONE, SAFE, UNSAFE, INDETERMINATE;
+
   public static boolean makesComponentsUnsafe(TTIStatus status) {
 
-    if (status == TTI_UNSAFE || status == INDETERMINATE) {
+    if (status == UNSAFE || status == INDETERMINATE) {
       return true;
     }
 

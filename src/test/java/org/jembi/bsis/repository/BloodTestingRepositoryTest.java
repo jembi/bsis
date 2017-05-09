@@ -61,7 +61,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
     bloodTestingRepository.saveBloodTestResultsToDatabase(stringResults, donation, new Date(), ruleResult, false);
 
     Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
@@ -87,7 +87,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
     
     // #1: re-entry should be required
     testResults.put(17L, "POS");
@@ -142,7 +142,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_UNSAFE);
+    ruleResult.setTTIStatus(TTIStatus.UNSAFE);
 
     testResults.put(17L, "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
@@ -154,7 +154,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
     donation = donationRepository.findDonationById(donationId);
     Assert.assertTrue("Re-entry is true, so tti status is updated to TTI_UNSAFE",
-        donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE));
+        donation.getTTIStatus().equals(TTIStatus.UNSAFE));
 
   }
 

@@ -35,7 +35,7 @@ public class LabellingConstraintChecker {
     Donation donation = component.getDonation();
     
     // Check that the donation is safe
-    if (donation.getTTIStatus() != TTIStatus.TTI_SAFE) {
+    if (donation.getTTIStatus() != TTIStatus.SAFE) {
       throw new IllegalStateException("Can't label component " + component.getId() + ": TTI status is not safe for donation "
           + donation.getId());
     }
