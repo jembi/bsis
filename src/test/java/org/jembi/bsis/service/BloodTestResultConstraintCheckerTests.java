@@ -255,7 +255,7 @@ public class BloodTestResultConstraintCheckerTests {
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(),
         generateTestBloodTestingRules());
-    bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
+    bloodTestingRuleResultSet.setTtiStatus(TTIStatus.SAFE);
     List<Long> pendingTtiTestIds = new ArrayList<>();
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
     BloodTestingRule rule1 = new BloodTestingRule();
@@ -286,7 +286,7 @@ public class BloodTestResultConstraintCheckerTests {
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), availableTestResults, new HashMap<Long, BloodTestResult>(),
         new ArrayList<BloodTestingRule>());
-    bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
+    bloodTestingRuleResultSet.setTtiStatus(TTIStatus.SAFE);
     List<Long> pendingTtiTestIds = new ArrayList<>();
     pendingTtiTestIds.add(2L);
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
@@ -318,7 +318,7 @@ public class BloodTestResultConstraintCheckerTests {
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), availableTestResults, new HashMap<Long, BloodTestResult>(),
         generateTestBloodTestingRules());
-    bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
+    bloodTestingRuleResultSet.setTtiStatus(TTIStatus.SAFE);
     List<Long> pendingTtiTestIds = new ArrayList<>();
     pendingTtiTestIds.add(3L);
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
@@ -354,7 +354,7 @@ public class BloodTestResultConstraintCheckerTests {
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), availableTestResults, new HashMap<Long, BloodTestResult>(),
         generateTestBloodTestingRules());
-    bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
+    bloodTestingRuleResultSet.setTtiStatus(TTIStatus.SAFE);
     List<Long> pendingTtiTestIds = new ArrayList<>();
     pendingTtiTestIds.add(2L);
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);

@@ -156,7 +156,7 @@ public class ComponentStatusCalculator {
     if (donation.isReleased() &&
         bloodTypingStatus.equals(BloodTypingStatus.COMPLETE) &&
         BloodTypingMatchStatus.isBloodGroupConfirmed(donation.getBloodTypingMatchStatus()) &&
-        ttiStatus.equals(TTIStatus.TTI_SAFE)) {
+        ttiStatus.equals(TTIStatus.SAFE)) {
       newComponentStatus = ComponentStatus.AVAILABLE;
     }
 
