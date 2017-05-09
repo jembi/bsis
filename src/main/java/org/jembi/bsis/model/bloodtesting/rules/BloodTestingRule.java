@@ -2,19 +2,24 @@ package org.jembi.bsis.model.bloodtesting.rules;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
@@ -46,8 +51,11 @@ public class BloodTestingRule extends BaseModificationTrackerUUIDEntity {
   @Column(length = 30)
   private String newInformation;
 
-  @Column(length = 60)
-  private String pendingTestsIds;
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @ManyToMany(fetch = FetchType.EAGER)
+  @Fetch(FetchMode.SELECT)
+  private List<BloodTest> pendingBloodTest;
 
   @Column(nullable = false)
   private boolean isDeleted = false;
@@ -94,28 +102,27 @@ public class BloodTestingRule extends BaseModificationTrackerUUIDEntity {
 
   /**
    * Get the pending test IDs as a set. The Set cannot be modified since changes can only be made by
-   * updating the {@link #pendingTestsIds} string.
+   * updating the {@link #pendingBloodTests} array.
    *
    * @return An immutable set of pending test IDs.
    */
   public Set<Long> getPendingTestsIdsSet() {
-    if (pendingTestsIds == null || pendingTestsIds.isEmpty()) {
+    if (pendingBloodTest == null || pendingBloodTest.isEmpty()) {
       return Collections.emptySet();
     }
     Set<Long> ids = new HashSet<>();
-    StringTokenizer st = new StringTokenizer(pendingTestsIds, ",");
-    while (st.hasMoreTokens()) {
-      ids.add(Long.valueOf(st.nextToken().trim()));
+    for (BloodTest pendingBloodTest : pendingBloodTest) {
+      ids.add(pendingBloodTest.getId());
     }
     return Collections.unmodifiableSet(ids);
   }
 
-  public String getPendingTestingIds() {
-    return pendingTestsIds;
+  public List<BloodTest> getPendingBloodTest() {
+    return pendingBloodTest;
   }
 
-  public void setPendingTestsIds(String pendingTestsIds) {
-    this.pendingTestsIds = pendingTestsIds;
+  public void setPendingBloodTest(List<BloodTest> pendingBloodTest) {
+    this.pendingBloodTest = pendingBloodTest;
   }
   
   public void setDonationFieldChanged(DonationField donationFieldChanged) {

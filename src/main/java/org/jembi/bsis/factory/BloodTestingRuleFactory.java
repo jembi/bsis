@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
+import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.viewmodel.BloodTestViewModel;
@@ -78,11 +78,11 @@ public class BloodTestingRuleFactory {
     bloodTestingRule.setNewInformation(bloodTestingRuleBackingForm.getNewInformation());
     bloodTestingRule.setPattern(bloodTestingRuleBackingForm.getPattern());
     bloodTestingRule.setBloodTest(bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId()));
-    List<Long> pendingTestsIds = new ArrayList<>();
+    List<BloodTest> pendingBloodTests = new ArrayList<>();
     for (BloodTestBackingForm pendingBloodTest : bloodTestingRuleBackingForm.getPendingTests()) {
-      pendingTestsIds.add(pendingBloodTest.getId()); 
+      pendingBloodTests.add(bloodTestFactory.createEntity(pendingBloodTest)); 
     }
-    bloodTestingRule.setPendingTestsIds(StringUtils.join(pendingTestsIds, ','));
+    bloodTestingRule.setPendingBloodTest(pendingBloodTests);
     return bloodTestingRule;
   }
 

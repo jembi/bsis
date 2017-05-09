@@ -131,23 +131,23 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     
     // ABO
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-         .withPattern("O").withNewInformation("O").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
+         .withPattern("O").withNewInformation("O").withBloodTest(aboBloodTest).withPendingBloodTest(aboRepeatBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-         .withPattern("A").withNewInformation("A").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
+         .withPattern("A").withNewInformation("A").withBloodTest(aboBloodTest).withPendingBloodTest(aboRepeatBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-         .withPattern("B").withNewInformation("B").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
+         .withPattern("B").withNewInformation("B").withBloodTest(aboBloodTest).withPendingBloodTest(aboRepeatBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-         .withPattern("AB").withNewInformation("AB").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
+         .withPattern("AB").withNewInformation("AB").withBloodTest(aboBloodTest).withPendingBloodTest(aboRepeatBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
-         .withPattern("NT").withNewInformation("").withBloodTest(aboBloodTest).withPendingTestsIds("5").build());
+         .withPattern("NT").withNewInformation("").withBloodTest(aboBloodTest).withPendingBloodTest(aboRepeatBloodTest).build());
     
     // RH
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODRH)
-         .withPattern("POS").withNewInformation("+").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
+         .withPattern("POS").withNewInformation("+").withBloodTest(rhBloodTest).withPendingBloodTest(rhRepeatBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODRH)
-         .withPattern("NEG").withNewInformation("-").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
+         .withPattern("NEG").withNewInformation("-").withBloodTest(rhBloodTest).withPendingBloodTest(rhRepeatBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODRH)
-         .withPattern("NT").withNewInformation("").withBloodTest(rhBloodTest).withPendingTestsIds("6").build());
+         .withPattern("NT").withNewInformation("").withBloodTest(rhBloodTest).withPendingBloodTest(rhRepeatBloodTest).build());
 
     // Titre
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TITRE)

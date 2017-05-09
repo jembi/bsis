@@ -305,7 +305,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateFormWithNoPendingTestsIds_shouldHaveNoErrors() {
+  public void testValidateFormWithNoPendingBloodTests_shouldHaveNoErrors() {
 
     // Set up data
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
@@ -324,7 +324,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateFormWithNonExistentPendingTestsIdsId_shouldHaveOneError() {
+  public void testValidateFormWithNonExistentPendingBloodTests_shouldHaveOneError() {
 
     // Set up data
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();

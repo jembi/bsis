@@ -122,20 +122,42 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withTestNameShort("Rh")
         .withId(1L)
         .build();
+
+    BloodTest pendingBloodTest1 = aBloodTest()
+        .withCategory(BloodTestCategory.BLOODTYPING)
+        .withTestNameShort("Rh Repeat 1")
+        .withId(2L)
+        .build();
+
+    BloodTest pendingBloodTest2 = aBloodTest()
+        .withCategory(BloodTestCategory.BLOODTYPING)
+        .withTestNameShort("Rh Repeat 2")
+        .withId(3L)
+        .build();
     
     BloodTestBackingForm bloodTestBackingForm = aBloodTestBackingForm()
         .withTestNameShort(bloodTest.getTestNameShort())
         .withCategory(bloodTest.getCategory())
         .withId(bloodTest.getId())
         .build();
+
+    BloodTestBackingForm pendingBloodTest1BackingForm = aBloodTestBackingForm()
+        .withTestNameShort(pendingBloodTest1.getTestNameShort())
+        .withCategory(pendingBloodTest1.getCategory())
+        .withId(pendingBloodTest1.getId())
+        .build();
+
+    BloodTestBackingForm pendingBloodTest2BackingForm = aBloodTestBackingForm()
+        .withTestNameShort(pendingBloodTest2.getTestNameShort())
+        .withCategory(pendingBloodTest2.getCategory())
+        .withId(pendingBloodTest2.getId())
+        .build();
     
     BloodTestingRuleBackingForm bloodTestingRuleBackingForm = aBloodTestingRuleBackingForm()
         .withId(bloodTestingRuleId)
         .withBloodTest(bloodTestBackingForm)
         .withDonationFieldChanged(DonationField.BLOODRH)
-        .withPendingTests(new HashSet<>(Arrays.asList(
-            aBloodTestBackingForm().withId(2L).build(),
-            aBloodTestBackingForm().withId(3L).build())))
+        .withPendingTests(new HashSet<>(Arrays.asList(pendingBloodTest1BackingForm, pendingBloodTest2BackingForm)))
         .withNewInformation("+")
         .withPattern("POS")
         .build();
@@ -144,12 +166,15 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withId(bloodTestingRuleId)
         .withBloodTest(bloodTest)
         .withDonationFieldChanged(DonationField.BLOODRH)
-        .withPendingTestsIds("2, 3")
+        .withPendingBloodTest(pendingBloodTest1)
+        .withPendingBloodTest(pendingBloodTest2)
         .withNewInformation("+")
         .withPattern("POS")
         .build();
 
     when(bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId())).thenReturn(bloodTest);
+    when(bloodTestFactory.createEntity(pendingBloodTest1BackingForm)).thenReturn(pendingBloodTest1);
+    when(bloodTestFactory.createEntity(pendingBloodTest2BackingForm)).thenReturn(pendingBloodTest2);
 
     // Exercise SUT
     BloodTestingRule returnedEntity = bloodTestingRuleFactory.createEntity(bloodTestingRuleBackingForm);
@@ -169,13 +194,19 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withTestName("Rh")
         .withCategory(BloodTestCategory.BLOODTYPING)
         .build();
+
+    BloodTest pendingBloodTest = aBloodTest()
+        .withCategory(BloodTestCategory.BLOODTYPING)
+        .withTestNameShort("Rh Repeat 1")
+        .withId(2L)
+        .build();
     
     BloodTestingRule bloodTestingRule = aBloodTestingRule()
         .withId(bloodTestingRuleId)
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withNewInformation("+")
         .withPattern("POS")
-        .withPendingTestsIds("2")
+        .withPendingBloodTest(pendingBloodTest)
         .withBloodTest(bloodTest)
         .build();
 
@@ -225,6 +256,18 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .withTestName("Rh")
         .withCategory(BloodTestCategory.BLOODTYPING)
         .build();
+
+    BloodTest pendingBloodTest1 = aBloodTest()
+        .withCategory(BloodTestCategory.BLOODTYPING)
+        .withTestNameShort("Rh Repeat 1")
+        .withId(2L)
+        .build();
+
+    BloodTest pendingBloodTest2 = aBloodTest()
+        .withCategory(BloodTestCategory.BLOODTYPING)
+        .withTestNameShort("Rh Repeat 2")
+        .withId(3L)
+        .build();
     
     BloodTestFullViewModel bloodTestFullViewModel = aBloodTestFullViewModel()
         .withId(1L)
@@ -250,7 +293,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
             .withDonationFieldChanged(DonationField.BLOODRH)
             .withNewInformation("+")
             .withPattern("POS")
-            .withPendingTestsIds("2")
+            .withPendingBloodTest(pendingBloodTest1)
             .withBloodTest(bloodTest)
             .build(),
         aBloodTestingRule()
@@ -258,7 +301,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
             .withDonationFieldChanged(DonationField.BLOODRH)
             .withNewInformation("+")
             .withPattern("NEG")
-            .withPendingTestsIds("3")
+            .withPendingBloodTest(pendingBloodTest2)
             .withBloodTest(bloodTest)
             .build());
 

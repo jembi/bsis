@@ -3,13 +3,17 @@ package org.jembi.bsis.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.BloodTestingRuleBuilder.aBloodTestingRule;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicBloodTypingBloodTest;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aRepeatBloodTypingBloodTest;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicTTIBloodTest;
+import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aRepeatTTIBloodTest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -36,8 +40,7 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditCompleteAmbiguousBloodTest() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
+    BloodTest bloodTest = aBasicBloodTypingBloodTest().withId(1L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -55,8 +58,7 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditCompleteNoMatchBloodTest() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
+    BloodTest bloodTest = aBasicBloodTypingBloodTest().withId(1L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -74,9 +76,9 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditCompleteNoMatchBloodTestWithOtherPendingAboTests() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
-    bloodTest.setId(1l);
+    BloodTest bloodTest = aBasicBloodTypingBloodTest().withId(1L).build();
+    BloodTest anotherBloodTest = aBasicBloodTypingBloodTest().withId(2L).build();
+    BloodTest pendingBloodTest = aRepeatBloodTypingBloodTest().withId(123L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -88,9 +90,10 @@ public class BloodTestResultConstraintCheckerTests {
     List<Long> pendingTestIds = new ArrayList<>();
     pendingTestIds.add(123L);
     bloodTestingRuleResultSet.setPendingAboTestsIds(pendingTestIds);
-    BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withId(2L).build());
-    rule1.setPendingTestsIds("123");
+    BloodTestingRule rule1 = aBloodTestingRule()
+        .withBloodTest(anotherBloodTest)
+        .withPendingBloodTest(pendingBloodTest)
+        .build();
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
     bloodTestingRuleResultSet.setBloodTestingRules(rules);
@@ -103,9 +106,8 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditCompleteNoMatchBloodTestWithAboPendingTests() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
-    bloodTest.setId(1l);
+    BloodTest bloodTest = aBasicBloodTypingBloodTest().withId(1L).build();
+    BloodTest pendingBloodTest = aRepeatBloodTypingBloodTest().withId(123L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -117,9 +119,10 @@ public class BloodTestResultConstraintCheckerTests {
     List<Long> pendingTestIds = new ArrayList<>();
     pendingTestIds.add(123L);
     bloodTestingRuleResultSet.setPendingAboTestsIds(pendingTestIds);
-    BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTest(bloodTest);
-    rule1.setPendingTestsIds("123");
+    BloodTestingRule rule1 = aBloodTestingRule()
+        .withBloodTest(bloodTest)
+        .withPendingBloodTest(pendingBloodTest)
+        .build();
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
     bloodTestingRuleResultSet.setBloodTestingRules(rules);
@@ -132,9 +135,9 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditCompleteNoMatchBloodTestWithOtherPendingRhTests() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
-    bloodTest.setId(1l);
+    BloodTest bloodTest = aBasicBloodTypingBloodTest().withId(1L).build();
+    BloodTest anotherBloodTest = aBasicBloodTypingBloodTest().withId(2L).build();
+    BloodTest pendingBloodTest = aRepeatBloodTypingBloodTest().withId(3L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -146,9 +149,10 @@ public class BloodTestResultConstraintCheckerTests {
     List<Long> pendingTestIds = new ArrayList<>();
     pendingTestIds.add(3L);
     bloodTestingRuleResultSet.setPendingRhTestsIds(pendingTestIds);
-    BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTest(BloodTestBuilder.aBasicBloodTypingBloodTest().withId(2L).build());
-    rule1.setPendingTestsIds("3");
+    BloodTestingRule rule1 = aBloodTestingRule()
+        .withBloodTest(anotherBloodTest)
+        .withPendingBloodTest(pendingBloodTest)
+        .build();
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
     bloodTestingRuleResultSet.setBloodTestingRules(rules);
@@ -161,9 +165,8 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditCompleteNoMatchBloodTestWithRhPendingTests() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
-    bloodTest.setId(1l);
+    BloodTest bloodTest = aBasicBloodTypingBloodTest().withId(1L).build();
+    BloodTest pendingBloodTest = aRepeatBloodTypingBloodTest().withId(123L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -175,9 +178,10 @@ public class BloodTestResultConstraintCheckerTests {
     List<Long> pendingTestIds = new ArrayList<>();
     pendingTestIds.add(123L);
     bloodTestingRuleResultSet.setPendingRhTestsIds(pendingTestIds);
-    BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTest(bloodTest);
-    rule1.setPendingTestsIds("123");
+    BloodTestingRule rule1 = aBloodTestingRule()
+        .withBloodTest(bloodTest)
+        .withPendingBloodTest(pendingBloodTest)
+        .build();
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
     bloodTestingRuleResultSet.setBloodTestingRules(rules);
@@ -190,8 +194,7 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditNotDoneBloodTest() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
+    BloodTest bloodTest = aBasicBloodTypingBloodTest().withId(1L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -209,8 +212,7 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditNoTypeDeterminedBloodTest() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
+    BloodTest bloodTest = aBasicBloodTypingBloodTest().withId(1L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -228,8 +230,7 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditReleasedDonationBloodTypingTestResult() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.BLOODTYPING);
+    BloodTest bloodTest = aBasicBloodTypingBloodTest().withId(1L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -247,8 +248,9 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditTTISafeWithNoPendingBloodTest() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.TTI);
+    BloodTest bloodTest = aBasicTTIBloodTest().build();
+    BloodTest anotherBloodTest = aBasicTTIBloodTest().withId(1L).build();
+    BloodTest pendingBloodTest = aRepeatTTIBloodTest().withId(2L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -258,9 +260,10 @@ public class BloodTestResultConstraintCheckerTests {
     bloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
     List<Long> pendingTtiTestIds = new ArrayList<>();
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
-    BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(1L).build());
-    rule1.setPendingTestsIds("2");
+    BloodTestingRule rule1 = aBloodTestingRule()
+        .withBloodTest(anotherBloodTest)
+        .withPendingBloodTest(pendingBloodTest)
+        .build();
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
     bloodTestingRuleResultSet.setBloodTestingRules(rules);
@@ -274,9 +277,8 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditTTISafeWithPendingBloodTest() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.TTI);
-    bloodTest.setId(1l);
+    BloodTest bloodTest = aBasicTTIBloodTest().withId(1L).build();
+    BloodTest pendingBloodTest = aRepeatTTIBloodTest().withId(2L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -290,9 +292,10 @@ public class BloodTestResultConstraintCheckerTests {
     List<Long> pendingTtiTestIds = new ArrayList<>();
     pendingTtiTestIds.add(2L);
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
-    BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTest(bloodTest);
-    rule1.setPendingTestsIds("2");
+    BloodTestingRule rule1 = aBloodTestingRule()
+        .withBloodTest(bloodTest)
+        .withPendingBloodTest(pendingBloodTest)
+        .build();
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
     bloodTestingRuleResultSet.setBloodTestingRules(rules);
@@ -305,9 +308,9 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditTTISafeWithOtherPendingBloodTest() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.TTI);
-    bloodTest.setId(1l);
+    BloodTest bloodTest = aBasicTTIBloodTest().withId(1L).build();
+    BloodTest anotherBloodTest = aBasicTTIBloodTest().withId(2L).build();
+    BloodTest pendingBloodTest = aRepeatTTIBloodTest().withId(3L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -322,12 +325,14 @@ public class BloodTestResultConstraintCheckerTests {
     List<Long> pendingTtiTestIds = new ArrayList<>();
     pendingTtiTestIds.add(3L);
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
-    BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTest(bloodTest);
-    rule1.setPendingTestsIds("2");
-    BloodTestingRule rule2 = new BloodTestingRule();
-    rule2.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(2L).build());
-    rule2.setPendingTestsIds("3");
+    BloodTestingRule rule1 = aBloodTestingRule()
+        .withBloodTest(bloodTest)
+        .withPendingBloodTest(anotherBloodTest)
+        .build();
+    BloodTestingRule rule2 = aBloodTestingRule()
+        .withBloodTest(anotherBloodTest)
+        .withPendingBloodTest(pendingBloodTest)
+        .build();
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
     rules.add(rule2);
@@ -341,9 +346,9 @@ public class BloodTestResultConstraintCheckerTests {
   @Test
   public void testCanEditTTISafeWithOtherRelatedPendingBloodTest() {
     Donation donation = aDonation().build();
-    BloodTest bloodTest = new BloodTest();
-    bloodTest.setCategory(BloodTestCategory.TTI);
-    bloodTest.setId(1l);
+    BloodTest bloodTest = aBasicTTIBloodTest().withId(1L).build();
+    BloodTest anotherBloodTest = aBasicTTIBloodTest().withId(2L).build();
+    BloodTest pendingBloodTest = aRepeatTTIBloodTest().withId(3L).build();
     BloodTestResult bloodTestResult = new BloodTestResult();
     bloodTestResult.setDonation(donation);
     bloodTestResult.setBloodTest(bloodTest);
@@ -358,12 +363,14 @@ public class BloodTestResultConstraintCheckerTests {
     List<Long> pendingTtiTestIds = new ArrayList<>();
     pendingTtiTestIds.add(2L);
     bloodTestingRuleResultSet.setPendingRepeatAndConfirmatoryTtiTestsIds(pendingTtiTestIds);
-    BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTest(bloodTest);
-    rule1.setPendingTestsIds("2");
-    BloodTestingRule rule2 = new BloodTestingRule();
-    rule2.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(2L).build());
-    rule2.setPendingTestsIds("3");
+    BloodTestingRule rule1 = aBloodTestingRule()
+        .withBloodTest(bloodTest)
+        .withPendingBloodTest(anotherBloodTest)
+        .build();
+    BloodTestingRule rule2 = aBloodTestingRule()
+        .withBloodTest(anotherBloodTest)
+        .withPendingBloodTest(pendingBloodTest)
+        .build();
     List<BloodTestingRule> rules = new ArrayList<>();
     rules.add(rule1);
     rules.add(rule2);
@@ -412,23 +419,15 @@ public class BloodTestResultConstraintCheckerTests {
   }
 
   private List<BloodTestingRule> generateTestBloodTestingRules() {
-    BloodTestingRule rule1 = new BloodTestingRule();
-    rule1.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(1L).build());
-    rule1.setPendingTestsIds("");
-    BloodTestingRule rule2 = new BloodTestingRule();
-    rule2.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(2L).build());
-    rule2.setPendingTestsIds("3");
-    BloodTestingRule rule3 = new BloodTestingRule();
-    rule3.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(3L).build());
-    rule3.setPendingTestsIds("4");
-    BloodTestingRule rule4 = new BloodTestingRule();
-    rule4.setBloodTest(BloodTestBuilder.aBasicTTIBloodTest().withId(4L).build());
-    rule4.setPendingTestsIds("");
+    BloodTest test1 = aBasicTTIBloodTest().withId(1L).build();
+    BloodTest test2 = aBasicTTIBloodTest().withId(2L).build();
+    BloodTest test3 = aBasicTTIBloodTest().withId(3L).build();
+    BloodTest test4 = aBasicTTIBloodTest().withId(4L).build();
     List<BloodTestingRule> bloodTestingRules = new ArrayList<BloodTestingRule>();
-    bloodTestingRules.add(rule1);
-    bloodTestingRules.add(rule2);
-    bloodTestingRules.add(rule3);
-    bloodTestingRules.add(rule4);
+    bloodTestingRules.add(aBloodTestingRule().withBloodTest(test1).build());
+    bloodTestingRules.add(aBloodTestingRule().withBloodTest(test2).withPendingBloodTest(test3).build());
+    bloodTestingRules.add(aBloodTestingRule().withBloodTest(test3).withPendingBloodTest(test4).build());
+    bloodTestingRules.add(aBloodTestingRule().withBloodTest(test4).build());
     return bloodTestingRules;
   }
 }

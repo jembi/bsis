@@ -1,0 +1,58 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170509-1215"  author="timler">
+
+    <comment>Refactor BloodTestingRule - pending BloodTest relationship to use a mapping table</comment>
+
+    <createTable tableName="BloodTestingRule_BloodTest">
+      <column name="bloodTestingRule_id" type="BINARY(16)">
+        <constraints foreignKeyName="fk_BloodTestingRule_BloodTest_BloodTestingRule" references="BloodTestingRule(id)" />
+      </column>
+      <column name="pendingBloodTest_id" type="BIGINT(20)">
+        <constraints foreignKeyName="fk_BloodTestingRule_BloodTest_BloodTest" references="BloodTest(id)"  />
+      </column>
+    </createTable>
+    
+    <sql dbms="mysql">
+      ALTER TABLE BloodTestingRule_BloodTest ADD bloodTestingRule_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(bloodTestingRule_id,  1, 4)),
+        HEX(SUBSTR(bloodTestingRule_id,  5, 2)),
+        HEX(SUBSTR(bloodTestingRule_id,  7, 2)),
+        HEX(SUBSTR(bloodTestingRule_id,  9, 2)),
+        HEX(SUBSTR(bloodTestingRule_id, 11)) )))
+      VIRTUAL AFTER bloodTestingRule_id;
+    </sql>
+
+    <sql dbms="mysql">
+      CREATE TEMPORARY TABLE numbers AS
+      SELECT 1 n FROM DUAL UNION ALL
+      SELECT 2   FROM DUAL UNION ALL
+      SELECT 3   FROM DUAL UNION ALL
+      SELECT 4   FROM DUAL UNION ALL
+      SELECT 5   FROM DUAL UNION ALL
+      SELECT 6   FROM DUAL UNION ALL
+      SELECT 7   FROM DUAL UNION ALL
+      SELECT 8   FROM DUAL UNION ALL
+      SELECT 9   FROM DUAL UNION ALL
+      SELECT 10  FROM DUAL;
+
+      INSERT INTO BloodTestingRule_BloodTest(bloodTestingRule_id, pendingBloodTest_id)
+        SELECT id, SUBSTRING_INDEX(
+                     SUBSTRING_INDEX(pendingTestsIds, ',', n), 
+                     ',', 
+                     -1
+                   ) AS pendingTestsId
+        FROM BloodTestingRule
+        JOIN numbers ON CHAR_LENGTH(pendingTestsIds) - CHAR_LENGTH(REPLACE(pendingTestsIds, ',', '')) >= n - 1
+        HAVING pendingTestsId != '';
+        
+      DROP TABLE numbers;
+    </sql>
+
+    <dropColumn columnName="pendingTestsIds" tableName="BloodTestingRule"/>
+
+  </changeSet>
+
+</databaseChangeLog>
