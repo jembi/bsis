@@ -10,7 +10,7 @@
       <column name="bloodTestingRule_id" type="BINARY(16)">
         <constraints foreignKeyName="fk_BloodTestingRule_BloodTest_BloodTestingRule" references="BloodTestingRule(id)" />
       </column>
-      <column name="pendingBloodTest_id" type="BIGINT(20)">
+      <column name="pendingBloodTests_id" type="BIGINT(20)">
         <constraints foreignKeyName="fk_BloodTestingRule_BloodTest_BloodTest" references="BloodTest(id)"  />
       </column>
     </createTable>
@@ -38,7 +38,7 @@
       SELECT 9   FROM DUAL UNION ALL
       SELECT 10  FROM DUAL;
 
-      INSERT INTO BloodTestingRule_BloodTest(bloodTestingRule_id, pendingBloodTest_id)
+      INSERT INTO BloodTestingRule_BloodTest(bloodTestingRule_id, pendingBloodTests_id)
         SELECT id, SUBSTRING_INDEX(
                      SUBSTRING_INDEX(pendingTestsIds, ',', n), 
                      ',', 

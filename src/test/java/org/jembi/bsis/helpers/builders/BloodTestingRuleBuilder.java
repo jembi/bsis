@@ -75,7 +75,7 @@ public class BloodTestingRuleBuilder extends AbstractEntityBuilder<BloodTestingR
     bloodTestingRule.setPattern(pattern);
     bloodTestingRule.setNewInformation(newInformation);
     bloodTestingRule.setDonationFieldChanged(donationFieldChanged);
-    bloodTestingRule.setPendingBloodTest(pendingBloodTests);
+    bloodTestingRule.setPendingBloodTests(pendingBloodTests);
     bloodTestingRule.setIsDeleted(isDeleted);
     return bloodTestingRule;
   }

@@ -25,7 +25,7 @@ public class BloodTestingRuleCRUDService {
     existingBloodTestingRule.setDonationFieldChanged(bloodTestingRule.getDonationFieldChanged());
     existingBloodTestingRule.setNewInformation(bloodTestingRule.getNewInformation());
     existingBloodTestingRule.setPattern(bloodTestingRule.getPattern());
-    existingBloodTestingRule.setPendingBloodTest(bloodTestingRule.getPendingBloodTest());
+    existingBloodTestingRule.setPendingBloodTests(bloodTestingRule.getPendingBloodTests());
     return bloodTestingRuleRepository.update(existingBloodTestingRule);
   }
 }

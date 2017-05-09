@@ -82,7 +82,7 @@ public class BloodTestingRuleFactory {
     for (BloodTestBackingForm pendingBloodTest : bloodTestingRuleBackingForm.getPendingTests()) {
       pendingBloodTests.add(bloodTestFactory.createEntity(pendingBloodTest)); 
     }
-    bloodTestingRule.setPendingBloodTest(pendingBloodTests);
+    bloodTestingRule.setPendingBloodTests(pendingBloodTests);
     return bloodTestingRule;
   }
 

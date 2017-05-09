@@ -182,20 +182,20 @@
 		isDeleted="0"   
 		newInformation="TTI_UNSAFE" pattern="POS" />
   
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2701'" pendingBloodTest_id="29" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2702'" pendingBloodTest_id="29" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2703'" pendingBloodTest_id="29" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2704'" pendingBloodTest_id="29" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2705'" pendingBloodTest_id="30" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2706'" pendingBloodTest_id="30" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2708'" pendingBloodTest_id="18" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2708'" pendingBloodTest_id="19" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2712'" pendingBloodTest_id="21" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2712'" pendingBloodTest_id="22" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2716'" pendingBloodTest_id="24" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2716'" pendingBloodTest_id="25" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2720'" pendingBloodTest_id="27" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2720'" pendingBloodTest_id="28" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2701'" pendingBloodTests_id="29" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2702'" pendingBloodTests_id="29" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2703'" pendingBloodTests_id="29" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2704'" pendingBloodTests_id="29" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2705'" pendingBloodTests_id="30" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2706'" pendingBloodTests_id="30" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2708'" pendingBloodTests_id="18" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2708'" pendingBloodTests_id="19" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2712'" pendingBloodTests_id="21" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2712'" pendingBloodTests_id="22" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2716'" pendingBloodTests_id="24" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2716'" pendingBloodTests_id="25" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2720'" pendingBloodTests_id="27" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2720'" pendingBloodTests_id="28" />
 
 	<DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType="Voluntary" isDeleted="false" />
 	<DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType="Family" isDeleted="false" />

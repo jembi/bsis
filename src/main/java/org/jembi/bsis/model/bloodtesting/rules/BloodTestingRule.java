@@ -55,7 +55,7 @@ public class BloodTestingRule extends BaseModificationTrackerUUIDEntity {
   @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch = FetchType.EAGER)
   @Fetch(FetchMode.SELECT)
-  private List<BloodTest> pendingBloodTest;
+  private List<BloodTest> pendingBloodTests;
 
   @Column(nullable = false)
   private boolean isDeleted = false;
@@ -107,22 +107,22 @@ public class BloodTestingRule extends BaseModificationTrackerUUIDEntity {
    * @return An immutable set of pending test IDs.
    */
   public Set<Long> getPendingTestsIdsSet() {
-    if (pendingBloodTest == null || pendingBloodTest.isEmpty()) {
+    if (pendingBloodTests == null || pendingBloodTests.isEmpty()) {
       return Collections.emptySet();
     }
     Set<Long> ids = new HashSet<>();
-    for (BloodTest pendingBloodTest : pendingBloodTest) {
+    for (BloodTest pendingBloodTest : pendingBloodTests) {
       ids.add(pendingBloodTest.getId());
     }
     return Collections.unmodifiableSet(ids);
   }
 
-  public List<BloodTest> getPendingBloodTest() {
-    return pendingBloodTest;
+  public List<BloodTest> getPendingBloodTests() {
+    return pendingBloodTests;
   }
 
-  public void setPendingBloodTest(List<BloodTest> pendingBloodTest) {
-    this.pendingBloodTest = pendingBloodTest;
+  public void setPendingBloodTests(List<BloodTest> pendingBloodTests) {
+    this.pendingBloodTests = pendingBloodTests;
   }
   
   public void setDonationFieldChanged(DonationField donationFieldChanged) {
