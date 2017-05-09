@@ -12,8 +12,9 @@ before_install:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t 60bc59b1-74af-468a-b386-7cc209586d00 || echo "Codecov did not collect coverage reports"
+  - sudo service mysql stop
 
-script: mvn -Dsurefire.useFile=false clean install && mvn liquibase:update && mvn compile assembly:single && bash .travis.stop-mysql.sh
+script: mvn -Dsurefire.useFile=false clean install && mvn liquibase:update && mvn compile assembly:single
 
 deploy:
   provider: releases
