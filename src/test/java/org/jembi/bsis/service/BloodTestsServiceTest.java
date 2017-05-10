@@ -324,9 +324,10 @@ public class BloodTestsServiceTest extends UnitTestSuite {
         .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
-    Map<Long, String> bloodTestResults = new HashMap<>();
-    bloodTestResults.put(1l, "AB");
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    UUID bloodTestId = UUID.randomUUID();
+    Map<UUID, String> bloodTestResults = new HashMap<>();
+    bloodTestResults.put(bloodTestId, "AB");
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(bloodTestId).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
@@ -335,7 +336,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
     // set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(bloodTest);
+    when(bloodTestRepository.findBloodTestById(bloodTestId)).thenReturn(bloodTest);
     when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
@@ -350,7 +351,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
 
     // run test
@@ -375,9 +376,10 @@ public class BloodTestsServiceTest extends UnitTestSuite {
         .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
-    Map<Long, String> bloodTestResults = new HashMap<>();
-    bloodTestResults.put(1l, "AB");
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    UUID bloodTestId = UUID.randomUUID();
+    Map<UUID, String> bloodTestResults = new HashMap<>();
+    bloodTestResults.put(bloodTestId, "AB");
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(bloodTestId).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
@@ -399,7 +401,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
 
     // run test
@@ -423,14 +425,16 @@ public class BloodTestsServiceTest extends UnitTestSuite {
         .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
-    Map<Long, String> bloodTestResults = new HashMap<>(); // tests passed to the 'saveBloodTests'
-                                                          // service method
-    bloodTestResults.put(1l, "AB");
+    UUID bloodTestId = UUID.randomUUID();
 
-    Map<Long, String> reEnteredBloodTestResults = new HashMap<>(); // tests passed to the rules
+    Map<UUID, String> bloodTestResults = new HashMap<>(); // tests passed to the 'saveBloodTests'
+                                                          // service method
+    bloodTestResults.put(bloodTestId, "AB");
+
+    Map<UUID, String> reEnteredBloodTestResults = new HashMap<>(); // tests passed to the rules
                                                                    // engine
 
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(bloodTestId).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
@@ -452,7 +456,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true))
         .thenReturn(true);
@@ -478,9 +482,10 @@ public class BloodTestsServiceTest extends UnitTestSuite {
         .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
-    Map<Long, String> bloodTestResults = new HashMap<>();
-    bloodTestResults.put(1l, "AB");
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    UUID bloodTestId = UUID.randomUUID();
+    Map<UUID, String> bloodTestResults = new HashMap<>();
+    bloodTestResults.put(bloodTestId, "AB");
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(bloodTestId).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
@@ -502,7 +507,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true))
         .thenReturn(true);
@@ -535,9 +540,10 @@ public class BloodTestsServiceTest extends UnitTestSuite {
         .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
-    Map<Long, String> bloodTestResults = new HashMap<>();
-    bloodTestResults.put(1l, "AB");
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    UUID bloodTestId = UUID.randomUUID();
+    Map<UUID, String> bloodTestResults = new HashMap<>();
+    bloodTestResults.put(bloodTestId, "AB");
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(bloodTestId).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
@@ -557,7 +563,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
 
     // run test
     TestResultsBackingForm form1 = TestResultsBackingFormBuilder.aTestResultsBackingForm()

@@ -32,7 +32,7 @@ public class BloodTestingRuleCRUDServiceTests extends UnitTestSuite {
   public void testCreateBloodTestingRule_shouldSave() {
     // Set up data
     BloodTestingRule bloodTestingRule = aBloodTestingRule()
-        .withBloodTest(BloodTestBuilder.aBloodTest().withTestNameShort("Rh").withId(1L).build())
+        .withBloodTest(BloodTestBuilder.aBloodTest().withTestNameShort("Rh").withId(UUID.randomUUID()).build())
         .withDonationFieldChanged(DonationField.BLOODRH)
         .withNewInformation("+")
         .withPattern("POS")

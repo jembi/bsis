@@ -13,6 +13,7 @@ import static org.jembi.bsis.helpers.matchers.BloodTestMatcher.hasSameStateAsBlo
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
@@ -276,7 +277,7 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
 
   @Test
   public void testVerifyBloodTestExists_shouldReturnFalse() {
-    boolean exists = bloodTestRepository.verifyBloodTestExists(1L);
+    boolean exists = bloodTestRepository.verifyBloodTestExists(UUID.randomUUID());
     assertThat(exists, is(false));
   }
   

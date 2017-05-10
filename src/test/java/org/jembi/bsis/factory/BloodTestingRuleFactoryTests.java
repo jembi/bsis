@@ -120,19 +120,19 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
     BloodTest bloodTest = aBloodTest()
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withTestNameShort("Rh")
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .build();
 
     BloodTest pendingBloodTest1 = aBloodTest()
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withTestNameShort("Rh Repeat 1")
-        .withId(2L)
+        .withId(UUID.randomUUID())
         .build();
 
     BloodTest pendingBloodTest2 = aBloodTest()
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withTestNameShort("Rh Repeat 2")
-        .withId(3L)
+        .withId(UUID.randomUUID())
         .build();
     
     BloodTestBackingForm bloodTestBackingForm = aBloodTestBackingForm()
@@ -186,10 +186,12 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateFullViewModel_shouldReturnFullViewModelWithTheCorrectState() {
     // Set up fixture
+    UUID bloodTestId = UUID.randomUUID();
+    UUID pendingBloodTestId = UUID.randomUUID();
     UUID bloodTestingRuleId = UUID.randomUUID();
 
     BloodTest bloodTest = aBloodTest()
-        .withId(1L) 
+        .withId(bloodTestId) 
         .withTestNameShort("Rh")
         .withTestName("Rh")
         .withCategory(BloodTestCategory.BLOODTYPING)
@@ -198,7 +200,7 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
     BloodTest pendingBloodTest = aBloodTest()
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withTestNameShort("Rh Repeat 1")
-        .withId(2L)
+        .withId(pendingBloodTestId)
         .build();
     
     BloodTestingRule bloodTestingRule = aBloodTestingRule()
@@ -212,13 +214,13 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
 
     // Set up expectations
     BloodTestFullViewModel bloodTestFullViewModel = aBloodTestFullViewModel()
-        .withId(1L) 
+        .withId(bloodTestId) 
         .withTestNameShort("Rh")
         .withCategory(bloodTest.getCategory())
         .build();
 
     BloodTestViewModel pendingBloodTestViewModel = aBloodTestViewModel()
-        .withId(2L) 
+        .withId(pendingBloodTestId) 
         .withTestNameShort("Repeat Rh")
         .withCategory(bloodTest.getCategory())
         .build();
@@ -247,11 +249,14 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateFullViewModels_shouldReturnFullViewModelsWithTheCorrectState() {
     // Set up fixture
+    UUID bloodTestId = UUID.randomUUID();
+    UUID pendingBloodTest1Id = UUID.randomUUID();
+    UUID pendingBloodTest2Id = UUID.randomUUID();
     UUID bloodTestingRuleId1 = UUID.randomUUID();
     UUID bloodTestingRuleId2 = UUID.randomUUID();
 
     BloodTest bloodTest = aBloodTest()
-        .withId(1L)  
+        .withId(bloodTestId)  
         .withTestNameShort("Rh")
         .withTestName("Rh")
         .withCategory(BloodTestCategory.BLOODTYPING)
@@ -260,29 +265,29 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
     BloodTest pendingBloodTest1 = aBloodTest()
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withTestNameShort("Rh Repeat 1")
-        .withId(2L)
+        .withId(pendingBloodTest1Id)
         .build();
 
     BloodTest pendingBloodTest2 = aBloodTest()
         .withCategory(BloodTestCategory.BLOODTYPING)
         .withTestNameShort("Rh Repeat 2")
-        .withId(3L)
+        .withId(pendingBloodTest2Id)
         .build();
     
     BloodTestFullViewModel bloodTestFullViewModel = aBloodTestFullViewModel()
-        .withId(1L)
+        .withId(bloodTestId)
         .withCategory(bloodTest.getCategory())
         .withTestNameShort("Rh")
         .build();
 
     BloodTestViewModel bloodTestViewModel1 = aBloodTestViewModel()
-        .withId(2L)
+        .withId(pendingBloodTest1Id)
         .withCategory(bloodTest.getCategory())
         .withTestNameShort("Repeat Rh")
         .build();
 
     BloodTestViewModel bloodTestViewModel2 = aBloodTestViewModel()
-        .withId(3L)
+        .withId(pendingBloodTest2Id)
         .withCategory(bloodTest.getCategory())
         .withTestNameShort("Repeat again Rh")
         .build();

@@ -171,8 +171,8 @@ public class TestResultController {
 
     for (BloodTestingRuleResult result : ruleResults) {
 
-      Map<Long, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
-      for (Long key : resultViewModelMap.keySet()) {
+      Map<UUID, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
+      for (UUID key : resultViewModelMap.keySet()) {
         BloodTestResultViewModel bloodTestResultViewModel = resultViewModelMap.get(key);
         BloodTestFullViewModel bloodTest = bloodTestResultViewModel.getBloodTest();
         if (bloodTestResultViewModel.getReEntryRequired().equals(true)) {

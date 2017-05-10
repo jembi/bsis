@@ -3,206 +3,206 @@
     <user id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" emailId="admin" firstName="admin" isactive="1"
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
 
-    <BloodTest id="1" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8601'" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
                isActive="1"
                negativeResults="" positiveResults="A,B,AB,O" rankInCategory="1"
                testName="ABO" testNameShort="ABO" validResults="A,B,AB,O"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false" />
-    <BloodTest id="2" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8602'" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="2"
                testName="Rh" testNameShort="Rh" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="3" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8603'" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
                isActive="1"
                negativeResults="LOW" positiveResults="HIGH" rankInCategory="3"
                testName="Titre" testNameShort="Titre" validResults="HIGH,LOW"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="4" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8604'" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="4"
                testName="Weak D" testNameShort="Weak D" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="17" bloodTestType="BASIC_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" bloodTestType="BASIC_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HIV" testNameShort="HIV" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="18" bloodTestType="CONFIRMATORY_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8618'" bloodTestType="CONFIRMATORY_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HIV Confirmatory 1" testNameShort="HIV Conf 1" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="19" bloodTestType="CONFIRMATORY_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8619'" bloodTestType="CONFIRMATORY_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HIV Confirmatory 2" testNameShort="HIV Conf 2" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="20" bloodTestType="BASIC_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8620'" bloodTestType="BASIC_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HBV" testNameShort="HBV" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="21" bloodTestType="CONFIRMATORY_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8621'" bloodTestType="CONFIRMATORY_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HBV Confirmatory 1" testNameShort="HBV Conf 1" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="22" bloodTestType="CONFIRMATORY_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8622'" bloodTestType="CONFIRMATORY_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HBV Confirmatory 2" testNameShort="HBV Conf 2" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="23" bloodTestType="BASIC_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8623'" bloodTestType="BASIC_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HCV" testNameShort="HCV" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="24" bloodTestType="CONFIRMATORY_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8624'" bloodTestType="CONFIRMATORY_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HCV Confirmatory 1" testNameShort="HCV Conf 1" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="25" bloodTestType="CONFIRMATORY_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8625'" bloodTestType="CONFIRMATORY_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="HCV Confirmatory 2" testNameShort="HCV Conf 2" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="26" bloodTestType="BASIC_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8626'" bloodTestType="BASIC_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="Syphilis" testNameShort="Syphilis" validResults="POS,NEG"
                flagComponentsForDiscard="0" flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="27" bloodTestType="CONFIRMATORY_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8627'" bloodTestType="CONFIRMATORY_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="Syphilis Confirmatory 1" testNameShort="Syphilis Conf 1"
                validResults="POS,NEG" flagComponentsForDiscard="0" 
                flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="28" bloodTestType="CONFIRMATORY_TTI" category="TTI"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8628'" bloodTestType="CONFIRMATORY_TTI" category="TTI"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="Syphilis Confirmatory 2" testNameShort="Syphilis Conf 2"
                validResults="POS,NEG" flagComponentsForDiscard="0"
                flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
-    <BloodTest id="29" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8629'" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
                isActive="1"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="Antibody Screening" testNameShort="AbScr"
                validResults="POS,NEG" flagComponentsForDiscard="0"
                flagComponentsContainingPlasmaForDiscard="0" isDeleted="true"/>
-    <BloodTest id="30" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
+    <BloodTest id="uuid'04586549-1d7e-4b12-ba81-1987d11f8630'" bloodTestType="BASIC_BLOODTYPING" category="BLOODTYPING"
                isActive="0"
                negativeResults="NEG" positiveResults="POS" rankInCategory="1"
                testName="Tubercolosis" testNameShort="TB"
                validResults="POS,NEG" flagComponentsForDiscard="0"
                flagComponentsContainingPlasmaForDiscard="0" isDeleted="false"/>
                
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2701'" bloodTest_id="1"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2701'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8601'"  
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"
                       newInformation="O" pattern="O" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2702'" bloodTest_id="1"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2702'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8601'"  
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"   newInformation="A"
                       pattern="A"  />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2703'" bloodTest_id="1"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2703'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8601'"  
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"  
                       newInformation="B" pattern="B"  />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2704'" bloodTest_id="1"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2704'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8601'"  
                       donationFieldChanged="BLOODABO"
                       isDeleted="0"  
                       newInformation="AB" pattern="AB"  />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2705'" bloodTest_id="2"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2705'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8602'"  
                       donationFieldChanged="BLOODRH"
                       isDeleted="0"  
                       newInformation="+" pattern="POS"  />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2706'" bloodTest_id="2"  
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2706'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8602'"  
                       donationFieldChanged="BLOODRH"
                       isDeleted="0"  
                       newInformation="-" pattern="NEG"  />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2707'" bloodTest_id="17" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2707'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="NEG" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2708'" bloodTest_id="17" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2708'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2709'" bloodTest_id="18" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2709'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8618'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2710'" bloodTest_id="19" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2710'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8619'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2711'" bloodTest_id="20" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2711'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8620'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="NEG" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2712'" bloodTest_id="20" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2712'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8620'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2713'" bloodTest_id="21" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2713'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8621'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2714'" bloodTest_id="22" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2714'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8622'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2715'" bloodTest_id="23" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2715'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8623'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="NEG" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2716'" bloodTest_id="23" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2716'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8623'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2717'" bloodTest_id="24" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2717'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8624'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2718'" bloodTest_id="25" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2718'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8625'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2719'" bloodTest_id="26" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2719'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8626'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="NEG" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2720'" bloodTest_id="26" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2720'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8626'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2721'" bloodTest_id="27" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2721'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8627'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2722'" bloodTest_id="28" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2722'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8628'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_UNSAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2723'" bloodTest_id="29" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2723'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8629'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="POS" />
-    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2724'" bloodTest_id="30" 
+    <BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2724'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8630'" 
                       donationFieldChanged="TTISTATUS"
                       isDeleted="0"  
                       newInformation="TTI_SAFE" pattern="POS" />
 
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2709'" pendingBloodTests_id="18" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2709'" pendingBloodTests_id="19" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2713'" pendingBloodTests_id="21" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2713'" pendingBloodTests_id="22" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2717'" pendingBloodTests_id="24" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2717'" pendingBloodTests_id="25" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2721'" pendingBloodTests_id="27" />
-    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2721'" pendingBloodTests_id="28" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2709'" pendingBloodTests_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8618'" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2709'" pendingBloodTests_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8619'" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2713'" pendingBloodTests_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8621'" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2713'" pendingBloodTests_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8622'" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2717'" pendingBloodTests_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8624'" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2717'" pendingBloodTests_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8625'" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2721'" pendingBloodTests_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8627'" />
+    <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2721'" pendingBloodTests_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8628'" />
 
     <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" donationType="Voluntary" isDeleted="false"/>
     <DonationType id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" donationType="Family" isDeleted="false"/>
@@ -430,171 +430,171 @@
 
 	<BloodTestResult isDeleted="false" id="uuid'8f389788-f3a6-40f7-ba93-891f058f0f0e'" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
-		testedOn="2015-02-06 02:09:13.0" bloodTest_id="17" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
+		testedOn="2015-02-06 02:09:13.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'e3e4a72a-51f2-4af5-bd33-c6ec942cff58'" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
-		testedOn="2015-02-06 02:09:13.0" bloodTest_id="20" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
+		testedOn="2015-02-06 02:09:13.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8620'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'34b6bd5b-9418-4841-b248-66e7c9010f2f'" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
-		testedOn="2015-02-06 02:09:13.0" bloodTest_id="23" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
+		testedOn="2015-02-06 02:09:13.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8623'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'386cada3-1663-4e8a-ac7a-c6434d6e2e97'" createdDate="2015-02-06 02:09:13.0"
 		lastUpdated="2015-02-06 02:09:13.0" notes="" result="NEG"
-		testedOn="2015-02-06 02:09:13.0" bloodTest_id="26" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
+		testedOn="2015-02-06 02:09:13.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8626'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'1eba7c4a-8bdd-4e35-a33a-199a7eaf3ed8'" createdDate="2015-02-06 02:09:23.0"
 		lastUpdated="2015-02-06 02:09:23.0" notes="" result="O"
-		testedOn="2015-02-06 02:09:23.0" bloodTest_id="1" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
+		testedOn="2015-02-06 02:09:23.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8601'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'f1645a31-b24e-4c2b-a02f-9d1569da5bbf'" createdDate="2015-02-06 02:09:23.0"
 		lastUpdated="2015-02-06 02:09:23.0" notes="" result="POS"
-		testedOn="2015-02-06 02:09:23.0" bloodTest_id="2" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
+		testedOn="2015-02-06 02:09:23.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8602'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'ff4d3096-9ea9-4930-8d4f-0a39c97cbbbc'" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:42:49.0" bloodTest_id="17" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'34438fb6-8c60-4ccc-8be5-0fa489c3eb93'" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:42:49.0" bloodTest_id="20" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8620'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="9" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:42:49.0" bloodTest_id="23" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8623'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'ae0c0e8c-ddb9-40c2-a3ad-d452f1845aba'" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:42:49.0" bloodTest_id="26" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8626'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'eb7ac910-4a43-4d51-99a7-1f676fc0fa34'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8601'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'56af55d2-738a-4570-8438-ae4e0cf121f0'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8602'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'eeb37ead-824c-435b-84f2-693ddbb57494'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="LOW"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="3" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8603'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'4bdf7c3a-5c71-404a-8a59-b1534e832e8a'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="4" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8604'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'8b17771f-2231-4e4d-9850-e8dffb04244b'" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
-		testedOn="2015-06-24 06:39:25.0" bloodTest_id="17" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-06-24 06:39:25.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'9a118071-5c21-4442-82ed-6f545b3f3f62'" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
-		testedOn="2015-06-24 06:39:25.0" bloodTest_id="20" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-06-24 06:39:25.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8620'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'5f49abbb-801b-4831-8128-da87fde1c33d'" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
-		testedOn="2015-06-24 06:39:25.0" bloodTest_id="23" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-06-24 06:39:25.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8623'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'392492f7-ed04-42c0-97fd-c96290fce622'" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
-		testedOn="2015-06-24 06:39:25.0" bloodTest_id="26" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
+		testedOn="2015-06-24 06:39:25.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8626'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a2'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'98710894-66ea-48ec-b598-db941cd70b87'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="B"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a4'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8601'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a4'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'81840abd-2ff9-44cf-8574-aa757a6001fd'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="POS"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a4'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8602'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a4'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'c77927dc-d31c-4752-b792-a67374b96100'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="LOW"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="3" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a4'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8603'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a4'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'c39254d9-77ff-47a5-a978-099d136e33ea'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="4" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a4'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8604'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a4'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'551c3335-bd1e-4f8c-a767-248e369243b1'" createdDate="2015-06-24 06:39:25.0"
 		lastUpdated="2015-06-24 06:39:25.0" notes="" result="NEG"
-		testedOn="2015-06-24 06:39:25.0" bloodTest_id="17" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a4'"
+		testedOn="2015-06-24 06:39:25.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a4'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'8e53f21e-8564-4a05-9dbc-2d5f9a164530'" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:30:49.0" bloodTest_id="17" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
+		testedOn="2015-04-24 04:30:49.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'ceaab9ef-3464-46bb-b14a-3ea40efb96e4'" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:42:49.0" bloodTest_id="20" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8620'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'c0d3d29c-aee6-40ec-be4c-42f37ebe991f'" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:42:49.0" bloodTest_id="23" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8623'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'2b4c4371-371a-4fd1-9268-81ce0814129c'" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:42:49.0" bloodTest_id="26" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8626'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'b0ca9d3a-00ac-4681-a006-dc844f41d9ee'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="A"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8601'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'54f9ccf2-2e04-45bd-b4e3-7c024ecd65d6'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8602'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'11608edb-0461-44f7-a356-c6b089ec2faa'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="LOW"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="3" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8603'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'b0fb7fe9-6613-485b-8745-714c6ce25993'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="NEG"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="4" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8604'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'3acea047-146d-47eb-ae79-476e1ff31d32'" createdDate="2015-04-24 04:42:49.0"
 		lastUpdated="2015-04-24 04:42:49.0" notes="" result="POS"
-		testedOn="2015-04-24 04:42:49.0" bloodTest_id="17" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
+		testedOn="2015-04-24 04:42:49.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a5'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'f0fc7bd2-2f28-4d38-9da8-a2a0fe856e28'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="Z"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="1" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a6'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8601'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a6'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'560681cf-cc2f-4800-b3b5-b241e6020c44'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="-"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="2" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a6'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8602'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a6'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'9f6ffdba-662f-498d-9513-983b721a03bb'" createdDate="2015-04-24 04:43:06.0"
 		lastUpdated="2015-04-24 04:43:06.0" notes="" result="?"
-		testedOn="2015-04-24 04:43:06.0" bloodTest_id="17" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a6'"
+		testedOn="2015-04-24 04:43:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a6'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'c1301229-7411-4dc4-9278-08f1cefdea39'" createdDate="2016-02-05 09:17:06.0"
 		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
-		testedOn="2016-02-05 09:17:06.0" bloodTest_id="17" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a8'"
+		testedOn="2016-02-05 09:17:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a8'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'3328d1c1-8244-4d7f-a1fe-83801324ce5a'" createdDate="2016-02-05 09:17:06.0"
 		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
-		testedOn="2016-02-05 09:17:06.0" bloodTest_id="20" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a8'"
+		testedOn="2016-02-05 09:17:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8620'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a8'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'bb8b6be2-bab8-4e4c-ae7c-9a4c241bd31c'" createdDate="2016-02-05 09:17:06.0"
 		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
-		testedOn="2016-02-05 09:17:06.0" bloodTest_id="23" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a8'"
+		testedOn="2016-02-05 09:17:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8623'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a8'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false"/>
 	<BloodTestResult isDeleted="false" id="uuid'e00e8a3f-48db-4e05-ae5e-cc192a33b090'" createdDate="2016-02-05 09:17:06.0"
 		lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
-		testedOn="2016-02-05 09:17:06.0" bloodTest_id="26" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a8'"
+		testedOn="2016-02-05 09:17:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8626'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a8'"
 		createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false" />
      <BloodTestResult isDeleted="false" id="uuid'78593503-a71f-430a-b3fb-d9f89aea6d2b'" createdDate="2016-02-05 09:17:06.0"
         lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
-        testedOn="2016-02-05 09:17:06.0" bloodTest_id="28" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a9'"
+        testedOn="2016-02-05 09:17:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8628'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a9'"
         createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false" />
     <BloodTestResult isDeleted="false" id="uuid'048ad464-98e7-426a-8a52-4813fc3803a3'" createdDate="2016-02-05 09:17:06.0"
         lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
-        testedOn="2016-02-05 09:17:06.0" bloodTest_id="29" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837b0'"
+        testedOn="2016-02-05 09:17:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8629'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837b0'"
         createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false" />
     <BloodTestResult isDeleted="false" id="uuid'8b8aff7c-274f-47e1-8510-7e58ee3db1e3'" createdDate="2016-02-05 09:17:06.0"
         lastUpdated="2016-02-05 09:17:06.0" notes="" result="NEG"
-        testedOn="2016-02-05 09:17:06.0" bloodTest_id="30" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837b1'"
+        testedOn="2016-02-05 09:17:06.0" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8630'" donation_id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837b1'"
         createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" reEntryRequired="false" />
 
     <Component location_id="uuid'77321456-eeee-1234-b5b1-123412348891'" inventoryStatus="NOT_IN_STOCK" id="uuid'11e71f4f-8efe-a380-9fc7-28f10e1b4901'" createdOn="2015-02-02 10:26:36.0" expiresOn="2015-03-09 10:26:36.0"

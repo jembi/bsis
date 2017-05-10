@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.LinkedHashSet;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
@@ -8,7 +9,7 @@ import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
 public class BloodTestBackingFormBuilder extends AbstractBuilder<BloodTestBackingForm> {
   
-  private Long id;
+  private UUID id;
   private String testName;
   private String testNameShort;
   private BloodTestCategory category;
@@ -22,7 +23,7 @@ public class BloodTestBackingFormBuilder extends AbstractBuilder<BloodTestBackin
   private boolean flagComponentsForDiscard;
   private Integer rankInCategory;
   
-  public BloodTestBackingFormBuilder withId(Long id) {
+  public BloodTestBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

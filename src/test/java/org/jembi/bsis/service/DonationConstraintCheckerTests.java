@@ -187,7 +187,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
         .build();
 
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult()
-        .withPendingRepeatAndConfirmatoryTtiTestsIds(12L).build();
+        .withPendingRepeatAndConfirmatoryTtiTestsIds(UUID.randomUUID()).build();
 
     when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
 
@@ -368,7 +368,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
         .build();
 
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult()
-        .withPendingRepeatAndConfirmatoryTtiTestsIds(12L).build();
+        .withPendingRepeatAndConfirmatoryTtiTestsIds(UUID.randomUUID()).build();
 
     boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation, bloodTestingRuleResult);
 
@@ -389,7 +389,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
         .build();
 
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult()
-        .withPendingRepeatAndConfirmatoryTtiTestsIds(12L).build();
+        .withPendingRepeatAndConfirmatoryTtiTestsIds(UUID.randomUUID()).build();
 
     boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation, bloodTestingRuleResult);
 

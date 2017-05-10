@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -106,11 +107,11 @@ public class BloodTestingRule extends BaseModificationTrackerUUIDEntity {
    *
    * @return An immutable set of pending test IDs.
    */
-  public Set<Long> getPendingTestsIdsSet() {
+  public Set<UUID> getPendingTestsIdsSet() {
     if (pendingBloodTests == null || pendingBloodTests.isEmpty()) {
       return Collections.emptySet();
     }
-    Set<Long> ids = new HashSet<>();
+    Set<UUID> ids = new HashSet<>();
     for (BloodTest pendingBloodTest : pendingBloodTests) {
       ids.add(pendingBloodTest.getId());
     }

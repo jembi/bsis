@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
@@ -89,7 +90,7 @@ public class BloodTestingRuleFactory {
   private void populateBloodTestingRuleFullViewModel(BloodTestingRuleFullViewModel fullViewModel,
       BloodTestingRule bloodTestingRule) {
     Set<BloodTestViewModel> pendingBloodTests = new HashSet<>();
-    for (Long id : bloodTestingRule.getPendingTestsIdsSet()) {
+    for (UUID id : bloodTestingRule.getPendingTestsIdsSet()) {
       BloodTestViewModel bloodTest = new BloodTestViewModel();
       bloodTest.setId(id);
       pendingBloodTests.add(bloodTest);
