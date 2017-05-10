@@ -130,4 +130,5 @@
   <include file="liquibase/updates/uuid/2870-implement-uuids-for-components-section-component-status-change-reason.xml"/>
   <include file="liquibase/updates/uuid/2870-implement-uuids-for-components-section-component-type-combination-component-type.xml"/>  
   <include file="liquibase/updates/uuid/2870-implement-uuids-for-components-section-component-type-combination-component-type-2.xml"/>
+  <include file="liquibase/updates/uuid/2874-implement-uuids-for-role-and-role-aud.xml"/>
 </databaseChangeLog>
