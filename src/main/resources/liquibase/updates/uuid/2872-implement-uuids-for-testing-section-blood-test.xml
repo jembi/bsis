@@ -25,6 +25,29 @@
       VIRTUAL AFTER bloodTestingRule_id;
     </sql>
 
+    <createTable tableName="BloodTestingRule_BloodTest_AUD">
+      <column name="bloodTestingRule_id" type="BINARY(16)">
+        <constraints primaryKey="true"  />
+      </column>
+      <column name="pendingBloodTests_id" type="BIGINT(20)">
+        <constraints primaryKey="true"  />
+      </column>   
+      <column name="REV" type="INT(11)">
+     <constraints primaryKey="true" />
+      </column>
+      <column name="REVTYPE" type="TINYINT(4)" />    
+    </createTable>
+
+    <sql dbms="mysql">
+      ALTER TABLE BloodTestingRule_BloodTest_AUD ADD bloodTestingRule_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(bloodTestingRule_id,  1, 4)),
+        HEX(SUBSTR(bloodTestingRule_id,  5, 2)),
+        HEX(SUBSTR(bloodTestingRule_id,  7, 2)),
+        HEX(SUBSTR(bloodTestingRule_id,  9, 2)),
+        HEX(SUBSTR(bloodTestingRule_id, 11)) )))
+      VIRTUAL AFTER bloodTestingRule_id;
+    </sql>
+
     <sql dbms="mysql">
       CREATE TEMPORARY TABLE numbers AS
       SELECT 1 n FROM DUAL UNION ALL
@@ -89,6 +112,10 @@
       <column name="bloodTest_id_temp" type="BIGINT" afterColumn="bloodTest_id"/>
     </addColumn>
 
+    <addColumn tableName="BloodTestingRule_BloodTest_AUD">
+      <column name="pendingBloodTests_id_temp" type="BIGINT" afterColumn="pendingBloodTests_id"/>
+    </addColumn>
+
     <addColumn tableName="BloodTestResult_AUD">
       <column name="bloodTest_id_temp" type="BIGINT" afterColumn="bloodTest_id"/>
     </addColumn>
@@ -111,6 +138,11 @@
     <sql>
       UPDATE BloodTestingRule_AUD 
       SET bloodTest_id_temp = bloodTest_id;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_BloodTest_AUD 
+      SET pendingBloodTests_id_temp = pendingBloodTests_id;
     </sql>
 
     <sql>
@@ -145,6 +177,7 @@
     <modifyDataType columnName="bloodTest_id" newDataType="BINARY(16)" tableName="BloodTestResult"/>
 
     <modifyDataType columnName="bloodTest_id" newDataType="BINARY(16)" tableName="BloodTestingRule_AUD"/>
+    <modifyDataType columnName="pendingBloodTests_id" newDataType="BINARY(16)" tableName="BloodTestingRule_BloodTest_AUD"/>
     <modifyDataType columnName="bloodTest_id" newDataType="BINARY(16)" tableName="BloodTestResult_AUD"/>
 
     <sql>
@@ -181,6 +214,16 @@
         HEX(SUBSTR(bloodTest_id,  9, 2)),
         HEX(SUBSTR(bloodTest_id, 11)) )))
       VIRTUAL AFTER bloodTest_id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE BloodTestingRule_BloodTest_AUD ADD pendingBloodTests_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(pendingBloodTests_id,  1, 4)),
+        HEX(SUBSTR(pendingBloodTests_id,  5, 2)),
+        HEX(SUBSTR(pendingBloodTests_id,  7, 2)),
+        HEX(SUBSTR(pendingBloodTests_id,  9, 2)),
+        HEX(SUBSTR(pendingBloodTests_id, 11)) )))
+      VIRTUAL AFTER pendingBloodTests_id;
     </sql>
 
     <sql dbms="mysql">
@@ -267,6 +310,13 @@
     </sql>
 
     <sql>
+      UPDATE BloodTestingRule_BloodTest_AUD AS updateTable
+        LEFT JOIN BloodTest AS joinedTable ON (updateTable.pendingBloodTests_id_temp = joinedTable.id_temp)
+      SET updateTable.pendingBloodTests_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
       UPDATE BloodTestResult_AUD AS updateTable
         LEFT JOIN BloodTest AS joinedTable ON (updateTable.bloodTest_id_temp = joinedTable.id_temp)
       SET updateTable.bloodTest_id = joinedTable.id 
@@ -284,6 +334,8 @@
     <dropColumn columnName="bloodTest_id_temp" tableName="BloodTestResult"/>
 
     <dropColumn columnName="bloodTest_id_temp" tableName="BloodTestingRule_AUD"/>
+
+    <dropColumn columnName="pendingBloodTests_id_temp" tableName="BloodTestingRule_BloodTest_AUD"/>
 
     <dropColumn columnName="bloodTest_id_temp" tableName="BloodTestResult_AUD"/>
 

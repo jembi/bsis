@@ -52,10 +52,7 @@ public class BloodTestingRule extends BaseModificationTrackerUUIDEntity {
   @Column(length = 30)
   private String newInformation;
 
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @ManyToMany(fetch = FetchType.EAGER)
-  @Fetch(FetchMode.SELECT)
   private List<BloodTest> pendingBloodTests;
 
   @Column(nullable = false)
