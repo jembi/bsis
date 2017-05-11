@@ -77,7 +77,7 @@ public class ComponentCRUDService {
 
   @Autowired
   private BleedTimeService bleedTimeService;
-
+  
   public Component createInitialComponent(Donation donation) {
 
     // Create initial component only if the countAsDonation is true and the config option is enabled
@@ -320,15 +320,21 @@ public class ComponentCRUDService {
     }
 
     long bleedTime = bleedTimeService.getBleedTime(donation.getBleedStartTime(), donation.getBleedEndTime());
-    long timeSinceDonation = bleedTimeService.getTimeSinceDonation(
-        initialComponent.getCreatedOn(), initialComponent.getProcessedOn());
-
     if (component.getComponentType().getMaxBleedTime() != null
         && bleedTime >= component.getComponentType().getMaxBleedTime()) {
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME);
-    } else if (component.getComponentType().getMaxTimeSinceDonation() != null
-        && timeSinceDonation >= component.getComponentType().getMaxTimeSinceDonation()) {
-      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
+    } else {
+      if (initialComponent.getProcessedOn() == null) {
+        LOGGER.warn("ProcessedOn date is null for donation Id:" +  donation.getId() +
+          " with DIN: " + donation.getDonationIdentificationNumber() + ", time since donation check is ignored");
+      } else {
+        long timeSinceDonation = bleedTimeService.getTimeSinceDonation(
+            initialComponent.getCreatedOn(), initialComponent.getProcessedOn());
+        if (component.getComponentType().getMaxTimeSinceDonation() != null
+              && timeSinceDonation >= component.getComponentType().getMaxTimeSinceDonation()) {
+          markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
+        }
+      }
     }
   }
 
