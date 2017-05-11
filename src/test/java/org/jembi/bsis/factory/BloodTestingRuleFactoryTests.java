@@ -173,8 +173,8 @@ public class BloodTestingRuleFactoryTests extends UnitTestSuite {
         .build();
 
     when(bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId())).thenReturn(bloodTest);
-    when(bloodTestFactory.createEntity(pendingBloodTest1BackingForm)).thenReturn(pendingBloodTest1);
-    when(bloodTestFactory.createEntity(pendingBloodTest2BackingForm)).thenReturn(pendingBloodTest2);
+    when(bloodTestRepository.findBloodTestById(pendingBloodTest1BackingForm.getId())).thenReturn(pendingBloodTest1);
+    when(bloodTestRepository.findBloodTestById(pendingBloodTest2BackingForm.getId())).thenReturn(pendingBloodTest2);
 
     // Exercise SUT
     BloodTestingRule returnedEntity = bloodTestingRuleFactory.createEntity(bloodTestingRuleBackingForm);

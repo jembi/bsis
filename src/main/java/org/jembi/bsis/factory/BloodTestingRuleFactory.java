@@ -81,7 +81,7 @@ public class BloodTestingRuleFactory {
     bloodTestingRule.setBloodTest(bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId()));
     List<BloodTest> pendingBloodTests = new ArrayList<>();
     for (BloodTestBackingForm pendingBloodTest : bloodTestingRuleBackingForm.getPendingTests()) {
-      pendingBloodTests.add(bloodTestFactory.createEntity(pendingBloodTest)); 
+      pendingBloodTests.add(bloodTestRepository.findBloodTestById(pendingBloodTest.getId()));
     }
     bloodTestingRule.setPendingBloodTests(pendingBloodTests);
     return bloodTestingRule;
