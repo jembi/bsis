@@ -6,7 +6,7 @@
     <comment>This change set migrates the Role and Role_AUD tables from an integer id primary key
         to a UUID of type BINARY(16). </comment>
         
-            <dropForeignKeyConstraint baseTableName="Permission_Role" constraintName="FK63DCE8E61D2E2631"/>
+    <dropForeignKeyConstraint baseTableName="Permission_Role" constraintName="FK63DCE8E61D2E2631"/>
     <dropForeignKeyConstraint baseTableName="User_Role" constraintName="FK8B9F886A1D2E2631"/>
 
     <addColumn tableName="Role">
@@ -202,10 +202,10 @@
 
     <dropColumn columnName="roles_id_temp" tableName="User_Role_AUD"/>
 
-    <addForeignKeyConstraint baseColumnNames="roles_id" baseTableName="Permission_Role" constraintName="FK63DCE8E61D2E2631"
+    <addForeignKeyConstraint baseColumnNames="roles_id" baseTableName="Permission_Role" constraintName="FK_Permission_Role_Role_id"
       referencedColumnNames="id" referencedTableName="Role"/>
 
-    <addForeignKeyConstraint baseColumnNames="roles_id" baseTableName="User_Role" constraintName="FK8B9F886A1D2E2631"
+    <addForeignKeyConstraint baseColumnNames="roles_id" baseTableName="User_Role" constraintName="FK_User_Role_Role_id"
       referencedColumnNames="id" referencedTableName="Role"/>
         
   </changeSet>
