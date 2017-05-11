@@ -86,7 +86,7 @@ public class BloodTestResultRepository extends AbstractRepository<BloodTestResul
         .setParameter("testOutcomeDeleted", false)
         .setParameter("released", true)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
-        .setParameter("ttiStatus", TTIStatus.TTI_UNSAFE)
+        .setParameter("ttiStatus", TTIStatus.UNSAFE)
         .getResultList();
   }
 }
