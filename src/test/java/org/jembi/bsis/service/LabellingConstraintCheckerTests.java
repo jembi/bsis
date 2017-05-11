@@ -33,7 +33,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   @Test(expected = IllegalStateException.class)
   public void testCanPrintPackLabelWithConsistencyChecksWithUnsafeDonation_shouldThrow() {
     // Set up
-    Donation unsafeDonation = aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.TTI_UNSAFE).build();
+    Donation unsafeDonation = aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.UNSAFE).build();
     Component component = aComponent()
         .withId(COMPONENT_ID)
         .withDonation(unsafeDonation)
@@ -49,7 +49,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
   @Test(expected = IllegalStateException.class)
   public void testCanPrintPackLabelWithConsistencyChecksWithUnreleasedDonation_shouldThrow() {
     // Set up
-    Donation unreleasedDonation = aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.TTI_SAFE).thatIsNotReleased().build();
+    Donation unreleasedDonation = aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.SAFE).thatIsNotReleased().build();
     Component component = aComponent()
         .withId(COMPONENT_ID)
         .withDonation(unreleasedDonation)
@@ -67,7 +67,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Donation donation = aDonation()
         .withId(DONATION_ID)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo(null).withBloodRh("+").build())
         .build();
@@ -88,7 +88,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Donation donation = aDonation()
         .withId(DONATION_ID)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh(null).build())
         .build();
@@ -109,7 +109,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Donation donation = aDonation()
         .withId(DONATION_ID)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo("B").withBloodRh("+").build())
         .withBloodAbo("A")
@@ -132,7 +132,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Donation donation = aDonation()
         .withId(DONATION_ID)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .withDonor(aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("-").build())
         .withBloodAbo("A")
@@ -156,7 +156,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     Donor deferredDonor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation()
         .withId(DONATION_ID)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .withDonor(deferredDonor)
         .withBloodAbo("A")
@@ -183,7 +183,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation()
         .withId(DONATION_ID)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .withDonor(donor)
         .withBloodAbo("A")
@@ -216,7 +216,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     Donor donor = aDonor().withId(UUID.randomUUID()).withBloodAbo("A").withBloodRh("+").build();
     Donation donation = aDonation()
         .withId(DONATION_ID)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .withDonor(donor)
         .withBloodAbo("A")

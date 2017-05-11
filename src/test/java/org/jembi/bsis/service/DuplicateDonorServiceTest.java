@@ -185,7 +185,7 @@ public class DuplicateDonorServiceTest extends UnitTestSuite {
     // create outcomes
     BloodTestingRuleResult btrr = BloodTestingRuleResultBuilder.aBloodTestingRuleResult()
         .withBloodAbo("A").withBloodRh("+")
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .build();
 
     // set up mocks
@@ -282,7 +282,7 @@ public class DuplicateDonorServiceTest extends UnitTestSuite {
 
     BloodTestingRuleResult btrr = BloodTestingRuleResultBuilder.aBloodTestingRuleResult()
         .withBloodAbo("A").withBloodRh("+")
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .build();
 
     // setup mocks

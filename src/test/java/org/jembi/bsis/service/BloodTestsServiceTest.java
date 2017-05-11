@@ -95,14 +95,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   public void testUpdateDonationWithTestResultsNotUpdated() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
 
     // set up mocks
 
@@ -169,7 +169,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
 
     // set up mocks
 
@@ -178,21 +178,21 @@ public class BloodTestsServiceTest extends UnitTestSuite {
 
     // do asserts
     Assert.assertTrue("Donation updated", updated);
-    Assert.assertEquals("TTI status set", TTIStatus.TTI_SAFE, donation.getTTIStatus());
+    Assert.assertEquals("TTI status set", TTIStatus.SAFE, donation.getTTIStatus());
   }
 
   @Test
   public void testUpdateDonationWithTestResultsUpdatedBloodTypingStatus() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.PENDING_TESTS);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
 
     // set up mocks
 
@@ -208,14 +208,14 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   public void testUpdateDonationWithTestResultsUpdatedBloodTypingMatchStatus() throws Exception {
     // set up data
     Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
 
     // set up mocks
 
@@ -231,7 +231,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedNotTTISafe() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.TTI_SAFE)
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE).withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -239,7 +239,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
-    ruleResult.setTTIStatus(TTIStatus.TTI_UNSAFE);
+    ruleResult.setTTIStatus(TTIStatus.UNSAFE);
 
     // set up mocks
 
@@ -248,7 +248,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
 
     // do asserts
     Assert.assertTrue("Donation updated", updated);
-    Assert.assertEquals("TTI status set", TTIStatus.TTI_UNSAFE, donation.getTTIStatus());
+    Assert.assertEquals("TTI status set", TTIStatus.UNSAFE, donation.getTTIStatus());
   }
 
   @Test
@@ -317,7 +317,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
     Map<Long, String> bloodTestResults = new HashMap<>();
@@ -327,7 +327,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
-        .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
     // set up mocks
@@ -368,7 +368,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
     Map<Long, String> bloodTestResults = new HashMap<>();
@@ -378,7 +378,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
-        .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
     // set up mocks
@@ -416,7 +416,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
     Map<Long, String> bloodTestResults = new HashMap<>(); // tests passed to the 'saveBloodTests'
@@ -431,7 +431,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
-        .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
     // set up mocks
@@ -470,7 +470,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
-    Donation donation = DonationBuilder.aDonation().withTTIStatus(TTIStatus.TTI_SAFE)
+    Donation donation = DonationBuilder.aDonation().withTTIStatus(TTIStatus.SAFE)
         .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
@@ -481,7 +481,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
-        .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
     // set up mocks
@@ -525,10 +525,10 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
     Donation donation1 = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
     Donation donation2 = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_2)
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
     Map<Long, String> bloodTestResults = new HashMap<>();

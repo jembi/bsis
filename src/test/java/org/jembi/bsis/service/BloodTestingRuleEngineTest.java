@@ -93,7 +93,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
-    Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.TTI_SAFE, result.getTTIStatus());
+    Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.SAFE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is O", "O", result.getBloodAbo());
     Assert.assertEquals("bloodRh is +", "+", result.getBloodRh());
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
@@ -116,7 +116,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
-    Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.TTI_SAFE, result.getTTIStatus());
+    Assert.assertEquals("ttiStatus is TTI_SAFE", TTIStatus.SAFE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is A", "A", result.getBloodAbo());
     Assert.assertEquals("bloodRh is -", "-", result.getBloodRh());
     Assert.assertEquals("No pending TTI tests", 0, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
@@ -215,7 +215,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
     Assert.assertEquals("bloodTypingMatchStatus is MATCH", BloodTypingMatchStatus.MATCH, result.getBloodTypingMatchStatus());
     Assert.assertEquals("bloodTypingStatus is set", BloodTypingStatus.COMPLETE, result.getBloodTypingStatus());
-    Assert.assertEquals("ttiStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
+    Assert.assertEquals("ttiStatus is TTI_UNSAFE", TTIStatus.UNSAFE, result.getTTIStatus());
     Assert.assertEquals("bloodAb is A", "A", result.getBloodAbo());
     Assert.assertEquals("bloodRh is -", "-", result.getBloodRh());
     Assert.assertEquals("2 pending TTI tests", 2, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
@@ -345,7 +345,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Map<Long, String> newTtiTestResults = new HashMap<>();
     newTtiTestResults.put(17L, "POS");
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, newTtiTestResults);
-    Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
+    Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.UNSAFE, result.getTTIStatus());
     Assert.assertEquals("No pending TTI tests", 2, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
   }
   
@@ -354,7 +354,7 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b3");
     Donation donation = donationRepository.findDonationById(donationId);
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<Long, String>());
-    Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
+    Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.UNSAFE, result.getTTIStatus());
     Assert.assertEquals("Pending TTI tests", 2, result.getPendingRepeatAndConfirmatoryTtiTestsIds().size());
   }
   
@@ -386,6 +386,6 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     Assert.assertEquals("BloodTypingMatchStatus is RESOLVED", BloodTypingMatchStatus.RESOLVED, result.getBloodTypingMatchStatus());
     Assert.assertEquals("Blood ABO not set", "O", result.getBloodAbo());
     Assert.assertEquals("Blood Rh not set", "+", result.getBloodRh());
-    Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.TTI_UNSAFE, result.getTTIStatus());
+    Assert.assertEquals("TTIStatus is TTI_UNSAFE", TTIStatus.UNSAFE, result.getTTIStatus());
   }
 }

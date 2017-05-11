@@ -119,15 +119,15 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
          .withPattern("NT").withNewInformation("INDETERMINATE").withBloodTest(hivBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
-         .withPattern("POS").withNewInformation("TTI_UNSAFE").withBloodTest(hivBloodTest).build());
+         .withPattern("POS").withNewInformation("UNSAFE").withBloodTest(hivBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
-         .withPattern("NEG").withNewInformation("TTI_SAFE").withBloodTest(hivBloodTest).build());
+         .withPattern("NEG").withNewInformation("SAFE").withBloodTest(hivBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
          .withPattern("NT").withNewInformation("INDETERMINATE").withBloodTest(hbvBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
-         .withPattern("POS").withNewInformation("TTI_UNSAFE").withBloodTest(hbvBloodTest).build());
+         .withPattern("POS").withNewInformation("UNSAFE").withBloodTest(hbvBloodTest).build());
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.TTISTATUS)
-        .withPattern("NEG").withNewInformation("TTI_SAFE").withBloodTest(hbvBloodTest).build());
+        .withPattern("NEG").withNewInformation("SAFE").withBloodTest(hbvBloodTest).build());
     
     // ABO
     rules.add(aBloodTestingRule().withDonationFieldChanged(DonationField.BLOODABO)
@@ -218,7 +218,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
-    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_SAFE);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.SAFE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
@@ -257,7 +257,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
-    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_UNSAFE);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.UNSAFE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
@@ -296,7 +296,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
-    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_UNSAFE);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.UNSAFE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
@@ -335,7 +335,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     // Setup expected rule engine result set
     BloodTestingRuleResultSet expectedBloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
         new HashMap<Long, String>(), new HashMap<Long, String>(), resultsMap, rules);
-    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.TTI_UNSAFE);
+    expectedBloodTestingRuleResultSet.setTtiStatus(TTIStatus.UNSAFE);
     expectedBloodTestingRuleResultSet.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     expectedBloodTestingRuleResultSet.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
 
