@@ -107,7 +107,7 @@ public class UserRepository extends AbstractRepository<User> {
     if (str != null) {
       for (String s : str) {
         if (s != null && !s.isEmpty()) {
-          role = findRoleById(Long.parseLong(s));
+          role = findRoleById(UUID.fromString(s));
           roles.add(role);
         }
       }
@@ -115,7 +115,7 @@ public class UserRepository extends AbstractRepository<User> {
     return roles;
   }
 
-  public Role findRoleById(Long id) throws NoResultException, NonUniqueResultException {
+  public Role findRoleById(UUID id) throws NoResultException, NonUniqueResultException {
     if (id == null)
       return null;
     String queryString = "SELECT r FROM Role r WHERE r.id = :roleId";

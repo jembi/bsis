@@ -58,14 +58,14 @@ public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testFindRoleDetailById() throws Exception {
-    Role superUser = roleRepository.findRoleDetailById(1l);
+    Role superUser = roleRepository.findRoleDetailById(UUID.fromString("49077a94-a105-4df6-9aea-16cce81ea701"));
     Assert.assertNotNull("Role exists", superUser);
     Assert.assertEquals("Role is correct", "Super User", superUser.getDescription());
   }
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindRoleDetailByIdUnknown() throws Exception {
-    roleRepository.findRoleDetailById(123l);
+    roleRepository.findRoleDetailById(UUID.randomUUID());
   }
 
   @Test
@@ -113,12 +113,13 @@ public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testUpdate() throws Exception {
-    Role one = roleRepository.findRoleDetailById(1l);
+    final UUID roleId = UUID.fromString("49077a94-a105-4df6-9aea-16cce81ea701");
+    Role one = roleRepository.findRoleDetailById(roleId);
     one.setName("Testing");
     one.setDescription("123");
     one.getPermissions().add(roleRepository.findPermissionByPermissionId(5));
     roleRepository.updateRole(one);
-    Role savedOne = roleRepository.findRoleDetailById(1l);
+    Role savedOne = roleRepository.findRoleDetailById(roleId);
     Assert.assertEquals("Role updated correctly", "Testing", savedOne.getName());
     Assert.assertEquals("Role updated correctly", "123", savedOne.getDescription());
     Assert.assertEquals("Role updated correctly", 5, savedOne.getPermissions().size());
@@ -127,11 +128,12 @@ public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   @Ignore("Bug? - after the delete, all queries fail due to foreign key reference:  integrity constraint violation: foreign key no action; FK_TC5K40I3KIT8944SYRD366VY1 table: USER_ROLE")
   public void testDelete() throws Exception {
-    Role one = roleRepository.findRoleDetailById(1l);
+    final UUID roleId = UUID.fromString("49077a94-a105-4df6-9aea-16cce81ea701");
+    Role one = roleRepository.findRoleDetailById(roleId);
     one.setPermissions(new HashSet<Permission>());
     one.setUsers(new ArrayList<User>());
     roleRepository.updateRole(one); // clear out foreign key references
-    roleRepository.deleteRole(1l);
+    roleRepository.deleteRole(roleId);
     List<Role> all = roleRepository.getAllRoles();
     Assert.assertNotNull("Role was permanently deleted", all);
     Assert.assertEquals("Role was permanently deleted", 2, all);

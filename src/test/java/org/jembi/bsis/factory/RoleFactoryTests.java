@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.RoleBackingForm;
 import org.jembi.bsis.backingform.PermissionBackingForm;
@@ -41,8 +42,9 @@ public class RoleFactoryTests extends UnitTestSuite {
     // Set up fixture
     Permission perm1 = aPermission().withId(1L).withName("do this").build();
     Permission perm2 = aPermission().withId(2L).withName("do that").build();
+    final UUID id = UUID.randomUUID();
     Role role = aRole()
-        .withId(1L)
+        .withId(id)
         .withName("Superuser")
         .withDescription("Can do everything")
         .withPermission(perm1)
@@ -53,7 +55,7 @@ public class RoleFactoryTests extends UnitTestSuite {
     permissionViewModels.add(aPermissionViewModel().withId(1L).withName("do this").build());
     permissionViewModels.add(aPermissionViewModel().withId(2L).withName("do that").build());
     RoleViewModel roleViewModel = aRoleViewModel()
-        .withId(1L)
+        .withId(id)
         .withName("Superuser")
         .withDescription("Can do everything")
         .withPermissions(permissionViewModels)
@@ -98,15 +100,16 @@ public class RoleFactoryTests extends UnitTestSuite {
         aPermission().withId(1L).build()
         ));
 
+    final UUID id = UUID.randomUUID();
     RoleBackingForm form = aRoleBackingForm()
-        .withId(1L)
+        .withId(id)
         .withName("role")
         .withDescription("role description")
         .withPermissions(permissions)
         .build();
 
     Role expectedRole = aRole()
-        .withId(1L)
+        .withId(id)
         .withName("role")
         .withDescription("role description")
         .withPermissions(expectedPermissions)
@@ -126,10 +129,10 @@ public class RoleFactoryTests extends UnitTestSuite {
     // Set up fixture
     List<RoleBackingForm> forms = Arrays.asList(
         aRoleBackingForm()
-          .withId(1L)
+          .withId(UUID.randomUUID())
           .build(),
         aRoleBackingForm()
-          .withId(2L)
+          .withId(UUID.randomUUID())
           .build()
         );
 

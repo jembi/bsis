@@ -32,7 +32,7 @@ public class UserRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testGetAllRoles() throws Exception {
-    List<Role> all = userRepository.getUserRole(new String[]{"1", "2", "3"});
+    List<Role> all = userRepository.getUserRole(new String[]{"4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd21", "4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd22", "4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd23"});
     Assert.assertNotNull("There are Roles defined", all);
     Assert.assertEquals("There are 3 Roles", 3, all.size());
   }
@@ -46,7 +46,7 @@ public class UserRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testGetAllRolesUnknown() throws Exception {
-    userRepository.getUserRole(new String[]{"123"});
+    userRepository.getUserRole(new String[]{UUID.randomUUID().toString()});
   }
 
   @Test

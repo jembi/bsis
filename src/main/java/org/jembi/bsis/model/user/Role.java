@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,8 +21,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Audited
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Role extends BaseModificationTrackerEntity {
+public class Role extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

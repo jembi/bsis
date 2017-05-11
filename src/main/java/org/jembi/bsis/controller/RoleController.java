@@ -2,6 +2,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -66,7 +67,7 @@ public class RoleController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
-  public RoleViewModel updateRole(@Valid @RequestBody RoleBackingForm form, @PathVariable Long id) {
+  public RoleViewModel updateRole(@Valid @RequestBody RoleBackingForm form, @PathVariable UUID id) {
     form.setId(id);
     Role updatedRole = roleRepository.updateRole(roleFactory.createEntity(form));
     return roleFactory.createViewModel(updatedRole);
@@ -75,7 +76,7 @@ public class RoleController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
-  public Map<String, Object> getRoleBydId(@PathVariable Long id) {
+  public Map<String, Object> getRoleBydId(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<String, Object>();
     Role role = roleRepository.findRoleDetailById(id);
     map.put("role", roleFactory.createViewModel(role));
@@ -93,7 +94,7 @@ public class RoleController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_ROLES + "')")
-  public void deleteRoleBydId(@PathVariable Long id) {
+  public void deleteRoleBydId(@PathVariable UUID id) {
     roleRepository.deleteRole(id);
   }
 }

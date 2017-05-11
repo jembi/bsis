@@ -5,17 +5,17 @@
     <Permission id="3" name="Edit Stuff"/>
     <Permission id="4" name="Void Stuff"/>
     <Permission id="5" name="New Stuff"/>
-    <Role id="1" name="Super User" description="Super User" createdDate="2017-01-17"/>
-    <Role id="2" name="Viewer" description="A User that can view stuff" createdDate="2017-01-17"/>
-    <Role id="3" name="Editor" description="A User that can edit stuff" createdDate="2017-01-17"/>
-    <Permission_Role permissions_id="1" roles_id="1"/>
-    <Permission_Role permissions_id="2" roles_id="1"/>
-    <Permission_Role permissions_id="3" roles_id="1"/>
-    <Permission_Role permissions_id="4" roles_id="1"/>
-    <Permission_Role permissions_id="1" roles_id="2"/>
-    <Permission_Role permissions_id="1" roles_id="3"/>
-    <Permission_Role permissions_id="2" roles_id="3"/>
-    <Permission_Role permissions_id="3" roles_id="3"/>
+    <Role id="uuid'49077a94-a105-4df6-9aea-16cce81ea701'" name="Super User" description="Super User" createdDate="2017-01-17"/>
+    <Role id="uuid'49077a94-a105-4df6-9aea-16cce81ea702'" name="Viewer" description="A User that can view stuff" createdDate="2017-01-17"/>
+    <Role id="uuid'49077a94-a105-4df6-9aea-16cce81ea703'" name="Editor" description="A User that can edit stuff" createdDate="2017-01-17"/>
+    <Permission_Role permissions_id="1" roles_id="uuid'49077a94-a105-4df6-9aea-16cce81ea701'"/>
+    <Permission_Role permissions_id="2" roles_id="uuid'49077a94-a105-4df6-9aea-16cce81ea701'"/>
+    <Permission_Role permissions_id="3" roles_id="uuid'49077a94-a105-4df6-9aea-16cce81ea701'"/>
+    <Permission_Role permissions_id="4" roles_id="uuid'49077a94-a105-4df6-9aea-16cce81ea701'"/>
+    <Permission_Role permissions_id="1" roles_id="uuid'49077a94-a105-4df6-9aea-16cce81ea702'"/>
+    <Permission_Role permissions_id="1" roles_id="uuid'49077a94-a105-4df6-9aea-16cce81ea703'"/>
+    <Permission_Role permissions_id="2" roles_id="uuid'49077a94-a105-4df6-9aea-16cce81ea703'"/>
+    <Permission_Role permissions_id="3" roles_id="uuid'49077a94-a105-4df6-9aea-16cce81ea703'"/>
     <User id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" emailId="xxxx@jembi.org" firstName="Super" isActive="true"
           isAdmin="true" isDeleted="false" isStaff="true" lastName="User"
           password="$2a$10$LCm5DaDhgfCdzPecqLVPyemfk6WfmbRduFTwDPPfAdABTLPb9d6c6"
@@ -28,7 +28,7 @@
           isAdmin="false" isDeleted="false" isStaff="true" lastName="User"
           password="$2a$10$iwTXdttOgKbkeMq5NegqmeL1dnZC.G2SrgXyUcM2uB91DKdqefwlK"
           username="editor" passwordReset="false" createdDate="2017-01-17"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" roles_id="1"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a82'" roles_id="2"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a83'" roles_id="3"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" roles_id="uuid'49077a94-a105-4df6-9aea-16cce81ea701'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a82'" roles_id="uuid'49077a94-a105-4df6-9aea-16cce81ea702'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a83'" roles_id="uuid'49077a94-a105-4df6-9aea-16cce81ea703'"/>
 </dataset>
