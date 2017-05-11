@@ -175,5 +175,36 @@ public class BloodTestFactoryTests extends UnitTestSuite {
     // Verify 
     assertThat(returnedEntity, hasSameStateAsBloodTest(expectedEntity)); 
      
-  } 
+  }
+
+  @Test
+  public void testConvertBloodTestBackingFormWithNullsToBloodTestEntity_shouldReturnExpectedEntity() {
+    // Set up fixture
+    UUID bloodTestId = UUID.randomUUID();
+    BloodTestBackingForm bloodTestBackingForm = BloodTestBackingFormBuilder.aBloodTestBackingForm()
+        .withId(bloodTestId)
+        .build();
+
+    BloodTest expectedEntity = BloodTestBuilder.aBloodTest()
+        .withId(bloodTestId)
+        .withTestName(null)
+        .withTestNameShort(null)
+        .withCategory(null)
+        .withBloodTestType(null)
+        .withValidResults(null)
+        .withNegativeResults(null)
+        .withPositiveResults(null)
+        .thatIsActive()
+        .thatIsNotDeleted()
+        .thatShouldNotFlagComponentsContainingPlasmaForDiscard()
+        .thatShouldNotFlagComponentsForDiscard()
+        .withRankInCategory(null)
+        .build();
+
+    // Exercise SUT
+    BloodTest returnedEntity = bloodTestFactory.createEntity(bloodTestBackingForm);
+
+    // Verify
+    assertThat(returnedEntity, hasSameStateAsBloodTest(expectedEntity));
+  }
 }

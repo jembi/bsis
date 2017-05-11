@@ -72,10 +72,18 @@ public class BloodTestFactory {
     bloodTest.setValidResults(StringUtils.join(bloodTestBackingForm.getValidResults(), ','));
     bloodTest.setNegativeResults(StringUtils.join(bloodTestBackingForm.getNegativeResults(), ','));
     bloodTest.setPositiveResults(StringUtils.join(bloodTestBackingForm.getPositiveResults(), ','));
-    bloodTest.setIsActive(bloodTestBackingForm.getIsActive());
-    bloodTest.setIsDeleted(bloodTestBackingForm.getIsDeleted());
-    bloodTest.setFlagComponentsContainingPlasmaForDiscard(bloodTestBackingForm.getFlagComponentsContainingPlasmaForDiscard());
-    bloodTest.setFlagComponentsForDiscard(bloodTestBackingForm.getFlagComponentsForDiscard());
+    if (bloodTestBackingForm.getIsActive() != null) {
+      bloodTest.setIsActive(bloodTestBackingForm.getIsActive());
+    }
+    if (bloodTestBackingForm.getIsDeleted() != null) {
+      bloodTest.setIsDeleted(bloodTestBackingForm.getIsDeleted());
+    }
+    if (bloodTestBackingForm.getFlagComponentsContainingPlasmaForDiscard() != null) {
+      bloodTest.setFlagComponentsContainingPlasmaForDiscard(bloodTestBackingForm.getFlagComponentsContainingPlasmaForDiscard());
+    }
+    if (bloodTestBackingForm.getFlagComponentsForDiscard() != null) {
+      bloodTest.setFlagComponentsForDiscard(bloodTestBackingForm.getFlagComponentsForDiscard());
+    }
     bloodTest.setRankInCategory(bloodTestBackingForm.getRankInCategory());
     
     return bloodTest;

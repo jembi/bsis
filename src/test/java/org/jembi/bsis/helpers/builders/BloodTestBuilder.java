@@ -100,8 +100,18 @@ public class BloodTestBuilder extends AbstractEntityBuilder<BloodTest> {
     return this;
   }
 
+  public BloodTestBuilder thatIsNotDeleted() {
+    this.isDeleted = Boolean.FALSE;
+    return this;
+  }
+
   public BloodTestBuilder thatIsInActive() {
     this.isActive = Boolean.FALSE;
+    return this;
+  }
+
+  public BloodTestBuilder thatIsActive() {
+    this.isActive = Boolean.TRUE;
     return this;
   }
 
