@@ -52,6 +52,7 @@
     </sql>
 
     <dropColumn columnName="pendingTestsIds" tableName="BloodTestingRule"/>
+    <dropColumn columnName="pendingTestsIds" tableName="BloodTestingRule_AUD"/>
 
   </changeSet>
 
