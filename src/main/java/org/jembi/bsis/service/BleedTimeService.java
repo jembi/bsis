@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BleedTimeService {
-
+  
   /**
    * Calculate bleed time from bleedStartTime and bleedEndTime in minutes
    *
