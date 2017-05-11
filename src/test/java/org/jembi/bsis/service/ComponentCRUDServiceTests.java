@@ -2919,7 +2919,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
   public void testProcessComponentWithNullProcessedOnDate_shouldIgnoreTimeSinceDonationCheck() throws Exception {
     // set up data
     Location location = LocationBuilder.aLocation().build();
-    Long componentTypeId1 = Long.valueOf(1);
+    UUID componentTypeId1 = UUID.randomUUID();
     ComponentType componentType = aComponentType().withId(componentTypeId1)
         .withComponentTypeCode("0001")
         .withComponentTypeName("#1")
@@ -2927,11 +2927,12 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
         .build();
     Date donationDate = new Date(); 
-    Donation donation = aDonation().withId(1L)
+    UUID donationId = UUID.randomUUID();
+    Donation donation = aDonation().withId(donationId)
         .withDonationIdentificationNumber("1234567")
         .withDonationDate(donationDate)
         .build();
-    Long parentComponentId = Long.valueOf(1);
+    UUID parentComponentId = UUID.randomUUID();
     ComponentBatch componentBatch = ComponentBatchBuilder.aComponentBatch().withLocation(location).build();
     Component parentComponent = aComponent().withId(parentComponentId)
         .withDonation(donation)
@@ -2941,7 +2942,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
         .withLocation(location)
         .withComponentBatch(componentBatch)
         .build();
-    ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(1L)
+    UUID componentTypeCombinationId = UUID.randomUUID();
+    ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(componentTypeCombinationId)
         .withCombinationName("Combination")
         .withComponentTypes(Arrays.asList(componentType))
         .build();
@@ -2961,7 +2963,8 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
     when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType);  
     when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
-    when(componentTypeCombinationRepository.findComponentTypeCombinationById(1L)).thenReturn(componentTypeCombination);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId))
+        .thenReturn(componentTypeCombination);
     
     // SUT
     Component processedComponent = componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId(), processedOn);
