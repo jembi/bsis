@@ -6,7 +6,7 @@
     <comment>This change set migrates the GeneralConfig and GeneralConfig_AUD tables from an integer id primary key
         to a UUID of type BINARY(16). </comment>
         
-            <addColumn tableName="GeneralConfig">
+    <addColumn tableName="GeneralConfig">
       <column name="id_temp" type="BIGINT" afterColumn="id"/>
     </addColumn>
 
