@@ -4,6 +4,7 @@ import static org.jembi.bsis.helpers.builders.GeneralConfigBackingFormBuilder.aG
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.GeneralConfigBackingForm;
 import org.jembi.bsis.helpers.builders.DataTypeBuilder;
@@ -63,13 +64,14 @@ public class GeneralConfigBackingFormValidatorTest {
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("TEXT").build();
 
     GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    form.setId(1l);
+    final UUID id = UUID.randomUUID();
+    form.setId(id);
     form.setName("configname");
     form.setValue("value");
     form.setDescription("description");
     form.setDataType(dataType);
 
-    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(1l).build();
+    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(id).build();
 
     // set up mocks
     when(dataTypeRepository.getDataTypeByid(1l)).thenReturn(dataType);
@@ -89,13 +91,13 @@ public class GeneralConfigBackingFormValidatorTest {
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("TEXT").build();
 
     GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    form.setId(1l);
+    form.setId(UUID.randomUUID());
     form.setName("configname");
     form.setValue("value");
     form.setDescription("description");
     form.setDataType(dataType);
 
-    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(2l).build();
+    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(UUID.randomUUID()).build();
 
     // set up mocks
     when(dataTypeRepository.getDataTypeByid(1l)).thenReturn(dataType);
@@ -116,7 +118,7 @@ public class GeneralConfigBackingFormValidatorTest {
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("TEXT").build();
 
     GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    form.setId(1l);
+    form.setId(UUID.randomUUID());
     form.setName("");
     form.setValue("value");
     form.setDescription("description");

@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -42,14 +43,14 @@ public class GeneralConfigRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testFindGeneralConfigById() throws Exception {
-    GeneralConfig one = generalConfigRepository.getGeneralConfigById(1l);
+    GeneralConfig one = generalConfigRepository.getGeneralConfigById(UUID.fromString("551baa94-6033-4ba3-8c1f-731012ba4fa1"));
     Assert.assertNotNull("There is a GeneralConfig with id 1", one);
     Assert.assertEquals("The GeneralConfig matches what was expected", "donation.bpSystolicMax", one.getName());
   }
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindGeneralConfigByIdUnknown() throws Exception {
-    generalConfigRepository.getGeneralConfigById(1111l);
+    generalConfigRepository.getGeneralConfigById(UUID.randomUUID());
   }
 
   @Test

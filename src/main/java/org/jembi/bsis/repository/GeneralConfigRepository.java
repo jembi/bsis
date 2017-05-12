@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -46,7 +47,7 @@ public class GeneralConfigRepository {
     em.persist(generalConfig);
   }
 
-  public GeneralConfig getGeneralConfigById(Long id) {
+  public GeneralConfig getGeneralConfigById(UUID id) {
     TypedQuery<GeneralConfig> query = em.createQuery("SELECT gc FROM GeneralConfig gc WHERE gc.id = :id ", GeneralConfig.class);
     query.setParameter("id", id);
     return query.getSingleResult();

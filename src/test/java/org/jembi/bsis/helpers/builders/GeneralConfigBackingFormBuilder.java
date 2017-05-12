@@ -1,18 +1,20 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.GeneralConfigBackingForm;
 import org.jembi.bsis.model.admin.DataType;
 import org.jembi.bsis.model.admin.GeneralConfig;
 
 public class GeneralConfigBackingFormBuilder extends AbstractBuilder<GeneralConfigBackingForm>{
   
-  private Long id;
+  private UUID id;
   private DataType dataType;
   private String value;
   private String name;
   private String description;
 
-  public GeneralConfigBackingFormBuilder withId(Long id) {
+  public GeneralConfigBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

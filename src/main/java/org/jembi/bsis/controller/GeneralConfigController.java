@@ -2,6 +2,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -62,14 +63,14 @@ public class GeneralConfigController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
-  public ResponseEntity<GeneralConfigViewModel> getGeneralConfig(@PathVariable Long id) {
+  public ResponseEntity<GeneralConfigViewModel> getGeneralConfig(@PathVariable UUID id) {
     return new ResponseEntity<GeneralConfigViewModel>(generalConfigFactory.createViewModel(
         configRepository.getGeneralConfigById(id)), HttpStatus.OK);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_GENERAL_CONFIGS + "')")
-  public ResponseEntity<GeneralConfigViewModel> updateGeneralConfig(@RequestBody @Valid GeneralConfigBackingForm form, @PathVariable Long id) {
+  public ResponseEntity<GeneralConfigViewModel> updateGeneralConfig(@RequestBody @Valid GeneralConfigBackingForm form, @PathVariable UUID id) {
 
     GeneralConfig updatedConfig = null;
     form.setId(id);
