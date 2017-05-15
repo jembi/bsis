@@ -403,12 +403,12 @@ public class BloodTestingRuleEngine {
 
     Set<String> ttiStatusChanges = resultSet.getTtiStatusChanges();
     if (!ttiStatusChanges.isEmpty()) {
-      if (ttiStatusChanges.contains(TTIStatus.TTI_UNSAFE.toString())) {
-        ttiStatus = TTIStatus.TTI_UNSAFE;
+      if (ttiStatusChanges.contains(TTIStatus.UNSAFE.toString())) {
+        ttiStatus = TTIStatus.UNSAFE;
       } else if (ttiStatusChanges.contains(TTIStatus.INDETERMINATE.toString()) && basicTTITestsDone) {
         ttiStatus = TTIStatus.INDETERMINATE;
-      } else if (ttiStatusChanges.size() == 1 && ttiStatusChanges.contains(TTIStatus.TTI_SAFE.toString()) && basicTTITestsDone) {
-        ttiStatus = TTIStatus.TTI_SAFE;
+      } else if (ttiStatusChanges.size() == 1 && ttiStatusChanges.contains(TTIStatus.SAFE.toString()) && basicTTITestsDone) {
+        ttiStatus = TTIStatus.SAFE;
       } 
     }
 

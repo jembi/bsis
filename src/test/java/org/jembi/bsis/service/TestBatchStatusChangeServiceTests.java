@@ -213,7 +213,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     Donor donor = aDonor().build();
     Donor expectedDonor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation unsafeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_UNSAFE)
+        .withTTIStatus(TTIStatus.UNSAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withDonor(donor)
         .withBloodTestResults(bloodTestResults)
@@ -250,7 +250,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     Donor donor = aDonor().withBloodAbo("A").withBloodRh("-").build();
     Donor expectedDonor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation unsafeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_UNSAFE)
+        .withTTIStatus(TTIStatus.UNSAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withVenue(location)
         .withDonor(donor)
@@ -288,7 +288,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     String bloodRh = "+";
     Donor donor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation noTypeDeterminedBloodTypingOutcomeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .withBloodAbo("A") // note: invalid values
         .withBloodRh("+")
@@ -324,7 +324,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     String bloodRh = "+";
     Donor donor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation noTypeDeterminedBloodTypingOutcomeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .withBloodAbo("A") // note: invalid values
         .withBloodRh("+")
@@ -392,7 +392,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     String bloodRh = "+";
     Donor donor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation noTypeDeterminedBloodTypingOutcomeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodAbo("A") // note: invalid values
@@ -429,7 +429,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     String bloodRh = "+";
     Donor donor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation noTypeDeterminedBloodTypingOutcomeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodAbo("A") // note: invalid values
@@ -469,7 +469,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     );
     
     Donation donationThatContainsPlasma = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodAbo("A") 
@@ -520,7 +520,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     );
     
     Donation donationThatContainsPlasma = aDonation()
-        .withTTIStatus(TTIStatus.TTI_UNSAFE)
+        .withTTIStatus(TTIStatus.UNSAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodAbo("A") 

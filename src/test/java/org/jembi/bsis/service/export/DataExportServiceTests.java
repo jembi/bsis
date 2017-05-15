@@ -50,7 +50,7 @@ public class DataExportServiceTests extends UnitTestSuite {
    * ensure that it is correct. If changes are made to the test then the output should be validated
    * again and this value should be updated to be the MD5 sum of the updated zip.
    */
-  private static final String EXPECTED_DIGEST = "54946e93dcb5a2b8beba696d8d6f55a1";
+  private static final String EXPECTED_DIGEST = "7ec990d981eaab1bacdf9050ab0dd33f";
   
   @InjectMocks
   private DataExportService dataExportService;
@@ -149,7 +149,7 @@ public class DataExportServiceTests extends UnitTestSuite {
     donation.setDonationDate(new Date(1472900253711L));
     donation.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
     donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
-    donation.setTtiStatus(TTIStatus.TTI_SAFE);
+    donation.setTtiStatus(TTIStatus.SAFE);
     donation.setBleedStartTime(new Date(1472900253711L));
     donation.setBleedEndTime(new Date(1472900914728L));
     donation.setDonorWeight(new BigDecimal(90));

@@ -120,67 +120,67 @@
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2707'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_SAFE" pattern="NEG" />
+		newInformation="SAFE" pattern="NEG" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2708'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8617'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS" />
+		newInformation="UNSAFE" pattern="POS" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2709'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8618'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS" />
+		newInformation="UNSAFE" pattern="POS" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2710'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8619'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS" />
+		newInformation="UNSAFE" pattern="POS" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2711'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8620'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_SAFE" pattern="NEG" />
+		newInformation="SAFE" pattern="NEG" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2712'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8620'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS" />
+		newInformation="UNSAFE" pattern="POS" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2713'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8621'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS" />
+		newInformation="UNSAFE" pattern="POS" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2714'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8622'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS" />
+		newInformation="UNSAFE" pattern="POS" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2715'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8623'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_SAFE" pattern="NEG" />
+		newInformation="SAFE" pattern="NEG" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2716'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8623'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS"  />
+		newInformation="UNSAFE" pattern="POS"  />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2717'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8624'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS" />
+		newInformation="UNSAFE" pattern="POS" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2718'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8625'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS" />
+		newInformation="UNSAFE" pattern="POS" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2719'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8626'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_SAFE" pattern="NEG" />
+		newInformation="SAFE" pattern="NEG" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2720'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8626'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS" />
+		newInformation="UNSAFE" pattern="POS" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2721'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8627'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS" />
+		newInformation="UNSAFE" pattern="POS" />
 	<BloodTestingRule id="uuid'640eb339-c815-48c6-81d7-0f225d3f2722'" bloodTest_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8628'" 
 		donationFieldChanged="TTISTATUS"
 		isDeleted="0"   
-		newInformation="TTI_UNSAFE" pattern="POS" />
+		newInformation="UNSAFE" pattern="POS" />
   
     <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2701'" pendingBloodTests_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8629'" />
     <BloodTestingRule_BloodTest bloodTestingRule_id="uuid'640eb339-c815-48c6-81d7-0f225d3f2702'" pendingBloodTests_id="uuid'04586549-1d7e-4b12-ba81-1987d11f8629'" />

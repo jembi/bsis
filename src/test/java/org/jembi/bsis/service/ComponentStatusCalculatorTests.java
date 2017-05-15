@@ -706,7 +706,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.PENDING_TESTS)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_MATCH)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withDonationBatch(donationBatch)
         .build();
     Calendar cal = Calendar.getInstance();
@@ -738,7 +738,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withDonationBatch(donationBatch)
         .build();
     Calendar cal = Calendar.getInstance();
@@ -770,7 +770,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withDonationBatch(donationBatch)
         .build();
     Calendar cal = Calendar.getInstance();
@@ -800,7 +800,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .build();
     Calendar cal = Calendar.getInstance();
@@ -859,7 +859,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .withIneligibleDonor(true)
         .build();
@@ -887,7 +887,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE) // Unconfirmed blood group
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .build();
     Component component = aComponent().withId(COMPONENT_ID)
@@ -914,7 +914,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED) // Unconfirmed blood group
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .build();
     Component component = aComponent().withId(COMPONENT_ID)
@@ -970,7 +970,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withTTIStatus(TTIStatus.TTI_UNSAFE)
+        .withTTIStatus(TTIStatus.UNSAFE)
         .thatIsReleased()
         .build();
     Calendar cal = Calendar.getInstance();
@@ -1029,7 +1029,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withTTIStatus(TTIStatus.TTI_SAFE) // TTI says safe, but the component status in UNSAFE
+        .withTTIStatus(TTIStatus.SAFE) // TTI says safe, but the component status in UNSAFE
         .withDonationBatch(donationBatch)
         .build();
     Calendar cal = Calendar.getInstance();
@@ -1059,7 +1059,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .build();
     Calendar cal = Calendar.getInstance();
@@ -1091,7 +1091,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .build();
     Calendar cal = Calendar.getInstance();
@@ -1123,7 +1123,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .thatIsReleased()
         .build();
     Calendar cal = Calendar.getInstance();

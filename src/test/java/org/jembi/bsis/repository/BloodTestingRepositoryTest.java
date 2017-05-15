@@ -61,7 +61,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
     bloodTestingRepository.saveBloodTestResultsToDatabase(stringResults, donation, new Date(), ruleResult, false);
 
     Map<UUID, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
@@ -88,7 +88,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
     
     // #1: re-entry should be required
     testResults.put(testId, "POS");
@@ -143,7 +143,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_UNSAFE);
+    ruleResult.setTTIStatus(TTIStatus.UNSAFE);
 
     testResults.put(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8617"), "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
@@ -155,7 +155,7 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
     donation = donationRepository.findDonationById(donationId);
     Assert.assertTrue("Re-entry is true, so tti status is updated to TTI_UNSAFE",
-        donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE));
+        donation.getTTIStatus().equals(TTIStatus.UNSAFE));
 
   }
 

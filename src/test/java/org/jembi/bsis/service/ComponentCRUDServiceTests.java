@@ -2915,5 +2915,63 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     // Run test
     componentCRUDService.untransfuseComponent(component);
   }
-  
+
+  public void testProcessComponentWithNullProcessedOnDate_shouldIgnoreTimeSinceDonationCheck() throws Exception {
+    // set up data
+    Location location = LocationBuilder.aLocation().build();
+    UUID componentTypeId1 = UUID.randomUUID();
+    ComponentType componentType = aComponentType().withId(componentTypeId1)
+        .withComponentTypeCode("0001")
+        .withComponentTypeName("#1")
+        .withExpiresAfter(90)
+        .withExpiresAfterUnits(ComponentTypeTimeUnits.DAYS)
+        .build();
+    Date donationDate = new Date(); 
+    UUID donationId = UUID.randomUUID();
+    Donation donation = aDonation().withId(donationId)
+        .withDonationIdentificationNumber("1234567")
+        .withDonationDate(donationDate)
+        .build();
+    UUID parentComponentId = UUID.randomUUID();
+    ComponentBatch componentBatch = ComponentBatchBuilder.aComponentBatch().withLocation(location).build();
+    Component parentComponent = aComponent().withId(parentComponentId)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withLocation(location)
+        .withComponentBatch(componentBatch)
+        .build();
+    UUID componentTypeCombinationId = UUID.randomUUID();
+    ComponentTypeCombination componentTypeCombination = aComponentTypeCombination().withId(componentTypeCombinationId)
+        .withCombinationName("Combination")
+        .withComponentTypes(Arrays.asList(componentType))
+        .build();
+    Date processedOn = null;
+    Component expectedParentComponent = aComponent().withId(parentComponentId)
+        .withDonation(donation)
+        .withCreatedOn(donationDate)
+        .withStatus(ComponentStatus.PROCESSED)
+        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .withCreatedOn(donation.getDonationDate())
+        .withLocation(location)
+        .withComponentBatch(componentBatch)
+        .withProcessedOn(processedOn)
+        .build();
+    // set up mocks
+    when(componentRepository.findComponentById(parentComponentId)).thenReturn(parentComponent);
+    when(componentConstraintChecker.canProcess(parentComponent)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId1)).thenReturn(componentType);  
+    when(componentRepository.update(argThat(hasSameStateAsComponent(expectedParentComponent)))).thenReturn(expectedParentComponent);
+    when(componentTypeCombinationRepository.findComponentTypeCombinationById(componentTypeCombinationId))
+        .thenReturn(componentTypeCombination);
+    
+    // SUT
+    Component processedComponent = componentCRUDService.processComponent(parentComponentId, componentTypeCombination.getId(), processedOn);
+    
+    // verify results
+    verify(componentRepository).update(argThat(hasSameStateAsComponent(expectedParentComponent)));
+    // check that processedOn date is null
+    assertThat(processedComponent.getProcessedOn(), is(expectedParentComponent.getProcessedOn()));
+  }
 }

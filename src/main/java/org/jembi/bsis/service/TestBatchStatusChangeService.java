@@ -87,7 +87,7 @@ public class TestBatchStatusChangeService {
     donation = donationRepository.updateDonation(donation);
 
     // Handle the situation where the Donors and/or Donation are unsafe
-    if (donation.getTTIStatus() == TTIStatus.TTI_UNSAFE) {
+    if (donation.getTTIStatus() == TTIStatus.UNSAFE) {
       LOGGER.info("Handling donation with unsafe TTI status: " + donation);
       componentCRUDService.markComponentsBelongingToDonorAsUnsafe(donation.getDonor());
 

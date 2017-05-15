@@ -58,7 +58,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     BloodTestingRuleBackingForm backingForm = aBloodTestingRuleBackingForm()
         .withBloodTest(bloodTestBackingForm)
         .withDonationFieldChanged(DonationField.TTISTATUS)
-        .withNewInformation(TTIStatus.TTI_UNSAFE.name())
+        .withNewInformation(TTIStatus.UNSAFE.name())
         .withPattern("POS")
         .withPendingTests(new LinkedHashSet<>(Arrays.asList(aBloodTestBackingForm()
             .withBloodTestType(BloodTestType.REPEAT_TTI)

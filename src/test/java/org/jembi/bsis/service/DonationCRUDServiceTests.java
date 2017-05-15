@@ -497,7 +497,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodAbo("A")
         .withBloodRh("+")
         .build();
