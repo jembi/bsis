@@ -101,20 +101,6 @@ public class UserRepository extends AbstractRepository<User> {
     return user;
   }
 
-  public List<Role> getUserRole(String[] str) {
-    Role role = null;
-    List<Role> roles = new ArrayList<Role>();
-    if (str != null) {
-      for (String s : str) {
-        if (s != null && !s.isEmpty()) {
-          role = findRoleById(UUID.fromString(s));
-          roles.add(role);
-        }
-      }
-    }
-    return roles;
-  }
-
   public Role findRoleById(UUID id) throws NoResultException, NonUniqueResultException {
     if (id == null)
       return null;

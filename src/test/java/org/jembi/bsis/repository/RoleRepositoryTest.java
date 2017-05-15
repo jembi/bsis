@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
 
+  private static final UUID ROLE_ID = UUID.randomUUID();
+
   @Autowired
   RoleRepository roleRepository;
 
@@ -65,7 +67,7 @@ public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindRoleDetailByIdUnknown() throws Exception {
-    roleRepository.findRoleDetailById(UUID.randomUUID());
+    roleRepository.findRoleDetailById(ROLE_ID);
   }
 
   @Test
@@ -113,7 +115,7 @@ public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testUpdate() throws Exception {
-    final UUID roleId = UUID.fromString("49077a94-a105-4df6-9aea-16cce81ea701");
+    UUID roleId = UUID.fromString("49077a94-a105-4df6-9aea-16cce81ea701");
     Role one = roleRepository.findRoleDetailById(roleId);
     one.setName("Testing");
     one.setDescription("123");
@@ -128,7 +130,7 @@ public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
   @Test
   @Ignore("Bug? - after the delete, all queries fail due to foreign key reference:  integrity constraint violation: foreign key no action; FK_TC5K40I3KIT8944SYRD366VY1 table: USER_ROLE")
   public void testDelete() throws Exception {
-    final UUID roleId = UUID.fromString("49077a94-a105-4df6-9aea-16cce81ea701");
+    UUID roleId = UUID.fromString("49077a94-a105-4df6-9aea-16cce81ea701");
     Role one = roleRepository.findRoleDetailById(roleId);
     one.setPermissions(new HashSet<Permission>());
     one.setUsers(new ArrayList<User>());

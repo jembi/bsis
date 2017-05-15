@@ -38,8 +38,9 @@ public class UserFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
-    UUID userId = UUID.randomUUID();
-    UUID id = UUID.randomUUID();
+    UUID roleViewModelId = UUID.randomUUID();
+    UUID userId = roleViewModelId;
+    UUID roleId = roleViewModelId;
     User user = aUser()
         .withId(userId)
         .withUsername("test")
@@ -49,13 +50,13 @@ public class UserFactoryTests extends UnitTestSuite {
         .withPasswordReset()
         .thatIsAdmin()
         .thatIsNotDeleted()
-        .withRole(aRole().withId(id).withName("Superuser").build())
-        .withRole(aRole().withId(id).withName("Admin").build())
+        .withRole(aRole().withId(roleId).withName("Superuser").build())
+        .withRole(aRole().withId(roleId).withName("Admin").build())
         .build();
 
     List<RoleViewModel> roleViewModels = Arrays.asList(
-        aRoleViewModel().withId(id).withName("Superuser").build(),
-        aRoleViewModel().withId(UUID.randomUUID()).withName("Admin").build()
+        aRoleViewModel().withId(roleId).withName("Superuser").build(),
+        aRoleViewModel().withId(roleViewModelId).withName("Admin").build()
         );
     UserViewModel expectedViewModel = aUserViewModel()
         .withId(userId)
