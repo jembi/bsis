@@ -1,6 +1,7 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
@@ -9,7 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class TestBatchViewModel {
 
-  private Long id;
+  private UUID id;
   private Date createdDate;
   private Date lastUpdatedDate;
   private TestBatchStatus status;
@@ -27,11 +28,11 @@ public class TestBatchViewModel {
     this.createdDate = createdDate;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -59,7 +60,7 @@ public class BloodTestControllerService {
     return bloodTestFactory.createFullViewModel(bloodTestCRUDService.updateBloodTest(bloodTest));
   }
 
-  public BloodTestFullViewModel getBloodTestById(long id) {
+  public BloodTestFullViewModel getBloodTestById(UUID id) {
     BloodTest bloodTest = bloodTestRepository.findBloodTestById(id);
     return bloodTestFactory.createFullViewModel(bloodTest);
   }

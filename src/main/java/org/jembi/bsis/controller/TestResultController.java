@@ -94,7 +94,7 @@ public class TestResultController {
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request, @RequestParam(
-      value = "testBatch", required = true) Long testBatchId,
+      value = "testBatch", required = true) UUID testBatchId,
       @RequestParam(value = "bloodTestType", required = false) BloodTestType bloodTestType) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
@@ -110,7 +110,7 @@ public class TestResultController {
   @RequestMapping(value = "/report", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public ResponseEntity<Map<String, Object>> getTestBatchOutcomesReport(@RequestParam(value = "testBatch",
-      required = true) Long testBatchId) {
+      required = true) UUID testBatchId) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     List<DonationTestOutcomesReportViewModel> donationTestOutcomesReports =
@@ -124,7 +124,7 @@ public class TestResultController {
   @RequestMapping(value = "/overview", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
   public ResponseEntity<Map<String, Object>> findTestResultsOverviewForTestBatch(HttpServletRequest request,
-      @RequestParam(value = "testBatch", required = true) Long testBatchId) {
+      @RequestParam(value = "testBatch", required = true) UUID testBatchId) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     List<BloodTestingRuleResult> ruleResults = getBloodTestingRuleResults(testBatch);
@@ -171,8 +171,8 @@ public class TestResultController {
 
     for (BloodTestingRuleResult result : ruleResults) {
 
-      Map<Long, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
-      for (Long key : resultViewModelMap.keySet()) {
+      Map<UUID, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
+      for (UUID key : resultViewModelMap.keySet()) {
         BloodTestResultViewModel bloodTestResultViewModel = resultViewModelMap.get(key);
         BloodTestFullViewModel bloodTest = bloodTestResultViewModel.getBloodTest();
         if (bloodTestResultViewModel.getReEntryRequired().equals(true)) {

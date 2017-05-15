@@ -44,7 +44,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
+        new HashMap<UUID, String>(), new HashMap<UUID, String>(), new HashMap<UUID, BloodTestResult>(), 
         new ArrayList<BloodTestingRule>());
 
     bloodTestingRuleResultSet.addTitreChanges("HIGH");
@@ -66,7 +66,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
+        new HashMap<UUID, String>(), new HashMap<UUID, String>(), new HashMap<UUID, BloodTestResult>(), 
         new ArrayList<BloodTestingRule>());
 
     bloodTestingRuleResultSet.addTitreChanges("LOW");
@@ -88,7 +88,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
+        new HashMap<UUID, String>(), new HashMap<UUID, String>(), new HashMap<UUID, BloodTestResult>(), 
         new ArrayList<BloodTestingRule>());
 
     bloodTestingRuleResultSet.addTitreChanges("");
@@ -110,7 +110,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withTitre(Titre.HIGH).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
+        new HashMap<UUID, String>(), new HashMap<UUID, String>(), new HashMap<UUID, BloodTestResult>(), 
         new ArrayList<BloodTestingRule>());
 
     bloodTestingRuleResultSet.addTitreChanges("LOW");
@@ -132,7 +132,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withTitre(Titre.HIGH).build();
     
     BloodTestingRuleResultSet bloodTestingRuleResultSet = new BloodTestingRuleResultSet(donation,
-        new HashMap<Long, String>(), new HashMap<Long, String>(), new HashMap<Long, BloodTestResult>(), 
+        new HashMap<UUID, String>(), new HashMap<UUID, String>(), new HashMap<UUID, BloodTestResult>(), 
         new ArrayList<BloodTestingRule>());
 
     bloodTestingRuleResultSet.addTitreChanges("");

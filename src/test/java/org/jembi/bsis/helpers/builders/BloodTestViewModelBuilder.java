@@ -1,12 +1,14 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.viewmodel.BloodTestViewModel;
 
 public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestViewModel> {
   
-  private Long id;
+  private UUID id;
   private String testNameShort;
   private BloodTestCategory category;
   private BloodTestType bloodTestType;
@@ -14,7 +16,7 @@ public class BloodTestViewModelBuilder extends AbstractBuilder<BloodTestViewMode
   private Boolean isDeleted = Boolean.FALSE;
   private Integer rankInCategory;
 
-  public BloodTestViewModelBuilder withId(Long id) {
+  public BloodTestViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

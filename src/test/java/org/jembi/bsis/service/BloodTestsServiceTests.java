@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestResultsBackingForm;
 import org.jembi.bsis.constant.GeneralConfigConstants;
@@ -62,7 +63,7 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN)
         .withDonationBatch(donationBatch).build();
-    Map<Long, String> bloodTestResults = new HashMap<>();
+    Map<UUID, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
     // Set up expectations
@@ -91,7 +92,7 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN).withDonationBatch(donationBatch).build();
-    Map<Long, String> bloodTestResults = new HashMap<>();
+    Map<UUID, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
     // Set up expectations
@@ -122,7 +123,7 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = aDonation().withDonationBatch(donationBatch)
         .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN).build();
-    Map<Long, String> bloodTestResults = new HashMap<>();
+    Map<UUID, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
     // Set up expectations

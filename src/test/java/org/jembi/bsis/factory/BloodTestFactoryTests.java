@@ -9,6 +9,7 @@ import static org.jembi.bsis.helpers.matchers.BloodTestViewModelMatcher.hasSameS
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.helpers.builders.BloodTestBackingFormBuilder;
@@ -34,14 +35,15 @@ public class BloodTestFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateFullViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
-    BloodTest bloodTest = BloodTestBuilder.aBasicBloodTypingBloodTest().withId(1L).withTestName("ABC test")
+    UUID bloodTestId = UUID.randomUUID();
+    BloodTest bloodTest = BloodTestBuilder.aBasicBloodTypingBloodTest().withId(bloodTestId).withTestName("ABC test")
         .withTestNameShort("ABC").withValidResults("A,B,C,D").withPositiveResults("A,B,C").withNegativeResults("D")
         .withRankInCategory(1).thatShouldFlagComponentsContainingPlasmaForDiscard()
         .thatShouldFlagComponentsForDiscard().build();
 
     // Set up expectations
     BloodTestFullViewModel expectedViewModel = BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel()
-        .withId(1L).withTestName("ABC test").withTestNameShort("ABC").withValidResult("A").withValidResult("B")
+        .withId(bloodTestId).withTestName("ABC test").withTestNameShort("ABC").withValidResult("A").withValidResult("B")
         .withValidResult("C").withValidResult("D").withPositiveResult("A").withPositiveResult("B")
         .withPositiveResult("C").withNegativeResult("D").withRankInCategory(1)
         .thatShouldFlagComponentsContainingPlasmaForDiscard().thatShouldFlagComponentsForDiscard().build();
@@ -56,17 +58,19 @@ public class BloodTestFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateFullViewModels_shouldReturnViewModelsWithTheCorrectState() {
     // Set up fixture
+    UUID bloodTest1Id = UUID.randomUUID();
+    UUID bloodTest2Id = UUID.randomUUID();
     List<BloodTest> bloodTests = Arrays.asList(
-        BloodTestBuilder.aBasicBloodTypingBloodTest().withId(1L).withTestName("test1").withTestNameShort("t").build(),
-        BloodTestBuilder.aBasicBloodTypingBloodTest().withId(2L).withTestName("test2").withTestNameShort("t").build());
+        BloodTestBuilder.aBasicBloodTypingBloodTest().withId(bloodTest1Id).withTestName("test1").withTestNameShort("t").build(),
+        BloodTestBuilder.aBasicBloodTypingBloodTest().withId(bloodTest2Id).withTestName("test2").withTestNameShort("t").build());
 
     // Set up expectations
     List<BloodTestFullViewModel> expectedViewModels =
         Arrays.asList(
-            BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel().withId(1L).withTestName("test1")
+            BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel().withId(bloodTest1Id).withTestName("test1")
                 .withTestNameShort("t").build(),
             BloodTestFullViewModelBuilder
-                .aBasicBloodTypingBloodTestFullViewModel().withId(2L).withTestName("test2").withTestNameShort("t")
+                .aBasicBloodTypingBloodTestFullViewModel().withId(bloodTest2Id).withTestName("test2").withTestNameShort("t")
                 .build());
 
     // Exercise SUT
@@ -81,8 +85,9 @@ public class BloodTestFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateViewModel_shouldReturnViewModelWithTheCorrectState() {
     // Set up fixture
+    UUID bloodTestId = UUID.randomUUID();
     BloodTest bloodTest = BloodTestBuilder.aBasicBloodTypingBloodTest()
-        .withId(1L)
+        .withId(bloodTestId)
         .withTestName("ABC test")
         .withTestNameShort("ABC")
         .withValidResults("A,B,C,D")
@@ -93,7 +98,7 @@ public class BloodTestFactoryTests extends UnitTestSuite {
     
     // Set up expectations
     BloodTestViewModel expectedViewModel = BloodTestViewModelBuilder.aBasicBloodTypingBloodTestViewModel()
-        .withId(1L)
+        .withId(bloodTestId)
         .withTestNameShort("ABC")
         .withRankInCategory(1)
         .build();
@@ -108,14 +113,16 @@ public class BloodTestFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateViewModels_shouldReturnFullViewModelsWithTheCorrectState() {
     // Set up fixture
+    UUID bloodTest1Id = UUID.randomUUID();
+    UUID bloodTest2Id = UUID.randomUUID();
     List<BloodTest> bloodTests = Arrays.asList(
-        BloodTestBuilder.aBasicBloodTypingBloodTest().withId(1L).withTestNameShort("t").build(), 
-        BloodTestBuilder.aBasicBloodTypingBloodTest().withId(2L).withTestNameShort("t").build());
+        BloodTestBuilder.aBasicBloodTypingBloodTest().withId(bloodTest1Id).withTestNameShort("t").build(), 
+        BloodTestBuilder.aBasicBloodTypingBloodTest().withId(bloodTest2Id).withTestNameShort("t").build());
 
     // Set up expectations
     List<BloodTestViewModel> expectedViewModels = Arrays.asList(
-        BloodTestViewModelBuilder.aBasicBloodTypingBloodTestViewModel().withTestNameShort("t").withId(1L).build(),
-        BloodTestViewModelBuilder.aBasicBloodTypingBloodTestViewModel().withTestNameShort("t").withId(2L).build());
+        BloodTestViewModelBuilder.aBasicBloodTypingBloodTestViewModel().withTestNameShort("t").withId(bloodTest1Id).build(),
+        BloodTestViewModelBuilder.aBasicBloodTypingBloodTestViewModel().withTestNameShort("t").withId(bloodTest2Id).build());
 
     // Exercise SUT
     List<BloodTestViewModel> returnedViewModels = bloodTestFactory.createViewModels(bloodTests);
@@ -129,8 +136,9 @@ public class BloodTestFactoryTests extends UnitTestSuite {
   @Test 
   public void testConvertBloodTestBackingFormToBloodTestEntity_shouldReturnExpectedEntity() { 
     // Set up fixture 
+    UUID bloodTestId = UUID.randomUUID();
     BloodTestBackingForm bloodTestBackingForm = BloodTestBackingFormBuilder.aBloodTestBackingForm() 
-        .withId(1L) 
+        .withId(bloodTestId) 
         .withTestName("Test Name") 
         .withTestNameShort("Test Name Short") 
         .withCategory(BloodTestCategory.BLOODTYPING) 
@@ -146,7 +154,7 @@ public class BloodTestFactoryTests extends UnitTestSuite {
         .build(); 
      
     BloodTest expectedEntity = BloodTestBuilder.aBloodTest() 
-        .withId(1L) 
+        .withId(bloodTestId) 
         .withTestName("Test Name") 
         .withTestNameShort("Test Name Short") 
         .withCategory(BloodTestCategory.BLOODTYPING) 

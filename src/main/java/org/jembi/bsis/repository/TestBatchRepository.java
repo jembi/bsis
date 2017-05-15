@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -46,7 +47,7 @@ public class TestBatchRepository extends AbstractRepository<TestBatch> {
     return query.getResultList();
   }
 
-  public TestBatch findTestBatchById(Long id) throws NoResultException {
+  public TestBatch findTestBatchById(UUID id) throws NoResultException {
     TypedQuery<TestBatch> query = entityManager.createQuery(
         "SELECT t FROM TestBatch t WHERE t.id = :id", TestBatch.class);
     query.setParameter("id", id);
@@ -90,7 +91,7 @@ public class TestBatchRepository extends AbstractRepository<TestBatch> {
 
   }
 
-  public void deleteTestBatch(Long id) {
+  public void deleteTestBatch(UUID id) {
     TestBatch testBatch = findTestBatchById(id);
     testBatch.setIsDeleted(true);
     Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
