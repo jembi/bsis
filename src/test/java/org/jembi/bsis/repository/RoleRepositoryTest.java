@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
 
-  private static final UUID ROLE_ID = UUID.randomUUID();
 
   @Autowired
   RoleRepository roleRepository;
@@ -67,7 +66,8 @@ public class RoleRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindRoleDetailByIdUnknown() throws Exception {
-    roleRepository.findRoleDetailById(ROLE_ID);
+    UUID irrelevantId = UUID.randomUUID();
+    roleRepository.findRoleDetailById(irrelevantId);
   }
 
   @Test

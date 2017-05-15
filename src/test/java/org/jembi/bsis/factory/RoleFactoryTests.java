@@ -42,7 +42,7 @@ public class RoleFactoryTests extends UnitTestSuite {
     // Set up fixture
     Permission perm1 = aPermission().withId(1L).withName("do this").build();
     Permission perm2 = aPermission().withId(2L).withName("do that").build();
-    final UUID roleId = UUID.randomUUID();
+    UUID roleId = UUID.randomUUID();
     Role role = aRole()
         .withId(roleId)
         .withName("Superuser")
@@ -100,16 +100,16 @@ public class RoleFactoryTests extends UnitTestSuite {
         aPermission().withId(1L).build()
         ));
 
-    final UUID formId = UUID.randomUUID();
+    UUID roleId = UUID.randomUUID();
     RoleBackingForm form = aRoleBackingForm()
-        .withId(formId)
+        .withId(roleId)
         .withName("role")
         .withDescription("role description")
         .withPermissions(permissions)
         .build();
 
     Role expectedRole = aRole()
-        .withId(formId)
+        .withId(roleId)
         .withName("role")
         .withDescription("role description")
         .withPermissions(expectedPermissions)
@@ -127,14 +127,14 @@ public class RoleFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntities_shouldReturnExpectedEntities() {
     // Set up fixture
-    UUID formId1 = UUID.randomUUID();
-    UUID formId2 = UUID.randomUUID();
+    UUID roleId1 = UUID.randomUUID();
+    UUID roleId2 = UUID.randomUUID();
     List<RoleBackingForm> forms = Arrays.asList(
         aRoleBackingForm()
-          .withId(formId1)
+          .withId(roleId1)
           .build(),
         aRoleBackingForm()
-          .withId(formId2)
+          .withId(roleId2)
           .build()
         );
 
