@@ -100,7 +100,6 @@
     <dropForeignKeyConstraint baseTableName="Transfusion_AUD" constraintName="FK_Transfusion_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="User_AUD" constraintName="FK_USER_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="User_Role_AUD" constraintName="FK_USER_ROLE_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="WellType_AUD" constraintName="FK_WELL_TYPE_AUDIT_REVISION"/>
 
     <addColumn tableName="AuditRevision">
       <column name="server_uuid" type="VARCHAR(36)" afterColumn="id"/>
@@ -259,10 +258,6 @@
     </addColumn>
 
     <addColumn tableName="User_Role_AUD">
-      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
-    </addColumn>
-
-    <addColumn tableName="WellType_AUD">
       <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
     </addColumn>
 
@@ -467,11 +462,6 @@
     </sql>
 
     <sql>
-      UPDATE WellType_AUD 
-      SET server_uuid = @@server_uuid;
-    </sql>
-
-    <sql>
       ALTER TABLE AuditRevision 
       CHANGE COLUMN id id BIGINT(20) NOT NULL AUTO_INCREMENT;
     </sql>
@@ -515,7 +505,6 @@
     <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="Transfusion_AUD"/>
     <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="User_AUD"/>
     <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="User_Role_AUD"/>
-    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="WellType_AUD"/>
 
     <sql>
       ALTER TABLE bsis.AuditRevision 
@@ -640,8 +629,6 @@
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="User_Role_AUD" constraintName="FK_USER_ROLE_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="WellType_AUD" constraintName="FK_WELL_TYPE_AUDIT_REVISION_ID_SERVER_UUID"
-      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
   </changeSet>
 
   <changeSet id="20170512-1330" author="rowanpi">
@@ -960,14 +947,6 @@
 
       DROP TRIGGER IF EXISTS bsis.User_Role_AUD_BEFORE_INSERT/
       CREATE DEFINER = CURRENT_USER TRIGGER bsis.User_Role_AUD_BEFORE_INSERT BEFORE INSERT ON User_Role_AUD FOR EACH ROW
-      BEGIN
-        IF ISNULL(NEW.server_uuid) THEN
-          SET NEW.server_uuid = @@server_uuid;
-        END IF;
-      END/
-
-      DROP TRIGGER IF EXISTS bsis.WellType_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.WellType_AUD_BEFORE_INSERT BEFORE INSERT ON WellType_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
