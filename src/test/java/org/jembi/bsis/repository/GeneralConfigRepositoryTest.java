@@ -50,7 +50,8 @@ public class GeneralConfigRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindGeneralConfigByIdUnknown() throws Exception {
-    generalConfigRepository.getGeneralConfigById(UUID.randomUUID());
+    UUID unknownGeneralConfigId = UUID.randomUUID();
+    generalConfigRepository.getGeneralConfigById(unknownGeneralConfigId);
   }
 
   @Test

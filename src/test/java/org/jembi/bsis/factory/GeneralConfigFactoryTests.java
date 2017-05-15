@@ -26,10 +26,10 @@ public class GeneralConfigFactoryTests extends UnitTestSuite {
   public void testConvertGenConfigEntityToViewModelWithTextDataType_shouldReturnExpectedViewModel() {
     //Data SetUp
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("text").build();
-    UUID id = UUID.randomUUID();
+    UUID generalConfigId = UUID.randomUUID();
     
     GeneralConfig generalConfig = aGeneralConfig()
-        .withId(id)
+        .withId(generalConfigId)
         .withName("name")
         .withDescription("description")
         .withValue("text Values")
@@ -37,7 +37,7 @@ public class GeneralConfigFactoryTests extends UnitTestSuite {
         .build();
     
     GeneralConfigViewModel expectedViewModel = aGeneralConfigViewModelBuilder()
-        .withId(id)
+        .withId(generalConfigId)
         .withName("name")
         .withDescription("description")
         .withValue("text Values")
@@ -85,10 +85,10 @@ public class GeneralConfigFactoryTests extends UnitTestSuite {
   public void testConvertGenConfigEntityToViewModelWithDecimalDataType_shouldReturnExpectedViewModel() {
     //Data SetUp
     DataType dataType = DataTypeBuilder.aDataType().withId(3l).withDataType("Decimal").build();
-    UUID id = UUID.randomUUID();
+    UUID generalConfigId = UUID.randomUUID();
     
     GeneralConfig generalConfig = aGeneralConfig()
-        .withId(id)
+        .withId(generalConfigId)
         .withName("name")
         .withDescription("description")
         .withDataType(dataType)
@@ -96,7 +96,7 @@ public class GeneralConfigFactoryTests extends UnitTestSuite {
         .build();
     
     GeneralConfigViewModel expectedViewModel = aGeneralConfigViewModelBuilder()
-        .withId(id)
+        .withId(generalConfigId)
         .withName("name")
         .withDescription("description")
         .withDataType(dataType)
@@ -114,10 +114,10 @@ public class GeneralConfigFactoryTests extends UnitTestSuite {
   public void testConvertGenConfigEntityToViewModelBooleanDataType_shouldReturnExpectedViewModel() {
     //Data SetUp
     DataType dataType = DataTypeBuilder.aDataType().withId(4l).withDataType("Boolean").build();
-    UUID id = UUID.randomUUID();
+    UUID generalConfigId = UUID.randomUUID();
     
     GeneralConfig generalConfig = aGeneralConfig()
-        .withId(id)
+        .withId(generalConfigId)
         .withName("name")
         .withDescription("description")
         .withDataType(dataType)
@@ -125,7 +125,7 @@ public class GeneralConfigFactoryTests extends UnitTestSuite {
         .build();
     
     GeneralConfigViewModel expectedViewModel = aGeneralConfigViewModelBuilder()
-        .withId(id)
+        .withId(generalConfigId)
         .withName("name")
         .withDescription("description")
         .withDataType(dataType)
@@ -143,10 +143,10 @@ public class GeneralConfigFactoryTests extends UnitTestSuite {
   public void testConvertGenConfigEntityToViewModelWithPassword_shouldReturnExpectedViewModel() {
     //Data SetUp
     DataType dataType = DataTypeBuilder.aDataType().withId(5l).withDataType("password").build();
-    UUID id = UUID.randomUUID();
+    UUID generalConfigId = UUID.randomUUID();
     
     GeneralConfig generalConfig = aGeneralConfig()
-        .withId(id)
+        .withId(generalConfigId)
         .withName("name")
         .withDescription("description")
         .withDataType(dataType)
@@ -154,7 +154,7 @@ public class GeneralConfigFactoryTests extends UnitTestSuite {
         .build();
     
     GeneralConfigViewModel expectedViewModel = aGeneralConfigViewModelBuilder()
-        .withId(id)
+        .withId(generalConfigId)
         .withName("name")
         .withDescription("description")
         .withValue("")

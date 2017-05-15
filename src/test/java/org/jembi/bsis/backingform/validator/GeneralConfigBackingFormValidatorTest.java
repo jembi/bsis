@@ -64,14 +64,14 @@ public class GeneralConfigBackingFormValidatorTest {
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("TEXT").build();
 
     GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    final UUID id = UUID.randomUUID();
-    form.setId(id);
+    final UUID formId = UUID.randomUUID();
+    form.setId(formId);
     form.setName("configname");
     form.setValue("value");
     form.setDescription("description");
     form.setDataType(dataType);
 
-    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(id).build();
+    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(formId).build();
 
     // set up mocks
     when(dataTypeRepository.getDataTypeByid(1l)).thenReturn(dataType);
@@ -91,13 +91,16 @@ public class GeneralConfigBackingFormValidatorTest {
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("TEXT").build();
 
     GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    form.setId(UUID.randomUUID());
+    UUID formId1 = UUID.randomUUID();
+    UUID formId2 = UUID.randomUUID();
+    
+    form.setId(formId1);
     form.setName("configname");
     form.setValue("value");
     form.setDescription("description");
     form.setDataType(dataType);
 
-    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(UUID.randomUUID()).build();
+    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(formId2).build();
 
     // set up mocks
     when(dataTypeRepository.getDataTypeByid(1l)).thenReturn(dataType);
@@ -118,7 +121,8 @@ public class GeneralConfigBackingFormValidatorTest {
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("TEXT").build();
 
     GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    form.setId(UUID.randomUUID());
+    UUID formId = UUID.randomUUID();
+    form.setId(formId);
     form.setName("");
     form.setValue("value");
     form.setDescription("description");
