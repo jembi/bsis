@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform.validator;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.backingform.BloodTestBackingForm;
@@ -116,7 +117,7 @@ public class BloodTestingRuleBackingFormValidator extends BaseValidator<BloodTes
     }
   }
 
-  private String validatePendingTest(Long id, String pendingTestsError) {
+  private String validatePendingTest(UUID id, String pendingTestsError) {
     if (id != null) {
       boolean testExists = bloodTestRepository.verifyBloodTestExists(id);
       if (!testExists) {

@@ -1,12 +1,14 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
 import org.jembi.bsis.viewmodel.BloodTestingRuleViewModel;
 
 public class BloodTestingRuleViewModelBuilder extends AbstractBuilder<BloodTestingRuleViewModel> {
   
-  private Long id;
+  private UUID id;
   private String testNameShort;
   private DonationField donationFieldChanged;
   private BloodTestCategory category;
@@ -14,7 +16,7 @@ public class BloodTestingRuleViewModelBuilder extends AbstractBuilder<BloodTesti
   private String pattern;
   private boolean isDeleted = false;
   
-  public BloodTestingRuleViewModelBuilder withId(Long id) {
+  public BloodTestingRuleViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

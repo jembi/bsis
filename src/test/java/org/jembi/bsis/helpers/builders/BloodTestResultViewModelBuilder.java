@@ -1,16 +1,18 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
 
 public class BloodTestResultViewModelBuilder extends AbstractBuilder<BloodTestResultViewModel> {
   
-  private long id;
+  private UUID id;
   private BloodTestFullViewModel bloodTest;
   private Boolean reEntryRequired;
   
 
-  public BloodTestResultViewModelBuilder withId(long id) {
+  public BloodTestResultViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

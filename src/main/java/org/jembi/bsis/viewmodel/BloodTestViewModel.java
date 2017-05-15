@@ -1,9 +1,11 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
-public class BloodTestViewModel extends BaseViewModel<Long> {
+public class BloodTestViewModel extends BaseViewModel<UUID> {
 
   private String testName;
   private String testNameShort;

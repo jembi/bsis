@@ -6,6 +6,8 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
@@ -44,8 +46,9 @@ public class BloodTestCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateBloodTest_shouldUpdate() {
     // Set up data
+    UUID bloodTestId = UUID.randomUUID();
     BloodTest existingBloodTest = BloodTestBuilder.aBloodTest()
-        .withId(1L)
+        .withId(bloodTestId)
         .withTestName("testName")
         .withTestNameShort("testNameShort")
         .withCategory(BloodTestCategory.BLOODTYPING)
@@ -53,7 +56,7 @@ public class BloodTestCRUDServiceTests extends UnitTestSuite {
         .build();
     
     BloodTest updatedBloodTest = BloodTestBuilder.aBloodTest()
-        .withId(1L)
+        .withId(bloodTestId)
         .withTestName("testName1")
         .withTestNameShort("testNameShort1")
         .withCategory(BloodTestCategory.TTI)
@@ -61,7 +64,7 @@ public class BloodTestCRUDServiceTests extends UnitTestSuite {
         .build();
     
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(existingBloodTest);
+    when(bloodTestRepository.findBloodTestById(bloodTestId)).thenReturn(existingBloodTest);
     when(bloodTestRepository.update(existingBloodTest)).thenReturn(updatedBloodTest);
 
     // Run test

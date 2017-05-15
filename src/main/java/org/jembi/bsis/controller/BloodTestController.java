@@ -2,6 +2,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -45,7 +46,7 @@ public class BloodTestController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
-  public ResponseEntity<Map<String, Object>> getBloodTestById(@PathVariable long id) {
+  public ResponseEntity<Map<String, Object>> getBloodTestById(@PathVariable UUID id) {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("bloodTest", bloodTestControllerService.getBloodTestById(id));
@@ -71,7 +72,7 @@ public class BloodTestController {
 
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTS + "')")
-  public ResponseEntity<Map<String, Object>> updateBloodTest(@PathVariable("id") long id,
+  public ResponseEntity<Map<String, Object>> updateBloodTest(@PathVariable("id") UUID id,
       @Valid @RequestBody BloodTestBackingForm backingForm) {
 
     // Use the id parameter from the path

@@ -65,13 +65,15 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   private static final UUID IRRELEVANT_DONATION_ID = UUID.randomUUID();
   private static final UUID IRRELEVANT_COMPONENT_ID = UUID.randomUUID();
   private static final UUID IRRELEVANT_DONATION_BATCH_ID = UUID.randomUUID();
-  private static final long IRRELEVANT_TEST_BATCH_ID = 64;
+  private static final UUID IRRELEVANT_TEST_BATCH_ID = UUID.randomUUID();
   private static final UUID IRRELEVANT_PACK_TYPE_ID = UUID.randomUUID();
   private static final Date IRRELEVANT_DATE_OF_FIRST_DONATION = new DateTime().minusDays(7).toDate();
   private static final Date IRRELEVANT_DATE_OF_LAST_DONATION = new DateTime().minusDays(2).toDate();
   private static final Date IRRELEVANT_CURRENT_DATE = new DateTime().toDate();
   private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
   private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
+  private static final UUID FIRST_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  private static final UUID SECOND_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
   
   @InjectMocks
   private DonationCRUDService donationCRUDService;
@@ -495,7 +497,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withPackType(oldPackType)
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodAbo("A")
         .withBloodRh("+")
         .build();
@@ -508,8 +510,8 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
     
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1L).withDonation(existingDonation).build());
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(2L).withDonation(existingDonation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withDonation(existingDonation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(SECOND_BLOOD_TEST_RESULT_ID).withDonation(existingDonation).build());
 
     // Set up expectations
     Donation expectedDonation = aDonation()

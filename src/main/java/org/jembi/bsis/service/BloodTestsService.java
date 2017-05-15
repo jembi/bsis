@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -78,7 +79,7 @@ public class BloodTestsService {
           donationRepository.findDonationByDonationIdentificationNumber(form.getDonationIdentificationNumber());
 
       // Get testResults from form
-      Map<Long, String> bloodTestResults = form.getTestResults();
+      Map<UUID, String> bloodTestResults = form.getTestResults();
 
       // Apply reEntry system config
       if (!reEntry
@@ -89,7 +90,7 @@ public class BloodTestsService {
       }
 
       // Run rule engine for the 1st time and save testResults
-      Map<Long, String> reEnteredBloodTestResults = bloodTestResults;
+      Map<UUID, String> reEnteredBloodTestResults = bloodTestResults;
       if (!reEntry) {
         // only outcomes that have been entered twice will be considered by the rules engine
         reEnteredBloodTestResults = new HashMap<>();

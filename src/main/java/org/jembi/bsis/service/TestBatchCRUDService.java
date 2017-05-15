@@ -1,5 +1,7 @@
 package org.jembi.bsis.service;
 
+import java.util.UUID;
+
 import org.apache.log4j.Logger;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -63,7 +65,7 @@ public class TestBatchCRUDService {
     return testBatchRepository.update(existingTestBatch);
   }
 
-  public void deleteTestBatch(Long testBatchId) {
+  public void deleteTestBatch(UUID testBatchId) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     if (!testBatchConstraintChecker.canDeleteTestBatch(testBatch)) {
       throw new IllegalStateException("Test batch cannot be deleted");

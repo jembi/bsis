@@ -39,7 +39,7 @@ public class BloodTestNamedQueryConstants {
       "SELECT count(b) = 0 "
       + "FROM BloodTest b "
       + "WHERE b.testName = :testName "
-      + " AND (:id = null OR b.id != :id)";
+      + " AND (:includeId = false OR b.id != :id)";
   
   public static final String NAME_VERIFY_BLOOD_TEST_WITH_ID_EXISTS =
       "BloodTest.verifyExists";

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -41,7 +42,7 @@ public class BloodTestingRuleResultViewModelFactory {
     ruleResult.setDonation(donationFactory.createDonationViewModelWithoutPermissions(donation));
 
     // pending tests
-    List<Long> pendingBloodTypingTestsIds = new ArrayList<>();
+    List<UUID> pendingBloodTypingTestsIds = new ArrayList<>();
     pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingAboTestsIds());
     pendingBloodTypingTestsIds.addAll(bloodTestingRuleResultSet.getPendingRhTestsIds());
     ruleResult.setPendingBloodTypingTestsIds(pendingBloodTypingTestsIds);
@@ -87,8 +88,8 @@ public class BloodTestingRuleResultViewModelFactory {
 
     // test data in various formats
     ruleResult.setStoredTestResults(bloodTestingRuleResultSet.getStoredTestResults());
-    Map<Long, BloodTestResultViewModel> recentTestResultsViewModel = new HashMap<>();
-    for (Long testId : bloodTestingRuleResultSet.getRecentTestResults().keySet()) {
+    Map<UUID, BloodTestResultViewModel> recentTestResultsViewModel = new HashMap<>();
+    for (UUID testId : bloodTestingRuleResultSet.getRecentTestResults().keySet()) {
       recentTestResultsViewModel.put(testId, createBloodTestResultViewModel(bloodTestingRuleResultSet, bloodTestingRuleResultSet.getRecentTestResults().get(testId), isDonationReleased));
     }
     ruleResult.setRecentTestResults(recentTestResultsViewModel);

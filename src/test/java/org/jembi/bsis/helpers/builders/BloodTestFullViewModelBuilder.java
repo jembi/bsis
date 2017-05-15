@@ -2,6 +2,7 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
@@ -9,7 +10,7 @@ import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 
 public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFullViewModel> {
   
-  private Long id;
+  private UUID id;
   private String testNameShort;
   private String testName;
   private Set<String> validResults = new HashSet<>();
@@ -23,7 +24,7 @@ public class BloodTestFullViewModelBuilder extends AbstractBuilder<BloodTestFull
   private boolean flagComponentsForDiscard;
   private boolean flagComponentsContainingPlasmaForDiscard;
   
-  public BloodTestFullViewModelBuilder withId(Long id) {
+  public BloodTestFullViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

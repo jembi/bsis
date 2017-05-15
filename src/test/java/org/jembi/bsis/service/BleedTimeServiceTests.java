@@ -39,5 +39,4 @@ public class BleedTimeServiceTests extends UnitTestSuite {
     //do asserts
     assertThat("Time since donation is correct", timeSinceDonation.equals(30L));
   }
-
 }

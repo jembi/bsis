@@ -59,6 +59,8 @@ import org.mockito.Mock;
 
 public class TestBatchFactoryTests extends UnitTestSuite {
 
+  private static final UUID IRRELEVANT_TEST_BATCH_ID = UUID.randomUUID();
+  private static final UUID ANOTHER_IRRELEVANT_TEST_BATCH_ID = UUID.randomUUID();
   private static final Long IRRELEVANT_ID = 4L;
   private static final Long ANOTHER_IRRELEVANT_ID = 5L;
   private static final TestBatchStatus IRRELEVANT_STATUS = TestBatchStatus.OPEN;
@@ -96,13 +98,13 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = createDonationBatch();
 
     TestBatch testBatch1 =
-        aTestBatch().withId(IRRELEVANT_ID).withStatus(IRRELEVANT_STATUS).withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+        aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(IRRELEVANT_STATUS).withBatchNumber(IRRELEVANT_BATCH_NUMBER)
             .withCreatedDate(IRRELEVANT_CREATED_DATE).withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
             .withDonationBatches(new HashSet<>(Arrays.asList(donationBatch))).withNotes(IRRELEVANT_NOTES).build();
 
     TestBatch testBatch2 =
         aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -114,7 +116,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationBatchFullViewModel donationBatchViewModel = new DonationBatchFullViewModel();
 
     TestBatchViewModel expectedViewModel = aTestBatchViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -142,7 +144,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
 
     TestBatch testBatch1 = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -152,7 +154,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
     
     TestBatch testBatch2 = aTestBatch()
-        .withId(ANOTHER_IRRELEVANT_ID)
+        .withId(ANOTHER_IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -163,7 +165,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     List<TestBatch> testBatches = Arrays.asList(new TestBatch[]{testBatch1, testBatch2});
 
     TestBatchFullViewModel expectedViewModel1 = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -178,7 +180,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withPermission("canEditDonationBatches", false)
         .build();
     TestBatchFullViewModel expectedViewModel2 = aTestBatchFullViewModel()
-        .withId(ANOTHER_IRRELEVANT_ID)
+        .withId(ANOTHER_IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -216,7 +218,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
 
     TestBatch testBatch = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -228,7 +230,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     CanReleaseResult canReleaseResult = new CanReleaseResult(true, expectedReadyCount);
 
     TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -264,7 +266,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
 
     TestBatch testBatch = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -274,7 +276,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
 
     TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -309,7 +311,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
     
     TestBatch testBatch = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -319,7 +321,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
 
     TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -354,7 +356,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
     
     TestBatch testBatch = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -364,7 +366,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
 
     TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -475,7 +477,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     UUID donationBatchId2 = UUID.randomUUID();
     UUID locationId = UUID.randomUUID();
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(IRRELEVANT_ID);
+    backingForm.setId(IRRELEVANT_TEST_BATCH_ID);
     backingForm.setStatus(TestBatchStatus.OPEN);
     backingForm.setCreatedDate(IRRELEVANT_CREATED_DATE);
     backingForm.setDonationBatchIds(Arrays.asList(donationBatchId1, donationBatchId2));
@@ -486,7 +488,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     Location location = aTestingSite().withId(locationId).build();
     
     TestBatch expectedTestBatch = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(TestBatchStatus.OPEN)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
         .withDonationBatches(new HashSet<>(Arrays.asList(firstDonationBatch, secondDonationBatch)))

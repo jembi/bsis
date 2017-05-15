@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
@@ -29,6 +30,9 @@ import org.springframework.validation.MapBindingResult;
 
 public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
 
+  private static UUID IRRELEVANT_BLOOD_TEST_ID = UUID.randomUUID();
+  private static UUID IRRELEVANT_PENDING_BLOOD_TEST_ID = UUID.randomUUID();
+
   @InjectMocks
   private BloodTestingRuleBackingFormValidator bloodTestingRuleBackingFormvalidator;
 
@@ -37,7 +41,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
 
   private BloodTest getBaseBloodTest() {
     return aBasicTTIBloodTest()
-        .withId(1L)
+        .withId(IRRELEVANT_BLOOD_TEST_ID)
         .withValidResults("POS")
         .withBloodTestType(BloodTestType.BASIC_TTI)
         .withCategory(BloodTestCategory.TTI)
@@ -46,7 +50,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
 
   private BloodTestingRuleBackingForm getBaseBloodTestingRuleBackingForm() {
     BloodTestBackingForm bloodTestBackingForm = aBloodTestBackingForm()
-        .withId(1L)
+        .withId(IRRELEVANT_BLOOD_TEST_ID)
         .withCategory(BloodTestCategory.TTI)
         .withBloodTestType(BloodTestType.BASIC_TTI)
         .withValidResults(new LinkedHashSet<>(Arrays.asList("POS", "NEG")))
@@ -54,12 +58,12 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     BloodTestingRuleBackingForm backingForm = aBloodTestingRuleBackingForm()
         .withBloodTest(bloodTestBackingForm)
         .withDonationFieldChanged(DonationField.TTISTATUS)
-        .withNewInformation(TTIStatus.TTI_UNSAFE.name())
+        .withNewInformation(TTIStatus.UNSAFE.name())
         .withPattern("POS")
         .withPendingTests(new LinkedHashSet<>(Arrays.asList(aBloodTestBackingForm()
             .withBloodTestType(BloodTestType.REPEAT_TTI)
             .withCategory(BloodTestCategory.TTI)
-            .withId(2L)
+            .withId(IRRELEVANT_PENDING_BLOOD_TEST_ID)
             .build())))
         .build();
     return backingForm;
@@ -72,8 +76,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -91,8 +95,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setBloodTest(null);
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -111,8 +115,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setBloodTest(aBloodTestBackingForm().build());
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -130,8 +134,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(null);
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(null);
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -150,8 +154,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setPattern(null);
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -170,8 +174,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setPattern("longPattern longPattern longPattern longPattern longPattern");
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -191,8 +195,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setPattern("XX");
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -211,8 +215,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setDonationFieldChanged(null);
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -232,8 +236,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setDonationFieldChanged(DonationField.BLOODABO);
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -252,8 +256,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setNewInformation(null);
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -271,8 +275,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setNewInformation("longNewInfo longNewInfo longNewInfo");
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -292,8 +296,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setNewInformation("AB");
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -305,15 +309,15 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateFormWithNoPendingTestsIds_shouldHaveNoErrors() {
+  public void testValidateFormWithNoPendingBloodTests_shouldHaveNoErrors() {
 
     // Set up data
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
     backingForm.setPendingTests(null);
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -324,14 +328,14 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateFormWithNonExistentPendingTestsIdsId_shouldHaveOneError() {
+  public void testValidateFormWithNonExistentPendingBloodTests_shouldHaveOneError() {
 
     // Set up data
     BloodTestingRuleBackingForm backingForm = getBaseBloodTestingRuleBackingForm();
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(false);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(false);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -350,8 +354,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.getPendingTests().add(backingForm.getBloodTest());
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -371,8 +375,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
         .withBloodTestType(BloodTestType.REPEAT_BLOODTYPING).build());
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -391,8 +395,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     backingForm.setIsDeleted(null);
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -412,8 +416,8 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
         .withBloodTestType(BloodTestType.BASIC_TTI).build());
 
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(getBaseBloodTest());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(getBaseBloodTest());
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");
@@ -429,7 +433,7 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
     // Set up data
     BloodTestingRuleBackingForm backingForm = aBloodTestingRuleBackingForm()
         .withBloodTest(aBloodTestBackingForm()
-            .withId(1L)
+            .withId(IRRELEVANT_BLOOD_TEST_ID)
             .withCategory(BloodTestCategory.BLOODTYPING)
             .withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
             .withValidResults(new LinkedHashSet<>(Arrays.asList("A", "B")))
@@ -439,17 +443,17 @@ public class BloodTestingRuleBackingFormValidatorTests extends UnitTestSuite {
         .withPendingTests(new LinkedHashSet<>(Arrays.asList(aBloodTestBackingForm()
             .withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
             .withCategory(BloodTestCategory.BLOODTYPING)
-            .withId(2L)
+            .withId(IRRELEVANT_PENDING_BLOOD_TEST_ID)
             .build())))
         .build();
     // Set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(aBasicBloodTypingBloodTest()
-        .withId(1L)
+    when(bloodTestRepository.findBloodTestById(IRRELEVANT_BLOOD_TEST_ID)).thenReturn(aBasicBloodTypingBloodTest()
+        .withId(IRRELEVANT_BLOOD_TEST_ID)
         .withValidResults("A")
         .withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
         .withCategory(BloodTestCategory.BLOODTYPING)
         .build());
-    when(bloodTestRepository.verifyBloodTestExists(2L)).thenReturn(true);
+    when(bloodTestRepository.verifyBloodTestExists(IRRELEVANT_PENDING_BLOOD_TEST_ID)).thenReturn(true);
 
     // Run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "BloodTestingRuleForm");

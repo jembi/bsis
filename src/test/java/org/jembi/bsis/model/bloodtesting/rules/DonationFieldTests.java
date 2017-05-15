@@ -52,7 +52,7 @@ public class DonationFieldTests extends UnitTestSuite {
 
   @Test
   public void testGetNewInformationForDonationFieldForTTIStatus_returnsCorrectStrings() throws Exception {
-    List<String> expectedNewInformation = Arrays.asList("NOT_DONE","TTI_SAFE", "TTI_UNSAFE", "INDETERMINATE"); 
+    List<String> expectedNewInformation = Arrays.asList("NOT_DONE","SAFE", "UNSAFE", "INDETERMINATE"); 
     List<String> newInformation = DonationField.getNewInformationForDonationField(DonationField.TTISTATUS);    
     assertThat(newInformation, is(expectedNewInformation));
   }
