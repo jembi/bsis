@@ -61,17 +61,17 @@ public class GeneralConfigBackingFormValidatorTest {
   @Test
   public void testUpdate() throws Exception {
     // set up data
+    UUID generalConfigId = UUID.randomUUID();
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("TEXT").build();
-
     GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    final UUID formId = UUID.randomUUID();
-    form.setId(formId);
+    
+    form.setId(generalConfigId);
     form.setName("configname");
     form.setValue("value");
     form.setDescription("description");
     form.setDataType(dataType);
 
-    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(formId).build();
+    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(generalConfigId).build();
 
     // set up mocks
     when(dataTypeRepository.getDataTypeByid(1l)).thenReturn(dataType);
@@ -91,16 +91,16 @@ public class GeneralConfigBackingFormValidatorTest {
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("TEXT").build();
 
     GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    UUID formId1 = UUID.randomUUID();
-    UUID formId2 = UUID.randomUUID();
+    UUID generalConfigId1 = UUID.randomUUID();
+    UUID generalConfigId2 = UUID.randomUUID();
     
-    form.setId(formId1);
+    form.setId(generalConfigId1);
     form.setName("configname");
     form.setValue("value");
     form.setDescription("description");
     form.setDataType(dataType);
 
-    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(formId2).build();
+    GeneralConfig duplicate = GeneralConfigBuilder.aGeneralConfig().withId(generalConfigId2).build();
 
     // set up mocks
     when(dataTypeRepository.getDataTypeByid(1l)).thenReturn(dataType);
@@ -118,11 +118,11 @@ public class GeneralConfigBackingFormValidatorTest {
   @Test
   public void testEmptyConfigName() throws Exception {
     // set up data
+    UUID generalConfigId = UUID.randomUUID();
     DataType dataType = DataTypeBuilder.aDataType().withId(1l).withDataType("TEXT").build();
-
     GeneralConfigBackingForm form = new GeneralConfigBackingForm();
-    UUID formId = UUID.randomUUID();
-    form.setId(formId);
+  
+    form.setId(generalConfigId);
     form.setName("");
     form.setValue("value");
     form.setDescription("description");
