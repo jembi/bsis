@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -45,13 +46,15 @@ public class TestResultsBackingFormsValidatorTest {
   @Test
   public void testValidateTestResultValuesValidResult() throws Exception {
     // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(1l, "A"); // invalid result
-    bloodTypingTestResults.put(2l, "POS"); // invalid result
+    UUID bloodTest1Id = UUID.randomUUID();
+    UUID bloodTest2Id = UUID.randomUUID();
+    Map<UUID, String> bloodTypingTestResults = new HashMap<>();
+    bloodTypingTestResults.put(bloodTest1Id, "A"); // invalid result
+    bloodTypingTestResults.put(bloodTest2Id, "POS"); // invalid result
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(bloodTest1Id).withValidResults("A,B,AB,O").build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(bloodTest2Id).withValidResults("POS,NEG").build());
 
     TestResultsBackingForm testResultsBackingForm = TestResultsBackingFormBuilder.aTestResultsBackingForm()
         .withDonationIdentificationNumber("1111111")
@@ -79,13 +82,15 @@ public class TestResultsBackingFormsValidatorTest {
   @Test
   public void testValidateTestResultValuesInvalidResult() throws Exception {
     // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(1l, "G"); // invalid result
-    bloodTypingTestResults.put(2l, "FALSE"); // invalid result
+    UUID bloodTest1Id = UUID.randomUUID();
+    UUID bloodTest2Id = UUID.randomUUID();
+    Map<UUID, String> bloodTypingTestResults = new HashMap<>();
+    bloodTypingTestResults.put(bloodTest1Id, "G"); // invalid result
+    bloodTypingTestResults.put(bloodTest2Id, "FALSE"); // invalid result
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(bloodTest1Id).withValidResults("A,B,AB,O").build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(bloodTest2Id).withValidResults("POS,NEG").build());
 
     TestResultsBackingForm testResultsBackingForm = TestResultsBackingFormBuilder.aTestResultsBackingForm()
         .withDonationIdentificationNumber("1111111")
@@ -115,11 +120,13 @@ public class TestResultsBackingFormsValidatorTest {
   @Test
   public void testValidateTestResultValuesNoTestResults() throws Exception {
     // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
+    UUID bloodTest1Id = UUID.randomUUID();
+    UUID bloodTest2Id = UUID.randomUUID();
+    Map<UUID, String> bloodTypingTestResults = new HashMap<>();
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).withValidResults("A,B,AB,O").build());
-    tests.add(BloodTestBuilder.aBloodTest().withId(2l).withValidResults("POS,NEG").build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(bloodTest1Id).withValidResults("A,B,AB,O").build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(bloodTest2Id).withValidResults("POS,NEG").build());
 
     TestResultsBackingForm testResultsBackingForm =
         TestResultsBackingFormBuilder.aTestResultsBackingForm()
@@ -150,11 +157,12 @@ public class TestResultsBackingFormsValidatorTest {
   @Test
   public void testValidateTestResultValuesInvalidTest() throws Exception {
     // set up data
-    Map<Long, String> bloodTypingTestResults = new HashMap<>();
-    bloodTypingTestResults.put(123l, "FALSE");
+    UUID bloodTest1Id = UUID.randomUUID();
+    Map<UUID, String> bloodTypingTestResults = new HashMap<>();
+    bloodTypingTestResults.put(UUID.randomUUID(), "FALSE");
 
     List<BloodTest> tests = new ArrayList<>();
-    tests.add(BloodTestBuilder.aBloodTest().withId(1l).build());
+    tests.add(BloodTestBuilder.aBloodTest().withId(bloodTest1Id).build());
 
     TestResultsBackingForm testResultsBackingForm = TestResultsBackingFormBuilder.aTestResultsBackingForm()
         .withDonationIdentificationNumber("1111111").withTestResults(bloodTypingTestResults).build();

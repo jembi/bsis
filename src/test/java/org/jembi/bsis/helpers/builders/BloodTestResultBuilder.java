@@ -4,6 +4,7 @@ import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.BloodTestResultPersister;
@@ -14,7 +15,7 @@ import org.jembi.bsis.model.user.User;
 
 public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResult> {
 
-  private Long id;
+  private UUID id;
   private String result;
   private BloodTest bloodTest = aBloodTest().build();
   private Donation donation = aDonation().build();
@@ -23,7 +24,7 @@ public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResul
   private Date createdDate;
   private User createdBy;
 
-  public BloodTestResultBuilder withId(Long id) {
+  public BloodTestResultBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

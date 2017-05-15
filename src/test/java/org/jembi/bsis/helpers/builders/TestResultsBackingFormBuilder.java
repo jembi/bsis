@@ -1,13 +1,14 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestResultsBackingForm;
 
 public class TestResultsBackingFormBuilder extends AbstractBuilder<TestResultsBackingForm> {
 
   private String donationIdentificationNumber;
-  private Map<Long, String> testResults;
+  private Map<UUID, String> testResults;
   private boolean saveUninterpretableResults;
 
 
@@ -16,7 +17,7 @@ public class TestResultsBackingFormBuilder extends AbstractBuilder<TestResultsBa
     return this;
   }
 
-  public TestResultsBackingFormBuilder withTestResults(Map<Long, String> testResults) {
+  public TestResultsBackingFormBuilder withTestResults(Map<UUID, String> testResults) {
     this.testResults = testResults;
     return this;
   }

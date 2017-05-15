@@ -2,20 +2,26 @@ package org.jembi.bsis.model.bloodtesting.rules;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
 
@@ -29,7 +35,7 @@ import org.jembi.bsis.repository.BloodTestingRuleNamedQueryConstants;
       name = BloodTestingRuleNamedQueryConstants.NAME_FIND_BLOOD_TESTING_RULE_BY_ID,
       query = BloodTestingRuleNamedQueryConstants.QUERY_FIND_BLOOD_TESTING_RULE_BY_ID)
 })
-public class BloodTestingRule extends BaseModificationTrackerEntity {
+public class BloodTestingRule extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -46,8 +52,8 @@ public class BloodTestingRule extends BaseModificationTrackerEntity {
   @Column(length = 30)
   private String newInformation;
 
-  @Column(length = 60)
-  private String pendingTestsIds;
+  @ManyToMany(fetch = FetchType.EAGER)
+  private List<BloodTest> pendingBloodTests;
 
   @Column(nullable = false)
   private boolean isDeleted = false;
@@ -94,28 +100,27 @@ public class BloodTestingRule extends BaseModificationTrackerEntity {
 
   /**
    * Get the pending test IDs as a set. The Set cannot be modified since changes can only be made by
-   * updating the {@link #pendingTestsIds} string.
+   * updating the {@link #pendingBloodTests} array.
    *
    * @return An immutable set of pending test IDs.
    */
-  public Set<Long> getPendingTestsIdsSet() {
-    if (pendingTestsIds == null || pendingTestsIds.isEmpty()) {
+  public Set<UUID> getPendingTestsIdsSet() {
+    if (pendingBloodTests == null || pendingBloodTests.isEmpty()) {
       return Collections.emptySet();
     }
-    Set<Long> ids = new HashSet<>();
-    StringTokenizer st = new StringTokenizer(pendingTestsIds, ",");
-    while (st.hasMoreTokens()) {
-      ids.add(Long.valueOf(st.nextToken().trim()));
+    Set<UUID> ids = new HashSet<>();
+    for (BloodTest pendingBloodTest : pendingBloodTests) {
+      ids.add(pendingBloodTest.getId());
     }
     return Collections.unmodifiableSet(ids);
   }
 
-  public String getPendingTestingIds() {
-    return pendingTestsIds;
+  public List<BloodTest> getPendingBloodTests() {
+    return pendingBloodTests;
   }
 
-  public void setPendingTestsIds(String pendingTestsIds) {
-    this.pendingTestsIds = pendingTestsIds;
+  public void setPendingBloodTests(List<BloodTest> pendingBloodTests) {
+    this.pendingBloodTests = pendingBloodTests;
   }
   
   public void setDonationFieldChanged(DonationField donationFieldChanged) {

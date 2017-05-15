@@ -1,13 +1,14 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 
 public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewModel> {
 
-  private Long id;
+  private UUID id;
   private TestBatchStatus status;
   private String batchNumber;
   private Date createdDate;
@@ -15,7 +16,7 @@ public class TestBatchViewModelBuilder extends AbstractBuilder<TestBatchViewMode
   private String notes;
   private Integer numSamples;
 
-  public TestBatchViewModelBuilder withId(Long id) {
+  public TestBatchViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

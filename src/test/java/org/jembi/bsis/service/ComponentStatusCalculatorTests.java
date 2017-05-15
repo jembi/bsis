@@ -57,7 +57,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithPositiveResult_shouldReturnTrue(){
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(UUID.randomUUID())
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(false)
@@ -76,7 +76,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithNegativeResult_shouldReturnFalse(){
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(UUID.randomUUID())
             .withResult("NEG")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(false)
@@ -95,7 +95,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithAllBloodTestResultsNotContainingPlasma_shouldReturnFalse(){
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(UUID.randomUUID())
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(false)
@@ -115,7 +115,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(UUID.randomUUID())
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(false)
@@ -134,7 +134,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(UUID.randomUUID())
             .withResult("NEG")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(true)
@@ -153,7 +153,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
 
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(9L)
+            .withId(UUID.randomUUID())
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(true)
@@ -700,7 +700,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testUpdateComponentStatusQuarantinedBloodGroupingPendingTestsTTISafe_shouldNotChangeStatus() throws Exception {
     // set up data
-    TestBatch testBatch = aReleasedTestBatch().withId(1L).build();
+    TestBatch testBatch = aReleasedTestBatch().withId(UUID.randomUUID()).build();
     DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
     Donation donation = aDonation()
         .withId(DONATION_ID)
@@ -732,7 +732,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testUpdateComponentStatusQuarantinedOpenTestBatch_shouldNotChangeStatus() throws Exception {
     // set up data
-    TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).withId(1L).build();
+    TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).withId(UUID.randomUUID()).build();
     DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
     Donation donation = aDonation()
         .withId(DONATION_ID)
@@ -764,7 +764,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testUpdateComponentStatusQuarantinedWithDiscrepancies_shouldNotChangeStatus() throws Exception {
     // set up data
-    TestBatch testBatch = aReleasedTestBatch().withId(1L).build();
+    TestBatch testBatch = aReleasedTestBatch().withId(UUID.randomUUID()).build();
     DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
     Donation donation = aDonation()
         .withId(DONATION_ID)
@@ -1023,7 +1023,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   @Test
   public void testUpdateComponentStatusQuarantinedBloodGroupingCompleteOldStatusTTIUnSafe_shouldNotChangeStatus() throws Exception {
     // set up data
-    TestBatch testBatch = aReleasedTestBatch().withId(1L).build();
+    TestBatch testBatch = aReleasedTestBatch().withId(UUID.randomUUID()).build();
     DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
     Donation donation = aDonation()
         .withId(DONATION_ID)

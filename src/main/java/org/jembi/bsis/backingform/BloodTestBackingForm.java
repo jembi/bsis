@@ -2,13 +2,14 @@ package org.jembi.bsis.backingform;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 
 public class BloodTestBackingForm {
   
-  private Long id;
+  private UUID id;
   
   private String testName;
   
@@ -34,11 +35,11 @@ public class BloodTestBackingForm {
   
   private Integer rankInCategory;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

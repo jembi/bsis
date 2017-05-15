@@ -2,6 +2,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -45,7 +46,7 @@ public class BloodTestingRuleController {
   
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTING_RULES + "')")
-  public Map<String, Object> getBloodTestingRuleById(@PathVariable long id) {
+  public Map<String, Object> getBloodTestingRuleById(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("bloodTestingRule", bloodTestingRuleControllerService.findBloodTestingRuleById(id));
     return map;
@@ -71,7 +72,7 @@ public class BloodTestingRuleController {
   
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_BLOOD_TESTING_RULES + "')")
-  public Map<String, Object> updateBloodTestingRule(@PathVariable("id") long id, 
+  public Map<String, Object> updateBloodTestingRule(@PathVariable("id") UUID id, 
       @Valid @RequestBody BloodTestingRuleBackingForm bloodTestingRuleBackingform) {
     // set the id parameter from the path
     bloodTestingRuleBackingform.setId(id);

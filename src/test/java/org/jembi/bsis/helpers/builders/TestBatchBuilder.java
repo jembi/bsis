@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
@@ -11,7 +12,7 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 
 public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
 
-  private Long id;
+  private UUID id;
   private TestBatchStatus status;
   private Set<DonationBatch> donationBatches;
   private String batchNumber;
@@ -20,7 +21,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
   private String notes;
   private Location location = LocationBuilder.aTestingSite().build();
 
-  public TestBatchBuilder withId(Long id) {
+  public TestBatchBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

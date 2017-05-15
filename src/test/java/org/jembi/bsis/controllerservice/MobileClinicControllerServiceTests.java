@@ -85,11 +85,11 @@ public class MobileClinicControllerServiceTests extends UnitTestSuite {
   @Test
   public void testGetBloodTestNames_shouldReturnCorrectNames() {
     // Set up fixture
-    BloodTest firstBasicTtiTest = aBloodTest().withId(1L).withTestNameShort("First").build();
-    BloodTest secondBasicTtiTest = aBloodTest().withId(1L).withTestNameShort("Second").build();
-    BloodTest firstRepestTtiTest = aBloodTest().withId(2L).withTestNameShort("Third").build();
-    BloodTest secondRepeatTtiTest = aBloodTest().withId(3L).withTestNameShort("Fourth").build();
-    BloodTest firstConfirmatoryTtiTest = aBloodTest().withId(1L).withTestNameShort("Fifth").build();
+    BloodTest firstBasicTtiTest = aBloodTest().withId(UUID.randomUUID()).withTestNameShort("First").build();
+    BloodTest secondBasicTtiTest = aBloodTest().withId(UUID.randomUUID()).withTestNameShort("Second").build();
+    BloodTest firstRepestTtiTest = aBloodTest().withId(UUID.randomUUID()).withTestNameShort("Third").build();
+    BloodTest secondRepeatTtiTest = aBloodTest().withId(UUID.randomUUID()).withTestNameShort("Fourth").build();
+    BloodTest firstConfirmatoryTtiTest = aBloodTest().withId(UUID.randomUUID()).withTestNameShort("Fifth").build();
 
     // Set expectations
     when(bloodTestRepository.getBloodTestsOfType(BloodTestType.BASIC_TTI)).thenReturn(Arrays.asList(
