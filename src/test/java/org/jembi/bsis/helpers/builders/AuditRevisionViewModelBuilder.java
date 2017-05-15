@@ -10,12 +10,12 @@ import org.jembi.bsis.viewmodel.UserViewModel;
 
 public class AuditRevisionViewModelBuilder extends AbstractBuilder<AuditRevisionViewModel> {
 
-  private int id;
+  private long id;
   private Date revisionDate;
   private UserViewModel user;
   private Set<EntityModification> entityModifications = new HashSet<>();
 
-  public AuditRevisionViewModelBuilder withId(int id) {
+  public AuditRevisionViewModelBuilder withId(long id) {
     this.id = id;
     return this;
   }
