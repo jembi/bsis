@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -40,7 +41,7 @@ public class RoleRepository {
     }
   }
 
-  public Role findRoleDetailById(Long id) throws NoResultException, NonUniqueResultException {
+  public Role findRoleDetailById(UUID id) throws NoResultException, NonUniqueResultException {
 
     String queryString = "SELECT r FROM Role r WHERE r.id = :roleId";
     TypedQuery<Role> query = em.createQuery(queryString, Role.class)
@@ -83,7 +84,7 @@ public class RoleRepository {
     return role;
   }
 
-  public void deleteRole(Long id) {
+  public void deleteRole(UUID id) {
     Role role = findRoleDetailById(id);
     em.remove(role);
   }

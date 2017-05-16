@@ -64,36 +64,36 @@
           isActive="true" isAdmin="false" isDeleted="false" isStaff="true"
           lastName="Staff" password="$2a$10$l6oa.rSWP6WO32Kqn2YCCO3EiELvFsKZdaPIKuFDMKexAgkr6isSS"
           username="bloodbankstaff" passwordReset="false" createdDate="2017-01-17"/>
-    <Role id="1" name="Super User" description="Super User"/>
-    <Role id="2" name="Admin" description="Admin User"/>
-    <Role id="3" name="Donor Clinic Supervisor" description="Donor Clinic Supervisor "/>
-    <Role id="4" name="Donor Clinic Staff" description="Donor Clinic Staff"/>
-    <Role id="5" name="Donor Communications Staff" description="Donor Communications Staff"/>
-    <Role id="6" name="Donor Counselling Staff" description="Donor Counselling Staff"/>
-    <Role id="7" name="Data Entry Clerk" description="Data Entry Clerk"/>
-    <Role id="8" name="Medical Officer" description="Medical Officer"/>
-    <Role id="9" name="Component Supervisor" description="Component Supervisor"/>
-    <Role id="10" name="Component Staff" description="Component Staff"/>
-    <Role id="11" name="TTI Testing Supervisor" description="TTI Testing Supervisor"/>
-    <Role id="12" name="TTI Testing Staff" description="TTI Testing Staff"/>
-    <Role id="13" name="Serology Supervisor" description="Serology Supervisor"/>
-    <Role id="14" name="Serology Staff" description="Serology Staff"/>
-    <Role id="15" name="Inventory Staff" description="Inventory Staff"/>
-    <Role id="16" name="Blood Bank Staff" description="Blood Bank Staff"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" roles_id="1"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a82'" roles_id="2"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a83'" roles_id="3"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a84'" roles_id="4"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a85'" roles_id="5"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a86'" roles_id="6"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a87'" roles_id="7"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a88'" roles_id="8"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a89'" roles_id="9"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a10'" roles_id="10"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a11'" roles_id="11"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a12'" roles_id="12"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a13'" roles_id="13"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a14'" roles_id="14"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a15'" roles_id="15"/>
-    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a16'" roles_id="16"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd21'" name="Super User" description="Super User"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd22'" name="Admin" description="Admin User"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd23'" name="Donor Clinic Supervisor" description="Donor Clinic Supervisor "/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd24'" name="Donor Clinic Staff" description="Donor Clinic Staff"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd25'" name="Donor Communications Staff" description="Donor Communications Staff"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd26'" name="Donor Counselling Staff" description="Donor Counselling Staff"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd27'" name="Data Entry Clerk" description="Data Entry Clerk"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd28'" name="Medical Officer" description="Medical Officer"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd29'" name="Component Supervisor" description="Component Supervisor"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd10'" name="Component Staff" description="Component Staff"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd11'" name="TTI Testing Supervisor" description="TTI Testing Supervisor"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd12'" name="TTI Testing Staff" description="TTI Testing Staff"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd13'" name="Serology Supervisor" description="Serology Supervisor"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd14'" name="Serology Staff" description="Serology Staff"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd15'" name="Inventory Staff" description="Inventory Staff"/>
+    <Role id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd16'" name="Blood Bank Staff" description="Blood Bank Staff"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd21'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a82'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd22'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a83'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd23'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a84'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd24'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a85'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd25'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a86'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd26'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a87'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd27'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a88'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd28'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a89'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd29'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a10'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd10'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a11'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd11'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a12'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd12'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a13'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd13'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a14'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd14'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a15'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd15'"/>
+    <User_Role users_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a16'" roles_id="uuid'4a4bb6f4-7dc7-428a-ba95-f1ac42c1dd16'"/>
 </dataset>

@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.jembi.bsis.model.user.Role;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
@@ -16,6 +15,8 @@ import org.junit.Test;
  * Test using DBUnit to test the UserRepository
  */
 public class UserRepositoryTest extends DBUnitContextDependentTestSuite {
+
+  private static final String USER_ID = "9bb07a38-eb7f-4e35-b5b1-34e77ad79a81";
 
   @Override
   protected IDataSet getDataSet() throws Exception {
@@ -31,27 +32,8 @@ public class UserRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testGetAllRoles() throws Exception {
-    List<Role> all = userRepository.getUserRole(new String[]{"1", "2", "3"});
-    Assert.assertNotNull("There are Roles defined", all);
-    Assert.assertEquals("There are 3 Roles", 3, all.size());
-  }
-
-  @Test
-  public void testGetAllRolesNull() throws Exception {
-    List<Role> all = userRepository.getUserRole(null);
-    Assert.assertNotNull("There are Roles defined", all);
-    Assert.assertTrue("There are no Roles", all.isEmpty());
-  }
-
-  @Test(expected = javax.persistence.NoResultException.class)
-  public void testGetAllRolesUnknown() throws Exception {
-    userRepository.getUserRole(new String[]{"123"});
-  }
-
-  @Test
   public void testFindUserById() throws Exception {
-    User user = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
+    User user = userRepository.findUserById(UUID.fromString(USER_ID));
     Assert.assertNotNull("User is defined", user);
     Assert.assertEquals("User is correct", "superuser", user.getUsername());
   }
@@ -75,12 +57,12 @@ public class UserRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testUpdateBasicUserInfo() throws Exception {
-    User user = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
+    User user = userRepository.findUserById(UUID.fromString(USER_ID));
     user.setFirstName("Test");
     user.setLastName("Tester");
     user.setEmailId("test@jembi.org");
     userRepository.updateBasicUserInfo(user, false);
-    User savedUser = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
+    User savedUser = userRepository.findUserById(UUID.fromString(USER_ID));
     Assert.assertEquals("FirstName changed", "Test", savedUser.getFirstName());
     Assert.assertEquals("LastName changed", "Tester", savedUser.getLastName());
     Assert.assertEquals("Email changed", "test@jembi.org", savedUser.getEmailId());
@@ -89,18 +71,18 @@ public class UserRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testUpdateBasicUserInfoPassword() throws Exception {
-    User user = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
+    User user = userRepository.findUserById(UUID.fromString(USER_ID));
     user.setPassword("newpassword");
     userRepository.updateBasicUserInfo(user, true);
-    User savedUser = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
+    User savedUser = userRepository.findUserById(UUID.fromString(USER_ID));
     Assert.assertFalse("Password was changed", !user.getPassword().equals(savedUser.getPassword()));
   }
 
   @Test
   public void testUpdateLastLogin() throws Exception {
-    User user = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
+    User user = userRepository.findUserById(UUID.fromString(USER_ID));
     userRepository.updateLastLogin(user);
-    User savedUser = userRepository.findUserById(UUID.fromString("9bb07a38-eb7f-4e35-b5b1-34e77ad79a81"));
+    User savedUser = userRepository.findUserById(UUID.fromString(USER_ID));
     Assert.assertFalse("Last login was changed", !user.getLastLogin().equals(savedUser.getLastLogin()));
   }
 }

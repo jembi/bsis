@@ -1,5 +1,7 @@
 package org.jembi.bsis.backingform;
 
+import java.util.UUID;
+
 import javax.validation.Valid;
 
 import org.jembi.bsis.model.admin.DataType;
@@ -16,7 +18,7 @@ public class GeneralConfigBackingForm {
   private String value;
   private String name;
   private String description;
-  private Long id;
+  private UUID id;
 
   @Valid
   private DataType dataType;
@@ -41,11 +43,11 @@ public class GeneralConfigBackingForm {
     this.name = name;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

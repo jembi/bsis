@@ -1,5 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.GeneralConfigPersister;
 import org.jembi.bsis.model.admin.DataType;
@@ -7,13 +9,13 @@ import org.jembi.bsis.model.admin.GeneralConfig;
 
 public class GeneralConfigBuilder extends AbstractEntityBuilder<GeneralConfig> {
 
-  private Long id;
+  private UUID id;
   private DataType dataType;
   private String value;
   private String name;
   private String description;
 
-  public GeneralConfigBuilder withId(Long id) {
+  public GeneralConfigBuilder withId(UUID id) {
     this.id = id;
     return this;
   }
