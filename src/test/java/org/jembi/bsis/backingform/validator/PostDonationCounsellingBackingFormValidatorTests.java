@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.LocationBackingForm;
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
@@ -249,7 +250,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
   public void testValidateInvalidFormWithLocationThatIsNotReferralSite_shouldReturnOneError() throws ParseException {
     // Set up data
     String locationName = "Not a Referral Site";
-    Long locationId = 1L;
+    UUID locationId = UUID.randomUUID();
 
     Location location = aLocation()
         .withId(locationId)
@@ -257,7 +258,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
         .build();
 
     LocationBackingForm locationForm = LocationBackingFormBuilder.aProcessingSiteBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName(locationName)
         .build();
 
@@ -272,7 +273,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
         .withReferralSite(locationForm)
         .build();
 
-    when(locationRepository.getLocation(1L)).thenReturn(location);
+    when(locationRepository.getLocation(locationId)).thenReturn(location);
     setupDateGeneratorServiceMocks(counsellingDate);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
@@ -289,7 +290,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
   public void testValidatePostDonationCounsellingWithInvalidDate_shouldReturnError() {
     // Set up data
     String locationName = "A Referral Site";
-    Long locationId = 1L;
+    UUID locationId = UUID.randomUUID();
 
     Location location = aLocation()
         .withId(locationId)
@@ -298,7 +299,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
         .build();
 
     LocationBackingForm locationForm = LocationBackingFormBuilder.aProcessingSiteBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName(locationName)
         .thatIsReferralSite()
         .build();
@@ -313,7 +314,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
         .withReferralSite(locationForm)
         .build();
     
-    when(locationRepository.getLocation(1L)).thenReturn(location);
+    when(locationRepository.getLocation(locationId)).thenReturn(location);
     setupDateGeneratorServiceMocks(dateInTheFuture);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
@@ -331,7 +332,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
   public void testValidatePostDonationCounsellingWithSameDate_shouldNotReturnError() {
     // Set up data
     String locationName = "A Referral Site";
-    Long locationId = 1L;
+    UUID locationId = UUID.randomUUID();
 
     Location location = aLocation()
         .withId(locationId)
@@ -340,7 +341,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
         .build();
 
     LocationBackingForm locationForm = LocationBackingFormBuilder.aProcessingSiteBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName(locationName)
         .thatIsReferralSite()
         .build();
@@ -355,7 +356,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
         .withReferralSite(locationForm)
         .build();
     
-    when(locationRepository.getLocation(1L)).thenReturn(location);
+    when(locationRepository.getLocation(locationId)).thenReturn(location);
     setupDateGeneratorServiceMocks(sameDayButLaterTime);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");
@@ -371,7 +372,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
   public void testValidatePostDonationCounsellingWithPastDate_shouldNotReturnError() {
     // Set up data
     String locationName = "A Referral Site";
-    Long locationId = 1L;
+    UUID locationId = UUID.randomUUID();
 
     Location location = aLocation()
         .withId(locationId)
@@ -380,7 +381,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
         .build();
 
     LocationBackingForm locationForm = LocationBackingFormBuilder.aProcessingSiteBackingForm()
-        .withId(1L)
+        .withId(locationId)
         .withName(locationName)
         .thatIsReferralSite()
         .build();
@@ -395,7 +396,7 @@ public class PostDonationCounsellingBackingFormValidatorTests extends UnitTestSu
         .withReferralSite(locationForm)
         .build();
     
-    when(locationRepository.getLocation(1L)).thenReturn(location);
+    when(locationRepository.getLocation(locationId)).thenReturn(location);
     setupDateGeneratorServiceMocks(sameDayButLaterTime);
 
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "postDonationCounselling");

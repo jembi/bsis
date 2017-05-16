@@ -3,6 +3,7 @@ package org.jembi.bsis.controller;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.controllerservice.ReportsControllerService;
 import org.jembi.bsis.model.inventory.InventoryStatus;
@@ -71,7 +72,7 @@ public class ReportsController {
   @RequestMapping(value = "/transfusionsummary/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.TRANSFUSIONS_REPORTING + "')")
   public Report generateTransfusionSummaryReport(
-      @RequestParam(value = "transfusionSiteId", required = false) Long transfusionSiteId,
+      @RequestParam(value = "transfusionSiteId", required = false) UUID transfusionSiteId,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return transfusionSummaryReportGenerator.generateTransfusionSummaryReport(transfusionSiteId, startDate, endDate);
@@ -90,7 +91,7 @@ public class ReportsController {
   @RequestMapping(value = "/discardedunits/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')") 
   public Report generateDiscardedUnits (
-      @RequestParam(value = "processingSite", required = false) Long processingSiteId,
+      @RequestParam(value = "processingSite", required = false) UUID processingSiteId,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return discardedComponentReportGenerator.generateDiscardedComponents(processingSiteId, startDate, endDate);
@@ -98,7 +99,7 @@ public class ReportsController {
 
   @RequestMapping(value = "/stockLevels/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
-  public Report findStockLevels(@RequestParam(value = "location", required = false) Long locationId,
+  public Report findStockLevels(@RequestParam(value = "location", required = false) UUID locationId,
       @RequestParam(value = "inventoryStatus", required = true) InventoryStatus inventoryStatus) {
     return stockLevelsReportGenerator.generateStockLevelsForLocationReport(locationId, inventoryStatus);
   }
@@ -118,7 +119,23 @@ public class ReportsController {
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return collectedDonationsReportGenerator.generateCollectedDonationsReport(startDate, endDate);
   }
+
+  @RequestMapping(value = "/collecteddonations/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
+  public Map<String, Object> getCollectedDonationsReportFormFields() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("donationTypes", reportsControllerService.getDonationTypes());
+    return map;
+  }
   
+  @RequestMapping(value = "/ttiprevalence/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.TTI_REPORTING + "')")
+  public Map<String, Object> getActiveTTIBloodTestsReportForm() {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("ttiBloodTests", reportsControllerService.getEnabledTTIBloodTests());
+    return map;
+  }
+
   @RequestMapping(value = "/ttiprevalence/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.TTI_REPORTING + "')")
   public Report getTTIPrevalenceReport(
@@ -171,7 +188,7 @@ public class ReportsController {
   @RequestMapping(value = "/donorsadverseevents/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.DONATIONS_REPORTING + "')")
   public Report generateDonorsAdverseEventsReport(
-      @RequestParam(value = "venue", required = false) Long venueId,
+      @RequestParam(value = "venue", required = false) UUID venueId,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return donorsAdverseEventsReportGenerator.generateDonorsAdverseEventsReport(venueId, startDate, endDate);
@@ -189,7 +206,7 @@ public class ReportsController {
   @RequestMapping(value = "/componentsprocessed/generate", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.COMPONENTS_REPORTING + "')")
   public Report generateComponentProductionReport(
-      @RequestParam(value = "processingSite", required = false) Long processingSiteId, 
+      @RequestParam(value = "processingSite", required = false) UUID processingSiteId,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
     return componentProductionReportGenerator.generateComponentProductionReport(processingSiteId, startDate, endDate);

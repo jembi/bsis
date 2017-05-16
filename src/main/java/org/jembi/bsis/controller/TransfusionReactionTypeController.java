@@ -2,17 +2,16 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
 import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
 import org.jembi.bsis.backingform.validator.TransfusionReactionTypeBackingFormValidator;
 import org.jembi.bsis.controllerservice.TransfusionReactionTypeControllerService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -39,7 +38,7 @@ public class TransfusionReactionTypeController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_TRANSFUSION_REACTION_TYPES + "')")
-  public Map<String, Object> getTransfusionReactionTypeById(@PathVariable Long id) {
+  public Map<String, Object> getTransfusionReactionTypeById(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<>();
     map.put("transfusionReactionType", transfusionReactionTypeControllerService.getTransfusionReactionType(id));
     return map;
@@ -64,7 +63,7 @@ public class TransfusionReactionTypeController {
   
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_TRANSFUSION_REACTION_TYPES + "')")
-  public Map<String, Object> updateTransfusionReactionTypes(@PathVariable("id") Long transfusionReactionTypeId,
+  public Map<String, Object> updateTransfusionReactionTypes(@PathVariable("id") UUID transfusionReactionTypeId,
       @Valid @RequestBody TransfusionReactionTypeBackingForm backingForm) {
     
     backingForm.setId(transfusionReactionTypeId);

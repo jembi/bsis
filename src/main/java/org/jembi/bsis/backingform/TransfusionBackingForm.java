@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform;
 
 import java.util.Date;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class TransfusionBackingForm {
 
-  private Long id;
+  private UUID id;
 
   private String donationIdentificationNumber;
   
@@ -30,11 +31,11 @@ public class TransfusionBackingForm {
   
   private Date dateTransfused;
   
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

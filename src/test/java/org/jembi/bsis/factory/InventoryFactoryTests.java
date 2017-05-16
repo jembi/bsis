@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.LocationBuilder;
@@ -56,27 +57,32 @@ public class InventoryFactoryTests {
 
   @Mock
   private OrderFormFactory orderFormFactory;
+  
+  private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
 
   @Test
   public void testCreateInventoryViewModel_shouldReturnViewModelWithTheCorrectStateAndNoExpiryStatus() {
 
     // Setup
     Date createdOn = new Date();
-    ComponentType aComponentType = aComponentType().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentType aComponentType = aComponentType().withId(componentTypeId).build();
     Component component = aComponent()
         .withComponentType(aComponentType)
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
-        .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
+        .withLocation(LocationBuilder.aDistributionSite().withId(locationId).build())
         .withCreatedOn(createdOn)
         .withStatus(ComponentStatus.ISSUED)
         .build();   
     
     // Setup mocks
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
 
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
     when(componentTypeFactory.createViewModel(component.getComponentType()))
         .thenReturn(componentTypeViewModel);
@@ -134,22 +140,24 @@ public class InventoryFactoryTests {
 
     // Setup
     Date createdOn = new Date();
-    ComponentType aComponentType = aComponentType().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentType aComponentType = aComponentType().withId(componentTypeId).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withComponentType(aComponentType)
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
-        .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
+        .withLocation(LocationBuilder.aDistributionSite().withId(locationId).build())
         .withCreatedOn(createdOn)
         .withStatus(ComponentStatus.ISSUED)
         .build();
 
     // Setup mocks
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
 
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
 
     OrderForm orderForm = anOrderForm().withComponents(Arrays.asList(component)).build();
     List<OrderForm> orderForms = Arrays.asList(orderForm);
@@ -189,20 +197,22 @@ public class InventoryFactoryTests {
 
     // Setup
     Date createdOn = new Date();
-    ComponentType aComponentType = aComponentType().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentType aComponentType = aComponentType().withId(componentTypeId).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withComponentType(aComponentType)
         .withDonation(DonationBuilder.aDonation().withBloodAbo("A").withBloodRh("+").build())
-        .withLocation(LocationBuilder.aDistributionSite().withId(1L).build())
+        .withLocation(LocationBuilder.aDistributionSite().withId(locationId).build())
         .withCreatedOn(createdOn)
         .withStatus(ComponentStatus.ISSUED)
         .build();
 
     // Setup mocks
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
 
     InventoryFullViewModel expectedFullViewModel =
@@ -236,10 +246,10 @@ public class InventoryFactoryTests {
 
     // Setup
     Component component1 = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .build();
     Component component2 = aComponent()
-        .withId(2L)
+        .withId(COMPONENT_ID_2)
         .build();
 
     // Run test
@@ -291,7 +301,8 @@ public class InventoryFactoryTests {
     Component component = aComponent().withExpiresOn(expiresOn).withStatus(ComponentStatus.ISSUED).build();
 
     // Setup mocks
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .build();
@@ -323,7 +334,8 @@ public class InventoryFactoryTests {
     Component component = aComponent().withExpiresOn(expiresOn).withStatus(ComponentStatus.ISSUED).build();
 
     // Setup mocks.
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     when(locationFactory.createViewModel(component.getLocation())).thenReturn(locationViewModel);
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
         .build();

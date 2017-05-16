@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
@@ -40,7 +41,7 @@ public class TransfusionCRUDService {
    * @return Transfusion persisted record
    */
   public Transfusion createTransfusion(
-      Transfusion transfusion, String donationIdentificatioNumber, String transfusedComponentCode, Long transfusedComponentTypeId) {
+      Transfusion transfusion, String donationIdentificatioNumber, String transfusedComponentCode, UUID transfusedComponentTypeId) {
 
     // Transfusion data must be associated with a Component
     if (transfusion.getComponent() == null) {
@@ -57,8 +58,8 @@ public class TransfusionCRUDService {
     return transfusion;
   }
 
-  public List<Transfusion> findTransfusions(String din, String componentCode, Long componentTypeId,
-      Long receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
+  public List<Transfusion> findTransfusions(String din, String componentCode, UUID componentTypeId,
+      UUID receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
     List<Transfusion> transfusions = new ArrayList<>();
 
     if (StringUtils.isNotEmpty(din)) {
@@ -78,7 +79,7 @@ public class TransfusionCRUDService {
   }
 
   private Component getTransfusedComponent(
-      String donationIdentificationNumber, String transfusedComponentCode, Long transfusedComponentTypeId) {
+      String donationIdentificationNumber, String transfusedComponentCode, UUID transfusedComponentTypeId) {
     if (transfusedComponentCode != null) {
       // the user scanned a component code - we need to use that to get the component
       return componentRepository.findComponentByCodeAndDIN(
@@ -95,7 +96,7 @@ public class TransfusionCRUDService {
     return components.get(0);
   }
 
-  public Transfusion updateTransfusion(Transfusion transfusion,  String donationIdentificatioNumber, String transfusedComponentCode, Long transfusedComponentTypeId) {
+  public Transfusion updateTransfusion(Transfusion transfusion,  String donationIdentificatioNumber, String transfusedComponentCode) {
     Transfusion existingTransfusion = transfusionRepository.findTransfusionById(transfusion.getId());
 
     existingTransfusion.setDateTransfused(transfusion.getDateTransfused());
@@ -108,7 +109,7 @@ public class TransfusionCRUDService {
     return transfusionRepository.update(existingTransfusion);
   }
 
-  public void deleteTransfusion(Long transfusionId) throws IllegalStateException, NoResultException {
+  public void deleteTransfusion(UUID transfusionId) throws IllegalStateException, NoResultException {
     Transfusion transfusion = transfusionRepository.findTransfusionById(transfusionId);
     if (transfusion == null) {
       throw new IllegalStateException("Transfusion with id " + transfusionId

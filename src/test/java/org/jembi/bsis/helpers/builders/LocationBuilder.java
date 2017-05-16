@@ -1,11 +1,13 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
 
 public class LocationBuilder extends AbstractEntityBuilder<Location> {
 
-  private Long id;
+  private UUID id;
   private boolean venue;
   private String name = "location";
   private boolean usageSite;
@@ -20,7 +22,7 @@ public class LocationBuilder extends AbstractEntityBuilder<Location> {
   private Division divisionLevel2;
   private Division divisionLevel3;
 
-  public LocationBuilder withId(long id) {
+  public LocationBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

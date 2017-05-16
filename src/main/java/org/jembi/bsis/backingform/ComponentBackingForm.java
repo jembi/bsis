@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -14,14 +15,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ComponentBackingForm {
 
-  private Long id;
+  private UUID id;
   private Integer weight;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

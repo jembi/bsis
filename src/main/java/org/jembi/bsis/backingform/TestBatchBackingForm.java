@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
@@ -13,22 +14,22 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class TestBatchBackingForm {
 
-  private Long id;
+  private UUID id;
   private TestBatchStatus status;
   private Date createdDate;
   private Date lastUpdated;
 
   private LocationBackingForm location;
-  private List<Long> donationBatchIds = null;
+  private List<UUID> donationBatchIds = null;
 
   public TestBatchBackingForm() {
   }
   
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
   
@@ -49,11 +50,11 @@ public class TestBatchBackingForm {
     this.createdDate = createdDate;
   }
 
-  public List<Long> getDonationBatchIds() {
+  public List<UUID> getDonationBatchIds() {
     return donationBatchIds;
   }
 
-  public void setDonationBatchIds(List<Long> donationBatchIds) {
+  public void setDonationBatchIds(List<UUID> donationBatchIds) {
     this.donationBatchIds = donationBatchIds;
   }
   

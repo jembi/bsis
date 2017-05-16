@@ -1,0 +1,39 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170404-1527"  author="timler">
+
+    <addColumn tableName="DuplicateDonorBackup">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE DuplicateDonorBackup 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="DuplicateDonorBackup"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="DuplicateDonorBackup"/>
+
+    <sql>
+      UPDATE DuplicateDonorBackup 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE DuplicateDonorBackup ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="DuplicateDonorBackup"/>
+  </changeSet>
+</databaseChangeLog>

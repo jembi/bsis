@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -63,13 +64,13 @@ public class BloodTestingRepository {
    * @param reEntry                     boolean true if the results are the re-entry and false if the results are first entry
    */
   public void saveBloodTestResultsToDatabase(
-      Map<Long, String> bloodTestResultsForDonation,
+      Map<UUID, String> bloodTestResultsForDonation,
       Donation donation, Date testedOn,
       BloodTestingRuleResult ruleResult,
       boolean reEntry) {
 
-    Map<Long, BloodTestResult> mostRecentTestResults = getRecentTestResultsForDonation(donation.getId());
-    for (Long testId : bloodTestResultsForDonation.keySet()) {
+    Map<UUID, BloodTestResult> mostRecentTestResults = getRecentTestResultsForDonation(donation.getId());
+    for (UUID testId : bloodTestResultsForDonation.keySet()) {
       BloodTestResult btResult = mostRecentTestResults.get(testId);
       updateOrCreateBloodTestResult(btResult, testId, bloodTestResultsForDonation.get(testId), donation, testedOn, reEntry);
     }
@@ -79,7 +80,7 @@ public class BloodTestingRepository {
     }
   }
 
-  private BloodTestResult updateOrCreateBloodTestResult(BloodTestResult btResult, Long testId, String testResult,
+  private BloodTestResult updateOrCreateBloodTestResult(BloodTestResult btResult, UUID testId, String testResult,
       Donation donation, Date testedOn, boolean reEntry) {
 
     if (btResult == null) {
@@ -112,12 +113,11 @@ public class BloodTestingRepository {
     return btResult;
   }
 
-  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(
-      List<Long> donationBatchIds) {
+  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(List<UUID> donationBatchIds) {
 
     List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<BloodTestingRuleResult>();
 
-    for (Long donationBatchId : donationBatchIds) {
+    for (UUID donationBatchId : donationBatchIds) {
       List<Donation> donations = donationBatchRepository.findDonationsInBatch(donationBatchId);
 
       for (Donation donation : donations) {
@@ -128,7 +128,7 @@ public class BloodTestingRepository {
         }
 
         BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-            donation, new HashMap<Long, String>());
+            donation, new HashMap<UUID, String>());
         bloodTestingRuleResults.add(ruleResult);
       }
     }
@@ -136,14 +136,14 @@ public class BloodTestingRepository {
     return bloodTestingRuleResults;
   }
 
-  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatchesByBloodTestType(List<Long> donationBatchIds,
+  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatchesByBloodTestType(List<UUID> donationBatchIds,
                                                                                          BloodTestType bloodTestType) {
 
     List<BloodTestingRuleResult> bloodTestingRuleResults = getAllTestsStatusForDonationBatches(donationBatchIds);
     List<BloodTestingRuleResult> filteredRuleResults = new ArrayList<BloodTestingRuleResult>();
     for (BloodTestingRuleResult result : bloodTestingRuleResults) {
-      Map<Long, BloodTestResultViewModel> filteredModelMap = new HashMap<>();
-      for (Long key : result.getRecentTestResults().keySet()) {
+      Map<UUID, BloodTestResultViewModel> filteredModelMap = new HashMap<>();
+      for (UUID key : result.getRecentTestResults().keySet()) {
         BloodTestResultViewModel model = result.getRecentTestResults().get(key);
         if (model.getBloodTest().getBloodTestType().equals(bloodTestType)) {
           filteredModelMap.put(key, model);
@@ -157,16 +157,13 @@ public class BloodTestingRepository {
     return bloodTestingRuleResults;
   }
 
-  public BloodTestingRuleResult getAllTestsStatusForDonation(
-      Long donationId) {
-    Donation donation = donationRepository
-        .findDonationById(donationId);
-    return ruleEngine.applyBloodTests(donation,
-        new HashMap<Long, String>());
+  public BloodTestingRuleResult getAllTestsStatusForDonation(UUID donationId) {
+    Donation donation = donationRepository.findDonationById(donationId);
+    return ruleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
   }
 
-  public Map<Long, BloodTestResult> getRecentTestResultsForDonation(
-      Long donationId) {
+  public Map<UUID, BloodTestResult> getRecentTestResultsForDonation(
+      UUID donationId) {
     String queryStr = "SELECT btr FROM BloodTestResult btr WHERE "
         + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
         + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted";
@@ -177,9 +174,9 @@ public class BloodTestingRepository {
     query.setParameter("isActive",true);
     query.setParameter("isDeleted", false);
     List<BloodTestResult> bloodTestResults = query.getResultList();
-    Map<Long, BloodTestResult> recentBloodTestResults = new HashMap<Long, BloodTestResult>();
+    Map<UUID, BloodTestResult> recentBloodTestResults = new HashMap<>();
     for (BloodTestResult bt : bloodTestResults) {
-      Long bloodTestId = bt.getBloodTest().getId();
+      UUID bloodTestId = bt.getBloodTest().getId();
       BloodTestResult existingBloodTestResult = recentBloodTestResults
           .get(bloodTestId);
       if (existingBloodTestResult == null) {

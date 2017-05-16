@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
@@ -42,6 +43,7 @@ public class LabellingServiceTests extends UnitTestSuite {
   private static final String PREPARATION_INFO = "Prepared from 450 ±50ml";
   private static final String STORAGE_INFO = "Store below -30°C";
   private static final String TRANSPORT_INFO = "Transport below -25°C";
+  private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1");
 
   @Spy
   @InjectMocks
@@ -64,6 +66,8 @@ public class LabellingServiceTests extends UnitTestSuite {
   
   @Mock
   private ComponentRepository componentRepository;
+  
+  private static final UUID COMPONENT_ID = UUID.randomUUID();
 
   @Test
   public void testVerifyPackLabelWithValidInputs_shouldReturnTrue() {
@@ -73,13 +77,13 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withFlagCharacters("11")
         .build();
     Component component = aComponent()
-      .withId(1L)
+      .withId(COMPONENT_ID)
       .withDonation(donation)
       .withStatus(ComponentStatus.AVAILABLE)
       .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
       .build();
     Component componentInStock = aComponent()
-      .withId(1L)
+      .withId(COMPONENT_ID)
       .withDonation(donation)
       .withStatus(ComponentStatus.AVAILABLE)
       .withInventoryStatus(InventoryStatus.IN_STOCK)
@@ -87,7 +91,7 @@ public class LabellingServiceTests extends UnitTestSuite {
       .build();
 
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(componentCRUDService.putComponentInStock(component)).thenReturn(componentInStock);
 
     // run test
@@ -106,14 +110,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withFlagCharacters("11")
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withStatus(ComponentStatus.PROCESSED)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
   
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
   
     // run test
     boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "3000505", "300050511");
@@ -131,14 +135,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withFlagCharacters("11")
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
 
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
 
     // run test
     boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "1234567", "300050511");
@@ -156,14 +160,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withFlagCharacters("11")
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
 
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
 
     // run test
     boolean dinMatches = labellingService.verifyPackLabel(component.getId(), "3000505", "123456789");
@@ -176,21 +180,20 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Test
   public void testPrintDiscardLabel_shouldReturnZPLContainingText() throws Exception {
     // set up data
-    Long componentId = Long.valueOf(1);
     Component component = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.SERVICE_INFO_LINE_1)).thenReturn("Line 1");
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.SERVICE_INFO_LINE_2)).thenReturn("Line 2");
 
     // run test
-    String label = labellingService.printDiscardLabel(componentId);
+    String label = labellingService.printDiscardLabel(COMPONENT_ID);
     
     // check outcome
     assertThat(label, label.contains("3001"));
@@ -201,25 +204,24 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Test
   public void testPrintDiscardLabel_shouldReturnZPLContainingDin() throws Exception {
     // set up data
-    Long componentId = Long.valueOf(1);
     String donationIdentificationNumber = "1234567";
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .build();
     Component component = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
 
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
 
     // run test
-    String label = labellingService.printDiscardLabel(componentId);
+    String label = labellingService.printDiscardLabel(COMPONENT_ID);
 
     // check outcome
     assertThat(label, label.contains(donationIdentificationNumber));
@@ -228,30 +230,28 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Test(expected = IllegalArgumentException.class)
   public void testPrintDiscardLabel_throwsException() throws Exception {
     // set up data
-    Long componentId = Long.valueOf(1);
     Component component = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.AVAILABLE)
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(false);
     
     // run test
-    labellingService.printDiscardLabel(componentId);
+    labellingService.printDiscardLabel(COMPONENT_ID);
   }
   
   @Test
   public void testPrintPackLabelWithPositiveRhBlood_shouldReturnZPLContainingText() throws Exception {
     // set up data
-    Long donationId = Long.valueOf(1);
     String bloodAbo = "A";
     String bloodRh = "+";
     String donationIdentificationNumber = "1234567";
     Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(donationId)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
@@ -265,11 +265,11 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withStorageInfo(STORAGE_INFO)
         .withTransportInfo(TRANSPORT_INFO)
         .build();
-    Long componentId = Long.valueOf(1);
+
     String componentCode = "123";
     Date expiresOn = new DateTime().plusDays(90).toDate();
     Component component = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
@@ -279,7 +279,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .build();
 
     Component componentRemoved = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.REMOVED)
@@ -289,14 +289,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentRemoved);
 
     // run test
-    String label = labellingService.printPackLabel(componentId);
+    String label = labellingService.printPackLabel(COMPONENT_ID);
     
     // check outcome
     assertThat(label, label.contains(donationIdentificationNumber));
@@ -313,13 +313,12 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Test
   public void testPrintPackLabelWithNegativeRhBlood_shouldReturnZPLContainingText() throws Exception {
     // set up data
-    Long donationId = Long.valueOf(1);
     String bloodAbo = "A";
     String bloodRh = "-";
     String donationIdentificationNumber = "1234567";
     Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(donationId)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
@@ -333,11 +332,11 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withStorageInfo(STORAGE_INFO)
         .withTransportInfo(TRANSPORT_INFO)
         .build();
-    Long componentId = Long.valueOf(1);
+
     String componentCode = "123";
     Date expiresOn = new DateTime().plusDays(90).toDate();
     Component component = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
@@ -347,7 +346,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .build();
 
     Component componentRemoved = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.REMOVED)
@@ -357,14 +356,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(componentRemoved);
     
     // run test
-    String label = labellingService.printPackLabel(componentId);
+    String label = labellingService.printPackLabel(COMPONENT_ID);
     
     // check outcome
     assertThat(label, label.contains(donationIdentificationNumber));
@@ -381,13 +380,12 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Test
   public void testPrintPackLabelWithInStockComponent_shouldMarkAsNotInStock() throws Exception {
     // set up data
-    Long donationId = Long.valueOf(1);
     String bloodAbo = "A";
     String bloodRh = "-";
     String donationIdentificationNumber = "1234567";
     Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(donationId)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
@@ -401,11 +399,11 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withStorageInfo(STORAGE_INFO)
         .withTransportInfo(TRANSPORT_INFO)
         .build();
-    Long componentId = Long.valueOf(1);
+    
     String componentCode = "123";
     Date expiresOn = new DateTime().plusDays(90).toDate();
     Component component = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
@@ -415,7 +413,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .build();
     
     Component labelledComponent = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.REMOVED)
@@ -426,14 +424,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(componentCRUDService.removeComponentFromStock(argThat(hasSameStateAsComponent(component)))).thenReturn(labelledComponent);
 
     // run test
-    labellingService.printPackLabel(componentId);
+    labellingService.printPackLabel(COMPONENT_ID);
     
     // check outcome
     verify(componentCRUDService).removeComponentFromStock(argThat(hasSameStateAsComponent(component)));
@@ -442,20 +440,19 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Test(expected = IllegalArgumentException.class)
   public void testPrintPackLabel_throwsException() throws Exception {
     // set up data
-    Long componentId = Long.valueOf(1);
     String donationIdentificationNumber = "1234567";
     Component component = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withStatus(ComponentStatus.EXPIRED)
         .withDonation(aDonation().withDonationIdentificationNumber(donationIdentificationNumber).build())
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(false);
     
     // run test
-    labellingService.printPackLabel(componentId);
+    labellingService.printPackLabel(COMPONENT_ID);
   }
   
   @Test
@@ -470,21 +467,21 @@ public class LabellingServiceTests extends UnitTestSuite {
     ComponentType componentType = aComponentType().withComponentTypeName("name").build();
     Date expiresOn = new DateTime().plusDays(90).toDate();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(true);
     
     // run test
-    String label = labellingService.printPackLabel(1L);
+    String label = labellingService.printPackLabel(COMPONENT_ID);
 
     // check outcome
     assertThat(label, label.contains("HIGH TITRE"));
@@ -502,21 +499,21 @@ public class LabellingServiceTests extends UnitTestSuite {
     ComponentType componentType = aComponentType().withComponentTypeName("name").build();
     Date expiresOn = new DateTime().plusDays(90).toDate();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withComponentType(componentType)
         .withExpiresOn(expiresOn)
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(labellingService.shouldLabelIncludeHighTitre(component)).thenReturn(false);
     
     // run test
-    String label = labellingService.printPackLabel(1L);
+    String label = labellingService.printPackLabel(COMPONENT_ID);
 
     // check outcome
     assertThat(label, !label.contains("HIGH TITRE"));
@@ -534,7 +531,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withGravity(1.03)
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withComponentType(componentType)
         .withExpiresOn(new Date())
@@ -542,7 +539,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .build();
 
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
@@ -550,7 +547,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(componentVolumeService.calculateVolume(component)).thenReturn(327);
 
     // run test
-    String label = labellingService.printPackLabel(1L);
+    String label = labellingService.printPackLabel(COMPONENT_ID);
 
     // check outcome
     assertThat(label, label.contains("Volume: 327ml"));
@@ -568,7 +565,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withGravity(1.03)
         .build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withDonation(donation)
         .withComponentType(componentType)
         .withExpiresOn(new Date())
@@ -576,7 +573,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .build();
 
     // set up mocks
-    when(componentCRUDService.findComponentById(1L)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
@@ -584,7 +581,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(componentVolumeService.calculateVolume(component)).thenReturn(null);
 
     // run test
-    String label = labellingService.printPackLabel(1L);
+    String label = labellingService.printPackLabel(COMPONENT_ID);
 
     // check outcome
     assertThat(label.contains("Volume"), is(false));
@@ -667,7 +664,7 @@ public class LabellingServiceTests extends UnitTestSuite {
     String bloodRh = "-";
     Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(1L)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber("3000505")
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
@@ -680,11 +677,11 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withStorageInfo(STORAGE_INFO)
         .withTransportInfo(TRANSPORT_INFO)
         .build();
-    Long componentId = Long.valueOf(1);
+
     String componentCode = "123";
     Date expiresOn = new DateTime().plusDays(90).toDate();    
     Component labelledComponent = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
@@ -693,7 +690,7 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withExpiresOn(expiresOn)
         .build();
     
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(labelledComponent);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(labelledComponent);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(labelledComponent)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
@@ -710,14 +707,13 @@ public class LabellingServiceTests extends UnitTestSuite {
   @Test
   public void testPrintPackLabelWithFlagCharacters34AndCheckCharacterY_shouldReturnZPLContainingText() throws Exception {
     // set up data
-    Long donationId = Long.valueOf(1);
     String bloodAbo = "A";
     String bloodRh = "+";
     String donationIdentificationNumber = "123456789102345678";
     String flagCharacters = "34";
     Date donationDate = new Date();
     Donation donation = aDonation()
-        .withId(donationId)
+        .withId(DONATION_ID)
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withDonationDate(donationDate)
         .withBloodAbo(bloodAbo)
@@ -731,11 +727,11 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withStorageInfo(STORAGE_INFO)
         .withTransportInfo(TRANSPORT_INFO)
         .build();
-    Long componentId = Long.valueOf(1);
+
     String componentCode = "123";
     Date expiresOn = new DateTime().plusDays(90).toDate();
     Component component = aComponent()
-        .withId(componentId)
+        .withId(COMPONENT_ID)
         .withComponentCode(componentCode)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
@@ -745,14 +741,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .build();
     
     // set up mocks
-    when(componentCRUDService.findComponentById(componentId)).thenReturn(component);
+    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintPackLabelWithConsistencyChecks(component)).thenReturn(true);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_FORMAT)).thenReturn(DATE_FORMAT);
     when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.DATE_TIME_FORMAT)).thenReturn(DATE_TIME_FORMAT);
     when(componentCRUDService.putComponentInStock(component)).thenReturn(component);
     when(checkCharacterService.calculateCheckCharacter("34")).thenReturn("Y");
     // run test
-    String label = labellingService.printPackLabel(componentId);
+    String label = labellingService.printPackLabel(COMPONENT_ID);
     
     // check outcome
     assertThat(label, label.contains(donationIdentificationNumber + flagCharacters));
@@ -765,14 +761,17 @@ public class LabellingServiceTests extends UnitTestSuite {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("a+");
     bloodGroups.add("a-");
-    
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
     // set up mocks
-    when(componentRepository.findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null, false))
+    when(componentRepository.findSafeComponents(componentTypeId, locationId, BloodGroup.toBloodGroups(bloodGroups),
+        null, null, null, false))
         .thenReturn(null);
     // run test
-    labellingService.findSafeComponentsToLabel(null, null, 1L, 1L, bloodGroups, null, null, null);
+    labellingService.findSafeComponentsToLabel(null, null, componentTypeId, locationId, bloodGroups, null, null, null);
     // verify
-    verify(componentRepository).findSafeComponents(1L, 1L, BloodGroup.toBloodGroups(bloodGroups), null, null, null,
+    verify(componentRepository).findSafeComponents(componentTypeId, locationId, BloodGroup.toBloodGroups(bloodGroups),
+        null, null, null,
         false);
   }
 

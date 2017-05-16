@@ -1,48 +1,37 @@
 package org.jembi.bsis.backingform;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.validation.Valid;
-
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
-import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReasonCategory;
+import java.util.UUID;
 
 public class DiscardReasonBackingForm {
-
-  @Valid
-  @JsonIgnore
-  private ComponentStatusChangeReason discardReason;
+  
+  private UUID id;
+  private String reason;
+  private Boolean isDeleted;
 
   public DiscardReasonBackingForm() {
-    discardReason = new ComponentStatusChangeReason();
-    discardReason.setCategory(ComponentStatusChangeReasonCategory.DISCARDED);
-  }
-
-  public ComponentStatusChangeReason getDiscardReason() {
-    return discardReason;
   }
 
   public String getReason() {
-    return discardReason.getStatusChangeReason();
+    return reason;
   }
 
-  public Long getId() {
-    return discardReason.getId();
+  public UUID getId() {
+    return id;
   }
 
-  public void setDiscardReason(ComponentStatusChangeReason discardReason) {
-    this.discardReason = discardReason;
+  public Boolean getIsDeleted() {
+    return isDeleted;
   }
 
-  public void setId(Long id) {
-    discardReason.setId(id);
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   public void setReason(String reason) {
-    discardReason.setStatusChangeReason(reason);
+    this.reason = reason;
   }
 
   public void setIsDeleted(Boolean isDeleted) {
-    discardReason.setIsDeleted(isDeleted);
+    this.isDeleted = isDeleted;
   }
 }

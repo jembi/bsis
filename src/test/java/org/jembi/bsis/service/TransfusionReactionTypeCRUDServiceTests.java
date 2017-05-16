@@ -8,6 +8,8 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
 import org.jembi.bsis.repository.TransfusionReactionTypeRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
@@ -41,7 +43,7 @@ public class TransfusionReactionTypeCRUDServiceTests extends UnitTestSuite {
   
   @Test
   public void testUpdateTransfusionReactionType_shouldUpdateCorrectly() {
-    long id = 282L;
+    UUID id = UUID.randomUUID();
     TransfusionReactionType existingTransfusionReactionType = aTransfusionReactionType()
       .withId(id)
       .withName("Test Name")

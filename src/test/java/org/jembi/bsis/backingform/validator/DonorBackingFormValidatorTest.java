@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DonorBackingForm;
 import org.jembi.bsis.helpers.builders.FormFieldBuilder;
@@ -45,17 +46,18 @@ public class DonorBackingFormValidatorTest {
 
   private DonorBackingForm getBaseDonorBackingForm() throws ParseException {
     PreferredLanguage preferredLanguage = new PreferredLanguage();
-    preferredLanguage.setId(1l);
+    UUID preferredLanguageId = UUID.randomUUID();
+    preferredLanguage.setId(preferredLanguageId);
     preferredLanguage.setPreferredLanguage("English");
     Date validBirthDate = CustomDateFormatter.getDateFromString("1977-10-20");
     DonorBackingForm donorForm = new DonorBackingForm();
-    donorForm.setId(1l);
+    donorForm.setId(UUID.randomUUID());
     donorForm.setBirthDate(validBirthDate);
     donorForm.setDonorNumber("DIN123");
     donorForm.setFirstName("First");
     donorForm.setLastName("Last");
     donorForm.setGender(Gender.female);
-    donorForm.setVenue(aLocationBackingForm().withId(1l).withName("Venue").thatIsVenue().build());
+    donorForm.setVenue(aLocationBackingForm().withId(UUID.randomUUID()).withName("Venue").thatIsVenue().build());
     donorForm.setPreferredLanguage(preferredLanguage);
     return donorForm;
   }
@@ -82,7 +84,7 @@ public class DonorBackingFormValidatorTest {
     DonorBackingForm donorForm = getBaseDonorBackingForm();
 
     Donor donor = new Donor();
-    donor.setId(2l);
+    donor.setId(UUID.randomUUID());
 
     // set up mocks
     when(formFieldRepository.getRequiredFormFields("donor")).thenReturn(Arrays.asList(requiredFields));
@@ -104,7 +106,7 @@ public class DonorBackingFormValidatorTest {
     donorForm.setDonorNumber("");
 
     Donor donor = new Donor();
-    donor.setId(2l);
+    donor.setId(UUID.randomUUID());
 
     FormField donorNumberFormField = FormFieldBuilder.aFormField().withAutoGenerate(true).build();
 

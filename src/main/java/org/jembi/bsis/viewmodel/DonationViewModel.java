@@ -3,6 +3,7 @@ package org.jembi.bsis.viewmodel;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
@@ -11,7 +12,7 @@ import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.utils.CustomDateFormatter;
 
-public class DonationViewModel extends BaseViewModel {
+public class DonationViewModel extends BaseViewModel<UUID> {
 
   private Date donationDate;
   private String donationIdentificationNumber;

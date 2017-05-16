@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,7 +22,7 @@ public class BloodTestResultRepository extends AbstractRepository<BloodTestResul
   @PersistenceContext
   private EntityManager entityManager;
 
-  public int countBloodTestResultsForDonation(long donationId) {
+  public int countBloodTestResultsForDonation(UUID donationId) {
     return entityManager.createNamedQuery(
         BloodTestResultNamedQueryConstants.NAME_COUNT_BLOOD_TEST_RESULTS_FOR_DONATION, 
         Number.class)
@@ -56,6 +57,7 @@ public class BloodTestResultRepository extends AbstractRepository<BloodTestResul
         .setParameter("endDate", endDate)
         .setParameter("donationDeleted", false)
         .setParameter("testOutcomeDeleted", false)
+        .setParameter("bloodTestDeleted", false)
         .setParameter("released", true)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
         .getResultList();
@@ -84,7 +86,7 @@ public class BloodTestResultRepository extends AbstractRepository<BloodTestResul
         .setParameter("testOutcomeDeleted", false)
         .setParameter("released", true)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
-        .setParameter("ttiStatus", TTIStatus.TTI_UNSAFE)
+        .setParameter("ttiStatus", TTIStatus.UNSAFE)
         .getResultList();
   }
 }

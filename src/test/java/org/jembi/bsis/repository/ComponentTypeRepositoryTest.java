@@ -2,6 +2,7 @@ package org.jembi.bsis.repository;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -49,25 +50,25 @@ public class ComponentTypeRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testIsComponentTypeValidTrue() throws Exception {
-    boolean valid = componentTypeRepository.verifyComponentTypeExists(1L);
+    boolean valid = componentTypeRepository.verifyComponentTypeExists(UUID.fromString("99a61311-1234-4321-b3ea-39e11c2c5801"));
     Assert.assertTrue("Is a valid ComponentType", valid);
   }
 
   @Test
   public void testIsComponentTypeValidFalse() throws Exception {
-    boolean valid = componentTypeRepository.verifyComponentTypeExists(56L);
+    boolean valid = componentTypeRepository.verifyComponentTypeExists(UUID.fromString("99a61311-1234-4321-b3ea-39e11c2c5856"));
     Assert.assertFalse("Is not a valid ComponentType", valid);
   }
 
   @Test
   public void testIsComponentTypeValidDeleted() throws Exception {
-    boolean valid = componentTypeRepository.verifyComponentTypeExists(17L);
+    boolean valid = componentTypeRepository.verifyComponentTypeExists(UUID.fromString("99a61311-1234-4321-b3ea-39e11c2c5817"));
     Assert.assertFalse("Is not a valid ComponentType", valid);
   }
 
   @Test
   public void testGetComponentTypeById() throws Exception {
-    ComponentType one = componentTypeRepository.getComponentTypeById(1l);
+    ComponentType one = componentTypeRepository.getComponentTypeById(UUID.fromString("99a61311-1234-4321-b3ea-39e11c2c5801"));
     Assert.assertNotNull("There is a ComponentType", one);
     Assert.assertEquals("ComponentType matches", "Whole Blood Single Pack - CPDA", one.getComponentTypeName());
   }
@@ -75,7 +76,7 @@ public class ComponentTypeRepositoryTest extends DBUnitContextDependentTestSuite
   @Test
   @Transactional
   public void testGetComponentTypeByIdUnknown() throws Exception {
-    ComponentType one = componentTypeRepository.getComponentTypeById(123l);
+    ComponentType one = componentTypeRepository.getComponentTypeById(UUID.fromString("99a61311-1234-4321-b3ea-39e11c2c5123"));
     Assert.assertNull("There is no ComponentType", one);
   }
 
@@ -97,10 +98,10 @@ public class ComponentTypeRepositoryTest extends DBUnitContextDependentTestSuite
 
   @Test
   public void testUpdateComponentType() throws Exception {
-    ComponentType existingComponentType = componentTypeRepository.getComponentTypeById(1l);
+    ComponentType existingComponentType = componentTypeRepository.getComponentTypeById(UUID.fromString("99a61311-1234-4321-b3ea-39e11c2c5801"));
     existingComponentType.setDescription("Junit");
     componentTypeRepository.updateComponentType(existingComponentType);
-    ComponentType updatedComponentType = componentTypeRepository.getComponentTypeById(1l);
+    ComponentType updatedComponentType = componentTypeRepository.getComponentTypeById(UUID.fromString("99a61311-1234-4321-b3ea-39e11c2c5801"));
     Assert.assertEquals("Description has been updated", "Junit", updatedComponentType.getDescription());
   }
 }

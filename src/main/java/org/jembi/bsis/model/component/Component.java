@@ -27,13 +27,13 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.jembi.bsis.constraintvalidator.ComponentStatusIsConsistent;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.usage.ComponentUsage;
 import org.jembi.bsis.repository.ComponentNamedQueryConstants;
 import org.jembi.bsis.repository.InventoryNamedQueryConstants;
 
@@ -74,7 +74,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Audited
 @ComponentStatusIsConsistent
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Component extends BaseModificationTrackerEntity {
+public class Component extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -117,9 +117,6 @@ public class Component extends BaseModificationTrackerEntity {
 
   @OneToOne(optional = true)
   private Component parentComponent;
-
-  @OneToOne(mappedBy = "component")
-  private ComponentUsage usage;
 
   @ManyToOne
   private ComponentBatch componentBatch;
@@ -232,14 +229,6 @@ public class Component extends BaseModificationTrackerEntity {
       statusChanges = new TreeSet<>();
     }
     statusChanges.add(statusChange);
-  }
-
-  public ComponentUsage getUsage() {
-    return usage;
-  }
-
-  public void setUsage(ComponentUsage usage) {
-    this.usage = usage;
   }
 
   public String getSubdivisionCode() {

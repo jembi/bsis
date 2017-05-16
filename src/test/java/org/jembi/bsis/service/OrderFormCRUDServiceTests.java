@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
@@ -29,7 +30,7 @@ import org.mockito.Mock;
 
 public class OrderFormCRUDServiceTests extends UnitTestSuite {
   
-  private static final Long ORDER_FORM_ID = 17L;
+  private static final UUID ORDER_FORM_ID = UUID.randomUUID();
   
   @InjectMocks
   private OrderFormCRUDService orderFormCRUDService;
@@ -85,7 +86,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     Date orderDate = new Date();
     Location dispatchedFrom = aDistributionSite().build();
     Location dispatchedTo = aDistributionSite().build();
-    OrderFormItem orderFormItem = anOrderItemForm().withId(7L).build();
+    OrderFormItem orderFormItem = anOrderItemForm().withId(UUID.randomUUID()).build();
     Component component = aComponent().build();
     
     OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withCreatedDate(createdDate).build();
@@ -169,6 +170,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdatePatientRequestOrderForm_shouldUpdateFieldsCorrectly() {
     // Fixture
+    Date orderDate = new Date();
     Date createdDate = new Date();
     Location dispatchedFrom = aDistributionSite().build();
     Location dispatchedTo = aUsageSite().build();
@@ -178,6 +180,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     OrderForm orderForm = anOrderForm()
         .withId(ORDER_FORM_ID)
         .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderDate(orderDate)
         .withOrderType(OrderType.PATIENT_REQUEST)
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)
@@ -187,6 +190,7 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
         .withId(ORDER_FORM_ID)
         .withCreatedDate(createdDate)
         .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderDate(orderDate)
         .withOrderType(OrderType.PATIENT_REQUEST)
         .withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo)

@@ -1,5 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.DeferralReasonBackingForm;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.donordeferral.DurationType;
@@ -9,7 +11,7 @@ public class DeferralReasonBackingFormBuilder {
   private DeferralReason deferralReason = new DeferralReason();
   private int defaultDuration;
   private DurationType durationType = DurationType.TEMPORARY;
-  private Long id;
+  private UUID id;
 
   public DeferralReasonBackingFormBuilder withDeferralReason(DeferralReason deferralReason) {
     this.deferralReason = deferralReason;
@@ -26,7 +28,7 @@ public class DeferralReasonBackingFormBuilder {
     return this;
   }
 
-  public DeferralReasonBackingFormBuilder withId(long id) {
+  public DeferralReasonBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

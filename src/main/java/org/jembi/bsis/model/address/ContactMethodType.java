@@ -3,11 +3,11 @@ package org.jembi.bsis.model.address;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseUUIDEntity;
 
 
 @Entity
-public class ContactMethodType extends BaseEntity {
+public class ContactMethodType extends BaseUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

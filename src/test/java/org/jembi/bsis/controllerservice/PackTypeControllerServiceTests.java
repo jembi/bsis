@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.PackTypeBackingForm;
 import org.jembi.bsis.factory.PackTypeFactory;
@@ -34,9 +35,14 @@ public class PackTypeControllerServiceTests extends UnitTestSuite {
   @Test
   public void testGetAllPackTypes_shouldFindAndReturnAllPackTypes() {
     // Set up
-    List<PackType> packTypes = Arrays.asList(aPackType().withId(1L).build(), aPackType().withId(2L).build());
-    List<PackTypeFullViewModel> expectedPackTypeViewModels = Arrays.asList(aPackTypeViewFullModel().withId(1L).build(),
-        aPackTypeViewFullModel().withId(2L).build());
+    UUID packTypeId1 = UUID.randomUUID();
+    UUID packTypeId2 = UUID.randomUUID();
+    List<PackType> packTypes = Arrays.asList(
+        aPackType().withId(packTypeId1).build(), 
+        aPackType().withId(packTypeId2).build());
+    List<PackTypeFullViewModel> expectedPackTypeViewModels = Arrays.asList(
+        aPackTypeViewFullModel().withId(packTypeId1).build(),
+        aPackTypeViewFullModel().withId(packTypeId2).build());
 
     // Mock
     when(packTypeRepository.getAllPackTypes()).thenReturn(packTypes);
@@ -52,7 +58,7 @@ public class PackTypeControllerServiceTests extends UnitTestSuite {
   @Test
   public void testGetPackTypeById_shouldFindAndReturnPackType() {
     // Set up
-    long packTypeId = 88L;
+    UUID packTypeId = UUID.randomUUID();
     PackType packType = aPackType().withId(packTypeId).build();
     PackTypeFullViewModel expectedPackTypeViewModel = aPackTypeViewFullModel().withId(packTypeId).build();
     
@@ -70,9 +76,10 @@ public class PackTypeControllerServiceTests extends UnitTestSuite {
   @Test
   public void testCreatePackType_shouldCreateAndReturnPackType() {
     // Set up
+    UUID packTypeId = UUID.randomUUID();
     PackTypeBackingForm packTypeBackingForm = aPackTypeBackingForm().withPackType("Test").build();
     PackType packTypeFromBackingForm = aPackType().withPackType("Test").build();
-    PackType createdPackType = aPackType().withId(1L).withPackType("Test").build();
+    PackType createdPackType = aPackType().withId(packTypeId).withPackType("Test").build();
     PackTypeFullViewModel expectedPackTypeViewModel = aPackTypeViewFullModel().withPackType("Test").build();
     
     // Mock
@@ -90,9 +97,10 @@ public class PackTypeControllerServiceTests extends UnitTestSuite {
   @Test
   public void testupdatePackType_shouldUpdateAndReturnPackType() {
     // Set up
+    UUID packTypeId = UUID.randomUUID();
     PackTypeBackingForm packTypeBackingForm = aPackTypeBackingForm().withPackType("Test").build();
-    PackType packTypeFromBackingForm = aPackType().withId(1L).withPackType("Test").build();
-    PackType updatedPackType = aPackType().withId(1L).withPackType("Test").build();
+    PackType packTypeFromBackingForm = aPackType().withId(packTypeId).withPackType("Test").build();
+    PackType updatedPackType = aPackType().withId(packTypeId).withPackType("Test").build();
     PackTypeFullViewModel expectedPackTypeViewModel = aPackTypeViewFullModel().withPackType("Test").build();
     
     // Mock

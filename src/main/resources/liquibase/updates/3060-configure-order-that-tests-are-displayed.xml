@@ -1,0 +1,97 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+  <changeSet id="20170420-1546" author="tumijacob">
+  <comment>This change set update BloodTest table with correct rankInCategory. </comment>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="1"/>
+      <where>testName = 'ABO'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="2"/>
+      <where>testName = 'Rh'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="3"/>
+      <where>testName = 'Titre'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="4"/>
+      <where>testName = 'Antibody Screen'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="5"/>
+      <where>testName = 'ABO Repeat 1'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="6"/>
+      <where>testName = 'Rh Repeat 1'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="1"/>
+      <where>testName = 'HIV'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="2"/>
+      <where>testName = 'HBV'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="3"/>
+      <where>testName = 'HCV'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="4"/>
+      <where>testName = 'Syphilis'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="13"/>
+      <where>testName = 'HIV Confirmatory'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="14"/>
+      <where>testName = 'HBV Confirmatory'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="15"/>
+      <where>testName = 'HCV Confirmatory'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="16"/>
+      <where>testName = 'Syphilis Confirmatory'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="5"/>
+      <where>testName = 'HIV Repeat 1'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="6"/>
+      <where>testName = 'HIV Repeat 2'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="7"/>
+      <where>testName = 'HBV Repeat 1'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="8"/>
+      <where>testName = 'HBV Repeat 2'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="9"/>
+      <where>testName = 'HCV Repeat 1'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="10"/>
+      <where>testName = 'HCV Repeat 2'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="11"/>
+      <where>testName = 'Syphilis Repeat 1'</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="rankInCategory" valueNumeric="12"/>
+      <where>testName = 'Syphilis Repeat 2'</where>
+    </update>
+  </changeSet>
+</databaseChangeLog>

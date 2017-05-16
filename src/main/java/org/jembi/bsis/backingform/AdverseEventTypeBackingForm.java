@@ -1,20 +1,22 @@
 package org.jembi.bsis.backingform;
 
+import java.util.UUID;
+
 import javax.validation.constraints.NotNull;
 
 public class AdverseEventTypeBackingForm {
 
-  private Long id;
+  private UUID id;
   @NotNull
   private String name;
   private String description;
   private boolean isDeleted;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

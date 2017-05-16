@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.RoleBackingForm;
 import org.jembi.bsis.backingform.UserBackingForm;
@@ -269,7 +270,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setModifyPassword(true);
 
     User anotherAdminUser = UserBuilder.aUser()
-        .withId(2l)
+        .withId(UUID.randomUUID())
         .withUsername("aadmin")
         .withPasswordReset()
         .build();
@@ -300,7 +301,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setModifyPassword(true);
 
     User anotherAdminUser = UserBuilder.aUser()
-        .withId(2l)
+        .withId(UUID.randomUUID())
         .withUsername("aadmin")
         .withPasswordReset()
         .build();
@@ -332,7 +333,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setModifyPassword(true);
 
     User anotherAdminUser = UserBuilder.aUser()
-        .withId(2l)
+        .withId(UUID.randomUUID())
         .withUsername("aadmin")
         .withPasswordReset()
         .build();
@@ -364,7 +365,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
     form.setModifyPassword(true);
 
     User anotherAdminUser = UserBuilder.aUser()
-        .withId(2l)
+        .withId(UUID.randomUUID())
         .withUsername("aadmin")
         .withPasswordReset()
         .build();
@@ -387,7 +388,7 @@ public class UserBackingFormValidatorTest extends UnitTestSuite {
   public void testUpdateWithManagePasswordChange() throws Exception {
     // set up data
     UserBackingForm form = new UserBackingForm();
-    form.setId(2l);
+    form.setId(UUID.randomUUID());
     form.setUsername("datacapturer");
     form.setPassword("newPassword");
     form.setConfirmPassword("newPassword");

@@ -3,29 +3,27 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.order.OrderForm;
 
-public class OrderFormMatcher extends TypeSafeMatcher<OrderForm> {
-
-  private OrderForm expected;
+public class OrderFormMatcher extends AbstractTypeSafeMatcher<OrderForm> {
 
   public OrderFormMatcher(OrderForm expected) {
     this.expected = expected;
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("An order form entity with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nCreated Date: ").appendValue(expected.getCreatedDate())
-        .appendText("\nStatus: ").appendValue(expected.getStatus())
-        .appendText("\nType: ").appendValue(expected.getType())
-        .appendText("\nOrder Date: ").appendValue(expected.getOrderDate())
-        .appendText("\nDispatched From: ").appendValue(expected.getDispatchedFrom())
-        .appendText("\nDispatched To: ").appendValue(expected.getDispatchedTo())
-        .appendText("\nItems: ").appendValue(expected.getItems())
-        .appendText("\nComponents: ").appendValue(expected.getComponents());
+  public void appendDescription(Description description, OrderForm orderForm) {
+    description.appendText("An OrderForm with the following state:")
+        .appendText("\nId: ").appendValue(orderForm.getId())
+        .appendText("\nCreated Date: ").appendValue(orderForm.getCreatedDate())
+        .appendText("\nStatus: ").appendValue(orderForm.getStatus())
+        .appendText("\nType: ").appendValue(orderForm.getType())
+        .appendText("\nOrder Date: ").appendValue(orderForm.getOrderDate())
+        .appendText("\nDispatched From: ").appendValue(orderForm.getDispatchedFrom())
+        .appendText("\nDispatched To: ").appendValue(orderForm.getDispatchedTo())
+        .appendText("\nItems: ").appendValue(orderForm.getItems())
+        .appendText("\nComponents: ").appendValue(orderForm.getComponents())
+        .appendText("\nIs deleted: ").appendValue(orderForm.getIsDeleted());
   }
   
   @Override

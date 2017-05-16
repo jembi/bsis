@@ -2,6 +2,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -47,7 +48,7 @@ public class DonationTypesController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_TYPES + "')")
-  public Map<String, Object> getDonationType(@PathVariable Long id) {
+  public Map<String, Object> getDonationType(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donationType", donationTypeControllerService.getDonationType(id));
     return map;
@@ -62,7 +63,7 @@ public class DonationTypesController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DONATION_TYPES + "')")
-  public Map<String, Object> updateDonationType(@Valid @RequestBody DonationTypeBackingForm form, @PathVariable Long id) {
+  public Map<String, Object> updateDonationType(@Valid @RequestBody DonationTypeBackingForm form, @PathVariable UUID id) {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donationType", donationTypeControllerService.updateDonationType(id, form));
     return map;

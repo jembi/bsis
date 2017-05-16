@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.AdverseEventBuilder;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
@@ -38,7 +39,7 @@ import org.mockito.Mock;
 
 public class DonationConstraintCheckerTests extends UnitTestSuite {
 
-  private static final long IRRELEVANT_DONATION_ID = 17;
+  private static final UUID IRRELEVANT_DONATION_ID = UUID.randomUUID();
 
   @InjectMocks
   private DonationConstraintChecker donationConstraintChecker;
@@ -161,7 +162,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationHasDiscrepanciesWithNoDiscrepancies_shouldReturnFalse() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
@@ -186,7 +187,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
         .build();
 
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult()
-        .withPendingRepeatAndConfirmatoryTtiTestsIds(12L).build();
+        .withPendingRepeatAndConfirmatoryTtiTestsIds(UUID.randomUUID()).build();
 
     when(bloodTestsService.executeTests(donation)).thenReturn(bloodTestingRuleResult);
 
@@ -198,7 +199,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationHasDiscrepanciesWithNoTypeDeterminedBloodTypingMatchStatus_shouldReturnFalse() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
@@ -215,7 +216,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationHasDiscrepanciesInDeterminateBloodTypingStatus_shouldReturnFalse() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
@@ -232,7 +233,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationHasDiscrepanciesWithMatchBloodTypingMatchStatus_shouldReturnFalse() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
@@ -249,7 +250,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationHasDiscrepanciesWithResolvedBloodTypingMatchStatus_shouldReturnFalse() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
@@ -266,7 +267,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationHasDiscrepanciesWithAmbiguousBloodTypingMatchStatus_shouldReturnTrue() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
@@ -283,7 +284,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationHasDiscrepanciesWithPendingTestsBloodTypingStatus_shouldReturnTrue() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.PENDING_TESTS)
         .withPackType(aPackType().build())
@@ -300,7 +301,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationIsReleasedTestBatchReleasedNoPendingTests_shouldReturnTrue() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
@@ -320,7 +321,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationIsOpenTestBatchReleasedNoPendingTests_shouldReturnFalse() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
@@ -340,7 +341,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationIsNullTestBatch_shouldReturnFalse() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
@@ -356,7 +357,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationIsReleasedTestBatchReleasedPendingTests_shouldReturnFalse() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
@@ -367,7 +368,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
         .build();
 
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult()
-        .withPendingRepeatAndConfirmatoryTtiTestsIds(12L).build();
+        .withPendingRepeatAndConfirmatoryTtiTestsIds(UUID.randomUUID()).build();
 
     boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation, bloodTestingRuleResult);
 
@@ -377,7 +378,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testDonationIsOpenTestBatchReleasedPendingTests_shouldReturnFalse() {
     Donation donation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withPackType(aPackType().build())
@@ -388,7 +389,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
         .build();
 
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult()
-        .withPendingRepeatAndConfirmatoryTtiTestsIds(12L).build();
+        .withPendingRepeatAndConfirmatoryTtiTestsIds(UUID.randomUUID()).build();
 
     boolean result = donationConstraintChecker.donationIsReleased(testBatch, donation, bloodTestingRuleResult);
 
@@ -433,7 +434,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     Donation donation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(aDonor().build())
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
         .withPackType(aPackType().build())
@@ -452,7 +453,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     Donation donation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(aDonor().build())
-        .withTTIStatus(TTIStatus.TTI_UNSAFE)
+        .withTTIStatus(TTIStatus.UNSAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
         .withPackType(aPackType().build())
@@ -471,7 +472,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     Donation donation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(aDonor().build())
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withPackType(aPackType().build())
@@ -500,11 +501,14 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanEditPackTypeWithProcessedComponent_shouldReturnFalse() {
     // Set up fixture
-    Component processedComponent = aComponent().withId(1L).withStatus(ComponentStatus.PROCESSED).build();
+    UUID componentId1 = UUID.randomUUID();
+    UUID componentId2 = UUID.randomUUID();
+    UUID componentId3 = UUID.randomUUID();
+    Component processedComponent = aComponent().withId(componentId1).withStatus(ComponentStatus.PROCESSED).build();
     List<Component> components = Arrays.asList(
         processedComponent,
-        aComponent().withId(2L).withParentComponent(processedComponent).withStatus(ComponentStatus.QUARANTINED).build(),
-        aComponent().withId(3L).withParentComponent(processedComponent).withStatus(ComponentStatus.QUARANTINED).build()
+        aComponent().withId(componentId2).withParentComponent(processedComponent).withStatus(ComponentStatus.QUARANTINED).build(),
+        aComponent().withId(componentId3).withParentComponent(processedComponent).withStatus(ComponentStatus.QUARANTINED).build()
     );
     Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withComponents(components).build();
     
@@ -518,7 +522,8 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanEditPackTypeWithDiscardedComponent_shouldReturnFalse() {
     // Set up fixture
-    Component discardedComponent = aComponent().withId(1L).withStatus(ComponentStatus.DISCARDED).build();
+    UUID componentId = UUID.randomUUID();
+    Component discardedComponent = aComponent().withId(componentId).withStatus(ComponentStatus.DISCARDED).build();
     Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withComponent(discardedComponent).build();
     
     // Exercise SUT
@@ -531,8 +536,9 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanEditPackTypeWithLabelledComponent_shouldReturnFalse() {
     // Set up fixture
+    UUID componentId = UUID.randomUUID();
     Component discardedComponent = aComponent()
-        .withId(1L)
+        .withId(componentId)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .build();
@@ -548,9 +554,11 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanEditPackTypeWithDeletedDiscardedComponent_shouldReturnTrue() {
     // Set up fixture
+    UUID componentId1 = UUID.randomUUID();
+    UUID componentId2 = UUID.randomUUID();
     List<Component> components = Arrays.asList(
-        aComponent().withId(1L).withStatus(ComponentStatus.DISCARDED).withIsDeleted(true).build(),
-        aComponent().withId(2L).withStatus(ComponentStatus.QUARANTINED).build()
+        aComponent().withId(componentId1).withStatus(ComponentStatus.DISCARDED).withIsDeleted(true).build(),
+        aComponent().withId(componentId2).withStatus(ComponentStatus.QUARANTINED).build()
     );
     Donation donation = aDonation().withId(IRRELEVANT_DONATION_ID).withComponents(components).build();
     

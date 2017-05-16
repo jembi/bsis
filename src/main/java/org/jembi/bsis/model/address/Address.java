@@ -3,12 +3,13 @@ package org.jembi.bsis.model.address;
 import javax.persistence.Entity;
 
 import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseUUIDEntity;
 
 /**
  * Entity containing the home, work and postal address of a Donor.
  */
 @Entity
-public class Address extends BaseEntity {
+public class Address extends BaseUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

@@ -3,24 +3,21 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.dto.TransfusionSummaryDTO;
 
-public class TransfusionSummaryDTOMatcher extends TypeSafeMatcher<TransfusionSummaryDTO> {
-
-  private TransfusionSummaryDTO expected;
+public class TransfusionSummaryDTOMatcher extends AbstractTypeSafeMatcher<TransfusionSummaryDTO> {
 
   public TransfusionSummaryDTOMatcher(TransfusionSummaryDTO expected) {
     this.expected = expected;
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("A transfusion summary dto with the following state:")
-        .appendText("\nCount: ").appendValue(expected.getCount())
-        .appendText("\nTransfusion Reaction Type: ").appendValue(expected.getTransfusionReactionType())
-        .appendText("\nTransfusion Site: ").appendValue(expected.getTransfusionSite()) 
-        .appendText("\nTransfusion Outcome: ").appendValue(expected.getTransfusionOutcome());
+  public void appendDescription(Description description, TransfusionSummaryDTO transfusionSummaryDTO) {
+    description.appendText("A TransfusionSummaryDTO with the following state:")
+        .appendText("\nCount: ").appendValue(transfusionSummaryDTO.getCount())
+        .appendText("\nTransfusion Reaction Type: ").appendValue(transfusionSummaryDTO.getTransfusionReactionType())
+        .appendText("\nTransfusion Site: ").appendValue(transfusionSummaryDTO.getTransfusionSite()) 
+        .appendText("\nTransfusion Outcome: ").appendValue(transfusionSummaryDTO.getTransfusionOutcome());
   }
 
   @Override

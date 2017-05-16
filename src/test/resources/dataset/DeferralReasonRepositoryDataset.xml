@@ -1,20 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-    <DeferralReason id="1" isDeleted="false" reason="High risk behaviour" defaultDuration="30"
+    <DeferralReason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" isDeleted="false" reason="High risk behaviour" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
-    <DeferralReason id="2" isDeleted="false" reason="Low weight" defaultDuration="30"
+    <DeferralReason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'" isDeleted="false" reason="Low weight" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
-    <DeferralReason id="3" isDeleted="false" reason="Low haemoglobin" defaultDuration="30"
+    <DeferralReason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" isDeleted="false" reason="Low haemoglobin" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
-    <DeferralReason id="4" isDeleted="false" reason="Other reasons" defaultDuration="30"
+    <DeferralReason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870684'" isDeleted="false" reason="Other reasons" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
-    <DeferralReason id="5" isDeleted="false" reason="Other medical conditions" defaultDuration="30"
+    <DeferralReason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" isDeleted="false" reason="Other medical conditions" defaultDuration="30"
                     durationType="TEMPORARY" type="NORMAL"/>
-    <DeferralReason id="6" isDeleted="false" reason="Travel history" defaultDuration="30"
+    <DeferralReason id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870686'" isDeleted="false" reason="Travel history" defaultDuration="30"
                     durationType="TEMPORARY"
                     type="NORMAL"/>
 </dataset>

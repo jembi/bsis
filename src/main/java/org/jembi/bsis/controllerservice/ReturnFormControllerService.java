@@ -2,6 +2,7 @@ package org.jembi.bsis.controllerservice;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -41,13 +42,13 @@ public class ReturnFormControllerService {
     return returnFormFactory.createFullViewModel(updatedReturnForm);
   }
 
-  public ReturnFormFullViewModel findById(Long id) {
+  public ReturnFormFullViewModel findById(UUID id) {
     ReturnForm returnForm = returnFormRepository.findById(id);
     return returnFormFactory.createFullViewModel(returnForm);
   }
 
   public List<ReturnFormViewModel> findReturnForms(Date returnDateFrom, Date returnDateTo, 
-      Long returnedFromId, Long returnedToId, ReturnStatus status) {
+      UUID returnedFromId, UUID returnedToId, ReturnStatus status) {
 
     List<ReturnForm> returnForms = returnFormRepository.findReturnForms(returnDateFrom, returnDateTo, 
         returnedFromId, returnedToId, status);
@@ -55,7 +56,7 @@ public class ReturnFormControllerService {
     return returnFormFactory.createViewModels(returnForms);
   }
   
-  public void deleteReturnForm(long returnFormId) {
+  public void deleteReturnForm(UUID returnFormId) {
     returnFormCRUDService.deleteReturnForm(returnFormId);
   }
 }

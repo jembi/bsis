@@ -10,6 +10,8 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.repository.DivisionRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
@@ -49,7 +51,7 @@ public class DivisionCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateDivision_shouldSetCorrectFieldsAndUpdate() {
     // Set up fixture
-    long divisionId = 877L;
+    UUID divisionId = UUID.randomUUID();
 
     Division existingDivision = aDivision()
         .withId(divisionId)
@@ -62,7 +64,7 @@ public class DivisionCRUDServiceTests extends UnitTestSuite {
         .withId(divisionId)
         .withName("Updated")
         .withLevel(2)
-        .withParent(aDivision().withId(1003L).build())
+        .withParent(aDivision().withId(UUID.randomUUID()).build())
         .build();
     
     // Set up expectations
@@ -81,7 +83,7 @@ public class DivisionCRUDServiceTests extends UnitTestSuite {
   @Test(expected = IllegalArgumentException.class)
   public void testUpdateDivisionWhenCannotEditLevel_shouldThrow() {
     // Set up fixture
-    long divisionId = 877L;
+    UUID divisionId = UUID.randomUUID();
 
     Division existingDivision = aDivision()
         .withId(divisionId)
@@ -94,7 +96,7 @@ public class DivisionCRUDServiceTests extends UnitTestSuite {
         .withId(divisionId)
         .withName("Updated")
         .withLevel(2)
-        .withParent(aDivision().withId(1003L).build())
+        .withParent(aDivision().withId(UUID.randomUUID()).build())
         .build();
     
     // Set up expectations
@@ -108,7 +110,7 @@ public class DivisionCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateDivisionWithoutChangingLevel_shouldSetCorrectFieldsAndUpdate() {
     // Set up fixture
-    long divisionId = 877L;
+    UUID divisionId = UUID.randomUUID();
 
     Division existingDivision = aDivision()
         .withId(divisionId)
@@ -121,7 +123,7 @@ public class DivisionCRUDServiceTests extends UnitTestSuite {
         .withId(divisionId)
         .withName("Updated")
         .withLevel(1)
-        .withParent(aDivision().withId(1003L).build())
+        .withParent(aDivision().withId(UUID.randomUUID()).build())
         .build();
     
     // Set up expectations

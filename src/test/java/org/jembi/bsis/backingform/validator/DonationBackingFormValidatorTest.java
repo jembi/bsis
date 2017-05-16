@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -70,14 +71,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testValidInsertNewDonationWithSpecifiedDINAndDonationDate() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     Date donationDate = form.getDonationDate();
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -93,7 +95,8 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testValidInsertNewDonationWithoutSpecifiedDINAndDonationDate() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonationDate(null);
     form.setDonationIdentificationNumber(null);
@@ -106,7 +109,7 @@ public class DonationBackingFormValidatorTest {
         .withUseCurrentTime(true).build());
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -123,7 +126,8 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testValidInsertNewDonationWithoutSpecifiedDINAndDonationDateDontGenerate() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonationDate(null);
     form.setDonationIdentificationNumber(null);
@@ -136,7 +140,7 @@ public class DonationBackingFormValidatorTest {
         .withUseCurrentTime(false).build());
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -152,9 +156,10 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testValidUpdateDonationAfterConfigDINLengthPropertyChange() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
-    form.setId(1L);
+    form.setId(UUID.randomUUID());
     form.setDonationIdentificationNumber("DIN5247");
 
     // set up mocks
@@ -164,7 +169,7 @@ public class DonationBackingFormValidatorTest {
     // edit form and change DIN config value
     form.setLastUpdated(new Date());
     when(generalConfigAccessorService.getIntValue("donation.dinLength")).thenReturn(10);
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
@@ -177,15 +182,16 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDINAlreadyExists() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
-    Donation otherDonation = DonationBuilder.aDonation().withId(2L).build();
+    Donation otherDonation = DonationBuilder.aDonation().withId(UUID.randomUUID()).build();
 
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("DIN1234")).thenReturn(otherDonation);
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -200,14 +206,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidNullBleedStartTime() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setBleedStartTime(null);
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -222,14 +229,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidNullBleedEndTime() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setBleedEndTime(null);
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -244,7 +252,8 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidBleedStartTimeAfterEndTime() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     form.setBleedStartTime(sdf.parse("2016-01-01 15:00"));
@@ -253,7 +262,7 @@ public class DonationBackingFormValidatorTest {
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -268,13 +277,14 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDonorNull() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonorNumber(null);
 
     // set up mocks
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -289,13 +299,14 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDonorNotFound() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenThrow(new NoResultException());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -310,14 +321,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDonationBatchNull() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.getDonationBatch().setBatchNumber(null);
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -332,13 +344,14 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDonationBatchNotFound() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenThrow(new NoResultException());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -353,7 +366,8 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidVenueNull() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setVenue(null);
 
@@ -374,7 +388,8 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidVenueNullId() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     venue.setId(null);
 
@@ -395,14 +410,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidVenue() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     venue.setIsVenue(false);
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -417,13 +433,14 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidLocation() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenThrow(new NoResultException());
+    when(locationRepository.getLocation(locationId)).thenThrow(new NoResultException());
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -438,14 +455,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidPackTypeEmpty() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setPackType(null);
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -460,14 +478,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDonationTypeEmpty() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonationType(null);
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -482,7 +501,8 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidBloodPressureAboveMax() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setBloodPressureDiastolic(101);
     form.setBloodPressureSystolic(191);
@@ -490,7 +510,7 @@ public class DonationBackingFormValidatorTest {
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -506,7 +526,8 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidBloodPressureBelowMin() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setBloodPressureDiastolic(39);
     form.setBloodPressureSystolic(69);
@@ -514,7 +535,7 @@ public class DonationBackingFormValidatorTest {
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -530,14 +551,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidHaemoglobinCountBelowMin() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setHaemoglobinCount(BigDecimal.valueOf(0));
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -552,14 +574,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidHaemoglobinCountAboveMax() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setHaemoglobinCount(BigDecimal.valueOf(26));
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -574,14 +597,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDonorWeightAbove() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonorWeight(BigDecimal.valueOf(400));
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -596,14 +620,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDonorWeightBelow() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonorWeight(BigDecimal.valueOf(20));
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -618,14 +643,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDonorPulseBelow() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonorPulse(20);
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -640,14 +666,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDonorPulseAbove() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonorPulse(300);
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -662,14 +689,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDinAboveMaximum() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonationIdentificationNumber("DIN111111111111111111111111111111111111");
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -683,14 +711,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDinBelowMinimum() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonationIdentificationNumber("DIN12");
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -704,14 +733,15 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testInvalidDinLenthConfiguration_shouldDefaultTo20() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonationIdentificationNumber("DIN12345678901234567"); // DIN of 20 characters
 
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
 
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpSystolicMin")).thenReturn("70");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.bpSystolicMax")).thenReturn("190");
@@ -738,16 +768,17 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testValidUpdateExistingDonation() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     Donation donation = form.getDonation();
-    donation.setId(1L);
+    donation.setId(UUID.randomUUID());
 
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumberIncludeDeleted("DIN1234")).thenReturn(form.getDonation());
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -761,7 +792,8 @@ public class DonationBackingFormValidatorTest {
   @Test
   public void testValidInsertMinimumDataRequired() throws Exception {
     // set up data
-    Location venue = LocationBuilder.aLocation().withId(1L).thatIsVenue().build();
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
     DonationBackingForm form = createBasicBackingForm(venue);
     form.setDonationDate(null);
     form.setDonationIdentificationNumber(null);
@@ -782,7 +814,7 @@ public class DonationBackingFormValidatorTest {
         .withUseCurrentTime(true).build());
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(venue);
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
     mockGeneralConfigAndFormFields();    
 
     // run test
@@ -813,8 +845,9 @@ public class DonationBackingFormValidatorTest {
   }
   
   private DonationBackingForm createBasicBackingForm(Location venue) throws Exception {
-    PackType packType = PackTypeBuilder.aPackType().withId(1L).withPackType("Single").build();
-    DonationTypeBackingForm donationType = aDonationTypeBackingForm().withId(1L).withDonationType("Voluntary").build();
+    UUID packTypeId = UUID.randomUUID();
+    PackType packType = PackTypeBuilder.aPackType().withId(packTypeId).withPackType("Single").build();
+    DonationTypeBackingForm donationType = aDonationTypeBackingForm().withId(UUID.randomUUID()).withDonationType("Voluntary").build();
 
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()
         .withBatchNumber("DB123")
@@ -822,7 +855,7 @@ public class DonationBackingFormValidatorTest {
         .withDonations(new ArrayList<Donation>())
         .build();
     
-    Donor donor = DonorBuilder.aDonor().withId(1L).withFirstName("David").withLastName("Smith").withDonorNumber("DN123").build();
+    Donor donor = DonorBuilder.aDonor().withId(UUID.randomUUID()).withFirstName("David").withLastName("Smith").withDonorNumber("DN123").build();
     
     DonationBackingForm form = new DonationBackingForm();
     form.setDonorNumber("DN123");
@@ -836,7 +869,7 @@ public class DonationBackingFormValidatorTest {
     form.setBleedStartTime(new Date());
     form.setBleedEndTime(new Date());
     form.setDonationBatchNumber("DB123");
-    form.setVenue(aLocationBackingForm().withId(1L).thatIsVenue().build());
+    form.setVenue(aLocationBackingForm().withId(venue.getId()).thatIsVenue().build());
     form.setBloodPressureDiastolic(80);
     form.setBloodPressureSystolic(100);
     form.setHaemoglobinCount(BigDecimal.valueOf(12));

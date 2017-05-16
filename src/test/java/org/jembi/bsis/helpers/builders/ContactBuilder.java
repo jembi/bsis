@@ -1,16 +1,18 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.address.Contact;
 
 public class ContactBuilder extends AbstractEntityBuilder<Contact> {
 
-  private Long id;
+  private UUID id;
   private String mobileNumber;
   private String homeNumber;
   private String workNumber;
   private String email;
 
-  public ContactBuilder withId(Long id) {
+  public ContactBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

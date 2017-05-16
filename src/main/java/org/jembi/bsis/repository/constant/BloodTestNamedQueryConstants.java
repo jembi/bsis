@@ -8,22 +8,25 @@ public class BloodTestNamedQueryConstants {
       "SELECT b FROM BloodTest b "
       + "WHERE b.category = :category "
       + "AND b.isActive = :isActive "
-      + "AND b.isDeleted = :isDeleted";
+      + "AND b.isDeleted = :isDeleted "
+      + "ORDER BY b.rankInCategory ASC NULLS LAST";
 
   public static final String NAME_GET_BLOOD_TESTS_BY_TYPE = 
       "BloodTest.getBloodTestsByType";
   public static final String QUERY_GET_BLOOD_TESTS_BY_TYPE =
       "SELECT b FROM BloodTest b "
       + "WHERE b.bloodTestType IN (:types) "
-      + "AND b.isActive = :isActive "
-      + "AND b.isDeleted = :isDeleted";
+      + "AND (:isActive = null OR b.isActive = :isActive) "
+      + "AND b.isDeleted = :isDeleted "
+      + "ORDER BY b.rankInCategory ASC NULLS LAST";
 
   public static final String NAME_GET_BLOOD_TESTS = 
       "BloodTest.getBloodTests";
   public static final String QUERY_GET_BLOOD_TESTS =
       "SELECT b FROM BloodTest b "
       + "WHERE (:includeDeleted = TRUE OR b.isDeleted = FALSE) "
-      + "AND (:includeInactive = TRUE OR b.isActive = TRUE)";
+      + "AND (:includeInactive = TRUE OR b.isActive = TRUE) "
+      + "ORDER BY b.category, b.rankInCategory ASC NULLS LAST";
 
   public static final String NAME_FIND_BLOOD_TEST_BY_ID =
       "BloodTest.findBloodTestById";
@@ -36,7 +39,7 @@ public class BloodTestNamedQueryConstants {
       "SELECT count(b) = 0 "
       + "FROM BloodTest b "
       + "WHERE b.testName = :testName "
-      + " AND (:id = null OR b.id != :id)";
+      + " AND (:includeId = false OR b.id != :id)";
   
   public static final String NAME_VERIFY_BLOOD_TEST_WITH_ID_EXISTS =
       "BloodTest.verifyExists";

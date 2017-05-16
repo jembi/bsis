@@ -1,13 +1,14 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.transfusion.TransfusionOutcome;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class TransfusionFullViewModel extends BaseViewModel {
+public class TransfusionFullViewModel extends BaseViewModel<UUID> {
 
   private String donationIdentificationNumber;
 

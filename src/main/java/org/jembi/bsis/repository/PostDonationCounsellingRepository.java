@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -15,11 +16,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class PostDonationCounsellingRepository extends AbstractRepository<PostDonationCounselling> {
 
-  public PostDonationCounselling findById(long id) {
+  public PostDonationCounselling findById(UUID id) {
     return entityManager.find(PostDonationCounselling.class, id);
   }
 
-  public List<PostDonationCounselling> findPostDonationCounselling(Date startDate, Date endDate, Set<Long> venueIds, 
+  public List<PostDonationCounselling> findPostDonationCounselling(Date startDate, Date endDate, Set<UUID> venueIds,
       CounsellingStatus counsellingStatus, Boolean referred, Boolean notReferred, boolean flaggedForCounselling) {
     
     String counsellingStatusName = counsellingStatus != null ? counsellingStatus.name() : null;
@@ -41,7 +42,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
         .getResultList();
   }
 
-  public PostDonationCounselling findPostDonationCounsellingForDonor(Long donorId) throws NoResultException {
+  public PostDonationCounselling findPostDonationCounsellingForDonor(UUID donorId) throws NoResultException {
 
     return entityManager.createNamedQuery(
         PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONOR,
@@ -52,7 +53,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
         .getSingleResult();
   }
 
-  public int countFlaggedPostDonationCounsellingsForDonor(Long donorId) {
+  public int countFlaggedPostDonationCounsellingsForDonor(UUID donorId) {
 
     return entityManager.createNamedQuery(
         PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,
@@ -64,7 +65,7 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
         .intValue();
   }
 
-  public int countNotFlaggedPostDonationCounsellingsForDonor(Long donorId) {
+  public int countNotFlaggedPostDonationCounsellingsForDonor(UUID donorId) {
 
     return entityManager.createNamedQuery(
         PostDonationCounsellingNamedQueryConstants.NAME_COUNT_FLAGGED_POST_DONATION_COUNSELLINGS_FOR_DONOR,

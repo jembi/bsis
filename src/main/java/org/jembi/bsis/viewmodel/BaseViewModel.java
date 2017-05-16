@@ -1,14 +1,14 @@
 package org.jembi.bsis.viewmodel;
 
-public abstract class BaseViewModel {
+public abstract class BaseViewModel<T> {
 
-  private Long id;
+  private T id;
 
-  public Long getId() {
+  public T getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(T id) {
     this.id = id;
   }
 
@@ -28,7 +28,8 @@ public abstract class BaseViewModel {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    BaseViewModel other = (BaseViewModel) obj;
+    @SuppressWarnings("unchecked")
+    BaseViewModel<T> other = (BaseViewModel<T>) obj;
     if (getId() == null) {
       if (other.getId() != null)
         return false;

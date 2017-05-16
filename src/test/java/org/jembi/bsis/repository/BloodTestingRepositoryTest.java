@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -48,25 +49,26 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
 
     // Update test 17 to POS and check that the reEntryRequired field is updated to true only
     // for that test. All tests are NEG to start with.
-    Donation donation = donationRepository.findDonationById(8l);
-    Map<Long, String> stringResults = new HashMap<Long, String>();
-    stringResults.put(17L, "POS");
-    stringResults.put(20L, "NEG");
-    stringResults.put(23L, "NEG");
-    stringResults.put(26L, "NEG");
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a8");
+    Donation donation = donationRepository.findDonationById(donationId);
+    Map<UUID, String> stringResults = new HashMap<>();
+    stringResults.put(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8617"), "POS");
+    stringResults.put(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8620"), "NEG");
+    stringResults.put(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8623"), "NEG");
+    stringResults.put(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8626"), "NEG");
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
     bloodTestingRepository.saveBloodTestResultsToDatabase(stringResults, donation, new Date(), ruleResult, false);
 
-    Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    for (Long key : newResults.keySet()) {
+    Map<UUID, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    for (UUID key : newResults.keySet()) {
       BloodTestResult result = (BloodTestResult) newResults.get(key);
       if (result.getBloodTest().getCategory().equals(BloodTestCategory.TTI)) {
-        if (result.getBloodTest().getId() == 17) {
+        if (result.getBloodTest().getId().equals(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8617"))) {
           Assert.assertEquals("Field reEntryRequired is set to true for test 17", true, result.getReEntryRequired());
         } else {
           Assert.assertEquals("Field reEntryRequired is false", false, result.getReEntryRequired());
@@ -77,87 +79,91 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   
   @Test
   public void testReEntrySequences() throws Exception {
-    Donation donation = donationRepository.findDonationById(8l);
-    Map<Long, String> testResults = new HashMap<Long, String>();
+    UUID testId = UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8617");
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a8");
+    Donation donation = donationRepository.findDonationById(donationId);
+    Map<UUID, String> testResults = new HashMap<>();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
     
     // #1: re-entry should be required
-    testResults.put(17L, "POS");
+    testResults.put(testId, "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
-    Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertTrue("Re-entry required", newResults.get(17L).getReEntryRequired());
+    Map<UUID, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertTrue("Re-entry required", newResults.get(testId).getReEntryRequired());
     
     // #2: edited initial result, re-entry still required
-    testResults.put(17L, "NEG");
+    testResults.put(testId, "NEG");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertTrue("Re-entry still required", newResults.get(17L).getReEntryRequired());
+    Assert.assertTrue("Re-entry still required", newResults.get(testId).getReEntryRequired());
 
     // #3:  re-entry of last result
-    testResults.put(17L, "NEG");
+    testResults.put(testId, "NEG");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertFalse("Re-entry no longer required", newResults.get(17L).getReEntryRequired());
+    Assert.assertFalse("Re-entry no longer required", newResults.get(testId).getReEntryRequired());
 
     // #4:  edited initial result, but no change in outcome
-    testResults.put(17L, "NEG");
+    testResults.put(testId, "NEG");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertFalse("Re-entry not required", newResults.get(17L).getReEntryRequired());
+    Assert.assertFalse("Re-entry not required", newResults.get(testId).getReEntryRequired());
 
     // #4:  edited initial result, but there is now a change
-    testResults.put(17L, "POS");
+    testResults.put(testId, "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertTrue("Re-entry now required", newResults.get(17L).getReEntryRequired());
+    Assert.assertTrue("Re-entry now required", newResults.get(testId).getReEntryRequired());
 
     // #5:  edited initial result, but there is no change in outcome
-    testResults.put(17L, "POS");
+    testResults.put(testId, "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertTrue("Re-entry still required", newResults.get(17L).getReEntryRequired());
+    Assert.assertTrue("Re-entry still required", newResults.get(testId).getReEntryRequired());
 
     // #6:  re-entry done with a different result
-    testResults.put(17L, "NEG");
+    testResults.put(testId, "NEG");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
     newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertFalse("Re-entry no longer required", newResults.get(17L).getReEntryRequired());
+    Assert.assertFalse("Re-entry no longer required", newResults.get(testId).getReEntryRequired());
   }
 
   @Test
   public void testDonationTTIStatusUpdateOnlyOnReEntry() throws Exception {
-    Donation donation = donationRepository.findDonationById(8l);
-    Map<Long, String> testResults = new HashMap<Long, String>();
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a8");
+    Donation donation = donationRepository.findDonationById(donationId);
+    Map<UUID, String> testResults = new HashMap<>();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_UNSAFE);
+    ruleResult.setTTIStatus(TTIStatus.UNSAFE);
 
-    testResults.put(17L, "POS");
+    testResults.put(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8617"), "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
-    donation = donationRepository.findDonationById(8l);
+    donation = donationRepository.findDonationById(donationId);
     Assert.assertTrue("Re-entry is false, so tti status remains as NOT_DONE",
         donation.getTTIStatus().equals(TTIStatus.NOT_DONE));
 
-    testResults.put(17L, "POS");
+    testResults.put(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8617"), "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
-    donation = donationRepository.findDonationById(8l);
+    donation = donationRepository.findDonationById(donationId);
     Assert.assertTrue("Re-entry is true, so tti status is updated to TTI_UNSAFE",
-        donation.getTTIStatus().equals(TTIStatus.TTI_UNSAFE));
+        donation.getTTIStatus().equals(TTIStatus.UNSAFE));
 
   }
 
   @Test
   public void testBloodTestResultCreationReEntryImplemented() throws Exception {
-    Donation donation = donationRepository.findDonationById(9l);
-    Map<Long, String> testResults = new HashMap<Long, String>();
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a9");
+    Donation donation = donationRepository.findDonationById(donationId);
+    Map<UUID, String> testResults = new HashMap<>();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
@@ -166,16 +172,17 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     ruleResult.setTTIStatus(TTIStatus.NOT_DONE);
 
     // reEntry is implemented so, on creation, send reEntry as false:
-    testResults.put(17L, "POS");
+    testResults.put(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8617"), "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, false);
-    Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertTrue("Re-entry is required", newResults.get(17L).getReEntryRequired());
+    Map<UUID, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertTrue("Re-entry is required", newResults.get(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8617")).getReEntryRequired());
   }
 
   @Test
   public void testBloodTestResultCreationReEntryNotImplemented() throws Exception {
-    Donation donation = donationRepository.findDonationById(9l);
-    Map<Long, String> testResults = new HashMap<Long, String>();
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a9");
+    Donation donation = donationRepository.findDonationById(donationId);
+    Map<UUID, String> testResults = new HashMap<>();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
@@ -184,19 +191,19 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     ruleResult.setTTIStatus(TTIStatus.NOT_DONE);
 
     // reEntry is not implemented so, on creation send reEntry as true:
-    testResults.put(17L, "POS");
+    testResults.put(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8617"), "POS");
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
-    Map<Long, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
-    Assert.assertFalse("Re-entry is not required", newResults.get(17L).getReEntryRequired());
+    Map<UUID, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
+    Assert.assertFalse("Re-entry is not required", newResults.get(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8617")).getReEntryRequired());
   }
 
   @Test
   public void testGetTestResultsForDonationBatchesByBloodTestType() {
-    ArrayList<Long> donationBatchIds = new ArrayList<Long>();
-    donationBatchIds.add(2l);
+    UUID donationBatchId = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870682");
+    List<UUID> donationBatchIds = new ArrayList<>();
+    donationBatchIds.add(donationBatchId);
     List<BloodTestingRuleResult> results = bloodTestingRepository
-        .getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds,
-        BloodTestType.BASIC_TTI);
+        .getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, BloodTestType.BASIC_TTI);
 
     // donation id = 2 is the only donation in batch id = 2
     BloodTestingRuleResult result = results.get(0);
@@ -208,8 +215,9 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   public void testGetRecentTestResultsForDonationWithActiveAndUnDeletedBloodTest_shouldReturnABloodTestResult() {
     
     //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(9l);
-    BloodTestResult result = returnedResults.get(28l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a9");
+    Map<UUID, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donationId);
+    BloodTestResult result = returnedResults.get(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8628"));
     assertThat(returnedResults.size(), is(1));
     assertThat(result.getBloodTest().getIsActive(), is(true));
     assertThat(result.getBloodTest().getIsDeleted(), is(false));
@@ -219,7 +227,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   public void testGetRecentTestResultsForDonationWithActiveAndDeletedBloodTest_shouldNotReturnABloodTestResult() {
 
     //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(10l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b0");
+    Map<UUID, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donationId);
     assertThat(returnedResults.size(), is(0));
   }
   
@@ -227,7 +236,8 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
   public void testGetRecentTestResultsForDonationWithInactiveAndUnDeletedBloodTest_shouldNotReturnABloodTestResult() {
   
     //Test
-    Map<Long, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(11l);
+    UUID donationId = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b1");
+    Map<UUID, BloodTestResult> returnedResults = bloodTestingRepository.getRecentTestResultsForDonation(donationId);
     assertThat(returnedResults.size(), is(0));
   }
 }

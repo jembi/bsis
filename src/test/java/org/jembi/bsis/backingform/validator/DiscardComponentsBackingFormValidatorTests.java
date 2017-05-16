@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.DiscardReasonBackingForm;
@@ -31,13 +32,17 @@ public class DiscardComponentsBackingFormValidatorTests {
 
   @Mock
   private ComponentRepository componentRepository;
+  
+  private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
 
   @Test
   public void testValidate_hasNoErrors() {
     // set up data
-    List<Long> componentIds = Arrays.asList(1L, 2L);
+    List<UUID> componentIds = Arrays.asList(COMPONENT_ID_1, COMPONENT_ID_2);
+    UUID discardReasonId = UUID.randomUUID();
     DiscardReasonBackingForm discardReasonBackingForm = new DiscardReasonBackingForm();
-    discardReasonBackingForm.setId(1L);
+    discardReasonBackingForm.setId(discardReasonId);
     DiscardComponentsBackingForm form = new DiscardComponentsBackingForm();
     form.setComponentIds(componentIds);
     form.setDiscardReason(discardReasonBackingForm);
@@ -46,9 +51,9 @@ public class DiscardComponentsBackingFormValidatorTests {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "DiscardComponents");
     
     // set up mocks
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(2L)).thenReturn(true);
-    when(discardReasonRepository.verifyDiscardReasonExists(1L)).thenReturn(true);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID_1)).thenReturn(true);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID_2)).thenReturn(true);
+    when(discardReasonRepository.verifyDiscardReasonExists(discardReasonId)).thenReturn(true);
     
     // run test
     validator.validateForm(form, errors);
@@ -60,8 +65,9 @@ public class DiscardComponentsBackingFormValidatorTests {
   @Test
   public void testValidateNoComponentIds_getComponentIdsRequiredError() {
     // set up data
+    UUID discardReasonId = UUID.randomUUID();
     DiscardReasonBackingForm discardReasonBackingForm = new DiscardReasonBackingForm();
-    discardReasonBackingForm.setId(1L);
+    discardReasonBackingForm.setId(discardReasonId);
     DiscardComponentsBackingForm form = new DiscardComponentsBackingForm();
     form.setDiscardReason(discardReasonBackingForm);
     form.setDiscardReasonText("text");
@@ -69,7 +75,7 @@ public class DiscardComponentsBackingFormValidatorTests {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "DiscardComponents");
 
     // set up mocks
-    when(discardReasonRepository.verifyDiscardReasonExists(1L)).thenReturn(true);
+    when(discardReasonRepository.verifyDiscardReasonExists(discardReasonId)).thenReturn(true);
 
     // run test
     validator.validateForm(form, errors);
@@ -82,9 +88,10 @@ public class DiscardComponentsBackingFormValidatorTests {
   @Test
   public void testValidateInvalidComponentId_getInvalidComponentIdError() {
     // set up data
-    List<Long> componentIds = Arrays.asList(1L, 2L);
+    UUID discardReasonId = UUID.randomUUID();
+    List<UUID> componentIds = Arrays.asList(COMPONENT_ID_1, COMPONENT_ID_2);
     DiscardReasonBackingForm discardReasonBackingForm = new DiscardReasonBackingForm();
-    discardReasonBackingForm.setId(1L);
+    discardReasonBackingForm.setId(discardReasonId);
     DiscardComponentsBackingForm form = new DiscardComponentsBackingForm();
     form.setComponentIds(componentIds);
     form.setDiscardReason(discardReasonBackingForm);
@@ -93,9 +100,9 @@ public class DiscardComponentsBackingFormValidatorTests {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "DiscardComponents");
 
     // set up mocks
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(2L)).thenReturn(false);
-    when(discardReasonRepository.verifyDiscardReasonExists(1L)).thenReturn(true);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID_1)).thenReturn(true);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID_2)).thenReturn(false);
+    when(discardReasonRepository.verifyDiscardReasonExists(discardReasonId)).thenReturn(true);
 
     // run test
     validator.validateForm(form, errors);
@@ -108,7 +115,7 @@ public class DiscardComponentsBackingFormValidatorTests {
   @Test
   public void testValidateNoDiscardReason_getDiscardReasonRequiredError() {
     // set up data
-    List<Long> componentIds = Arrays.asList(1L, 2L);
+    List<UUID> componentIds = Arrays.asList(COMPONENT_ID_1, COMPONENT_ID_2);
     DiscardComponentsBackingForm form = new DiscardComponentsBackingForm();
     form.setComponentIds(componentIds);
     form.setDiscardReasonText("text");
@@ -116,8 +123,8 @@ public class DiscardComponentsBackingFormValidatorTests {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "DiscardComponents");
 
     // set up mocks
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(2L)).thenReturn(true);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID_1)).thenReturn(true);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID_2)).thenReturn(true);
 
     // run test
     validator.validateForm(form, errors);
@@ -130,9 +137,10 @@ public class DiscardComponentsBackingFormValidatorTests {
   @Test
   public void testValidateInvalidDiscardReasonId_getInvalidDiscardReasonError() {
     // set up data
-    List<Long> componentIds = Arrays.asList(1L, 2L);
+    UUID discardReasonId = UUID.randomUUID();
+    List<UUID> componentIds = Arrays.asList(COMPONENT_ID_1, COMPONENT_ID_2);
     DiscardReasonBackingForm discardReasonBackingForm = new DiscardReasonBackingForm();
-    discardReasonBackingForm.setId(1L);
+    discardReasonBackingForm.setId(discardReasonId);
     DiscardComponentsBackingForm form = new DiscardComponentsBackingForm();
     form.setComponentIds(componentIds);
     form.setDiscardReason(discardReasonBackingForm);
@@ -141,9 +149,9 @@ public class DiscardComponentsBackingFormValidatorTests {
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "DiscardComponents");
 
     // set up mocks
-    when(componentRepository.verifyComponentExists(1L)).thenReturn(true);
-    when(componentRepository.verifyComponentExists(2L)).thenReturn(true);
-    when(discardReasonRepository.verifyDiscardReasonExists(1L)).thenReturn(false);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID_1)).thenReturn(true);
+    when(componentRepository.verifyComponentExists(COMPONENT_ID_2)).thenReturn(true);
+    when(discardReasonRepository.verifyDiscardReasonExists(discardReasonId)).thenReturn(false);
 
     // run test
     validator.validateForm(form, errors);

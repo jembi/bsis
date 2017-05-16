@@ -3,6 +3,7 @@ package org.jembi.bsis.helpers.builders;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentBackingForm;
 import org.jembi.bsis.backingform.LocationBackingForm;
@@ -14,7 +15,7 @@ import org.jembi.bsis.model.order.OrderType;
 
 public class OrderFormBackingFormBuilder {
 
-  private Long id;
+  private UUID id;
   private Date orderDate;
   private LocationBackingForm dispatchedFrom;
   private LocationBackingForm dispatchedTo;
@@ -24,7 +25,7 @@ public class OrderFormBackingFormBuilder {
   private List<ComponentBackingForm> components = new ArrayList<>();
   private PatientBackingForm patient;
 
-  public OrderFormBackingFormBuilder withId(Long id) {
+  public OrderFormBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

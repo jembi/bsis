@@ -1,13 +1,14 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ComponentViewModel extends BaseViewModel {
+public class ComponentViewModel extends BaseViewModel<UUID> {
 
   private ComponentTypeViewModel componentType;
   private Date createdOn;

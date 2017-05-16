@@ -2,7 +2,6 @@ package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
@@ -10,6 +9,7 @@ import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentTyp
 import static org.jembi.bsis.helpers.builders.ComponentTypeFullViewModelBuilder.aComponentTypeFullViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
 import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasSameStateAsComponentFullViewModel;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.jembi.bsis.model.component.Component;
@@ -66,17 +67,21 @@ public class ComponentFactoryTests {
   
   @Mock
   private ComponentRepository componentRepository;
+  
+  private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
+  private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
 
   @Test
   public void createComponentFullViewModel_oneComponent() throws Exception {
     // set up data
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
-    Location location = aLocation().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location location = aLocation().withId(locationId).build();
 
-    Component parentComponent = aComponent().withId(2L).build();
-    
+    Component parentComponent = aComponent().withId(COMPONENT_ID_2).build();
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId)
         .withComponentTypeName("name")
         .withComponentTypeCode("0000")
         .build();
@@ -86,10 +91,10 @@ public class ComponentFactoryTests {
           .withComponentTypeName(componentType.getComponentTypeName())
           .withComponentTypeCode(componentType.getComponentTypeCode())
           .build();
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withComponentType(componentType)
@@ -99,7 +104,7 @@ public class ComponentFactoryTests {
         .build();
     
     ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withComponentType(componentTypeViewModel)
@@ -126,8 +131,8 @@ public class ComponentFactoryTests {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
-    components.add(aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).withDonation(donation).build());
-    components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
+    components.add(aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.AVAILABLE).withDonation(donation).build());
+    components.add(aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
     
     // run test
     List<ComponentFullViewModel> viewModels = componentFactory.createComponentFullViewModels(components);
@@ -154,8 +159,8 @@ public class ComponentFactoryTests {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
-    components.add(aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).withDonation(donation).build());
-    components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
+    components.add(aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.AVAILABLE).withDonation(donation).build());
+    components.add(aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
     donation.addComponent(components.get(0));
     donation.addComponent(components.get(1));
 
@@ -191,7 +196,7 @@ public class ComponentFactoryTests {
     Date expiresOn = cal.getTime();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     Component initialComponent = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withCreatedOn(createdOn)
         .build();
     Donation donation = aDonation()
@@ -202,7 +207,7 @@ public class ComponentFactoryTests {
         .build();
     ComponentType componentType = aComponentType().build();
     Component component = aComponent()
-        .withId(2L)
+        .withId(COMPONENT_ID_2)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentCode("0011")
         .withComponentType(componentType)
@@ -213,13 +218,14 @@ public class ComponentFactoryTests {
         .withDonation(donation)
         .withParentComponent(initialComponent)
         .build();
-    
+
+    UUID componentTypeId2 = UUID.randomUUID();
     ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
-        .withId(2L)
+        .withId(componentTypeId2)
         .build();
     
     ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
-        .withId(2L)
+        .withId(COMPONENT_ID_2)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentCode("0011")
         .withComponentType(componentTypeFullViewModel)
@@ -269,13 +275,13 @@ public class ComponentFactoryTests {
     Date processedOn = cal.getTime();
     cal.add(Calendar.DAY_OF_YEAR, 200);
     Date expiresOn = cal.getTime();
-    Component initialComponent = aComponent().withId(1L).build();
+    Component initialComponent = aComponent().withId(COMPONENT_ID_1).build();
     Donation donation = aDonation()
         .withComponent(initialComponent)
         .build();
     ComponentType componentType = aComponentType().build();
     Component component = aComponent()
-        .withId(2L)
+        .withId(COMPONENT_ID_2)
         .withComponentType(componentType)
         .withCreatedOn(processedOn)
         .withExpiresOn(expiresOn)
@@ -283,12 +289,13 @@ public class ComponentFactoryTests {
         .withParentComponent(initialComponent)
         .build();
 
+    UUID componentTypeId2 = UUID.randomUUID();
     ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
-        .withId(2L)
+        .withId(componentTypeId2)
         .build();
 
     ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
-        .withId(2L)
+        .withId(COMPONENT_ID_2)
         .withStatus(ComponentStatus.QUARANTINED)
         .withComponentCode(null)
         .withComponentType(componentTypeFullViewModel)
@@ -307,7 +314,7 @@ public class ComponentFactoryTests {
         .withBleedStartTime(null)
         .withBleedEndTime(null)
         .withDonationDateTime(null)
-        .withParentComponentId(1L)
+        .withParentComponentId(COMPONENT_ID_1)
         .build();
 
     // setup mocks
@@ -331,23 +338,24 @@ public class ComponentFactoryTests {
   @Test
   public void createManagementViewModelForInitialComponent_viewModelWithNullParentComponentIdReturned() throws Exception {
     // set up data
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
     Donation donation = aDonation().build();
     Component initialComponent = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withComponentType(componentType)
         .withDonation(donation)
         .build();
     donation.addComponent(initialComponent);
 
     ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
 
     ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.QUARANTINED)
         .withComponentCode(null)
         .withComponentType(componentTypeFullViewModel)
@@ -400,9 +408,10 @@ public class ComponentFactoryTests {
         .withFlagCharacters("09")
         .build();
     ComponentType componentType = aComponentType().build();
-    Location location = aLocation().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location location = aLocation().withId(locationId).build();
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(componentType)
         .withComponentCode("componentCode")
@@ -412,13 +421,14 @@ public class ComponentFactoryTests {
         .withLocation(location)
         .build();
     
+    UUID componentTypeId = UUID.randomUUID();
     ComponentTypeViewModel componentTypeViewModel = aComponentTypeViewModel()
-        .withId(1L)
+        .withId(componentTypeId)
         .build();
 
-    LocationViewModel locationViewModel = aLocationViewModel().withId(1L).build();
+    LocationViewModel locationViewModel = aLocationViewModel().withId(locationId).build();
     
-    ComponentViewModel expectedViewModel = aComponentViewModel().withId(1L)
+    ComponentViewModel expectedViewModel = aComponentViewModel().withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.AVAILABLE)
         .withComponentType(componentTypeViewModel)
         .withComponentCode("componentCode")
@@ -446,8 +456,8 @@ public class ComponentFactoryTests {
   public void createComponentViewModels_componentList() throws Exception {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
-    components.add(aComponent().withId(1L).withStatus(ComponentStatus.AVAILABLE).build());
-    components.add(aComponent().withId(2L).withStatus(ComponentStatus.DISCARDED).build());
+    components.add(aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.AVAILABLE).build());
+    components.add(aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.DISCARDED).build());
 
     // run test
     List<ComponentViewModel> viewModels = componentFactory.createComponentViewModels(components);
@@ -462,14 +472,14 @@ public class ComponentFactoryTests {
     // set up data
     
     Component component = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withParentComponent(null)
         .build();
     
     ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
-        .withId(1L)
+        .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .thatIsInitialComponent()

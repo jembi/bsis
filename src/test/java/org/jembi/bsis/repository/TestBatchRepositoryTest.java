@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -48,14 +49,15 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testFindTestBatchById() throws Exception {
-    TestBatch testBatch = testBatchRepository.findTestBatchById(1l);
+    UUID testBatchId = UUID.fromString("640eb339-c815-48c6-81d7-0f225d3f2701");
+    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     Assert.assertNotNull("TestBatch defined", testBatch);
     Assert.assertEquals("TestBatch is correct", "000000", testBatch.getBatchNumber());
   }
 
   @Test(expected = javax.persistence.NoResultException.class)
   public void testFindTestBatchByIdUnknown() throws Exception {
-    testBatchRepository.findTestBatchById(123l);
+    testBatchRepository.findTestBatchById(UUID.randomUUID());
   }
 
   @Test
@@ -94,27 +96,31 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testDeleteTestBatch() throws Exception {
-    testBatchRepository.deleteTestBatch(1l);
-    TestBatch testBatch = testBatchRepository.findTestBatchById(1l);
+    UUID testBatchId = UUID.fromString("640eb339-c815-48c6-81d7-0f225d3f2701");
+    testBatchRepository.deleteTestBatch(testBatchId);
+    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     Assert.assertTrue("TestBatch is deleted", testBatch.getIsDeleted());
   }
 
   @Test
   public void testUpdateTestBatch() throws Exception {
-    TestBatch testBatch = testBatchRepository.findTestBatchById(2l);
+    UUID testBatchId = UUID.fromString("640eb339-c815-48c6-81d7-0f225d3f2702");
+    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
     testBatch.setStatus(TestBatchStatus.RELEASED);
     testBatchRepository.update(testBatch);
-    TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(2l);
+    TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(testBatchId);
     Assert.assertEquals("TestBatch status is correct", TestBatchStatus.RELEASED, updatedTestBatch.getStatus());
   }
 
   @Test
   public void testSaveTestBatch() throws Exception {
     TestBatch testBatch = new TestBatch();
+    UUID donationBatchId = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870683");
     Set<DonationBatch> donationBatches = new HashSet<>();
-    donationBatches.add(donationBatchRepository.findDonationBatchById(3l));
+    donationBatches.add(donationBatchRepository.findDonationBatchById(donationBatchId));
     testBatch.setDonationBatches(donationBatches);
-    Location location = locationRepository.getLocation(2l);
+    UUID locationId = UUID.fromString("55321456-eeee-1234-b5b1-123412348811");
+    Location location = locationRepository.getLocation(locationId);
     testBatch.setLocation(location);
     TestBatch savedTestBatch = testBatchRepository.saveTestBatch(testBatch, "123456");
     Assert.assertNotNull("Saved TestBatch has an id", savedTestBatch.getId());
@@ -122,7 +128,7 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
     Assert.assertNotNull("Saved TestBatch is found", retrievedTestBatch);
     Assert.assertEquals("TestBatch status is correct", TestBatchStatus.OPEN, retrievedTestBatch.getStatus());
     Assert.assertEquals("TestBatch batchNumber is correct", "123456", retrievedTestBatch.getBatchNumber());
-    DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(3l);
+    DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
     Assert.assertNotNull("DonationBatch was linked to TestBatch", updatedDonationBatch.getTestBatch());
   }
 

@@ -1,19 +1,5 @@
 package org.jembi.bsis.model.donationbatch;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import org.hibernate.annotations.Where;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
-import org.jembi.bsis.model.componentbatch.ComponentBatch;
-import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.model.testbatch.TestBatch;
-import org.jembi.bsis.repository.DonationBatchQueryConstants;
-
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +15,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Where;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
+import org.jembi.bsis.model.componentbatch.ComponentBatch;
+import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.testbatch.TestBatch;
+import org.jembi.bsis.repository.DonationBatchQueryConstants;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @NamedQueries({
     @NamedQuery(name = DonationBatchQueryConstants.NAME_COUNT_DONATION_BATCHES,
         query = DonationBatchQueryConstants.QUERY_COUNT_DONATION_BATCHES),
@@ -42,7 +42,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class DonationBatch extends BaseModificationTrackerEntity {
+public class DonationBatch extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

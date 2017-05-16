@@ -1,6 +1,8 @@
 package org.jembi.bsis.viewmodel;
 
-public class LocationViewModel extends BaseViewModel {
+import java.util.UUID;
+
+public class LocationViewModel extends BaseViewModel<UUID> {
 
   private String name;
   private boolean isDeleted;

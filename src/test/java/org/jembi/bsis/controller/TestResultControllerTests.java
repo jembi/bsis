@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -42,6 +43,9 @@ import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.mockito.Mockito.when;
 
 public class TestResultControllerTests extends UnitTestSuite {
+  
+  private static final UUID DONATION_BATCH_ID = UUID.randomUUID();
+  
   @Spy
   @InjectMocks
   private TestResultController testResultController;
@@ -59,7 +63,7 @@ public class TestResultControllerTests extends UnitTestSuite {
 
     Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
         aDonationBatch()
-            .withId(1L)
+            .withId(DONATION_BATCH_ID)
             .withBatchNumber("123")
             .withDonationBatchDate(new Date())
             .build()
@@ -67,28 +71,29 @@ public class TestResultControllerTests extends UnitTestSuite {
     );
     
     TestBatch aTestBatch = aTestBatch()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withBatchNumber("00001")
         .withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN)
         .withDonationBatches(donationBatches)
         .build();
     
+    UUID basicTTIBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel basicTTIBloodFullTestViewModel = aBasicTTIBloodTestFullViewModel()
-        .withId(1L)
+        .withId(basicTTIBloodTestId)
         .withBloodTestType(BloodTestType.BASIC_TTI)
         .build();
     
     BloodTestResultViewModel basicTTIBloodTestResultViewModel = aBloodTestResultViewModel()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withBloodTest(basicTTIBloodFullTestViewModel)
         .withReEntryRequired()
         .build();
             
-    Map<Long, BloodTestResultViewModel> recentTestResults = new HashMap<>();
-    recentTestResults.put(1L, basicTTIBloodTestResultViewModel);
+    Map<UUID, BloodTestResultViewModel> recentTestResults = new HashMap<>();
+    recentTestResults.put(basicTTIBloodTestId, basicTTIBloodTestResultViewModel);
     
-    List<Long> noTestIds = new ArrayList<>();
+    List<UUID> noTestIds = new ArrayList<>();
     List<BloodTestingRuleResult> bloodTestingRuleResult = Arrays.asList(
         aBloodTestingRuleResult()
             .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
@@ -132,45 +137,47 @@ public class TestResultControllerTests extends UnitTestSuite {
 
     Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
         aDonationBatch()
-            .withId(1L)
+            .withId(DONATION_BATCH_ID)
             .withBatchNumber("123")
             .withDonationBatchDate(new Date())
             .build()
       )
     );
     
-    TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
     
+    UUID basicTTIBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel basicTTIBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
-        .withId(1L)
+        .withId(basicTTIBloodTestId)
         .withBloodTestType(BloodTestType.BASIC_TTI)
         .build();
     
     BloodTestResultViewModel basicTTIBloodTestResultViewModel = aBloodTestResultViewModel()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withBloodTest(basicTTIBloodFullTestViewModel)
         .withReEntryRequired()
         .build();
             
-    Map<Long, BloodTestResultViewModel> recentTestResults1 = new HashMap<>();
-    recentTestResults1.put(1L, basicTTIBloodTestResultViewModel);
-     
+    Map<UUID, BloodTestResultViewModel> recentTestResults1 = new HashMap<>();
+    recentTestResults1.put(basicTTIBloodTestId, basicTTIBloodTestResultViewModel);
+
+    UUID repeatTTIBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel repeatTTIBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
-        .withId(1L)
+        .withId(repeatTTIBloodTestId)
         .withBloodTestType(BloodTestType.REPEAT_TTI)
         .build();
     
     BloodTestResultViewModel repeatTTIBloodTestResultViewModel = aBloodTestResultViewModel()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withBloodTest(repeatTTIBloodFullTestViewModel)
         .withReEntryRequired()
         .build();
             
-    Map<Long, BloodTestResultViewModel> recentTestResults2 = new HashMap<>();
-    recentTestResults2.put(1L, repeatTTIBloodTestResultViewModel);
+    Map<UUID, BloodTestResultViewModel> recentTestResults2 = new HashMap<>();
+    recentTestResults2.put(repeatTTIBloodTestId, repeatTTIBloodTestResultViewModel);
    
-    List<Long> noTestIds = new ArrayList<>();
+    List<UUID> noTestIds = new ArrayList<>();
 
     List<BloodTestingRuleResult> bloodTestingRuleResult = Arrays.asList(
         aBloodTestingRuleResult()
@@ -222,32 +229,33 @@ public class TestResultControllerTests extends UnitTestSuite {
 
     Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
         aDonationBatch()
-            .withId(1L)
+            .withId(DONATION_BATCH_ID)
             .withBatchNumber("123")
             .withDonationBatchDate(new Date())
             .build()
       )
     );
     
-    TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
     
+    UUID basicBloodTypingBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel basicBloodTypingBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
-        .withId(1L)
+        .withId(basicBloodTypingBloodTestId)
         .withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
         .build();
     
     BloodTestResultViewModel basicBloodTypingBloodTestResultViewModel = aBloodTestResultViewModel()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withBloodTest(basicBloodTypingBloodFullTestViewModel)
         .withReEntryNotRequired()
         .build();
             
-    Map<Long, BloodTestResultViewModel> recentTestResults = new HashMap<>();
-    recentTestResults.put(1L, basicBloodTypingBloodTestResultViewModel);
+    Map<UUID, BloodTestResultViewModel> recentTestResults = new HashMap<>();
+    recentTestResults.put(basicBloodTypingBloodTestId, basicBloodTypingBloodTestResultViewModel);
 
-    List<Long> bloodTypeTestsIds = Arrays.asList(1L, 2L, 3L);
-    List<Long> noTestIds = new ArrayList<>();
+    List<UUID> bloodTypeTestsIds = Arrays.asList(basicBloodTypingBloodTestId, UUID.randomUUID(), UUID.randomUUID());
+    List<UUID> noTestIds = new ArrayList<>();
     List<BloodTestingRuleResult> bloodTestingRuleResult = Arrays.asList(aBloodTestingRuleResult()
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withPendingRepeatAndConfirmatoryTtiTestsIds(noTestIds)
@@ -289,14 +297,14 @@ public class TestResultControllerTests extends UnitTestSuite {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
     Set<DonationBatch> donationBatches = new HashSet<>(
-        Arrays.asList(aDonationBatch().withId(1L).withBatchNumber("123").withDonationBatchDate(new Date()).build()));
+        Arrays.asList(aDonationBatch().withId(DONATION_BATCH_ID).withBatchNumber("123").withDonationBatchDate(new Date()).build()));
 
-    TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
 
-    Map<Long, BloodTestResultViewModel> recentTestResults = new HashMap<>();
+    Map<UUID, BloodTestResultViewModel> recentTestResults = new HashMap<>();
 
-    List<Long> testsIds = Arrays.asList(1L, 2L, 3L);
+    List<UUID> testsIds = Arrays.asList(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
     List<BloodTestingRuleResult> bloodTestingRuleResult = Arrays.asList(
         aBloodTestingRuleResult()
             .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
@@ -340,69 +348,74 @@ public class TestResultControllerTests extends UnitTestSuite {
 
     Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
         aDonationBatch()
-            .withId(1L)
+            .withId(DONATION_BATCH_ID)
             .withBatchNumber("123")
             .withDonationBatchDate(new Date())
             .build()
       )
     );
     
-    TestBatch aTestBatch = aTestBatch().withId(1L).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
     
+    UUID basicBloodTypingBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel basicBloodTypingBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
-        .withId(1L)
+        .withId(basicBloodTypingBloodTestId)
         .withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
         .build();
     
     BloodTestResultViewModel bloodTypingTestResultViewModel = aBloodTestResultViewModel()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withBloodTest(basicBloodTypingBloodFullTestViewModel)
         .withReEntryRequired()
         .build();
-    
+
+    UUID basicTTIBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel basicTTIBloodFullTestViewModel = aBasicTTIBloodTestFullViewModel()
-        .withId(2L)
+        .withId(basicTTIBloodTestId)
         .withBloodTestType(BloodTestType.BASIC_TTI)
         .build();
     
     BloodTestResultViewModel bloodTTITestResultViewModel = aBloodTestResultViewModel()
-        .withId(2L)
+        .withId(UUID.randomUUID())
         .withBloodTest(basicTTIBloodFullTestViewModel)
         .withReEntryRequired()
         .build();
-            
-    BloodTestFullViewModel repeatBloodTypingFullTestViewModel = aRepeatBloodTypingBloodTestFullViewModel().withId(3L)
+
+    UUID repeatBloodTypingTestId = UUID.randomUUID();
+    BloodTestFullViewModel repeatBloodTypingFullTestViewModel = aRepeatBloodTypingBloodTestFullViewModel().withId(repeatBloodTypingTestId)
         .withBloodTestType(BloodTestType.REPEAT_BLOODTYPING).build();
 
     BloodTestResultViewModel repeatBloodTypingTestResultViewModel = aBloodTestResultViewModel()
-        .withId(3L)
+        .withId(UUID.randomUUID())
         .withBloodTest(repeatBloodTypingFullTestViewModel).withReEntryRequired().build();
 
+    UUID confirmatoryTTIBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel confirmatoryTTIBloodFullTestViewModel =
-        aConfirmatoryTTIBloodTestFullViewModel().withId(4L).withBloodTestType(BloodTestType.CONFIRMATORY_TTI).build();
+        aConfirmatoryTTIBloodTestFullViewModel().withId(confirmatoryTTIBloodTestId).withBloodTestType(BloodTestType.CONFIRMATORY_TTI).build();
 
-    BloodTestResultViewModel confirmatoryTTITestResultViewModel = aBloodTestResultViewModel().withId(4L)
+    BloodTestResultViewModel confirmatoryTTITestResultViewModel = aBloodTestResultViewModel().withId(UUID.randomUUID())
         .withBloodTest(confirmatoryTTIBloodFullTestViewModel).withReEntryRequired().build();
 
+    UUID repeatTTIBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel repeatTTIFullTestViewModel =
-        aRepeatTTIBloodTestFullViewModel().withId(5L).withBloodTestType(BloodTestType.REPEAT_TTI)
+        aRepeatTTIBloodTestFullViewModel().withId(repeatTTIBloodTestId).withBloodTestType(BloodTestType.REPEAT_TTI)
         .build();
     
     BloodTestResultViewModel repeatTTITestResultViewModel =
-        aBloodTestResultViewModel().withId(5L).withBloodTest(repeatTTIFullTestViewModel)
+        aBloodTestResultViewModel().withId(UUID.randomUUID()).withBloodTest(repeatTTIFullTestViewModel)
         .withReEntryRequired()
         .build();
     
-    Map<Long, BloodTestResultViewModel> recentTestResults = new HashMap<>();
-    recentTestResults.put(1L, bloodTypingTestResultViewModel);
-    recentTestResults.put(2L, bloodTTITestResultViewModel);
-    recentTestResults.put(3L, repeatBloodTypingTestResultViewModel);
-    recentTestResults.put(4L, confirmatoryTTITestResultViewModel);
-    recentTestResults.put(5L, repeatTTITestResultViewModel);
+    Map<UUID, BloodTestResultViewModel> recentTestResults = new HashMap<>();
+    recentTestResults.put(basicBloodTypingBloodTestId, bloodTypingTestResultViewModel);
+    recentTestResults.put(basicTTIBloodTestId, bloodTTITestResultViewModel);
+    recentTestResults.put(repeatBloodTypingTestId, repeatBloodTypingTestResultViewModel);
+    recentTestResults.put(confirmatoryTTIBloodTestId, confirmatoryTTITestResultViewModel);
+    recentTestResults.put(repeatTTIBloodTestId, repeatTTITestResultViewModel);
 
 
-    List<Long> noTestIds = new ArrayList<>();
+    List<UUID> noTestIds = new ArrayList<>();
     List<BloodTestingRuleResult> bloodTestingRuleResult = Arrays.asList(
         aBloodTestingRuleResult()
             .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)

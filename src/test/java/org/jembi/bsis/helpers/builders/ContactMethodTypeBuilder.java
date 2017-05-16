@@ -1,13 +1,15 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.address.ContactMethodType;
 
 public class ContactMethodTypeBuilder extends AbstractEntityBuilder<ContactMethodType> {
 
-  private Long id;
+  private UUID id;
   private String contactMethod;
 
-  public ContactMethodTypeBuilder withId(Long id) {
+  public ContactMethodTypeBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

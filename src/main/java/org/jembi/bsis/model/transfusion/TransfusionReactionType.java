@@ -7,7 +7,7 @@ import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotBlank;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.repository.constant.TransfusionReactionTypeNamedQueryConstants;
 
 /**
@@ -23,7 +23,7 @@ import org.jembi.bsis.repository.constant.TransfusionReactionTypeNamedQueryConst
 })
 @Entity
 @Audited
-public class TransfusionReactionType extends BaseModificationTrackerEntity {
+public class TransfusionReactionType extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

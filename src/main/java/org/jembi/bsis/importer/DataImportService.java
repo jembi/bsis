@@ -1,5 +1,16 @@
 package org.jembi.bsis.importer;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -69,16 +80,6 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 @Transactional
 @Service
 @Scope("prototype")
@@ -134,7 +135,7 @@ public class DataImportService {
   private EntityManager entityManager;
 
   private Map<String, Donor> externalDonorIdToBsisDonor = new HashMap<>();
-  private Map<String, Long> donationIdentificationNumberToDonationId = new HashMap<>();
+  private Map<String, UUID> donationIdentificationNumberToDonationId = new HashMap<>();
 
   private boolean validationOnly;
   private String action;
@@ -1103,10 +1104,10 @@ public class DataImportService {
       BindException errors = new BindException(testOutcomeBackingForm, "TestResultBackingForm");
 
       Date testedOn = null;
-      Long donationId = null;
+      UUID donationId = null;
       BloodTest bloodTest = null;
       String outcome = null;
-      Map<Long, String> testResults = new HashMap<>();
+      Map<UUID, String> testResults = new HashMap<>();
 
       for (Cell cell : row) {
         Cell header = headers.getCell(cell.getColumnIndex());

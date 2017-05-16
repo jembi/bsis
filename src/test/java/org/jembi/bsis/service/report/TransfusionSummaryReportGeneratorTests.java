@@ -4,17 +4,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.CohortBuilder.aCohort;
-import static org.jembi.bsis.helpers.builders.TransfusionSummaryDTOBuilder.aTransfusionSummaryDTO;
-import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTransfusionReactionType;
 import static org.jembi.bsis.helpers.builders.DataValueBuilder.aDataValue;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aUsageSite;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.ReportBuilder.aReport;
+import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTransfusionReactionType;
+import static org.jembi.bsis.helpers.builders.TransfusionSummaryDTOBuilder.aTransfusionSummaryDTO;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.TransfusionSummaryDTO;
@@ -45,8 +46,9 @@ public class TransfusionSummaryReportGeneratorTests extends UnitTestSuite {
 
     Date irrelevantStartDate = new Date();
     Date irrelevantEndDate = new Date();
-    Location transfusionSite = aUsageSite().withId(1L).build();
-    LocationViewModel transfusionSiteViewModel = aLocationViewModel().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location transfusionSite = aUsageSite().withId(locationId).build();
+    LocationViewModel transfusionSiteViewModel = aLocationViewModel().withId(locationId).build();
 
     List<TransfusionSummaryDTO> dtos = Arrays.asList(
         aTransfusionSummaryDTO()

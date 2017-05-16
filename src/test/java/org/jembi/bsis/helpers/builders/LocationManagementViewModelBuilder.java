@@ -1,16 +1,18 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.viewmodel.DivisionViewModel;
 import org.jembi.bsis.viewmodel.LocationManagementViewModel;
 
 public class LocationManagementViewModelBuilder extends AbstractBuilder<LocationManagementViewModel> {
 
-  private Long id;
+  private UUID id;
   private DivisionViewModel divisionLevel3;
   private boolean isDeleted;
   private String name;
 
-  public LocationManagementViewModelBuilder withId(Long id) {
+  public LocationManagementViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

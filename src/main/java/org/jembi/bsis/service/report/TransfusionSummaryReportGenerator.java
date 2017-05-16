@@ -1,5 +1,10 @@
 package org.jembi.bsis.service.report;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.TransfusionSummaryDTO;
 import org.jembi.bsis.factory.LocationFactory;
@@ -10,10 +15,6 @@ import org.jembi.bsis.model.reporting.Report;
 import org.jembi.bsis.repository.TransfusionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class TransfusionSummaryReportGenerator {
@@ -40,7 +41,7 @@ public class TransfusionSummaryReportGenerator {
    * @param endDate
    * The period end date for date range
    */
-  public Report generateTransfusionSummaryReport(Long transfusionSiteId, Date startDate, Date endDate) {
+  public Report generateTransfusionSummaryReport(UUID transfusionSiteId, Date startDate, Date endDate) {
     Report report = new Report();
     report.setStartDate(startDate);
     report.setEndDate(endDate);
@@ -49,7 +50,7 @@ public class TransfusionSummaryReportGenerator {
     return report;
   }
 
-  private List<DataValue> generateReportDataValues(Long transfusionSiteId, Date startDate, Date endDate) {
+  private List<DataValue> generateReportDataValues(UUID transfusionSiteId, Date startDate, Date endDate) {
     List<TransfusionSummaryDTO> dtos = transfusionRepository.findTransfusionSummaryRecordedForUsageSiteForPeriod(transfusionSiteId, startDate, endDate);
 
     List<DataValue> dataValues = new ArrayList<>(dtos.size());

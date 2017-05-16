@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -34,7 +35,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
 
   private static final Date NO_START_DATE = null;
   private static final Date NO_END_DATE = null;
-  private static final Set<Long> NO_VENUES = null;
+  private static final Set<UUID> NO_VENUES = null;
   private static final CounsellingStatus NO_COUNSELLING_STATUS = null; 
   private static final Boolean NO_REFERRED = null;
   private static final Boolean NO_NOT_REFERRED = null;
@@ -76,7 +77,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
 
     Location firstVenue = aVenue().buildAndPersist(entityManager);
     Location secondVenue = aVenue().buildAndPersist(entityManager);
-    List<Long> venues = Arrays.asList(firstVenue.getId(), secondVenue.getId());
+    List<UUID> venues = Arrays.asList(firstVenue.getId(), secondVenue.getId());
     
     PostDonationCounselling one = aPostDonationCounselling()
         .thatIsFlaggedForCounselling()
@@ -555,7 +556,7 @@ public class PostDonationCounsellingRepositoryTests extends SecurityContextDepen
 
     assertThat(returnedPostDonationCounselling, is(expectedPostDonationCounselling));
   }
-
+  
   @Test
   public void testCountFlaggedPostDonationCounsellingsForDonorWithNoPostDonationCounsellings_shouldReturnZero() {
 

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.controllerservice.DonorControllerService;
 import org.jembi.bsis.factory.DonationFactory;
@@ -23,8 +24,6 @@ import org.mockito.Mock;
 
 public class DonorControllerServiceTests extends UnitTestSuite {
   
-  private static final long DONOR_ID = 17L;
-
   @InjectMocks
   private DonorControllerService donorControllerService;
   @Mock
@@ -35,23 +34,28 @@ public class DonorControllerServiceTests extends UnitTestSuite {
   @Test
   public void testFindDonationsForDonor_shouldReturnViewModel() {
     // Setup
+    UUID userId = UUID.randomUUID();
+    UUID donorId = UUID.randomUUID();
+    UUID donationId1 = UUID.randomUUID();
+    UUID donationId2 = UUID.randomUUID();
+
     List<Donation> donations = Arrays.asList(
-        aDonation().withId(1L).build(),
-        aDonation().withId(8L).build()
+        aDonation().withId(donationId1).build(),
+        aDonation().withId(donationId2).build()
     );
-    Donor donor = aDonor().withId(USER_ID).withDonations(donations).build();
+    Donor donor = aDonor().withId(userId).withDonations(donations).build();
     
     // Expectations
     List<DonationViewModel> expectedViewModels = Arrays.asList(
-        aDonationViewModel().withId(1L).build(),
-        aDonationViewModel().withId(8L).build()
+        aDonationViewModel().withId(donationId1).build(),
+        aDonationViewModel().withId(donationId2).build()
     );
     
-    when(donorRepository.findDonorById(DONOR_ID)).thenReturn(donor);
+    when(donorRepository.findDonorById(donorId)).thenReturn(donor);
     when(donationFactory.createDonationViewModelsWithPermissions(donations)).thenReturn(expectedViewModels);
     
     // Test
-    List<DonationViewModel> returnedViewModels = donorControllerService.findDonationsForDonor(DONOR_ID);
+    List<DonationViewModel> returnedViewModels = donorControllerService.findDonationsForDonor(donorId);
     
     // Verifications
     assertThat(returnedViewModels, is(expectedViewModels));

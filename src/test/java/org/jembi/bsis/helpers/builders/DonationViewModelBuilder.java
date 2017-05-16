@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
@@ -17,7 +18,7 @@ import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 
 public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel> {
 
-  private Long id;
+  private UUID id;
   private Map<String, Boolean> permissions;
   private AdverseEventViewModel adverseEvent;
   private PackTypeFullViewModel packType;
@@ -43,7 +44,7 @@ public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel>
   private LocationViewModel venue;
   private boolean released;
 
-  public DonationViewModelBuilder withId(Long id) {
+  public DonationViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

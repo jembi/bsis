@@ -2,6 +2,7 @@ package org.jembi.bsis.backingform.validator;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestResultsBackingForm;
 import org.jembi.bsis.backingform.TestResultsBackingForms;
@@ -40,7 +41,7 @@ public class TestResultsBackingFormsValidator extends BaseValidator<TestResultsB
       activeBloodTestsMap.put(bloodTypingTest.getId().toString(), bloodTypingTest);
     }
 
-    for (Long testId : form.getTestResults().keySet()) {
+    for (UUID testId : form.getTestResults().keySet()) {
 
       BloodTest activeBloodTest = activeBloodTestsMap.get(testId.toString());
 

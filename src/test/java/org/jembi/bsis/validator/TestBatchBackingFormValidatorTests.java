@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -32,6 +33,9 @@ import org.springframework.validation.Errors;
 
 public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
+  private static final UUID DONATION_BATCH_ID_1 = UUID.randomUUID();
+  private static final UUID DONATION_BATCH_ID_2 = UUID.randomUUID();
+
   @InjectMocks
   private TestBatchBackingFormValidator validator;
   @Mock
@@ -51,13 +55,14 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateUpdateWithUnassignedDonationBatch() {
+
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
-    backingForm.setDonationBatchIds(Arrays.asList(1l, 2l));
+    backingForm.setId(UUID.randomUUID());
+    backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
     backingForm.setCreatedDate(new Date());
 
-    when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(new DonationBatch());
-    when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(new DonationBatch());
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
 
@@ -69,20 +74,21 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateUpdateWithDonationBatchAssignedToAnotherBatch() {
+
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
-    backingForm.setDonationBatchIds(Arrays.asList(1l, 2l));
+    backingForm.setId(UUID.randomUUID());
+    backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
     backingForm.setCreatedDate(new Date());
     TestBatch tb2 = new TestBatch();
-    tb2.setId(2l);
+    tb2.setId(UUID.randomUUID());
     Location venue = new Location();
     venue.setName("Test");
     DonationBatch db1 = new DonationBatch();
     db1.setTestBatch(tb2);
     db1.setVenue(venue);
 
-    when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(db1);
-    when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(new DonationBatch());
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(db1);
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
 
@@ -95,20 +101,21 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateUpdateWithDonationBatchAssignedToBatch() {
+    UUID testBatchId = UUID.randomUUID();
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
-    backingForm.setDonationBatchIds(Arrays.asList(1l, 2l));
+    backingForm.setId(testBatchId);
+    backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
     backingForm.setCreatedDate(new Date());
     TestBatch tb1 = new TestBatch();
-    tb1.setId(1l);
+    tb1.setId(testBatchId);
     Location venue = new Location();
     venue.setName("Test");
     DonationBatch db1 = new DonationBatch();
     db1.setTestBatch(tb1);
     db1.setVenue(venue);
 
-    when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(db1);
-    when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(new DonationBatch());
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(db1);
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
 
@@ -120,13 +127,15 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateWithNonExistentLocation() {
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
-    backingForm.setLocation(aLocationBackingForm().withId(1L).build());
 
-    when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(new DonationBatch());
-    when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(new DonationBatch());
-    when(locationRepository.getLocation(1L)).thenThrow(new NoResultException());
+    TestBatchBackingForm backingForm = new TestBatchBackingForm();
+    backingForm.setId(UUID.randomUUID());
+    UUID locationId = UUID.randomUUID();
+    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
+
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
+    when(locationRepository.getLocation(locationId)).thenThrow(new NoResultException());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
 
@@ -140,13 +149,15 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateWithNonTestingSiteLocation() {
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
-    backingForm.setLocation(aLocationBackingForm().withId(1L).build());
 
-    when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(new DonationBatch());
-    when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(new DonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(aDistributionSite().build());
+    TestBatchBackingForm backingForm = new TestBatchBackingForm();
+    backingForm.setId(UUID.randomUUID());
+    UUID locationId = UUID.randomUUID();
+    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
+
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(aDistributionSite().build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
 
@@ -160,13 +171,15 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateWithDeletedLocation() {
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
-    backingForm.setLocation(aLocationBackingForm().withId(1L).build());
 
-    when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(new DonationBatch());
-    when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(new DonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(aTestingSite().thatIsDeleted().build());
+    TestBatchBackingForm backingForm = new TestBatchBackingForm();
+    backingForm.setId(UUID.randomUUID());
+    UUID locationId = UUID.randomUUID();
+    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
+
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().thatIsDeleted().build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
 
@@ -180,12 +193,14 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateWithNoLocation() {
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(1l);
 
-    when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(new DonationBatch());
-    when(donationBatchRepository.findDonationBatchById(2l)).thenReturn(new DonationBatch());
-    when(locationRepository.getLocation(1L)).thenReturn(aTestingSite().thatIsDeleted().build());
+    TestBatchBackingForm backingForm = new TestBatchBackingForm();
+    backingForm.setId(UUID.randomUUID());
+    UUID locationId = UUID.randomUUID();
+
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().thatIsDeleted().build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -53,6 +54,11 @@ public class BloodTestsServiceTest extends UnitTestSuite {
 
   private static final String IRRELEVANT_DONATION_DIN_1 = "1111111";
   private static final String IRRELEVANT_DONATION_DIN_2 = "2222222";
+  private static final UUID DONATION_ID = UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837b1");
+  private static final UUID FIRST_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  private static final UUID SECOND_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  private static final UUID THIRD_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  private static final UUID FOURTH_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
 
   @InjectMocks
   BloodTestsService service;
@@ -92,15 +98,15 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsNotUpdated() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(1l).withBloodAbo("A").withBloodRh("+")
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
 
     // set up mocks
 
@@ -114,7 +120,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedBloodAbo() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(1l).withBloodRh("+").withTTIStatus(TTIStatus.NOT_DONE)
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodRh("+").withTTIStatus(TTIStatus.NOT_DONE)
         .withBloodTypingStatus(BloodTypingStatus.NOT_DONE).withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
         .build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -136,7 +142,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
 
   public void testUpdateDonationWithTestResultsUpdatedBloodRh() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(1l).withBloodAbo("A").withTTIStatus(TTIStatus.NOT_DONE)
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withTTIStatus(TTIStatus.NOT_DONE)
         .withBloodTypingStatus(BloodTypingStatus.NOT_DONE).withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
         .build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -159,7 +165,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedTTISafe() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(1l).withBloodAbo("A").withBloodRh("+")
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
         .withTTIStatus(TTIStatus.NOT_DONE).withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -167,7 +173,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
 
     // set up mocks
 
@@ -176,21 +182,21 @@ public class BloodTestsServiceTest extends UnitTestSuite {
 
     // do asserts
     Assert.assertTrue("Donation updated", updated);
-    Assert.assertEquals("TTI status set", TTIStatus.TTI_SAFE, donation.getTTIStatus());
+    Assert.assertEquals("TTI status set", TTIStatus.SAFE, donation.getTTIStatus());
   }
 
   @Test
   public void testUpdateDonationWithTestResultsUpdatedBloodTypingStatus() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(1l).withBloodAbo("A").withBloodRh("+")
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.PENDING_TESTS);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
 
     // set up mocks
 
@@ -205,15 +211,15 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedBloodTypingMatchStatus() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(1l).withBloodAbo("A").withBloodRh("+")
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setBloodAbo("A");
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
-    ruleResult.setTTIStatus(TTIStatus.TTI_SAFE);
+    ruleResult.setTTIStatus(TTIStatus.SAFE);
 
     // set up mocks
 
@@ -229,7 +235,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedNotTTISafe() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(1l).withTTIStatus(TTIStatus.TTI_SAFE)
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE).withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -237,7 +243,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     ruleResult.setBloodRh("+");
     ruleResult.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
     ruleResult.setBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH);
-    ruleResult.setTTIStatus(TTIStatus.TTI_UNSAFE);
+    ruleResult.setTTIStatus(TTIStatus.UNSAFE);
 
     // set up mocks
 
@@ -246,13 +252,13 @@ public class BloodTestsServiceTest extends UnitTestSuite {
 
     // do asserts
     Assert.assertTrue("Donation updated", updated);
-    Assert.assertEquals("TTI status set", TTIStatus.TTI_UNSAFE, donation.getTTIStatus());
+    Assert.assertEquals("TTI status set", TTIStatus.UNSAFE, donation.getTTIStatus());
   }
 
   @Test
   public void testUpdateDonationWithTestResultsUpdatedTitreFromNull_shouldUpdate() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(null).build();
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTitre(null).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setTitre(Titre.LOW);
 
@@ -267,7 +273,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedTitreFromHighToLow_shouldUpdate() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(Titre.HIGH).build();
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTitre(Titre.HIGH).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setTitre(Titre.LOW);
 
@@ -282,7 +288,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedTitreFromHighToNT_shouldUpdate() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(Titre.HIGH).build();
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTitre(Titre.HIGH).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setTitre(null);
 
@@ -297,7 +303,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsSameTitre_shouldNotUpdate() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(1l).withTitre(Titre.HIGH).build();
+    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTitre(Titre.HIGH).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setTitre(Titre.HIGH);
 
@@ -315,21 +321,22 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
-    Map<Long, String> bloodTestResults = new HashMap<>();
-    bloodTestResults.put(1l, "AB");
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    UUID bloodTestId = UUID.randomUUID();
+    Map<UUID, String> bloodTestResults = new HashMap<>();
+    bloodTestResults.put(bloodTestId, "AB");
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(bloodTestId).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
-        .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
     // set up mocks
-    when(bloodTestRepository.findBloodTestById(1L)).thenReturn(bloodTest);
+    when(bloodTestRepository.findBloodTestById(bloodTestId)).thenReturn(bloodTest);
     when(donationRepository.findDonationById(donation.getId())).thenReturn(donation);
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)).thenReturn(donation);
     when(ruleEngine.applyBloodTests(donation, bloodTestResults)).thenReturn(ruleResult);
@@ -344,7 +351,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
 
     // run test
@@ -366,17 +373,18 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
-    Map<Long, String> bloodTestResults = new HashMap<>();
-    bloodTestResults.put(1l, "AB");
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    UUID bloodTestId = UUID.randomUUID();
+    Map<UUID, String> bloodTestResults = new HashMap<>();
+    bloodTestResults.put(bloodTestId, "AB");
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(bloodTestId).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
-        .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
     // set up mocks
@@ -393,7 +401,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
 
     // run test
@@ -414,22 +422,24 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
-    Map<Long, String> bloodTestResults = new HashMap<>(); // tests passed to the 'saveBloodTests'
-                                                          // service method
-    bloodTestResults.put(1l, "AB");
+    UUID bloodTestId = UUID.randomUUID();
 
-    Map<Long, String> reEnteredBloodTestResults = new HashMap<>(); // tests passed to the rules
+    Map<UUID, String> bloodTestResults = new HashMap<>(); // tests passed to the 'saveBloodTests'
+                                                          // service method
+    bloodTestResults.put(bloodTestId, "AB");
+
+    Map<UUID, String> reEnteredBloodTestResults = new HashMap<>(); // tests passed to the rules
                                                                    // engine
 
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(bloodTestId).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
-        .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
     // set up mocks
@@ -446,7 +456,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true))
         .thenReturn(true);
@@ -468,18 +478,19 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
-    Donation donation = DonationBuilder.aDonation().withTTIStatus(TTIStatus.TTI_SAFE)
+    Donation donation = DonationBuilder.aDonation().withTTIStatus(TTIStatus.SAFE)
         .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
-    Map<Long, String> bloodTestResults = new HashMap<>();
-    bloodTestResults.put(1l, "AB");
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    UUID bloodTestId = UUID.randomUUID();
+    Map<UUID, String> bloodTestResults = new HashMap<>();
+    bloodTestResults.put(bloodTestId, "AB");
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(bloodTestId).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
     BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
-        .withBloodRh("+").withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
     // set up mocks
@@ -496,7 +507,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
     when(typedQuery.getSingleResult()).thenReturn(bloodTest);
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true))
         .thenReturn(true);
@@ -523,17 +534,18 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
     Donation donation1 = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
     Donation donation2 = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_2)
-        .withTTIStatus(TTIStatus.TTI_SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
 
-    Map<Long, String> bloodTestResults = new HashMap<>();
-    bloodTestResults.put(1l, "AB");
-    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(17l).build();
+    UUID bloodTestId = UUID.randomUUID();
+    Map<UUID, String> bloodTestResults = new HashMap<>();
+    bloodTestResults.put(bloodTestId, "AB");
+    BloodTest bloodTest = BloodTestBuilder.aBloodTest().withId(bloodTestId).build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1l).withBloodTest(bloodTest).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
     // set up mocks
     when(donationRepository.findDonationByDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1))
@@ -551,7 +563,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
         .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", 17)).thenReturn(typedQuery);
+    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
 
     // run test
     TestResultsBackingForm form1 = TestResultsBackingFormBuilder.aTestResultsBackingForm()
@@ -576,10 +588,10 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // Set up data
     Donation donation = DonationBuilder.aDonation().build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(1L).withDonation(donation).build());
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(2L).withDonation(donation).build());
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(3L).withDonation(donation).build());
-    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(4L).withDonation(donation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withDonation(donation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(SECOND_BLOOD_TEST_RESULT_ID).withDonation(donation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(THIRD_BLOOD_TEST_RESULT_ID).withDonation(donation).build());
+    bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FOURTH_BLOOD_TEST_RESULT_ID).withDonation(donation).build());
 
     BloodTestResult deleted1 = bloodTestResultList.get(0);
     deleted1.setIsDeleted(true);

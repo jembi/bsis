@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
@@ -49,11 +50,11 @@ public class DonorDeferralStatusCalculator {
     return generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.DEFER_DONORS_WITH_NEG_REPEAT_OUTCOMES);
   }
 
-  public boolean isDonorCurrentlyDeferred(long donorId) {
+  public boolean isDonorCurrentlyDeferred(UUID donorId) {
     return donorDeferralRepository.countCurrentDonorDeferralsForDonor(donorId) > 0;
   }
 
-  public boolean isDonorDeferredOnDate(long donorId, Date date) {
+  public boolean isDonorDeferredOnDate(UUID donorId, Date date) {
     return donorDeferralRepository.countDonorDeferralsForDonorOnDate(donorId, date) > 0;
   }
 

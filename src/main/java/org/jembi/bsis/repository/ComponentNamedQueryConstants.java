@@ -40,8 +40,8 @@ public class ComponentNamedQueryConstants {
       "SELECT DISTINCT c FROM Component c " +
       "WHERE c.status = 'AVAILABLE' " +
       "AND (:includeInitialComponents = true OR c.parentComponent is not null) " +
-      "AND (:componentTypeId is null OR c.componentType.id = :componentTypeId) " +
-      "AND (:locationId is null OR c.location.id = :locationId) " +
+      "AND (:includeAllComponents = true OR c.componentType.id = :componentTypeId) " +
+      "AND (:includeAllLocations = true OR c.location.id = :locationId) " +
       "AND (:startDate is null OR c.createdOn >= :startDate) " +
       "AND (:endDate is null OR c.createdOn <= :endDate) " +
       "AND (:includeBloodGroups = false OR CONCAT(c.donation.bloodAbo,c.donation.bloodRh) IN (:bloodGroups))"+
@@ -56,7 +56,7 @@ public class ComponentNamedQueryConstants {
       "AND (:includeComponentTypes = false OR c.componentType.id IN (:componentTypeIds)) " +
       "AND (:donationDateFrom = null OR c.donation.donationDate >= :donationDateFrom) " +
       "AND (:donationDateTo = null OR c.donation.donationDate <= :donationDateTo) " +
-      "AND (:locationId = null OR c.location.id = :locationId) " +
+      "AND (:includeAllLocations is true OR c.location.id = :locationId) " +
       "AND (:includeStatus = false OR c.status = :status) " +
       "ORDER BY c.id ASC";
   
@@ -114,7 +114,8 @@ public class ComponentNamedQueryConstants {
       "select DISTINCT new org.jembi.bsis.dto.DiscardedComponentDTO(s.component.componentType.componentTypeName, s.statusChangeReason.statusChangeReason, s.component.componentBatch.location, count(s.component)) " +
       "from ComponentStatusChange AS s " +
       "where s.component.status = 'DISCARDED' and s.newStatus ='DISCARDED' " +
-      "and (s.component.componentBatch.location.id = :processingSiteId OR :processingSiteId = NULL) " +
+          "and (s.component.componentBatch.location.id = :processingSiteId OR :includeAllProcessingSites is true) "
+          +
       "and s.isDeleted = false " +
       "and s.component.componentBatch IS NOT NULL " +
       "and s.statusChangedOn BETWEEN :startDate AND :endDate " +
@@ -132,7 +133,7 @@ public class ComponentNamedQueryConstants {
       + "AND c.isDeleted = :deleted "
       + "AND c.status NOT IN :excludedStatuses "
       //if processingSiteId is null, get all the sites otherwise fetch the provided processingSite
-      + "AND (cb.location.id = :processingSiteId OR :processingSiteId = NULL) "
+      + "AND (cb.location.id = :processingSiteId OR :includeAllProcessingSites is true) "
       + "GROUP BY cb.location, c.componentType.componentTypeName, c.donation.bloodAbo, c.donation.bloodRh "
       + "ORDER BY cb.location, c.componentType.componentTypeName ASC";
 

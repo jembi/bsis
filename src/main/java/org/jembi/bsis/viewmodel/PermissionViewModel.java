@@ -1,6 +1,6 @@
 package org.jembi.bsis.viewmodel;
 
-public class PermissionViewModel extends BaseViewModel {
+public class PermissionViewModel extends BaseViewModel<Long> {
 
   private String name;
 

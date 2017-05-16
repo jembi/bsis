@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -45,6 +46,8 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
   private TransfusionRepository transfusionRepository;
   @Mock
   private ComponentRepository componentRepository;
+  
+  private static final UUID COMPONENT_ID = UUID.randomUUID();
 
   @Test
   public void testCreateTransfusion_shouldCreateAndUpdateComponentStatus() throws Exception {
@@ -52,13 +55,14 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     String din = "1234567";
     TransfusionOutcome transfusionOutcome = TransfusionOutcome.TRANSFUSED_UNEVENTFULLY;
     String notes = "notes";
-    Patient patient = aPatient().withId(1L).build();
-    Long componentTypeId = 1L;
+    UUID patientId = UUID.randomUUID();
+    Patient patient = aPatient().withId(patientId).build();
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
-    Component transfusedComponent = aComponent().withId(1L).withComponentType(componentType).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Component transfusedComponent = aComponent().withId(COMPONENT_ID).withComponentType(componentType).build();
+    Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
     Transfusion transfusion = aTransfusion()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withComponent(transfusedComponent)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(transfusionOutcome)
@@ -76,7 +80,7 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
 
   @Test
   public void testFindTransfusionsWithDinAndComponentCode_shouldReturnOneTransfusion() {
-    Transfusion transfusion = aTransfusion().withId(1L).build();
+    Transfusion transfusion = aTransfusion().withId(UUID.randomUUID()).build();
 
     // set up mocks
     when(transfusionRepository.findTransfusionByDINAndComponentCode("1000000", "1001")).thenReturn(transfusion);
@@ -109,12 +113,14 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Date transfusionDate = new Date();
     TransfusionOutcome transfusionOutcome = TransfusionOutcome.TRANSFUSED_UNEVENTFULLY;
     String notes = "notes";
-    Patient patient = aPatient().withId(1L).build();
-    Long componentTypeId = 1L;
+    UUID patientId = UUID.randomUUID();
+    Patient patient = aPatient().withId(patientId).build();
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
+    UUID transfusionId = UUID.randomUUID();
     Transfusion transfusion = aTransfusion()
-        .withId(1L)
+        .withId(transfusionId)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(transfusionOutcome)
         .withPatient(patient)
@@ -122,10 +128,10 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
         .withDateTransfused(transfusionDate)
         .thatIsNotDeleted()
         .build();
-    Component transfusedComponent = aComponent().withId(1L).withComponentType(componentType).build();
+    Component transfusedComponent = aComponent().withId(COMPONENT_ID).withComponentType(componentType).build();
     List<Component> returnedComponents = Arrays.asList(transfusedComponent);
     Transfusion expectedTransfusion = aTransfusion()
-        .withId(1L)
+        .withId(transfusionId)
         .withComponent(transfusedComponent)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(transfusionOutcome)
@@ -150,12 +156,14 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Date transfusionDate = new Date();
     TransfusionOutcome transfusionOutcome = TransfusionOutcome.TRANSFUSED_UNEVENTFULLY;
     String notes = "notes";
-    Patient patient = aPatient().withId(1L).build();
-    Long componentTypeId = 1L;
+    UUID patientId = UUID.randomUUID();
+    UUID componentId = UUID.randomUUID();
+    Patient patient = aPatient().withId(patientId).build();
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
     Transfusion transfusion = aTransfusion()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(transfusionOutcome)
         .withPatient(patient)
@@ -163,8 +171,8 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
         .withDateTransfused(transfusionDate)
         .thatIsNotDeleted()
         .build();
-    Component transfusedComponent1 = aComponent().withId(1L).withComponentType(componentType).build();
-    Component transfusedComponent2 = aComponent().withId(2L).withComponentType(componentType).build();
+    Component transfusedComponent1 = aComponent().withId(COMPONENT_ID).withComponentType(componentType).build();
+    Component transfusedComponent2 = aComponent().withId(componentId).withComponentType(componentType).build();
     List<Component> returnedComponents = Arrays.asList(transfusedComponent1, transfusedComponent2);
 
     when(componentCRUDService.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId))
@@ -180,10 +188,12 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Date transfusionDate = new Date();
     TransfusionOutcome transfusionOutcome = TransfusionOutcome.TRANSFUSED_UNEVENTFULLY;
     String notes = "notes";
-    Patient patient = aPatient().withId(1L).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    UUID patientId = UUID.randomUUID();
+    Patient patient = aPatient().withId(patientId).build();
+    Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
+    UUID transfusionId = UUID.randomUUID();
     Transfusion transfusion = aTransfusion()
-        .withId(1L)
+        .withId(transfusionId)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(transfusionOutcome)
         .withPatient(patient)
@@ -192,11 +202,11 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
         .thatIsNotDeleted()
         .build();
     Component transfusedComponent = aComponent()
-        .withId(1L)
+        .withId(COMPONENT_ID)
         .withComponentCode(transfusedComponentCode)
         .build();
     Transfusion expectedTransfusion = aTransfusion()
-        .withId(1L)
+        .withId(transfusionId)
         .withComponent(transfusedComponent)
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(transfusionOutcome)
@@ -221,12 +231,13 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
     Date transfusionDate = new Date();
     TransfusionOutcome transfusionOutcome = TransfusionOutcome.TRANSFUSED_UNEVENTFULLY;
     String notes = "notes";
-    Patient patient = aPatient().withId(1L).build();
-    Long componentTypeId = 1L;
+    UUID patientId = UUID.randomUUID();
+    Patient patient = aPatient().withId(patientId).build();
+    UUID componentTypeId = UUID.randomUUID();
     ComponentType componentType = aComponentType().withId(componentTypeId).build();
-    Location receivedFrom = aLocation().withId(1L).build();
+    Location receivedFrom = aLocation().withId(UUID.randomUUID()).build();
     Transfusion transfusion = aTransfusion()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withReceivedFrom(receivedFrom)
         .withTransfusionOutcome(transfusionOutcome)
         .withPatient(patient)
@@ -257,8 +268,9 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testDeleteTransfusion_shouldMarkAsDeleted() {
     // Set up
+
     Transfusion transfusion = aTransfusion()
-        .withId(1L)
+        .withId(UUID.randomUUID())
         .withDateTransfused(new Date())
         .withPatient(aPatient()
             .withName1("Name 1")
@@ -266,15 +278,15 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
             .build())
         .withReceivedFrom(aUsageSite().build())
         .withComponent(aComponent()
-            .withId(1L)
+            .withId(COMPONENT_ID)
             .withStatus(ComponentStatus.TRANSFUSED)
             .build())
         .build();
 
     // Mocks
-    when(transfusionRepository.findTransfusionById(1L)).thenReturn(transfusion);
+    when(transfusionRepository.findTransfusionById(transfusion.getId())).thenReturn(transfusion);
     // Test
-    transfusionCRUDService.deleteTransfusion(1L);
+    transfusionCRUDService.deleteTransfusion(transfusion.getId());
 
     // Assertions
     assertThat("Transfusion has been deleted", transfusion.getIsDeleted());
@@ -283,10 +295,11 @@ public class TransfusionCRUDServiceTests extends UnitTestSuite {
   @Test(expected = IllegalStateException.class)
   public void testDeleteTransfusionDeleted_shouldThrow() {
 
+    UUID transfusionId = UUID.randomUUID();
     // Mocks
-    when(transfusionRepository.findTransfusionById(1L)).thenReturn(null);
+    when(transfusionRepository.findTransfusionById(transfusionId)).thenReturn(null);
 
     // Test
-    transfusionCRUDService.deleteTransfusion(1L);
+    transfusionCRUDService.deleteTransfusion(transfusionId);
   }
 }

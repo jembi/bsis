@@ -2,18 +2,19 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.PermissionBackingForm;
 import org.jembi.bsis.backingform.RoleBackingForm;
 
 public class RoleBackingFormBuilder extends AbstractBuilder<RoleBackingForm> {
 
-  private Long id;
+  private UUID id;
   private String name;
   private String description;
   private Set<PermissionBackingForm> permissions;
 
-  public RoleBackingFormBuilder withId(Long id) {
+  public RoleBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

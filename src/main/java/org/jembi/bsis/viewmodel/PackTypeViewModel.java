@@ -1,6 +1,8 @@
 package org.jembi.bsis.viewmodel;
 
-public class PackTypeViewModel extends BaseViewModel {
+import java.util.UUID;
+
+public class PackTypeViewModel extends BaseViewModel<UUID> {
 
   private String packType;
 

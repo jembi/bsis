@@ -1,16 +1,18 @@
 package org.jembi.bsis.viewmodel;
 
+import java.util.UUID;
+
 public class AdverseEventViewModel {
 
-  private Long id;
+  private UUID id;
   private AdverseEventTypeViewModel type;
   private String comment;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

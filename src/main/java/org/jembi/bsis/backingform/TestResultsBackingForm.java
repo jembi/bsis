@@ -1,11 +1,12 @@
 package org.jembi.bsis.backingform;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class TestResultsBackingForm {
 
   private String donationIdentificationNumber;
-  private Map<Long, String> testResults;
+  private Map<UUID, String> testResults;
   private boolean saveUninterpretableResults;
 
   public String getDonationIdentificationNumber() {
@@ -16,11 +17,11 @@ public class TestResultsBackingForm {
     this.donationIdentificationNumber = donationIdentificationNumber;
   }
 
-  public Map<Long, String> getTestResults() {
+  public Map<UUID, String> getTestResults() {
     return testResults;
   }
 
-  public void setTestResults(Map<Long, String> testResults) {
+  public void setTestResults(Map<UUID, String> testResults) {
     this.testResults = testResults;
   }
 

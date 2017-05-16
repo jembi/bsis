@@ -19,10 +19,10 @@ public class OrderFormNamedQueryConstants {
       "WHERE o.isDeleted=:isDeleted " +
       "AND (:orderDateFrom is null OR o.orderDate >= :orderDateFrom) " +
       "AND (:orderDateTo is null OR o.orderDate <= :orderDateTo) " +
-      "AND (:dispatchedFromId is null OR o.dispatchedFrom.id = :dispatchedFromId) " +
-      "AND (:dispatchedToId is null OR o.dispatchedTo.id = :dispatchedToId) " +
-      "AND (:includeStatus = false OR o.status = :status) " +
-      "AND (:incudeType = false OR o.type = :type) " +
+      "AND (:includeAllDispatchFromLocations is true OR o.dispatchedFrom.id = :dispatchedFromId) " +
+      "AND (:includeAllDispatchToLocations is true OR o.dispatchedTo.id = :dispatchedToId) " +
+      "AND (:includeAllStatuses is true OR o.status = :status) " +
+      "AND (:incudeAllTypes is true OR o.type = :type) " +
       "ORDER BY o.orderDate DESC";
   
   public static final String NAME_FIND_BLOOD_UNITS_ORDERED =
@@ -58,7 +58,7 @@ public class OrderFormNamedQueryConstants {
       "SELECT count(o) > 0 " +
           "FROM OrderForm o " +
           "INNER JOIN o.components c " +
-          "WHERE (:id = null OR o.id <> :id) " +
+          "WHERE (:includeId = false OR o.id <> :id) " +
           "AND c.id = :componentId " +
           "AND o.status = :orderStatus " +
           "AND o.isDeleted = :isDeleted";

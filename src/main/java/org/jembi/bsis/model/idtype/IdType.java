@@ -8,13 +8,13 @@ package org.jembi.bsis.model.idtype;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BaseUUIDEntity;
 
 /**
  * Entity representing the various types of Donor identification accepted by the application.
  */
 @Entity
-public class IdType extends BaseEntity {
+public class IdType extends BaseUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

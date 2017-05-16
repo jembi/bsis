@@ -3,6 +3,7 @@ package org.jembi.bsis.repository;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.TypedQuery;
 
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ComponentBatchRepository extends AbstractRepository<ComponentBatch> {
   
-  public ComponentBatch findByIdIncludeDeleted(Long id) {
+  public ComponentBatch findByIdIncludeDeleted(UUID id) {
     return entityManager.find(ComponentBatch.class, id);
   }
 
@@ -25,7 +26,7 @@ public class ComponentBatchRepository extends AbstractRepository<ComponentBatch>
         .getResultList();
   }
   
-  public ComponentBatch findById(Long id) {
+  public ComponentBatch findById(UUID id) {
     return entityManager.createNamedQuery(
         ComponentBatchNamedQueryConstants.NAME_FIND_COMPONENT_BATCH_BY_ID, ComponentBatch.class)
         .setParameter("id", id)
@@ -33,7 +34,7 @@ public class ComponentBatchRepository extends AbstractRepository<ComponentBatch>
         .getSingleResult();
   }
   
-  public ComponentBatch findByIdEager(Long id) {
+  public ComponentBatch findByIdEager(UUID id) {
     return entityManager.createNamedQuery(
         ComponentBatchNamedQueryConstants.NAME_FIND_COMPONENT_BATCH_BY_ID_EAGER, ComponentBatch.class)
         .setParameter("id", id)

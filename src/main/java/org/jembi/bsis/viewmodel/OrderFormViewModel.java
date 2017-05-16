@@ -1,6 +1,7 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.order.OrderStatus;
 import org.jembi.bsis.model.order.OrderType;
@@ -8,7 +9,7 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class OrderFormViewModel extends BaseViewModel {
+public class OrderFormViewModel extends BaseViewModel<UUID> {
 
   private Date orderDate;
 

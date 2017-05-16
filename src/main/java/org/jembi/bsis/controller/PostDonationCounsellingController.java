@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -43,7 +44,7 @@ public class PostDonationCounsellingController {
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_POST_DONATION_COUNSELLING + "')")
   public PostDonationCounsellingViewModel updatePostDonationCounselling(
       @Valid @RequestBody PostDonationCounsellingBackingForm backingForm,
-      @PathVariable Long id) {
+      @PathVariable UUID id) {
 
     return postDonationCounsellingControllerService.update(backingForm);
   }
@@ -74,7 +75,7 @@ public class PostDonationCounsellingController {
       @RequestParam(value = "flaggedForCounselling", required = true) boolean flaggedForCounselling,
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
-      @RequestParam(value = "venue", required = false) Set<Long> venues,
+      @RequestParam(value = "venue", required = false) Set<UUID> venues,
       @RequestParam(value = "counsellingStatus", required = false) CounsellingStatus counsellingStatus,
       @RequestParam(value = "referred", required = false) Boolean referred,
       @RequestParam(value = "notReferred", required = false) Boolean notReferred) {

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.backingform.ComponentTypeCombinationBackingForm;
@@ -35,16 +36,17 @@ public class ComponentTypeCombinationBackingFormValidatorTests extends UnitTestS
   
   @Test
   public void testValidateForm_shouldHaveNoErrors() {
-    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(1L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(componentTypeId).build();
+    ComponentType componentType = aComponentType().withId(componentTypeId).build();
     ComponentTypeCombinationBackingForm backingForm = aComponentTypeCombinationBackingForm()
         .withCombinationName("combination")
         .withComponentTypes(Arrays.asList(componentTypeBackingForm))
         .withSourceComponentTypes(Sets.newHashSet(componentTypeBackingForm))
         .build();
 
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentType);
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId)).thenReturn(componentType);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
     when(componentTypeCombinationRepository.isUniqueCombinationName(null, backingForm.getCombinationName())).thenReturn(true);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentTypeCombination");
@@ -55,16 +57,17 @@ public class ComponentTypeCombinationBackingFormValidatorTests extends UnitTestS
   
   @Test
   public void testValidateFormWithNoCombinationName_shouldHaveOneError() {
-    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(1L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(componentTypeId).build();
+    ComponentType componentType = aComponentType().withId(componentTypeId).build();
     ComponentTypeCombinationBackingForm backingForm = aComponentTypeCombinationBackingForm()
         .withCombinationName(null)
         .withComponentTypes(Arrays.asList(componentTypeBackingForm))
         .withSourceComponentTypes(Sets.newHashSet(componentTypeBackingForm))
         .build();
 
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentType);
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId)).thenReturn(componentType);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentTypeCombination");
     componentTypeCombinationBackingFormValidator.validateForm(backingForm, errors);
@@ -75,8 +78,9 @@ public class ComponentTypeCombinationBackingFormValidatorTests extends UnitTestS
   
   @Test
   public void testValidateFormWithInvalidCombinationNameLength_shouldHaveOneError() {
-    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(1L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(componentTypeId).build();
+    ComponentType componentType = aComponentType().withId(componentTypeId).build();
     ComponentTypeCombinationBackingForm backingForm = aComponentTypeCombinationBackingForm()
         .withCombinationName(
             "verylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongwordverylongword")
@@ -84,8 +88,8 @@ public class ComponentTypeCombinationBackingFormValidatorTests extends UnitTestS
         .withSourceComponentTypes(Sets.newHashSet(componentTypeBackingForm))
         .build();
 
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentType);
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId)).thenReturn(componentType);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentTypeCombination");
     componentTypeCombinationBackingFormValidator.validateForm(backingForm, errors);
@@ -96,16 +100,17 @@ public class ComponentTypeCombinationBackingFormValidatorTests extends UnitTestS
   
   @Test
   public void testValidateFormWithDuplicateCombinationName_shouldHaveOneError() {
-    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(1L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(componentTypeId).build();
+    ComponentType componentType = aComponentType().withId(componentTypeId).build();
     ComponentTypeCombinationBackingForm backingForm = aComponentTypeCombinationBackingForm()
         .withCombinationName("combination")
         .withComponentTypes(Arrays.asList(componentTypeBackingForm))
         .withSourceComponentTypes(Sets.newHashSet(componentTypeBackingForm))
         .build();
 
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentType);
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId)).thenReturn(componentType);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
     when(componentTypeCombinationRepository.isUniqueCombinationName(null, backingForm.getCombinationName())).thenReturn(false);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentTypeCombination");
@@ -117,16 +122,17 @@ public class ComponentTypeCombinationBackingFormValidatorTests extends UnitTestS
   
   @Test
   public void testValidateFormWithNullProducedComponentTypes_shouldHaveOneError() {
-    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(1L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(componentTypeId).build();
+    ComponentType componentType = aComponentType().withId(componentTypeId).build();
     ComponentTypeCombinationBackingForm backingForm = aComponentTypeCombinationBackingForm()
         .withCombinationName("combination")
         .withComponentTypes(null)
         .withSourceComponentTypes(Sets.newHashSet(componentTypeBackingForm))
         .build();
 
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentType);
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId)).thenReturn(componentType);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
     when(componentTypeCombinationRepository.isUniqueCombinationName(null, backingForm.getCombinationName())).thenReturn(true);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentTypeCombination");
@@ -138,18 +144,20 @@ public class ComponentTypeCombinationBackingFormValidatorTests extends UnitTestS
   
   @Test
   public void testValidateFormWithInvalidProducedComponentTypeId_shouldHaveOneError() {
-    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(1L).build();
-    ComponentTypeBackingForm invalidIdComponentTypeBackingForm = aComponentTypeBackingForm().withId(2L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(componentTypeId).build();
+    UUID invalidComponentType = UUID.randomUUID();
+    ComponentTypeBackingForm invalidIdComponentTypeBackingForm = aComponentTypeBackingForm().withId(invalidComponentType).build();
+    ComponentType componentType = aComponentType().withId(componentTypeId).build();
     ComponentTypeCombinationBackingForm backingForm = aComponentTypeCombinationBackingForm()
         .withCombinationName("combination")
         .withComponentTypes(Arrays.asList(invalidIdComponentTypeBackingForm))
         .withSourceComponentTypes(Sets.newHashSet(componentTypeBackingForm))
         .build();
 
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentType);
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
-    when(componentTypeRepository.verifyComponentTypeExists(2L)).thenReturn(false);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId)).thenReturn(componentType);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
+    when(componentTypeRepository.verifyComponentTypeExists(invalidComponentType)).thenReturn(false);
     when(componentTypeCombinationRepository.isUniqueCombinationName(null, backingForm.getCombinationName())).thenReturn(true);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentTypeCombination");
@@ -161,16 +169,17 @@ public class ComponentTypeCombinationBackingFormValidatorTests extends UnitTestS
   
   @Test
   public void testValidateFormWithNullSourceComponentTypes_shouldHaveOneError() {
-    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(1L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(componentTypeId).build();
+    ComponentType componentType = aComponentType().withId(componentTypeId).build();
     ComponentTypeCombinationBackingForm backingForm = aComponentTypeCombinationBackingForm()
         .withCombinationName("combination")
         .withComponentTypes(Arrays.asList(componentTypeBackingForm))
         .withSourceComponentTypes(null)
         .build();
 
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentType);
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId)).thenReturn(componentType);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
     when(componentTypeCombinationRepository.isUniqueCombinationName(null, backingForm.getCombinationName())).thenReturn(true);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentTypeCombination");
@@ -182,18 +191,20 @@ public class ComponentTypeCombinationBackingFormValidatorTests extends UnitTestS
   
   @Test
   public void testValidateFormWithInvalidSourceComponentTypeId_shouldHaveOneError() {
-    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(1L).build();
-    ComponentTypeBackingForm invalidIdComponentTypeBackingForm = aComponentTypeBackingForm().withId(2L).build();
-    ComponentType componentType = aComponentType().withId(1L).build();
+    UUID componentTypeId = UUID.randomUUID();
+    ComponentTypeBackingForm componentTypeBackingForm = aComponentTypeBackingForm().withId(componentTypeId).build();
+    UUID invalidComponentType = UUID.randomUUID();
+    ComponentTypeBackingForm invalidIdComponentTypeBackingForm = aComponentTypeBackingForm().withId(invalidComponentType).build();
+    ComponentType componentType = aComponentType().withId(componentTypeId).build();
     ComponentTypeCombinationBackingForm backingForm = aComponentTypeCombinationBackingForm()
         .withCombinationName("combination")
         .withComponentTypes(Arrays.asList(componentTypeBackingForm))
         .withSourceComponentTypes(Sets.newHashSet(invalidIdComponentTypeBackingForm))
         .build();
 
-    when(componentTypeRepository.getComponentTypeById(1L)).thenReturn(componentType);
-    when(componentTypeRepository.verifyComponentTypeExists(1L)).thenReturn(true);
-    when(componentTypeRepository.verifyComponentTypeExists(2L)).thenReturn(false);
+    when(componentTypeRepository.getComponentTypeById(componentTypeId)).thenReturn(componentType);
+    when(componentTypeRepository.verifyComponentTypeExists(componentTypeId)).thenReturn(true);
+    when(componentTypeRepository.verifyComponentTypeExists(invalidComponentType)).thenReturn(false);
     when(componentTypeCombinationRepository.isUniqueCombinationName(null, backingForm.getCombinationName())).thenReturn(true);
     
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "ComponentTypeCombination");

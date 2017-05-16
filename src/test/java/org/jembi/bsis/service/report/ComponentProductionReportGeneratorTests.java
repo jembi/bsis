@@ -7,13 +7,14 @@ import static org.jembi.bsis.helpers.builders.CohortBuilder.aCohort;
 import static org.jembi.bsis.helpers.builders.ComponentProductionDTOBuilder.aComponentProductionDTO;
 import static org.jembi.bsis.helpers.builders.DataValueBuilder.aDataValue;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aProcessingSite;
-import static org.jembi.bsis.helpers.builders.ReportBuilder.aReport;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
+import static org.jembi.bsis.helpers.builders.ReportBuilder.aReport;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.ComponentProductionDTO;
@@ -43,8 +44,9 @@ public class ComponentProductionReportGeneratorTests extends UnitTestSuite {
 
     Date irrelevantStartDate = new Date();
     Date irrelevantEndDate = new Date();
-    Location processingSite = aProcessingSite().withId(1L).build();
-    LocationViewModel processingSiteViewModel = aLocationViewModel().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location processingSite = aProcessingSite().withId(locationId).build();
+    LocationViewModel processingSiteViewModel = aLocationViewModel().withId(locationId).build();
 
     List<ComponentProductionDTO> dtos = Arrays.asList(
             aComponentProductionDTO()

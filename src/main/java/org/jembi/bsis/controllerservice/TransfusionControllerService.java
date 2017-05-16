@@ -2,6 +2,7 @@ package org.jembi.bsis.controllerservice;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TransfusionBackingForm;
 import org.jembi.bsis.factory.ComponentTypeFactory;
@@ -69,28 +70,24 @@ public class TransfusionControllerService {
 
   public TransfusionFullViewModel updateTransfusion(TransfusionBackingForm backingForm) {
     Transfusion entity = transfusionFactory.createEntity(backingForm);
-    Long componentTypeId = null;
-    if (backingForm.getComponentType() != null) {
-      componentTypeId = backingForm.getComponentType().getId();
-    }
     entity = transfusionCRUDService.updateTransfusion(entity, backingForm.getDonationIdentificationNumber(),
-        backingForm.getComponentCode(), componentTypeId);
+        backingForm.getComponentCode());
     return transfusionFactory.createFullViewModel(entity);
   }
 
-  public List<TransfusionViewModel> findTransfusions(String din, String componentCode, Long componentTypeId,
-      Long receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
+  public List<TransfusionViewModel> findTransfusions(String din, String componentCode, UUID componentTypeId,
+      UUID receivedFromId, TransfusionOutcome transfusionOutcome, Date startDate, Date endDate) {
     List<Transfusion> transfusions = transfusionCRUDService.findTransfusions(din, componentCode, componentTypeId,
         receivedFromId, transfusionOutcome, startDate, endDate);
     return transfusionFactory.createViewModels(transfusions);
   }
   
-  public TransfusionFullViewModel getTransfusion(Long id) {
+  public TransfusionFullViewModel getTransfusion(UUID id) {
     Transfusion transfusion = transfusionRepository.findTransfusionById(id);
     return transfusionFactory.createFullViewModel(transfusion);
   }
 
-  public void deleteTransfusion(Long id) {
+  public void deleteTransfusion(UUID id) {
     transfusionCRUDService.deleteTransfusion(id);
   }
   

@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform.validator;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.DiscardComponentsBackingForm;
 import org.jembi.bsis.backingform.DiscardReasonBackingForm;
@@ -27,7 +28,7 @@ public class DiscardComponentsBackingFormValidator extends BaseValidator<Discard
     if (form.getComponentIds() == null) {
       errors.rejectValue("componentIds", "required", "componentIds to discard are required");
     } else {
-      List<Long> componentIds = form.getComponentIds();
+      List<UUID> componentIds = form.getComponentIds();
       for (int i = 0, len = componentIds.size(); i < len; i++) {
         errors.pushNestedPath("componentIds[" + i + "]");
         try {
@@ -47,7 +48,7 @@ public class DiscardComponentsBackingFormValidator extends BaseValidator<Discard
     }
   }
 
-  private void validateComponentIds(Long componentId, Errors errors) {
+  private void validateComponentIds(UUID componentId, Errors errors) {
     if (componentId == null) {
       errors.rejectValue("", "required", "componentId is required");
     } else if (!componentRepository.verifyComponentExists(componentId)) {

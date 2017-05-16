@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.DiscardedComponentDTO;
@@ -44,8 +45,9 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
   public void testgenerateDiscardedComponents() {
     Date startDate = new Date();
     Date endDate = new Date();
-    Location processingSite = aProcessingSite().withId(1L).build();
-    LocationViewModel processingSiteViewModel = aLocationViewModel().withId(1L).build();
+    UUID locationId = UUID.randomUUID();
+    Location processingSite = aProcessingSite().withId(locationId).build();
+    LocationViewModel processingSiteViewModel = aLocationViewModel().withId(locationId).build();
 
     List<DiscardedComponentDTO> discardedComponents = Arrays.asList(
         aDiscardedComponentDTO()
@@ -93,8 +95,9 @@ public class DiscardedComponentReportGeneratorTests extends UnitTestSuite {
   public void testgenerateDiscardedComponentsWithListOfDTOs() {
     Date startDate = new Date();
     Date endDate = new Date();
-    Location processingSite = aProcessingSite().withId(1L).build();
-    LocationViewModel processingSiteViewModel = aLocationViewModel().withId(1L).withName("aProcessingSite").build();
+    UUID locationId = UUID.randomUUID();
+    Location processingSite = aProcessingSite().withId(locationId).build();
+    LocationViewModel processingSiteViewModel = aLocationViewModel().withId(locationId).withName("aProcessingSite").build();
 
     List<DiscardedComponentDTO> discardedComponents = Arrays.asList(
         aDiscardedComponentDTO()

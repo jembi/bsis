@@ -1,0 +1,573 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170323-0951" author="timler">
+    <comment>Make AdverseEventType tracking timestamp columns not nullable and give them a default value</comment>
+    <update tableName="AdverseEventType_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="AdverseEventType_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="AdverseEventType">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <sql>
+      ALTER TABLE AdverseEventType CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE AdverseEventType CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE AdverseEventType_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE AdverseEventType_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-0952" author="timler">
+    <comment>Make BloodTest tracking timestamp columns not nullable and give them a default value</comment>
+    <update tableName="BloodTest_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="BloodTest_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="BloodTest">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <sql>
+      ALTER TABLE BloodTest CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE BloodTest CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE BloodTest_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE BloodTest_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <!-- Note: This table is missing auditing. See: https://jembiprojects.jira.com/browse/BSIS-2944 -->
+  <changeSet id="20170323-0953" author="timler">
+    <comment>Make BloodTestResult tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE BloodTestResult CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE BloodTestResult CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-0954" author="timler">
+    <update tableName="BloodTestingRule_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="BloodTestingRule_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="BloodTestingRule">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make BloodTestingRule tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE BloodTestingRule CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE BloodTestingRule CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE BloodTestingRule_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE BloodTestingRule_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-0955" author="timler">
+    <update tableName="Component_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="Component_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="Component">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make Component tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE Component CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Component CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Component_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Component_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-0956" author="timler">
+    <update tableName="ComponentBatch_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="ComponentBatch_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="ComponentBatch">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make ComponentBatch tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE ComponentBatch CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ComponentBatch CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ComponentBatch_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ComponentBatch_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-0957" author="timler">
+    <comment>Fix ComponentBatch timestamp columns that should be datetime</comment>
+    <modifyDataType tableName="ComponentBatch" columnName="collectionDate" newDataType="DATETIME"/>
+    <modifyDataType tableName="ComponentBatch" columnName="deliveryDate" newDataType="DATETIME"/>
+    <modifyDataType tableName="ComponentBatch_AUD" columnName="collectionDate" newDataType="DATETIME"/>
+    <modifyDataType tableName="ComponentBatch_AUD" columnName="deliveryDate" newDataType="DATETIME"/>
+  </changeSet>
+
+  <changeSet id="20170323-0958" author="timler">
+    <update tableName="ComponentType_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="ComponentType_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="ComponentType">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make ComponentType tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE ComponentType CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ComponentType CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ComponentType_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ComponentType_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-0959" author="timler">
+    <update tableName="ComponentTypeCombination_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="ComponentTypeCombination_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="ComponentTypeCombination">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make ComponentTypeCombination tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE ComponentTypeCombination CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ComponentTypeCombination CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ComponentTypeCombination_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ComponentTypeCombination_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1000" author="timler">
+    <update tableName="DeferralReason_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="DeferralReason_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="DeferralReason">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make DeferralReason tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE DeferralReason CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DeferralReason CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DeferralReason_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DeferralReason_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1001" author="timler">
+    <update tableName="Division_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="Division_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="Division">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make Division tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE Division CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Division CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Division_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Division_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1002" author="timler">
+    <update tableName="Donation_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="Donation_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="Donation">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make Donation tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE Donation CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Donation CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Donation_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Donation_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1003" author="timler">
+    <update tableName="DonationBatch_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="DonationBatch_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="DonationBatch">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make DonationBatch tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE DonationBatch CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DonationBatch CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DonationBatch_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DonationBatch_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1004" author="timler">
+    <update tableName="DonationType_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="DonationType_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="DonationType">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make DonationType tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE DonationType CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DonationType CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DonationType_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DonationType_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1005" author="timler">
+    <update tableName="Donor_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="Donor_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="Donor">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make Donor tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE Donor CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Donor CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Donor_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Donor_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1006" author="timler">
+    <update tableName="DonorDeferral_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="DonorDeferral_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="DonorDeferral">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make DonorDeferral tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE DonorDeferral CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DonorDeferral CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DonorDeferral_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE DonorDeferral_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1007" author="timler">
+    <update tableName="GeneralConfig_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="GeneralConfig_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="GeneralConfig">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make GeneralConfig tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE GeneralConfig CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE GeneralConfig CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE GeneralConfig_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE GeneralConfig_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1008" author="timler">
+    <update tableName="Location_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="Location_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="Location">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make Location tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE Location CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Location CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Location_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Location_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1009" author="timler">
+    <update tableName="OrderForm_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="OrderForm_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="OrderForm">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make OrderForm tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE OrderForm CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE OrderForm CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE OrderForm_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE OrderForm_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1010" author="timler">
+    <update tableName="PackType_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="PackType_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="PackType">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make PackType tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE PackType CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE PackType CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE PackType_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE PackType_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1011" author="timler">
+    <update tableName="PostDonationCounselling_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="PostDonationCounselling_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="PostDonationCounselling">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make PostDonationCounselling tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE PostDonationCounselling CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE PostDonationCounselling CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE PostDonationCounselling_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE PostDonationCounselling_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1012" author="timler">
+    <update tableName="ReturnForm_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="ReturnForm_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="ReturnForm">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make ReturnForm tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE ReturnForm CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ReturnForm CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ReturnForm_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE ReturnForm_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1013" author="timler">
+    <update tableName="Role_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="Role_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="Role">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make Role tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE Role CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Role CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Role_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Role_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1014" author="timler">
+    <update tableName="TestBatch_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="TestBatch_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="TestBatch">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make TestBatch tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE TestBatch CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE TestBatch CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE TestBatch_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE TestBatch_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1015" author="timler">
+    <update tableName="Transfusion_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="Transfusion_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="Transfusion">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make Transfusion tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE Transfusion CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Transfusion CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Transfusion_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE Transfusion_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1016" author="timler">
+    <update tableName="TransfusionReactionType_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="TransfusionReactionType_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="TransfusionReactionType">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make TransfusionReactionType tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE TransfusionReactionType CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE TransfusionReactionType CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE TransfusionReactionType_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE TransfusionReactionType_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170323-1017" author="timler">
+    <update tableName="User_AUD">
+      <column name="createdDate" valueComputed="CURRENT_TIMESTAMP" />
+      <where>createdDate is NULL</where>
+    </update>
+    <update tableName="User_AUD">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <update tableName="User">
+      <column name="lastUpdated" valueComputed="CURRENT_TIMESTAMP" />
+      <where>lastUpdated is NULL</where>
+    </update>
+    <comment>Make User tracking timestamp columns not nullable and give them a default value</comment>
+    <sql>
+      ALTER TABLE User CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE User CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE User_AUD CHANGE createdDate createdDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE User_AUD CHANGE lastUpdated lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    </sql>
+  </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,113 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170404-1526"  author="tumijacob">
+    <comment>This change set migrates the PreferredLanguage table from an integer id primary key
+        to a UUID of type BINARY(16). </comment>
+        
+    <dropForeignKeyConstraint baseTableName="Donor" constraintName="fk_donor_preferredLanguage"/>
+
+    <addColumn tableName="PreferredLanguage">
+      <column name="id_temp" type="BIGINT" afterColumn="id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor">
+      <column name="preferredLanguage_id_temp" type="BIGINT" afterColumn="preferredLanguage_id"/>
+    </addColumn>
+
+    <addColumn tableName="Donor_AUD">
+      <column name="preferredLanguage_id_temp" type="BIGINT" afterColumn="preferredLanguage_id"/>
+    </addColumn>
+
+    <sql>
+      UPDATE PreferredLanguage 
+      SET id_temp = id;
+    </sql>
+
+    <!-- Create Index on temporary id_temp field to make updates referencing it more efficient. -->
+    <createIndex indexName="preferredlanguage_id_temp_index" tableName="PreferredLanguage" unique="true">
+        <column name="id_temp" type="BIGINT"/>
+    </createIndex>
+
+    <sql>
+      UPDATE Donor_AUD 
+      SET preferredLanguage_id_temp = preferredLanguage_id;
+    </sql>
+
+    <sql>
+      UPDATE Donor 
+      SET preferredLanguage_id_temp = preferredLanguage_id;
+    </sql>
+
+    <!-- Remove auto increment from the existing id column -->
+    <modifyDataType columnName="id" newDataType="BIGINT(20)" tableName="PreferredLanguage"/>
+
+    <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="PreferredLanguage"/>
+
+    <modifyDataType columnName="preferredLanguage_id" newDataType="BINARY(16)" tableName="Donor"/>
+
+    <modifyDataType columnName="preferredLanguage_id" newDataType="BINARY(16)" tableName="Donor_AUD"/>
+
+    <sql>
+      UPDATE PreferredLanguage 
+      SET id = GENERATEBINARYUUID()
+      ORDER BY id_temp;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE PreferredLanguage ADD id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(id,  1, 4)),
+        HEX(SUBSTR(id,  5, 2)),
+        HEX(SUBSTR(id,  7, 2)),
+        HEX(SUBSTR(id,  9, 2)),
+        HEX(SUBSTR(id, 11)) )))
+      VIRTUAL AFTER id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Donor_AUD ADD preferredLanguage_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(preferredLanguage_id,  1, 4)),
+        HEX(SUBSTR(preferredLanguage_id,  5, 2)),
+        HEX(SUBSTR(preferredLanguage_id,  7, 2)),
+        HEX(SUBSTR(preferredLanguage_id,  9, 2)),
+        HEX(SUBSTR(preferredLanguage_id, 11)) )))
+      VIRTUAL AFTER preferredLanguage_id;
+    </sql>
+
+    <sql dbms="mysql">
+      ALTER TABLE Donor ADD preferredLanguage_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(preferredLanguage_id,  1, 4)),
+        HEX(SUBSTR(preferredLanguage_id,  5, 2)),
+        HEX(SUBSTR(preferredLanguage_id,  7, 2)),
+        HEX(SUBSTR(preferredLanguage_id,  9, 2)),
+        HEX(SUBSTR(preferredLanguage_id, 11)) )))
+      VIRTUAL AFTER preferredLanguage_id;
+    </sql>
+
+
+    <sql>
+      UPDATE Donor AS updateTable
+        LEFT JOIN PreferredLanguage AS joinedTable ON (updateTable.preferredLanguage_id_temp = joinedTable.id_temp)
+      SET updateTable.preferredLanguage_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <sql>
+      UPDATE Donor_AUD AS updateTable
+        LEFT JOIN PreferredLanguage AS joinedTable ON (updateTable.preferredLanguage_id_temp = joinedTable.id_temp)
+      SET updateTable.preferredLanguage_id = joinedTable.id 
+      WHERE joinedTable.id IS NOT null; 
+    </sql>
+
+    <dropColumn columnName="id_temp" tableName="PreferredLanguage"/>
+
+    <dropColumn columnName="preferredLanguage_id_temp" tableName="Donor"/>
+
+    <dropColumn columnName="preferredLanguage_id_temp" tableName="Donor_AUD"/>
+
+    <addForeignKeyConstraint baseColumnNames="preferredLanguage_id" baseTableName="Donor" constraintName="fk_donor_preferredLanguage"
+      referencedColumnNames="id" referencedTableName="PreferredLanguage"/>
+
+  </changeSet>
+</databaseChangeLog>

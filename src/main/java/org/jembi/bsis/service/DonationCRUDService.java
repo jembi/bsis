@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -56,7 +57,7 @@ public class DonationCRUDService {
   @Autowired
   private DateGeneratorService dateGeneratorService;
 
-  public void deleteDonation(long donationId) throws IllegalStateException, NoResultException {
+  public void deleteDonation(UUID donationId) throws IllegalStateException, NoResultException {
 
     if (!donationConstraintChecker.canDeleteDonation(donationId)) {
       throw new IllegalStateException("Cannot delete donation with constraints");

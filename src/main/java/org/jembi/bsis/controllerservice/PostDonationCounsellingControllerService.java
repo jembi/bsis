@@ -3,6 +3,7 @@ package org.jembi.bsis.controllerservice;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.PostDonationCounsellingBackingForm;
 import org.jembi.bsis.factory.LocationFactory;
@@ -55,7 +56,7 @@ public class PostDonationCounsellingControllerService {
   }
 
   public List<PostDonationCounsellingSummaryViewModel> getCounsellingSummaries(Date startDate, Date endDate,
-      Set<Long> venueIds, CounsellingStatus counsellingStatus, Boolean referred, Boolean notReferred, boolean flaggedForCounselling) {
+      Set<UUID> venueIds, CounsellingStatus counsellingStatus, Boolean referred, Boolean notReferred, boolean flaggedForCounselling) {
     List<PostDonationCounselling> counsellings = postDonationCounsellingRepository
         .findPostDonationCounselling(startDate, endDate, venueIds, counsellingStatus, referred, notReferred, flaggedForCounselling);
     return postDonationCounsellingFactory.createSummaryViewModels(counsellings);

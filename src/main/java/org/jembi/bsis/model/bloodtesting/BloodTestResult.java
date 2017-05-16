@@ -12,7 +12,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.BloodTestResultNamedQueryConstants;
 
@@ -40,8 +42,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 })
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class BloodTestResult extends BaseModificationTrackerEntity {
+@Audited
+public class BloodTestResult extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
@@ -14,9 +15,11 @@ import static org.jembi.bsis.helpers.matchers.TransfusionMatcher.hasSameStateAsT
 import static org.jembi.bsis.helpers.matchers.TransfusionSummaryDTOMatcher.hasSameStateAsTransfusionSummaryDTO;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.NoResultException;
 
 import org.hamcrest.core.IsNull;
 import org.jembi.bsis.dto.TransfusionSummaryDTO;
@@ -31,8 +34,6 @@ import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.persistence.NoResultException;
 
 public class TransfusionRepositoryTests extends SecurityContextDependentTestSuite {
   
@@ -94,7 +95,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   @Test(expected = NoResultException.class)
   public void testFindTransfusionByIdWithNoExistingTransfusion_shouldThrow() {
     // Test
-    transfusionRepository.findTransfusionById(20L);
+    transfusionRepository.findTransfusionById(UUID.randomUUID());
   }
 
   @Test(expected = NoResultException.class)
@@ -169,7 +170,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
           .buildAndPersist(entityManager))
       .buildAndPersist(entityManager);
     
-    Long receivedFromId = null;
+    UUID receivedFromId = null;
     
     List<TransfusionSummaryDTO> expectedTransfusionSummaryDTOs = new ArrayList<>();
     expectedTransfusionSummaryDTOs.add(aTransfusionSummaryDTO()
@@ -196,7 +197,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
   
   @Test
   public void testFindTransfusionSummaryRecordedForUsageSiteForPeriodWithUsageSite_shouldReturnRightDtos() {
-    
+
     Date startDate = new DateTime().minusDays(60).toDate();
     Date endDate = new DateTime().minusDays(1).toDate();
     TransfusionReactionType transfusionReactionType = aTransfusionReactionType()
@@ -207,7 +208,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     Location receivedFrom2 = aUsageSite()
         .withName("Masvingo")
         .buildAndPersist(entityManager);
-    
+
     aTransfusion()
         .withDateTransfused(startDate)
         .withPatient(aPatient()
@@ -219,7 +220,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
         .withComponent(aComponent()
             .buildAndPersist(entityManager))
         .buildAndPersist(entityManager);
-    
+
     aTransfusion()
       .withDateTransfused(startDate)
       .withPatient(aPatient()
@@ -233,7 +234,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
       .buildAndPersist(entityManager);
     
     List<TransfusionSummaryDTO> transfusionSummaryDTOs = transfusionRepository.findTransfusionSummaryRecordedForUsageSiteForPeriod(receivedFrom2.getId(), startDate, endDate);
-    
+
     // check that the transfusion summary count returned is equal to persisted transfusions count for the usageSite
     assertThat(transfusionSummaryDTOs.size(), is(1));
   }
@@ -257,7 +258,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
            .withName("Tranfusion site")
            .buildAndPersist(entityManager))
        .buildAndPersist(entityManager);
-           
+
         // Excluded by donationIdentificationNumber    
         aTransfusion()
             .withComponent(aComponent()
@@ -273,7 +274,7 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
                .withName("Transfusion site")
                .buildAndPersist(entityManager))
            .buildAndPersist(entityManager);
-          
+
         // Excluded by component code    
         aTransfusion()
             .withComponent(aComponent()
@@ -289,16 +290,16 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
                .withName("Transfusion site")
                .buildAndPersist(entityManager))
            .buildAndPersist(entityManager);
-    
+
     Transfusion returnedTransfusion = transfusionRepository
         .findTransfusionByDINAndComponentCode(donationIdentificationNumber, componentCode);
-    
+
     assertThat(returnedTransfusion, hasSameStateAsTransfusion(expectedTranfusion));
   }
 
   @Test
   public void testFindTransfusionByDINAndCodeWithFlagCharacters_shouldReturnCorrectFields() {
-    
+
     String  donationIdentificationNumber = "1234567";
     String flagCharacter = "BR";
     String componentCode = "011-022";
@@ -317,10 +318,10 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
            .withName("Tranfusion site")
            .buildAndPersist(entityManager))
        .buildAndPersist(entityManager);
-    
+
     Transfusion returnedTransfusion = transfusionRepository
         .findTransfusionByDINAndComponentCode(donationIdentificationNumber + flagCharacter, componentCode);
-   
+
     assertThat(returnedTransfusion, hasSameStateAsTransfusion(expectedTranfusion));
   }
 
@@ -333,28 +334,27 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     Location receiveFrom = aUsageSite().buildAndPersist(entityManager);
     ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
     Component component = aComponent().withComponentType(componentType).buildAndPersist(entityManager);
-    List<Transfusion> expectedTransfusions = Arrays.asList(
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(startDate)
-            .withReceivedFrom(receiveFrom)
-            .withComponent(component)
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .buildAndPersist(entityManager),
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(new Date())
-            .withReceivedFrom(receiveFrom)
-            .withComponent(component)
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .buildAndPersist(entityManager)
-        );
+
+    Transfusion transfusion1 = aTransfusion()
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withDateTransfused(startDate)
+        .withReceivedFrom(receiveFrom)
+        .withComponent(component)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .buildAndPersist(entityManager);
+    Transfusion transfusion2 = aTransfusion()
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withDateTransfused(new Date())
+        .withReceivedFrom(receiveFrom)
+        .withComponent(component)
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .buildAndPersist(entityManager);
 
     // Excluded for TransfusionOutcome
     aTransfusion()
@@ -424,7 +424,9 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
         componentType.getId(), receiveFrom.getId(), TransfusionOutcome.TRANSFUSED_UNEVENTFULLY, startDate, endDate);
 
     // Verify
-    assertThat(returnedTransfusions, is(expectedTransfusions));
+    assertThat(returnedTransfusions.size(), is(2));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion1)));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion2)));
   }
 
   @Test
@@ -437,35 +439,35 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
     Component component = aComponent().withComponentType(componentType).buildAndPersist(entityManager);
 
-    List<Transfusion> expectedTransfusions = Arrays.asList(
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(startDate)
-            .withReceivedFrom(receiveFrom)
-            .withComponent(component)
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .buildAndPersist(entityManager),
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(new Date())
-            .withReceivedFrom(receiveFrom)
-            .withComponent(component)
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSION_REACTION_OCCURRED)
-            .buildAndPersist(entityManager)
-    );
+    Transfusion transfusion1 = aTransfusion()
+         .withPatient(aPatient()
+             .withName1("Name 1")
+             .withName2("Name 1")
+             .build())
+         .withDateTransfused(startDate)
+         .withReceivedFrom(receiveFrom)
+         .withComponent(component)
+         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+         .buildAndPersist(entityManager);
+    Transfusion transfusion2 = aTransfusion()
+         .withPatient(aPatient()
+             .withName1("Name 1")
+             .withName2("Name 1")
+             .build())
+         .withDateTransfused(new Date())
+         .withReceivedFrom(receiveFrom)
+         .withComponent(component)
+         .withTransfusionOutcome(TransfusionOutcome.TRANSFUSION_REACTION_OCCURRED)
+         .buildAndPersist(entityManager);
 
     // Exercise SUT
     List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusions(
         componentType.getId(), receiveFrom.getId(), null, startDate, endDate);
 
     // Verify
-    assertThat(returnedTransfusions, is(expectedTransfusions));
+    assertThat(returnedTransfusions.size(), is(2));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion1)));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion2)));
   }
 
   @Test
@@ -476,39 +478,39 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     Date endDate = new DateTime().plusDays(2).toDate();
     Location receiveFrom = aUsageSite().buildAndPersist(entityManager);
 
-    List<Transfusion> expectedTransfusions = Arrays.asList(
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(startDate)
-            .withReceivedFrom(receiveFrom)
-            .withComponent(aComponent()
-                .withComponentType(aComponentType().build())
-                .buildAndPersist(entityManager))
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .buildAndPersist(entityManager),
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(new Date())
-            .withReceivedFrom(receiveFrom)
-            .withComponent(aComponent()
-                .withComponentType(aComponentType().build())
-                .buildAndPersist(entityManager))
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .buildAndPersist(entityManager)
-    );
+    Transfusion transfusion1 = aTransfusion()
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withDateTransfused(startDate)
+        .withReceivedFrom(receiveFrom)
+        .withComponent(aComponent()
+            .withComponentType(aComponentType().build())
+            .buildAndPersist(entityManager))
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .buildAndPersist(entityManager);
+    Transfusion transfusion2 = aTransfusion()
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withDateTransfused(new Date())
+        .withReceivedFrom(receiveFrom)
+        .withComponent(aComponent()
+            .withComponentType(aComponentType().build())
+            .buildAndPersist(entityManager))
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .buildAndPersist(entityManager);
 
     // Exercise SUT
     List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusions(
         null, receiveFrom.getId(), TransfusionOutcome.TRANSFUSED_UNEVENTFULLY, startDate, endDate);
 
     // Verify
-    assertThat(returnedTransfusions, is(expectedTransfusions));
+    assertThat(returnedTransfusions.size(), is(2));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion1)));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion2)));
   }
 
   @Test
@@ -519,39 +521,39 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     Date endDate = new DateTime().plusDays(2).toDate();
     ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
 
-    List<Transfusion> expectedTransfusions = Arrays.asList(
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(startDate)
-            .withReceivedFrom(aUsageSite().buildAndPersist(entityManager))
-            .withComponent(aComponent()
-                .withComponentType(componentType)
-                .buildAndPersist(entityManager))
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .buildAndPersist(entityManager),
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(new Date())
-            .withReceivedFrom(aUsageSite().buildAndPersist(entityManager))
-            .withComponent(aComponent()
-                .withComponentType(componentType)
-                .buildAndPersist(entityManager))
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .buildAndPersist(entityManager)
-    );
+    Transfusion transfusion1 = aTransfusion()
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withDateTransfused(startDate)
+        .withReceivedFrom(aUsageSite().buildAndPersist(entityManager))
+        .withComponent(aComponent()
+            .withComponentType(componentType)
+            .buildAndPersist(entityManager))
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .buildAndPersist(entityManager);
+    Transfusion transfusion2 = aTransfusion()
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withDateTransfused(new Date())
+        .withReceivedFrom(aUsageSite().buildAndPersist(entityManager))
+        .withComponent(aComponent()
+            .withComponentType(componentType)
+            .buildAndPersist(entityManager))
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .buildAndPersist(entityManager);
 
     // Exercise SUT
     List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusions(
         componentType.getId(), null, TransfusionOutcome.TRANSFUSED_UNEVENTFULLY, startDate, endDate);
 
     // Verify
-    assertThat(returnedTransfusions, is(expectedTransfusions));
+    assertThat(returnedTransfusions.size(), is(2));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion1)));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion2)));
   }
 
   @Test
@@ -562,39 +564,39 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     Location receiveFrom = aUsageSite().buildAndPersist(entityManager);
     ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
 
-    List<Transfusion> expectedTransfusions = Arrays.asList(
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(new DateTime().minusDays(7).toDate())
-            .withReceivedFrom(receiveFrom)
-            .withComponent(aComponent()
-                .withComponentType(componentType)
-                .buildAndPersist(entityManager))
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .buildAndPersist(entityManager),
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(new Date())
-            .withReceivedFrom(receiveFrom)
-            .withComponent(aComponent()
-                .withComponentType(componentType)
-                .buildAndPersist(entityManager))
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .buildAndPersist(entityManager)
-    );
+    Transfusion transfusion1 = aTransfusion()
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withDateTransfused(new DateTime().minusDays(7).toDate())
+        .withReceivedFrom(receiveFrom)
+        .withComponent(aComponent()
+            .withComponentType(componentType)
+            .buildAndPersist(entityManager))
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .buildAndPersist(entityManager);
+    Transfusion transfusion2 = aTransfusion()
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withDateTransfused(new Date())
+        .withReceivedFrom(receiveFrom)
+        .withComponent(aComponent()
+            .withComponentType(componentType)
+            .buildAndPersist(entityManager))
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .buildAndPersist(entityManager);
 
     // Exercise SUT
     List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusions(
         componentType.getId(), receiveFrom.getId(), TransfusionOutcome.TRANSFUSED_UNEVENTFULLY, null, endDate);
 
     // Verify
-    assertThat(returnedTransfusions, is(expectedTransfusions));
+    assertThat(returnedTransfusions.size(), is(2));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion1)));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion2)));
   }
 
   @Test
@@ -605,38 +607,38 @@ public class TransfusionRepositoryTests extends SecurityContextDependentTestSuit
     Location receiveFrom = aUsageSite().buildAndPersist(entityManager);
     ComponentType componentType = aComponentType().withComponentTypeCode("test").buildAndPersist(entityManager);
 
-    List<Transfusion> expectedTransfusions = Arrays.asList(
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(startDate)
-            .withReceivedFrom(receiveFrom)
-            .withComponent(aComponent()
-                .withComponentType(componentType)
-                .buildAndPersist(entityManager))
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .buildAndPersist(entityManager),
-        aTransfusion()
-            .withPatient(aPatient()
-                .withName1("Name 1")
-                .withName2("Name 1")
-                .build())
-            .withDateTransfused(new Date())
-            .withReceivedFrom(receiveFrom)
-            .withComponent(aComponent()
-                .withComponentType(componentType)
-                .buildAndPersist(entityManager))
-            .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
-            .buildAndPersist(entityManager)
-    );
+    Transfusion transfusion1 = aTransfusion()
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withDateTransfused(startDate)
+        .withReceivedFrom(receiveFrom)
+        .withComponent(aComponent()
+            .withComponentType(componentType)
+            .buildAndPersist(entityManager))
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .buildAndPersist(entityManager);
+    Transfusion transfusion2 = aTransfusion()
+        .withPatient(aPatient()
+            .withName1("Name 1")
+            .withName2("Name 1")
+            .build())
+        .withDateTransfused(new Date())
+        .withReceivedFrom(receiveFrom)
+        .withComponent(aComponent()
+            .withComponentType(componentType)
+            .buildAndPersist(entityManager))
+        .withTransfusionOutcome(TransfusionOutcome.TRANSFUSED_UNEVENTFULLY)
+        .buildAndPersist(entityManager);
 
     // Exercise SUT
     List<Transfusion> returnedTransfusions = transfusionRepository.findTransfusions(
         componentType.getId(), receiveFrom.getId(), TransfusionOutcome.TRANSFUSED_UNEVENTFULLY, startDate, null);
 
     // Verify
-    assertThat(returnedTransfusions, is(expectedTransfusions));
+    assertThat(returnedTransfusions.size(), is(2));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion1)));
+    assertThat(returnedTransfusions, hasItem(hasSameStateAsTransfusion(transfusion2)));
   }
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -77,7 +78,7 @@ public class ComponentCRUDService {
 
   @Autowired
   private BleedTimeService bleedTimeService;
-
+  
   public Component createInitialComponent(Donation donation) {
 
     // Create initial component only if the countAsDonation is true and the config option is enabled
@@ -198,7 +199,7 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component deleteComponent(long componentId) {
+  public Component deleteComponent(UUID componentId) {
     LOGGER.info("Deleting component " + componentId);
 
     Component existingComponent = componentRepository.findComponentById(componentId);
@@ -218,7 +219,7 @@ public class ComponentCRUDService {
     }
   }
 
-  public Component processComponent(long parentComponentId, long componentTypeCombinationId, Date processedOn) {
+  public Component processComponent(UUID parentComponentId, UUID componentTypeCombinationId, Date processedOn) {
 
     Component parentComponent = componentRepository.findComponentById(parentComponentId);
     parentComponent.setProcessedOn(processedOn);
@@ -320,20 +321,26 @@ public class ComponentCRUDService {
     }
 
     long bleedTime = bleedTimeService.getBleedTime(donation.getBleedStartTime(), donation.getBleedEndTime());
-    long timeSinceDonation = bleedTimeService.getTimeSinceDonation(
-        initialComponent.getCreatedOn(), initialComponent.getProcessedOn());
-
     if (component.getComponentType().getMaxBleedTime() != null
         && bleedTime >= component.getComponentType().getMaxBleedTime()) {
       markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAX_BLEED_TIME);
-    } else if (component.getComponentType().getMaxTimeSinceDonation() != null
-        && timeSinceDonation >= component.getComponentType().getMaxTimeSinceDonation()) {
-      markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
+    } else {
+      if (initialComponent.getProcessedOn() == null) {
+        LOGGER.warn("ProcessedOn date is null for donation Id:" +  donation.getId() +
+          " with DIN: " + donation.getDonationIdentificationNumber() + ", time since donation check is ignored");
+      } else {
+        long timeSinceDonation = bleedTimeService.getTimeSinceDonation(
+            initialComponent.getCreatedOn(), initialComponent.getProcessedOn());
+        if (component.getComponentType().getMaxTimeSinceDonation() != null
+              && timeSinceDonation >= component.getComponentType().getMaxTimeSinceDonation()) {
+          markComponentAsUnsafe(component, ComponentStatusChangeReasonType.EXCEEDS_MAXTIME_SINCE_DONATION);
+        }
+      }
     }
   }
 
-  public void discardComponents(List<Long> componentIds, Long discardReasonId, String discardReasonText) {
-    for (Long id : componentIds) {
+  public void discardComponents(List<UUID> componentIds, UUID discardReasonId, String discardReasonText) {
+    for (UUID id : componentIds) {
       discardComponent(id, discardReasonId, discardReasonText);
     }
   }
@@ -345,7 +352,7 @@ public class ComponentCRUDService {
     return componentRepository.update(component);
   }
 
-  public Component discardComponent(Long componentId, Long discardReasonId, String discardReasonText) {
+  public Component discardComponent(UUID componentId, UUID discardReasonId, String discardReasonText) {
     Component existingComponent = componentRepository.findComponentById(componentId);
     
     // update existing component status
@@ -372,7 +379,7 @@ public class ComponentCRUDService {
     return updateComponent(existingComponent);
   }
   
-  public Component undiscardComponent(long componentId) {
+  public Component undiscardComponent(UUID componentId) {
     Component existingComponent = componentRepository.findComponentById(componentId);
     
     if (!componentConstraintChecker.canUndiscard(existingComponent)) {
@@ -390,7 +397,7 @@ public class ComponentCRUDService {
     return rollBackComponentStatusChanges(existingComponent, ComponentStatusChangeReasonCategory.DISCARDED);
   }
   
-  public Component preProcessComponent(long componentId, Integer componentWeight, Date bleedStartTime, Date bleedEndTime) {
+  public Component preProcessComponent(UUID componentId, Integer componentWeight, Date bleedStartTime, Date bleedEndTime) {
     Component existingComponent = componentRepository.findComponentById(componentId);
 
     // update donation bleed times
@@ -435,7 +442,7 @@ public class ComponentCRUDService {
     return updateComponent(existingComponent);
   }
 
-  public Component recordChildComponentWeight(long componentId, Integer componentWeight) {
+  public Component recordChildComponentWeight(UUID componentId, Integer componentWeight) {
     Component existingComponent = componentRepository.findComponentById(componentId);
     
     // check if the weight is being updated
@@ -454,11 +461,11 @@ public class ComponentCRUDService {
     return updateComponent(existingComponent);
   }
   
-  public Component findComponentById(Long id) {
+  public Component findComponentById(UUID id) {
     return componentRepository.findComponentById(id);
   }
   
-  public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, Long componentTypeId) {
+  public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, UUID componentTypeId) {
     return componentRepository.findComponentsByDINAndType(donationIdentificationNumber, componentTypeId);
   }
 

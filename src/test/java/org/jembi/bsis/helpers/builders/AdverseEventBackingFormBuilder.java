@@ -1,11 +1,13 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.backingform.AdverseEventBackingForm;
 import org.jembi.bsis.backingform.AdverseEventTypeBackingForm;
 
 public class AdverseEventBackingFormBuilder extends AbstractBuilder<AdverseEventBackingForm> {
 
-  private Long id;
+  private UUID id;
   private AdverseEventTypeBackingForm type;
   private String comment;
 
@@ -19,7 +21,7 @@ public class AdverseEventBackingFormBuilder extends AbstractBuilder<AdverseEvent
     return this;
   }
 
-  public AdverseEventBackingFormBuilder withId(Long id) {
+  public AdverseEventBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

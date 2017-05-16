@@ -1,13 +1,15 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.model.idtype.IdType;
 
 public class IdTypeBuilder extends AbstractEntityBuilder<IdType> {
 
-  private Long id;
+  private UUID id;
   private String type;
 
-  public IdTypeBuilder withId(Long id) {
+  public IdTypeBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

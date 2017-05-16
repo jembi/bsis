@@ -1,5 +1,7 @@
 package org.jembi.bsis.model.donor;
 
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
+
 import java.util.Date;
 import java.util.List;
 
@@ -25,10 +27,9 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.Length;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.address.Address;
 import org.jembi.bsis.model.address.AddressType;
 import org.jembi.bsis.model.address.Contact;
@@ -41,9 +42,6 @@ import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.repository.DonorNamedQueryConstants;
 import org.jembi.bsis.utils.DonorUtils;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @NamedQueries({
   @NamedQuery(name = DonorNamedQueryConstants.NAME_GET_ALL_DUPLICATE_DONORS,
@@ -65,8 +63,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 })
 @Entity
 @Audited
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Donor extends BaseModificationTrackerEntity {
+public class Donor extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 
@@ -170,8 +167,6 @@ public class Donor extends BaseModificationTrackerEntity {
    */
   private Boolean isDeleted = Boolean.FALSE;
 
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy = "donor")
   @Where(clause = "isDeleted = 0")
   private List<Donation> donations;
@@ -179,45 +174,29 @@ public class Donor extends BaseModificationTrackerEntity {
   /**
    * If a donor has been deferred then we can disallow him to donate the next time.
    */
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   @OneToMany(mappedBy = "deferredDonor")
   @Where(clause = "isVoided = 0")
   private List<DonorDeferral> deferrals;
 
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @Audited(targetAuditMode = NOT_AUDITED)
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @JoinColumn(name = "addressId")
   private Address address;
 
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @Audited(targetAuditMode = NOT_AUDITED)
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  @JoinColumn(name = "contactId")
   private Contact contact;
 
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @Audited(targetAuditMode = NOT_AUDITED)
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(nullable = true, name = "addressTypeId")
   private AddressType addressType;
 
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @Audited(targetAuditMode = NOT_AUDITED)
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(nullable = true)
   private ContactMethodType contactMethodType;
 
-// @NotAudited
-// @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-// @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "donorId")
-// @Fetch(value = FetchMode.SUBSELECT)
-// private List<IdNumber> idNumbers; 
-
+  @Audited(targetAuditMode = NOT_AUDITED)
   @ManyToOne(fetch = FetchType.EAGER)
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   private IdType idType;
 
   private String idNumber;
@@ -228,9 +207,8 @@ public class Donor extends BaseModificationTrackerEntity {
   @Temporal(TemporalType.DATE)
   private Date dateOfFirstDonation;
 
+  @Audited(targetAuditMode = NOT_AUDITED)
   @ManyToOne(fetch = FetchType.EAGER)
-  @NotAudited
-  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   private PreferredLanguage preferredLanguage;
 
   private Date dueToDonate;

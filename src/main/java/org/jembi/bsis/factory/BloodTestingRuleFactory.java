@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jembi.bsis.backingform.BloodTestBackingForm;
 import org.jembi.bsis.backingform.BloodTestingRuleBackingForm;
+import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.rules.BloodTestingRule;
 import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.viewmodel.BloodTestViewModel;
@@ -78,18 +79,18 @@ public class BloodTestingRuleFactory {
     bloodTestingRule.setNewInformation(bloodTestingRuleBackingForm.getNewInformation());
     bloodTestingRule.setPattern(bloodTestingRuleBackingForm.getPattern());
     bloodTestingRule.setBloodTest(bloodTestRepository.findBloodTestById(bloodTestingRuleBackingForm.getBloodTest().getId()));
-    List<Long> pendingTestsIds = new ArrayList<>();
+    List<BloodTest> pendingBloodTests = new ArrayList<>();
     for (BloodTestBackingForm pendingBloodTest : bloodTestingRuleBackingForm.getPendingTests()) {
-      pendingTestsIds.add(pendingBloodTest.getId()); 
+      pendingBloodTests.add(bloodTestRepository.findBloodTestById(pendingBloodTest.getId()));
     }
-    bloodTestingRule.setPendingTestsIds(StringUtils.join(pendingTestsIds, ','));
+    bloodTestingRule.setPendingBloodTests(pendingBloodTests);
     return bloodTestingRule;
   }
 
   private void populateBloodTestingRuleFullViewModel(BloodTestingRuleFullViewModel fullViewModel,
       BloodTestingRule bloodTestingRule) {
     Set<BloodTestViewModel> pendingBloodTests = new HashSet<>();
-    for (Long id : bloodTestingRule.getPendingTestsIdsSet()) {
+    for (UUID id : bloodTestingRule.getPendingTestsIdsSet()) {
       BloodTestViewModel bloodTest = new BloodTestViewModel();
       bloodTest.setId(id);
       pendingBloodTests.add(bloodTest);

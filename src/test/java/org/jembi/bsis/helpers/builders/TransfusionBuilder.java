@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.location.Location;
@@ -12,7 +13,7 @@ import org.jembi.bsis.model.user.User;
 
 public class TransfusionBuilder extends AbstractEntityBuilder<Transfusion> {
 
-  private Long id;
+  private UUID id;
   private Date createdDate;
   private User createdBy;
   private Date lastUpdated;
@@ -26,7 +27,7 @@ public class TransfusionBuilder extends AbstractEntityBuilder<Transfusion> {
   private String notes;
   private boolean isDeleted;
   
-  public TransfusionBuilder withId(Long id) {
+  public TransfusionBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

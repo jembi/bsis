@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -31,8 +32,8 @@ public class ComponentRepository extends AbstractRepository<Component> {
   @PersistenceContext
   private EntityManager em;
 
-  public List<Component> findAnyComponent(List<Long> componentTypes, ComponentStatus status,
-      Date donationDateFrom, Date donationDateTo, Long locationId) {
+  public List<Component> findAnyComponent(List<UUID> componentTypes, ComponentStatus status,
+      Date donationDateFrom, Date donationDateTo, UUID locationId) {
 
     boolean includeComponentTypes = true, includeStatus = true;
     if (status == null) {
@@ -42,10 +43,16 @@ public class ComponentRepository extends AbstractRepository<Component> {
       includeComponentTypes = false;
     }
 
+    boolean includeAllLocations = false;
+    if (locationId == null) {
+      includeAllLocations = true;
+    }
+
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_ANY_COMPONENT, Component.class)
           .setParameter("isDeleted", Boolean.FALSE)
           .setParameter("status", status)
           .setParameter("locationId", locationId)
+          .setParameter("includeAllLocations", includeAllLocations)
           .setParameter("componentTypeIds", componentTypes)
           .setParameter("donationDateFrom", donationDateFrom)
           .setParameter("donationDateTo", donationDateTo)
@@ -70,11 +77,11 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .getResultList();
   }
 
-  public Component findComponent(Long componentId) {
+  public Component findComponent(UUID componentId) {
     return em.find(Component.class, componentId);
   }
 
-  public Component findComponentById(Long componentId) throws NoResultException {
+  public Component findComponentById(UUID componentId) throws NoResultException {
     String queryString = "SELECT c FROM Component c LEFT JOIN FETCH c.donation where c.id = :componentId AND c.isDeleted = :isDeleted";
     TypedQuery<Component> query = em.createQuery(queryString, Component.class);
     query.setParameter("isDeleted", Boolean.FALSE);
@@ -95,7 +102,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
     query.executeUpdate();
   }
 
-  public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, long componentTypeId) {
+  public List<Component> findComponentsByDINAndType(String donationIdentificationNumber, UUID componentTypeId) {
     String queryStr = "SELECT c from Component c WHERE " +
         "(c.donation.donationIdentificationNumber = :donationIdentificationNumber " +
         "OR CONCAT(c.donation.donationIdentificationNumber, c.donation.flagCharacters) = :donationIdentificationNumber) AND " +
@@ -107,7 +114,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
   }
 
   // TODO: Test
-  public int countChangedComponentsForDonation(long donationId) {
+  public int countChangedComponentsForDonation(UUID donationId) {
     return em.createNamedQuery(
         ComponentNamedQueryConstants.NAME_COUNT_CHANGED_COMPONENTS_FOR_DONATION,
         Number.class)
@@ -125,7 +132,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .getSingleResult();
   }
 
-  public boolean verifyComponentExists(Long id) {
+  public boolean verifyComponentExists(UUID id) {
     Long count = em.createNamedQuery(ComponentNamedQueryConstants.NAME_COUNT_COMPONENT_WITH_ID, Long.class)
         .setParameter("id", id).getSingleResult();
     if (count == 1) {
@@ -156,18 +163,33 @@ public class ComponentRepository extends AbstractRepository<Component> {
     return new LinkedHashSet<>(componentExportDTOs);
   }
 
-  public List<DiscardedComponentDTO> findSummaryOfDiscardedComponentsByProcessingSite(Long processingSiteId, Date starDate, Date endDate) {
+  public List<DiscardedComponentDTO> findSummaryOfDiscardedComponentsByProcessingSite(UUID processingSiteId,
+      Date starDate, Date endDate) {
+
+    boolean includeAllProcessingSites = false;
+    if (processingSiteId == null) {
+      includeAllProcessingSites = true;
+    }
+
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE, DiscardedComponentDTO.class)
         .setParameter("processingSiteId", processingSiteId)
+        .setParameter("includeAllProcessingSites", includeAllProcessingSites)
         .setParameter("startDate", starDate)
         .setParameter("endDate", endDate)
         .getResultList();
   }
   
-  public List<ComponentProductionDTO> findProducedComponentsByProcessingSite(Long processingSiteId, Date startDate, Date endDate) {
+  public List<ComponentProductionDTO> findProducedComponentsByProcessingSite(UUID processingSiteId, Date startDate,
+      Date endDate) {
+
+    boolean includeAllProcessingSites = false;
+    if (processingSiteId == null) {
+      includeAllProcessingSites = true;
+    }
     return em.createNamedQuery(
         ComponentNamedQueryConstants.NAME_FIND_PRODUCED_COMPONENTS_BY_PROCESSING_SITE, ComponentProductionDTO.class)
         .setParameter("processingSiteId", processingSiteId)
+        .setParameter("includeAllProcessingSites", includeAllProcessingSites)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("excludedStatuses", Arrays.asList(ComponentStatus.PROCESSED))
@@ -175,7 +197,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .getResultList();
   }
 
-  public List<Component> findSafeComponents(Long componentTypeId, Long locationId, List<BloodGroup> bloodGroups,
+  public List<Component> findSafeComponents(UUID componentTypeId, UUID locationId, List<BloodGroup> bloodGroups,
       Date startDate, Date endDate, InventoryStatus inventoryStatus, boolean includeInitialComponents) {
     boolean includeBloodGroups = true;
     List<String> stringBloodGroups = null;
@@ -189,9 +211,21 @@ public class ComponentRepository extends AbstractRepository<Component> {
       }
     }
 
+    boolean includeAllLocations = false;
+    if (locationId == null) {
+      includeAllLocations = true;
+    }
+
+    boolean includeAllComponents = false;
+    if (componentTypeId == null) {
+      includeAllComponents = true;
+    }
+
     return em.createNamedQuery(ComponentNamedQueryConstants.NAME_FIND_SAFE_COMPONENTS, Component.class)
         .setParameter("locationId", locationId)
+        .setParameter("includeAllLocations", includeAllLocations)
         .setParameter("componentTypeId", componentTypeId)
+        .setParameter("includeAllComponents", includeAllComponents)
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("includeBloodGroups", includeBloodGroups)

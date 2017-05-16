@@ -1,6 +1,7 @@
 package org.jembi.bsis.backingform;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.rules.DonationField;
@@ -9,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BloodTestingRuleBackingForm {
 
-  private Long id;
+  private UUID id;
 
   private BloodTestBackingForm bloodTest;
 
@@ -23,11 +24,11 @@ public class BloodTestingRuleBackingForm {
 
   private Boolean isDeleted;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

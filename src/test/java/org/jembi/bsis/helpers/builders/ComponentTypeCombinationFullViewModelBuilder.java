@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.viewmodel.ComponentTypeCombinationFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 
 public class ComponentTypeCombinationFullViewModelBuilder extends AbstractBuilder<ComponentTypeCombinationFullViewModel> {
   
-  private Long id;
+  private UUID id;
   private boolean isDeleted = false;
   private String combinationName;
   private List<ComponentTypeViewModel> componentTypes;
   private Set<ComponentTypeViewModel> sourceComponentTypes;
 
-  public ComponentTypeCombinationFullViewModelBuilder withId(Long id) {
+  public ComponentTypeCombinationFullViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

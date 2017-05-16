@@ -2,13 +2,14 @@ package org.jembi.bsis.dto;
 
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 
 public class ComponentExportDTO extends ModificationTrackerExportDTO {
 
-  private long id; // Used only for removing duplicates
+  private UUID id; // Used only for removing duplicates
   private String donationIdentificationNumber;
   private String componentCode;
   private String parentComponentCode;
@@ -26,7 +27,7 @@ public class ComponentExportDTO extends ModificationTrackerExportDTO {
     // Default constructor
   }
 
-  public ComponentExportDTO(long id, String donationIdentificationNumber, String componentCode, Date createdDate,
+  public ComponentExportDTO(UUID id, String donationIdentificationNumber, String componentCode, Date createdDate,
       String createdBy, Date lastUpdated, String lastUpdatedBy, String parentComponentCode, Date createdOn,
       ComponentStatus status, String location, Date issuedOn, InventoryStatus inventoryStatus, Date discardedOn,
       String discardReason, Date expiresOn, String notes) {
@@ -48,6 +49,10 @@ public class ComponentExportDTO extends ModificationTrackerExportDTO {
     this.expiresOn = expiresOn;
     this.notes = notes;
   }
+  
+  public UUID getId() {
+    return this.id;
+  } 
 
   public String getDonationIdentificationNumber() {
     return donationIdentificationNumber;
@@ -155,7 +160,11 @@ public class ComponentExportDTO extends ModificationTrackerExportDTO {
     if (!(other instanceof ComponentExportDTO)) {
       return false;
     }
-    return ((ComponentExportDTO) other).id == id;
+    
+    if (getId() == null) {
+      return super.equals(other);
+    }
+    return getId().equals(((ComponentExportDTO) other).getId());          
   }
 
 }

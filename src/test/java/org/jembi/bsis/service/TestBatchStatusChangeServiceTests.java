@@ -22,6 +22,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.LocationBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -42,7 +43,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
-
+  
+  private static final UUID FIRST_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  private static final UUID SECOND_BLOOD_TEST_RESULT_ID=UUID.randomUUID();
+  
   @InjectMocks
   private TestBatchStatusChangeService testBatchStatusChangeService;
   @Mock
@@ -209,7 +213,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     Donor donor = aDonor().build();
     Donor expectedDonor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation unsafeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_UNSAFE)
+        .withTTIStatus(TTIStatus.UNSAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withDonor(donor)
         .withBloodTestResults(bloodTestResults)
@@ -239,14 +243,14 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithUnsafeDonationAndDonorToBeDeferred_shouldDeferDonorAndCreateCounsellingReferral() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
     Donor donor = aDonor().withBloodAbo("A").withBloodRh("-").build();
     Donor expectedDonor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation unsafeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_UNSAFE)
+        .withTTIStatus(TTIStatus.UNSAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withVenue(location)
         .withDonor(donor)
@@ -278,13 +282,13 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithNoTypeDeterminedBloodTyping_shouldNotSetBloodABORhOfDonor() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
     Donor donor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation noTypeDeterminedBloodTypingOutcomeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .withBloodAbo("A") // note: invalid values
         .withBloodRh("+")
@@ -314,13 +318,13 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithNoTypeDeterminedBloodTyping_shouldMarkComponentsAsUnsafe() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
     Donor donor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation noTypeDeterminedBloodTypingOutcomeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .withBloodAbo("A") // note: invalid values
         .withBloodRh("+")
@@ -348,7 +352,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithIndeterminateTTIStatus_shouldMarkComponentsAsUnsafe() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "A";
     String bloodRh = "+";
@@ -382,13 +386,13 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithIndeterminateBloodTyping_shouldNotSetBloodABORhOfDonor() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
     Donor donor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation noTypeDeterminedBloodTypingOutcomeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodAbo("A") // note: invalid values
@@ -419,13 +423,13 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithIndeterminateBloodTyping_shouldMarkComponentsAsUnsafe() {
 
-    Location location = LocationBuilder.aLocation().withId(1).withName("Test Location").build();
+    Location location = LocationBuilder.aLocation().withId(UUID.randomUUID()).withName("Test Location").build();
     List<BloodTestResult> bloodTestResults = Arrays.asList(aBloodTestResult().build());
     String bloodAbo = "O";
     String bloodRh = "+";
     Donor donor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation noTypeDeterminedBloodTypingOutcomeDonation = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.INDETERMINATE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodAbo("A") // note: invalid values
@@ -455,7 +459,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   public void testHandleReleaseWithContainsPlasma_shouldMarkComponentsAsUnsafeAndUpdateComponentsStatuses() {
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(111L)
+            .withId(FIRST_BLOOD_TEST_RESULT_ID)
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .thatShouldFlagComponentsContainingPlasmaForDiscard()
@@ -465,7 +469,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     );
     
     Donation donationThatContainsPlasma = aDonation()
-        .withTTIStatus(TTIStatus.TTI_SAFE)
+        .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodAbo("A") 
@@ -498,7 +502,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   public void testHandleReleaseWithContainsPlasmaAndTTIPos_shouldMarkComponentsAsUnsafeAndUpdateComponentsStatuses() {
     List<BloodTestResult> bloodTestResults = Arrays.asList(
         aBloodTestResult()
-            .withId(111L)
+            .withId(FIRST_BLOOD_TEST_RESULT_ID)
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .thatShouldFlagComponentsContainingPlasmaForDiscard()
@@ -506,7 +510,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
                 .build())
             .build(),
         aBloodTestResult()
-            .withId(222L)
+            .withId(SECOND_BLOOD_TEST_RESULT_ID)
             .withResult("POS")
             .withBloodTest(aBloodTest()
                 .withFlagComponentsForDiscard(true)
@@ -516,7 +520,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     );
     
     Donation donationThatContainsPlasma = aDonation()
-        .withTTIStatus(TTIStatus.TTI_UNSAFE)
+        .withTTIStatus(TTIStatus.UNSAFE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodAbo("A") 

@@ -217,6 +217,48 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
   }
 
   @Test
+  public void testFindTTIPrevalenceReportIndicatorsWithInactiveAndDeletedBloodTests_shouldReturnAggregatedIndicators() {
+    Date irrelevantStartDate = new DateTime().minusDays(7).toDate();
+    Date irrelevantEndDate = new DateTime().minusDays(2).toDate();
+
+    Location expectedVenue = aVenue().build();
+    Gender expectedGender = Gender.male;
+    Donation expectedDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
+    BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI)
+            .withTestName("test1").withTestNameShort("t1").thatIsInActive().buildAndPersist(entityManager);
+    BloodTest deletedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI)
+        .withTestName("test3").withTestNameShort("t3").thatIsDeleted().buildAndPersist(entityManager);
+
+    // Expected even though the BloodTest is inactive
+    aBloodTestResult()
+            .withDonation(expectedDonation)
+            .withBloodTest(expectedBloodTest)
+            .buildAndPersist(entityManager);
+
+    // Excluded because the BloodTest is deleted
+    aBloodTestResult()
+            .withDonation(expectedDonation)
+            .withBloodTest(deletedBloodTest)
+            .buildAndPersist(entityManager);
+
+    List<BloodTestResultDTO> expectedDtos = Arrays.asList(
+            aBloodTestResultDTO()
+                    .withBloodTest(expectedBloodTest)
+                    .withVenue(expectedVenue)
+                    .withGender(expectedGender)
+                    .withCount(1)
+                    .build()
+    );
+
+    List<BloodTestResultDTO> returnedDtos = bloodTestResultRepository.findTTIPrevalenceReportIndicators(
+            irrelevantStartDate, irrelevantEndDate);
+
+    assertThat(returnedDtos, is(expectedDtos));
+  }
+
+
+  @Test
   public void testFindTTIPrevalenceTotalUnitsTested_shouldReturnCorrectTotals() {
     Date irrelevantStartDate = new DateTime().minusDays(7).toDate();
     Date irrelevantEndDate = new DateTime().minusDays(2).toDate();
@@ -228,9 +270,9 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
     Donation expectedDonationEndDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantEndDate)
             .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
     Donation expectedDonationSafe = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_SAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.SAFE).buildAndPersist(entityManager);
     Donation expectedDonationUnsafe = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
 
     Donation outOfRangeDateDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(new Date())
             .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).buildAndPersist(entityManager);
@@ -321,18 +363,18 @@ public class BloodTestResultRepositoryTests extends SecurityContextDependentTest
     Location expectedVenue = aVenue().build();
     Gender expectedGender = Gender.male;
     Donation expectedUnsafeDonationStartDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
     Donation expectedUnsafeDonationEndDate = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantEndDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
 
     Donation safeDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_SAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.SAFE).buildAndPersist(entityManager);
     Donation deletedDonation = aDonation().withVenue(expectedVenue).thatIsDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
     Donation outOfRangeDateDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(new Date())
-            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
     Donation notReleasedDonation = aDonation().withVenue(expectedVenue).thatIsNotDeleted().withDonationDate(irrelevantStartDate)
-            .thatIsNotReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.TTI_UNSAFE).buildAndPersist(entityManager);
+            .thatIsNotReleased().withDonor(aDonor().withGender(expectedGender).build()).withTTIStatus(TTIStatus.UNSAFE).buildAndPersist(entityManager);
 
     BloodTest expectedBloodTest = aBloodTest().withBloodTestType(BloodTestType.BASIC_TTI)
             .withTestName("test1").withTestNameShort("t1").buildAndPersist(entityManager);

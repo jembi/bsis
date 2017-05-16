@@ -8,6 +8,7 @@ public abstract class AbstractEntityPersister<T> {
 
   public T persist(T entity, EntityManager entityManager) {
     entityManager.persist(entity);
+    entityManager.flush();
     return entity;
   }
 

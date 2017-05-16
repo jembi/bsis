@@ -3,10 +3,11 @@ package org.jembi.bsis.helpers.builders;
 import org.jembi.bsis.backingform.ComponentPreProcessingBackingForm;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class ComponentPreProcessingBackingFormBuilder extends AbstractBuilder<ComponentPreProcessingBackingForm> {
 
-  private Long id;
+  private UUID id;
   private Integer weight;
   private Date bleedStartTime;
   private Date bleedEndTime;
@@ -21,7 +22,7 @@ public class ComponentPreProcessingBackingFormBuilder extends AbstractBuilder<Co
     return this;
   }
   
-  public ComponentPreProcessingBackingFormBuilder withId(Long id) {
+  public ComponentPreProcessingBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

@@ -1,10 +1,11 @@
 package org.jembi.bsis.backingform;
 
 import java.util.Set;
+import java.util.UUID;
 
 public class RoleBackingForm {
 
-  private Long id;
+  private UUID id;
   private String name;
   private String description;
   private Set<PermissionBackingForm> permissions;
@@ -13,7 +14,7 @@ public class RoleBackingForm {
     return description;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
@@ -29,7 +30,7 @@ public class RoleBackingForm {
     this.description = description;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

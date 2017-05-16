@@ -3,6 +3,7 @@ package org.jembi.bsis.controller;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -72,7 +73,7 @@ public class OrderFormController {
 
   @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_ORDER_FORM + "')")
-  public ResponseEntity<Map<String, Object>> updateOrderForm(@PathVariable("id") Long orderFormId,
+  public ResponseEntity<Map<String, Object>> updateOrderForm(@PathVariable("id") UUID orderFormId,
       @Valid @RequestBody OrderFormBackingForm backingForm) {
     
     // Use the id parameter from the path
@@ -85,7 +86,7 @@ public class OrderFormController {
   
   @RequestMapping(method = RequestMethod.GET, value = "/{id}")
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_ORDER_FORM + "')")
-  public ResponseEntity<Map<String, Object>> getOrderForm(@PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> getOrderForm(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<>();
     map.put("orderForm", orderFormControllerService.findOrderForm(id));
     return new ResponseEntity<>(map, HttpStatus.OK);
@@ -96,8 +97,8 @@ public class OrderFormController {
   public ResponseEntity<Map<String, Object>> findComponentBatches(
       @RequestParam(value = "orderDateFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date orderDateFrom,
       @RequestParam(value = "orderDateTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date orderDateTo,
-      @RequestParam(value = "dispatchedFromId", required = false) Long dispatchedFromId,
-      @RequestParam(value = "dispatchedToId", required = false) Long dispatchedToId,
+      @RequestParam(value = "dispatchedFromId", required = false) UUID dispatchedFromId,
+      @RequestParam(value = "dispatchedToId", required = false) UUID dispatchedToId,
       @RequestParam(value = "type", required = false) OrderType type,
       @RequestParam(value = "status", required = false) OrderStatus status) {
     Map<String, Object> map = new HashMap<String, Object>();
@@ -108,7 +109,7 @@ public class OrderFormController {
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('" + PermissionConstants.VOID_ORDER_FORM + "')")
-  public void deleteDonation(@PathVariable Long id) {
+  public void deleteOrderForm(@PathVariable UUID id) {
     orderFormControllerService.deleteOrderForm(id);
   }
 }

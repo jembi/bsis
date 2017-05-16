@@ -1,8 +1,10 @@
 package org.jembi.bsis.backingform;
 
+import java.util.UUID;
+
 public class PackTypeBackingForm {
 
-  private Long id;
+  private UUID id;
   private String packType;
   private ComponentTypeBackingForm componentType;
   private Boolean canPool;
@@ -15,11 +17,11 @@ public class PackTypeBackingForm {
   private Integer minWeight;
   private Integer lowVolumeWeight;
   
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

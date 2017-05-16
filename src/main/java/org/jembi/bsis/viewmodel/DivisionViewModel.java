@@ -1,6 +1,8 @@
 package org.jembi.bsis.viewmodel;
 
-public class DivisionViewModel extends BaseViewModel {
+import java.util.UUID;
+
+public class DivisionViewModel extends BaseViewModel<UUID> {
   
   private String name;
   private int level;

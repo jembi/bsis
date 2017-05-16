@@ -1,87 +1,87 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-    <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5801'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Single Pack - CPDA"
                    componentTypeCode="0011" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="2" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5802'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Double Pack - CPDA"
                    componentTypeCode="0012" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="3" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5803'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Triple Pack - CPDA"
                    componentTypeCode="0013" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="4" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5804'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Quad Pack - CPDA"
                    componentTypeCode="0014" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="5" description="" expiresAfter="5"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5805'" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Apheresis" componentTypeCode="0021"
                    containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="6" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5806'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood - CPDA" componentTypeCode="1001"
                    containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="7" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5807'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Whole Blood Poor Platelets - CPDA"
                    componentTypeCode="1005" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="8" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5808'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - CPDA" componentTypeCode="2001"
                    containsPlasma="false"/>
-    <ComponentType canBeIssued="true" id="9" description="" expiresAfter="42"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5809'" description="" expiresAfter="42"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - SAGM" componentTypeCode="2011"
                    containsPlasma="false"/>
-    <ComponentType canBeIssued="true" id="10" description="" expiresAfter="365"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5810'" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Fresh Frozen Plasma - Whole Blood"
                    componentTypeCode="3001" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="11" description="" expiresAfter="365"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5811'" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Frozen Plasma - Whole Blood" componentTypeCode="3002"
                    containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="12" description="" expiresAfter="5"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5812'" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Whole Blood"
                    componentTypeCode="4001" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="13" description="" expiresAfter="1"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5813'" description="" expiresAfter="1"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Whole Blood - 24H"
                    componentTypeCode="4011" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="14" description="" expiresAfter="35"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5814'" description="" expiresAfter="35"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Packed Red Cells - Paediatric - CPDA"
                    componentTypeCode="2101" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="15" description="" expiresAfter="365"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5815'" description="" expiresAfter="365"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Fresh Frozen Plasma - Apheresis"
                    componentTypeCode="3011" containsPlasma="true"/>
-    <ComponentType canBeIssued="true" id="16" description="" expiresAfter="5"
+    <ComponentType canBeIssued="true" id="uuid'99a61311-1234-4321-b3ea-39e11c2c5816'" description="" expiresAfter="5"
                    expiresAfterUnits="DAYS" hasBloodGroup="true" isDeleted="false"
                    componentTypeName="Platelets Concentrate - Apheresis"
                    componentTypeCode="4021" containsPlasma="true"/>
-    <PackType id="1" packType="Single" isDeleted="false" testSampleProduced="true"
-              componentType_id="1" countAsDonation="true" periodBetweenDonations="90"/>
-    <PackType id="2" packType="Double" isDeleted="false" testSampleProduced="true"
-              componentType_id="2" countAsDonation="true" periodBetweenDonations="90"/>
-    <PackType id="3" packType="Triple" isDeleted="false" testSampleProduced="true"
-              componentType_id="3" countAsDonation="true" periodBetweenDonations="90"/>
-    <PackType id="4" packType="Quad" isDeleted="false" testSampleProduced="true"
-              componentType_id="4" countAsDonation="true" periodBetweenDonations="90"/>
-    <PackType id="5" packType="Apheresis" isDeleted="false" testSampleProduced="true"
-              componentType_id="5" countAsDonation="true" periodBetweenDonations="30"/>
-    <PackType id="6" packType="Dry Pack" isDeleted="false" testSampleProduced="true"
+    <PackType id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'" packType="Single" isDeleted="false" testSampleProduced="true"
+              componentType_id="uuid'99a61311-1234-4321-b3ea-39e11c2c5801'" countAsDonation="true" periodBetweenDonations="90"/>
+    <PackType id="uuid'a60fc65c-8877-45d3-b31b-a374e43019a3'" packType="Double" isDeleted="false" testSampleProduced="true"
+              componentType_id="uuid'99a61311-1234-4321-b3ea-39e11c2c5802'" countAsDonation="true" periodBetweenDonations="90"/>
+    <PackType id="uuid'52b78158-af2d-42af-bf98-64e9d8911249'" packType="Triple" isDeleted="false" testSampleProduced="true"
+              componentType_id="uuid'99a61311-1234-4321-b3ea-39e11c2c5803'" countAsDonation="true" periodBetweenDonations="90"/>
+    <PackType id="uuid'50ac5fa4-bdc5-4d69-bdf1-1e1b7f6c4fe3'" packType="Quad" isDeleted="false" testSampleProduced="true"
+              componentType_id="uuid'99a61311-1234-4321-b3ea-39e11c2c5804'" countAsDonation="true" periodBetweenDonations="90"/>
+    <PackType id="uuid'3def02dd-d3a2-4941-9748-3770524fed72'" packType="Apheresis" isDeleted="false" testSampleProduced="true"
+              componentType_id="uuid'99a61311-1234-4321-b3ea-39e11c2c5805'" countAsDonation="true" periodBetweenDonations="30"/>
+    <PackType id="uuid'e357445a-5e2d-4cfe-ba8e-44443c7bb8b6'" packType="Dry Pack" isDeleted="false" testSampleProduced="true"
               countAsDonation="false" periodBetweenDonations="0"/>
-    <PackType id="7" packType="Test Only" isDeleted="false" testSampleProduced="true"
+    <PackType id="uuid'24d1d077-ff9d-42a6-abee-42a0ce8a5d42'" packType="Test Only" isDeleted="false" testSampleProduced="true"
               countAsDonation="false" periodBetweenDonations="0"/>
-    <PackType id="8" packType="Did Not Bleed" testSampleProduced="true"
+    <PackType id="uuid'5a2016de-6875-4d93-8bcf-1c4a60617ca4'" packType="Did Not Bleed" testSampleProduced="true"
               isDeleted="false" countAsDonation="false" periodBetweenDonations="0"/>
-    <PackType id="9" packType="Deleted" testSampleProduced="true"
+    <PackType id="uuid'fd44ac9b-19b8-4a48-9d14-1155e4c56c3a'" packType="Deleted" testSampleProduced="true"
               isDeleted="true" countAsDonation="false" periodBetweenDonations="0"/>
     <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="1" name="location 1" isVenue="true"/>
-    <Donation ineligibleDonor="0" released="0" venue_id="1"/>
+    <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" ineligibleDonor="0" released="0" venue_id="1"/>
 </dataset>

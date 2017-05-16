@@ -16,6 +16,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
@@ -60,10 +61,16 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
 
   @Mock
   private OrderFormRepository orderFormRepository;
+  
+  private static final UUID COMPONENT_ID = UUID.randomUUID();
+
+  private static final UUID locationId_1 = UUID.randomUUID();
+  private static final UUID locationId_2 = UUID.randomUUID();
 
   private OrderFormBackingForm getTransferOrderFormBackingForm() {
-    LocationBackingForm dispatchedFrom = aDistributionSiteBackingForm().withName("LocFrom").withId(1l).build();
-    LocationBackingForm dispatchedTo = aDistributionSiteBackingForm().withName("LocTo").withId(2l).build();
+    LocationBackingForm dispatchedFrom =
+        aDistributionSiteBackingForm().withName("LocFrom").withId(locationId_1).build();
+    LocationBackingForm dispatchedTo = aDistributionSiteBackingForm().withName("LocTo").withId(locationId_2).build();
     Date orderDate = new Date();
     OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo).withOrderDate(orderDate).withOrderType(OrderType.TRANSFER).build();
@@ -71,8 +78,9 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
   }
   
   private OrderFormBackingForm getIssueOrderFormBackingForm() {
-    LocationBackingForm dispatchedFrom = aDistributionSiteBackingForm().withName("LocFrom").withId(1l).build();
-    LocationBackingForm dispatchedTo = aUsageSiteBackingForm().withName("LocTo").withId(2l).build();
+    LocationBackingForm dispatchedFrom =
+        aDistributionSiteBackingForm().withName("LocFrom").withId(locationId_1).build();
+    LocationBackingForm dispatchedTo = aUsageSiteBackingForm().withName("LocTo").withId(locationId_2).build();
     Date orderDate = new Date();
     OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo).withOrderDate(orderDate).withOrderType(OrderType.ISSUE).build();
@@ -80,8 +88,9 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
   }
   
   private OrderFormBackingForm getPatientRequestOrderFormBackingForm() {
-    LocationBackingForm dispatchedFrom = aDistributionSiteBackingForm().withName("LocFrom").withId(1l).build();
-    LocationBackingForm dispatchedTo = aUsageSiteBackingForm().withName("LocTo").withId(2l).build();
+    LocationBackingForm dispatchedFrom =
+        aDistributionSiteBackingForm().withName("LocFrom").withId(locationId_1).build();
+    LocationBackingForm dispatchedTo = aUsageSiteBackingForm().withName("LocTo").withId(locationId_2).build();
     Date orderDate = new Date();
     OrderFormBackingForm backingForm = anOrderFormBackingForm().withDispatchedFrom(dispatchedFrom)
         .withDispatchedTo(dispatchedTo).withOrderDate(orderDate).withOrderType(OrderType.PATIENT_REQUEST).build();
@@ -92,27 +101,28 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     OrderFormItemBackingForm backingForm = new OrderFormItemBackingForm();
     backingForm.setBloodGroup("A+");
     backingForm.setNumberOfUnits(22);
+    UUID componentTypdId = UUID.randomUUID();
     ComponentTypeBackingForm componentType = new ComponentTypeBackingForm();
-    componentType.setId(1L);
+    componentType.setId(componentTypdId);
     backingForm.setComponentType(componentType);
     return backingForm;
   }
 
   private ComponentBackingForm getBaseOrderFormComponentBackingForm() {
-    ComponentBackingForm component = aComponentBackingForm().withId(1L).build();
+    ComponentBackingForm component = aComponentBackingForm().withId(COMPONENT_ID).build();
     return component;
   }
 
   private Location getDispatchedFromLocation() {
-    return aDistributionSite().withName("DispatchedFrom").withId(1l).build();
+    return aDistributionSite().withName("DispatchedFrom").withId(locationId_1).build();
   }
 
   private Location getTransferToLocation() {
-    return aDistributionSite().withName("TransferTo").withId(2l).build();
+    return aDistributionSite().withName("TransferTo").withId(locationId_2).build();
   }
 
   private Location getIssueToLocation() {
-    return aUsageSite().withName("IssueTo").withId(2l).build();
+    return aUsageSite().withName("IssueTo").withId(locationId_2).build();
   }
   
   private Component getBaseComponent() {
@@ -127,11 +137,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
-    when(orderFormRepository.isComponentInAnotherOrderForm(null, 1L)).thenReturn(false);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(getBaseComponent());
+    when(orderFormRepository.isComponentInAnotherOrderForm(null, COMPONENT_ID)).thenReturn(false);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -150,11 +160,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getTransferToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getTransferToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
-    when(orderFormRepository.isComponentInAnotherOrderForm(null, 1L)).thenReturn(false);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(getBaseComponent());
+    when(orderFormRepository.isComponentInAnotherOrderForm(null, COMPONENT_ID)).thenReturn(false);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -174,11 +184,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setPatient(aPatientBackingForm().withName1("First Name").withName2("Last Name").build());
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
-    when(orderFormRepository.isComponentInAnotherOrderForm(null, 1L)).thenReturn(false);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(getBaseComponent());
+    when(orderFormRepository.isComponentInAnotherOrderForm(null, COMPONENT_ID)).thenReturn(false);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -197,10 +207,10 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(getBaseComponent());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -220,10 +230,10 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setPatient(aPatientBackingForm().build());
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(getBaseComponent());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -243,10 +253,10 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setPatient(aPatientBackingForm().withName1("name1").build());
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(getBaseComponent());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -264,11 +274,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
     backingForm.setPatient(aPatientBackingForm().withName1("First Name").withName2("Last Name").withDateOfBirth(new DateTime().plusDays(20).toDate()).build());
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm"))
         .thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(getBaseComponent());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -286,12 +296,12 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
     backingForm.setPatient(aPatientBackingForm().withName1("First Name").withName2("Last Name").withDateOfBirth(new DateTime().minusDays(20).toDate()).build());
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm"))
         .thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
-    when(orderFormRepository.isComponentInAnotherOrderForm(null, 1L)).thenReturn(false);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(getBaseComponent());
+    when(orderFormRepository.isComponentInAnotherOrderForm(null, COMPONENT_ID)).thenReturn(false);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -310,10 +320,10 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setPatient(aPatientBackingForm().withName2("name2").build());
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(getBaseComponent());
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -332,11 +342,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setPatient(aPatientBackingForm().withName1("very_long_name_exceeding_maximum_length_allowed").withName2("name2").build());
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
-    when(orderFormRepository.isComponentInAnotherOrderForm(null, 1L)).thenReturn(false);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(getBaseComponent());
+    when(orderFormRepository.isComponentInAnotherOrderForm(null, COMPONENT_ID)).thenReturn(false);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -357,11 +367,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setPatient(aPatientBackingForm().withName1("name1").withName2("very_long_name_exceeding_maximum_length_allowed").build());
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(getBaseComponent());
-    when(orderFormRepository.isComponentInAnotherOrderForm(null, 1L)).thenReturn(false);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(getBaseComponent());
+    when(orderFormRepository.isComponentInAnotherOrderForm(null, COMPONENT_ID)).thenReturn(false);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -398,8 +408,8 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     OrderFormBackingForm backingForm = getIssueOrderFormBackingForm();
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenThrow(new NoResultException());
-    when(locationRepository.getLocation(2l)).thenThrow(new NoResultException());
+    when(locationRepository.getLocation(locationId_1)).thenThrow(new NoResultException());
+    when(locationRepository.getLocation(locationId_2)).thenThrow(new NoResultException());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
 
     // run test
@@ -417,11 +427,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     OrderFormBackingForm backingForm = getIssueOrderFormBackingForm();
 
     // dispatchedFrom can't be a venue
-    Location venue1 = aVenue().withId(1l).build();
+    Location venue1 = aVenue().withId(locationId_1).build();
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(venue1);
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(venue1);
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
 
     // run test
@@ -439,11 +449,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     OrderFormBackingForm backingForm = getTransferOrderFormBackingForm();
 
     // can't transfer to a usageSite
-    Location usageSite = aUsageSite().withId(2l).build();
+    Location usageSite = aUsageSite().withId(locationId_2).build();
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(usageSite);
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(usageSite);
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
 
     // run test
@@ -461,11 +471,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     OrderFormBackingForm backingForm = getIssueOrderFormBackingForm();
 
     // can't issue to a distribution site
-    Location distributionSite = aDistributionSite().withId(2l).build();
+    Location distributionSite = aDistributionSite().withId(locationId_2).build();
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(distributionSite);
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(distributionSite);
     when(formFieldRepository.getRequiredFormFields("OrderForm"))
         .thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
 
@@ -485,11 +495,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setPatient(aPatientBackingForm().withName1("First Name").withName2("Last Name").build());
 
     // can't issue a patient request to a distribution site
-    Location distributionSite = aDistributionSite().withId(2l).build();
+    Location distributionSite = aDistributionSite().withId(locationId_2).build();
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(distributionSite);
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(distributionSite);
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
 
     // run test
@@ -510,8 +520,8 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setOrderDate(null);
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
 
     // run test
@@ -535,18 +545,18 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     OrderFormBackingForm backingForm = getIssueOrderFormBackingForm();
     
     // create a component with a different location from dispatchedFrom
-    Location differentLocation = aDistributionSite().withName("DifferentLocation").withId(3l).build();
+    Location differentLocation = aDistributionSite().withName("DifferentLocation").withId(UUID.randomUUID()).build();
     Component component =
         aComponent().withInventoryStatus(InventoryStatus.IN_STOCK)
         .withLocation(differentLocation).build();
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(component);
-    when(orderFormRepository.isComponentInAnotherOrderForm(null, 1L)).thenReturn(false);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component);
+    when(orderFormRepository.isComponentInAnotherOrderForm(null, COMPONENT_ID)).thenReturn(false);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -568,11 +578,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(component);
-    when(orderFormRepository.isComponentInAnotherOrderForm(null, 1L)).thenReturn(false);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component);
+    when(orderFormRepository.isComponentInAnotherOrderForm(null, COMPONENT_ID)).thenReturn(false);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -594,11 +604,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(component);
-    when(orderFormRepository.isComponentInAnotherOrderForm(null, 1L)).thenReturn(false);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component);
+    when(orderFormRepository.isComponentInAnotherOrderForm(null, COMPONENT_ID)).thenReturn(false);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -615,10 +625,10 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(null);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(null);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");
@@ -638,8 +648,8 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setComponents(Arrays.asList(componentBackingForm));
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
 
     // run test
@@ -660,11 +670,11 @@ public class OrderFormBackingFormValidatorTest extends UnitTestSuite {
     backingForm.setComponents(Arrays.asList(getBaseOrderFormComponentBackingForm()));
 
     // set up mocks
-    when(locationRepository.getLocation(1l)).thenReturn(getDispatchedFromLocation());
-    when(locationRepository.getLocation(2l)).thenReturn(getIssueToLocation());
+    when(locationRepository.getLocation(locationId_1)).thenReturn(getDispatchedFromLocation());
+    when(locationRepository.getLocation(locationId_2)).thenReturn(getIssueToLocation());
     when(formFieldRepository.getRequiredFormFields("OrderForm")).thenReturn(Arrays.asList(new String[] {"orderDate", "status", "type"}));
-    when(componentRepository.findComponent(1L)).thenReturn(component);
-    when(orderFormRepository.isComponentInAnotherOrderForm(null, 1L)).thenReturn(true);
+    when(componentRepository.findComponent(COMPONENT_ID)).thenReturn(component);
+    when(orderFormRepository.isComponentInAnotherOrderForm(null, COMPONENT_ID)).thenReturn(true);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "OrderForm");

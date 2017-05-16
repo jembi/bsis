@@ -14,9 +14,8 @@ import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -31,7 +30,7 @@ import org.mockito.Mock;
 
 public class TestBatchCRUDServiceTests extends UnitTestSuite {
 
-  private static final Long TEST_BATCH_ID = 7L;
+  private static final UUID TEST_BATCH_ID = UUID.randomUUID();
   private static final CanReleaseResult CAN_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(true);
   private static final CanReleaseResult CANT_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(false);
 
@@ -182,9 +181,12 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
 
   @Test
   public void testUpdateTestBatch_shouldUpdateDonationBatch() {
-    final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(1l).build();
-    final DonationBatch donationBatch2 = new DonationBatchBuilder().withId(2l).build();
-    final DonationBatch donationBatch3 = new DonationBatchBuilder().withId(3l).build();
+    UUID donationBatchId1 = UUID.randomUUID();
+    UUID donationBatchId2 = UUID.randomUUID();
+    UUID donationBatchId3 = UUID.randomUUID();
+    final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(donationBatchId1).build();
+    final DonationBatch donationBatch2 = new DonationBatchBuilder().withId(donationBatchId2).build();
+    final DonationBatch donationBatch3 = new DonationBatchBuilder().withId(donationBatchId3).build();
 
     final TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withDonationBatch(donationBatch1)
         .withDonationBatch(donationBatch2).withStatus(TestBatchStatus.OPEN).build();
@@ -199,29 +201,15 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
 
     testBatchCRUDService.updateTestBatch(updatedTestBatch);
 
-    verify(donationBatchRepository, times(2)).updateDonationBatch(argThat(new TypeSafeMatcher<DonationBatch>() {
-
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("A donation batch");
-      }
-
-      @Override
-      protected boolean matchesSafely(DonationBatch actual) {
-        if (actual.getId().equals(1l)) {
-          return (actual.getTestBatch() == null);
-        }
-        if (actual.getId().equals(3l)) {
-          return (actual.getTestBatch() == testBatch);
-        }
-        return false;
-      }
-    }));
+    verify(donationBatchRepository).updateDonationBatch(argThat(is(donationBatch1)));
+    verify(donationBatchRepository).updateDonationBatch(argThat(is(donationBatch2)));
+    verify(donationBatchRepository).updateDonationBatch(argThat(is(donationBatch3)));
   }
 
   @Test(expected = IllegalStateException.class)
   public void testUpdateTestBatch_shouldNotUpdateDonationBatch() {
-    final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(1l).build();
+    UUID donationBatchId = UUID.randomUUID();
+    final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(donationBatchId).build();
 
     final TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withDonationBatch(donationBatch1)
         .withDonationBatch(donationBatch1).withStatus(TestBatchStatus.OPEN).build();
@@ -230,7 +218,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
         .withDonationBatch(donationBatch1).withStatus(TestBatchStatus.OPEN).build();
 
     when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
-    when(donationBatchRepository.findDonationBatchById(1l)).thenReturn(donationBatch1);
+    when(donationBatchRepository.findDonationBatchById(donationBatchId)).thenReturn(donationBatch1);
     when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
     when(donationBatchRepository.updateDonationBatch(donationBatch1)).thenReturn(donationBatch1);
 

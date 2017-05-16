@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.service.TestBatchCRUDService;
@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Audited
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class TestBatch extends BaseModificationTrackerEntity {
+public class TestBatch extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 

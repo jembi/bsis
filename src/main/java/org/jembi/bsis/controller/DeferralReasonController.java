@@ -2,6 +2,7 @@ package org.jembi.bsis.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -55,7 +56,7 @@ public class DeferralReasonController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
-  public ResponseEntity<Map<String, Object>> getDeferralReasonById(@PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> getDeferralReasonById(@PathVariable UUID id) {
     Map<String, Object> map = new HashMap<String, Object>();
     DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(id);
     map.put("reason", deferralReasonFactory.createViewModel(deferralReason));
@@ -72,7 +73,7 @@ public class DeferralReasonController {
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.MANAGE_DEFERRAL_REASONS + "')")
-  public ResponseEntity<Map<String, Object>> updateDeferralReason(@Valid @RequestBody DeferralReasonBackingForm formData, @PathVariable Long id) {
+  public ResponseEntity<Map<String, Object>> updateDeferralReason(@Valid @RequestBody DeferralReasonBackingForm formData, @PathVariable UUID id) {
     Map<String, Object> map = new HashMap<String, Object>();
     DeferralReason deferralReason = formData.getDeferralReason();
     deferralReason.setId(id);

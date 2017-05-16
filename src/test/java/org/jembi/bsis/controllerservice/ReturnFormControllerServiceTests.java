@@ -5,8 +5,8 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
-import org.jembi.bsis.controllerservice.ReturnFormControllerService;
 import org.jembi.bsis.factory.ReturnFormFactory;
 import org.jembi.bsis.helpers.builders.ReturnFormBuilder;
 import org.jembi.bsis.helpers.builders.ReturnFormViewModelBuilder;
@@ -36,18 +36,20 @@ public class ReturnFormControllerServiceTests extends UnitTestSuite {
     // set up test data
     Date returnDateFrom = new Date();
     Date returnDateTo = new Date();
-    Long returnedFromId = 1L;
-    Long returnedToId = 2L;
+    UUID returnedFromId = UUID.randomUUID();
+    UUID returnedToId = UUID.randomUUID();
+    UUID id1 = UUID.randomUUID();
+    UUID id2 = UUID.randomUUID();
     ReturnStatus status = ReturnStatus.RETURNED;
     
     List<ReturnForm> entities = Arrays.asList(
-        ReturnFormBuilder.aReturnForm().withId(1L).build(),
-        ReturnFormBuilder.aReturnForm().withId(2L).build()
+        ReturnFormBuilder.aReturnForm().withId(id1).build(),
+        ReturnFormBuilder.aReturnForm().withId(id2).build()
     );
     
     List<ReturnFormViewModel> viewModels = Arrays.asList(
-        ReturnFormViewModelBuilder.aReturnFormViewModel().withId(1L).build(),
-        ReturnFormViewModelBuilder.aReturnFormViewModel().withId(2L).build()
+        ReturnFormViewModelBuilder.aReturnFormViewModel().withId(id1).build(),
+        ReturnFormViewModelBuilder.aReturnFormViewModel().withId(id2).build()
     );
     
     // set up mocks

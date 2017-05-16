@@ -4,9 +4,9 @@ import javax.persistence.EntityManager;
 
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.DefaultPersister;
-import org.jembi.bsis.model.BaseEntity;
+import org.jembi.bsis.model.BSISEntity;
 
-public abstract class AbstractEntityBuilder<T extends BaseEntity> extends AbstractBuilder<T> {
+public abstract class AbstractEntityBuilder<T extends BSISEntity> extends AbstractBuilder<T> {
 
   public AbstractEntityPersister<T> getPersister() {
     return new DefaultPersister<>();

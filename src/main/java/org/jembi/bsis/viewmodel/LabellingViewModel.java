@@ -2,8 +2,9 @@ package org.jembi.bsis.viewmodel;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
-public class LabellingViewModel extends BaseViewModel {
+public class LabellingViewModel extends BaseViewModel<UUID> {
 
   private String componentName;
   private String componentCode;

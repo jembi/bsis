@@ -3,12 +3,14 @@ package org.jembi.bsis.repository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
@@ -26,7 +28,7 @@ public class DonationBatchRepository {
   public DonationBatchRepository() {
   }
 
-  public DonationBatch findDonationBatchByIdEager(Long batchId) {
+  public DonationBatch findDonationBatchByIdEager(UUID batchId) {
     String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donations LEFT JOIN FETCH b.venue " +
         "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<DonationBatch> query = em.createQuery(queryString, DonationBatch.class);
@@ -35,7 +37,7 @@ public class DonationBatchRepository {
     return b;
   }
 
-  public DonationBatch findDonationBatchById(Long batchId) {
+  public DonationBatch findDonationBatchById(UUID batchId) {
     String queryString = "SELECT distinct b FROM DonationBatch b LEFT JOIN FETCH b.donations " +
         "WHERE b.id = :batchId and b.isDeleted = :isDeleted";
     TypedQuery<DonationBatch> query = em.createQuery(queryString, DonationBatch.class);
@@ -82,7 +84,7 @@ public class DonationBatchRepository {
   }
 
 
-  public List<DonationBatch> findDonationBatches(Boolean isClosed, List<Long> venueIds, Date startDate, Date endDate) {
+  public List<DonationBatch> findDonationBatches(Boolean isClosed, List<UUID> venueIds, Date startDate, Date endDate) {
     String queryStr = "SELECT distinct b from DonationBatch b LEFT JOIN FETCH b.donations WHERE b.isDeleted=:isDeleted ";
     if (!venueIds.isEmpty()) {
       queryStr += "AND b.venue.id IN (:venueIds) ";
@@ -131,7 +133,7 @@ public class DonationBatchRepository {
     return query.getResultList();
   }
 
-  public List<Donation> findDonationsInBatch(Long batchId) {
+  public List<Donation> findDonationsInBatch(UUID batchId) {
     DonationBatch donationBatch = findDonationBatchByIdEager(batchId);
     List<Donation> donations = new ArrayList<Donation>();
     for (Donation c : donationBatch.getDonations()) {
@@ -161,7 +163,7 @@ public class DonationBatchRepository {
         .intValue();
   }
   
-  public boolean verifyDonationBatchExists(Long id) {
+  public boolean verifyDonationBatchExists(UUID id) {
     return em.createNamedQuery(DonationBatchQueryConstants.NAME_VERIFY_DONATION_BATCH_WITH_ID_EXISTS, Boolean.class)
         .setParameter("id", id)
         .setParameter("deleted", false)
@@ -173,7 +175,7 @@ public class DonationBatchRepository {
         DonationBatch.class).getResultList();
   }
   
-  public ComponentBatch findComponentBatchByDonationbatchId(Long donationBatchId) {
+  public ComponentBatch findComponentBatchByDonationbatchId(UUID donationBatchId) {
     ComponentBatch componentBatch = null;
     try {
       componentBatch = em.createNamedQuery(       

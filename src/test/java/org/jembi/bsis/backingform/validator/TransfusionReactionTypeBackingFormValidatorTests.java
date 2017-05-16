@@ -7,6 +7,7 @@ import static org.jembi.bsis.helpers.builders.TransfusionReactionTypeBuilder.aTr
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TransfusionReactionTypeBackingForm;
 import org.jembi.bsis.model.transfusion.TransfusionReactionType;
@@ -29,15 +30,16 @@ public class TransfusionReactionTypeBackingFormValidatorTests extends UnitTestSu
   @Test
   public void testValidateForm_shouldHaveNoErrors() {
     // Set up fixture
-    TransfusionReactionType reactionType = aTransfusionReactionType().withId(1L).build();
+    UUID id = UUID.randomUUID();
+    TransfusionReactionType reactionType = aTransfusionReactionType().withId(id).build();
     TransfusionReactionTypeBackingForm form = aTransfusionReactionTypeBackingForm()
-        .withId(1L)
+        .withId(id)
         .withName("reactionName")
         .withDescription("Transfusion reaction name")
         .withIsDeleted(false)
         .build();
     
-    when(transfusionReactionTypeRepository.findById(1L)).thenReturn(reactionType);
+    when(transfusionReactionTypeRepository.findById(id)).thenReturn(reactionType);
     when(transfusionReactionTypeRepository.isUniqueTransfusionReactionTypeName(form.getId(),form.getName()))
         .thenReturn(true);
     
@@ -51,14 +53,15 @@ public class TransfusionReactionTypeBackingFormValidatorTests extends UnitTestSu
   @Test
   public void testValidateForm_withNoReactionTypeName_shouldHaveOneError() {
     // Set up fixture
-    TransfusionReactionType reactionType = aTransfusionReactionType().withId(1L).build();
+    UUID id = UUID.randomUUID();
+    TransfusionReactionType reactionType = aTransfusionReactionType().withId(id).build();
     TransfusionReactionTypeBackingForm form = aTransfusionReactionTypeBackingForm()
-        .withId(1L)
+        .withId(id)
         .withName(null)
         .withIsDeleted(false)
         .build();
     
-    when(transfusionReactionTypeRepository.findById(1L)).thenReturn(reactionType);
+    when(transfusionReactionTypeRepository.findById(id)).thenReturn(reactionType);
     when(transfusionReactionTypeRepository.isUniqueTransfusionReactionTypeName(form.getId(),form.getName()))
         .thenReturn(true);
     
@@ -72,15 +75,16 @@ public class TransfusionReactionTypeBackingFormValidatorTests extends UnitTestSu
   @Test
   public void testValidateFormWithNonUniqueName_shouldHaveOneError() {
     // Set up fixture
-    TransfusionReactionType reactionType = aTransfusionReactionType().withId(1L).build();
+    UUID id = UUID.randomUUID();
+    TransfusionReactionType reactionType = aTransfusionReactionType().withId(id).build();
     TransfusionReactionTypeBackingForm form = aTransfusionReactionTypeBackingForm()
-        .withId(1L)
+        .withId(id)
         .withName("reactionName")
         .withDescription("Transfusion reaction name")
         .withIsDeleted(false)
         .build();
     
-    when(transfusionReactionTypeRepository.findById(1L)).thenReturn(reactionType);
+    when(transfusionReactionTypeRepository.findById(id)).thenReturn(reactionType);
     when(transfusionReactionTypeRepository.isUniqueTransfusionReactionTypeName(form.getId(),form.getName()))
         .thenReturn(false);
     
@@ -94,15 +98,16 @@ public class TransfusionReactionTypeBackingFormValidatorTests extends UnitTestSu
   @Test
   public void testValidateFormWithNullIsDeleted_shouldNotHaveErrors() {
     // Set up fixture
-    TransfusionReactionType reactionType = aTransfusionReactionType().withId(1L).build();  
+    UUID id = UUID.randomUUID();
+    TransfusionReactionType reactionType = aTransfusionReactionType().withId(id).build();  
     TransfusionReactionTypeBackingForm form = aTransfusionReactionTypeBackingForm()
-        .withId(1L)
+        .withId(id)
         .withName("reactionName")
         .withDescription("Transfusion reaction name")
         .withIsDeleted(null)
         .build();
     
-    when(transfusionReactionTypeRepository.findById(1L)).thenReturn(reactionType);
+    when(transfusionReactionTypeRepository.findById(id)).thenReturn(reactionType);
     when(transfusionReactionTypeRepository.isUniqueTransfusionReactionTypeName(form.getId(),form.getName()))
         .thenReturn(true);
     

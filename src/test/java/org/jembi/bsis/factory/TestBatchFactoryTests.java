@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
@@ -58,6 +59,8 @@ import org.mockito.Mock;
 
 public class TestBatchFactoryTests extends UnitTestSuite {
 
+  private static final UUID IRRELEVANT_TEST_BATCH_ID = UUID.randomUUID();
+  private static final UUID ANOTHER_IRRELEVANT_TEST_BATCH_ID = UUID.randomUUID();
   private static final Long IRRELEVANT_ID = 4L;
   private static final Long ANOTHER_IRRELEVANT_ID = 5L;
   private static final TestBatchStatus IRRELEVANT_STATUS = TestBatchStatus.OPEN;
@@ -95,13 +98,13 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = createDonationBatch();
 
     TestBatch testBatch1 =
-        aTestBatch().withId(IRRELEVANT_ID).withStatus(IRRELEVANT_STATUS).withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+        aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(IRRELEVANT_STATUS).withBatchNumber(IRRELEVANT_BATCH_NUMBER)
             .withCreatedDate(IRRELEVANT_CREATED_DATE).withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
             .withDonationBatches(new HashSet<>(Arrays.asList(donationBatch))).withNotes(IRRELEVANT_NOTES).build();
 
     TestBatch testBatch2 =
         aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -113,7 +116,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationBatchFullViewModel donationBatchViewModel = new DonationBatchFullViewModel();
 
     TestBatchViewModel expectedViewModel = aTestBatchViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -141,7 +144,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
 
     TestBatch testBatch1 = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -151,7 +154,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
     
     TestBatch testBatch2 = aTestBatch()
-        .withId(ANOTHER_IRRELEVANT_ID)
+        .withId(ANOTHER_IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -162,7 +165,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     List<TestBatch> testBatches = Arrays.asList(new TestBatch[]{testBatch1, testBatch2});
 
     TestBatchFullViewModel expectedViewModel1 = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -177,7 +180,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withPermission("canEditDonationBatches", false)
         .build();
     TestBatchFullViewModel expectedViewModel2 = aTestBatchFullViewModel()
-        .withId(ANOTHER_IRRELEVANT_ID)
+        .withId(ANOTHER_IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -215,7 +218,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
 
     TestBatch testBatch = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -227,7 +230,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     CanReleaseResult canReleaseResult = new CanReleaseResult(true, expectedReadyCount);
 
     TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -263,7 +266,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
 
     TestBatch testBatch = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -273,7 +276,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
 
     TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -308,7 +311,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
     
     TestBatch testBatch = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -318,7 +321,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
 
     TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -353,7 +356,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
     
     TestBatch testBatch = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -363,7 +366,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
 
     TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
@@ -470,28 +473,31 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateEntity_shouldSetCorrectFields() {
+    UUID donationBatchId1 = UUID.randomUUID();
+    UUID donationBatchId2 = UUID.randomUUID();
+    UUID locationId = UUID.randomUUID();
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(IRRELEVANT_ID);
+    backingForm.setId(IRRELEVANT_TEST_BATCH_ID);
     backingForm.setStatus(TestBatchStatus.OPEN);
     backingForm.setCreatedDate(IRRELEVANT_CREATED_DATE);
-    backingForm.setDonationBatchIds(Arrays.asList(1L, 2L));
-    backingForm.setLocation(aTestingSiteBackingForm().withId(7L).build());
+    backingForm.setDonationBatchIds(Arrays.asList(donationBatchId1, donationBatchId2));
+    backingForm.setLocation(aTestingSiteBackingForm().withId(locationId).build());
     
-    DonationBatch firstDonationBatch = aDonationBatch().withId(1L).build();
-    DonationBatch secondDonationBatch = aDonationBatch().withId(2L).build();
-    Location location = aTestingSite().withId(7L).build();
+    DonationBatch firstDonationBatch = aDonationBatch().withId(donationBatchId1).build();
+    DonationBatch secondDonationBatch = aDonationBatch().withId(donationBatchId2).build();
+    Location location = aTestingSite().withId(locationId).build();
     
     TestBatch expectedTestBatch = aTestBatch()
-        .withId(IRRELEVANT_ID)
+        .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(TestBatchStatus.OPEN)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
         .withDonationBatches(new HashSet<>(Arrays.asList(firstDonationBatch, secondDonationBatch)))
         .withLocation(location)
         .build();
     
-    when(donationBatchRepository.findDonationBatchById(1L)).thenReturn(firstDonationBatch);
-    when(donationBatchRepository.findDonationBatchById(2L)).thenReturn(secondDonationBatch);
-    when(locationRepository.getLocation(7L)).thenReturn(location);
+    when(donationBatchRepository.findDonationBatchById(donationBatchId1)).thenReturn(firstDonationBatch);
+    when(donationBatchRepository.findDonationBatchById(donationBatchId2)).thenReturn(secondDonationBatch);
+    when(locationRepository.getLocation(locationId)).thenReturn(location);
     
     TestBatch returnedTestBatch = testBatchFactory.createEntity(backingForm);
     

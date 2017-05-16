@@ -1,6 +1,7 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.backingform.ComponentTypeBackingForm;
 import org.jembi.bsis.model.componenttype.ComponentTypeCombination;
@@ -8,7 +9,7 @@ import org.jembi.bsis.model.componenttype.ComponentTypeTimeUnits;
 
 public class ComponentTypeBackingFormBuilder extends AbstractBuilder<ComponentTypeBackingForm> {
   
-  private Long id;
+  private UUID id;
   private String componentTypeName;
   private String componentTypeCode;
   private Integer expiresAfter;
@@ -30,7 +31,7 @@ public class ComponentTypeBackingFormBuilder extends AbstractBuilder<ComponentTy
   private Double gravity;
   private Set<ComponentTypeCombination> producedComponentTypeCombinations;
   
-  public ComponentTypeBackingFormBuilder withId(Long id) {
+  public ComponentTypeBackingFormBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

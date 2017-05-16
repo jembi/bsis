@@ -13,7 +13,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.envers.Audited;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.repository.constant.BloodTestNamedQueryConstants;
 
 @Entity
@@ -39,7 +39,7 @@ import org.jembi.bsis.repository.constant.BloodTestNamedQueryConstants;
       query = BloodTestNamedQueryConstants.QUERY_VERIFY_BLOOD_TEST_WITH_ID_EXISTS)
   
 })
-public class BloodTest extends BaseModificationTrackerEntity implements Comparable<BloodTest> {
+public class BloodTest extends BaseModificationTrackerUUIDEntity implements Comparable<BloodTest> {
 
   private static final long serialVersionUID = 1L;
 

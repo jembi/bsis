@@ -3,6 +3,7 @@ package org.jembi.bsis.backingform;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jembi.bsis.model.returnform.ReturnStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
@@ -12,7 +13,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class ReturnFormBackingForm {
 
-  private Long id;
+  private UUID id;
 
   private Date returnDate;
 
@@ -24,11 +25,11 @@ public class ReturnFormBackingForm {
 
   private List<ComponentBackingForm> components;
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

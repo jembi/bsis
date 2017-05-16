@@ -1,13 +1,14 @@
 package org.jembi.bsis.helpers.builders;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.user.User;
 
 public class DonationTypeBuilder extends AbstractEntityBuilder<DonationType> {
 
-  private Long id;
+  private UUID id;
   private String name;
   private Boolean isDeleted;
   private Date createdDate;
@@ -15,7 +16,7 @@ public class DonationTypeBuilder extends AbstractEntityBuilder<DonationType> {
   private Date lastUpdated;
   private User lastUpdatedBy;
 
-  public DonationTypeBuilder withId(Long id) {
+  public DonationTypeBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

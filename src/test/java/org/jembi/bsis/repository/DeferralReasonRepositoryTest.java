@@ -2,12 +2,12 @@ package org.jembi.bsis.repository;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.donordeferral.DeferralReason;
 import org.jembi.bsis.model.user.User;
-import org.jembi.bsis.repository.DeferralReasonRepository;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class DeferralReasonRepositoryTest extends DBUnitContextDependentTestSuit
 
   @Test
   public void testGetDeferralReasonById() throws Exception {
-    DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(1l);
+    DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870681"));
     Assert.assertNotNull("DeferralReason with id 1 exists", deferralReason);
   }
 
@@ -60,13 +60,14 @@ public class DeferralReasonRepositoryTest extends DBUnitContextDependentTestSuit
 
   @Test
   public void testUpdateDeferralReason() throws Exception {
-    DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(1l);
+    UUID deferralReasonId = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870681");
+    DeferralReason deferralReason = deferralReasonRepository.getDeferralReasonById(deferralReasonId);
     Assert.assertNotNull("DeferralReason exists", deferralReason);
 
     deferralReason.setReason("Junit");
     deferralReasonRepository.updateDeferralReason(deferralReason);
 
-    DeferralReason savedDeferralReason = deferralReasonRepository.getDeferralReasonById(1l);
+    DeferralReason savedDeferralReason = deferralReasonRepository.getDeferralReasonById(deferralReasonId);
     Assert.assertNotNull("DeferralReason still exists", savedDeferralReason);
     Assert.assertEquals("Reason has been updated", "Junit", savedDeferralReason.getReason());
   }

@@ -1,15 +1,17 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.UUID;
+
 import org.jembi.bsis.viewmodel.TransfusionReactionTypeManagementViewModel;
 
 public class TransfusionReactionTypeManagementViewModelBuilder extends AbstractBuilder<TransfusionReactionTypeManagementViewModel> {
 
-  private long id;
+  private UUID id;
   private String name;
   private String description;
   boolean isDeleted = false;
 
-  public TransfusionReactionTypeManagementViewModelBuilder withId(long id) {
+  public TransfusionReactionTypeManagementViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

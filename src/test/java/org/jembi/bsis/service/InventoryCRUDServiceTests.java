@@ -5,10 +5,10 @@ import static org.mockito.Mockito.verify;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.InventoryRepository;
-import org.jembi.bsis.service.InventoryCRUDService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +31,10 @@ public class InventoryCRUDServiceTests extends UnitTestSuite {
   public void findComponentsInStockWithCodeAndDINParams_callsRightMethod() {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("A+");
-    inventoryCRUDService.findComponentsInStock(IRRELEVANT_DONATION_DIN, IRRELEVANT_COMPONENT_CODE, 1L, 1L, new Date(),
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    inventoryCRUDService.findComponentsInStock(IRRELEVANT_DONATION_DIN, IRRELEVANT_COMPONENT_CODE, locationId, componentTypeId,
+        new Date(),
         bloodGroups);
     verify(inventoryRepository).findComponentByCodeAndDINInStock(IRRELEVANT_COMPONENT_CODE, IRRELEVANT_DONATION_DIN);
   }
@@ -40,14 +43,20 @@ public class InventoryCRUDServiceTests extends UnitTestSuite {
   public void findComponentsInStockWithCodeAndNoDINParams_throws() {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("A+");
-    inventoryCRUDService.findComponentsInStock(null, IRRELEVANT_COMPONENT_CODE, 1L, 1L, new Date(), bloodGroups);
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    inventoryCRUDService.findComponentsInStock(null, IRRELEVANT_COMPONENT_CODE, locationId, componentTypeId, new Date(),
+        bloodGroups);
   }
+
 
   @Test(expected = IllegalArgumentException.class)
   public void findComponentsInStockWithDINAndNoCodeParams_throws() {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("A+");
-    inventoryCRUDService.findComponentsInStock(IRRELEVANT_DONATION_DIN, null, 1L, 1L, new Date(), bloodGroups);
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    inventoryCRUDService.findComponentsInStock(IRRELEVANT_DONATION_DIN, null, locationId, componentTypeId, new Date(), bloodGroups);
   }
 
   @Test
@@ -57,15 +66,19 @@ public class InventoryCRUDServiceTests extends UnitTestSuite {
     bloodGroups.add("A+");
     List<BloodGroup> bloodGroupObjs = new ArrayList<>();
     bloodGroupObjs.add(new BloodGroup("A+"));
-    inventoryCRUDService.findComponentsInStock(null, null, 1L, 1L, dueToExpireBy, bloodGroups);
-    verify(inventoryRepository).findComponentsInStock(1L, 1L, dueToExpireBy, bloodGroupObjs);
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    inventoryCRUDService.findComponentsInStock(null, null, locationId, componentTypeId, dueToExpireBy, bloodGroups);
+    verify(inventoryRepository).findComponentsInStock(locationId, componentTypeId, dueToExpireBy, bloodGroupObjs);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void findComponentsInStockWithNoCodeAndNoDINParamsAndWrongBloodGroup_throws() {
     List<String> bloodGroups = new ArrayList<>();
     bloodGroups.add("WrongBloodGroup");
-    inventoryCRUDService.findComponentsInStock(null, null, 1L, 1L, null, bloodGroups);
+    UUID locationId = UUID.randomUUID();
+    UUID componentTypeId = UUID.randomUUID();
+    inventoryCRUDService.findComponentsInStock(null, null, locationId, componentTypeId, null, bloodGroups);
   }
 
   @Test

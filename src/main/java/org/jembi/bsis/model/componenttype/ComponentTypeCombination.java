@@ -15,7 +15,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.model.BaseModificationTrackerEntity;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.repository.constant.ComponentTypeCombinationsQueryConstants;
 
 @NamedQueries({
@@ -29,7 +29,7 @@ import org.jembi.bsis.repository.constant.ComponentTypeCombinationsQueryConstant
 
 @Audited
 @Entity
-public class ComponentTypeCombination extends BaseModificationTrackerEntity {
+public class ComponentTypeCombination extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;
 
