@@ -1,27 +1,21 @@
 package org.jembi.bsis.interceptor;
 import java.util.Date;
 
-import org.hibernate.event.spi.MergeEvent;
-import org.hibernate.event.spi.PersistEvent;
-import org.jembi.bsis.interceptor.EntitySaveListener;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.junit.Assert;
 import org.junit.Test;
 
-
-
-public class EntitySaveListenerTest extends SecurityContextDependentTestSuite {
+public class EntitySaveInterceptorTest extends SecurityContextDependentTestSuite {
   
-  EntitySaveListener listener = new EntitySaveListener();
+  EntitySaveInterceptor interceptor = new EntitySaveInterceptor();
 
   @Test
   public void testPersist_FirstTime() {
     Donor donor = new Donor();
-    PersistEvent event = new PersistEvent(donor, null);
     
-    listener.onPersist(event);
+    interceptor.onSave(donor, null, null, null, null);
     
     Assert.assertEquals("Audit fields were set", loggedInUser, donor.getCreatedBy());
     Assert.assertEquals("Audit fields were set", loggedInUser, donor.getLastUpdatedBy());
@@ -36,9 +30,8 @@ public class EntitySaveListenerTest extends SecurityContextDependentTestSuite {
     donor.setCreatedDate(createdDate);
     User user = new User();
     donor.setCreatedBy(user);
-    PersistEvent event = new PersistEvent(donor, null);
     
-    listener.onPersist(event);
+    interceptor.onSave(donor, null, null, null, null);
     
     Assert.assertEquals("CreatedBy was not changed", user, donor.getCreatedBy());
     Assert.assertEquals("Audit fields were set", loggedInUser, donor.getLastUpdatedBy());
@@ -53,10 +46,8 @@ public class EntitySaveListenerTest extends SecurityContextDependentTestSuite {
     donor.setCreatedDate(createdDate);
     User user = new User();
     donor.setCreatedBy(user);
-    MergeEvent event = new MergeEvent(donor, null);
-    event.setEntity(donor);
     
-    listener.onMerge(event);
+    interceptor.onFlushDirty(donor, null, null, null, null, null);
     
     Assert.assertEquals("CreatedBy was not changed", user, donor.getCreatedBy());
     Assert.assertEquals("Audit fields were set", loggedInUser, donor.getLastUpdatedBy());
