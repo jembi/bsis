@@ -6,69 +6,69 @@
   This will force any data issues to fail early before the following script executes. -->
   <changeSet id="20170512-1200" author="rowanpi">
     <addForeignKeyConstraint baseColumnNames="auditRevision_id" baseTableName="EntityModification"
-     constraintName="FK_EntityModification_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_ENTITYMODIFICATION_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="AdverseEventType_AUD"
-     constraintName="FK_AdverseEventType_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_ADVERSEEVENTTYPE_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="AdverseEvent_AUD"
-     constraintName="FK_AdverseEvent_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_ADVERSEEVENT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="BloodTestResult_AUD"
-     constraintName="FK_BloodTestResult_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_BLOODTESTRESULT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="BloodTransportBox_AUD"
-     constraintName="FK_BloodTransportBox_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_BLOODTRANSPORTBOX_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="ComponentBatch_AUD"
-     constraintName="FK_ComponentBatch_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_COMPONENTBATCH_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="Division_AUD"
-     constraintName="FK_Division_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_DIVISION_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="GeneralConfig_AUD"
-     constraintName="FK_GeneralConfig_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_GENERALCONFIG_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OrderFormItem_AUD"
-     constraintName="FK_OrderFormItem_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_ORDERFORMITEM_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OrderForm_AUD"
-     constraintName="FK_OrderForm_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_ORDERFORM_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OrderForm_Component_AUD"
-     constraintName="FK_OrderForm_Component_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_ORDERFORM_COMPONENT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="Patient_AUD"
-     constraintName="FK_Patient_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_PATIENT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="PostDonationCounselling_AUD"
-     constraintName="FK_PostDonationCounselling_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_POSTDONATIONCOUNSELLING_AUD_AUDIT_REVISION_ID_SERVER_UUID" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="ReturnForm_AUD"
-     constraintName="FK_ReturnForm_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_RETURNFORM_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="ReturnForm_Component_AUD"
-     constraintName="FK_ReturnForm_Component_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_RETURNFORM_COMPONENT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="TestBatch_AUD"
-     constraintName="FK_TestBatch_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_TESTBATCH_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="TransfusionReactionType_AUD"
-     constraintName="FK_TransfusionReactionType_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_TRANSFUSIONREACTIONTYPE_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="Transfusion_AUD"
-     constraintName="FK_Transfusion_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+     constraintName="FK_TRANSFUSION_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
   </changeSet>
 
   <changeSet id="20170512-1300" author="rowanpi">
-    <dropForeignKeyConstraint baseTableName="EntityModification" constraintName="FK_EntityModification_AUD_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="AdverseEventType_AUD" constraintName="FK_AdverseEventType_AUD_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="AdverseEvent_AUD" constraintName="FK_AdverseEvent_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="EntityModification" constraintName="FK_ENTITYMODIFICATION_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="AdverseEventType_AUD" constraintName="FK_ADVERSEEVENTTYPE_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="AdverseEvent_AUD" constraintName="FK_ADVERSEEVENT_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="BloodTestingRule_AUD" constraintName="FK_BLOOD_TESTING_RULE_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="BloodTestResult_AUD" constraintName="FK_BloodTestResult_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="BloodTestResult_AUD" constraintName="FK_BLOODTESTRESULT_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="BloodTest_AUD" constraintName="FK_BLOOD_TEST_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="BloodTransportBox_AUD" constraintName="FK_BloodTransportBox_AUD_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="ComponentBatch_AUD" constraintName="FK_ComponentBatch_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="BloodTransportBox_AUD" constraintName="FK_BLOODTRANSPORTBOX_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="ComponentBatch_AUD" constraintName="FK_COMPONENTBATCH_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="ComponentStatusChangeReason_AUD" constraintName="FK_COMPONENT_STATUS_CHANGE_REASON_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="ComponentStatusChange_AUD" constraintName="FK_COMPONENT_STATUS_CHANGE_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="ComponentTypeCombination_AUD" constraintName="FK_COMPONENT_TYPE_COMBINATION_AUDIT_REVISION"/>
@@ -76,28 +76,28 @@
     <dropForeignKeyConstraint baseTableName="Component_AUD" constraintName="FK_COMPONENT_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="ContactMethodType_AUD" constraintName="FK_CONTACT_METHOD_TYPE_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="DeferralReason_AUD" constraintName="FK_DEFERRAL_REASON_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="Division_AUD" constraintName="FK_Division_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Division_AUD" constraintName="FK_DIVISION_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="DonationBatch_AUD" constraintName="FK_DONATION_BATCH_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="DonationType_AUD" constraintName="FK_DONATION_TYPE_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="Donation_AUD" constraintName="FK_DONATION_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="DonorDeferral_AUD" constraintName="FK_DONOR_DEFERRAL_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="Donor_AUD" constraintName="FK_DONOR_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="GeneralConfig_AUD" constraintName="FK_GeneralConfig_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="GeneralConfig_AUD" constraintName="FK_GENERALCONFIG_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="Location_AUD" constraintName="FK_LOCATION_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="OrderFormItem_AUD" constraintName="FK_OrderFormItem_AUD_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="OrderForm_AUD" constraintName="FK_OrderForm_AUD_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="OrderForm_Component_AUD" constraintName="FK_OrderForm_Component_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="OrderFormItem_AUD" constraintName="FK_ORDERFORMITEM_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="OrderForm_AUD" constraintName="FK_ORDERFORM_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="OrderForm_Component_AUD" constraintName="FK_ORDERFORM_COMPONENT_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="PackType_AUD" constraintName="FK_PACK_TYPE_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="Patient_AUD" constraintName="FK_Patient_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Patient_AUD" constraintName="FK_PATIENT_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="Permission_AUD" constraintName="FK_PERMISSION_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="Permission_Role_AUD" constraintName="FK_PERMISSION_ROLE_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="PostDonationCounselling_AUD" constraintName="FK_PostDonationCounselling_AUD_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="ReturnForm_AUD" constraintName="FK_ReturnForm_AUD_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="ReturnForm_Component_AUD" constraintName="FK_ReturnForm_Component_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="PostDonationCounselling_AUD" constraintName="FK_POSTDONATIONCOUNSELLING_AUD_AUDIT_REVISION_ID_SERVER_UUID"/>
+    <dropForeignKeyConstraint baseTableName="ReturnForm_AUD" constraintName="FK_RETURNFORM_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="ReturnForm_Component_AUD" constraintName="FK_RETURNFORM_COMPONENT_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="Role_AUD" constraintName="FK_ROLE_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="TestBatch_AUD" constraintName="FK_TestBatch_AUD_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="TransfusionReactionType_AUD" constraintName="FK_TransfusionReactionType_AUD_AUDIT_REVISION"/>
-    <dropForeignKeyConstraint baseTableName="Transfusion_AUD" constraintName="FK_Transfusion_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="TestBatch_AUD" constraintName="FK_TESTBATCH_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="TransfusionReactionType_AUD" constraintName="FK_TRANSFUSIONREACTIONTYPE_AUD_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="Transfusion_AUD" constraintName="FK_TRANSFUSION_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="User_AUD" constraintName="FK_USER_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="User_Role_AUD" constraintName="FK_USER_ROLE_AUDIT_REVISION"/>
 
@@ -512,28 +512,28 @@
       ADD PRIMARY KEY (`id`, `server_uuid`);
     </sql>
 
-    <addForeignKeyConstraint baseColumnNames="auditRevision_id,server_uuid" baseTableName="EntityModification" constraintName="FK_EntityModification_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="auditRevision_id,server_uuid" baseTableName="EntityModification" constraintName="FK_ENTITYMODIFICATION_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="AdverseEventType_AUD" constraintName="FK_AdverseEventType_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="AdverseEventType_AUD" constraintName="FK_ADVERSEEVENTTYPE_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="AdverseEvent_AUD" constraintName="FK_AdverseEvent_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="AdverseEvent_AUD" constraintName="FK_ADVERSEEVENT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTestingRule_AUD" constraintName="FK_BLOOD_TESTING_RULE_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTestResult_AUD" constraintName="FK_BloodTestResult_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTestResult_AUD" constraintName="FK_BLOODTESTRESULT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTest_AUD" constraintName="FK_BLOOD_TEST_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTransportBox_AUD" constraintName="FK_BloodTransportBox_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTransportBox_AUD" constraintName="FK_BLOODTRANSPORTBOX_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ComponentBatch_AUD" constraintName="FK_ComponentBatch_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ComponentBatch_AUD" constraintName="FK_COMPONENTBATCH_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ComponentStatusChangeReason_AUD" constraintName="FK_COMPONENT_STATUS_CHANGE_REASON_AUDIT_REVISION_ID_SERVER_UUID"
@@ -557,7 +557,7 @@
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="DeferralReason_AUD" constraintName="FK_DEFERRAL_REASON_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Division_AUD" constraintName="FK_Division_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Division_AUD" constraintName="FK_DIVISION_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="DonationBatch_AUD" constraintName="FK_DONATION_BATCH_AUDIT_REVISION_ID_SERVER_UUID"
@@ -575,25 +575,25 @@
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Donor_AUD" constraintName="FK_DONOR_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="GeneralConfig_AUD" constraintName="FK_GeneralConfig_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="GeneralConfig_AUD" constraintName="FK_GENERALCONFIG_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Location_AUD" constraintName="FK_LOCATION_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="OrderFormItem_AUD" constraintName="FK_OrderFormItem_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="OrderFormItem_AUD" constraintName="FK_ORDERFORMITEM_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="OrderForm_AUD" constraintName="FK_OrderForm_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="OrderForm_AUD" constraintName="FK_ORDERFORM_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="OrderForm_Component_AUD" constraintName="FK_OrderForm_Component_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="OrderForm_Component_AUD" constraintName="FK_ORDERFORM_COMPONENT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="PackType_AUD" constraintName="FK_PACK_TYPE_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Patient_AUD" constraintName="FK_Patient_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Patient_AUD" constraintName="FK_PATIENT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Permission_AUD" constraintName="FK_PERMISSION_AUDIT_REVISION_ID_SERVER_UUID"
@@ -602,25 +602,25 @@
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Permission_Role_AUD" constraintName="FK_PERMISSION_ROLE_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="PostDonationCounselling_AUD" constraintName="FK_PostDonationCounselling_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="PostDonationCounselling_AUD" constraintName="FK_POSTDONATIONCOUNSELLING_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ReturnForm_AUD" constraintName="FK_ReturnForm_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ReturnForm_AUD" constraintName="FK_RETURNFORM_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ReturnForm_Component_AUD" constraintName="FK_ReturnForm_Component_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="ReturnForm_Component_AUD" constraintName="FK_RETURNFORM_COMPONENT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Role_AUD" constraintName="FK_ROLE_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="TestBatch_AUD" constraintName="FK_TestBatch_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="TestBatch_AUD" constraintName="FK_TESTBATCH_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="TransfusionReactionType_AUD" constraintName="FK_TransfusionReactionType_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="TransfusionReactionType_AUD" constraintName="FK_TRANSFUSIONREACTIONTYPE_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Transfusion_AUD" constraintName="FK_Transfusion_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="Transfusion_AUD" constraintName="FK_TRANSFUSION_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="User_AUD" constraintName="FK_USER_AUDIT_REVISION_ID_SERVER_UUID"
