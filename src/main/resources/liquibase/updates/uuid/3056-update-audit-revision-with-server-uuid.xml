@@ -14,6 +14,9 @@
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="AdverseEvent_AUD"
      constraintName="FK_ADVERSEEVENT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="BloodTestingRule_BloodTest_AUD"
+     constraintName="FK_BLOODTESTINGRULE_BLOODTEST_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
+
     <addForeignKeyConstraint baseColumnNames="REV" baseTableName="BloodTestResult_AUD"
      constraintName="FK_BLOODTESTRESULT_AUD_AUDIT_REVISION" referencedColumnNames="id" referencedTableName="AuditRevision"/>
 
@@ -65,6 +68,7 @@
     <dropForeignKeyConstraint baseTableName="AdverseEventType_AUD" constraintName="FK_ADVERSEEVENTTYPE_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="AdverseEvent_AUD" constraintName="FK_ADVERSEEVENT_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="BloodTestingRule_AUD" constraintName="FK_BLOOD_TESTING_RULE_AUDIT_REVISION"/>
+    <dropForeignKeyConstraint baseTableName="BloodTestingRule_BloodTest_AUD" constraintName="FK_BLOODTESTINGRULE_BLOODTEST_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="BloodTestResult_AUD" constraintName="FK_BLOODTESTRESULT_AUD_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="BloodTest_AUD" constraintName="FK_BLOOD_TEST_AUDIT_REVISION"/>
     <dropForeignKeyConstraint baseTableName="BloodTransportBox_AUD" constraintName="FK_BLOODTRANSPORTBOX_AUD_AUDIT_REVISION"/>
@@ -118,6 +122,10 @@
     </addColumn>
 
     <addColumn tableName="BloodTestingRule_AUD">
+      <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
+    </addColumn>
+
+    <addColumn tableName="BloodTestingRule_BloodTest_AUD">
       <column name="server_uuid" type="VARCHAR(36)" afterColumn="REV"/>
     </addColumn>
 
@@ -283,6 +291,11 @@
 
     <sql>
       UPDATE BloodTestingRule_AUD 
+      SET server_uuid = @@server_uuid;
+    </sql>
+
+    <sql>
+      UPDATE BloodTestingRule_BloodTest_AUD 
       SET server_uuid = @@server_uuid;
     </sql>
 
@@ -472,6 +485,7 @@
     <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="BloodTestResult_AUD"/>
     <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="BloodTest_AUD"/>
     <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="BloodTestingRule_AUD"/>
+    <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="BloodTestingRule_BloodTest_AUD"/>
     <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="BloodTransportBox_AUD"/>
     <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="ComponentBatch_AUD"/>
     <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="ComponentStatusChangeReason_AUD"/>
@@ -521,7 +535,10 @@
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="AdverseEvent_AUD" constraintName="FK_ADVERSEEVENT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
-    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTestingRule_AUD" constraintName="FK_BLOOD_TESTING_RULE_AUDIT_REVISION_ID_SERVER_UUID"
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTestingRule_AUD" constraintName="FK_BLOOD_TESTING_RULE_AUD_AUDIT_REVISION_ID_SERVER_UUID"
+      referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
+
+    <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTestingRule_BloodTest_AUD" constraintName="FK_BLOODTESTINGRULE_BLOODTEST_AUD_AUDIT_REVISION_ID_SERVER_UUID"
       referencedColumnNames="id,server_uuid" referencedTableName="AuditRevision"/>
 
     <addForeignKeyConstraint baseColumnNames="REV,server_uuid" baseTableName="BloodTestResult_AUD" constraintName="FK_BLOODTESTRESULT_AUD_AUDIT_REVISION_ID_SERVER_UUID"
@@ -683,6 +700,14 @@
 
       DROP TRIGGER IF EXISTS bsis.BloodTestingRule_AUD_BEFORE_INSERT/
       CREATE DEFINER = CURRENT_USER TRIGGER bsis.BloodTestingRule_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTestingRule_AUD FOR EACH ROW
+      BEGIN
+        IF ISNULL(NEW.server_uuid) THEN
+          SET NEW.server_uuid = @@server_uuid;
+        END IF;
+      END/
+
+      DROP TRIGGER IF EXISTS bsis.BloodTestingRule_BloodTest_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER bsis.BloodTestingRule_BloodTest_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTestingRule_BloodTest_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
@@ -952,6 +977,8 @@
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
+    </sql>
+  </changeSet>
 
     </sql>
   </changeSet>
