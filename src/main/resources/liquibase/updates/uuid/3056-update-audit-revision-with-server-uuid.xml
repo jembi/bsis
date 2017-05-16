@@ -980,6 +980,163 @@
     </sql>
   </changeSet>
 
+  <changeSet id="20170516-1358" author="rowanpi">
+    <sql>
+      ALTER TABLE AdverseEventType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE AdverseEvent_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE BloodTestResult_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE BloodTest_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE BloodTestingRule_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE BloodTestingRule_BloodTest_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (bloodTestingRule_id, pendingBloodTests_id, REV, server_uuid);
+
+      ALTER TABLE BloodTransportBox_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ComponentBatch_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ComponentStatusChangeReason_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ComponentStatusChange_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ComponentTypeCombination_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ComponentType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Component_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ContactMethodType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE DeferralReason_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Division_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE DonationBatch_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE DonationType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Donation_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE DonorDeferral_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Donor_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE GeneralConfig_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Location_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE OrderFormItem_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE OrderForm_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE OrderForm_Component_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (orderForm_id, component_id, REV, server_uuid);
+
+      ALTER TABLE PackType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Patient_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Permission_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Permission_Role_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (permissions_id, roles_id, REV, server_uuid);
+
+      ALTER TABLE PostDonationCounselling_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ReturnForm_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE ReturnForm_Component_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (returnForm_id, component_id, REV, server_uuid);
+
+      ALTER TABLE Role_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE TestBatch_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE TransfusionReactionType_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE Transfusion_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE User_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (id, REV, server_uuid);
+
+      ALTER TABLE User_Role_AUD
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (users_id, roles_id, REV, server_uuid);
     </sql>
   </changeSet>
 </databaseChangeLog>
