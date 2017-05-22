@@ -135,6 +135,7 @@
   <include file="liquibase/updates/uuid/2872-implement-uuids-for-testing-section-test-batch.xml"/>
   <include file="liquibase/updates/uuid/2872-implement-uuids-for-testing-section-blood-test-result.xml"/>
   <include file="liquibase/updates/uuid/2872-implement-uuids-for-testing-section-blood-test.xml"/>
+  <include file="liquibase/updates/uuid/3056-update-audit-revision-with-server-uuid.xml"/>
   <include file="liquibase/updates/uuid/2874-implement-uuids-for-remaining-entities-role.xml"/>
   <include file="liquibase/updates/uuid/2874-implement-uuids-for-remaining-entities-general-config.xml"/>
 </databaseChangeLog>

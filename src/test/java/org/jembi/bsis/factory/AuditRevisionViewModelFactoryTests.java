@@ -46,7 +46,7 @@ public class AuditRevisionViewModelFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateAuditRevisionViewModels_shouldCreateAuditRevisionViewModelWithTheCorrectState() {
     String irrelevantUsername = "irrelevant.username";
-    int irrelevantAuditRevisionId = 78;
+    long irrelevantAuditRevisionId = 78;
     Date irrelevantRevisionDate = new DateTime().minusDays(7).toDate();
     UUID entityModificationId1 = UUID.randomUUID();
     UUID entityModificationId2 = UUID.randomUUID();

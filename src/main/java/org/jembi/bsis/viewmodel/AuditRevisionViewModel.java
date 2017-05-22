@@ -13,16 +13,16 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class AuditRevisionViewModel {
 
-  private int id;
+  private long id;
   private Date revisionDate;
   private UserViewModel user;
   private Set<EntityModification> entityModifications = new HashSet<>();
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(long id) {
     this.id = id;
   }
 
