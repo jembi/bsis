@@ -2,18 +2,19 @@ package org.jembi.bsis.helpers.builders;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jembi.bsis.viewmodel.PermissionViewModel;
 import org.jembi.bsis.viewmodel.RoleViewModel;
 
 public class RoleViewModelBuilder extends AbstractBuilder<RoleViewModel> {
 
-  private Long id;
+  private UUID id;
   private String name;
   private String description;
   private Set<PermissionViewModel> permissions;
 
-  public RoleViewModelBuilder withId(Long id) {
+  public RoleViewModelBuilder withId(UUID id) {
     this.id = id;
     return this;
   }

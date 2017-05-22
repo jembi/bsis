@@ -1,8 +1,9 @@
 package org.jembi.bsis.viewmodel;
 
 import java.util.Set;
+import java.util.UUID;
 
-public class RoleViewModel extends BaseViewModel<Long> {
+public class RoleViewModel extends BaseViewModel<UUID> {
 
   private String name;
   private String description;
