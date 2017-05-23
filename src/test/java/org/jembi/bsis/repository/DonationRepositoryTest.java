@@ -101,8 +101,9 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     Donation newDonation = new Donation();
     Donation existingDonation = donationRepository.findDonationById(DONATION_ID_1);
     newDonation.setId(existingDonation.getId());
-    newDonation.copy(existingDonation);
-    newDonation.setId(null); // don't want to override, just save time with the copy
+    newDonation.setVenue(existingDonation.getVenue());
+    newDonation.setDonor(existingDonation.getDonor());
+    newDonation.setId(null); 
     newDonation.setDonationIdentificationNumber("JUNIT123");
     Calendar today = Calendar.getInstance();
     newDonation.setCreatedDate(today.getTime());
@@ -117,12 +118,12 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test(expected = javax.persistence.PersistenceException.class)
   public void testAddDonationWithSameDIN_shouldThrow() throws Exception {
-    Donation updatedDonation = new Donation();
+    Donation newDonation = new Donation();
     Donation existingDonation = donationRepository.findDonationById(DONATION_ID_1);
-    updatedDonation.setId(existingDonation.getId());
-    updatedDonation.copy(existingDonation);
-    updatedDonation.setId(null); // don't want to override, just save time with the copy
-    donationRepository.saveDonation(updatedDonation);
+    newDonation.setId(existingDonation.getId());
+    newDonation.setVenue(existingDonation.getVenue());
+    newDonation.setDonor(existingDonation.getDonor());
+    donationRepository.saveDonation(newDonation);
     // should fail because DIN already exists
   }
 

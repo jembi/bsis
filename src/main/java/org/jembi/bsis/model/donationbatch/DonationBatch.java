@@ -141,11 +141,6 @@ public class DonationBatch extends BaseModificationTrackerUUIDEntity {
     this.venue = venue;
   }
 
-  public void copy(DonationBatch donationBatch) {
-    this.setNotes(donationBatch.getNotes());
-    this.venue = donationBatch.getVenue();
-  }
-
   public boolean isBackEntry() {
     return backEntry;
   }
