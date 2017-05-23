@@ -72,7 +72,27 @@ public class ComponentTypeRepository {
 
   public ComponentType updateComponentType(ComponentType componentType) {
     ComponentType existingComponentType = getComponentTypeById(componentType.getId());
-    existingComponentType.copy(componentType);
+    existingComponentType.setComponentTypeName(componentType.getComponentTypeName());
+    existingComponentType.setComponentTypeCode(componentType.getComponentTypeCode());
+    existingComponentType.setExpiresAfter(componentType.getExpiresAfter());
+    existingComponentType.setExpiresAfterUnits(componentType.getExpiresAfterUnits());
+    existingComponentType.setDescription(componentType.getDescription());
+    existingComponentType.setHasBloodGroup(componentType.getHasBloodGroup());
+    existingComponentType.setComponentTypeCombinations(componentType.getComponentTypeCombinations());
+    existingComponentType.setProducedComponentTypeCombinations(componentType.getProducedComponentTypeCombinations());
+    existingComponentType.setHighStorageTemperature(componentType.getHighStorageTemperature());
+    existingComponentType.setLowStorageTemperature(componentType.getLowStorageTemperature());
+    existingComponentType.setLowTransportTemperature(componentType.getLowTransportTemperature());
+    existingComponentType.setHighStorageTemperature(componentType.getHighTransportTemperature());
+    existingComponentType.setPreparationInfo(componentType.getPreparationInfo());
+    existingComponentType.setTransportInfo(componentType.getTransportInfo());
+    existingComponentType.setStorageInfo(componentType.getStorageInfo());
+    existingComponentType.setCanBeIssued(componentType.getCanBeIssued());
+    existingComponentType.setIsDeleted(componentType.getIsDeleted());
+    existingComponentType.setContainsPlasma(componentType.getContainsPlasma());
+    existingComponentType.setMaxBleedTime(componentType.getMaxBleedTime());
+    existingComponentType.setMaxTimeSinceDonation(componentType.getMaxTimeSinceDonation());
+    existingComponentType.setGravity(componentType.getGravity());
     return em.merge(existingComponentType);
   }
   
