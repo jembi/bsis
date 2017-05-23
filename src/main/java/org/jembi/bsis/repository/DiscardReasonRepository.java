@@ -65,7 +65,11 @@ public class DiscardReasonRepository {
     if (existingDiscardReason == null) {
       return null;
     }
-    existingDiscardReason.copy(deferralReason);
+    existingDiscardReason.setId(deferralReason.getId());
+    existingDiscardReason.setCategory(deferralReason.getCategory());
+    existingDiscardReason.setStatusChangeReason(deferralReason.getStatusChangeReason());
+    existingDiscardReason.setIsDeleted(deferralReason.getIsDeleted());
+    existingDiscardReason.setType(deferralReason.getType());
     em.merge(existingDiscardReason);
     em.flush();
     return existingDiscardReason;
