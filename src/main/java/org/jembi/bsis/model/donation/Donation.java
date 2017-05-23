@@ -279,29 +279,6 @@ public class Donation extends BaseModificationTrackerUUIDEntity implements Compa
     this.isDeleted = isDeleted;
   }
 
-  public void copy(Donation donation) {
-    assert (this.getId().equals(donation.getId()));
-    this.donationIdentificationNumber = donation.donationIdentificationNumber;
-    this.donor = donation.donor;
-    this.setDonationType(donation.getDonationType());
-    this.packType = donation.packType;
-    this.donationDate = donation.donationDate;
-    this.donationBatch = donation.donationBatch;
-    this.notes = donation.notes;
-    this.haemoglobinCount = donation.haemoglobinCount;
-    this.haemoglobinLevel = donation.haemoglobinLevel;
-    this.donorPulse = donation.donorPulse;
-    this.donorWeight = donation.donorWeight;
-    this.bloodPressureDiastolic = donation.bloodPressureDiastolic;
-    this.bloodPressureSystolic = donation.bloodPressureSystolic;
-    this.venue = donation.getVenue();
-    this.bloodAbo = donation.bloodAbo;
-    this.bloodRh = donation.bloodRh;
-    this.flagCharacters = donation.flagCharacters;
-    this.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
-    this.titre = donation.titre;
-  }
-
   /**
    * Finds the initial component (which is the component which is the parent
    * of all other components) for this Donation.
