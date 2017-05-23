@@ -81,11 +81,4 @@ public class ComponentTypeCombination extends BaseModificationTrackerUUIDEntity 
     this.isDeleted = isDeleted;
   }
 
-  public void copy(ComponentTypeCombination componentTypeCombination) {
-    this.componentTypes = componentTypeCombination.getComponentTypes();
-    this.sourceComponentTypes = componentTypeCombination.getSourceComponentTypes();
-    this.combinationName = componentTypeCombination.getCombinationName();
-    this.isDeleted = componentTypeCombination.getIsDeleted();
-  }
-
 }
