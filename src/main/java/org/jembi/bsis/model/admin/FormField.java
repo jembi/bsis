@@ -125,20 +125,6 @@ public class FormField extends BaseEntity {
     this.hidden = hidden;
   }
 
-  public void copy(FormField formField) {
-    this.displayName = formField.displayName;
-    this.defaultValue = formField.defaultValue;
-    if (this.isHidable)
-      this.hidden = formField.hidden;
-    if (this.canBeOptional)
-      this.isRequired = formField.isRequired;
-    if (this.isAutoGeneratable)
-      this.autoGenerate = formField.autoGenerate;
-    if (this.isTimeField)
-      this.useCurrentTime = formField.useCurrentTime;
-    this.maxLength = formField.maxLength;
-  }
-
   public Boolean getIsRequired() {
     return isRequired;
   }
