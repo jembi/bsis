@@ -57,10 +57,10 @@ public class GeneralConfig extends BaseModificationTrackerUUIDEntity {
     this.dataType = dataType;
   }
 
-  public void copy(GeneralConfig generalConfig) {
-    this.name = generalConfig.getName();
-    this.description = generalConfig.getDescription();
-    this.value = generalConfig.getValue();
-    this.dataType = generalConfig.getDataType();
-  }
+//  public void copy(GeneralConfig generalConfig) {
+//    this.name = generalConfig.getName();
+//    this.description = generalConfig.getDescription();
+//    this.value = generalConfig.getValue();
+//    this.dataType = generalConfig.getDataType();
+//  }
 }

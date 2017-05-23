@@ -64,15 +64,7 @@ public class ComponentStatusChangeReason extends BaseUUIDEntity {
   public void setIsDeleted(Boolean isDeleted) {
     this.isDeleted = isDeleted;
   }
-
-  public void copy(ComponentStatusChangeReason componentStatusChangeReason) {
-    this.setId(componentStatusChangeReason.getId());
-    this.setCategory(componentStatusChangeReason.getCategory());
-    this.setStatusChangeReason(componentStatusChangeReason.getStatusChangeReason());
-    this.setIsDeleted(componentStatusChangeReason.getIsDeleted());
-    this.setType(componentStatusChangeReason.getType());
-  }
-
+  
   public ComponentStatusChangeReasonType getType() {
     return type;
   }

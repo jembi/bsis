@@ -289,30 +289,6 @@ public class ComponentType extends BaseModificationTrackerUUIDEntity {
     this.gravity = gravity;
   }
 
-  public void copy(ComponentType componentType) {
-    this.componentTypeName = componentType.getComponentTypeName();
-    this.componentTypeCode = componentType.getComponentTypeCode();
-    this.expiresAfter = componentType.getExpiresAfter();
-    this.expiresAfterUnits = componentType.getExpiresAfterUnits();
-    this.description = componentType.getDescription();
-    this.hasBloodGroup = componentType.getHasBloodGroup();
-    this.componentTypeCombinations = componentType.getComponentTypeCombinations();
-    this.producedComponentTypeCombinations = componentType.getProducedComponentTypeCombinations();
-    this.highStorageTemperature = componentType.getHighStorageTemperature();
-    this.lowStorageTemperature = componentType.getLowStorageTemperature();
-    this.lowTransportTemperature = componentType.getLowTransportTemperature();
-    this.highTransportTemperature = componentType.getHighTransportTemperature();
-    this.preparationInfo = componentType.getPreparationInfo();
-    this.transportInfo = componentType.getTransportInfo();
-    this.storageInfo = componentType.getStorageInfo();
-    this.canBeIssued = componentType.getCanBeIssued();
-    this.isDeleted = componentType.getIsDeleted();
-    this.containsPlasma = componentType.getContainsPlasma();
-    this.maxBleedTime = componentType.getMaxBleedTime();
-    this.maxTimeSinceDonation = componentType.getMaxTimeSinceDonation();
-    this.gravity = componentType.getGravity();
-  }
-
   /**
    * Returns the max bleed time in minutes
    * @return

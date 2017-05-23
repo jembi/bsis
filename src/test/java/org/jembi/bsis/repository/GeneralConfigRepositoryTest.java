@@ -96,7 +96,10 @@ public class GeneralConfigRepositoryTest extends DBUnitContextDependentTestSuite
   public void testSave() throws Exception {
     GeneralConfig bpSystolicMax = generalConfigRepository.getGeneralConfigByName("donation.bpSystolicMax");
     GeneralConfig newGeneralConfig = new GeneralConfig();
-    newGeneralConfig.copy(bpSystolicMax);
+    newGeneralConfig.setName(bpSystolicMax.getName());
+    newGeneralConfig.setDescription(bpSystolicMax.getDescription());
+    newGeneralConfig.setValue(bpSystolicMax.getValue());
+    newGeneralConfig.setDataType(bpSystolicMax.getDataType());
     newGeneralConfig.setName("junit.save");
     generalConfigRepository.save(newGeneralConfig);
     GeneralConfig savedGeneralConfig = generalConfigRepository.getGeneralConfigByName("junit.save");

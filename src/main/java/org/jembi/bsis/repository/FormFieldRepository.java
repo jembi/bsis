@@ -45,7 +45,13 @@ public class FormFieldRepository {
     if (existingFormField == null) {
       return null;
     }
-    existingFormField.copy(formField);
+    existingFormField.setDisplayName(formField.getDisplayName());
+    existingFormField.setDefaultValue(formField.getDefaultValue());
+    existingFormField.setIsHidable(formField.getIsHidable());
+    existingFormField.setIsAutoGeneratable(formField.getIsAutoGeneratable());
+    existingFormField.setCanBeOptional(existingFormField.getCanBeOptional());
+    existingFormField.setUseCurrentTime(existingFormField.getUseCurrentTime());
+    existingFormField.setMaxLength(formField.getMaxLength());
     em.merge(existingFormField);
     em.flush();
     return existingFormField;
