@@ -30,11 +30,14 @@ public class MustacheTemplateTests extends UnitTestSuite {
         aMustacheExampleObjectBuilder()
             .withDoNotShowGender(false)
             .withShowIdNumber(true)
-            .withDonor(new MustacheExample.DonorTemplateObject(donorName, idNumber, donorGender))
+            .withDonorName(donorName)
+            .withDonorGender(donorGender)
+            .withDonorIdNumber(idNumber)
             .build())
         .flush();
 
     String mustacheOutput = writer.toString();
+    System.out.println(mustacheOutput);
     assertThat(mustacheOutput, containsString("Name: " + donorName));
     assertThat(mustacheOutput, containsString("ID: " + idNumber));
     assertThat(mustacheOutput, containsString("Gender: " + donorGender));
@@ -51,7 +54,9 @@ public class MustacheTemplateTests extends UnitTestSuite {
         aMustacheExampleObjectBuilder()
             .withDoNotShowGender(false)
             .withShowIdNumber(false)
-            .withDonor(new MustacheExample.DonorTemplateObject(donorName, idNumber, donorGender))
+            .withDonorName(donorName)
+            .withDonorGender(donorGender)
+            .withDonorIdNumber(idNumber)
             .build())
         .flush();
 
@@ -72,7 +77,9 @@ public class MustacheTemplateTests extends UnitTestSuite {
         aMustacheExampleObjectBuilder()
             .withDoNotShowGender(true)
             .withShowIdNumber(true)
-            .withDonor(new MustacheExample.DonorTemplateObject(donorName, idNumber, donorGender))
+            .withDonorName(donorName)
+            .withDonorGender(donorGender)
+            .withDonorIdNumber(idNumber)
             .build())
         .flush();
 
@@ -93,7 +100,9 @@ public class MustacheTemplateTests extends UnitTestSuite {
         aMustacheExampleObjectBuilder()
             .withDoNotShowGender(true)
             .withShowIdNumber(false)
-            .withDonor(new MustacheExample.DonorTemplateObject(donorName, idNumber, donorGender))
+            .withDonorName(donorName)
+            .withDonorGender(donorGender)
+            .withDonorIdNumber(idNumber)
             .build())
         .flush();
 
