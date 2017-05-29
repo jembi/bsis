@@ -18,6 +18,7 @@ public class GeneralConfigConstants {
   public static final String SERVICE_INFO_LINE_1 = "packLabel.serviceInfoLine1";
   public static final String SERVICE_INFO_LINE_2 = "packLabel.serviceInfoLine2";
   public static final String PACK_LABEL_ZPL = "packLabel.packLabelZPL";
+  public static final String DISCARD_LABEL_ZPL = "packLabel.discardLabelZPL";
   
   // General
   public static final String DATE_FORMAT = "dateFormat";
