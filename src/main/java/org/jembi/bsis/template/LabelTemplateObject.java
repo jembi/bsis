@@ -1,6 +1,6 @@
 package org.jembi.bsis.template;
 
-public class LabelTemplateObject {
+public abstract class LabelTemplateObject {
 
   public Component component = new Component();
   public Config config = new Config();
