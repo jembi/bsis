@@ -15,14 +15,14 @@ public class TemplateObjectFactory {
   public DiscardLabelTemplateObject createDiscardLabelTemplateObject(Component component){
     DiscardLabelTemplateObject template = new DiscardLabelTemplateObject();
 
-    template.component.setComponentCode(component.getComponentCode());
+    template.component.componentCode = component.getComponentCode();
     String serviceInfoLine1 = generalConfigAccessorService.getGeneralConfigValueByName(
         GeneralConfigConstants.SERVICE_INFO_LINE_1);
     String serviceInfoLine2 = generalConfigAccessorService.getGeneralConfigValueByName(
         GeneralConfigConstants.SERVICE_INFO_LINE_2);
 
-    template.config.setServiceInfoLine1(serviceInfoLine1);
-    template.config.setServiceInfoLine2(serviceInfoLine2);
+    template.config.serviceInfoLine1 = serviceInfoLine1;
+    template.config.serviceInfoLine2 = serviceInfoLine2;
 
     return template;
   }

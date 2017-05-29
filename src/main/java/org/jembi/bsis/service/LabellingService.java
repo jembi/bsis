@@ -203,8 +203,8 @@ public class LabellingService {
 
     // Get configured service info values
     DiscardLabelTemplateObject discardLabelTemplateObject = templateObjectFactory.createDiscardLabelTemplateObject(component);
-    String serviceInfoLine1 = discardLabelTemplateObject.config.getServiceInfoLine1();
-    String serviceInfoLine2 = discardLabelTemplateObject.config.getServiceInfoLine2();
+    String serviceInfoLine1 = discardLabelTemplateObject.config.serviceInfoLine1;
+    String serviceInfoLine2 = discardLabelTemplateObject.config.serviceInfoLine2;
 
     // Generate ZPL label
     String labelZPL =
