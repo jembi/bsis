@@ -18,8 +18,8 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.util.BloodAbo;
 import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.ComponentRepository;
-import org.jembi.bsis.template.DiscardLabelTemplateObject;
-import org.jembi.bsis.template.TemplateObjectFactory;
+import org.jembi.bsis.template.labelling.DiscardLabelTemplateObject;
+import org.jembi.bsis.template.labelling.TemplateObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -203,8 +203,8 @@ public class LabellingService {
 
     // Get configured service info values
     DiscardLabelTemplateObject discardLabelTemplateObject = templateObjectFactory.createDiscardLabelTemplateObject(component);
-    String serviceInfoLine1 = discardLabelTemplateObject.config.getServiceInfoLine1();
-    String serviceInfoLine2 = discardLabelTemplateObject.config.getServiceInfoLine2();
+    String serviceInfoLine1 = discardLabelTemplateObject.config.serviceInfoLine1;
+    String serviceInfoLine2 = discardLabelTemplateObject.config.serviceInfoLine2;
 
     // Generate ZPL label
     String labelZPL =

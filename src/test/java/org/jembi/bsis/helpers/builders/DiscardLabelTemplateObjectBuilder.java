@@ -1,6 +1,6 @@
 package org.jembi.bsis.helpers.builders;
 
-import org.jembi.bsis.template.DiscardLabelTemplateObject;
+import org.jembi.bsis.template.labelling.DiscardLabelTemplateObject;
 
 public class DiscardLabelTemplateObjectBuilder extends AbstractBuilder<DiscardLabelTemplateObject> {
   private String componentCode;
@@ -25,9 +25,9 @@ public class DiscardLabelTemplateObjectBuilder extends AbstractBuilder<DiscardLa
   @Override
   public DiscardLabelTemplateObject build() {
     DiscardLabelTemplateObject template = new DiscardLabelTemplateObject();
-    template.component.setComponentCode(componentCode);
-    template.config.setServiceInfoLine1(serviceInfoLine1);
-    template.config.setServiceInfoLine2(serviceInfoLine2);
+    template.component.componentCode = componentCode;
+    template.config.serviceInfoLine1 = serviceInfoLine1;
+    template.config.serviceInfoLine2 = serviceInfoLine2;
     return template;
   }
 

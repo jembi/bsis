@@ -1,9 +1,9 @@
-package org.jembi.bsis.templates;
+package org.jembi.bsis.template.labelling;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
-import static org.jembi.bsis.templates.MustacheExampleObjectBuilder.aMustacheExampleObjectBuilder;
+import static org.jembi.bsis.template.labelling.MustacheExampleObjectBuilder.aMustacheExampleObjectBuilder;
 
 import java.io.StringWriter;
 

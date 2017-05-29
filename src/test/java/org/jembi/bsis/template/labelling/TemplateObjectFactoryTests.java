@@ -1,4 +1,4 @@
-package org.jembi.bsis.templates;
+package org.jembi.bsis.template.labelling;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
@@ -10,8 +10,6 @@ import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.jembi.bsis.suites.UnitTestSuite;
-import org.jembi.bsis.template.DiscardLabelTemplateObject;
-import org.jembi.bsis.template.TemplateObjectFactory;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
