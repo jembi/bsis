@@ -1,4 +1,4 @@
-package org.jembi.bsis.templates;
+package org.jembi.bsis.template.labelling;
 
 public class MustacheExampleObjectBuilder {
   private boolean showIdNumber;

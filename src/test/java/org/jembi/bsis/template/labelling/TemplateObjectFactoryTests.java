@@ -1,4 +1,4 @@
-package org.jembi.bsis.templates;
+package org.jembi.bsis.template.labelling;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
