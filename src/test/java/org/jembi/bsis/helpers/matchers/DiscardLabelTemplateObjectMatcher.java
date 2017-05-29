@@ -16,16 +16,16 @@ public class DiscardLabelTemplateObjectMatcher extends AbstractTypeSafeMatcher<D
   @Override
   public void appendDescription(Description description, DiscardLabelTemplateObject template) {
     description.appendText("A DiscardLabelTemplateObject with the following state:")
-        .appendText("\ncomponent.componentCode: ").appendValue(template.getComponentCode())
-        .appendText("\nconfig.serviceInfoLine1: ").appendValue(template.getServiceInfoLine1())
-        .appendText("\nconfig.serviceInfoLine2: ").appendValue(template.getServiceInfoLine2());
+        .appendText("\ncomponent.componentCode: ").appendValue(template.component.getComponentCode())
+        .appendText("\nconfig.serviceInfoLine1: ").appendValue(template.config.getServiceInfoLine1())
+        .appendText("\nconfig.serviceInfoLine2: ").appendValue(template.config.getServiceInfoLine2());
   }
 
   @Override
   protected boolean matchesSafely(DiscardLabelTemplateObject actual) {
-    return Objects.equals(actual.getComponentCode(), expected.getComponentCode())
-        && Objects.equals(actual.getServiceInfoLine1(), expected.getServiceInfoLine1())
-        && Objects.equals(actual.getServiceInfoLine2(), expected.getServiceInfoLine2());
+    return Objects.equals(actual.component.getComponentCode(), expected.component.getComponentCode())
+        && Objects.equals(actual.config.getServiceInfoLine1(), expected.config.getServiceInfoLine1())
+        && Objects.equals(actual.config.getServiceInfoLine2(), expected.config.getServiceInfoLine2());
   }
 
   public static DiscardLabelTemplateObjectMatcher hasSameStateAsDiscardLabelTemplateObject(DiscardLabelTemplateObject expected) {

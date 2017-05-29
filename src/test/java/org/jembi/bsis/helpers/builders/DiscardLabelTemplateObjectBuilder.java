@@ -25,9 +25,9 @@ public class DiscardLabelTemplateObjectBuilder extends AbstractBuilder<DiscardLa
   @Override
   public DiscardLabelTemplateObject build() {
     DiscardLabelTemplateObject template = new DiscardLabelTemplateObject();
-    template.setComponentCode(componentCode);
-    template.setServiceInfoLine1(serviceInfoLine1);
-    template.setServiceInfoLine2(serviceInfoLine2);
+    template.component.setComponentCode(componentCode);
+    template.config.setServiceInfoLine1(serviceInfoLine1);
+    template.config.setServiceInfoLine2(serviceInfoLine2);
     return template;
   }
 
