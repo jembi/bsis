@@ -138,4 +138,5 @@
   <include file="liquibase/updates/uuid/3056-update-audit-revision-with-server-uuid.xml"/>
   <include file="liquibase/updates/uuid/2874-implement-uuids-for-remaining-entities-role.xml"/>
   <include file="liquibase/updates/uuid/2874-implement-uuids-for-remaining-entities-general-config.xml"/>
+  <include file="liquibase/updates/3038-make-pack-label-zpl-configurable.xml"/>
 </databaseChangeLog>

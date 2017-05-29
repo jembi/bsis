@@ -1,0 +1,90 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170529-1000" author="timler">
+    <comment>Adding PackLabel ZPL to GeneralConfig</comment>
+    <insert tableName="GeneralConfig">
+      <column name="id" valueComputed="GENERATEBINARYUUID()"></column>
+      <column name="name">packLabel.packLabelZPL</column>
+      <column name="description">Zebra Printer Language (ZPL) code for the Pack Label</column>
+      <column name="value"><![CDATA[CT~~CD,~CC^~CT~
+^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD15^JUS^LRN^CI28^XZ
+^XA
+^MMT
+^PW799
+^LL0799
+^LS0
+
+^FX NW quadrant
+^FX -----------
+
+^FX DIN barcode with flag characters and check character (configurable length)
+^FT59,52^A0N,17,38^FH^FDDIN^FS
+^BY2,3,82^FT61,144^BCN,,N,N,N,A^FD{{donation.DIN}}{{donation.flagCharacters}}^FS
+^FT61,180^ADN,30,10^FH^FD{{donation.DIN}}^FS
+^FT{{dinPositioning.flagCharPos}},155^ADR,30,10^FH^FD{{donation.flagCharacters}}^FS
+^FO{{dinPositioning.boxPos}},148^GB30,38,3^FS
+^FT{{dinPositioning.checkCharPos}},180^ADN,27,14^FH^FD{{donation.checkCharacter}}^FS
+
+^FX Collected On
+^FT64,208^A0N,17,38^FDCollected On^FS
+^BY2,3,84^FT64,305^BCN,,N,N^FD{{donation.donationDateISO}}^FS
+^FT64,331^A0N,23,36^FD{{donation.donationDate}}^FS
+
+^FX Service Info (line 1 and 2)
+^FT64,387^A0N,20,14^FD{{config.serviceInfoLine1}}^FS
+^FT64,414^A0N,20,14^FD{{config.serviceInfoLine2}}^FS
+
+^FX NE quadrant
+^FX -----------
+
+^FX Blood Group barcode
+^BY3,3,80^FT445,147^BCN,,Y,N^FD{{donation.bloodABO}}{{donation.bloodRh}}^FS
+
+^FX Blood ABO/Rh
+^FT505,304^A0N,152,148^FB166,1,0,C^FD{{donation.bloodABO}}^FS
+{{#donation.bloodPositive}}
+  ^FT487,365^A0N,40,38^FB221,1,0,C^FH^FDRhD POSITIVE^FS
+{{/donation.bloodPositive}}
+{{^donation.bloodPositive}}
+  ^FO482,326^GB233,50,50^FS
+  ^FT482,363^A0N,40,38^FB233,1,0,C^FR^FH^FDRhD NEGATIVE^FS
+{{/donation.bloodPositive}}
+
+^FX High Titre
+{{#donation.bloodHighTitre}}
+  ^FT505,409^A0N,36,36,C^FR^FDHIGH TITRE^FS
+{{/donation.bloodHighTitre}}
+
+^FX NW quadrant
+^FX -----------
+
+^FX Component Code / Name
+^BY3,3,77^FT64,535^BCN,,Y,N^FD{{component.componentCode}}^FS
+^FT64,616^A0N,43,16^FD{{componentType.componentTypeName}}^FS
+
+^FX Volume (optional)
+{{^component.volume}}
+^FT64,655^A0N,23,14^FDVolume: {{component.volume}}ml^FS
+{{/component.volume}}
+
+^FX Component Type information
+^FT64,681^A0N,23,14^FD{{componentType.preparationInfo}}^FS
+^FT64,707^A0N,23,14^FD{{componentType.storageInfo}}^FS
+^FT64,733^A0N,23,14^FD{{componentType.transportInfo}}^FS
+
+^FX NE quadrant
+^FX -----------
+
+^FX Component Expiry
+^FT445,439^A0N,17,38^FDExpires On^FS
+^BY2,3,82^FT445,535^BCN,,N,N^FD{{component.expiresOnISO}}^FS
+^FT445,565^A0N,23,31^FD{{component.expiresOn}}^FS
+
+^FX Print Quality
+^PQ1,0,1,Y^XZ]]></column>
+      <column name="dataType_id">1</column>
+    </insert>
+  </changeSet>
+</databaseChangeLog>
