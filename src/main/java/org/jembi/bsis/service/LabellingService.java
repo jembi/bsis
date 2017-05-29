@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class LabellingService {
 
+  public static final String DATA_LINK_ESCAPE = "\u0010";
+
   @Autowired
   private ComponentCRUDService componentCRUDService;
   @Autowired
