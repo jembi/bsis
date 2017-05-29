@@ -1,6 +1,6 @@
 package org.jembi.bsis.helpers.builders;
 
-import org.jembi.bsis.template.DiscardLabelTemplateObject;
+import org.jembi.bsis.template.labelling.DiscardLabelTemplateObject;
 
 public class DiscardLabelTemplateObjectBuilder extends AbstractBuilder<DiscardLabelTemplateObject> {
   private String componentCode;

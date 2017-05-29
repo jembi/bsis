@@ -3,7 +3,7 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.jembi.bsis.template.DiscardLabelTemplateObject;
+import org.jembi.bsis.template.labelling.DiscardLabelTemplateObject;
 
 public class DiscardLabelTemplateObjectMatcher extends AbstractTypeSafeMatcher<DiscardLabelTemplateObject> {
 

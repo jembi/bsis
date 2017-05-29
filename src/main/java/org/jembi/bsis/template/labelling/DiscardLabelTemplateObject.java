@@ -1,4 +1,4 @@
-package org.jembi.bsis.template;
+package org.jembi.bsis.template.labelling;
 
 public class DiscardLabelTemplateObject {
 

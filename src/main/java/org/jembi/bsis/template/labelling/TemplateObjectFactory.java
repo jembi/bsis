@@ -1,4 +1,4 @@
-package org.jembi.bsis.template;
+package org.jembi.bsis.template.labelling;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.component.Component;
