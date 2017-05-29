@@ -18,6 +18,8 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.util.BloodAbo;
 import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.ComponentRepository;
+import org.jembi.bsis.template.DiscardLabelTemplateObject;
+import org.jembi.bsis.template.TemplateObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,8 @@ public class LabellingService {
   private ComponentVolumeService componentVolumeService;
   @Autowired
   private ComponentRepository componentRepository;
+  @Autowired
+  private TemplateObjectFactory templateObjectFactory;
   
   public List<Component> findSafeComponentsToLabel(String din, String componentCode, UUID componentTypeId,
       UUID locationId,
@@ -198,10 +202,9 @@ public class LabellingService {
     }
 
     // Get configured service info values
-    String serviceInfoLine1 = generalConfigAccessorService.getGeneralConfigValueByName(
-        GeneralConfigConstants.SERVICE_INFO_LINE_1);
-    String serviceInfoLine2 = generalConfigAccessorService.getGeneralConfigValueByName(
-        GeneralConfigConstants.SERVICE_INFO_LINE_2);
+    DiscardLabelTemplateObject discardLabelTemplateObject = templateObjectFactory.createDiscardLabelTemplateObject(component);
+    String serviceInfoLine1 = discardLabelTemplateObject.config.getServiceInfoLine1();
+    String serviceInfoLine2 = discardLabelTemplateObject.config.getServiceInfoLine2();
 
     // Generate ZPL label
     String labelZPL =

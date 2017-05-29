@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.DiscardLabelTemplateObjectBuilder.aDiscardLabelTemplateObject;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
@@ -30,6 +31,8 @@ import org.jembi.bsis.model.util.BloodAbo;
 import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.jembi.bsis.template.DiscardLabelTemplateObject;
+import org.jembi.bsis.template.TemplateObjectFactory;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -63,7 +66,10 @@ public class LabellingServiceTests extends UnitTestSuite {
 
   @Mock
   private ComponentVolumeService componentVolumeService;
-  
+
+  @Mock
+  private TemplateObjectFactory templateObjectFactory;
+
   @Mock
   private ComponentRepository componentRepository;
   
@@ -185,12 +191,16 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
-    
+    DiscardLabelTemplateObject discardLabelTemplateObject = aDiscardLabelTemplateObject()
+        .withServiceInfoLine1("Line 1")
+        .withServiceInfoLine2("Line 2")
+        .build();
+
     // set up mocks
     when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.SERVICE_INFO_LINE_1)).thenReturn("Line 1");
-    when(generalConfigAccessorService.getGeneralConfigValueByName(GeneralConfigConstants.SERVICE_INFO_LINE_2)).thenReturn("Line 2");
+    when(templateObjectFactory.createDiscardLabelTemplateObject(argThat(hasSameStateAsComponent(component))))
+      .thenReturn(discardLabelTemplateObject);
 
     // run test
     String label = labellingService.printDiscardLabel(COMPONENT_ID);
@@ -215,10 +225,16 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withStatus(ComponentStatus.EXPIRED)
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
+    DiscardLabelTemplateObject discardLabelTemplateObject = aDiscardLabelTemplateObject()
+        .withServiceInfoLine1("Line 1")
+        .withServiceInfoLine2("Line 2")
+        .build();
 
     // set up mocks
     when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
+    when(templateObjectFactory.createDiscardLabelTemplateObject(argThat(hasSameStateAsComponent(component))))
+      .thenReturn(discardLabelTemplateObject);
 
     // run test
     String label = labellingService.printDiscardLabel(COMPONENT_ID);
