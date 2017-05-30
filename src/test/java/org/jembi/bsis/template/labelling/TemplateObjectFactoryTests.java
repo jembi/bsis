@@ -90,7 +90,7 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCreatePackLabelTemplateObject_shouldReturnAPackLabelTemplateObject() {
+  public void testCreatePackLabelTemplateObject_shouldReturnAPackLabelTemplateObject() throws ParseException {
     // Set up fixture
     int flagCharPos = 123;
     int boxPos = 153;
@@ -104,8 +104,6 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
     String checkCharacter = "A";
     String bloodABO = "A";
     String bloodRh = "+";
-    boolean isBloodRhPositive = true;
-    boolean isBloodHighTitre = false;
     String donationDate = "2017/05/29";
     String donationDateISO = "2017-05-29";
 
@@ -121,13 +119,10 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
 
     Date expiresOnDate = null;
     Date donationDateDate = null;
-    try {
-      expiresOnDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(expiresOn);
-      donationDateDate = new SimpleDateFormat("yyyy/MM/dd").parse(donationDate);
-    } catch (ParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+
+    expiresOnDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(expiresOn);
+    donationDateDate = new SimpleDateFormat("yyyy/MM/dd").parse(donationDate);
+
 
     Donation donation = aDonation()
         .withDonationIdentificationNumber(DIN)
@@ -160,8 +155,9 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
         .withCheckCharacter(checkCharacter)
         .withBloodABO(bloodABO)
         .withBloodRh(bloodRh)
-        .withIsBloodRhPositive(isBloodRhPositive)
-        .withIsBloodHighTitre(isBloodHighTitre)
+        .thatIsBloodRhPositive()
+        .thatIsNotBloodRhNegative()
+        .thatIsNotBloodHighTitre()
         .withDonationDate(donationDate)
         .withDonationDateISO(donationDateISO)
         .withComponentCode(componentCode)
@@ -182,7 +178,6 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
         GeneralConfigConstants.SERVICE_INFO_LINE_2))
       .thenReturn(serviceInfoLine2);
 
-    // Set up date formats
     when(generalConfigAccessorService.getGeneralConfigValueByName("dateFormat")).thenReturn("yyyy/MM/dd");
 
     when(generalConfigAccessorService.getGeneralConfigValueByName("dateTimeFormat")).thenReturn("yyyy/MM/dd HH:mm:ss");
@@ -199,7 +194,8 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCreatePackLabelTemplateObjectWithHighTitre_shouldReturnAPackLabelTemplateObject() {
+  public void testCreatePackLabelTemplateObjectWithHighTitre_shouldReturnAPackLabelTemplateObject()
+      throws ParseException {
     // Set up fixture
     int flagCharPos = 123;
     int boxPos = 153;
@@ -213,8 +209,6 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
     String checkCharacter = "A";
     String bloodABO = "O";
     String bloodRh = "-";
-    boolean isBloodRhPositive = false;
-    boolean isBloodHighTitre = true;
     String donationDate = "2017/05/29";
     String donationDateISO = "2017-05-29";
 
@@ -230,13 +224,9 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
 
     Date expiresOnDate = null;
     Date donationDateDate = null;
-    try {
-      expiresOnDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(expiresOn);
-      donationDateDate = new SimpleDateFormat("yyyy/MM/dd").parse(donationDate);
-    } catch (ParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+
+    expiresOnDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(expiresOn);
+    donationDateDate = new SimpleDateFormat("yyyy/MM/dd").parse(donationDate);
 
     Donation donation = aDonation()
         .withDonationIdentificationNumber(DIN)
@@ -271,8 +261,9 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
         .withCheckCharacter(checkCharacter)
         .withBloodABO(bloodABO)
         .withBloodRh(bloodRh)
-        .withIsBloodRhPositive(isBloodRhPositive)
-        .withIsBloodHighTitre(isBloodHighTitre)
+        .thatIsNotBloodRhPositive()
+        .thatIsBloodRhNegative()
+        .thatIsBloodHighTitre()
         .withDonationDate(donationDate)
         .withDonationDateISO(donationDateISO)
         .withComponentCode(componentCode)
@@ -293,7 +284,6 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
         GeneralConfigConstants.SERVICE_INFO_LINE_2))
       .thenReturn(serviceInfoLine2);
 
-    // Set up date formats
     when(generalConfigAccessorService.getGeneralConfigValueByName("dateFormat")).thenReturn("yyyy/MM/dd");
 
     when(generalConfigAccessorService.getGeneralConfigValueByName("dateTimeFormat")).thenReturn("yyyy/MM/dd HH:mm:ss");

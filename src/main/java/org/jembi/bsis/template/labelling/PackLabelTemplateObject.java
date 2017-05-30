@@ -23,7 +23,7 @@ public class PackLabelTemplateObject {
 
   public class DonationTemplateObject {
     public String DIN, flagCharacters, checkCharacter, bloodABO, bloodRh, donationDate, donationDateISO;
-    public boolean isBloodRhPositive, isBloodHighTitre;
+    public boolean isBloodRhPositive, isBloodRhNegative, isBloodHighTitre;
   }
 
   public class ComponentTypeTemplateObject {

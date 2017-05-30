@@ -30,7 +30,6 @@ public class TemplateObjectFactory {
   public PackLabelTemplateObject createPackLabelTemplateObject(Component component) {
     PackLabelTemplateObject template = new PackLabelTemplateObject();
 
-    // Set up date formats
     String dateFormatString = generalConfigAccessorService.getGeneralConfigValueByName("dateFormat");
     String dateTimeFormatString = generalConfigAccessorService.getGeneralConfigValueByName("dateTimeFormat");
 
@@ -39,7 +38,7 @@ public class TemplateObjectFactory {
     DateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     updatePackLabelTemplateObjectWithConfigInfo(template);
-    updatePackLabelTemplateObjectWithComponentInfo(component, template, dateTimeFormat, isoDateFormat);
+    updatePackLabelTemplateObjectWithComponentInfo(template, component, dateTimeFormat, isoDateFormat);
     updatePackLabelTemplateObjectWithDonationInfo(template, component, dateFormat, isoDateFormat);
     updatePackLabelTemplateObjectWithComponentTypeInfo(template, component.getComponentType());
     updatePackLabelTemplateObjectWithDINPositioningInfo(template,
@@ -68,7 +67,7 @@ public class TemplateObjectFactory {
     template.DINPositioning.checkCharPos = boxPos + 9;
   }
 
-  private void updatePackLabelTemplateObjectWithComponentInfo(Component component, PackLabelTemplateObject template,
+  private void updatePackLabelTemplateObjectWithComponentInfo(PackLabelTemplateObject template, Component component,
       DateFormat dateTimeFormat, DateFormat isoDateFormat) {
     template.component.componentCode = component.getComponentCode();
     template.component.expiresOn = dateTimeFormat.format(component.getExpiresOn());
@@ -86,6 +85,7 @@ public class TemplateObjectFactory {
     template.donation.bloodABO = donation.getBloodAbo();
     template.donation.bloodRh = donation.getBloodRh();
     template.donation.isBloodRhPositive = donation.getBloodRh().contains("+");
+    template.donation.isBloodRhNegative = donation.getBloodRh().contains("-");
     template.donation.isBloodHighTitre = shouldLabelIncludeHighTitre(component);
     template.donation.donationDate = dateFormat.format(donation.getDonationDate());
     template.donation.donationDateISO = isoDateFormat.format(donation.getDonationDate());
