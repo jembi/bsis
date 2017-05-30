@@ -37,7 +37,6 @@ public class MustacheTemplateTests extends UnitTestSuite {
         .flush();
 
     String mustacheOutput = writer.toString();
-    System.out.println(mustacheOutput);
     assertThat(mustacheOutput, containsString("Name: " + donorName));
     assertThat(mustacheOutput, containsString("ID: " + idNumber));
     assertThat(mustacheOutput, containsString("Gender: " + donorGender));

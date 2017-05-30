@@ -80,13 +80,23 @@ public class PackLabelTemplateObjectBuilder extends AbstractBuilder<PackLabelTem
     return this;
   }
 
-  public PackLabelTemplateObjectBuilder withIsBloodRhPositive(boolean isBloodRhPositive) {
-    this.isBloodRhPositive = isBloodRhPositive;
+  public PackLabelTemplateObjectBuilder thatIsBloodRhPositive() {
+    this.isBloodRhPositive = true;
     return this;
   }
 
-  public PackLabelTemplateObjectBuilder withIsBloodHighTitre(boolean isBloodHighTitre) {
-    this.isBloodHighTitre = isBloodHighTitre;
+  public PackLabelTemplateObjectBuilder thatIsNotBloodRhPositive() {
+    this.isBloodRhPositive = false;
+    return this;
+  }
+
+  public PackLabelTemplateObjectBuilder thatIsBloodHighTitre() {
+    this.isBloodHighTitre = true;
+    return this;
+  }
+
+  public PackLabelTemplateObjectBuilder thatIsNotBloodHighTitre() {
+    this.isBloodHighTitre = false;
     return this;
   }
 

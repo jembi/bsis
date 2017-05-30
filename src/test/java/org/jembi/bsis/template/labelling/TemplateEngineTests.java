@@ -193,8 +193,6 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
     String checkCharacter = "A";
     String bloodABO = "A";
     String bloodRh = "+";
-    boolean isBloodRhPositive = true;
-    boolean isBloodHighTitre = false;
     String donationDate = "2017/05/29";
     String donationDateISO = "2017-05-29";
 
@@ -269,8 +267,8 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
         .withCheckCharacter(checkCharacter)
         .withBloodABO(bloodABO)
         .withBloodRh(bloodRh)
-        .withIsBloodRhPositive(isBloodRhPositive)
-        .withIsBloodHighTitre(isBloodHighTitre)
+        .thatIsBloodRhPositive()
+        .thatIsNotBloodHighTitre()
         .withDonationDate(donationDate)
         .withDonationDateISO(donationDateISO)
         .withComponentCode(componentCode)
@@ -302,8 +300,6 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
     String checkCharacter = "A";
     String bloodABO = "A";
     String bloodRh = "-";
-    boolean isBloodRhPositive = false;
-    boolean isBloodHighTitre = false;
     String donationDate = "2017/05/29";
     String donationDateISO = "2017-05-29";
 
@@ -379,8 +375,8 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
         .withCheckCharacter(checkCharacter)
         .withBloodABO(bloodABO)
         .withBloodRh(bloodRh)
-        .withIsBloodRhPositive(isBloodRhPositive)
-        .withIsBloodHighTitre(isBloodHighTitre)
+        .thatIsNotBloodRhPositive()
+        .thatIsNotBloodHighTitre()
         .withDonationDate(donationDate)
         .withDonationDateISO(donationDateISO)
         .withComponentCode(componentCode)
@@ -412,8 +408,6 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
     String checkCharacter = "A";
     String bloodABO = "A";
     String bloodRh = "+";
-    boolean isBloodRhPositive = true;
-    boolean isBloodHighTitre = false;
     String donationDate = "2017/05/29";
     String donationDateISO = "2017-05-29";
 
@@ -489,8 +483,8 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
         .withCheckCharacter(checkCharacter)
         .withBloodABO(bloodABO)
         .withBloodRh(bloodRh)
-        .withIsBloodRhPositive(isBloodRhPositive)
-        .withIsBloodHighTitre(isBloodHighTitre)
+        .thatIsBloodRhPositive()
+        .thatIsNotBloodHighTitre()
         .withDonationDate(donationDate)
         .withDonationDateISO(donationDateISO)
         .withComponentCode(componentCode)
@@ -522,8 +516,6 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
     String checkCharacter = "A";
     String bloodABO = "A";
     String bloodRh = "+";
-    boolean isBloodRhPositive = true;
-    boolean isBloodHighTitre = true;
     String donationDate = "2017/05/29";
     String donationDateISO = "2017-05-29";
 
@@ -599,8 +591,8 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
         .withCheckCharacter(checkCharacter)
         .withBloodABO(bloodABO)
         .withBloodRh(bloodRh)
-        .withIsBloodRhPositive(isBloodRhPositive)
-        .withIsBloodHighTitre(isBloodHighTitre)
+        .thatIsBloodRhPositive()
+        .thatIsBloodHighTitre()
         .withDonationDate(donationDate)
         .withDonationDateISO(donationDateISO)
         .withComponentCode(componentCode)
