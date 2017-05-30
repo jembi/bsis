@@ -4,8 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
-import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DiscardLabelTemplateObjectBuilder.aDiscardLabelTemplateObject;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.GeneralConfigBuilder.aGeneralConfig;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.any;
@@ -14,7 +14,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -221,7 +220,7 @@ public class LabellingServiceTests extends UnitTestSuite {
       .thenReturn(discardLabelTemplateObject);
     when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.DISCARD_LABEL_ZPL))
       .thenReturn(generalConfig);
-    when(templateEngine.execute(generalConfig.getValue(), discardLabelTemplateObject))
+    when(templateEngine.execute("DISCARD_LABEL_TEMPLATE_NAME", generalConfig.getValue(), discardLabelTemplateObject))
       .thenReturn("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber()
           + "^FX Component Type barcode^BY3,3,77^FT75,280^BCN,,Y,N^FD" + component.getComponentType().getComponentTypeCode()
           + "^FS^FX Service Info (line 1 and 2)^FT415,102^A0,20,14^FD" + discardLabelTemplateObject.config.serviceInfoLine1
@@ -267,7 +266,7 @@ public class LabellingServiceTests extends UnitTestSuite {
       .thenReturn(discardLabelTemplateObject);
     when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.DISCARD_LABEL_ZPL))
     .thenReturn(generalConfig);
-    when(templateEngine.execute(generalConfig.getValue(), discardLabelTemplateObject))
+    when(templateEngine.execute("DISCARD_LABEL_TEMPLATE_NAME", generalConfig.getValue(), discardLabelTemplateObject))
     .thenReturn("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber());
 
     // run test
