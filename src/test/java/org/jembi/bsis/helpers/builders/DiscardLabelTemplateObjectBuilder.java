@@ -4,12 +4,18 @@ import org.jembi.bsis.template.labelling.DiscardLabelTemplateObject;
 
 public class DiscardLabelTemplateObjectBuilder extends AbstractBuilder<DiscardLabelTemplateObject> {
   private String componentCode;
+  private String componentTypeCode;
   private String DIN;
   private String serviceInfoLine1;
   private String serviceInfoLine2;
 
   public DiscardLabelTemplateObjectBuilder withComponentCode(String componentCode) {
     this.componentCode = componentCode;
+    return this;
+  }
+
+  public DiscardLabelTemplateObjectBuilder withComponentTypeCode(String componentTypeCode) {
+    this.componentTypeCode = componentTypeCode;
     return this;
   }
 
@@ -32,6 +38,7 @@ public class DiscardLabelTemplateObjectBuilder extends AbstractBuilder<DiscardLa
   public DiscardLabelTemplateObject build() {
     DiscardLabelTemplateObject template = new DiscardLabelTemplateObject();
     template.component.componentCode = componentCode;
+    template.componentType.componentTypeCode = componentTypeCode;
     template.donation.DIN = DIN;
     template.config.serviceInfoLine1 = serviceInfoLine1;
     template.config.serviceInfoLine2 = serviceInfoLine2;

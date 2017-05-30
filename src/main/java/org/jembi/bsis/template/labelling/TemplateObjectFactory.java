@@ -121,7 +121,9 @@ public class TemplateObjectFactory {
     DiscardLabelTemplateObject template = new DiscardLabelTemplateObject();
 
     template.component.componentCode = component.getComponentCode();
+    template.componentType.componentTypeCode = component.getComponentType().getComponentTypeCode();
     template.donation.DIN = component.getDonationIdentificationNumber();
+
     updateDiscardLabelTemplateObjectWithConfigInfo(template);
 
     return template;

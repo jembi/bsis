@@ -16,6 +16,7 @@ import java.util.Date;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.service.CheckCharacterService;
@@ -45,7 +46,8 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateDiscardLabelTemplateObject_shouldReturnADiscardLabelTemplateObject() {
     // Set up fixture
-    String componentCode = "1001";
+    String componentCode = "1001-01";
+    String componentTypeCode = "1001";
     String serviceInfoLine1 = "service info line 1";
     String serviceInfoLine2 = "service info line 2";
     String DIN = "3000600";
@@ -54,13 +56,19 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
         .withDonationIdentificationNumber(DIN)
         .build();
 
+    ComponentType componentType = aComponentType()
+        .withComponentTypeCode(componentTypeCode)
+        .build();
+
     Component component = aComponent()
         .withComponentCode(componentCode)
+        .withComponentType(componentType)
         .withDonation(donation)
         .build();
 
     DiscardLabelTemplateObject expectedResult = aDiscardLabelTemplateObject()
         .withComponentCode(componentCode)
+        .withComponentTypeCode(componentTypeCode)
         .withDIN(DIN)
         .withServiceInfoLine1(serviceInfoLine1)
         .withServiceInfoLine2(serviceInfoLine2)
