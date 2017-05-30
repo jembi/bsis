@@ -104,8 +104,6 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
     String checkCharacter = "A";
     String bloodABO = "A";
     String bloodRh = "+";
-    boolean isBloodRhPositive = true;
-    boolean isBloodHighTitre = false;
     String donationDate = "2017/05/29";
     String donationDateISO = "2017-05-29";
 
@@ -158,6 +156,7 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
         .withBloodABO(bloodABO)
         .withBloodRh(bloodRh)
         .thatIsBloodRhPositive()
+        .thatIsNotBloodRhNegative()
         .thatIsNotBloodHighTitre()
         .withDonationDate(donationDate)
         .withDonationDateISO(donationDateISO)
@@ -210,8 +209,6 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
     String checkCharacter = "A";
     String bloodABO = "O";
     String bloodRh = "-";
-    boolean isBloodRhPositive = false;
-    boolean isBloodHighTitre = true;
     String donationDate = "2017/05/29";
     String donationDateISO = "2017-05-29";
 
@@ -265,6 +262,7 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
         .withBloodABO(bloodABO)
         .withBloodRh(bloodRh)
         .thatIsNotBloodRhPositive()
+        .thatIsBloodRhNegative()
         .thatIsBloodHighTitre()
         .withDonationDate(donationDate)
         .withDonationDateISO(donationDateISO)

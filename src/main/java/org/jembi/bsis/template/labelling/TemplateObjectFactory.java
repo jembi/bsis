@@ -85,6 +85,7 @@ public class TemplateObjectFactory {
     template.donation.bloodABO = donation.getBloodAbo();
     template.donation.bloodRh = donation.getBloodRh();
     template.donation.isBloodRhPositive = donation.getBloodRh().contains("+");
+    template.donation.isBloodRhNegative = donation.getBloodRh().contains("-");
     template.donation.isBloodHighTitre = shouldLabelIncludeHighTitre(component);
     template.donation.donationDate = dateFormat.format(donation.getDonationDate());
     template.donation.donationDateISO = isoDateFormat.format(donation.getDonationDate());
