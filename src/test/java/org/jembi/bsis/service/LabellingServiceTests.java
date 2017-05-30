@@ -6,6 +6,7 @@ import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DiscardLabelTemplateObjectBuilder.aDiscardLabelTemplateObject;
+import static org.jembi.bsis.helpers.builders.GeneralConfigBuilder.aGeneralConfig;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
@@ -13,6 +14,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +23,7 @@ import java.util.UUID;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
+import org.jembi.bsis.model.admin.GeneralConfig;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -30,7 +33,9 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.util.BloodAbo;
 import org.jembi.bsis.model.util.BloodGroup;
 import org.jembi.bsis.repository.ComponentRepository;
+import org.jembi.bsis.repository.GeneralConfigRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.jembi.bsis.template.TemplateEngine;
 import org.jembi.bsis.template.labelling.DiscardLabelTemplateObject;
 import org.jembi.bsis.template.labelling.TemplateObjectFactory;
 import org.joda.time.DateTime;
@@ -72,6 +77,12 @@ public class LabellingServiceTests extends UnitTestSuite {
 
   @Mock
   private ComponentRepository componentRepository;
+  
+  @Mock
+  private GeneralConfigRepository generalConfigRepository;
+  
+  @Mock
+  private TemplateEngine templateEngine;
   
   private static final UUID COMPONENT_ID = UUID.randomUUID();
 
@@ -195,13 +206,28 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withServiceInfoLine1("Line 1")
         .withServiceInfoLine2("Line 2")
         .build();
+    GeneralConfig generalConfig = aGeneralConfig()
+        .withName(GeneralConfigConstants.DISCARD_LABEL_ZPL)
+        .withValue("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD{{donation.DIN}}"
+            + "^FX Component Type barcode^BY3,3,77^FT75,280^BCN,,Y,N^FD{{componentType.componentTypeCode}}"
+            + "^FS^FX Service Info (line 1 and 2)^FT415,102^A0,20,14^FD{{config.serviceInfoLine1}}"
+            + "^FS^FT416,133^A0N,20,14^FD{{config.serviceInfoLine2}}FS^XZ")
+        .build();
 
     // set up mocks
     when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
     when(templateObjectFactory.createDiscardLabelTemplateObject(argThat(hasSameStateAsComponent(component))))
       .thenReturn(discardLabelTemplateObject);
-
+    when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.DISCARD_LABEL_ZPL))
+      .thenReturn(generalConfig);
+    when(templateEngine.execute(generalConfig.getValue(), discardLabelTemplateObject))
+      .thenReturn("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber()
+          + "^FX Component Type barcode^BY3,3,77^FT75,280^BCN,,Y,N^FD" + component.getComponentType().getComponentTypeCode()
+          + "^FS^FX Service Info (line 1 and 2)^FT415,102^A0,20,14^FD" + discardLabelTemplateObject.config.serviceInfoLine1
+          + "^FS^FT416,133^A0N,20,14^FD" + discardLabelTemplateObject.config.serviceInfoLine2 + "FS^XZ");
+  
+    
     // run test
     String label = labellingService.printDiscardLabel(COMPONENT_ID);
     
@@ -229,12 +255,20 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withServiceInfoLine1("Line 1")
         .withServiceInfoLine2("Line 2")
         .build();
+    GeneralConfig generalConfig = aGeneralConfig()
+        .withName(GeneralConfigConstants.DISCARD_LABEL_ZPL)
+        .withValue("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD{{donation.DIN}}")
+        .build();
 
     // set up mocks
     when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
     when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
     when(templateObjectFactory.createDiscardLabelTemplateObject(argThat(hasSameStateAsComponent(component))))
       .thenReturn(discardLabelTemplateObject);
+    when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.DISCARD_LABEL_ZPL))
+    .thenReturn(generalConfig);
+    when(templateEngine.execute(generalConfig.getValue(), discardLabelTemplateObject))
+    .thenReturn("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber());
 
     // run test
     String label = labellingService.printDiscardLabel(COMPONENT_ID);
@@ -244,7 +278,7 @@ public class LabellingServiceTests extends UnitTestSuite {
   }
   
   @Test(expected = IllegalArgumentException.class)
-  public void testPrintDiscardLabel_throwsException() throws Exception {
+  public void testPrintDiscardLabel_throwsIllegalArgumentException() throws Exception {
     // set up data
     Component component = aComponent()
         .withId(COMPONENT_ID)
