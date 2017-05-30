@@ -2,8 +2,11 @@
   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-  <changeSet id="20170529-1000" author="timler">
+  <changeSet id="20170530-0957" author="timler">
     <comment>Adding PackLabel ZPL to GeneralConfig</comment>
+    <delete tableName="GeneralConfig">
+      <where>name = "packLabel.packLabelZPL"</where>
+    </delete>
     <insert tableName="GeneralConfig">
       <column name="id" valueComputed="GENERATEBINARYUUID()"></column>
       <column name="name">packLabel.packLabelZPL</column>
@@ -86,9 +89,13 @@
 ^PQ1,0,1,Y^XZ]]></column>
       <column name="dataType_id">1</column>
     </insert>
-    
-    
+  </changeSet>
+
+  <changeSet id="20170530-1001" author="patience-mpofu">
     <comment>Adding DiscardLabel ZPL to GeneralConfig</comment>
+    <delete tableName="GeneralConfig">
+      <where>name = "packLabel.discardLabelZPL"</where>
+    </delete>
     <insert tableName="GeneralConfig">
       <column name="id" valueComputed="GENERATEBINARYUUID()"></column>
       <column name="name">packLabel.discardLabelZPL</column>
@@ -128,7 +135,7 @@ X03FUFE0K03FUFE,Y0VFN07FTFC,Y0UFE0M03FTF8,Y01FSFP07FRF80,g03FQFC0O09FQFE,gG07FOF
 
 ^FX DIN barcode
 ^BY3,3,77^FT75,140^BCN,,Y,N
-^FD{{donation.donationIdentificationNumber}}^FS
+^FD{{donation.DIN}}^FS
 
 ^FX Component Type barcode
 ^BY3,3,77^FT75,280^BCN,,Y,N
@@ -142,7 +149,7 @@ X03FUFE0K03FUFE,Y0VFN07FTFC,Y0UFE0M03FTF8,Y01FSFP07FRF80,g03FQFC0O09FQFE,gG07FOF
 ^FT224,512^XG000.GRF,1,1^FS
 ^FT291,592^A0N,39,38^FDDO NOT USE^FS
 ^FT297,539^A0N,39,38^FDBIOHAZARD^FS
-^PQ1,0,1,Y^XZ"
+^PQ1,0,1,Y^XZ
 ^XA^ID000.GRF^FS^XZ]]></column>
       <column name="dataType_id">1</column>
     </insert>

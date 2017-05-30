@@ -117,10 +117,11 @@ public class TemplateObjectFactory {
     template.componentType.transportInfo = componentType.getTransportInfo();
   }
 
-  public DiscardLabelTemplateObject createDiscardLabelTemplateObject(Component component){
+  public DiscardLabelTemplateObject createDiscardLabelTemplateObject(Component component) {
     DiscardLabelTemplateObject template = new DiscardLabelTemplateObject();
 
     template.component.componentCode = component.getComponentCode();
+    template.donation.DIN = component.getDonationIdentificationNumber();
     updateDiscardLabelTemplateObjectWithConfigInfo(template);
 
     return template;
@@ -131,7 +132,6 @@ public class TemplateObjectFactory {
         GeneralConfigConstants.SERVICE_INFO_LINE_1);
     String serviceInfoLine2 = generalConfigAccessorService.getGeneralConfigValueByName(
         GeneralConfigConstants.SERVICE_INFO_LINE_2);
-
     template.config.serviceInfoLine1 = serviceInfoLine1;
     template.config.serviceInfoLine2 = serviceInfoLine2;
   }

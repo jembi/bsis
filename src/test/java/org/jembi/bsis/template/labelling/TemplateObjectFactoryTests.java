@@ -48,13 +48,20 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
     String componentCode = "1001";
     String serviceInfoLine1 = "service info line 1";
     String serviceInfoLine2 = "service info line 2";
+    String DIN = "3000600";
+
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber(DIN)
+        .build();
 
     Component component = aComponent()
         .withComponentCode(componentCode)
+        .withDonation(donation)
         .build();
 
     DiscardLabelTemplateObject expectedResult = aDiscardLabelTemplateObject()
         .withComponentCode(componentCode)
+        .withDIN(DIN)
         .withServiceInfoLine1(serviceInfoLine1)
         .withServiceInfoLine2(serviceInfoLine2)
         .build();

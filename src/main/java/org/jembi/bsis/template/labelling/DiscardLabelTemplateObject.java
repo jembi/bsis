@@ -2,6 +2,7 @@ package org.jembi.bsis.template.labelling;
 
 public class DiscardLabelTemplateObject {
 
+  public DonationTemplateObject donation = new DonationTemplateObject();
   public ComponentTemplateObject component = new ComponentTemplateObject();
   public ConfigTemplateObject config = new ConfigTemplateObject();
 
@@ -13,4 +14,7 @@ public class DiscardLabelTemplateObject {
     public String serviceInfoLine1, serviceInfoLine2;
   }
 
+  public class DonationTemplateObject {
+    public String DIN;
+  }
 }
