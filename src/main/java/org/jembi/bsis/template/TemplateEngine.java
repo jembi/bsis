@@ -17,21 +17,21 @@ import com.github.mustachejava.MustacheFactory;
 @Service
 public class TemplateEngine {
 
-  private static String DEFAULT_TEMPLATE_NAME = "template";
   MustacheFactory mf = new DefaultMustacheFactory();
 
   /**
    * Execute the specified template given the specified data and returns the result
-   * 
+   *
+   * @param templateName String identifying the template (will be used for caching)
    * @param template String containing the template
    * @param data Object containing the data that will be used to generate the result
    * @return String output of running the template with the specified data
    * @throws IOException if any error occurs while reading the template or writing the output 
    */
-  public String execute(String template, Object data) throws IOException {
+  public String execute(String templateName, String template, Object data) throws IOException {
     String output = null;
     try (StringReader templateReader = new StringReader(template)) {
-      Mustache mustache = mf.compile(templateReader, DEFAULT_TEMPLATE_NAME);
+      Mustache mustache = mf.compile(templateReader, templateName);
       try (StringWriter outputWriter = new StringWriter()) {
         mustache.execute(outputWriter, data);
         outputWriter.flush();
