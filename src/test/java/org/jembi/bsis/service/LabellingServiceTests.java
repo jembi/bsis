@@ -221,7 +221,7 @@ public class LabellingServiceTests extends UnitTestSuite {
       .thenReturn(discardLabelTemplateObject);
     when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.DISCARD_LABEL_ZPL))
       .thenReturn(generalConfig);
-    when(templateEngine.execute(generalConfig.getValue(), discardLabelTemplateObject))
+    when(templateEngine.execute(generalConfig.getName(),generalConfig.getValue(), discardLabelTemplateObject))
       .thenReturn("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber()
           + "^FX Component Type barcode^BY3,3,77^FT75,280^BCN,,Y,N^FD" + component.getComponentType().getComponentTypeCode()
           + "^FS^FX Service Info (line 1 and 2)^FT415,102^A0,20,14^FD" + discardLabelTemplateObject.config.serviceInfoLine1
@@ -267,7 +267,7 @@ public class LabellingServiceTests extends UnitTestSuite {
       .thenReturn(discardLabelTemplateObject);
     when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.DISCARD_LABEL_ZPL))
     .thenReturn(generalConfig);
-    when(templateEngine.execute(generalConfig.getValue(), discardLabelTemplateObject))
+    when(templateEngine.execute(generalConfig.getName(),generalConfig.getValue(), discardLabelTemplateObject))
     .thenReturn("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber());
 
     // run test
