@@ -9,24 +9,24 @@ public class PackLabelTemplateObject {
   public ComponentTypeTemplateObject componentType = new ComponentTypeTemplateObject();
 
   public class ComponentTemplateObject {
-    String componentCode, expiresOn, expiresOnISO;
-    Integer volume;
+    public String componentCode, expiresOn, expiresOnISO;
+    public Integer volume;
   }
 
   public class ConfigTemplateObject {
-    String serviceInfoLine1, serviceInfoLine2;
+    public String serviceInfoLine1, serviceInfoLine2;
   }
 
   public class DINPositioningTemplateObject {
-    int flagCharPos, boxPos, checkCharPos;
+    public int flagCharPos, boxPos, checkCharPos;
   }
 
   public class DonationTemplateObject {
-    String DIN, flagCharacters, checkCharacter, bloodABO, bloodRh, donationDate, donationDateISO;
-    boolean bloodPositive, bloodHighTitre;
+    public String DIN, flagCharacters, checkCharacter, bloodABO, bloodRh, donationDate, donationDateISO;
+    public boolean isBloodRhPositive, isBloodHighTitre;
   }
 
   public class ComponentTypeTemplateObject {
-    String componentTypeName, preparationInfo, storageInfo, transportInfo;
+    public String componentTypeName, preparationInfo, storageInfo, transportInfo;
   }
 }
