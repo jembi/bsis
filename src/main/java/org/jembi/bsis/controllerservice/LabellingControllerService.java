@@ -1,5 +1,6 @@
 package org.jembi.bsis.controllerservice;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -63,7 +64,7 @@ public class LabellingControllerService {
     return labellingService.printPackLabel(componentId);
   }
 
-  public String printDiscardLabel(UUID componentId) {
+  public String printDiscardLabel(UUID componentId) throws IOException {
     return labellingService.printDiscardLabel(componentId);
   }
   

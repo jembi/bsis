@@ -1,5 +1,6 @@
 package org.jembi.bsis.controller;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +86,11 @@ public class LabellingController {
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
   public ResponseEntity<Map<String, Object>> printDiscard(@PathVariable UUID componentId) {
     Map<String, Object> map = new HashMap<String, Object>();
-    map.put("labelZPL", labellingControllerService.printDiscardLabel(componentId));
+    try {
+      map.put("labelZPL", labellingControllerService.printDiscardLabel(componentId));
+    } catch (IOException e) {
+      return new ResponseEntity<Map<String, Object>>(map, HttpStatus.NOT_FOUND);
+    }
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
