@@ -7,7 +7,6 @@ import static org.jembi.bsis.helpers.builders.PackLabelTemplateObjectBuilder.aPa
 
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.jembi.bsis.template.TemplateEngine;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -77,9 +76,9 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
       + "^FT59,52^A0N,17,38^FH^FDDIN^FS"
       + "^BY2,3,82^FT61,144^BCN,,N,N,N,A^FD{{donation.DIN}}{{donation.flagCharacters}}^FS"
       + "^FT61,180^ADN,30,10^FH^FD{{donation.DIN}}^FS"
-      + "^FT{{dinPositioning.flagCharPos}},155^ADR,30,10^FH^FD{{donation.flagCharacters}}^FS"
-      + "^FO{{dinPositioning.boxPos}},148^GB30,38,3^FS"
-      + "^FT{{dinPositioning.checkCharPos}},180^ADN,27,14^FH^FD{{donation.checkCharacter}}^FS"
+      + "^FT{{DINPositioning.flagCharPos}},155^ADR,30,10^FH^FD{{donation.flagCharacters}}^FS"
+      + "^FO{{DINPositioning.boxPos}},148^GB30,38,3^FS"
+      + "^FT{{DINPositioning.checkCharPos}},180^ADN,27,14^FH^FD{{donation.checkCharacter}}^FS"
       + "^FX Collected On"
       + "^FT64,208^A0N,17,38^FDCollected On^FS"
       + "^BY2,3,84^FT64,305^BCN,,N,N^FD{{donation.donationDateISO}}^FS"
@@ -93,24 +92,24 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
       + "^BY3,3,80^FT445,147^BCN,,Y,N^FD{{donation.bloodABO}}{{donation.bloodRh}}^FS"
       + "^FX Blood ABO/Rh"
       + "^FT505,304^A0N,152,148^FB166,1,0,C^FD{{donation.bloodABO}}^FS"
-      + "{{#donation.bloodPositive}}"
+      + "{{#donation.isBloodRhPositive}}"
       + "  ^FT487,365^A0N,40,38^FB221,1,0,C^FH^FDRhD POSITIVE^FS"
-      + "{{/donation.bloodPositive}}"
-      + "{{^donation.bloodPositive}}"
+      + "{{/donation.isBloodRhPositive}}"
+      + "{{^donation.isBloodRhPositive}}"
       + "  ^FO482,326^GB233,50,50^FS"
       + "  ^FT482,363^A0N,40,38^FB233,1,0,C^FR^FH^FDRhD NEGATIVE^FS"
-      + "{{/donation.bloodPositive}}"
+      + "{{/donation.isBloodRhPositive}}"
       + "^FX High Titre"
-      + "{{#donation.bloodHighTitre}}"
+      + "{{#donation.isBloodHighTitre}}"
       + "  ^FT505,409^A0N,36,36,C^FR^FDHIGH TITRE^FS"
-      + "{{/donation.bloodHighTitre}}"
+      + "{{/donation.isBloodHighTitre}}"
       + "^FX NW quadrant"
       + "^FX -----------"
       + "^FX Component Code / Name"
       + "^BY3,3,77^FT64,535^BCN,,Y,N^FD{{component.componentCode}}^FS"
       + "^FT64,616^A0N,43,16^FD{{componentType.componentTypeName}}^FS"
       + "^FX Volume (optional)"
-      + "{{^component.volume}}"
+      + "{{#component.volume}}"
       + "^FT64,655^A0N,23,14^FDVolume: {{component.volume}}ml^FS"
       + "{{/component.volume}}"
       + "^FX Component Type information"
@@ -154,7 +153,6 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
     assertThat(actualOutput2, is(expectedOutput2));
   }
 
-  @Ignore("Will be fixed in BSIS-3375")
   @Test
   public void testExecuteWithDiscardLabelTemplate_shouldReturnDiscardLabel() throws Exception { 
     String componentTypeCode = "0011";
@@ -181,7 +179,6 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
     assertThat(actualOutput, is(expectedOutput));
   }
 
-  @Ignore("Will be fixed in BSIS-3375")
   @Test
   public void testExecuteWitPackLabelTemplate_shouldReturnPackLabelWithPositiveBlood() throws Exception {
     int flagCharPos = 147;
@@ -291,7 +288,6 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
     assertThat(actualOutput, is(expectedOutput));
   }
 
-  @Ignore("Will be fixed in BSIS-3375")
   @Test
   public void testExecuteWitPackLabelTemplate_shouldReturnPackLabelWithNegativeBlood() throws Exception {
     int flagCharPos = 147;
@@ -402,7 +398,6 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
     assertThat(actualOutput, is(expectedOutput));
   }
 
-  @Ignore("Will be fixed in BSIS-3375")
   @Test
   public void testExecuteWitPackLabelTemplate_shouldReturnPackLabelWithVolume() throws Exception {
     int flagCharPos = 147;
@@ -513,7 +508,6 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
     assertThat(actualOutput, is(expectedOutput));
   }
 
-  @Ignore("Will be fixed in BSIS-3375")
   @Test
   public void testExecuteWitPackLabelTemplate_shouldReturnPackLabelWithHighTitre() throws Exception {
     int flagCharPos = 147;

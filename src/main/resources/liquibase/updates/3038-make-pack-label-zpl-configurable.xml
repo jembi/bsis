@@ -2,7 +2,7 @@
   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-  <changeSet id="20170530-0957" author="timler">
+  <changeSet id="20170530-1414" author="timler">
     <comment>Adding PackLabel ZPL to GeneralConfig</comment>
     <delete tableName="GeneralConfig">
       <where>name = "packLabel.packLabelZPL"</where>
@@ -26,9 +26,9 @@
 ^FT59,52^A0N,17,38^FH^FDDIN^FS
 ^BY2,3,82^FT61,144^BCN,,N,N,N,A^FD{{donation.DIN}}{{donation.flagCharacters}}^FS
 ^FT61,180^ADN,30,10^FH^FD{{donation.DIN}}^FS
-^FT{{dinPositioning.flagCharPos}},155^ADR,30,10^FH^FD{{donation.flagCharacters}}^FS
-^FO{{dinPositioning.boxPos}},148^GB30,38,3^FS
-^FT{{dinPositioning.checkCharPos}},180^ADN,27,14^FH^FD{{donation.checkCharacter}}^FS
+^FT{{DINPositioning.flagCharPos}},155^ADR,30,10^FH^FD{{donation.flagCharacters}}^FS
+^FO{{DINPositioning.boxPos}},148^GB30,38,3^FS
+^FT{{DINPositioning.checkCharPos}},180^ADN,27,14^FH^FD{{donation.checkCharacter}}^FS
 
 ^FX Collected On
 ^FT64,208^A0N,17,38^FDCollected On^FS
@@ -47,18 +47,18 @@
 
 ^FX Blood ABO/Rh
 ^FT505,304^A0N,152,148^FB166,1,0,C^FD{{donation.bloodABO}}^FS
-{{#donation.bloodPositive}}
+{{#donation.isBloodRhPositive}}
   ^FT487,365^A0N,40,38^FB221,1,0,C^FH^FDRhD POSITIVE^FS
-{{/donation.bloodPositive}}
-{{^donation.bloodPositive}}
+{{/donation.isBloodRhPositive}}
+{{^donation.isBloodRhPositive}}
   ^FO482,326^GB233,50,50^FS
   ^FT482,363^A0N,40,38^FB233,1,0,C^FR^FH^FDRhD NEGATIVE^FS
-{{/donation.bloodPositive}}
+{{/donation.isBloodRhPositive}}
 
 ^FX High Titre
-{{#donation.bloodHighTitre}}
+{{#donation.isBloodHighTitre}}
   ^FT505,409^A0N,36,36,C^FR^FDHIGH TITRE^FS
-{{/donation.bloodHighTitre}}
+{{/donation.isBloodHighTitre}}
 
 ^FX NW quadrant
 ^FX -----------
@@ -68,7 +68,7 @@
 ^FT64,616^A0N,43,16^FD{{componentType.componentTypeName}}^FS
 
 ^FX Volume (optional)
-{{^component.volume}}
+{{#component.volume}}
 ^FT64,655^A0N,23,14^FDVolume: {{component.volume}}ml^FS
 {{/component.volume}}
 
