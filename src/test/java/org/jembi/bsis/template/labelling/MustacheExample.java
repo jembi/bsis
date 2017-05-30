@@ -1,6 +1,6 @@
 package org.jembi.bsis.template.labelling;
 
-public class ExampleTemplateObject {
+public class MustacheExample {
   public boolean showIdNumber;
   public boolean doNotShowGender;
   public DonorTemplateObject donor = new DonorTemplateObject();
