@@ -1,4 +1,4 @@
-package org.jembi.bsis.template.labelling;
+package org.jembi.bsis.template;
 
 import java.io.IOException;
 import java.io.StringReader;

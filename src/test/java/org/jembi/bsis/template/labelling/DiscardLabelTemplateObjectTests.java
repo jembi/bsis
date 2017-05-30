@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DiscardLabelTemplateObjectBuilder.aDiscardLabelTemplateObject;
 
 import org.jembi.bsis.suites.ContextDependentTestSuite;
+import org.jembi.bsis.template.TemplateEngine;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.not;
 import static org.jembi.bsis.template.labelling.ExampleTemplateObjectBuilder.anExampleTemplateObjectBuilder;
 
 import org.jembi.bsis.suites.ContextDependentTestSuite;
+import org.jembi.bsis.template.TemplateEngine;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
