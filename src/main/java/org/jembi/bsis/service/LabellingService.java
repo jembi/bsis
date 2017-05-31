@@ -211,8 +211,7 @@ public class LabellingService {
 
     DiscardLabelTemplateObject discardLabelTemplateObject = templateObjectFactory.createDiscardLabelTemplateObject(component);
     GeneralConfig discardLabelTemplate = generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.DISCARD_LABEL_ZPL);
-    String discardLabelZPL = templateEngine.execute("DISCARD_LABEL_TEMPLATE_NAME", discardLabelTemplate.getValue(),
-        discardLabelTemplateObject);
+    String discardLabelZPL = templateEngine.execute(discardLabelTemplate.getName(), discardLabelTemplate.getValue(), discardLabelTemplateObject);
     return DATA_LINK_ESCAPE + discardLabelZPL;
   }
   
