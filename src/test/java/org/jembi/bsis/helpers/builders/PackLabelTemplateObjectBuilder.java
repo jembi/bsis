@@ -178,6 +178,7 @@ public class PackLabelTemplateObjectBuilder extends AbstractBuilder<PackLabelTem
     template.donation.bloodABO = bloodABO;
     template.donation.bloodRh = bloodRh;
     template.donation.isBloodRhPositive = isBloodRhPositive;
+    template.donation.isBloodRhNegative = isBloodRhNegative;
     template.donation.isBloodHighTitre = isBloodHighTitre;
     template.donation.donationDate = donationDate;
     template.donation.donationDateISO = donationDateISO;
