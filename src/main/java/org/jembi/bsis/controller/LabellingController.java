@@ -65,7 +65,7 @@ public class LabellingController {
 
   @RequestMapping(value = "/print/packlabel/{componentId}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> printLabel(@PathVariable UUID componentId) {
+  public ResponseEntity<Map<String, Object>> printLabel(@PathVariable UUID componentId) throws IOException {
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("labelZPL", labellingControllerService.printPackLabel(componentId));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);

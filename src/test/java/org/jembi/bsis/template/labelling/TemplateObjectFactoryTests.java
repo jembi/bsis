@@ -298,4 +298,136 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
     // Verify
     assertThat(actualResult, hasSameStateAsPackLabelTemplateObject(expectedResult));
   }
+
+  @Test
+  public void testCreatePackLabelTemplateObjectWithHighBloodTitreButNotPlasma_shouldReturnAPackLabelTemplateObject()
+      throws ParseException {
+    // Set up fixture
+    int flagCharPos = 123;
+    int boxPos = 153;
+    int checkCharPos = 162;
+    String DIN = "12345";
+    String bloodABO = "O";
+    String bloodRh = "-";
+    String donationDate = "2017/05/29";
+    String donationDateISO = "2017-05-29";
+    String componentCode = "1001";
+    String expiresOn = "2017/05/29 00:30:00";
+    String expiresOnISO = "2017-05-29";
+    String componentTypeName = "Fresh Frozen Fish";
+    Date expiresOnDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(expiresOn);
+    Date donationDateDate = new SimpleDateFormat("yyyy/MM/dd").parse(donationDate);
+
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber(DIN)
+        .withBloodAbo(bloodABO)
+        .withBloodRh(bloodRh)
+        .withDonationDate(donationDateDate)
+        .withTitre(Titre.HIGH)
+        .build();
+
+    Component component = aComponent()
+        .withComponentCode(componentCode)
+        .withExpiresOn(expiresOnDate)
+        .withDonation(donation)
+        .withComponentType(aComponentType()
+            .withComponentTypeName(componentTypeName)
+            .thatDoesntContainsPlasma()
+            .build())
+        .build();
+
+    PackLabelTemplateObject expectedResult = aPackLabelTemplateObject()
+        .withFlagCharPos(flagCharPos)
+        .withBoxPos(boxPos)
+        .withCheckCharPos(checkCharPos)
+        .withDIN(DIN)
+        .withBloodABO(bloodABO)
+        .withBloodRh(bloodRh)
+        .thatIsNotBloodRhPositive()
+        .thatIsBloodRhNegative()
+        .thatIsNotBloodHighTitre()
+        .withDonationDate(donationDate)
+        .withDonationDateISO(donationDateISO)
+        .withComponentCode(componentCode)
+        .withExpiresOn(expiresOn)
+        .withExpiresOnISO(expiresOnISO)
+        .withComponentTypeName(componentTypeName)
+        .build();
+
+    when(generalConfigAccessorService.getGeneralConfigValueByName("dateFormat")).thenReturn("yyyy/MM/dd");
+    when(generalConfigAccessorService.getGeneralConfigValueByName("dateTimeFormat")).thenReturn("yyyy/MM/dd HH:mm:ss");
+    when(componentVolumeService.calculateVolume(component)).thenReturn(null);
+
+    // Exercise SUT
+    PackLabelTemplateObject actualResult = templateObjectFactory.createPackLabelTemplateObject(component);
+
+    // Verify
+    assertThat(actualResult, hasSameStateAsPackLabelTemplateObject(expectedResult));
+  }
+
+  @Test
+  public void testCreatePackLabelTemplateObjectWithHighBloodTitreButNotOBlood_shouldReturnAPackLabelTemplateObject() throws ParseException {
+    // Set up fixture
+    int flagCharPos = 123;
+    int boxPos = 153;
+    int checkCharPos = 162;
+    String DIN = "12345";
+    String bloodABO = "A";
+    String bloodRh = "-";
+    String donationDate = "2017/05/29";
+    String donationDateISO = "2017-05-29";
+    String componentCode = "1001";
+    String componentTypeName = "Fresh Frozen Fish";
+    String expiresOn = "2017/05/29 00:30:00";
+    String expiresOnISO = "2017-05-29";
+
+    Date expiresOnDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(expiresOn);
+    Date donationDateDate = new SimpleDateFormat("yyyy/MM/dd").parse(donationDate);
+
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber(DIN)
+        .withBloodAbo(bloodABO)
+        .withBloodRh(bloodRh)
+        .withDonationDate(donationDateDate)
+        .withTitre(Titre.HIGH)
+        .build();
+
+    Component component = aComponent()
+        .withComponentCode(componentCode)
+        .withDonation(donation)
+        .withExpiresOn(expiresOnDate)
+        .withComponentType(aComponentType()
+            .withComponentTypeName(componentTypeName)
+            .thatContainsPlasma()
+            .build())
+        .build();
+
+    PackLabelTemplateObject expectedResult = aPackLabelTemplateObject()
+        .withFlagCharPos(flagCharPos)
+        .withBoxPos(boxPos)
+        .withCheckCharPos(checkCharPos)
+        .withDIN(DIN)
+        .withBloodABO(bloodABO)
+        .withBloodRh(bloodRh)
+        .thatIsNotBloodRhPositive()
+        .thatIsBloodRhNegative()
+        .thatIsNotBloodHighTitre()
+        .withDonationDate(donationDate)
+        .withDonationDateISO(donationDateISO)
+        .withComponentCode(componentCode)
+        .withExpiresOn(expiresOn)
+        .withExpiresOnISO(expiresOnISO)
+        .withComponentTypeName(componentTypeName)
+        .build();
+
+    when(generalConfigAccessorService.getGeneralConfigValueByName("dateFormat")).thenReturn("yyyy/MM/dd");
+    when(generalConfigAccessorService.getGeneralConfigValueByName("dateTimeFormat")).thenReturn("yyyy/MM/dd HH:mm:ss");
+    when(componentVolumeService.calculateVolume(component)).thenReturn(null);
+
+    // Exercise SUT
+    PackLabelTemplateObject actualResult = templateObjectFactory.createPackLabelTemplateObject(component);
+
+    // Verify
+    assertThat(actualResult, hasSameStateAsPackLabelTemplateObject(expectedResult));
+  }
 }

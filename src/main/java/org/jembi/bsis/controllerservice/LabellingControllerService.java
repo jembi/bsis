@@ -60,7 +60,7 @@ public class LabellingControllerService {
     return labellingFactory.createViewModels(components);
   }
 
-  public String printPackLabel(UUID componentId) {
+  public String printPackLabel(UUID componentId) throws IOException {
     return labellingService.printPackLabel(componentId);
   }
 
