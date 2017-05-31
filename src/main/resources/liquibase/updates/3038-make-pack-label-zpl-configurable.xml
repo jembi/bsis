@@ -50,10 +50,10 @@
 {{#donation.isBloodRhPositive}}
   ^FT487,365^A0N,40,38^FB221,1,0,C^FH^FDRhD POSITIVE^FS
 {{/donation.isBloodRhPositive}}
-{{^donation.isBloodRhPositive}}
+{{#donation.isBloodRhNegative}}
   ^FO482,326^GB233,50,50^FS
   ^FT482,363^A0N,40,38^FB233,1,0,C^FR^FH^FDRhD NEGATIVE^FS
-{{/donation.isBloodRhPositive}}
+{{/donation.isBloodRhNegative}}
 
 ^FX High Titre
 {{#donation.isBloodHighTitre}}
