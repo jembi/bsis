@@ -195,49 +195,6 @@ public class LabellingServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void testPrintDiscardLabel_shouldReturnZPLContainingText() throws Exception {
-    // set up data
-    Component component = aComponent()
-        .withId(COMPONENT_ID)
-        .withStatus(ComponentStatus.EXPIRED)
-        .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
-        .build();
-    DiscardLabelTemplateObject discardLabelTemplateObject = aDiscardLabelTemplateObject()
-        .withServiceInfoLine1("Line 1")
-        .withServiceInfoLine2("Line 2")
-        .build();
-    GeneralConfig generalConfig = aGeneralConfig()
-        .withName(GeneralConfigConstants.DISCARD_LABEL_ZPL)
-        .withValue("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD{{donation.DIN}}"
-            + "^FX Component Type barcode^BY3,3,77^FT75,280^BCN,,Y,N^FD{{componentType.componentTypeCode}}"
-            + "^FS^FX Service Info (line 1 and 2)^FT415,102^A0,20,14^FD{{config.serviceInfoLine1}}"
-            + "^FS^FT416,133^A0N,20,14^FD{{config.serviceInfoLine2}}FS^XZ")
-        .build();
-
-    // set up mocks
-    when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
-    when(labellingConstraintChecker.canPrintDiscardLabel(component)).thenReturn(true);
-    when(templateObjectFactory.createDiscardLabelTemplateObject(argThat(hasSameStateAsComponent(component))))
-      .thenReturn(discardLabelTemplateObject);
-    when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.DISCARD_LABEL_ZPL))
-      .thenReturn(generalConfig);
-    when(templateEngine.execute("DISCARD_LABEL_TEMPLATE_NAME", generalConfig.getValue(), discardLabelTemplateObject))
-      .thenReturn("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber()
-          + "^FX Component Type barcode^BY3,3,77^FT75,280^BCN,,Y,N^FD" + component.getComponentType().getComponentTypeCode()
-          + "^FS^FX Service Info (line 1 and 2)^FT415,102^A0,20,14^FD" + discardLabelTemplateObject.config.serviceInfoLine1
-          + "^FS^FT416,133^A0N,20,14^FD" + discardLabelTemplateObject.config.serviceInfoLine2 + "FS^XZ");
-  
-    
-    // run test
-    String label = labellingService.printDiscardLabel(COMPONENT_ID);
-    
-    // check outcome
-    assertThat(label, label.contains("3001"));
-    assertThat(label, label.contains("Line 1"));
-    assertThat(label, label.contains("Line 2"));
-  }
-
-  @Test
   public void testPrintDiscardLabel_shouldReturnZPLContainingDin() throws Exception {
     // set up data
     String donationIdentificationNumber = "1234567";
@@ -267,7 +224,7 @@ public class LabellingServiceTests extends UnitTestSuite {
       .thenReturn(discardLabelTemplateObject);
     when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.DISCARD_LABEL_ZPL))
     .thenReturn(generalConfig);
-    when(templateEngine.execute("DISCARD_LABEL_TEMPLATE_NAME", generalConfig.getValue(), discardLabelTemplateObject))
+    when(templateEngine.execute(generalConfig.getName(), generalConfig.getValue(), discardLabelTemplateObject))
     .thenReturn("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber());
 
     // run test

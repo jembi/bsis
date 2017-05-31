@@ -84,13 +84,9 @@ public class LabellingController {
 
   @RequestMapping(value = "/print/discardlabel/{componentId}", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.LABEL_COMPONENT + "')")
-  public ResponseEntity<Map<String, Object>> printDiscard(@PathVariable UUID componentId) {
+  public ResponseEntity<Map<String, Object>> printDiscard(@PathVariable UUID componentId) throws IOException {
     Map<String, Object> map = new HashMap<String, Object>();
-    try {
-      map.put("labelZPL", labellingControllerService.printDiscardLabel(componentId));
-    } catch (IOException e) {
-      return new ResponseEntity<Map<String, Object>>(map, HttpStatus.NOT_FOUND);
-    }
+    map.put("labelZPL", labellingControllerService.printDiscardLabel(componentId));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
   }
 
