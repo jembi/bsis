@@ -192,13 +192,14 @@ public class LabellingServiceTests extends UnitTestSuite {
         .withComponentType(ComponentTypeBuilder.aComponentType().withComponentTypeCode("3001").build())
         .build();
     DiscardLabelTemplateObject discardLabelTemplateObject = aDiscardLabelTemplateObject()
-        .withServiceInfoLine1("Line 1")
-        .withServiceInfoLine2("Line 2")
+        .withDIN(donationIdentificationNumber)
         .build();
     GeneralConfig generalConfig = aGeneralConfig()
         .withName(GeneralConfigConstants.DISCARD_LABEL_ZPL)
         .withValue("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD{{donation.DIN}}")
         .build();
+    String discardLabelZpl = "CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber();
+    String expectedDiscardLabelZpl = LabellingService.DATA_LINK_ESCAPE + discardLabelZpl;
 
     // set up mocks
     when(componentCRUDService.findComponentById(COMPONENT_ID)).thenReturn(component);
@@ -206,15 +207,15 @@ public class LabellingServiceTests extends UnitTestSuite {
     when(templateObjectFactory.createDiscardLabelTemplateObject(argThat(hasSameStateAsComponent(component))))
       .thenReturn(discardLabelTemplateObject);
     when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.DISCARD_LABEL_ZPL))
-    .thenReturn(generalConfig);
+      .thenReturn(generalConfig);
     when(templateEngine.execute(generalConfig.getName(), generalConfig.getValue(), discardLabelTemplateObject))
-    .thenReturn("CT~~CD,~CC^~CT~^XA^FX DIN barcode^BY3,3,77^FT75,140^BCN,,Y,N^FD" + component.getDonationIdentificationNumber());
+      .thenReturn(discardLabelZpl);
 
     // run test
     String label = labellingService.printDiscardLabel(COMPONENT_ID);
 
     // check outcome
-    assertThat(label, label.contains(donationIdentificationNumber));
+    assertThat(label, is(expectedDiscardLabelZpl));
   }
   
   @Test(expected = IllegalArgumentException.class)
