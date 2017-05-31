@@ -300,6 +300,112 @@ public class TemplateObjectFactoryTests extends UnitTestSuite {
   }
 
   @Test
+  public void testCreatePackLabelTemplateObjectWithLowBloodTitreAndONegBlood_shouldReturnAPackLabelTemplateObject()
+      throws ParseException {
+    // Set up fixture
+    int flagCharPos = 123;
+    int boxPos = 153;
+    int checkCharPos = 162;
+
+    String serviceInfoLine1 = "service info line 1";
+    String serviceInfoLine2 = "service info line 2";
+
+    String DIN = "12345";
+    String flagCharacters = "21";
+    String checkCharacter = "A";
+    String bloodABO = "O";
+    String bloodRh = "-";
+    String donationDate = "2017/05/29";
+    String donationDateISO = "2017-05-29";
+
+    String componentCode = "1001";
+    String expiresOn = "2017/05/29 00:30:00";
+    String expiresOnISO = "2017-05-29";
+    Integer volume = 40;
+
+    String componentTypeName = "Fresh Frozen Fish";
+    String preparationInfo = "Shaken not stirred";
+    String storageInfo = "Cold Storage";
+    String transportInfo = "Rocket Launch";
+
+    Date expiresOnDate = null;
+    Date donationDateDate = null;
+
+    expiresOnDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(expiresOn);
+    donationDateDate = new SimpleDateFormat("yyyy/MM/dd").parse(donationDate);
+
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber(DIN)
+        .withFlagCharacters(flagCharacters)
+        .withBloodAbo(bloodABO)
+        .withBloodRh(bloodRh)
+        .withDonationDate(donationDateDate)
+        .withTitre(Titre.LOW)
+        .build();
+
+    Component component = aComponent()
+        .withComponentCode(componentCode)
+        .withExpiresOn(expiresOnDate)
+        .withDonation(donation)
+        .withComponentType(aComponentType()
+            .withComponentTypeName(componentTypeName)
+            .withPreparationInfo(preparationInfo)
+            .withStorageInfo(storageInfo)
+            .withTransportInfo(transportInfo)
+            .thatContainsPlasma()
+            .build())
+        .build();
+
+    PackLabelTemplateObject expectedResult = aPackLabelTemplateObject()
+        .withServiceInfoLine1(serviceInfoLine1)
+        .withServiceInfoLine2(serviceInfoLine2)
+        .withFlagCharPos(flagCharPos)
+        .withBoxPos(boxPos)
+        .withCheckCharPos(checkCharPos)
+        .withDIN(DIN)
+        .withFlagCharacters(flagCharacters)
+        .withCheckCharacter(checkCharacter)
+        .withBloodABO(bloodABO)
+        .withBloodRh(bloodRh)
+        .thatIsNotBloodRhPositive()
+        .thatIsBloodRhNegative()
+        .thatIsNotBloodHighTitre()
+        .withDonationDate(donationDate)
+        .withDonationDateISO(donationDateISO)
+        .withComponentCode(componentCode)
+        .withExpiresOn(expiresOn)
+        .withExpiresOnISO(expiresOnISO)
+        .withVolume(volume)
+        .withComponentTypeName(componentTypeName)
+        .withPreparationInfo(preparationInfo)
+        .withStorageInfo(storageInfo)
+        .withTransportInfo(transportInfo)
+        .build();
+
+    when(generalConfigAccessorService.getGeneralConfigValueByName(
+        GeneralConfigConstants.SERVICE_INFO_LINE_1))
+      .thenReturn(serviceInfoLine1);
+
+    when(generalConfigAccessorService.getGeneralConfigValueByName(
+        GeneralConfigConstants.SERVICE_INFO_LINE_2))
+      .thenReturn(serviceInfoLine2);
+
+    when(generalConfigAccessorService.getGeneralConfigValueByName("dateFormat")).thenReturn("yyyy/MM/dd");
+
+    when(generalConfigAccessorService.getGeneralConfigValueByName("dateTimeFormat")).thenReturn("yyyy/MM/dd HH:mm:ss");
+
+    when(componentVolumeService.calculateVolume(component)).thenReturn(volume);
+
+    when(checkCharacterService.calculateCheckCharacter(flagCharacters)).thenReturn(checkCharacter);
+
+    // Exercise SUT
+    PackLabelTemplateObject actualResult = templateObjectFactory.createPackLabelTemplateObject(component);
+
+    // Verify
+    assertThat(actualResult, hasSameStateAsPackLabelTemplateObject(expectedResult));
+  }
+
+  @Test
   public void testCreatePackLabelTemplateObjectWithHighBloodTitreButNotPlasma_shouldReturnAPackLabelTemplateObject()
       throws ParseException {
     // Set up fixture
