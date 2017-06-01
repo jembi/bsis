@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheException;
 import com.github.mustachejava.MustacheFactory;
 
 /**
@@ -16,6 +18,8 @@ import com.github.mustachejava.MustacheFactory;
  */
 @Service
 public class TemplateEngine {
+
+  private static final Logger LOGGER = Logger.getLogger(TemplateEngine.class);
 
   MustacheFactory mf = new DefaultMustacheFactory();
 
@@ -31,11 +35,16 @@ public class TemplateEngine {
   public String execute(String templateName, String template, Object data) throws IOException {
     String output = null;
     try (StringReader templateReader = new StringReader(template)) {
-      Mustache mustache = mf.compile(templateReader, templateName);
-      try (StringWriter outputWriter = new StringWriter()) {
-        mustache.execute(outputWriter, data);
-        outputWriter.flush();
-        output = outputWriter.toString();
+      try {
+        Mustache mustache = mf.compile(templateReader, templateName);
+        try (StringWriter outputWriter = new StringWriter()) {
+            mustache.execute(outputWriter, data);
+            outputWriter.flush();
+            output = outputWriter.toString();
+        }
+      } catch (MustacheException e) {
+        LOGGER.error("Error thrown while parsing or executing template '" + templateName + "'", e);
+        output = "";
       }
     }
     return output;

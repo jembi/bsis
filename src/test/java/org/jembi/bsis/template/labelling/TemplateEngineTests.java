@@ -154,6 +154,118 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
   }
 
   @Test
+  public void testExecuteWithTemplateThatContainsUnknownVariable_shouldIgnoreUnknownVariable() throws Exception { 
+    String serviceInfoLine1 = "Info1";
+    String serviceInfoLine2 = "Info2";
+
+    String template1 = "{{config.serviceInfoLine1}} {{config.serviceInfoLine2}} {{config.serviceInfoLine3}}";
+
+    String expectedOutput = "Info1 Info2 ";
+
+    DiscardLabelTemplateObject data = aDiscardLabelTemplateObject()
+        .withServiceInfoLine1(serviceInfoLine1)
+        .withServiceInfoLine2(serviceInfoLine2)
+        .build();
+
+    String actualOutput = templateEngine.execute("discardLabel", template1, data);
+    assertThat(actualOutput, is(expectedOutput));
+  }
+
+  @Test
+  public void testExecuteWithTemplateThatContainsBadlyFormattedVariable1_shouldIgnoreBadFormatVariable() throws Exception { 
+    String serviceInfoLine1 = "Info1";
+    String serviceInfoLine2 = "Info2";
+
+    String template1 = "{{config.serviceInfoLine1}} {config.serviceInfoLine2}";
+
+    String expectedOutput = "Info1 {config.serviceInfoLine2}";
+
+    DiscardLabelTemplateObject data = aDiscardLabelTemplateObject()
+        .withServiceInfoLine1(serviceInfoLine1)
+        .withServiceInfoLine2(serviceInfoLine2)
+        .build();
+
+    String actualOutput = templateEngine.execute("discardLabel", template1, data);
+    assertThat(actualOutput, is(expectedOutput));
+  }
+
+  @Test
+  public void testExecuteWithTemplateThatContainsBadlyFormattedVariable2_shouldIgnoreBadFormatVariable() throws Exception { 
+    String serviceInfoLine1 = "Info1";
+    String serviceInfoLine2 = "Info2";
+
+    String template1 = "{{config.serviceInfoLine1 {{config.serviceInfoLine2}}";
+
+    String expectedOutput = "";
+
+    DiscardLabelTemplateObject data = aDiscardLabelTemplateObject()
+        .withServiceInfoLine1(serviceInfoLine1)
+        .withServiceInfoLine2(serviceInfoLine2)
+        .build();
+
+    String actualOutput = templateEngine.execute("discardLabel", template1, data);
+    assertThat(actualOutput, is(expectedOutput));
+  }
+
+  @Test
+  public void testExecuteWithTemplateThatContainsBadlyFormattedVariable3_shouldIgnoreBadFormatVariable() throws Exception { 
+    String serviceInfoLine1 = "Info1";
+    String serviceInfoLine2 = "Info2";
+
+    String template1 = "{{config.#serviceInfoLine1}} {{config.serviceInfoLine2}}";
+
+    String expectedOutput = " Info2";
+
+    DiscardLabelTemplateObject data = aDiscardLabelTemplateObject()
+        .withServiceInfoLine1(serviceInfoLine1)
+        .withServiceInfoLine2(serviceInfoLine2)
+        .build();
+
+    String actualOutput = templateEngine.execute("discardLabel", template1, data);
+    assertThat(actualOutput, is(expectedOutput));
+  }
+
+  @Test
+  public void testExecuteWithTemplateThatContainsBadlyFormattedVariable4_shouldIgnoreBadFormatVariable() throws Exception { 
+    String serviceInfoLine1 = "Info1";
+    String serviceInfoLine2 = "Info2";
+
+    String template1 = "{{%config.serviceInfoLine1}} {{config.serviceInfoLine2}}";
+
+    String expectedOutput = " Info2";
+
+    DiscardLabelTemplateObject data = aDiscardLabelTemplateObject()
+        .withServiceInfoLine1(serviceInfoLine1)
+        .withServiceInfoLine2(serviceInfoLine2)
+        .build();
+
+    String actualOutput = templateEngine.execute("discardLabel", template1, data);
+    assertThat(actualOutput, is(expectedOutput));
+  }
+
+  @Test
+  public void testExecuteWithTemplateThatHasAMissingEndTag_shouldIgnoreNoMissingTag() throws Exception { 
+    String serviceInfoLine1 = "Info1";
+    String serviceInfoLine2 = "Info2";
+
+    String template1 = "{{#config.serviceInfoLine1}} {{config.serviceInfoLine2}}";
+
+    String expectedOutput = "";
+
+    DiscardLabelTemplateObject data = aDiscardLabelTemplateObject()
+        .withServiceInfoLine1(serviceInfoLine1)
+        .withServiceInfoLine2(serviceInfoLine2)
+        .build();
+
+    String actualOutput = templateEngine.execute("discardLabel", template1, data);
+
+    // note that MustacheException is thrown
+    // > com.github.mustachejava.MustacheException: Failed to close 'config.serviceInfoLine1' tag at line 1
+    // but it is caught, logged, and an empty string is returned.
+    assertThat(actualOutput, is(expectedOutput));
+  }
+
+  @Test
   public void testExecuteWithDiscardLabelTemplate_shouldReturnDiscardLabel() throws Exception { 
     String componentTypeCode = "0011";
     String DIN = "3000600";
