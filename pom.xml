@@ -265,8 +265,8 @@
         </dependency>
         <dependency>
             <groupId>com.mchange</groupId>
-            <artifactId>mchange-commons-java</artifactId>
-            <version>0.2.3.3</version>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.2.1</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -382,8 +382,8 @@
         </dependency>
         <dependency>
             <groupId>com.mchange</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>0.9.2.1</version>
+            <artifactId>mchange-commons-java</artifactId>
+            <version>0.2.3.3</version>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
@@ -529,6 +529,11 @@
           <groupId>org.apache.commons</groupId>
           <artifactId>commons-csv</artifactId>
           <version>1.4</version>
+        </dependency>
+        <dependency>
+          <groupId>com.github.spullara.mustache.java</groupId>
+          <artifactId>compiler</artifactId>
+          <version>0.8.18</version>
         </dependency>
     </dependencies>
 </project>
