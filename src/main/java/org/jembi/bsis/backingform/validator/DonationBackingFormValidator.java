@@ -237,14 +237,14 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
 
         // Check if the next allowed donation date is after today
         if (nextDonationDate.isAfter(new DateTime().withTimeAtStartOfDay())) {
-          errors.rejectValue("donation.donor", "donor.donationBeforeNextAllowedDate", "Selected donation Date is before donor's next allowed donation date");
+          errors.rejectValue("donation.donor", "invalid.donationBeforeNextAllowedDate", "Selected donation Date is before donor's next allowed donation date");
         }
       }
     }
 
     // Check if the donor is deferred
     if (donor != null && donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())) {
-      errors.rejectValue("donation.donor", "donor.deferred", "Donor is currently deferred");
+      errors.rejectValue("donation.donor", "invalid.donorDeferred", "Donor is currently deferred");
     }
   }
   
