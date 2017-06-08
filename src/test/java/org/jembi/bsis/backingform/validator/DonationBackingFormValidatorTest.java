@@ -556,7 +556,7 @@ public class DonationBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("Error exist", 1, errors.getErrorCount());
-    Assert.assertEquals(errors.getFieldError("donation.donor").getCode(), "invalid.donationBeforeNextAllowedDate");
+    Assert.assertEquals(errors.getFieldError("donation.donor").getCode(), "errors.invalid.donationBeforeNextAllowedDate");
     Assert.assertEquals(errors.getFieldError("donation.donor").getDefaultMessage(), "Selected donation Date is before donor's next allowed donation date");
   }
 
@@ -580,7 +580,7 @@ public class DonationBackingFormValidatorTest {
 
     // check asserts
     Assert.assertEquals("Error exist", 1, errors.getErrorCount());
-    Assert.assertEquals(errors.getFieldError("donation.donor").getCode(), "invalid.donorDeferred");
+    Assert.assertEquals(errors.getFieldError("donation.donor").getCode(), "errors.invalid.donorDeferred");
     Assert.assertEquals(errors.getFieldError("donation.donor").getDefaultMessage(), "Donor is currently deferred");
   }
 
