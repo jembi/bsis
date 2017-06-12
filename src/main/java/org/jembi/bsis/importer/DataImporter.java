@@ -80,7 +80,9 @@ public class DataImporter {
       System.exit(1);
     } finally {
       if (fileInputStream != null) {
-        fileInputStream.close();
+        try {
+          fileInputStream.close();
+        } catch(IOException ioException) { }
       }
     }
     
