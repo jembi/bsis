@@ -63,9 +63,7 @@ public class DataImporter {
     SecurityContextHolder.getContext().setAuthentication(auth);
 
     // Read spreadsheet and import the data
-    FileInputStream fileInputStream = null;
-    try {
-      fileInputStream = new FileInputStream(args[0]);
+    try (FileInputStream fileInputStream = new FileInputStream(args[0])) {
       Workbook workbook = WorkbookFactory.create(fileInputStream);
       importService.importData(workbook, validationOnly);
     } catch (DataImportService.RollbackException e) {
@@ -78,12 +76,6 @@ public class DataImporter {
       System.err.println(action + " failed");
       e.printStackTrace();
       System.exit(1);
-    } finally {
-      if (fileInputStream != null) {
-        try {
-          fileInputStream.close();
-        } catch(IOException ioException) { }
-      }
     }
     
     // Close the application context
