@@ -5,10 +5,6 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DiscardLabelTemplateObjectBuilder.aDiscardLabelTemplateObject;
 import static org.jembi.bsis.helpers.builders.PackLabelTemplateObjectBuilder.aPackLabelTemplateObject;
 
-import java.io.IOException;
-import java.util.HashMap;
-
-import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.jembi.bsis.template.TemplateEngine;
 import org.junit.Test;
@@ -18,8 +14,6 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
 
   @Autowired
   private TemplateEngine templateEngine;
-  @Autowired
-  private GeneralConfigAccessorService generalConfigAccessorService;
 
   private String discardLabelTemplate = "CT~~CD,~CC^~CT~"
       + "^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD15^JUS^LRN^CI28^XZ"
@@ -729,39 +723,6 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
 
     String actualOutput = templateEngine.execute("packLabel", packLabelTemplate, data);
 
-    assertThat(actualOutput, is(expectedOutput));
-  }
-  
-  @Test
-  public void testExecuteWithTemplateAndHashMap_shouldReturnEmailSubject() throws IOException {
-    String template = "{{email.resetPassword.subject}}";
-    String expectedOutput = "BSIS Password Reset";
-    HashMap<String, String> map = new HashMap<>(); 
-    map.put("email.resetPassword.subject", "BSIS Password Reset");
-    
-    String actualOutput = templateEngine.execute(template, map);
-    assertThat(actualOutput, is(expectedOutput));
-  }
-  
-  @Test
-  public void testExecuteWithTemplateAndHashMap_shouldReturnEmailMessage() throws IOException {
-    String template = "{{email.resetPassword.message}}";
-    String expectedOutput = "Your password has been reset to {{password}}. You will be required to change it next time you log in.";
-    HashMap<String, String> map = new HashMap<>(); 
-    map.put("email.resetPassword.message", "Your password has been reset to {{password}}. You will be required to change it next time you log in.");
-    
-    String actualOutput = templateEngine.execute(template, map);
-    assertThat(actualOutput, is(expectedOutput));
-  }
-  
-  @Test
-  public void testExecuteWithInvalidTemplateAndHashMap_shouldReturnEmailMessage() throws IOException {
-    String template = "{{email.resetPassword.invalid}}";
-    String expectedOutput = "";
-    HashMap<String, String> map = new HashMap<>(); 
-    map.put("email.resetPassword.message", "");
-    
-    String actualOutput = templateEngine.execute(template, map);
     assertThat(actualOutput, is(expectedOutput));
   }
 }
