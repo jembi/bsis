@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DiscardLabelTemplateObjectBuilder.aDiscardLabelTemplateObject;
 import static org.jembi.bsis.helpers.builders.PackLabelTemplateObjectBuilder.aPackLabelTemplateObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.jembi.bsis.suites.ContextDependentTestSuite;
@@ -730,7 +729,7 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
   }
   
   @Test
-  public void testExecuteWithTemplateAndHashMap_shouldReturnEmailSubject() throws IOException {
+  public void testExecuteWithTemplateAndHashMap_shouldReturnEmailSubject() throws Exception {
     String template = "{{email.resetPassword.subject}}";
     String expectedOutput = "BSIS Password Reset";
     HashMap<String, String> map = new HashMap<>();
@@ -741,7 +740,7 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
   }
   
   @Test
-  public void testExecuteWithTemplateAndHashMap_shouldReturnEmailMessage() throws IOException {
+  public void testExecuteWithTemplateAndHashMap_shouldReturnEmailMessage() throws Exception {
     String template = "{{email.resetPassword.message}}";
     String expectedOutput =
         "Your password has been reset to 1234. You will be required to change it next time you log in.";
@@ -753,7 +752,7 @@ public class TemplateEngineTests extends ContextDependentTestSuite {
   }
   
   @Test
-  public void testExecuteWithInvalidTemplateAndHashMap_shouldReturnEmailMessage() throws IOException {
+  public void testExecuteWithInvalidTemplateAndHashMap_shouldReturnEmailMessage() throws Exception {
     String template = "{{email.resetPassword.invalid}}";
     String expectedOutput = "";
     HashMap<String, String> map = new HashMap<>();
