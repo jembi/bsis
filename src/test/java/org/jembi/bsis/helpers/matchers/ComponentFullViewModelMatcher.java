@@ -4,31 +4,28 @@ import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 
-public class ComponentFullViewModelMatcher extends TypeSafeMatcher<ComponentFullViewModel> {
-
-  private ComponentFullViewModel expected;
+public class ComponentFullViewModelMatcher extends AbstractTypeSafeMatcher<ComponentFullViewModel> {
 
   public ComponentFullViewModelMatcher(ComponentFullViewModel expected) {
     this.expected = expected;
   }
 
   @Override
-  public void describeTo(Description description) {
+  public void appendDescription(Description description, ComponentFullViewModel model) {
     description.appendText("A ComponentViewModel with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nComponentCode: ").appendValue(expected.getComponentCode())
-        .appendText("\nComponentType: ").appendValue(expected.getComponentType())
-        .appendText("\nStatus: ").appendValue(expected.getStatus())
-        .appendText("\nInventoryStatus: ").appendValue(expected.getInventoryStatus())
-        .appendText("\nLocation: ").appendValue(expected.getLocation())
-        .appendText("\nCreatedOn: ").appendValue(expected.getCreatedOn())
-        .appendText("\nExpiresOn: ").appendValue(expected.getExpiresOn())
-        .appendText("\nBlood ABO: ").appendValue(expected.getBloodAbo())
-        .appendText("\nBlood Rh: ").appendValue(expected.getBloodRh())
-        .appendText("\nIs InitialComponent: ").appendValue(expected.getIsInitialComponent())
+        .appendText("\nId: ").appendValue(model.getId())
+        .appendText("\nComponentCode: ").appendValue(model.getComponentCode())
+        .appendText("\nComponentType: ").appendValue(model.getComponentType())
+        .appendText("\nStatus: ").appendValue(model.getStatus())
+        .appendText("\nInventoryStatus: ").appendValue(model.getInventoryStatus())
+        .appendText("\nLocation: ").appendValue(model.getLocation())
+        .appendText("\nCreatedOn: ").appendValue(model.getCreatedOn())
+        .appendText("\nExpiresOn: ").appendValue(model.getExpiresOn())
+        .appendText("\nBlood ABO: ").appendValue(model.getBloodAbo())
+        .appendText("\nBlood Rh: ").appendValue(model.getBloodRh())
+        .appendText("\nIs InitialComponent: ").appendValue(model.getIsInitialComponent())
         ;
   }
 
@@ -51,5 +48,4 @@ public class ComponentFullViewModelMatcher extends TypeSafeMatcher<ComponentFull
   public static ComponentFullViewModelMatcher hasSameStateAsComponentFullViewModel(ComponentFullViewModel expected) {
     return new ComponentFullViewModelMatcher(expected);
   }
-
 }

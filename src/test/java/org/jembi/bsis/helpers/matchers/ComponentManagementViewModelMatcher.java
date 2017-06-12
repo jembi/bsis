@@ -4,36 +4,33 @@ import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 
-public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<ComponentManagementViewModel> {
-
-  private ComponentManagementViewModel expected;
+public class ComponentManagementViewModelMatcher extends AbstractTypeSafeMatcher<ComponentManagementViewModel> {
 
   public ComponentManagementViewModelMatcher(ComponentManagementViewModel expected) {
     this.expected = expected;
   }
 
   @Override
-  public void describeTo(Description description) {
+  public void appendDescription(Description description, ComponentManagementViewModel model) {
     description.appendText("A ComponentViewModel with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nComponentCode: ").appendValue(expected.getComponentCode())
-        .appendText("\nComponentType: ").appendValue(expected.getComponentType())
-        .appendText("\nStatus: ").appendValue(expected.getStatus())
-        .appendText("\nCreated on: ").appendValue(expected.getCreatedOn())
-        .appendText("\nExpires on: ").appendValue(expected.getExpiresOn())
-        .appendText("\nExpiry status: ").appendValue(expected.getExpiryStatus())
-        .appendText("\nWeight: ").appendValue(expected.getWeight())
-        .appendText("\nPermissions: ").appendValue(expected.getPermissions())
-        .appendText("\nPack type: ").appendValue(expected.getPackType())
-        .appendText("\nHas component batch: ").appendValue(expected.getHasComponentBatch())
-        .appendText("\nInventory Status: ").appendValue(expected.getInventoryStatus())
-        .appendText("\nBleed Start Time: ").appendValue(expected.getBleedStartTime())
-        .appendText("\nBleed End Time: ").appendValue(expected.getBleedEndTime())
-        .appendText("\nDonation datetime: ").appendValue(expected.getDonationDateTime())
-        .appendText("\nParent component id: ").appendValue(expected.getParentComponentId());
+        .appendText("\nId: ").appendValue(model.getId())
+        .appendText("\nComponentCode: ").appendValue(model.getComponentCode())
+        .appendText("\nComponentType: ").appendValue(model.getComponentType())
+        .appendText("\nStatus: ").appendValue(model.getStatus())
+        .appendText("\nCreated on: ").appendValue(model.getCreatedOn())
+        .appendText("\nExpires on: ").appendValue(model.getExpiresOn())
+        .appendText("\nExpiry status: ").appendValue(model.getExpiryStatus())
+        .appendText("\nWeight: ").appendValue(model.getWeight())
+        .appendText("\nPermissions: ").appendValue(model.getPermissions())
+        .appendText("\nPack type: ").appendValue(model.getPackType())
+        .appendText("\nHas component batch: ").appendValue(model.getHasComponentBatch())
+        .appendText("\nInventory Status: ").appendValue(model.getInventoryStatus())
+        .appendText("\nBleed Start Time: ").appendValue(model.getBleedStartTime())
+        .appendText("\nBleed End Time: ").appendValue(model.getBleedEndTime())
+        .appendText("\nDonation datetime: ").appendValue(model.getDonationDateTime())
+        .appendText("\nParent component id: ").appendValue(model.getParentComponentId());
   }
 
   @Override
@@ -59,5 +56,4 @@ public class ComponentManagementViewModelMatcher extends TypeSafeMatcher<Compone
   public static ComponentManagementViewModelMatcher hasSameStateAsComponentManagementViewModel(ComponentManagementViewModel expected) {
     return new ComponentManagementViewModelMatcher(expected);
   }
-
 }

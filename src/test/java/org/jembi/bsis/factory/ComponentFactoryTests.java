@@ -33,6 +33,7 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
+import org.jembi.bsis.util.RandomTestDate;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
@@ -101,6 +102,7 @@ public class ComponentFactoryTests {
         .withLocation(location)
         .withDonation(donation)
         .withParentComponent(parentComponent)
+        .withExpiresOn(new RandomTestDate())
         .build();
     
     ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
@@ -111,6 +113,8 @@ public class ComponentFactoryTests {
         .withLocation(locationViewModel)
         .withBloodAbo(donation.getBloodAbo())
         .withBloodRh(donation.getBloodRh())
+        .withCreatedOn(component.getCreatedOn())
+        .withExpiresOn(component.getExpiresOn())
         .thatIsNotInitialComponent()
         .build();
 
@@ -131,8 +135,18 @@ public class ComponentFactoryTests {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
-    components.add(aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.AVAILABLE).withDonation(donation).build());
-    components.add(aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_1)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withExpiresOn(new RandomTestDate())
+        .build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_2)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(donation)
+        .withExpiresOn(new RandomTestDate())
+        .build());
     
     // run test
     List<ComponentFullViewModel> viewModels = componentFactory.createComponentFullViewModels(components);
@@ -347,6 +361,7 @@ public class ComponentFactoryTests {
         .withId(COMPONENT_ID_1)
         .withComponentType(componentType)
         .withDonation(donation)
+        .withExpiresOn(new RandomTestDate())
         .build();
     donation.addComponent(initialComponent);
 
@@ -360,7 +375,7 @@ public class ComponentFactoryTests {
         .withComponentCode(null)
         .withComponentType(componentTypeFullViewModel)
         .withCreatedOn(null)
-        .withExpiresOn(null)
+        .withExpiresOn(initialComponent.getExpiresOn())
         .withWeigth(null)
         .withPermission("canDiscard", true)
         .withPermission("canProcess", true)
@@ -368,12 +383,12 @@ public class ComponentFactoryTests {
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
         .withPermission("canRecordChildComponentWeight", true)
-        .withExpiryStatus("")
+        .withExpiryStatus("Already expired")
         .whichHasNoComponentBatch()
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withBleedStartTime(null)
         .withBleedEndTime(null)
-        .withDonationDateTime(null)
+        .withDonationDateTime(initialComponent.getCreatedOn())
         .withParentComponentId(null)
         .build();
 
@@ -436,7 +451,7 @@ public class ComponentFactoryTests {
         .withExpiresOn(expiresOn)
         .withDonationIdentificationNumber("1234567")
         .withDonationFlagCharacters("09")
-        .withExpiryStatus("Already expired")
+        .withDaysToExpire(0)
         .withLocation(locationViewModel)
         .build();
 
@@ -456,8 +471,16 @@ public class ComponentFactoryTests {
   public void createComponentViewModels_componentList() throws Exception {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
-    components.add(aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.AVAILABLE).build());
-    components.add(aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.DISCARDED).build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_1)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withExpiresOn(new RandomTestDate())
+        .build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_2)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withExpiresOn(new RandomTestDate())
+        .build());
 
     // run test
     List<ComponentViewModel> viewModels = componentFactory.createComponentViewModels(components);
@@ -470,12 +493,12 @@ public class ComponentFactoryTests {
   @Test
   public void createComponentFullViewModelWithNullParentComponent_shouldSetIntialComponent() {
     // set up data
-    
     Component component = aComponent()
         .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withParentComponent(null)
+        .withExpiresOn(new RandomTestDate())
         .build();
     
     ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
@@ -483,6 +506,7 @@ public class ComponentFactoryTests {
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .thatIsInitialComponent()
+        .withExpiresOn(component.getExpiresOn())
         .build();
 
     // run test

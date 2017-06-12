@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.service.ComponentConstraintChecker;
+import org.jembi.bsis.utils.ComponentUtils;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
@@ -124,7 +125,7 @@ public class ComponentFactory {
     viewModel.setExpiresOn(component.getExpiresOn());
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
     viewModel.setDonationFlagCharacters(component.getDonation().getFlagCharacters());
-    viewModel.setExpiryStatus(getExpiryStatus(component));
+    viewModel.setDaysToExpire(ComponentUtils.getDaysToExpire(component));
     viewModel.setId(component.getId());
     viewModel.setLocation(locationFactory.createViewModel(component.getLocation()));
     viewModel.setStatus(component.getStatus());

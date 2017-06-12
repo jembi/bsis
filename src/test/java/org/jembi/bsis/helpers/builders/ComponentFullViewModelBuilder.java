@@ -1,11 +1,12 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.Date;
 import java.util.UUID;
 
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
-import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
+import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 
 public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFullViewModel> {
@@ -14,6 +15,8 @@ public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFull
   private LocationViewModel location;
   private InventoryStatus inventoryStatus;
   private ComponentStatus status;
+  private Date createdOn;
+  private Date expiresOn;
   private String bloodRh;
   private String bloodAbo;
   private ComponentTypeViewModel componentType;
@@ -36,6 +39,15 @@ public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFull
 
   public ComponentFullViewModelBuilder withStatus(ComponentStatus status) {
     this.status = status;
+    return this;
+  }
+  public ComponentFullViewModelBuilder withCreatedOn(Date createdOn) {
+    this.createdOn = createdOn;
+    return this;
+  }
+
+  public ComponentFullViewModelBuilder withExpiresOn(Date expiresOn) {
+    this.expiresOn = expiresOn;
     return this;
   }
 
@@ -70,6 +82,8 @@ public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFull
     viewModel.setId(id);
     viewModel.setInventoryStatus(inventoryStatus);
     viewModel.setStatus(status);
+    viewModel.setCreatedOn(createdOn);
+    viewModel.setExpiresOn(expiresOn);
     viewModel.setLocation(location);
     viewModel.setBloodAbo(bloodAbo);
     viewModel.setBloodRh(bloodRh);
