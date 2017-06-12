@@ -3,6 +3,7 @@ package org.jembi.bsis.template;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,21 @@ public class TemplateEngine {
         LOGGER.error("Error thrown while parsing or executing template '" + templateName + "'", e);
         output = "";
       }
+    }
+    return output;
+  }
+  
+  public String execute(String templateName, String template, Map<String, String> map) throws IOException {
+    String output = null;
+    try (StringReader templateReader = new StringReader(template)) {
+      Mustache mustache = mf.compile(templateReader, templateName);
+      try (StringWriter outputWriter = new StringWriter()) {
+        mustache.execute(outputWriter, map);
+        outputWriter.flush();
+        output = outputWriter.toString();
+      }
+    } catch (MustacheException e) {
+      LOGGER.error("Error thrown while parsing or executing template '" + templateName + "'" + "For a HashMap", e);
     }
     return output;
   }
