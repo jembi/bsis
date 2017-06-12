@@ -21,7 +21,7 @@ public class ComponentManagementViewModelMatcher extends AbstractTypeSafeMatcher
         .appendText("\nStatus: ").appendValue(model.getStatus())
         .appendText("\nCreated on: ").appendValue(model.getCreatedOn())
         .appendText("\nExpires on: ").appendValue(model.getExpiresOn())
-        .appendText("\nExpiry status: ").appendValue(model.getExpiryStatus())
+        .appendText("\nExpiry status: ").appendValue(model.getDaysToExpire())
         .appendText("\nWeight: ").appendValue(model.getWeight())
         .appendText("\nPermissions: ").appendValue(model.getPermissions())
         .appendText("\nPack type: ").appendValue(model.getPackType())
@@ -40,7 +40,7 @@ public class ComponentManagementViewModelMatcher extends AbstractTypeSafeMatcher
         Objects.equals(actual.getComponentCode(), expected.getComponentCode()) &&
         Objects.equals(actual.getComponentType(), expected.getComponentType()) &&
         Objects.equals(actual.getStatus(), expected.getStatus()) &&
-        Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus()) &&
+        Objects.equals(actual.getDaysToExpire(), expected.getDaysToExpire()) &&
         Objects.equals(actual.getPermissions(), expected.getPermissions()) &&
         (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn()) || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
         (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn()) || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&

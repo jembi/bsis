@@ -2,7 +2,6 @@ package org.jembi.bsis.factory;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +12,6 @@ import org.jembi.bsis.utils.ComponentUtils;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +46,7 @@ public class ComponentFactory {
     viewModel.setComponentType(componentTypeFactory.createFullViewModel(component.getComponentType()));
     viewModel.setCreatedOn(component.getCreatedOn());
     viewModel.setExpiresOn(component.getExpiresOn());
-    viewModel.setExpiryStatus(getExpiryStatus(component));
+    viewModel.setDaysToExpire(ComponentUtils.getDaysToExpire(component));
     viewModel.setId(component.getId());
     viewModel.setStatus(component.getStatus());
     viewModel.setWeight(component.getWeight());
@@ -130,19 +127,5 @@ public class ComponentFactory {
     viewModel.setLocation(locationFactory.createViewModel(component.getLocation()));
     viewModel.setStatus(component.getStatus());
     return viewModel;
-  }
-
-  private String getExpiryStatus(Component component) {
-    Date today = new Date();
-    if (component.getExpiresOn() == null) {
-      return "";
-    }
-    if (today.equals(component.getExpiresOn()) || today.before(component.getExpiresOn())) {
-      DateTime expiresOn = new DateTime(component.getExpiresOn().getTime());
-      Long age = (long) Days.daysBetween(expiresOn, new DateTime()).getDays();
-      return Math.abs(age) + " days to expire";
-    } else {
-      return "Already expired";
-    }
   }
 }

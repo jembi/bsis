@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -41,7 +40,6 @@ import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -173,8 +171,18 @@ public class ComponentFactoryTests {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
-    components.add(aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.AVAILABLE).withDonation(donation).build());
-    components.add(aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_1)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withExpiresOn(new RandomTestDate())
+        .build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_2)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(donation)
+        .withExpiresOn(new RandomTestDate())
+        .build());
     donation.addComponent(components.get(0));
     donation.addComponent(components.get(1));
 
@@ -252,7 +260,7 @@ public class ComponentFactoryTests {
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
         .withPermission("canRecordChildComponentWeight", true)
-        .withExpiryStatus("Already expired")
+        .withDaysToExpire(0)
         .whichHasNoComponentBatch()
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withBleedStartTime(donation.getBleedStartTime())
@@ -275,77 +283,6 @@ public class ComponentFactoryTests {
 
     // do asserts
     Assert.assertNotNull("View model created", convertedViewModel);
-    assertThat("Created correctly", convertedViewModel, hasSameStateAsComponentManagementViewModel(expectedViewModel));
-  }
-
-  @Ignore("Need to fix issue with the wrong expiry status being calculated")
-  @Test
-  public void createManagementViewModelWithExpiryDateInTheFuture_returnsCorrectViewModel() throws Exception {
-    // set up data
-    Date createdOn = new Date();
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(createdOn);
-    cal.add(Calendar.DAY_OF_YEAR, 1);
-    Date processedOn = cal.getTime();
-    cal.add(Calendar.DAY_OF_YEAR, 200);
-    Date expiresOn = cal.getTime();
-    Component initialComponent = aComponent().withId(COMPONENT_ID_1).build();
-    Donation donation = aDonation()
-        .withComponent(initialComponent)
-        .build();
-    ComponentType componentType = aComponentType().build();
-    Component component = aComponent()
-        .withId(COMPONENT_ID_2)
-        .withComponentType(componentType)
-        .withCreatedOn(processedOn)
-        .withExpiresOn(expiresOn)
-        .withDonation(donation)
-        .withParentComponent(initialComponent)
-        .build();
-
-    UUID componentTypeId2 = UUID.randomUUID();
-    ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
-        .withId(componentTypeId2)
-        .build();
-
-    ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
-        .withId(COMPONENT_ID_2)
-        .withStatus(ComponentStatus.QUARANTINED)
-        .withComponentCode(null)
-        .withComponentType(componentTypeFullViewModel)
-        .withCreatedOn(processedOn)
-        .withExpiresOn(expiresOn)
-        .withWeigth(null)
-        .withPermission("canDiscard", true)
-        .withPermission("canProcess", true)
-        .withPermission("canPreProcess", true)
-        .withPermission("canUnprocess", true)
-        .withPermission("canUndiscard", true)
-        .withPermission("canRecordChildComponentWeight", true)
-        .withExpiryStatus("200 days to expire") // note: can be "201 days to expire" in some edge cases
-        .whichHasNoComponentBatch()
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withBleedStartTime(null)
-        .withBleedEndTime(null)
-        .withDonationDateTime(null)
-        .withParentComponentId(COMPONENT_ID_1)
-        .build();
-
-    // setup mocks
-    when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(componentTypeFullViewModel);
-    when(componentConstraintChecker.canDiscard(component)).thenReturn(true);
-    when(componentConstraintChecker.canProcess(component)).thenReturn(true);
-    when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
-    when(componentConstraintChecker.canUnprocess(component)).thenReturn(true);
-    when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
-    when(componentConstraintChecker.canRecordChildComponentWeight(component)).thenReturn(true);
-
-    // run test
-    ComponentManagementViewModel convertedViewModel = componentFactory.createManagementViewModel(component);
-
-    // do asserts
-    Assert.assertNotNull("View model created", convertedViewModel);
-    System.out.println("Returned view model: " + ToStringBuilder.reflectionToString(convertedViewModel));
     assertThat("Created correctly", convertedViewModel, hasSameStateAsComponentManagementViewModel(expectedViewModel));
   }
 
@@ -383,7 +320,7 @@ public class ComponentFactoryTests {
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
         .withPermission("canRecordChildComponentWeight", true)
-        .withExpiryStatus("Already expired")
+        .withDaysToExpire(0)
         .whichHasNoComponentBatch()
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withBleedStartTime(null)

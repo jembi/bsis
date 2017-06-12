@@ -17,7 +17,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
   private Date createdOn;
   private Date expiresOn;
   private ComponentStatus status;
-  private String expiryStatus;
+  private int daysToExpire;
   private String componentCode;
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
@@ -83,8 +83,8 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     return this;
   }
 
-  public ComponentManagementViewModelBuilder withExpiryStatus(String expiryStatus) {
-    this.expiryStatus = expiryStatus;
+  public ComponentManagementViewModelBuilder withDaysToExpire(int daysToExpire) {
+    this.daysToExpire = daysToExpire;
     return this;
   }
 
@@ -115,7 +115,7 @@ public class ComponentManagementViewModelBuilder extends AbstractBuilder<Compone
     viewModel.setId(id);
     viewModel.setCreatedOn(createdOn);
     viewModel.setExpiresOn(expiresOn);
-    viewModel.setExpiryStatus(expiryStatus);
+    viewModel.setDaysToExpire(daysToExpire);
     viewModel.setStatus(status);
     viewModel.setComponentCode(componentCode);
     viewModel.setWeight(weight);
