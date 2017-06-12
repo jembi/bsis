@@ -2,9 +2,14 @@ package org.jembi.bsis.service;
 
 import java.util.Properties;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +30,16 @@ public class BsisEmailSender {
     mailSender.setUsername(generalConfigAccessorService.getGeneralConfigValueByName("smtp.auth.username"));
     mailSender.setPassword(generalConfigAccessorService.getGeneralConfigValueByName("smtp.auth.password"));
     mailSender.send(message);
+  }
+  
+  public MimeMailMessage getMailMessage(String to, String subject, String message) throws MessagingException {
+    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+    MimeMessage mimeMessage = mailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+    helper.setTo(to);
+    helper.setSubject(subject);
+    helper.setText(message);
+    return new MimeMailMessage(mimeMessage);
   }
 
 }
