@@ -11,12 +11,15 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.SequenceNumberRepository;
+import org.jembi.bsis.service.DonorDeferralStatusCalculator;
 import org.jembi.bsis.service.GeneralConfigAccessorService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -46,6 +49,9 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
 
   @Autowired
   private LocationRepository locationRepository;
+
+  @Autowired
+  private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
 
   @Override
   public void validateForm(DonationBackingForm form, Errors errors) {
@@ -210,6 +216,35 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     form.setDonor(donor);
     if (donor == null) {
       errors.rejectValue("donation.donor", "donor.invalid", "Please supply a valid donor");
+    }
+
+    // Check if the donations are valid
+    if (donor != null && donor.getDonations() != null) {
+
+      for (Donation donation : donor.getDonations()) {
+
+        PackType packType = donation.getPackType();
+
+        if (!packType.getCountAsDonation()) {
+          // Don't check period between donations if it doesn't count as a donation
+          continue;
+        }
+
+        // Work out the next allowed donation date
+        DateTime nextDonationDate = new DateTime(donation.getDonationDate())
+            .plusDays(packType.getPeriodBetweenDonations())
+            .withTimeAtStartOfDay();
+
+        // Check if the next allowed donation date is after today
+        if (nextDonationDate.isAfter(new DateTime().withTimeAtStartOfDay())) {
+          errors.rejectValue("donation.donor", "errors.invalid.donationBeforeNextAllowedDate", "Selected donation Date is before donor's next allowed donation date");
+        }
+      }
+    }
+
+    // Check if the donor is deferred
+    if (donor != null && donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())) {
+      errors.rejectValue("donation.donor", "errors.invalid.donorDeferred", "Donor is currently deferred");
     }
   }
   

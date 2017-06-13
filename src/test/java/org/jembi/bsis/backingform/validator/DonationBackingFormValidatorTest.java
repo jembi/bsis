@@ -3,6 +3,10 @@ package org.jembi.bsis.backingform.validator;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.DonationTypeBackingFormBuilder.aDonationTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
+import static org.jembi.bsis.helpers.builders.DonationTypeBuilder.aDonationType;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -35,6 +39,7 @@ import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.SequenceNumberRepository;
+import org.jembi.bsis.service.DonorDeferralStatusCalculator;
 import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -66,7 +71,8 @@ public class DonationBackingFormValidatorTest {
   private SequenceNumberRepository sequenceNumberRepository;
   @Mock
   private LocationRepository locationRepository;
-
+  @Mock
+  private DonorDeferralStatusCalculator donorDeferralStatusCalculator;
   
   @Test
   public void testValidInsertNewDonationWithSpecifiedDINAndDonationDate() throws Exception {
@@ -80,6 +86,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -110,6 +117,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -141,6 +149,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -170,6 +179,7 @@ public class DonationBackingFormValidatorTest {
     form.setLastUpdated(new Date());
     when(generalConfigAccessorService.getIntValue("donation.dinLength")).thenReturn(10);
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
@@ -192,6 +202,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -215,6 +226,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -238,6 +250,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -263,6 +276,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -285,6 +299,8 @@ public class DonationBackingFormValidatorTest {
     // set up mocks
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -307,6 +323,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenThrow(new NoResultException());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -330,6 +347,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -352,6 +370,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenThrow(new NoResultException());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -374,6 +393,7 @@ public class DonationBackingFormValidatorTest {
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -396,6 +416,7 @@ public class DonationBackingFormValidatorTest {
     // set up mocks
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -419,6 +440,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -441,6 +463,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenThrow(new NoResultException());
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -464,6 +487,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -487,6 +511,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -497,7 +522,138 @@ public class DonationBackingFormValidatorTest {
     Assert.assertEquals("Errors exist", 1, errors.getErrorCount());
     Assert.assertNotNull("Error on field donationType", errors.getFieldError("donation.donationType"));
   }
-  
+
+  @Test
+  public void testInvalidDonationBeforeNextAllowedDate() throws Exception {
+    // set up data
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
+    DonationBackingForm form = createBasicBackingForm(venue);
+    form.getPackType().setPeriodBetweenDonations(20);
+    form.getPackType().setCountAsDonation(Boolean.TRUE);
+    Donation donation = aDonation()
+        .withPackType(form.getPackType())
+        .withDonationDate(new Date())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withDonationBatch(aDonationBatch().withId(UUID.randomUUID()).build())
+        .withVenue(venue)
+        .withDonationType(aDonationType().withId(UUID.randomUUID()).build())
+        .withDonor(form.getDonor())
+        .build();
+    form.getDonor().setDonations(Arrays.asList(donation));
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
+    mockGeneralConfigAndFormFields();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Error exist", 1, errors.getErrorCount());
+    Assert.assertEquals(errors.getFieldError("donation.donor").getCode(), "errors.invalid.donationBeforeNextAllowedDate");
+    Assert.assertEquals(errors.getFieldError("donation.donor").getDefaultMessage(), "Selected donation Date is before donor's next allowed donation date");
+  }
+
+  @Test
+  public void testDonationBeforeNextAllowedDateWithPackTypeNotCountingAsDonation() throws Exception {
+    // set up data
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
+    DonationBackingForm form = createBasicBackingForm(venue);
+    form.getPackType().setPeriodBetweenDonations(20);
+    form.getPackType().setCountAsDonation(Boolean.FALSE);
+    Donation donation = aDonation()
+        .withPackType(form.getPackType())
+        .withDonationDate(new Date())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withDonationBatch(aDonationBatch().withId(UUID.randomUUID()).build())
+        .withVenue(venue)
+        .withDonationType(aDonationType().withId(UUID.randomUUID()).build())
+        .withDonor(form.getDonor())
+        .build();
+    form.getDonor().setDonations(Arrays.asList(donation));
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
+    mockGeneralConfigAndFormFields();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+
+  @Test
+  public void testDonationAfterNextAllowedDate() throws Exception {
+    // set up data
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
+    DonationBackingForm form = createBasicBackingForm(venue);
+    form.getPackType().setPeriodBetweenDonations(20);
+    form.getPackType().setCountAsDonation(Boolean.TRUE);
+    Donation donation = aDonation()
+        .withPackType(form.getPackType())
+        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01"))
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withDonationBatch(aDonationBatch().withId(UUID.randomUUID()).build())
+        .withVenue(venue)
+        .withDonationType(aDonationType().withId(UUID.randomUUID()).build())
+        .withDonor(form.getDonor())
+        .build();
+    form.getDonor().setDonations(Arrays.asList(donation));
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
+    mockGeneralConfigAndFormFields();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+
+  @Test
+  public void testInvalidDonorDeferred() throws Exception {
+    // set up data
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
+    DonationBackingForm form = createBasicBackingForm(venue);
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.TRUE);
+    mockGeneralConfigAndFormFields();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Error exist", 1, errors.getErrorCount());
+    Assert.assertEquals(errors.getFieldError("donation.donor").getCode(), "errors.invalid.donorDeferred");
+    Assert.assertEquals(errors.getFieldError("donation.donor").getDefaultMessage(), "Donor is currently deferred");
+  }
+
   @Test
   public void testInvalidBloodPressureAboveMax() throws Exception {
     // set up data
@@ -511,6 +667,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -536,6 +693,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -560,6 +718,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -583,6 +742,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -606,6 +766,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -629,6 +790,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -652,6 +814,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -675,6 +838,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -698,6 +862,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -720,6 +885,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -756,6 +922,7 @@ public class DonationBackingFormValidatorTest {
     when(generalConfigAccessorService.getIntValue("donation.dinLength")).thenReturn(35);
     when(formFieldRepository.getRequiredFormFields("donation")).thenReturn(Arrays.asList(new String[] {"packType", "donationType"}));
     when(formFieldRepository.getFieldMaxLengths("donation")).thenReturn(new HashMap<String, Integer>());
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
 
     // run test
     Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
@@ -779,6 +946,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();
 
     // run test
@@ -815,6 +983,7 @@ public class DonationBackingFormValidatorTest {
     when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
     when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
     mockGeneralConfigAndFormFields();    
 
     // run test
