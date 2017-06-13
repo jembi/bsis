@@ -1,5 +1,6 @@
 package org.jembi.bsis.service;
 
+import javax.mail.MessagingException;
 import javax.persistence.NoResultException;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -7,7 +8,8 @@ import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.MailParseException;
+import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,11 +53,13 @@ public class PasswordResetService {
     user.setPasswordReset(true);
     userRepository.updateUser(user, true);
     // Send an email containing the new password to the user
-    SimpleMailMessage message = new SimpleMailMessage();
-    message.setTo(user.getEmailId());
-    message.setSubject(passwordResetSubject);
-    message.setText(String.format(passwordResetMessage, newPassword));
-    bsisEmailSender.sendEmail(message);
+    try {
+      MimeMailMessage message= bsisEmailSender.createMailMessage(user.getEmailId(), passwordResetSubject,
+          String.format(passwordResetMessage, newPassword));
+      bsisEmailSender.sendEmail(message);
+    } catch (MessagingException e) {
+      throw new MailParseException(e);
+    }
   }
 
 }

@@ -1,6 +1,6 @@
 package org.jembi.bsis.service;
 
-import static org.jembi.bsis.helpers.builders.SimpleMailMessageBuilder.aSimpleMailMessage;
+import static org.jembi.bsis.helpers.builders.MimeMailMessageBuilder.aMimeMailMessage;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -19,15 +19,15 @@ import org.junit.Test;
 import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.MimeMailMessage;
 
 public class PasswordResetServiceTests extends UnitTestSuite {
 
   private static final String TEST_EMAIL = "default.user@jembi.org";
-  private static final String USERNAME = "superuser";
+  private static final String USERNAME = "Суперпользователь";
   private static final String EXPECTED_PASSWORD = "$2a$10$JP08kh2Cz2FF/1pMdkiUN.4r6CdOKFymCLeFGFU3P0ygqFZtkjteq";
-  private static final String TEXT = "Your password has been reset to \"" + EXPECTED_PASSWORD
-      + "\". You will be required to change it next time you log in.";
+  private static final String TEXT = "Ваш пароль был сброшен до  \"" + EXPECTED_PASSWORD 
+      + "\". Вам потребуется изменить его при следующем входе в систему";
   private static final String BSIS_PASSWORD_RESET_MAIL_SUBJECT = "BSIS Password reset";
 
   @InjectMocks
@@ -44,9 +44,9 @@ public class PasswordResetServiceTests extends UnitTestSuite {
   }
 
   @Test
-  public void tesResetUserPassword_shouldUpdateUserPassword() throws MessagingException {
+  public void tesResetUserPasswordWithLatinCharacters_shouldUpdateUserPassword() throws MessagingException {
     // Data
-    SimpleMailMessage expectedMessage = aSimpleMailMessage()
+    MimeMailMessage expectedMessage = aMimeMailMessage()
         .withTo(TEST_EMAIL)
         .withSubject(BSIS_PASSWORD_RESET_MAIL_SUBJECT)
         .withText(TEXT)
@@ -56,7 +56,8 @@ public class PasswordResetServiceTests extends UnitTestSuite {
     User user = aUser().withUsername(USERNAME).withEmailId(TEST_EMAIL).withPasswordReset().build();
     when(userRepository.findUser(user.getUsername())).thenReturn(user);
     when(userRepository.updateUser(user, true)).thenAnswer(AdditionalAnswers.returnsFirstArg());
-    doNothing().when(bsisEmailSender).sendEmail(any(SimpleMailMessage.class));
+    when(bsisEmailSender.createMailMessage(TEST_EMAIL, BSIS_PASSWORD_RESET_MAIL_SUBJECT, TEXT)).thenReturn(expectedMessage);
+    doNothing().when(bsisEmailSender).sendEmail(any(MimeMailMessage.class));
     
     // Test
     passwordResetService.resetUserPassword(USERNAME);
@@ -64,7 +65,7 @@ public class PasswordResetServiceTests extends UnitTestSuite {
     verify(bsisEmailSender).sendEmail(expectedMessage);
     verify(userRepository).updateUser(user, true);
   }
-
+  
   @Test(expected = NoResultException.class)
   public void testPasswordResetWithNoExistingUser_shouldThrow() {
     String username = "anyUser";

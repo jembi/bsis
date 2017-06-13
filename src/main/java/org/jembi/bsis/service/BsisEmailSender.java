@@ -6,7 +6,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,7 +17,7 @@ public class BsisEmailSender {
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
 
-  public void sendEmail(SimpleMailMessage message) {
+  public void sendEmail(MimeMailMessage message) {
     JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
     Properties mailProperties = new Properties();
     mailProperties.put("mail.smtp.auth", true);
@@ -29,10 +28,10 @@ public class BsisEmailSender {
     mailSender.setProtocol("smtp");
     mailSender.setUsername(generalConfigAccessorService.getGeneralConfigValueByName("smtp.auth.username"));
     mailSender.setPassword(generalConfigAccessorService.getGeneralConfigValueByName("smtp.auth.password"));
-    mailSender.send(message);
+    mailSender.send(message.getMimeMessage());
   }
   
-  public MimeMailMessage getMailMessage(String to, String subject, String message) throws MessagingException {
+  public MimeMailMessage createMailMessage(String to, String subject, String message) throws MessagingException {
     JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
     MimeMessage mimeMessage = mailSender.createMimeMessage();
     MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -41,5 +40,4 @@ public class BsisEmailSender {
     helper.setText(message);
     return new MimeMailMessage(mimeMessage);
   }
-
 }
