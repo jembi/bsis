@@ -596,6 +596,41 @@ public class DonationBackingFormValidatorTest {
   }
 
   @Test
+  public void testDonationAfterNextAllowedDate() throws Exception {
+    // set up data
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
+    DonationBackingForm form = createBasicBackingForm(venue);
+    form.getPackType().setPeriodBetweenDonations(20);
+    form.getPackType().setCountAsDonation(Boolean.TRUE);
+    Donation donation = aDonation()
+        .withPackType(form.getPackType())
+        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2016-01-01"))
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withDonationBatch(aDonationBatch().withId(UUID.randomUUID()).build())
+        .withVenue(venue)
+        .withDonationType(aDonationType().withId(UUID.randomUUID()).build())
+        .withDonor(form.getDonor())
+        .build();
+    form.getDonor().setDonations(Arrays.asList(donation));
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
+    mockGeneralConfigAndFormFields();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
+  }
+
+  @Test
   public void testInvalidDonorDeferred() throws Exception {
     // set up data
     UUID locationId = UUID.randomUUID();
