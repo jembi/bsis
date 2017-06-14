@@ -1179,7 +1179,7 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
 
     //set up data and mocks
     Calendar cal = Calendar.getInstance();
-    cal.add(Calendar.DATE, 2);
+    cal.add(Calendar.DATE, 1);
     
     when(dateGeneratorService.generateDate(cal.getTime())).thenReturn(new Date(cal.getTimeInMillis()));
     
@@ -1219,7 +1219,8 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     
     //set up data and mocks
     Calendar cal = Calendar.getInstance();
-    cal.add(Calendar.DATE, 101);
+    cal.setTime(new Date(System.currentTimeMillis()));
+    cal.add(Calendar.DATE, 100);
     
     when(dateGeneratorService.generateDate(cal.getTime())).thenReturn(new Date(cal.getTimeInMillis()));
     

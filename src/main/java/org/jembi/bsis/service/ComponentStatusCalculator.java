@@ -204,7 +204,7 @@ public class ComponentStatusCalculator {
       return -1;
     } else {
       DateTime expiresOn = new DateTime(dateGeneratorService.generateDate(component.getExpiresOn()));
-      int daysToExpire = Days.daysBetween(new DateTime(), expiresOn).getDays();
+      int daysToExpire = Days.daysBetween(today, expiresOn).getDays();
       return daysToExpire;
       } 
     }

@@ -75,7 +75,7 @@ public class ComponentFactoryTests {
   
   private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
   private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
-  
+
   @Test
   public void createComponentFullViewModel_oneComponent() throws Exception {
     // set up data
