@@ -1,5 +1,6 @@
 package org.jembi.bsis.controller;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -21,7 +22,7 @@ public class PasswordResetController {
   private PasswordResetControllerService passwordResetControllerService;
 
   @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity<Map<String, Object>> resetPassword(@Valid @RequestBody PasswordResetBackingForm form) {
+  public ResponseEntity<Map<String, Object>> resetPassword(@Valid @RequestBody PasswordResetBackingForm form) throws IOException {
     passwordResetControllerService.resetPassword(form);      
     return new ResponseEntity<Map<String, Object>>(HttpStatus.CREATED);
   }

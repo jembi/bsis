@@ -1,5 +1,7 @@
 package org.jembi.bsis.controllerservice;
 
+import java.io.IOException;
+
 import org.jembi.bsis.backingform.PasswordResetBackingForm;
 import org.jembi.bsis.service.PasswordResetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ public class PasswordResetControllerService {
   @Autowired
   private PasswordResetService passwordResetService;
 
-  public void resetPassword(PasswordResetBackingForm form) {
+  public void resetPassword(PasswordResetBackingForm form) throws IOException {
     passwordResetService.resetUserPassword(form.getUsername());
     
   }
