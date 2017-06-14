@@ -1,6 +1,7 @@
 package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestResultBuilder.aBloodTestResult;
@@ -38,6 +39,7 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -52,6 +54,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   private ComponentStatusCalculator componentStatusCalculator;
   @Mock
   private DonationRepository donationRepository;
+  @Mock
+  private DateGeneratorService dateGeneratorService;
+  
+  @Before
+  public void setup(){
+    when(dateGeneratorService.generateDate(new Date())).thenReturn(new Date());
+    when(dateGeneratorService.generateDate()).thenReturn(new Date());
+  }
   
   @Test
   public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithPositiveResult_shouldReturnTrue(){
@@ -1148,4 +1158,140 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     assertThat("status is changed", statusChanged, is(true));
     assertThat("status is AVAILABLE", component.getStatus(), is(ComponentStatus.AVAILABLE));
   }
-}
+  
+  @Test
+  public void testGetDaysToExpire_shouldReturnZeroDaysToExpire(){
+    
+    //set up data
+    Component component = aComponent()
+        .withExpiresOn(dateGeneratorService.generateDate())
+        .build();
+
+    //SUT
+    int daysToExpire = componentStatusCalculator.getDaysToExpire(component);
+    
+    //verify
+    assertThat(0, comparesEqualTo(daysToExpire));
+    }
+  
+  @Test
+  public void testGetDaysToExpire_shouldReturnOneDayToExpire(){
+
+    //set up data and mocks
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DATE, 2);
+    
+    when(dateGeneratorService.generateDate(cal.getTime())).thenReturn(new Date(cal.getTimeInMillis()));
+    
+    Component component = aComponent()
+        .withExpiresOn(dateGeneratorService.generateDate(cal.getTime()))
+        .build();
+    
+    //SUT
+    int daysToExpire = componentStatusCalculator.getDaysToExpire(component);
+    
+    //verify
+    assertThat(1, comparesEqualTo(daysToExpire));
+  }
+  
+  @Test
+  public void testGetDaysToExpire_shouldReturnMinusOneDayToExpire(){
+    
+    //set up data and mocks
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DATE, -1);
+    
+    when(dateGeneratorService.generateDate(cal.getTime())).thenReturn(new Date(cal.getTimeInMillis()));
+    
+    Component component = aComponent()
+        .withExpiresOn(dateGeneratorService.generateDate(cal.getTime()))
+        .build();
+    
+    //SUT
+    int daysToExpire = componentStatusCalculator.getDaysToExpire(component);
+    
+    //verify
+    assertThat(-1, comparesEqualTo(daysToExpire));
+  }
+  
+  @Test
+  public void testGetDaysToExpire_shouldReturnOneHundredDaysToExpire(){
+    
+    //set up data and mocks
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DATE, 101);
+    
+    when(dateGeneratorService.generateDate(cal.getTime())).thenReturn(new Date(cal.getTimeInMillis()));
+    
+    Component component = aComponent()
+        .withExpiresOn(dateGeneratorService.generateDate(cal.getTime()))
+        .build();
+    
+    //SUT
+    int daysToExpire = componentStatusCalculator.getDaysToExpire(component);
+    
+    //verify
+    assertThat(100, comparesEqualTo(daysToExpire));
+  }
+  
+  @Test
+  public void testGetDaysToExpire_shouldReturnMinusOneForOneHundredDaysAfterExpiryDate(){
+    
+    //set up data and mocks
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DATE, -100);
+    
+    when(dateGeneratorService.generateDate(cal.getTime())).thenReturn(new Date(cal.getTimeInMillis()));
+    
+    Component component = aComponent()
+        .withExpiresOn(dateGeneratorService.generateDate(cal.getTime()))
+        .build();
+    
+    //SUT
+    int daysToExpire = componentStatusCalculator.getDaysToExpire(component);
+    
+    //verify
+    assertThat(-1, comparesEqualTo(daysToExpire));
+  }
+    
+    @Test
+    public void testGetDaysToExpire_shouldReturnMinusOneForSameExpiryDateEarlierExpiryTime(){
+      
+      //set up data and mocks
+      Calendar cal = Calendar.getInstance();
+      cal.set(Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY - 1);
+     
+      when(dateGeneratorService.generateDate(cal.getTime())).thenReturn(new Date(cal.getTimeInMillis()));
+      
+      Component component = aComponent()
+          .withExpiresOn(dateGeneratorService.generateDate(cal.getTime()))
+          .build();
+      
+      //SUT
+      int daysToExpire = componentStatusCalculator.getDaysToExpire(component);
+      
+      //verify
+      assertThat(-1, comparesEqualTo(daysToExpire));
+    }
+    
+    @Test
+    public void testGetDaysToExpire_shouldReturnZeroForSameExpiryDateLaterExpiryTime(){
+      
+      //set up data and mocks
+      Calendar cal = Calendar.getInstance();
+      cal.set(Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY + 1);
+
+      when(dateGeneratorService.generateDate(cal.getTime())).thenReturn(new Date(cal.getTimeInMillis()));
+      
+      Component component = aComponent()
+          .withExpiresOn(dateGeneratorService.generateDate(cal.getTime()))
+          .build();
+      
+      //SUT
+      int daysToExpire = componentStatusCalculator.getDaysToExpire(component);
+      
+      //verify
+      assertThat(-1 , comparesEqualTo(daysToExpire));
+    }
+  }
+

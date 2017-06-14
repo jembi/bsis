@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.service.ComponentConstraintChecker;
-import org.jembi.bsis.utils.ComponentUtils;
+import org.jembi.bsis.service.ComponentStatusCalculator;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
@@ -29,6 +29,9 @@ public class ComponentFactory {
 
   @Autowired
   private ComponentConstraintChecker componentConstraintChecker;
+  
+  @Autowired
+  private ComponentStatusCalculator componentStatusCalculator;
 
   public List<ComponentManagementViewModel> createManagementViewModels(Collection<Component> components) {
     List<ComponentManagementViewModel> viewModels = new ArrayList<>();
@@ -46,7 +49,7 @@ public class ComponentFactory {
     viewModel.setComponentType(componentTypeFactory.createFullViewModel(component.getComponentType()));
     viewModel.setCreatedOn(component.getCreatedOn());
     viewModel.setExpiresOn(component.getExpiresOn());
-    viewModel.setDaysToExpire(ComponentUtils.getDaysToExpire(component));
+    viewModel.setDaysToExpire(componentStatusCalculator.getDaysToExpire(component));
     viewModel.setId(component.getId());
     viewModel.setStatus(component.getStatus());
     viewModel.setWeight(component.getWeight());
@@ -122,7 +125,7 @@ public class ComponentFactory {
     viewModel.setExpiresOn(component.getExpiresOn());
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
     viewModel.setDonationFlagCharacters(component.getDonation().getFlagCharacters());
-    viewModel.setDaysToExpire(ComponentUtils.getDaysToExpire(component));
+    viewModel.setDaysToExpire(componentStatusCalculator.getDaysToExpire(component));
     viewModel.setId(component.getId());
     viewModel.setLocation(locationFactory.createViewModel(component.getLocation()));
     viewModel.setStatus(component.getStatus());

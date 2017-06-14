@@ -17,6 +17,8 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.DonationRepository;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,9 @@ public class ComponentStatusCalculator {
   
   @Autowired
   private DonationRepository donationRepository;
+  
+  @Autowired
+  private DateGeneratorService dateGeneratorService;
 
   public boolean shouldComponentsBeDiscardedForTestResults(List<BloodTestResult> bloodTestResults) {
 
@@ -191,4 +196,16 @@ public class ComponentStatusCalculator {
     }
     return false;
   }
+  
+  public int getDaysToExpire(Component component){
+    
+    DateTime today =  new DateTime(dateGeneratorService.generateDate());
+    if(today.isAfter(new DateTime(dateGeneratorService.generateDate(component.getExpiresOn())))) {
+      return -1;
+    } else {
+      DateTime expiresOn = new DateTime(dateGeneratorService.generateDate(component.getExpiresOn()));
+      int daysToExpire = Days.daysBetween(new DateTime(), expiresOn).getDays();
+      return daysToExpire;
+      } 
+    }
 }

@@ -32,6 +32,8 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
+import org.jembi.bsis.service.ComponentStatusCalculator;
+import org.jembi.bsis.service.DateGeneratorService;
 import org.jembi.bsis.util.RandomTestDate;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
@@ -40,6 +42,7 @@ import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -67,9 +70,12 @@ public class ComponentFactoryTests {
   @Mock
   private ComponentRepository componentRepository;
   
+  @Mock
+  private ComponentStatusCalculator componentStatusCalculator;
+  
   private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
   private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
-
+  
   @Test
   public void createComponentFullViewModel_oneComponent() throws Exception {
     // set up data
