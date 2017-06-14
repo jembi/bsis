@@ -14,14 +14,14 @@ public class ComponentManagementViewModelMatcher extends AbstractTypeSafeMatcher
 
   @Override
   public void appendDescription(Description description, ComponentManagementViewModel model) {
-    description.appendText("A ComponentViewModel with the following state:")
+    description.appendText("A ComponentManagementViewModel with the following state:")
         .appendText("\nId: ").appendValue(model.getId())
         .appendText("\nComponentCode: ").appendValue(model.getComponentCode())
         .appendText("\nComponentType: ").appendValue(model.getComponentType())
         .appendText("\nStatus: ").appendValue(model.getStatus())
         .appendText("\nCreated on: ").appendValue(model.getCreatedOn())
         .appendText("\nExpires on: ").appendValue(model.getExpiresOn())
-        .appendText("\nExpiry status: ").appendValue(model.getDaysToExpire())
+        .appendText("\nDays to expire: ").appendValue(model.getDaysToExpire())
         .appendText("\nWeight: ").appendValue(model.getWeight())
         .appendText("\nPermissions: ").appendValue(model.getPermissions())
         .appendText("\nPack type: ").appendValue(model.getPackType())
