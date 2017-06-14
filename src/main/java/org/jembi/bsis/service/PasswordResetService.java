@@ -15,7 +15,6 @@ import org.jembi.bsis.repository.GeneralConfigRepository;
 import org.jembi.bsis.repository.UserRepository;
 import org.jembi.bsis.template.TemplateEngine;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailParseException;
 import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,11 +26,7 @@ public class PasswordResetService {
   @Autowired
   private UserRepository userRepository;
   @Autowired
-  private BsisEmailSender bsisEmailSender;
-  @Value("${password.reset.subject}")
-  private String passwordResetSubject;
-  @Value("${password.reset.message}")
-  private String passwordResetMessage;
+  private BsisEmailSender bsisEmailSender;;
   @Autowired
   private GeneralConfigRepository generalConfigRepository;
   @Autowired
@@ -43,14 +38,6 @@ public class PasswordResetService {
 
   public void setUserRepository(UserRepository userRepository) {
     this.userRepository = userRepository;
-  }
-
-  public void setPasswordResetSubject(String passwordResetSubject) {
-    this.passwordResetSubject = passwordResetSubject;
-  }
-
-  public void setPasswordResetMessage(String passwordResetMessage) {
-    this.passwordResetMessage = passwordResetMessage;
   }
 
   public void resetUserPassword(String username) throws IOException {

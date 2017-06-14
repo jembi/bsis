@@ -1,14 +1,14 @@
 package org.jembi.bsis.service;
 
-import static org.jembi.bsis.helpers.builders.MimeMailMessageBuilder.aMimeMailMessage;
 import static org.jembi.bsis.helpers.builders.GeneralConfigBuilder.aGeneralConfig;
+import static org.jembi.bsis.helpers.builders.MimeMailMessageBuilder.aMimeMailMessage;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doReturn;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,7 +24,6 @@ import org.jembi.bsis.repository.GeneralConfigRepository;
 import org.jembi.bsis.repository.UserRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.template.TemplateEngine;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
@@ -52,12 +51,6 @@ public class PasswordResetServiceTests extends UnitTestSuite {
   private GeneralConfigRepository generalConfigRepository;
   @Mock
   private TemplateEngine templateEngine;
-
-  @Before
-  public void setup() {
-    passwordResetService.setPasswordResetMessage(TEXT);
-    passwordResetService.setPasswordResetSubject(BSIS_PASSWORD_RESET_MAIL_SUBJECT);
-  }
 
   @Test
   public void tesResetUserPasswordWithLatinCharacters_shouldUpdateUserPassword() throws MessagingException, IOException {
