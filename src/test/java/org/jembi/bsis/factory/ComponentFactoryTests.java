@@ -41,6 +41,7 @@ import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -300,11 +301,12 @@ public class ComponentFactoryTests {
         .withId(componentTypeId)
         .build();
     Donation donation = aDonation().build();
+    Date expiresOn = new DateTime().minusDays(2).toDate();
     Component initialComponent = aComponent()
         .withId(COMPONENT_ID_1)
         .withComponentType(componentType)
         .withDonation(donation)
-        .withExpiresOn(new RandomTestDate())
+        .withExpiresOn(expiresOn)
         .build();
     donation.addComponent(initialComponent);
 

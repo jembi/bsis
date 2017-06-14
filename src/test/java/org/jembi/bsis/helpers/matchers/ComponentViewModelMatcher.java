@@ -26,7 +26,7 @@ public class ComponentViewModelMatcher extends TypeSafeMatcher<ComponentViewMode
         .appendText("\nexpiresOn: ").appendValue(expected.getExpiresOn())
         .appendText("\ndonationIdentificationNumber: ").appendValue(expected.getDonationIdentificationNumber())
         .appendText("\ndonationFlagCharacters: ").appendValue(expected.getDonationFlagCharacters())
-        .appendText("\nexpiryStatus: ").appendValue(expected.getDaysToExpire())
+        .appendText("\ndaysToExpire: ").appendValue(expected.getDaysToExpire())
         .appendText("\nLocation: ").appendValue(expected.getLocation());
   }
 
