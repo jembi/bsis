@@ -30,7 +30,7 @@ http://www.springframework.org/schema/task http://www.springframework.org/schema
 
 
 
-  <context:property-placeholder location="classpath:bsis.properties, classpath:email.properties" />
+  <context:property-placeholder location="classpath:bsis.properties"/>
 
   <!-- Configures the @Controller programming model -->
   <mvc:annotation-driven />
