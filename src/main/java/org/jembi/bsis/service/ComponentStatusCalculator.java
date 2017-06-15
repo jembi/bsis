@@ -197,15 +197,14 @@ public class ComponentStatusCalculator {
     return false;
   }
   
-  public int getDaysToExpire(Component component){
-    
-    DateTime today =  new DateTime(dateGeneratorService.generateDate());
-    if(today.isAfter(new DateTime(dateGeneratorService.generateDate(component.getExpiresOn())))) {
+  public int getDaysToExpire(Component component) {
+
+    Date today = dateGeneratorService.generateDate();
+    if (today.after(component.getExpiresOn())) {
       return -1;
     } else {
-      DateTime expiresOn = new DateTime(dateGeneratorService.generateDate(component.getExpiresOn()));
-      int daysToExpire = Days.daysBetween(today, expiresOn).getDays();
-      return daysToExpire;
-      } 
+      DateTime expiresOn = new DateTime(component.getExpiresOn());
+      return Days.daysBetween(new DateTime(today), expiresOn).getDays();
     }
+  }
 }
