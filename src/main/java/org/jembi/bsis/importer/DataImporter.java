@@ -63,8 +63,7 @@ public class DataImporter {
     SecurityContextHolder.getContext().setAuthentication(auth);
 
     // Read spreadsheet and import the data
-    try {
-      FileInputStream fileInputStream = new FileInputStream(args[0]);
+    try (FileInputStream fileInputStream = new FileInputStream(args[0])) {
       Workbook workbook = WorkbookFactory.create(fileInputStream);
       importService.importData(workbook, validationOnly);
     } catch (DataImportService.RollbackException e) {
