@@ -40,9 +40,9 @@ public class OrderFormCRUDService {
       }
 
       for (Component component : updatedOrderForm.getComponents()) {
-        if (updatedOrderForm.getType() == OrderType.ISSUE) {
+        if (OrderType.isIssue(updatedOrderForm.getType())) {
           componentCRUDService.issueComponent(component, updatedOrderForm.getDispatchedTo());
-        } else if (updatedOrderForm.getType() == OrderType.TRANSFER) {
+        } else if (OrderType.isTransfer(updatedOrderForm.getType())) {
           componentCRUDService.transferComponent(component, updatedOrderForm.getDispatchedTo());
         }
       }
@@ -58,6 +58,7 @@ public class OrderFormCRUDService {
     existingOrderForm.setDispatchedFrom(updatedOrderForm.getDispatchedFrom());
     existingOrderForm.setDispatchedTo(updatedOrderForm.getDispatchedTo());
     existingOrderForm.setComponents(updatedOrderForm.getComponents());
+    existingOrderForm.setPatient(updatedOrderForm.getPatient());
     return orderFormRepository.update(existingOrderForm);
   }
 

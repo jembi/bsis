@@ -11,7 +11,7 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.ComponentBatchBackingForm;
 import org.jembi.bsis.backingform.validator.ComponentBatchBackingFormValidator;
-import org.jembi.bsis.factory.ComponentBatchViewModelFactory;
+import org.jembi.bsis.factory.ComponentBatchFactory;
 import org.jembi.bsis.factory.DonationBatchViewModelFactory;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.componentbatch.ComponentBatch;
@@ -52,7 +52,7 @@ public class ComponentBatchController {
   private ComponentBatchCRUDService componentBatchCRUDService;
   
   @Autowired
-  private ComponentBatchViewModelFactory componentBatchViewModelFactory;
+  private ComponentBatchFactory componentBatchFactory;
   
   @Autowired
   private DonationBatchRepository donationBatchRepository;
@@ -94,19 +94,19 @@ public class ComponentBatchController {
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_COMPONENT_BATCH + "')")
   public ResponseEntity<ComponentBatchFullViewModel> addComponentBatch(@RequestBody @Valid ComponentBatchBackingForm form) {
-    ComponentBatch componentBatch = form.getComponentBatch();
+    ComponentBatch componentBatch = componentBatchFactory.createEntity(form);
     componentBatch = componentBatchCRUDService.createComponentBatch(componentBatch);
     return new ResponseEntity<>(
-        componentBatchViewModelFactory.createComponentBatchFullViewModel(componentBatch), HttpStatus.CREATED);
+        componentBatchFactory.createComponentBatchFullViewModel(componentBatch), HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_COMPONENT_BATCH + "')")
   public ResponseEntity<ComponentBatchFullViewModel> updateComponentBatch(@PathVariable Long id, @RequestBody @Valid ComponentBatchBackingForm form) {
-    ComponentBatch componentBatch = form.getComponentBatch();
+    ComponentBatch componentBatch = componentBatchFactory.createEntity(form);
     componentBatch = componentBatchCRUDService.updateComponentBatch(componentBatch);
     return new ResponseEntity<>(
-        componentBatchViewModelFactory.createComponentBatchFullViewModel(componentBatch), HttpStatus.OK);
+        componentBatchFactory.createComponentBatchFullViewModel(componentBatch), HttpStatus.OK);
   }
 
   @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -121,7 +121,7 @@ public class ComponentBatchController {
   public ResponseEntity<ComponentBatchFullViewModel> getComponentBatch(@PathVariable Long id) {
     ComponentBatch componentBatch = componentBatchCRUDService.getComponentBatchById(id);
     return new ResponseEntity<>(
-        componentBatchViewModelFactory.createComponentBatchFullViewModel(componentBatch), HttpStatus.OK);
+        componentBatchFactory.createComponentBatchFullViewModel(componentBatch), HttpStatus.OK);
   }
   
   @RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -131,7 +131,7 @@ public class ComponentBatchController {
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endCollectionDate) {
     Map<String, Object> map = new HashMap<String, Object>();
     List<ComponentBatch> componentBatches = componentBatchCRUDService.findComponentBatches(startCollectionDate, endCollectionDate);
-    map.put("componentBatches", componentBatchViewModelFactory.createComponentBatchViewModels(componentBatches));
+    map.put("componentBatches", componentBatchFactory.createComponentBatchViewModels(componentBatches));
     return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
   }

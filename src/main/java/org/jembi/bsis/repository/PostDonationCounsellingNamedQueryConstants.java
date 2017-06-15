@@ -37,4 +37,19 @@ public class PostDonationCounsellingNamedQueryConstants {
       + "FROM PostDonationCounselling pdc "
       + "WHERE pdc.isDeleted = :deleted "
       + "ORDER BY pdc.modificationTracker.createdDate ASC ";
+  
+  public static final String NAME_FIND_POST_DONATION_COUNSELLING =
+      "PostDonationCounselling.findPostDonationCounselling";
+  public static final String QUERY_FIND_POST_DONATION_COUNSELLING =
+      "SELECT pdc " +
+          "FROM PostDonationCounselling pdc " +
+          "WHERE pdc.isDeleted = :isDeleted " +
+          "AND pdc.flaggedForCounselling = :flaggedForCounselling " +
+          "AND ((:includeReferred = true AND pdc.referred = :referred1) " +
+            "OR (:includeReferred = true AND pdc.referred = :referred2) " +
+            "OR (:includeReferred = false AND pdc.referred IS NULL)) " +
+          "AND (:venuesHasItems = false OR pdc.donation.venue.id IN (:venueIds)) " +
+          "AND (:counsellingStatus IS NULL OR pdc.counsellingStatus = :counsellingStatus) " +
+          "AND (:startDate IS NULL OR pdc.donation.donationDate >= :startDate) " +
+          "AND (:endDate IS NULL OR pdc.donation.donationDate <= :endDate)";
 }

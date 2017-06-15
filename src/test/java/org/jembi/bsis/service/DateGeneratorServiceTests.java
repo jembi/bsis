@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.joda.time.LocalDate;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -32,5 +34,18 @@ public class DateGeneratorServiceTests {
 
     assertEquals(aDate, expectedDate);
 
+  }
+
+  @Test
+  public void testgenerateLocalDateWithNullDate_shouldReturnNull() throws Exception {
+    LocalDate date = service.generateLocalDate(null);
+    Assert.assertNull(date);
+  }
+
+  @Test
+  public void testgenerateLocalDateWithCurrentDate_shouldReturnCurrentLocalDate() throws Exception {
+    LocalDate date = new LocalDate();
+    LocalDate localDate = service.generateLocalDate(date.toDate());
+    Assert.assertEquals(localDate, date);
   }
 }

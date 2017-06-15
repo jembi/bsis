@@ -34,6 +34,7 @@ public class DonationNamedQueryConstants {
       "SELECT NEW org.jembi.bsis.dto.CollectedDonationDTO(d.donationType, do.gender, d.bloodAbo, d.bloodRh, d.venue, COUNT(d)) " +
           "FROM Donation d, Donor do " +
           "WHERE d.donor = do AND d.donationDate BETWEEN :startDate AND :endDate " +
+          "AND d.donationType.isDeleted = :deleted " +
           "AND d.isDeleted = :deleted " +
           "GROUP BY d.venue, do.gender, d.donationType, d.bloodAbo, d.bloodRh " +
           "ORDER BY d.venue, do.gender, d.donationType, d.bloodAbo, d.bloodRh";
@@ -51,13 +52,13 @@ public class DonationNamedQueryConstants {
       "Donation.findLastDonationsByDonorVenueAndDonationDate";
   public static final String QUERY_FIND_LAST_DONATIONS_BY_DONOR_VENUE_AND_DONATION_DATE =
       "SELECT DISTINCT d "
-      + "FROM Donation d "
-      + "LEFT JOIN FETCH d.bloodTestResults "
-      + "WHERE d.donationDate BETWEEN :startDate AND :endDate "
-      // Only look at the last donation for each donor
-      + "AND d.donationDate = d.donor.dateOfLastDonation "
-      + "AND d.donor.venue = :venue "
-      + "AND d.isDeleted = :deleted ";
+        + "FROM Donation d "
+        + "LEFT JOIN FETCH d.bloodTestResults "
+        + "WHERE d.donationDate BETWEEN :startDate AND :endDate "
+          // Only look at the last donation for each donor
+          + "AND d.donationDate = DATE(d.donor.dateOfLastDonation) "
+          + "AND d.donor.venue = :venue "
+          + "AND d.isDeleted = :deleted ";
   
   public static final String NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED = 
       "Donation.findDonationByDonationIdentificationNumberIncludeDeleted";

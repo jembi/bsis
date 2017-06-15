@@ -166,6 +166,47 @@ public class OrderFormCRUDServiceTests extends UnitTestSuite {
     verify(componentCRUDService).issueComponent(component, dispatchedTo);
   }
 
+  @Test
+  public void testUpdatePatientRequestOrderForm_shouldUpdateFieldsCorrectly() {
+    // Fixture
+    Date createdDate = new Date();
+    Location dispatchedFrom = aDistributionSite().build();
+    Location dispatchedTo = aUsageSite().build();
+    Component component = aComponent().build();
+    
+    OrderForm existingOrderForm = anOrderForm().withId(ORDER_FORM_ID).withCreatedDate(createdDate).build();
+    OrderForm orderForm = anOrderForm()
+        .withId(ORDER_FORM_ID)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.PATIENT_REQUEST)
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .withComponent(component)
+        .build();
+    OrderForm expectedOrderForm = anOrderForm()
+        .withId(ORDER_FORM_ID)
+        .withCreatedDate(createdDate)
+        .withOrderStatus(OrderStatus.DISPATCHED)
+        .withOrderType(OrderType.PATIENT_REQUEST)
+        .withDispatchedFrom(dispatchedFrom)
+        .withDispatchedTo(dispatchedTo)
+        .withComponent(component)
+        .build();
+
+    // Expectations
+    when(orderFormRepository.findById(ORDER_FORM_ID)).thenReturn(existingOrderForm);
+    when(orderFormRepository.update(existingOrderForm)).thenReturn(existingOrderForm);
+    when(orderFormConstraintChecker.canDispatch(existingOrderForm)).thenReturn(true);
+    when(orderFormConstraintChecker.canEdit(existingOrderForm)).thenReturn(true);
+    
+    // Test
+    OrderForm returnedOrderForm = orderFormCRUDService.updateOrderForm(orderForm);
+    
+    // Assertions
+    assertThat(returnedOrderForm, hasSameStateAsOrderForm(expectedOrderForm));
+    verify(componentCRUDService).issueComponent(component, dispatchedTo);
+  }
+
   @Test(expected = IllegalStateException.class)
   public void testUpdatePreviouslyDispatchedOrderForm_shouldThrow() {
     // Fixture

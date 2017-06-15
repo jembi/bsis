@@ -25,7 +25,9 @@ public class PostDonationCounsellingViewModelMatcher extends TypeSafeMatcher<Pos
         .appendText("\nFlaggedForCounselling: ").appendValue(expected.isFlaggedForCounselling())
         .appendText("\nCounsellingDate: ").appendValue(expected.getCounsellingDate())
         .appendText("\nCounsellingStatus: ").appendValue(expected.getCounsellingStatus())
-        .appendText("\nNotes: ").appendValue(expected.getNotes());
+        .appendText("\nNotes: ").appendValue(expected.getNotes())
+        .appendText("\nReferred: ").appendValue(expected.isReferred())
+        .appendText("\nReferred Site: ").appendValue(expected.getReferralSite());
   }
 
   @Override
@@ -37,7 +39,9 @@ public class PostDonationCounsellingViewModelMatcher extends TypeSafeMatcher<Pos
         Objects.equals(actual.isFlaggedForCounselling(), expected.isFlaggedForCounselling()) &&
         Objects.equals(actual.getCounsellingDate(), expected.getCounsellingDate()) &&
         Objects.equals(actual.getCounsellingStatus(), expected.getCounsellingStatus()) &&
-        Objects.equals(actual.getNotes(), expected.getNotes());
+        Objects.equals(actual.getNotes(), expected.getNotes()) &&
+        Objects.equals(actual.isReferred(), expected.isReferred()) &&
+        Objects.equals(actual.getReferralSite(), expected.getReferralSite());
   }
 
   public static PostDonationCounsellingViewModelMatcher hasSameStateAsPostDonationCounsellingViewModel(PostDonationCounsellingViewModel expected) {

@@ -37,9 +37,9 @@ public class TtiPrevalenceReportGenerator {
     report.setEndDate(endDate);
     
     List<DataValue> dataValues = new ArrayList<DataValue>();
-    dataValues.addAll(geBloodResultsDataValues(startDate, endDate));
     dataValues.addAll(getTotalUnitsTestedDataValues(startDate, endDate));
     dataValues.addAll(getTotalUnsafeUnitsTestedDataValues(startDate, endDate));
+    dataValues.addAll(geBloodResultsDataValues(startDate, endDate));
 
     report.setDataValues(dataValues);
     report.sortDataValuesByVenue();

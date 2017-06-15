@@ -15,6 +15,7 @@ import javax.persistence.NamedQuery;
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerEntity;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.PostDonationCounsellingNamedQueryConstants;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -28,7 +29,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING_FOR_DONATION,
         query = PostDonationCounsellingNamedQueryConstants.QUERY_FIND_POST_DONATION_COUNSELLING_FOR_DONATION),
     @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLINGS_FOR_EXPORT,
-        query = PostDonationCounsellingNamedQueryConstants.QUERY_FIND_POST_DONATION_COUNSELLINGS_FOR_EXPORT)
+        query = PostDonationCounsellingNamedQueryConstants.QUERY_FIND_POST_DONATION_COUNSELLINGS_FOR_EXPORT),
+    @NamedQuery(name = PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING,
+    query = PostDonationCounsellingNamedQueryConstants.QUERY_FIND_POST_DONATION_COUNSELLING)
 })
 @Entity
 @Audited
@@ -54,6 +57,11 @@ public class PostDonationCounselling extends BaseModificationTrackerEntity {
   private boolean isDeleted;
 
   private String notes;
+  
+  private Boolean referred;
+
+  @ManyToOne(optional = true)
+  private Location referralSite;
 
   public PostDonationCounselling() {
     super();
@@ -106,4 +114,20 @@ public class PostDonationCounselling extends BaseModificationTrackerEntity {
   public void setNotes(String notes) {
     this.notes = notes;
   }
+  
+  public Boolean getReferred() {
+    return referred;
+  }
+
+  public void setReferred(Boolean referred) {
+    this.referred = referred;
+  }
+
+  public Location getReferralSite() {
+    return referralSite;
+  }
+
+  public void setReferralSite(Location referralSite) {
+    this.referralSite = referralSite;
+  }    
 }

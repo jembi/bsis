@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jembi.bsis.constant.CohortConstants;
 import org.jembi.bsis.dto.BloodUnitsOrderDTO;
+import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.model.reporting.Cohort;
 import org.jembi.bsis.model.reporting.Comparator;
 import org.jembi.bsis.model.reporting.DataValue;
@@ -19,6 +20,9 @@ public class BloodUnitsIssuedReportGenerator {
   
   @Autowired
   private OrderFormRepository orderFormRepository;
+
+  @Autowired
+  private LocationFactory locationFactory;
   
   public Report generateUnitsIssuedReport(Date startDate, Date endDate) {
     Report report = new Report();
@@ -44,6 +48,7 @@ public class BloodUnitsIssuedReportGenerator {
       dataValue.setId("unitsOrdered");
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
+      dataValue.setLocation(locationFactory.createViewModel(dto.getDistributionSite()));
       dataValue.setValue(dto.getCount());
 
       Cohort bloodTestCohort = new Cohort();
@@ -51,6 +56,12 @@ public class BloodUnitsIssuedReportGenerator {
       bloodTestCohort.setComparator(Comparator.EQUALS);
       bloodTestCohort.setOption(dto.getComponentType().getComponentTypeName());
       dataValue.addCohort(bloodTestCohort);
+
+      Cohort orderTypeCohort = new Cohort();
+      orderTypeCohort.setCategory(CohortConstants.ORDER_TYPE_CATEGORY);
+      orderTypeCohort.setComparator(Comparator.EQUALS);
+      orderTypeCohort.setOption(dto.getOrderType().name());
+      dataValue.addCohort(orderTypeCohort);
       dataValues.add(dataValue);
     }
 
@@ -68,6 +79,7 @@ public class BloodUnitsIssuedReportGenerator {
       dataValue.setId("unitsIssued");
       dataValue.setStartDate(startDate);
       dataValue.setEndDate(endDate);
+      dataValue.setLocation(locationFactory.createViewModel(dto.getDistributionSite()));
       dataValue.setValue(dto.getCount());
 
       Cohort bloodTestCohort = new Cohort();
@@ -75,6 +87,12 @@ public class BloodUnitsIssuedReportGenerator {
       bloodTestCohort.setComparator(Comparator.EQUALS);
       bloodTestCohort.setOption(dto.getComponentType().getComponentTypeName());
       dataValue.addCohort(bloodTestCohort);
+
+      Cohort orderTypeCohort = new Cohort();
+      orderTypeCohort.setCategory(CohortConstants.ORDER_TYPE_CATEGORY);
+      orderTypeCohort.setComparator(Comparator.EQUALS);
+      orderTypeCohort.setOption(dto.getOrderType().name());
+      dataValue.addCohort(orderTypeCohort);
       dataValues.add(dataValue);
     }
 

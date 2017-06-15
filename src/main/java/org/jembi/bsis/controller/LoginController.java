@@ -2,9 +2,6 @@ package org.jembi.bsis.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jembi.bsis.repository.GenericConfigRepository;
-import org.jembi.bsis.repository.LoginRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,12 +14,6 @@ import com.mangofactory.swagger.annotations.ApiIgnore;
 @RequestMapping("login")
 public class LoginController {
 
-  @Autowired
-  private LoginRepository loginRepository;
-
-  @Autowired
-  private GenericConfigRepository genericConfigRepository;
-
   @RequestMapping(method = RequestMethod.GET)
   @ApiIgnore
   public ModelAndView login(HttpServletRequest request,
@@ -30,14 +21,6 @@ public class LoginController {
     ModelAndView mv = new ModelAndView("login");
     if (error)
       mv.addObject("login_error", true);
-    return mv;
-  }
-
-  @RequestMapping(value = "/welcomePage", method = RequestMethod.GET)
-  @ApiIgnore
-  public ModelAndView welcomePage(HttpServletRequest request) {
-    ModelAndView mv = new ModelAndView("welcomePage");
-    mv.addObject("labsetup", genericConfigRepository.getConfigProperties("labsetup"));
     return mv;
   }
 }

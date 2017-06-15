@@ -87,7 +87,11 @@ public class PermissionConstants {
 
   // Inventory Permissions
   public static final String LABEL_COMPONENT = "Label Component";
-
+  public static final String ADD_TRANSFUSION_DATA = "Add Transfusion Data";
+  public static final String EDIT_TRANSFUSION_DATA = "Edit Transfusion Data";
+  public static final String VIEW_TRANSFUSION_DATA = "View Transfusion Data";
+  public static final String VOID_TRANSFUSION_DATA = "Void Transfusion Data";
+  
   // Discard Permissions
   public static final String DISCARD_COMPONENT = "Discard Component";
   public static final String VIEW_DISCARDS = "View Discards";
@@ -98,6 +102,7 @@ public class PermissionConstants {
   public static final String TTI_REPORTING = "Reporting - TTI Testing";
   public static final String COMPONENTS_REPORTING = "Reporting - Components";
   public static final String DONORS_REPORTING = "Reporting - Donors";
+  public static final String TRANSFUSIONS_REPORTING = "Reporting - Transfusions";
 
   // Admin and Super-User Permissions
   public static final String MANAGE_USERS = "Manage Users";
@@ -121,6 +126,7 @@ public class PermissionConstants {
   public static final String MANAGE_BLOOD_TESTS = "Manage Blood Tests";
   public static final String MANAGE_REQUESTS = "Manage Requests";
   public static final String MANAGE_GENERAL_CONFIGS = "Manage General Configs";
+  public static final String MANAGE_TRANSFUSION_REACTION_TYPES = "Manage Transfusion Reaction Types";
 
   //Page Control Permissions
   public static final String VIEW_DONOR_INFORMATION = "View Donor Information";

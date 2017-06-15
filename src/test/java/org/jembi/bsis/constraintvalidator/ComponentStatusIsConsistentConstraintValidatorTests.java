@@ -1,5 +1,6 @@
 package org.jembi.bsis.constraintvalidator;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
@@ -102,5 +103,12 @@ public class ComponentStatusIsConsistentConstraintValidatorTests extends UnitTes
     Component component = ComponentBuilder.aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.PROCESSED).build();
     boolean valid = constraintValidator.isValid(component, null);
     Assert.assertTrue("Is compatible", valid);
+  }
+  
+  @Test
+  public void testConsistencyRemovedTransfused_shouldBeCompatible() {
+    Component component = ComponentBuilder.aComponent().withInventoryStatus(InventoryStatus.REMOVED).withStatus(ComponentStatus.TRANSFUSED).build();
+    boolean valid = constraintValidator.isValid(component, null);
+    assertThat("Is compatible", valid);
   }
 }

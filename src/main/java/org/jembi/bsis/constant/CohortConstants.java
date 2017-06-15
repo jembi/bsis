@@ -11,5 +11,8 @@ public class CohortConstants {
   public static final String DEFERRAL_REASON_CATEGORY = "Deferral Reason";
   public static final String ADVERSE_EVENT_TYPE_CATEGORY = "Adverse Event Type";
   public static final String DISCARD_REASON_CATEGORY = "Discard Reason";
+  public static final String TRANSFUSION_REACTION_TYPE_CATEGORY = "Transfusion Reaction Type";
+  public static final String TRANSFUSION_OUTCOME_CATEGORY = "Transfusion Outcome";
+  public static final String ORDER_TYPE_CATEGORY = "Order Type";
 
 }

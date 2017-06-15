@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.factory.DonationBatchViewModelFactory;
-import org.jembi.bsis.factory.DonationSummaryViewModelFactory;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
@@ -20,7 +19,7 @@ import org.jembi.bsis.service.TestBatchCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.utils.PermissionUtils;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
-import org.jembi.bsis.viewmodel.DonationSummaryViewModel;
+import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
@@ -53,9 +52,6 @@ public class TestBatchControllerService {
   @Autowired
   private DonationBatchViewModelFactory donationBatchViewModelFactory;
 
-  @Autowired
-  private DonationSummaryViewModelFactory donationSummaryViewModelFactory;
-
   public TestBatchFullViewModel updateTestBatch(TestBatchBackingForm backingForm) {
     TestBatch testBatch = testBatchFactory.createEntity(backingForm);
     testBatch = testBatchCRUDService.updateTestBatch(testBatch);
@@ -72,7 +68,7 @@ public class TestBatchControllerService {
   }
   
   public TestBatchFullViewModel saveTestBatch(TestBatchBackingForm form) {
-    TestBatch testBatch = testBatchRepository.saveTestBatch(form.getTestBatch(), sequenceNumberRepository.getNextTestBatchNumber());
+    TestBatch testBatch = testBatchRepository.saveTestBatch(testBatchFactory.createEntity(form), sequenceNumberRepository.getNextTestBatchNumber());
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
     return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
   }
@@ -92,9 +88,9 @@ public class TestBatchControllerService {
     testBatchCRUDService.deleteTestBatch(id);
   }
 
-  public List<DonationSummaryViewModel> getDonationsSummaries(long id, BloodTypingMatchStatus bloodTypingMatchStatus) {
+  public List<DonationViewModel> getDonations(long id, BloodTypingMatchStatus bloodTypingMatchStatus) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-    return donationSummaryViewModelFactory.createDonationSummaryViewModels(testBatch, bloodTypingMatchStatus);
+    return testBatchFactory.createDonationViewModels(testBatch, bloodTypingMatchStatus);
   }
 
   public Date getTestBatchCreatedDate(long id) {

@@ -52,6 +52,8 @@ public class PostDonationCounsellingCRUDService {
     existingPostDonationCounselling.setCounsellingStatus(postDonationCounselling.getCounsellingStatus());
     existingPostDonationCounselling.setCounsellingDate(postDonationCounselling.getCounsellingDate());
     existingPostDonationCounselling.setNotes(postDonationCounselling.getNotes());
+    existingPostDonationCounselling.setReferred(postDonationCounselling.getReferred());
+    existingPostDonationCounselling.setReferralSite(postDonationCounselling.getReferralSite());
 
     return postDonationCounsellingRepository.update(existingPostDonationCounselling);
   }

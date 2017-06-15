@@ -68,6 +68,13 @@ public class LocationRepository extends AbstractRepository<Location>{
         .getResultList();
   }
 
+  public List<Location> getReferralSites() {
+    return em.createNamedQuery(LocationNamedQueryConstants.NAME_FIND_REFERRAL_SITES, Location.class)
+        .setParameter("isReferralSite", true)
+        .setParameter("isDeleted", false)
+        .getResultList();
+  }
+
   public List<Location> getAllLocations(boolean includeDeleted) {
     return em.createNamedQuery(LocationNamedQueryConstants.NAME_GET_ALL_LOCATIONS, Location.class)
         .setParameter("includeDeleted", includeDeleted)
@@ -150,6 +157,9 @@ public class LocationRepository extends AbstractRepository<Location>{
         case USAGE_SITE:
           addWhereCondition(queryBuilder, "l.isUsageSite = :isUsageSite ");
           break;
+        case REFERRAL_SITE:
+          addWhereCondition(queryBuilder, "l.isReferralSite = :isReferralSite ");
+          break;
       }
     }
 
@@ -187,6 +197,9 @@ public class LocationRepository extends AbstractRepository<Location>{
           break;
         case USAGE_SITE:
           query.setParameter("isUsageSite", true);
+          break;
+        case REFERRAL_SITE:
+          query.setParameter("isReferralSite", true);
           break;
       }
     }

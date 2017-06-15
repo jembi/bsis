@@ -1,16 +1,13 @@
 package org.jembi.bsis.repository;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 
 import org.jembi.bsis.dto.PostDonationCounsellingExportDTO;
+import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.model.counselling.PostDonationCounselling;
 import org.jembi.bsis.model.donation.Donation;
 import org.springframework.stereotype.Repository;
@@ -22,38 +19,26 @@ public class PostDonationCounsellingRepository extends AbstractRepository<PostDo
     return entityManager.find(PostDonationCounselling.class, id);
   }
 
-  public List<Donation> findDonationsFlaggedForCounselling(Date startDate, Date endDate, Set<Long> venueIds) {
+  public List<PostDonationCounselling> findPostDonationCounselling(Date startDate, Date endDate, Set<Long> venueIds, 
+      CounsellingStatus counsellingStatus, Boolean referred, Boolean notReferred, boolean flaggedForCounselling) {
+    
+    String counsellingStatusName = counsellingStatus != null ? counsellingStatus.name() : null;
+    boolean venuesHasItems = (venueIds == null || venueIds.isEmpty()) ? false : true;
 
-    StringBuilder queryBuilder = new StringBuilder()
-        .append("SELECT DISTINCT(pdc.donation) ")
-        .append("FROM PostDonationCounselling pdc ")
-        .append("WHERE pdc.flaggedForCounselling = :flaggedForCounselling ")
-        .append("AND pdc.isDeleted = :isDeleted ");
-
-    Map<String, Object> parameters = new HashMap<>();
-    parameters.put("flaggedForCounselling", true);
-    parameters.put("isDeleted", false);
-
-    if (startDate != null) {
-      queryBuilder.append("AND pdc.donation.donationDate >= :startDate ");
-      parameters.put("startDate", startDate);
-    }
-
-    if (endDate != null) {
-      queryBuilder.append("AND pdc.donation.donationDate <= :endDate ");
-      parameters.put("endDate", endDate);
-    }
-
-    if (venueIds != null && !venueIds.isEmpty()) {
-      queryBuilder.append("AND pdc.donation.venue.id IN :venueIds ");
-      parameters.put("venueIds", venueIds);
-    }
-
-    TypedQuery<Donation> query = entityManager.createQuery(queryBuilder.toString(), Donation.class);
-    for (Entry<String, Object> entry : parameters.entrySet()) {
-      query.setParameter(entry.getKey(), entry.getValue());
-    }
-    return query.getResultList();
+    return entityManager.createNamedQuery(
+        PostDonationCounsellingNamedQueryConstants.NAME_FIND_POST_DONATION_COUNSELLING,
+        PostDonationCounselling.class)
+        .setParameter("isDeleted", false)
+        .setParameter("startDate", startDate)
+        .setParameter("endDate", endDate)
+        .setParameter("venueIds", venueIds)
+        .setParameter("venuesHasItems", venuesHasItems)
+        .setParameter("counsellingStatus", counsellingStatusName)
+        .setParameter("referred1", referred)
+        .setParameter("referred2", (notReferred == null ? null : !notReferred))
+        .setParameter("includeReferred", (referred != null && notReferred != null))
+        .setParameter("flaggedForCounselling", flaggedForCounselling)
+        .getResultList();
   }
 
   public PostDonationCounselling findPostDonationCounsellingForDonor(Long donorId) throws NoResultException {

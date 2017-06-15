@@ -14,6 +14,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.DonorRepository;
+import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.SequenceNumberRepository;
 import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,9 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
 
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
+
+  @Autowired
+  private LocationRepository locationRepository;
 
   @Override
   public void validateForm(DonationBackingForm form, Errors errors) {
@@ -174,11 +178,22 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
   }
   
   private void validateVenue(DonationBackingForm form, Errors errors) {
-    Location venue = form.getDonation().getVenue();
-    if (venue == null) {
+    
+    if (form.getDonation().getVenue() == null || form.getDonation().getVenue().getId() == null) {
       errors.rejectValue("donation.venue", "venue.empty", "Venue is required.");
-    } else if (venue.getIsVenue() == false) {
-      errors.rejectValue("donation.venue", "venue.invalid", "Location is not a Venue.");
+    } else {
+      Location venue = null;
+      try {
+        venue = locationRepository.getLocation(form.getDonation().getVenue().getId());
+      } catch (NoResultException ex) {
+        LOGGER.warn("Could not find Venue with id '" + form.getDonation().getVenue().getId()
+            + "'. Error: " + ex.getMessage());
+      }
+      if (venue == null) {
+        errors.rejectValue("donation.venue", "venue.empty", "Venue is required.");
+      } else if (venue.getIsVenue() == false) {
+        errors.rejectValue("donation.venue", "venue.invalid", "Location is not a Venue.");
+      }
     }
   }
 

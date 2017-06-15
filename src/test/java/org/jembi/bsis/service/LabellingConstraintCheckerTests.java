@@ -357,7 +357,7 @@ public class LabellingConstraintCheckerTests extends UnitTestSuite {
     // Set up
     Component component = aComponent()
         .withId(1L)
-        .withStatus(ComponentStatus.USED)
+        .withStatus(ComponentStatus.TRANSFUSED)
         .withComponentBatch(aComponentBatch()
             .withId(1L)
             .build())

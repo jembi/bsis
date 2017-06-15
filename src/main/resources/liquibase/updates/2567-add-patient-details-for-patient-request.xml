@@ -1,0 +1,58 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+  logicalFilePath="./liquibase/updates/2567-add-patient-details-for-patient-request.xml">
+
+  <changeSet id="20170216-1151" author="tmvumbi2">
+    <!-- Add tables Patient and Patient_AUD -->
+    <createTable tableName="Patient">
+      <column name="id" type="BIGINT(20)" autoIncrement="true">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="name1" type="VARCHAR(20)">
+        <constraints nullable="false" />
+      </column>
+      <column name="name2" type="VARCHAR(20)">
+        <constraints nullable="false" />
+      </column>
+      <column name="dateOfBirth" type="DATE" />
+      <column name="gender" type="VARCHAR(15)" />
+      <column name="patientNumber" type="VARCHAR(20)" />
+      <column name="hospitalBloodBankNumber" type="VARCHAR(20)" />
+      <column name="hospitalWardNumber" type="VARCHAR(20)" />
+      <column name="bloodAbo" type="VARCHAR(2)" />
+      <column name="bloodRh" type="VARCHAR(1)" />
+    </createTable>
+
+    <createTable tableName="Patient_AUD">
+      <column name="id" type="BIGINT(20)" autoIncrement="true">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="REV" type="INT(11)">
+        <constraints primaryKey="true" />
+      </column>
+      <column name="REVTYPE" type="TINYINT(4)" />
+      <column name="name1" type="VARCHAR(20)" />
+      <column name="name2" type="VARCHAR(20)" />
+      <column name="dateOfBirth" type="DATE" />
+      <column name="gender" type="VARCHAR(15)" />
+      <column name="patientNumber" type="VARCHAR(20)" />
+      <column name="hospitalBloodBankNumber" type="VARCHAR(20)" />
+      <column name="hospitalWardNumber" type="VARCHAR(20)" />
+      <column name="bloodAbo" type="VARCHAR(2)" />
+      <column name="bloodRh" type="VARCHAR(1)" />
+    </createTable>
+  </changeSet>
+
+  <changeSet id="20170217-0810" author="tmvumbi2">
+    <!-- Add patient_id to OrderForm and OrderForm_AUD -->
+    <addColumn tableName="OrderForm">
+      <column name="patient_id" type="BIGINT(20)" defaultValue="NULL">
+        <constraints foreignKeyName="fk_OrderForm_patient" references="Patient(id)" />
+      </column>
+    </addColumn>
+    <addColumn tableName="OrderForm_AUD">
+      <column name="patient_id" type="BIGINT(20)" />
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>

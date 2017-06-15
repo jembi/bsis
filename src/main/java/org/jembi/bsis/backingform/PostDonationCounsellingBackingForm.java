@@ -13,13 +13,13 @@ public class PostDonationCounsellingBackingForm {
 
   @NotNull
   private Long id;
-
   private CounsellingStatus counsellingStatus;
-
   private Date counsellingDate;
   private String notes;
   private boolean flaggedForCounselling;
-
+  private Boolean referred;
+  private LocationBackingForm referralSite;
+  
   public long getId() {
     return id;
   }
@@ -32,11 +32,8 @@ public class PostDonationCounsellingBackingForm {
     return counsellingStatus;
   }
 
-  public void setCounsellingStatus(Integer counsellingStatusId) {
-    if (counsellingStatusId == null) {
-      return;
-    }
-    this.counsellingStatus = CounsellingStatus.findById(counsellingStatusId);
+  public void setCounsellingStatus(CounsellingStatus counsellingStatus) {
+    this.counsellingStatus = counsellingStatus;
   }
 
   public Date getCounsellingDate() {
@@ -64,4 +61,20 @@ public class PostDonationCounsellingBackingForm {
     return flaggedForCounselling;
   }
 
+  public Boolean isReferred() {
+    return referred;
+  }
+
+  public void setReferred(Boolean referred) {
+    this.referred = referred;
+  }
+   
+  public LocationBackingForm getReferralSite() {
+    return referralSite;
+  }
+
+  public void setReferralSite(LocationBackingForm referralSite) {
+    this.referralSite = referralSite;
+  }
 }
+

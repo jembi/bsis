@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicBloodTypingBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBasicTTIBloodTest;
@@ -55,6 +56,23 @@ public class BloodTestRepositoryTests extends SecurityContextDependentTestSuite 
     assertThat("2 tests returned", basicBloodTypingTests.size(), is(2));
     assertThat("aboTest is returned", basicBloodTypingTests.contains(aboTest));
     assertThat("rhTest is returned", basicBloodTypingTests.contains(rhTest));
+  }
+
+  @Test
+  public void testGetEnabledBloodTestsOfType_shouldReturnCorrectBloodTests() {
+    // Set up data
+    BloodTest enabledActiveTest = aBasicTTIBloodTest().buildAndPersist(entityManager);
+    BloodTest enabledInactiveTest = aBasicTTIBloodTest().thatIsInActive().buildAndPersist(entityManager);
+    aBasicTTIBloodTest().thatIsDeleted().thatIsInActive().buildAndPersist(entityManager); // excluded by deleted
+    aBasicTTIBloodTest().thatIsDeleted().buildAndPersist(entityManager); // excluded by deleted
+
+    // Test
+    List<BloodTest> basicTTITests = bloodTestRepository.getEnabledBloodTestsOfType(BloodTestType.BASIC_TTI);
+
+    // Verify
+    assertThat(basicTTITests.size(), is(2));
+    assertThat(basicTTITests, hasItem(enabledActiveTest));
+    assertThat(basicTTITests, hasItem(enabledInactiveTest));
   }
 
   @Test

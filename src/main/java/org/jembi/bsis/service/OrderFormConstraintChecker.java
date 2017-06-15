@@ -2,6 +2,7 @@ package org.jembi.bsis.service;
 
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.model.order.OrderStatus;
+import org.jembi.bsis.model.order.OrderType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,9 @@ public class OrderFormConstraintChecker {
     return 
         orderForm.getStatus().equals(OrderStatus.CREATED) && 
         orderForm.getComponents() != null && 
-        orderForm.getComponents().size() > 0;
+        orderForm.getComponents().size() > 0 &&
+        (!OrderType.isPatientRequest(orderForm.getType())
+            || (OrderType.isPatientRequest(orderForm.getType()) && orderForm.getPatient() != null));
   }
   
   public boolean canEdit(OrderForm orderForm) {

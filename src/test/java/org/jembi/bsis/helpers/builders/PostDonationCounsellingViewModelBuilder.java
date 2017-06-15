@@ -4,21 +4,24 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jembi.bsis.viewmodel.CounsellingStatusViewModel;
+import org.jembi.bsis.model.counselling.CounsellingStatus;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
+import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.PostDonationCounsellingViewModel;
 
 public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<PostDonationCounsellingViewModel> {
 
   private long id;
   private boolean flaggedForCounselling = false;
-  private CounsellingStatusViewModel counsellingStatus;
+  private CounsellingStatus counsellingStatus;
   private Date counsellingDate;
   private DonorViewModel donor;
   private String notes;
   private DonationViewModel donation;
   private Map<String, Boolean> permissions;
+  private Boolean referred;
+  private LocationViewModel referralSite;
   
   public PostDonationCounsellingViewModelBuilder withId(long id) {
     this.id = id;
@@ -55,9 +58,28 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
     return this;
   }
 
-  public PostDonationCounsellingViewModelBuilder withCounsellingStatusViewModel(
-      CounsellingStatusViewModel counsellingStatus) {
+  public PostDonationCounsellingViewModelBuilder withCounsellingStatus(CounsellingStatus counsellingStatus) {
     this.counsellingStatus = counsellingStatus;
+    return this;
+  }
+
+  public PostDonationCounsellingViewModelBuilder withReferred(Boolean referred) {
+    this.referred = referred;
+    return this;
+  }
+
+  public PostDonationCounsellingViewModelBuilder thatIsReferred() {
+    this.referred = true;
+    return this;
+  }
+
+  public PostDonationCounsellingViewModelBuilder thatIsNotReferred() {
+    this.referred = false;
+    return this;
+  }
+  
+  public PostDonationCounsellingViewModelBuilder withReferralSite(LocationViewModel referralSite) {
+    this.referralSite = referralSite;
     return this;
   }
 
@@ -82,6 +104,8 @@ public class PostDonationCounsellingViewModelBuilder extends AbstractBuilder<Pos
     viewModel.setCounsellingStatus(counsellingStatus);
     viewModel.setDonor(donor);
     viewModel.setNotes(notes);
+    viewModel.setReferred(referred);
+    viewModel.setReferralSite(referralSite);
     return viewModel;
   }
 

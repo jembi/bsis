@@ -81,4 +81,15 @@
   <include file="liquibase/updates/1799-add-component-status-change-reason-low-weight.xml"/>
   <include file="liquibase/updates/2372-change-donationDate-to-date.xml"/>
   <include file="liquibase/updates/2219-add-donation-counselling-notes.xml"/>
+  <include file="liquibase/updates/2123-add-edit-location-with-type-referral.xml"/>
+  <include file="liquibase/updates/2121-add-referred-boolean-to-couselling.xml"/>
+  <include file="liquibase/updates/2122-record-referral-site-for-TTI-POS-donor.xml"/>
+  <include file="liquibase/updates/2567-add-patient-details-for-patient-request.xml"/>
+  <include file="liquibase/updates/2562-configure-transfusion-reaction-types.xml"/>
+  <include file="liquibase/updates/2582-add-transfusion-data-for-a-din.xml"/>
+  <include file="liquibase/updates/2577-find-transfusions.xml"/>
+  <include file="liquibase/updates/2685-add-transfusion-summary-report.xml"/>
+  <include file="liquibase/updates/2772-remove-usage-repository-and-component-usage.xml"/>
+  <include file="liquibase/updates/2395-remove-unused.xml"/>
+  <include file="liquibase/updates/patch/3020-set-bloodtest-tracking-fields.xml"/>
 </databaseChangeLog>

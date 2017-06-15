@@ -2,9 +2,9 @@
 <dataset>
     <user id="1" emailId="admin" firstName="admin" isactive="1"
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
-    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="1" isDeleted="false" isVenue="true"
               isMobileSite="false" isUsageSite="false" name="Maseru" notes=""/>
-    <Location isTestingSite="1" isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="false"
+    <Location isTestingSite="1" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="2" isDeleted="false" isVenue="false"
               isMobileSite="false" isUsageSite="false" name="Testing" notes=""/>
     <Address id="1"/>
     <Address id="2"/>

@@ -36,10 +36,13 @@ public class OrderFormFactory {
   private ComponentRepository componentRepository;
 
   @Autowired
-  private ComponentFactory componentFactory;
+  private InventoryFactory inventoryFactory;
 
   @Autowired
   private LocationFactory locationFactory;
+
+  @Autowired
+  private PatientFactory patientFactory;
 
   @Autowired
   private OrderFormConstraintChecker orderFormConstraintChecker;
@@ -50,6 +53,9 @@ public class OrderFormFactory {
     Location to = locationRepository.getLocation(backingForm.getDispatchedTo().getId());
     entity.setId(backingForm.getId());
     entity.setDispatchedFrom(from);
+    if (backingForm.getPatient() != null) {
+      entity.setPatient(patientFactory.createEntity(backingForm.getPatient()));
+    }
     entity.setDispatchedTo(to);
     entity.setOrderDate(backingForm.getOrderDate());
     entity.setStatus(backingForm.getStatus());
@@ -75,7 +81,7 @@ public class OrderFormFactory {
     OrderFormFullViewModel viewModel = new OrderFormFullViewModel();
     populateBasicViewModel(entity, viewModel);
     viewModel.setItems(orderFormItemFactory.createViewModels(entity.getItems()));
-    viewModel.setComponents(componentFactory.createComponentFullViewModels(entity.getComponents()));
+    viewModel.setComponents(inventoryFactory.createViewModels(entity.getComponents()));
 
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDispatch", orderFormConstraintChecker.canDispatch(entity));
@@ -105,6 +111,9 @@ public class OrderFormFactory {
     viewModel.setId(entity.getId());
     viewModel.setDispatchedFrom(locationFactory.createFullViewModel(entity.getDispatchedFrom()));
     viewModel.setDispatchedTo(locationFactory.createFullViewModel(entity.getDispatchedTo()));
+    if (entity.getPatient() != null) {
+      viewModel.setPatient(patientFactory.createViewModel(entity.getPatient()));
+    }
     viewModel.setOrderDate(entity.getOrderDate());
     viewModel.setStatus(entity.getStatus());
     viewModel.setType(entity.getType());

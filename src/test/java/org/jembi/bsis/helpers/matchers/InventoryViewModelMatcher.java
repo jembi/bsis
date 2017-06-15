@@ -27,7 +27,8 @@ public class InventoryViewModelMatcher extends TypeSafeMatcher<InventoryViewMode
         .appendText("\ndonationIdentificationNumber: ").appendValue(expected.getDonationIdentificationNumber())
         .appendText("\nexpiryStatus: ").appendValue(expected.getExpiryStatus())
         .appendText("\nBloodGroup: ").appendValue(expected.getBloodGroup())
-        .appendText("\nexpiresOn: ").appendValue(expected.getExpiresOn());
+        .appendText("\nexpiresOn: ").appendValue(expected.getExpiresOn())
+        .appendText("\ncomponentStatus: ").appendValue(expected.getComponentStatus());
   }
 
   @Override
@@ -42,9 +43,10 @@ public class InventoryViewModelMatcher extends TypeSafeMatcher<InventoryViewMode
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
         Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus()) && 
         (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn())
-            || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn())) && 
+            || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getLocation(), expected.getLocation()) && 
-        Objects.equals(actual.getBloodGroup(), expected.getBloodGroup()));
+        Objects.equals(actual.getBloodGroup(), expected.getBloodGroup())  &&
+        Objects.equals(actual.getComponentStatus(), expected.getComponentStatus());
   }
 
   public static InventoryViewModelMatcher hasSameStateAsInventoryViewModel(InventoryViewModel expected) {
