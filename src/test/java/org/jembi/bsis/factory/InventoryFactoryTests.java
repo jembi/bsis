@@ -255,6 +255,7 @@ public class InventoryFactoryTests {
     assertThat(createdFullViewModel, hasSameStateAsInventoryFullViewModel(expectedFullViewModel));
   }
 
+  @Test
   public void testCreateFullViewModels_shouldCreateFullViewModels() {
 
     // Setup
