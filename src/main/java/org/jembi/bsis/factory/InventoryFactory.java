@@ -8,6 +8,7 @@ import java.util.List;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.order.OrderForm;
 import org.jembi.bsis.repository.OrderFormRepository;
+import org.jembi.bsis.service.ComponentStatusCalculator;
 import org.jembi.bsis.viewmodel.InventoryFullViewModel;
 import org.jembi.bsis.viewmodel.InventoryViewModel;
 import org.joda.time.DateTime;
@@ -29,6 +30,9 @@ public class InventoryFactory {
 
   @Autowired
   private OrderFormFactory orderFormFactory;
+
+  @Autowired
+  private ComponentStatusCalculator componentStatusCalculator;
 
   public List<InventoryViewModel> createViewModels(List<Component> components) {
     List<InventoryViewModel> viewModels = new ArrayList<>();
@@ -70,7 +74,7 @@ public class InventoryFactory {
     viewModel.setComponentType(componentTypeFactory.createViewModel(component.getComponentType()));
     viewModel.setCreatedOn(component.getCreatedOn());
     viewModel.setLocation(locationFactory.createViewModel(component.getLocation()));
-    viewModel.setExpiryStatus(getExpiryStatus(component));
+    viewModel.setDaysToExpire(componentStatusCalculator.getDaysToExpire(component));
     viewModel.setDonationIdentificationNumber(component.getDonationIdentificationNumber());
     viewModel.setInventoryStatus(component.getInventoryStatus());
     String bloodGroup = component.getDonation().getBloodAbo() + component.getDonation().getBloodRh();
@@ -78,20 +82,5 @@ public class InventoryFactory {
     viewModel.setExpiresOn(component.getExpiresOn());
     viewModel.setComponentStatus(component.getStatus());
     return viewModel;
-  }
-
-  private String getExpiryStatus(Component component) {
-    if (component.getExpiresOn() == null) {
-      return "";
-    }
-    Date today = new Date();
-    if (today.equals(component.getExpiresOn()) || today.before(component.getExpiresOn())) {
-      DateTime expiresOn = new DateTime(component.getExpiresOn().getTime());
-      Long age = (long) Days.daysBetween(expiresOn, new DateTime()).getDays();
-      return Math.abs(age) + " days to expire";
-    } else {
-      return "Already expired";
-    }
-
   }
 }

@@ -16,7 +16,7 @@ public class InventoryViewModelBuilder extends AbstractBuilder<InventoryViewMode
   private Date createdOn;
   private String donationIdentificationNumber;
   private InventoryStatus inventoryStatus;
-  private String expiryStatus;
+  private int daysToExpire;
   private String componentCode;
   private Date expiresOn;
   private LocationViewModel location;
@@ -48,8 +48,8 @@ public class InventoryViewModelBuilder extends AbstractBuilder<InventoryViewMode
     return this;
   }
 
-  public InventoryViewModelBuilder withExpiryStatus(String expiryStatus) {
-    this.expiryStatus = expiryStatus;
+  public InventoryViewModelBuilder withDaysToExpire(int daysToExpire) {
+    this.daysToExpire = daysToExpire;
     return this;
   }
 
@@ -87,7 +87,7 @@ public class InventoryViewModelBuilder extends AbstractBuilder<InventoryViewMode
     viewModel.setCreatedOn(createdOn);
     viewModel.setDonationIdentificationNumber(donationIdentificationNumber);
     viewModel.setComponentCode(componentCode);
-    viewModel.setExpiryStatus(expiryStatus);
+    viewModel.setDaysToExpire(daysToExpire);
     viewModel.setExpiresOn(expiresOn);
     viewModel.setLocation(location);
     viewModel.setBloodGroup(bloodGroup);

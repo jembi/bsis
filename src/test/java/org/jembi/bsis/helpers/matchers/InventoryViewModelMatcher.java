@@ -22,7 +22,7 @@ public class InventoryViewModelMatcher extends AbstractTypeSafeMatcher<Inventory
         .appendText("\nLocation: ").appendValue(inventoryViewModel.getLocation())
         .appendText("\ncreatedOn: ").appendValue(inventoryViewModel.getCreatedOn())
         .appendText("\ndonationIdentificationNumber: ").appendValue(inventoryViewModel.getDonationIdentificationNumber())
-        .appendText("\nexpiryStatus: ").appendValue(inventoryViewModel.getExpiryStatus())
+        .appendText("\ndaysToExpire: ").appendValue(inventoryViewModel.getDaysToExpire())
         .appendText("\nBloodGroup: ").appendValue(inventoryViewModel.getBloodGroup())
         .appendText("\nexpiresOn: ").appendValue(inventoryViewModel.getExpiresOn())
         .appendText("\ncomponentStatus: ").appendValue(inventoryViewModel.getComponentStatus());
@@ -38,7 +38,7 @@ public class InventoryViewModelMatcher extends AbstractTypeSafeMatcher<Inventory
         (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn())
             || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
-        Objects.equals(actual.getExpiryStatus(), expected.getExpiryStatus()) && 
+        Objects.equals(actual.getDaysToExpire(), expected.getDaysToExpire()) && 
         (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn())
             || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getLocation(), expected.getLocation()) && 

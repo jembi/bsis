@@ -21,7 +21,7 @@ public class InventoryViewModel {
 
   private ComponentTypeViewModel componentType;
 
-  private String expiryStatus;
+  private int daysToExpire;
 
   private LocationViewModel location;
 
@@ -67,12 +67,12 @@ public class InventoryViewModel {
     this.createdOn = createdOn;
   }
 
-  public String getExpiryStatus() {
-    return expiryStatus;
+  public int getDaysToExpire() {
+    return daysToExpire;
   }
 
-  public void setExpiryStatus(String expiryStatus) {
-    this.expiryStatus = expiryStatus;
+  public void setDaysToExpire(int daysToExpire) {
+    this.daysToExpire = daysToExpire;
   }
 
   public ComponentTypeViewModel getComponentType() {
