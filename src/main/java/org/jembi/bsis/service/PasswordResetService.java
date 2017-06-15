@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.persistence.NoResultException;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -49,13 +50,9 @@ public class PasswordResetService {
     sendNewPasswordEmailToUser(user, newPassword);
   }
 
-  private void sendNewPasswordEmailToUser(User user, String newPassword) throws Exception {
-    try {
-      GeneralConfig passwordResetSubject = generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PASSWORD_RESET_SUBJECT);
-      bsisEmailSender.sendEmail(user.getEmailId(), passwordResetSubject.getValue(), getPasswordResetMessage(newPassword));
-    } catch (Exception e) {
-      throw e;
-    }
+  private void sendNewPasswordEmailToUser(User user, String newPassword) throws MessagingException, IOException {
+    GeneralConfig passwordResetSubject = generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PASSWORD_RESET_SUBJECT);
+    bsisEmailSender.sendEmail(user.getEmailId(), passwordResetSubject.getValue(), getPasswordResetMessage(newPassword));
   }
 
   private void updateUserWithNewPassword(User user, String newPassword) {
@@ -68,7 +65,7 @@ public class PasswordResetService {
   protected String generateRandomPassword() {
     return RandomStringUtils.randomAlphanumeric(16);
   } 
-  
+
   protected String getPasswordResetMessage(String password) throws IOException {
     GeneralConfig passwordResetMessage = generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PASSWORD_RESET_MESSAGE);
     Map<String,String> map = new HashMap<>();
