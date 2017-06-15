@@ -2,8 +2,6 @@ package org.jembi.bsis.controller;
 
 import static org.jembi.bsis.helpers.builders.PasswordResetBackingFormBuilder.aPasswordResetBackingForm;
 
-import java.io.IOException;
-
 import org.jembi.bsis.backingform.PasswordResetBackingForm;
 import org.jembi.bsis.controllerservice.PasswordResetControllerService;
 import org.jembi.bsis.suites.UnitTestSuite;

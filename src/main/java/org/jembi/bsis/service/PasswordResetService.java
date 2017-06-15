@@ -1,5 +1,6 @@
 package org.jembi.bsis.service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,40 +39,40 @@ public class PasswordResetService {
 
   public void resetUserPassword(String username) throws Exception {
     User user = userRepository.findUser(username);
-    GeneralConfig passwordResetSubject = generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PASSWORD_RESET_SUBJECT);
-    GeneralConfig passwordResetMessage = generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PASSWORD_RESET_MESSAGE);
-    
     if (user == null) {
       throw new NoResultException();
     }
     
-    // Generate a new random alphanumeric password
     String newPassword = generateRandomPassword();
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    user.setPassword(passwordEncoder.encode(newPassword));
-    user.setPasswordReset(true);
-    userRepository.updateUser(user, true);
-    
-    Map<String, String> map = getMapWithPassword(newPassword);
-    String output = templateEngine.execute(passwordResetMessage.getName(), passwordResetMessage.getValue(), map);
+    updateUserWithNewPassword(user, newPassword);
+   
+    sendNewPasswordEmailToUser(user, newPassword);
+  }
 
-    // Send an email containing the new password to the user
+  private void sendNewPasswordEmailToUser(User user, String newPassword) throws Exception {
     try {
-      bsisEmailSender.sendEmail(user.getEmailId(), passwordResetSubject.getValue(), output);
+      GeneralConfig passwordResetSubject = generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PASSWORD_RESET_SUBJECT);
+      bsisEmailSender.sendEmail(user.getEmailId(), passwordResetSubject.getValue(), getPasswordResetMessage(newPassword));
     } catch (Exception e) {
       throw e;
     }
   }
 
-  protected Map<String, String> getMapWithPassword(String newPassword) {
-    Map<String,String> map = new HashMap<>();
-    map.put("password", newPassword);
-    return map;
+  private void updateUserWithNewPassword(User user, String newPassword) {
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    user.setPassword(passwordEncoder.encode(newPassword));
+    user.setPasswordReset(true);
+    userRepository.updateUser(user, true);
   }
 
   protected String generateRandomPassword() {
-    // Generate a new random alphanumeric password
     return RandomStringUtils.randomAlphanumeric(16);
+  } 
+  
+  protected String getPasswordResetMessage(String password) throws IOException {
+    GeneralConfig passwordResetMessage = generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PASSWORD_RESET_MESSAGE);
+    Map<String,String> map = new HashMap<>();
+    map.put("password", password);
+    return templateEngine.execute(passwordResetMessage.getName(), passwordResetMessage.getValue(), map); 
   }
-
 }

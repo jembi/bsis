@@ -1,9 +1,11 @@
 package org.jembi.bsis.service;
 
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.GeneralConfigBuilder.aGeneralConfig;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -48,6 +50,7 @@ public class PasswordResetServiceTests extends UnitTestSuite {
   @Mock
   private TemplateEngine templateEngine;
 
+  @SuppressWarnings("unchecked")
   @Test
   public void tesResetUserPasswordWithLatinCharacters_shouldUpdateUserPassword() throws Exception {
     // Data
@@ -74,10 +77,9 @@ public class PasswordResetServiceTests extends UnitTestSuite {
     when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PASSWORD_RESET_MESSAGE)).thenReturn(passwordResetMessage);
     when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PASSWORD_RESET_SUBJECT)).thenReturn(passwordResetSubject);
     when(userRepository.updateUser(user, true)).thenAnswer(AdditionalAnswers.returnsFirstArg());
-    //when(bsisEmailSender.createMailMessage(TEST_EMAIL, BSIS_PASSWORD_RESET_MAIL_SUBJECT, TEXT)).thenReturn(expectedMessage);
-    when(templateEngine.execute(passwordResetMessage.getName(), passwordResetMessage.getValue(), map)).thenReturn(TEXT);
+    when(templateEngine.execute(argThat(is(passwordResetMessage.getName())), argThat(is(passwordResetMessage.getValue())),
+        any(HashMap.class))).thenReturn(TEXT);
     doReturn(EXPECTED_PASSWORD).when(passwordResetService).generateRandomPassword();
-    doReturn(map).when(passwordResetService).getMapWithPassword(EXPECTED_PASSWORD); 
     doNothing().when(bsisEmailSender).sendEmail(any(String.class), any(String.class), any(String.class));
     
     // Test
