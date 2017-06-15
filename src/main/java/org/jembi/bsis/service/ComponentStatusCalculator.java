@@ -197,6 +197,19 @@ public class ComponentStatusCalculator {
     return false;
   }
   
+  
+  /**
+   * Calculates the number of days before a component expires 
+   * 
+   * If the component has already expired the difference is -1 
+   * 
+   * If the component expires today the difference is 0 
+   * 
+   * Otherwise the number of days left before the component expires is returned
+   * 
+   * @param component
+   * @return
+   */
   public int getDaysToExpire(Component component) {
 
     Date today = dateGeneratorService.generateDate();

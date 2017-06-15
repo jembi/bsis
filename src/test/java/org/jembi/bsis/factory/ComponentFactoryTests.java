@@ -1,6 +1,7 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
@@ -16,6 +17,7 @@ import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasS
 import static org.jembi.bsis.helpers.matchers.ComponentManagementViewModelMatcher.hasSameStateAsComponentManagementViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameStateAsComponentViewModel;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,6 +85,7 @@ public class ComponentFactoryTests {
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
     UUID locationId = UUID.randomUUID();
     Location location = aLocation().withId(locationId).build();
+    Date today = new Date();
 
     Component parentComponent = aComponent().withId(COMPONENT_ID_2).build();
     UUID componentTypeId = UUID.randomUUID();
@@ -107,7 +110,7 @@ public class ComponentFactoryTests {
         .withLocation(location)
         .withDonation(donation)
         .withParentComponent(parentComponent)
-        .withExpiresOn(new RandomTestDate())
+        .withExpiresOn(today)
         .build();
     
     ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
@@ -133,6 +136,9 @@ public class ComponentFactoryTests {
     // do asserts
     Assert.assertNotNull("View model created", convertedViewModel);
     assertThat("Correct view model", convertedViewModel, hasSameStateAsComponentFullViewModel(expectedViewModel));
+    verify(componentStatusCalculator).getDaysToExpire(component);
+    assertThat(convertedViewModel.getDaysToExpire(), comparesEqualTo(componentStatusCalculator.getDaysToExpire(component)));
+    
   }
   
   @Test
