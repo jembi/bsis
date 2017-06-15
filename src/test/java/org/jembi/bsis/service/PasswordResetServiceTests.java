@@ -1,6 +1,8 @@
 package org.jembi.bsis.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.matchers.RegexMatcher.containsPattern;
 import static org.jembi.bsis.helpers.builders.GeneralConfigBuilder.aGeneralConfig;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.mockito.Matchers.any;
@@ -98,5 +100,12 @@ public class PasswordResetServiceTests extends UnitTestSuite {
 
     // Test
     passwordResetService.resetUserPassword(username);
+  }
+
+  @Test
+  public void testGenerateRandomPassword_shouldReturnRandomAlphanumericPassword() throws Exception {
+    String alphanumeric16Pattern = "[a-zA-Z0-9]{16}";
+    String password = passwordResetService.generateRandomPassword();
+    assertThat(password, containsPattern(alphanumeric16Pattern));
   }
 }

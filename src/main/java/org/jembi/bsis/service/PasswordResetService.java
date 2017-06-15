@@ -30,14 +30,6 @@ public class PasswordResetService {
   @Autowired
   private TemplateEngine templateEngine;
 
-  public UserRepository getUserRepository() {
-    return userRepository;
-  }
-
-  public void setUserRepository(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
-
   public void resetUserPassword(String username) throws Exception {
     User user = userRepository.findUser(username);
     if (user == null) {
