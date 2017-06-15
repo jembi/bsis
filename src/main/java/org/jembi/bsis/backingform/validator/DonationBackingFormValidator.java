@@ -62,8 +62,8 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
       validateDonationIdentificationNumber(form, errors);
     }
     validateDonationBleedTimes(form, errors);
-    validateDonor(form, errors);
-    validateDonationBatch(form, errors);
+    DonationBatch donationBatch = validateDonationBatch(form, errors);
+    validateDonor(form, donationBatch, errors);
     validateVenue(form, errors);
     validateBloodPressure(form, errors);
     validateHaemoglobinCount(form, errors);
@@ -167,7 +167,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     }
   }
 
-  private void validateDonationBatch(DonationBackingForm form, Errors errors) {
+  private DonationBatch validateDonationBatch(DonationBackingForm form, Errors errors) {
     DonationBatch donationBatch = null;
     String batchNumber = form.getDonationBatchNumber();
     if (StringUtils.isNotBlank(batchNumber)) {
@@ -181,6 +181,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     if (donationBatch == null) {
       errors.rejectValue("donation.donationBatch", "donationBatch.invalid", "Please supply a valid donation batch");
     }
+    return donationBatch;
   }
   
   private void validateVenue(DonationBackingForm form, Errors errors) {
@@ -203,7 +204,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
     }
   }
 
-  private void validateDonor(DonationBackingForm form, Errors errors) {
+  private void validateDonor(DonationBackingForm form, DonationBatch donationBatch, Errors errors) {
     String donorNumber = form.getDonorNumber();
     Donor donor = null;
     if (StringUtils.isNotBlank(donorNumber)) {
@@ -218,33 +219,37 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
       errors.rejectValue("donation.donor", "donor.invalid", "Please supply a valid donor");
     }
 
-    // Check if the donations are valid
-    if (donor != null && donor.getDonations() != null) {
-
-      for (Donation donation : donor.getDonations()) {
-
-        PackType packType = donation.getPackType();
-
-        if (!packType.getCountAsDonation()) {
-          // Don't check period between donations if it doesn't count as a donation
-          continue;
-        }
-
-        // Work out the next allowed donation date
-        DateTime nextDonationDate = new DateTime(donation.getDonationDate())
-            .plusDays(packType.getPeriodBetweenDonations())
-            .withTimeAtStartOfDay();
-
-        // Check if the next allowed donation date is after today
-        if (nextDonationDate.isAfter(new DateTime().withTimeAtStartOfDay())) {
-          errors.rejectValue("donation.donor", "errors.invalid.donationBeforeNextAllowedDate", "Selected donation Date is before donor's next allowed donation date");
+    if (donationBatch == null || donationBatch.isBackEntry()) {
+      // skip validation on donor eligibility
+    } else {
+      // Check if the donations are valid
+      if (donor != null && donor.getDonations() != null) {
+  
+        for (Donation donation : donor.getDonations()) {
+  
+          PackType packType = donation.getPackType();
+  
+          if (!packType.getCountAsDonation()) {
+            // Don't check period between donations if it doesn't count as a donation
+            continue;
+          }
+  
+          // Work out the next allowed donation date
+          DateTime nextDonationDate = new DateTime(donation.getDonationDate())
+              .plusDays(packType.getPeriodBetweenDonations())
+              .withTimeAtStartOfDay();
+  
+          // Check if the next allowed donation date is after today
+          if (nextDonationDate.isAfter(new DateTime().withTimeAtStartOfDay())) {
+            errors.rejectValue("donation.donor", "errors.invalid.donationBeforeNextAllowedDate", "Selected donation Date is before donor's next allowed donation date");
+          }
         }
       }
-    }
 
-    // Check if the donor is deferred
-    if (donor != null && donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())) {
-      errors.rejectValue("donation.donor", "errors.invalid.donorDeferred", "Donor is currently deferred");
+      // Check if the donor is deferred
+      if (donor != null && donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())) {
+        errors.rejectValue("donation.donor", "errors.invalid.donorDeferred", "Donor is currently deferred");
+      }
     }
   }
   
