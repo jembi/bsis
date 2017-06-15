@@ -4,8 +4,6 @@ package org.jembi.bsis.controllerservice;
 import static org.jembi.bsis.helpers.builders.PasswordResetBackingFormBuilder.aPasswordResetBackingForm;
 import static org.mockito.Mockito.verify;
 
-import java.io.IOException;
-
 import org.jembi.bsis.backingform.PasswordResetBackingForm;
 import org.jembi.bsis.service.PasswordResetService;
 import org.jembi.bsis.suites.UnitTestSuite;
@@ -21,7 +19,7 @@ public class PasswordResetControllerServiceTests extends UnitTestSuite {
   private PasswordResetService passwordResetService;
 
   @Test
-  public void testResetPassword_shouldUpdatePassword() throws IOException {
+  public void testResetPassword_shouldUpdatePassword() throws Exception {
     String username = "superuser";
 
     PasswordResetBackingForm form = aPasswordResetBackingForm().withUsername(username).build();

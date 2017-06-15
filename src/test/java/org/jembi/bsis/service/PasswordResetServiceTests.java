@@ -1,7 +1,6 @@
 package org.jembi.bsis.service;
 
 import static org.jembi.bsis.helpers.builders.GeneralConfigBuilder.aGeneralConfig;
-import static org.jembi.bsis.helpers.builders.MimeMailMessageBuilder.aMimeMailMessage;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -10,11 +9,9 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.mail.MessagingException;
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.constant.GeneralConfigConstants;
@@ -29,7 +26,6 @@ import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.springframework.mail.javamail.MimeMailMessage;
 
 public class PasswordResetServiceTests extends UnitTestSuite {
 
@@ -53,19 +49,13 @@ public class PasswordResetServiceTests extends UnitTestSuite {
   private TemplateEngine templateEngine;
 
   @Test
-  public void tesResetUserPasswordWithLatinCharacters_shouldUpdateUserPassword() throws MessagingException, IOException {
+  public void tesResetUserPasswordWithLatinCharacters_shouldUpdateUserPassword() throws Exception {
     // Data
     String passwordResetName = "email.resetPassword.message";
     String passwordResetDescription = "Password reset email";
     
     Map<String, String> map = new HashMap<>();
     map.put("password", EXPECTED_PASSWORD);
-    
-    MimeMailMessage expectedMessage = aMimeMailMessage()
-        .withTo(TEST_EMAIL)
-        .withSubject(BSIS_PASSWORD_RESET_MAIL_SUBJECT)
-        .withText(TEXT)
-        .build();
     
     GeneralConfig passwordResetMessage = aGeneralConfig()
         .withName(passwordResetName)
@@ -84,21 +74,21 @@ public class PasswordResetServiceTests extends UnitTestSuite {
     when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PASSWORD_RESET_MESSAGE)).thenReturn(passwordResetMessage);
     when(generalConfigRepository.getGeneralConfigByName(GeneralConfigConstants.PASSWORD_RESET_SUBJECT)).thenReturn(passwordResetSubject);
     when(userRepository.updateUser(user, true)).thenAnswer(AdditionalAnswers.returnsFirstArg());
-    when(bsisEmailSender.createMailMessage(TEST_EMAIL, BSIS_PASSWORD_RESET_MAIL_SUBJECT, TEXT)).thenReturn(expectedMessage);
+    //when(bsisEmailSender.createMailMessage(TEST_EMAIL, BSIS_PASSWORD_RESET_MAIL_SUBJECT, TEXT)).thenReturn(expectedMessage);
     when(templateEngine.execute(passwordResetMessage.getName(), passwordResetMessage.getValue(), map)).thenReturn(TEXT);
     doReturn(EXPECTED_PASSWORD).when(passwordResetService).generateRandomPassword();
     doReturn(map).when(passwordResetService).getMapWithPassword(EXPECTED_PASSWORD); 
-    doNothing().when(bsisEmailSender).sendEmail(any(MimeMailMessage.class));
+    doNothing().when(bsisEmailSender).sendEmail(any(String.class), any(String.class), any(String.class));
     
     // Test
     passwordResetService.resetUserPassword(USERNAME);
     // verify
-    verify(bsisEmailSender).sendEmail(expectedMessage);
+    verify(bsisEmailSender).sendEmail(user.getEmailId(), BSIS_PASSWORD_RESET_MAIL_SUBJECT, TEXT);
     verify(userRepository).updateUser(user, true);
   }
   
   @Test(expected = NoResultException.class)
-  public void testPasswordResetWithNoExistingUser_shouldThrow() throws IOException {
+  public void testPasswordResetWithNoExistingUser_shouldThrow() throws Exception {
     String username = "anyUser";
 
     // mocks

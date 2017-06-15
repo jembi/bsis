@@ -21,7 +21,7 @@ public class PasswordResetControllerTests extends UnitTestSuite {
   private PasswordResetController passwordResetController;
 
   @Test
-  public void testResetPassword_shouldReturnResponseEntityWithCreatedStatus() throws IOException {
+  public void testResetPassword_shouldReturnResponseEntityWithCreatedStatus() throws Exception {
     String username = "superuser";
     PasswordResetBackingForm form = aPasswordResetBackingForm().withUsername(username).build();
 

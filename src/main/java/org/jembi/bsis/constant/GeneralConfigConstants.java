@@ -25,7 +25,7 @@ public class GeneralConfigConstants {
   public static final String DATE_TIME_FORMAT = "dateTimeFormat";
   
   // Password reset
-  public static final String PASSWORD_RESET_SUBJECT = "password.reset.subject";
+  public static final String PASSWORD_RESET_SUBJECT = "email.resetPassword.subject";
   public static final String PASSWORD_RESET_MESSAGE = "email.resetPassword.message";
   
 
