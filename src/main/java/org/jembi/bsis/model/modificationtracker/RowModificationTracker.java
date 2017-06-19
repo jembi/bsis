@@ -1,5 +1,6 @@
 package org.jembi.bsis.model.modificationtracker;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -17,7 +18,9 @@ import org.jembi.bsis.model.user.User;
  * @author iamrohitbanga
  */
 @Embeddable
-public class RowModificationTracker implements ModificationTracker {
+public class RowModificationTracker implements ModificationTracker, Serializable {
+
+  private static final long serialVersionUID = 8988186756639849992L;
 
   @Temporal(TemporalType.TIMESTAMP)
   @Column(columnDefinition = "TIMESTAMP")
