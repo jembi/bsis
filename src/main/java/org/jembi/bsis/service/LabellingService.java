@@ -54,8 +54,16 @@ public class LabellingService {
           ComponentStatus.AVAILABLE, false);
     } else {
       List<BloodGroup> bloodGroupsList = BloodGroup.toBloodGroups(bloodGroups);
+      List<InventoryStatus> inventoryStatuses = null;
+      if (inventoryStatus != null) {
+        inventoryStatuses = new ArrayList<>();
+        inventoryStatuses.add(inventoryStatus);
+        if (inventoryStatus == InventoryStatus.NOT_IN_STOCK) {
+          inventoryStatuses.add(InventoryStatus.REMOVED);
+        }
+      }
       components = componentRepository.findSafeComponents(componentTypeId, locationId, bloodGroupsList, startDate, endDate,
-          inventoryStatus, false);
+          inventoryStatuses, false);
     }
     return components;
   }

@@ -1383,7 +1383,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findSafeComponents(componentType.getId(), location.getId(),
-        bloodGroups, startDate, endDate, inventoryStatus, false);
+        bloodGroups, startDate, endDate, Arrays.asList(inventoryStatus), false);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1517,7 +1517,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findSafeComponents(componentType.getId(), location.getId(),
-        bloodGroups, startDate, endDate, inventoryStatus, false);
+        bloodGroups, startDate, endDate, Arrays.asList(inventoryStatus), false);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1651,7 +1651,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findSafeComponents(componentType.getId(), location.getId(),
-        bloodGroups, startDate, endDate, inventoryStatus, false);
+        bloodGroups, startDate, endDate, Arrays.asList(inventoryStatus), false);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1689,7 +1689,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findSafeComponents(componentType.getId(), null,
-        bloodGroups, startDate, endDate, inventoryStatus, true);
+        bloodGroups, startDate, endDate, Arrays.asList(inventoryStatus), true);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1732,7 +1732,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findSafeComponents(null, location.getId(), bloodGroups,
-        startDate, endDate, inventoryStatus, true);
+        startDate, endDate, Arrays.asList(inventoryStatus), true);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1769,7 +1769,7 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findSafeComponents(componentType.getId(), location.getId(),
-        null, startDate, endDate, inventoryStatus, true);
+        null, startDate, endDate, Arrays.asList(inventoryStatus), true);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
@@ -1810,11 +1810,42 @@ public class ComponentRepositoryTests extends SecurityContextDependentTestSuite 
 
     // Exercise SUT
     List<Component> returnedComponents = componentRepository.findSafeComponents(componentType.getId(), location.getId(),
-        bloodGroups, null, null, inventoryStatus, true);
+        bloodGroups, null, null, Arrays.asList(inventoryStatus), true);
 
     // Verify
     assertThat(returnedComponents, is(expectedComponents));
   }
+
+  @Test
+  public void testFindSafeComponentsWithTwo_shouldReturnCorrectRecords() {
+    // Set up fixture
+    InventoryStatus inventoryStatus1 = InventoryStatus.NOT_IN_STOCK;
+    InventoryStatus inventoryStatus2 = InventoryStatus.REMOVED;
+    ComponentStatus availableStatus = ComponentStatus.AVAILABLE;
+    List<Component> expectedComponents = Arrays.asList(
+        aComponent()
+            .withInventoryStatus(inventoryStatus1)
+            .withStatus(availableStatus)
+            .buildAndPersist(entityManager),
+        aComponent()
+            .withInventoryStatus(inventoryStatus2)
+            .withStatus(availableStatus)
+            .buildAndPersist(entityManager)
+    );
+
+    // Excluded by InventoryStatus
+    aComponent()
+        .withInventoryStatus(InventoryStatus.IN_STOCK)
+        .withStatus(availableStatus)
+        .buildAndPersist(entityManager);
+
+    // Exercise SUT
+    List<Component> returnedComponents = componentRepository.findSafeComponents(null, null, null, null, null, 
+        Arrays.asList(inventoryStatus1, inventoryStatus2), true);
+
+    // Verify
+    assertThat(returnedComponents, is(expectedComponents));
+  } 
 
   @Test
   public void testFindComponentsByDINAndComponentCodeAndStatus_shouldReturnCorrectComponents() {
