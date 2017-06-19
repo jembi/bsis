@@ -14,8 +14,7 @@ public class PasswordResetControllerService {
   @Autowired
   private PasswordResetService passwordResetService;
 
-  public void resetPassword(PasswordResetBackingForm form) {
+  public void resetPassword(PasswordResetBackingForm form) throws Exception {
     passwordResetService.resetUserPassword(form.getUsername());
-    
   }
 }

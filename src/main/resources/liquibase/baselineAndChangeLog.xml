@@ -139,4 +139,5 @@
   <include file="liquibase/updates/uuid/2874-implement-uuids-for-remaining-entities-role.xml"/>
   <include file="liquibase/updates/uuid/2874-implement-uuids-for-remaining-entities-general-config.xml"/>
   <include file="liquibase/updates/3038-make-pack-label-zpl-configurable.xml"/>
+  <include file="liquibase/updates/3431-move-password-reset-email-properties-to-gen-config.xml"/>
 </databaseChangeLog>

@@ -21,8 +21,8 @@ public class PasswordResetController {
   private PasswordResetControllerService passwordResetControllerService;
 
   @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity<Map<String, Object>> resetPassword(@Valid @RequestBody PasswordResetBackingForm form) {
-    passwordResetControllerService.resetPassword(form);      
+  public ResponseEntity<Map<String, Object>> resetPassword(@Valid @RequestBody PasswordResetBackingForm form) throws Exception {
+    passwordResetControllerService.resetPassword(form);
     return new ResponseEntity<Map<String, Object>>(HttpStatus.CREATED);
   }
 }

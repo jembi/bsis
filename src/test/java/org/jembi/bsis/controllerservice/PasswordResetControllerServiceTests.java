@@ -19,7 +19,7 @@ public class PasswordResetControllerServiceTests extends UnitTestSuite {
   private PasswordResetService passwordResetService;
 
   @Test
-  public void testResetPassword_shouldUpdatePassword() {
+  public void testResetPassword_shouldUpdatePassword() throws Exception {
     String username = "superuser";
 
     PasswordResetBackingForm form = aPasswordResetBackingForm().withUsername(username).build();
