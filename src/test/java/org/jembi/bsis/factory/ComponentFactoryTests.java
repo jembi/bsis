@@ -1,7 +1,6 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
@@ -17,7 +16,6 @@ import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasS
 import static org.jembi.bsis.helpers.matchers.ComponentManagementViewModelMatcher.hasSameStateAsComponentManagementViewModel;
 import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameStateAsComponentViewModel;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +33,6 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
 import org.jembi.bsis.service.ComponentStatusCalculator;
-import org.jembi.bsis.service.DateGeneratorService;
 import org.jembi.bsis.util.RandomTestDate;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
@@ -45,7 +42,6 @@ import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.joda.time.DateTime;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -85,7 +81,6 @@ public class ComponentFactoryTests {
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
     UUID locationId = UUID.randomUUID();
     Location location = aLocation().withId(locationId).build();
-    Date today = new Date();
 
     Component parentComponent = aComponent().withId(COMPONENT_ID_2).build();
     UUID componentTypeId = UUID.randomUUID();
@@ -110,7 +105,7 @@ public class ComponentFactoryTests {
         .withLocation(location)
         .withDonation(donation)
         .withParentComponent(parentComponent)
-        .withExpiresOn(today)
+        .withExpiresOn(new RandomTestDate())
         .build();
     
     ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
@@ -123,12 +118,14 @@ public class ComponentFactoryTests {
         .withBloodRh(donation.getBloodRh())
         .withCreatedOn(component.getCreatedOn())
         .withExpiresOn(component.getExpiresOn())
+        .withDaysToExpire(3)
         .thatIsNotInitialComponent()
         .build();
 
     // setup mocks
     when(locationFactory.createViewModel(location)).thenReturn(locationViewModel);
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
+    when(componentStatusCalculator.getDaysToExpire(component)).thenReturn(expectedViewModel.getDaysToExpire());
 
     // run test
     ComponentFullViewModel convertedViewModel = componentFactory.createComponentFullViewModel(component);
@@ -136,9 +133,6 @@ public class ComponentFactoryTests {
     // do asserts
     Assert.assertNotNull("View model created", convertedViewModel);
     assertThat("Correct view model", convertedViewModel, hasSameStateAsComponentFullViewModel(expectedViewModel));
-    verify(componentStatusCalculator).getDaysToExpire(component);
-    assertThat(convertedViewModel.getDaysToExpire(), comparesEqualTo(componentStatusCalculator.getDaysToExpire(component)));
-    
   }
   
   @Test

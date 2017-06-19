@@ -17,6 +17,7 @@ public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFull
   private ComponentStatus status;
   private Date createdOn;
   private Date expiresOn;
+  private int daysToExpire;
   private String bloodRh;
   private String bloodAbo;
   private ComponentTypeViewModel componentType;
@@ -48,6 +49,11 @@ public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFull
 
   public ComponentFullViewModelBuilder withExpiresOn(Date expiresOn) {
     this.expiresOn = expiresOn;
+    return this;
+  }
+
+  public ComponentFullViewModelBuilder withDaysToExpire(int daysToExpire) {
+    this.daysToExpire = daysToExpire;
     return this;
   }
 
@@ -84,6 +90,7 @@ public class ComponentFullViewModelBuilder extends AbstractBuilder<ComponentFull
     viewModel.setStatus(status);
     viewModel.setCreatedOn(createdOn);
     viewModel.setExpiresOn(expiresOn);
+    viewModel.setDaysToExpire(daysToExpire);
     viewModel.setLocation(location);
     viewModel.setBloodAbo(bloodAbo);
     viewModel.setBloodRh(bloodRh);
