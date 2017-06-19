@@ -39,8 +39,6 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
-import org.joda.time.MutableDateTime;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
