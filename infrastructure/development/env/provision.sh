@@ -19,6 +19,6 @@ echo "mysql-server-5.7 mysql-server/root_password_again password ${MYSQL_ROOT_PA
 sudo apt-get install --quiet --assume-yes \
   git \
   mysql-server-5.7 \
-  openjdk-7-jdk \
+  openjdk-8-jdk \
   tomcat7 \
   maven
