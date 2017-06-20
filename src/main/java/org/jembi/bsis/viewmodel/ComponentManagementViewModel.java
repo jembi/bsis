@@ -17,7 +17,7 @@ public class ComponentManagementViewModel extends BaseViewModel<UUID> {
   private Date createdOn;
   private Date expiresOn;
   private ComponentStatus status;
-  private String expiryStatus;
+  private int daysToExpire;
   private String componentCode;
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
@@ -96,12 +96,12 @@ public class ComponentManagementViewModel extends BaseViewModel<UUID> {
   public void setStatus(ComponentStatus status) {
     this.status = status;
   }
-  public String getExpiryStatus() {
-    return expiryStatus;
+  public int getDaysToExpire() {
+    return daysToExpire;
   }
 
-  public void setExpiryStatus(String expiryStatus) {
-    this.expiryStatus = expiryStatus;
+  public void setDaysToExpire(int daysToExpire) {
+    this.daysToExpire = daysToExpire;
   }
 
   public String getComponentCode() {

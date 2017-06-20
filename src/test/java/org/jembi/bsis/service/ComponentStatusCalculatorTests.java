@@ -1,6 +1,7 @@
 package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestResultBuilder.aBloodTestResult;
@@ -52,6 +53,8 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   private ComponentStatusCalculator componentStatusCalculator;
   @Mock
   private DonationRepository donationRepository;
+  @Mock
+  private DateGeneratorService dateGeneratorService;
   
   @Test
   public void testShouldComponentsBeDiscardedForTestResultsIfContainsPlasmaWithPositiveResult_shouldReturnTrue(){
@@ -1148,4 +1151,114 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
     assertThat("status is changed", statusChanged, is(true));
     assertThat("status is AVAILABLE", component.getStatus(), is(ComponentStatus.AVAILABLE));
   }
+  
+  @Test
+  public void testGetDaysToExpire_shouldReturnZeroDaysToExpire() {
+
+    // set up data
+    Date today = new DateTime().toDate();
+    Component component = aComponent().withExpiresOn(today).build();
+
+    // set up mocks
+    when(dateGeneratorService.generateDate()).thenReturn(today);
+
+    // verify
+    assertThat(0, comparesEqualTo(componentStatusCalculator.getDaysToExpire(component)));
+  }
+
+  @Test
+  public void testGetDaysToExpire_shouldReturnOneDayToExpire() {
+
+    // set up data
+    Date today = new Date();
+    DateTime expiresOn = new DateTime(today);
+    expiresOn = expiresOn.plusDays(1);
+    Component component = aComponent().withExpiresOn(expiresOn.toDate()).build();
+
+    //setup mocks
+    when(dateGeneratorService.generateDate()).thenReturn(today);
+
+    // verify
+    assertThat(1, comparesEqualTo(componentStatusCalculator.getDaysToExpire(component)));
+  }
+
+  @Test
+  public void testGetDaysToExpire_shouldReturnMinusOneDayToExpire() {
+
+    // set up
+    Date today = new Date();
+    DateTime expiresOn = new DateTime(today);
+    expiresOn = expiresOn.minusDays(1);
+    Component component = aComponent().withExpiresOn(expiresOn.toDate()).build();;
+
+    // set up mocks
+    when(dateGeneratorService.generateDate()).thenReturn(today);
+
+    // verify
+    assertThat(-1, comparesEqualTo(componentStatusCalculator.getDaysToExpire(component)));
+  }
+
+  @Test
+  public void testGetDaysToExpire_shouldReturnOneHundredDaysToExpire() {
+
+    // set up data
+    Date today = new Date();
+    DateTime expiresOn = new DateTime(today);
+    expiresOn = expiresOn.plusDays(100);
+    Component component = aComponent().withExpiresOn(expiresOn.toDate()).build();;
+
+    // set up mocks
+    when(dateGeneratorService.generateDate()).thenReturn(today);
+
+    // verify
+    assertThat(100, comparesEqualTo(componentStatusCalculator.getDaysToExpire(component)));
+  }
+
+  @Test
+  public void testGetDaysToExpire_shouldReturnMinusOneForOneHundredDaysAfterExpiryDate() {
+
+    // set up data
+    Date today = new Date();
+    DateTime expiresOn = new DateTime(today);
+    expiresOn = expiresOn.minusDays(100);
+    Component component = aComponent().withExpiresOn(expiresOn.toDate()).build();
+
+    // set up mocks
+    when(dateGeneratorService.generateDate()).thenReturn(today);;
+
+    // verify
+    assertThat(-1, comparesEqualTo(componentStatusCalculator.getDaysToExpire(component)));
+  }
+
+  @Test
+  public void testGetDaysToExpire_shouldReturnMinusOneForSameExpiryDateEarlierExpiryTime() {
+
+    // set up data
+    Date today = new Date();
+    DateTime expiresOn = new DateTime(today);
+    expiresOn = expiresOn.minusMillis(5);
+    Component component = aComponent().withExpiresOn(expiresOn.toDate()).build();
+
+    //set up mocks
+    when(dateGeneratorService.generateDate()).thenReturn(today);
+
+    // verify
+    assertThat(-1, comparesEqualTo(componentStatusCalculator.getDaysToExpire(component)));
+  }
+
+  @Test
+  public void testGetDaysToExpire_shouldReturnZeroForSameExpiryDateLaterExpiryTime() {
+
+    // set up data and mocks
+    Date today = new Date();
+    DateTime expiresOn = new DateTime(today);
+    expiresOn = expiresOn.plusMillis(5);
+    Component component = aComponent().withExpiresOn(expiresOn.toDate()).build();
+
+    when(dateGeneratorService.generateDate()).thenReturn(today);
+
+    // verify
+    assertThat(0, comparesEqualTo(componentStatusCalculator.getDaysToExpire(component)));
+  }
 }
+

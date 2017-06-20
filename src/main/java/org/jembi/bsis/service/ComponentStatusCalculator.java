@@ -17,6 +17,8 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.repository.DonationRepository;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,9 @@ public class ComponentStatusCalculator {
   
   @Autowired
   private DonationRepository donationRepository;
+  
+  @Autowired
+  private DateGeneratorService dateGeneratorService;
 
   public boolean shouldComponentsBeDiscardedForTestResults(List<BloodTestResult> bloodTestResults) {
 
@@ -190,5 +195,29 @@ public class ComponentStatusCalculator {
       return true;
     }
     return false;
+  }
+  
+  
+  /**
+   * Calculates the number of days before a component expires 
+   * 
+   * If the component has already expired the difference is -1 
+   * 
+   * If the component expires today the difference is 0 
+   * 
+   * Otherwise the number of days left before the component expires is returned
+   * 
+   * @param component
+   * @return
+   */
+  public int getDaysToExpire(Component component) {
+
+    Date today = dateGeneratorService.generateDate();
+    if (today.after(component.getExpiresOn())) {
+      return -1;
+    } else {
+      DateTime expiresOn = new DateTime(component.getExpiresOn());
+      return Days.daysBetween(new DateTime(today), expiresOn).getDays();
+    }
   }
 }

@@ -16,7 +16,7 @@ public class ComponentViewModel extends BaseViewModel<UUID> {
   private String donationIdentificationNumber;
   private String donationFlagCharacters;
   private ComponentStatus status;
-  private String expiryStatus;
+  private int daysToExpire;
   private String componentCode;
   private LocationViewModel location;
 
@@ -77,12 +77,12 @@ public class ComponentViewModel extends BaseViewModel<UUID> {
   public void setStatus(ComponentStatus status) {
     this.status = status;
   }
-  public String getExpiryStatus() {
-    return expiryStatus;
+  public int getDaysToExpire() {
+    return daysToExpire;
   }
 
-  public void setExpiryStatus(String expiryStatus) {
-    this.expiryStatus = expiryStatus;
+  public void setDaysToExpire(int daysToExpire) {
+    this.daysToExpire = daysToExpire;
   }
 
   public String getComponentCode() {

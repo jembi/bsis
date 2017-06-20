@@ -123,7 +123,7 @@ public class ComponentBackingForm {
   }
 
   @JsonIgnore
-  public void setExpiryStatus(String expiryStatus) {
+  public void setDaysToExpire(Integer daysToExpire) {
     // Ignore
   }
 

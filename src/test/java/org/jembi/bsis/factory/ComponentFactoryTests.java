@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.componenttype.ComponentType;
@@ -33,14 +32,16 @@ import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
+import org.jembi.bsis.service.ComponentStatusCalculator;
+import org.jembi.bsis.util.RandomTestDate;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeFullViewModel;
 import org.jembi.bsis.viewmodel.ComponentTypeViewModel;
 import org.jembi.bsis.viewmodel.ComponentViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.joda.time.DateTime;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -67,6 +68,9 @@ public class ComponentFactoryTests {
   
   @Mock
   private ComponentRepository componentRepository;
+  
+  @Mock
+  private ComponentStatusCalculator componentStatusCalculator;
   
   private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
   private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
@@ -101,6 +105,7 @@ public class ComponentFactoryTests {
         .withLocation(location)
         .withDonation(donation)
         .withParentComponent(parentComponent)
+        .withExpiresOn(new RandomTestDate())
         .build();
     
     ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
@@ -111,12 +116,16 @@ public class ComponentFactoryTests {
         .withLocation(locationViewModel)
         .withBloodAbo(donation.getBloodAbo())
         .withBloodRh(donation.getBloodRh())
+        .withCreatedOn(component.getCreatedOn())
+        .withExpiresOn(component.getExpiresOn())
+        .withDaysToExpire(3)
         .thatIsNotInitialComponent()
         .build();
 
     // setup mocks
     when(locationFactory.createViewModel(location)).thenReturn(locationViewModel);
     when(componentTypeFactory.createViewModel(componentType)).thenReturn(componentTypeViewModel);
+    when(componentStatusCalculator.getDaysToExpire(component)).thenReturn(expectedViewModel.getDaysToExpire());
 
     // run test
     ComponentFullViewModel convertedViewModel = componentFactory.createComponentFullViewModel(component);
@@ -131,8 +140,18 @@ public class ComponentFactoryTests {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
-    components.add(aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.AVAILABLE).withDonation(donation).build());
-    components.add(aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_1)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withExpiresOn(new RandomTestDate())
+        .build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_2)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(donation)
+        .withExpiresOn(new RandomTestDate())
+        .build());
     
     // run test
     List<ComponentFullViewModel> viewModels = componentFactory.createComponentFullViewModels(components);
@@ -159,8 +178,18 @@ public class ComponentFactoryTests {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
-    components.add(aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.AVAILABLE).withDonation(donation).build());
-    components.add(aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.DISCARDED).withDonation(donation).build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_1)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withDonation(donation)
+        .withExpiresOn(new RandomTestDate())
+        .build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_2)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withDonation(donation)
+        .withExpiresOn(new RandomTestDate())
+        .build());
     donation.addComponent(components.get(0));
     donation.addComponent(components.get(1));
 
@@ -238,7 +267,7 @@ public class ComponentFactoryTests {
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
         .withPermission("canRecordChildComponentWeight", true)
-        .withExpiryStatus("Already expired")
+        .withDaysToExpire(0)
         .whichHasNoComponentBatch()
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withBleedStartTime(donation.getBleedStartTime())
@@ -264,77 +293,6 @@ public class ComponentFactoryTests {
     assertThat("Created correctly", convertedViewModel, hasSameStateAsComponentManagementViewModel(expectedViewModel));
   }
 
-  @Ignore("Need to fix issue with the wrong expiry status being calculated")
-  @Test
-  public void createManagementViewModelWithExpiryDateInTheFuture_returnsCorrectViewModel() throws Exception {
-    // set up data
-    Date createdOn = new Date();
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(createdOn);
-    cal.add(Calendar.DAY_OF_YEAR, 1);
-    Date processedOn = cal.getTime();
-    cal.add(Calendar.DAY_OF_YEAR, 200);
-    Date expiresOn = cal.getTime();
-    Component initialComponent = aComponent().withId(COMPONENT_ID_1).build();
-    Donation donation = aDonation()
-        .withComponent(initialComponent)
-        .build();
-    ComponentType componentType = aComponentType().build();
-    Component component = aComponent()
-        .withId(COMPONENT_ID_2)
-        .withComponentType(componentType)
-        .withCreatedOn(processedOn)
-        .withExpiresOn(expiresOn)
-        .withDonation(donation)
-        .withParentComponent(initialComponent)
-        .build();
-
-    UUID componentTypeId2 = UUID.randomUUID();
-    ComponentTypeFullViewModel componentTypeFullViewModel = aComponentTypeFullViewModel()
-        .withId(componentTypeId2)
-        .build();
-
-    ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
-        .withId(COMPONENT_ID_2)
-        .withStatus(ComponentStatus.QUARANTINED)
-        .withComponentCode(null)
-        .withComponentType(componentTypeFullViewModel)
-        .withCreatedOn(processedOn)
-        .withExpiresOn(expiresOn)
-        .withWeigth(null)
-        .withPermission("canDiscard", true)
-        .withPermission("canProcess", true)
-        .withPermission("canPreProcess", true)
-        .withPermission("canUnprocess", true)
-        .withPermission("canUndiscard", true)
-        .withPermission("canRecordChildComponentWeight", true)
-        .withExpiryStatus("200 days to expire") // note: can be "201 days to expire" in some edge cases
-        .whichHasNoComponentBatch()
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withBleedStartTime(null)
-        .withBleedEndTime(null)
-        .withDonationDateTime(null)
-        .withParentComponentId(COMPONENT_ID_1)
-        .build();
-
-    // setup mocks
-    when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(componentTypeFullViewModel);
-    when(componentConstraintChecker.canDiscard(component)).thenReturn(true);
-    when(componentConstraintChecker.canProcess(component)).thenReturn(true);
-    when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
-    when(componentConstraintChecker.canUnprocess(component)).thenReturn(true);
-    when(componentConstraintChecker.canUndiscard(component)).thenReturn(true);
-    when(componentConstraintChecker.canRecordChildComponentWeight(component)).thenReturn(true);
-
-    // run test
-    ComponentManagementViewModel convertedViewModel = componentFactory.createManagementViewModel(component);
-
-    // do asserts
-    Assert.assertNotNull("View model created", convertedViewModel);
-    System.out.println("Returned view model: " + ToStringBuilder.reflectionToString(convertedViewModel));
-    assertThat("Created correctly", convertedViewModel, hasSameStateAsComponentManagementViewModel(expectedViewModel));
-  }
-
   @Test
   public void createManagementViewModelForInitialComponent_viewModelWithNullParentComponentIdReturned() throws Exception {
     // set up data
@@ -343,10 +301,12 @@ public class ComponentFactoryTests {
         .withId(componentTypeId)
         .build();
     Donation donation = aDonation().build();
+    Date expiresOn = new DateTime().minusDays(2).toDate();
     Component initialComponent = aComponent()
         .withId(COMPONENT_ID_1)
         .withComponentType(componentType)
         .withDonation(donation)
+        .withExpiresOn(expiresOn)
         .build();
     donation.addComponent(initialComponent);
 
@@ -360,7 +320,7 @@ public class ComponentFactoryTests {
         .withComponentCode(null)
         .withComponentType(componentTypeFullViewModel)
         .withCreatedOn(null)
-        .withExpiresOn(null)
+        .withExpiresOn(initialComponent.getExpiresOn())
         .withWeigth(null)
         .withPermission("canDiscard", true)
         .withPermission("canProcess", true)
@@ -368,12 +328,12 @@ public class ComponentFactoryTests {
         .withPermission("canUnprocess", true)
         .withPermission("canUndiscard", true)
         .withPermission("canRecordChildComponentWeight", true)
-        .withExpiryStatus("")
+        .withDaysToExpire(0)
         .whichHasNoComponentBatch()
         .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
         .withBleedStartTime(null)
         .withBleedEndTime(null)
-        .withDonationDateTime(null)
+        .withDonationDateTime(initialComponent.getCreatedOn())
         .withParentComponentId(null)
         .build();
 
@@ -436,7 +396,7 @@ public class ComponentFactoryTests {
         .withExpiresOn(expiresOn)
         .withDonationIdentificationNumber("1234567")
         .withDonationFlagCharacters("09")
-        .withExpiryStatus("Already expired")
+        .withDaysToExpire(0)
         .withLocation(locationViewModel)
         .build();
 
@@ -456,8 +416,16 @@ public class ComponentFactoryTests {
   public void createComponentViewModels_componentList() throws Exception {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
-    components.add(aComponent().withId(COMPONENT_ID_1).withStatus(ComponentStatus.AVAILABLE).build());
-    components.add(aComponent().withId(COMPONENT_ID_2).withStatus(ComponentStatus.DISCARDED).build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_1)
+        .withStatus(ComponentStatus.AVAILABLE)
+        .withExpiresOn(new RandomTestDate())
+        .build());
+    components.add(aComponent()
+        .withId(COMPONENT_ID_2)
+        .withStatus(ComponentStatus.DISCARDED)
+        .withExpiresOn(new RandomTestDate())
+        .build());
 
     // run test
     List<ComponentViewModel> viewModels = componentFactory.createComponentViewModels(components);
@@ -470,12 +438,12 @@ public class ComponentFactoryTests {
   @Test
   public void createComponentFullViewModelWithNullParentComponent_shouldSetIntialComponent() {
     // set up data
-    
     Component component = aComponent()
         .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withParentComponent(null)
+        .withExpiresOn(new RandomTestDate())
         .build();
     
     ComponentFullViewModel expectedViewModel = aComponentFullViewModel()
@@ -483,6 +451,7 @@ public class ComponentFactoryTests {
         .withStatus(ComponentStatus.AVAILABLE)
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .thatIsInitialComponent()
+        .withExpiresOn(component.getExpiresOn())
         .build();
 
     // run test
