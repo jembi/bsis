@@ -1,11 +1,12 @@
 services:
   - mysql
 
+dist: trusty
 sudo: required
 
 language: java
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 before_install:
   - bash .travis.install-mysql-5.7.sh
