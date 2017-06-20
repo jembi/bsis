@@ -5,7 +5,7 @@ sudo: required
 
 language: java
 jdk:
-  - openjdk8
+  - oraclejdk8
 
 before_install:
   - bash .travis.install-mysql-5.7.sh
