@@ -198,7 +198,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
   }
 
   public List<Component> findSafeComponents(UUID componentTypeId, UUID locationId, List<BloodGroup> bloodGroups,
-      Date startDate, Date endDate, InventoryStatus inventoryStatus, boolean includeInitialComponents) {
+      Date startDate, Date endDate, List<InventoryStatus> inventoryStatuses, boolean includeInitialComponents) {
     boolean includeBloodGroups = true;
     List<String> stringBloodGroups = null;
 
@@ -230,7 +230,7 @@ public class ComponentRepository extends AbstractRepository<Component> {
         .setParameter("endDate", endDate)
         .setParameter("includeBloodGroups", includeBloodGroups)
         .setParameter("bloodGroups", stringBloodGroups)
-        .setParameter("inventoryStatus",inventoryStatus)
+        .setParameter("inventoryStatuses",inventoryStatuses)
         .setParameter("isDeleted", false)
         .setParameter("includeInitialComponents", includeInitialComponents)
         .getResultList();

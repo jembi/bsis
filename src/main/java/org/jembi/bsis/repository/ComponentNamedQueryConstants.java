@@ -46,7 +46,7 @@ public class ComponentNamedQueryConstants {
       "AND (:endDate is null OR c.createdOn <= :endDate) " +
       "AND (:includeBloodGroups = false OR CONCAT(c.donation.bloodAbo,c.donation.bloodRh) IN (:bloodGroups))"+
       "AND c.isDeleted = :isDeleted " +
-      "AND c.inventoryStatus = :inventoryStatus " +
+      "AND c.inventoryStatus in :inventoryStatuses " +
       "ORDER BY c.id ASC";
 
   public static final String NAME_FIND_ANY_COMPONENT = "Component.findAnyComponent";

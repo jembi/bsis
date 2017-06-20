@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -365,8 +366,33 @@ public class LabellingServiceTests extends UnitTestSuite {
     labellingService.findSafeComponentsToLabel(null, null, componentTypeId, locationId, bloodGroups, null, null, null);
     // verify
     verify(componentRepository).findSafeComponents(componentTypeId, locationId, BloodGroup.toBloodGroups(bloodGroups),
-        null, null, null,
-        false);
+        null, null, null, false);
+  }
+
+  @Test
+  public void testFindSafeComponentWithNullDinAndWithInventoryStatusNotInStock_shouldDoFindSafeComponentsSearch() {
+    // set up mocks
+    when(componentRepository.findSafeComponents(null, null, null, null, null, 
+        Arrays.asList(InventoryStatus.NOT_IN_STOCK, InventoryStatus.REMOVED), false))
+        .thenReturn(null);
+    // run test
+    labellingService.findSafeComponentsToLabel(null, null, null, null, null, null, null, InventoryStatus.NOT_IN_STOCK);
+    // verify
+    verify(componentRepository).findSafeComponents(null, null, null, null, null, 
+        Arrays.asList(InventoryStatus.NOT_IN_STOCK, InventoryStatus.REMOVED), false);
+  }
+
+  @Test
+  public void testFindSafeComponentWithNullDinAndWithInventoryStatusInStock_shouldDoFindSafeComponentsSearch() {
+    // set up mocks
+    when(componentRepository.findSafeComponents(null, null, null, null, null, 
+        Arrays.asList(InventoryStatus.IN_STOCK), false))
+        .thenReturn(null);
+    // run test
+    labellingService.findSafeComponentsToLabel(null, null, null, null, null, null, null, InventoryStatus.IN_STOCK);
+    // verify
+    verify(componentRepository).findSafeComponents(null, null, null, null, null, 
+        Arrays.asList(InventoryStatus.IN_STOCK), false);
   }
 
   @Test
