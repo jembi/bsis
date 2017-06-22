@@ -66,9 +66,10 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
     String createdAfterDate = "2015-07-10 00:00:00";
     String createdBeforeDate = "2015-07-11 23:59:59";
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    UUID locationId = UUID.randomUUID();
 
     List<TestBatch> testBatches = testBatchRepository.findTestBatches(Arrays.asList(status),
-        df.parse(createdAfterDate), df.parse(createdBeforeDate));
+        df.parse(createdAfterDate), df.parse(createdBeforeDate), locationId);
     Assert.assertNotNull("TestBatch not null", testBatches);
     Assert.assertTrue("TestBatch is empty", testBatches.isEmpty());
   }
@@ -81,15 +82,24 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
 
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     List<TestBatch> testBatches = testBatchRepository.findTestBatches(statuses, df.parse(createdAfterDate),
-        df.parse(createdBeforeDate));
+        df.parse(createdBeforeDate), null);
     Assert.assertNotNull("TestBatch not null", testBatches);
     Assert.assertEquals("TestBatch matched on date", 2, testBatches.size());
   }
 
   @Test
+  public void testFindTestBatchesMatchOnLocationOnly() throws Exception {
+    UUID locationId = UUID.fromString("55321456-eeee-1234-b5b1-123412348812");
+
+    List<TestBatch> testBatches = testBatchRepository.findTestBatches(null, null, null, locationId);
+    Assert.assertNotNull("TestBatch not null", testBatches);
+    Assert.assertEquals("TestBatch matched on location", 2, testBatches.size());
+  }
+
+  @Test
   public void testFindTestBatchesMatchOnStatusOnly() throws Exception {
     TestBatchStatus status = TestBatchStatus.CLOSED;
-    List<TestBatch> testBatches = testBatchRepository.findTestBatches(Arrays.asList(status), null, null);
+    List<TestBatch> testBatches = testBatchRepository.findTestBatches(Arrays.asList(status), null, null, null);
     Assert.assertNotNull("TestBatch not null", testBatches);
     Assert.assertEquals("TestBatch matched on status", 1, testBatches.size());
   }
