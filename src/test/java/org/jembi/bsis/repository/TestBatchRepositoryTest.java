@@ -105,6 +105,15 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
+  public void testFindTestBatchesMatchOnMultipleStatusesOnly() throws Exception {
+    TestBatchStatus status1 = TestBatchStatus.CLOSED;
+    TestBatchStatus status2 = TestBatchStatus.OPEN;
+    List<TestBatch> testBatches = testBatchRepository.findTestBatches(Arrays.asList(status1, status2), null, null, null);
+    Assert.assertNotNull("TestBatch not null", testBatches);
+    Assert.assertEquals("TestBatch matched on status", 2, testBatches.size());
+  }
+
+  @Test
   public void testDeleteTestBatch() throws Exception {
     UUID testBatchId = UUID.fromString("640eb339-c815-48c6-81d7-0f225d3f2701");
     testBatchRepository.deleteTestBatch(testBatchId);

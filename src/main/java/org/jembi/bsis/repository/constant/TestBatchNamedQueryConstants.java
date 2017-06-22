@@ -8,7 +8,7 @@ public class TestBatchNamedQueryConstants {
       "SELECT t FROM TestBatch t "
       + "INNER JOIN t.location l "
       + "WHERE t.isDeleted = :deleted "
-      + "AND (:includeStatuses is false OR t.status IN :statuses) "
+      + "AND (:includeStatuses is false OR t.status IN (:statuses)) "
       + "AND (:includeStartDate is false OR t.modificationTracker.createdDate >= :startDate) "
       + "AND (:includeEndDate is false OR t.modificationTracker.createdDate <= :endDate) "
       + "AND (:includeLocation is false OR l.id = :locationId)";
