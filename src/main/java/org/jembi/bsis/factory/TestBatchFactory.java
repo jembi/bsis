@@ -56,6 +56,7 @@ public class TestBatchFactory {
     testBatch.setId(backingForm.getId());
     testBatch.setStatus(backingForm.getStatus());
     testBatch.setCreatedDate(backingForm.getCreatedDate());
+    testBatch.setTestBatchDate(backingForm.getTestBatchDate());
     Set<DonationBatch> donationBatches = new HashSet<>();
     for (UUID donationBatchId : backingForm.getDonationBatchIds()) {
       donationBatches.add(donationBatchRepository.findDonationBatchById(donationBatchId));

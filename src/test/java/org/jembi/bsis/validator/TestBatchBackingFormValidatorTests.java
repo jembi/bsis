@@ -7,6 +7,8 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.mockito.Mockito.when;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -24,6 +26,7 @@ import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -54,12 +57,14 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateUpdateWithUnassignedDonationBatch() {
+  public void testValidateUpdateWithUnassignedDonationBatch() throws ParseException {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
     backingForm.setCreatedDate(new Date());
+    Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-20 09:17");
+    backingForm.setTestBatchDate(testBatchDate);
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
@@ -73,7 +78,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateUpdateWithDonationBatchAssignedToAnotherBatch() {
+  public void testValidateUpdateWithDonationBatchAssignedToAnotherBatch() throws ParseException {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
@@ -86,6 +91,8 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     DonationBatch db1 = new DonationBatch();
     db1.setTestBatch(tb2);
     db1.setVenue(venue);
+    Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-20 09:17");
+    backingForm.setTestBatchDate(testBatchDate);
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(db1);
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
@@ -100,7 +107,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateUpdateWithDonationBatchAssignedToBatch() {
+  public void testValidateUpdateWithDonationBatchAssignedToBatch() throws ParseException {
     UUID testBatchId = UUID.randomUUID();
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(testBatchId);
@@ -113,6 +120,8 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     DonationBatch db1 = new DonationBatch();
     db1.setTestBatch(tb1);
     db1.setVenue(venue);
+    Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-20 09:17");
+    backingForm.setTestBatchDate(testBatchDate);
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(db1);
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
@@ -126,12 +135,14 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateWithNonExistentLocation() {
+  public void testValidateWithNonExistentLocation() throws ParseException {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
     backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
+    Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-20 09:17");
+    backingForm.setTestBatchDate(testBatchDate);
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
@@ -148,12 +159,14 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateWithNonTestingSiteLocation() {
+  public void testValidateWithNonTestingSiteLocation() throws ParseException {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
     backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
+    Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-20 09:17");
+    backingForm.setTestBatchDate(testBatchDate);
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
@@ -170,12 +183,14 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateWithDeletedLocation() {
+  public void testValidateWithDeletedLocation() throws ParseException {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
     backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
+    Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-20 09:17");
+    backingForm.setTestBatchDate(testBatchDate);
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
@@ -192,11 +207,13 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateWithNoLocation() {
+  public void testValidateWithNoLocation() throws ParseException {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
+    Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-20 09:17");
+    backingForm.setTestBatchDate(testBatchDate);
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
@@ -210,5 +227,73 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     assertThat(errors.getErrorCount(), is(1));
     assertThat(errors.getFieldErrorCount(), is(1));
     assertThat(errors.getFieldError("location").getCode(), is("requiredField.error"));
+  }
+  
+  @Test
+  public void testValidateValidTestBatchDate() throws ParseException {
+    TestBatchBackingForm backingForm = new TestBatchBackingForm();
+    backingForm.setId(UUID.randomUUID());
+    UUID locationId = UUID.randomUUID();
+    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
+    Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-20 09:17");
+    backingForm.setTestBatchDate(testBatchDate);
+
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().withId(locationId).build());
+    when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
+    when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+
+    Errors errors = new BindException(backingForm, "testBatchBackingForm");
+    validator.validate(backingForm, errors);
+
+    assertThat(errors.getErrorCount(), is(0));
+    assertThat(errors.getFieldErrorCount(), is(0));
+  }
+  
+  @Test
+  public void testValidateNullTestBatchDate() throws ParseException{
+    TestBatchBackingForm backingForm = new TestBatchBackingForm();
+    backingForm.setId(UUID.randomUUID());
+    UUID locationId = UUID.randomUUID();
+    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
+
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().withId(locationId).build());
+    when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
+    when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+
+    Errors errors = new BindException(backingForm, "testBatchBackingForm");
+    validator.validate(backingForm, errors);
+
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("testBatchDate").getCode(), is("errors.invalid"));
+  }
+  
+  @Test
+  public void testValidateTestBatchDateAfterToday() throws ParseException{
+    TestBatchBackingForm backingForm = new TestBatchBackingForm();
+    backingForm.setId(UUID.randomUUID());
+    UUID locationId = UUID.randomUUID();
+    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
+    backingForm.setTestBatchDate(null);
+    Date today = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-06-23 09:17");
+    Date testBatchDate = new DateTime(today).plusDays(5).toDate();
+    backingForm.setTestBatchDate(testBatchDate);
+
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
+    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().withId(locationId).build());
+    when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
+    when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+
+    Errors errors = new BindException(backingForm, "testBatchBackingForm");
+    validator.validate(backingForm, errors);
+
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldErrorCount(), is(1));
+    assertThat(errors.getFieldError("testBatchDate").getCode(), is("errors.invalid"));
   }
 }

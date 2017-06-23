@@ -16,7 +16,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
   private TestBatchStatus status;
   private Set<DonationBatch> donationBatches;
   private String batchNumber;
-  private Date createdDate;
+  private Date testBatchDate;
   private Date lastUpdatedDate;
   private String notes;
   private Location location = LocationBuilder.aTestingSite().build();
@@ -36,8 +36,8 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     return this;
   }
 
-  public TestBatchBuilder withCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
+  public TestBatchBuilder withCreatedDate(Date testBatchDate) {
+    this.testBatchDate = testBatchDate;
     return this;
   }
 
@@ -75,7 +75,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     testBatch.setId(id);
     testBatch.setStatus(status);
     testBatch.setBatchNumber(batchNumber);
-    testBatch.setCreatedDate(createdDate);
+    testBatch.setCreatedDate(testBatchDate);
     testBatch.setLastUpdated(lastUpdatedDate);
     testBatch.setNotes(notes);
     testBatch.setDonationBatches(donationBatches);

@@ -17,6 +17,7 @@ public class TestBatchBackingForm {
   private UUID id;
   private TestBatchStatus status;
   private Date createdDate;
+  private Date testBatchDate;
   private Date lastUpdated;
 
   private LocationBackingForm location;
@@ -104,6 +105,14 @@ public class TestBatchBackingForm {
   @JsonIgnore
   public void setPermissions(Map<String, Boolean> permissions) {
     // Ignore
+  }
+
+  public Date getTestBatchDate() {
+    return testBatchDate;
+  }
+
+  public void setTestBatchDate(Date testBatchDate) {
+    this.testBatchDate = testBatchDate;
   }
 
 }
