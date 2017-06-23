@@ -1,5 +1,6 @@
 package org.jembi.bsis.model.testbatch;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 import org.hibernate.envers.Audited;
@@ -41,6 +44,9 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
   @Size(min = 6, max = 6)
   private String batchNumber;
 
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(columnDefinition = "DATETIME", nullable = false)
+  private Date testBatchDate;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 20)
@@ -107,6 +113,14 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
 
   public void setLocation(Location location) {
     this.location = location;
+  }
+
+  public Date getTestBatchDate() {
+    return testBatchDate;
+  }
+
+  public void setTestBatchDate(Date testBatchDate) {
+    this.testBatchDate = testBatchDate;
   }
 
 }
