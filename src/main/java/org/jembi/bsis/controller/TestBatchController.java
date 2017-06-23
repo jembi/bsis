@@ -115,12 +115,4 @@ public class TestBatchController {
     map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatchCreatedDate));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
-  
-  @RequestMapping(value = "/search/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TESTING_INFORMATION + "')")
-  public ResponseEntity<Map<String, Object>> findTestingSites() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("testingSites", testBatchControllerService.getTestingSites());
-    return new ResponseEntity<>(map, HttpStatus.OK);
-  }
 }
