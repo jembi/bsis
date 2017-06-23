@@ -480,6 +480,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     backingForm.setId(IRRELEVANT_TEST_BATCH_ID);
     backingForm.setStatus(TestBatchStatus.OPEN);
     backingForm.setCreatedDate(IRRELEVANT_CREATED_DATE);
+    backingForm.setDonationBatchIds(Arrays.asList(donationBatchId1, donationBatchId2));
     backingForm.setLocation(aTestingSiteBackingForm().withId(locationId).build());
     
     DonationBatch firstDonationBatch = aDonationBatch().withId(donationBatchId1).build();
@@ -490,6 +491,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(TestBatchStatus.OPEN)
         .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withDonationBatches(new HashSet<>(Arrays.asList(firstDonationBatch, secondDonationBatch)))
         .withLocation(location)
         .build();
     
