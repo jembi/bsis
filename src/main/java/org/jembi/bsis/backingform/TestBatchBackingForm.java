@@ -20,7 +20,6 @@ public class TestBatchBackingForm {
   private Date lastUpdated;
 
   private LocationBackingForm location;
-  private List<UUID> donationBatchIds = null;
 
   public TestBatchBackingForm() {
   }
@@ -50,14 +49,6 @@ public class TestBatchBackingForm {
     this.createdDate = createdDate;
   }
 
-  public List<UUID> getDonationBatchIds() {
-    return donationBatchIds;
-  }
-
-  public void setDonationBatchIds(List<UUID> donationBatchIds) {
-    this.donationBatchIds = donationBatchIds;
-  }
-  
   @JsonIgnore
   public void setDonationBatches(List<DonationBatchViewModel> donationBatches) {
     // Ignore

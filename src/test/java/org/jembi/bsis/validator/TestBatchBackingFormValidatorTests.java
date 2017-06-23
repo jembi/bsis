@@ -58,7 +58,6 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
-    backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
     backingForm.setCreatedDate(new Date());
 
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(new DonationBatch());
@@ -73,38 +72,10 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateUpdateWithDonationBatchAssignedToAnotherBatch() {
-
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(UUID.randomUUID());
-    backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
-    backingForm.setCreatedDate(new Date());
-    TestBatch tb2 = new TestBatch();
-    tb2.setId(UUID.randomUUID());
-    Location venue = new Location();
-    venue.setName("Test");
-    DonationBatch db1 = new DonationBatch();
-    db1.setTestBatch(tb2);
-    db1.setVenue(venue);
-
-    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_1)).thenReturn(db1);
-    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
-    when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
-    when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
-
-    Errors errors = new BindException(backingForm, "testBatchBackingForm");
-    validator.validate(backingForm, errors);
-
-    assertThat(errors.getErrorCount(), is(1));
-    Assert.assertNotNull(errors.getFieldError("donationBatchIds"));
-  }
-
-  @Test
   public void testValidateUpdateWithDonationBatchAssignedToBatch() {
     UUID testBatchId = UUID.randomUUID();
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(testBatchId);
-    backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
     backingForm.setCreatedDate(new Date());
     TestBatch tb1 = new TestBatch();
     tb1.setId(testBatchId);

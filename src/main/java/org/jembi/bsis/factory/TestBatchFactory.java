@@ -4,18 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
-import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.TestBatchConstraintChecker;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
@@ -43,9 +39,6 @@ public class TestBatchFactory {
   private LocationFactory locationFactory;
   
   @Autowired
-  private DonationBatchRepository donationBatchRepository;
-  
-  @Autowired
   private LocationRepository locationRepository;
   
   @Autowired
@@ -56,11 +49,6 @@ public class TestBatchFactory {
     testBatch.setId(backingForm.getId());
     testBatch.setStatus(backingForm.getStatus());
     testBatch.setCreatedDate(backingForm.getCreatedDate());
-    Set<DonationBatch> donationBatches = new HashSet<>();
-    for (UUID donationBatchId : backingForm.getDonationBatchIds()) {
-      donationBatches.add(donationBatchRepository.findDonationBatchById(donationBatchId));
-    }
-    testBatch.setDonationBatches(donationBatches);
     testBatch.setLocation(locationRepository.getLocation(backingForm.getLocation().getId()));
     return testBatch;
   }
