@@ -58,36 +58,36 @@ public class TestBatchRepository extends AbstractRepository<TestBatch> {
 
   public List<TestBatch> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate, UUID locationId) {
 
-    boolean includeStartDate = true;
+    boolean includeStartDateCheck = true;
     if (startDate == null) {
-      includeStartDate = false;
+      includeStartDateCheck = false;
     }
 
-    boolean includeEndDate = true;
+    boolean includeEndDateCheck = true;
     if (endDate == null) {
-      includeEndDate = false;
+      includeEndDateCheck = false;
     }
 
-    boolean includeLocation = true;
+    boolean includeAllLocations = false;
     if (locationId == null) {
-      includeLocation = false;
+      includeAllLocations = true;
     }
     
-    boolean includeStatuses = true;
+    boolean includeAllStatuses = false;
     if (statuses == null) {
-      includeStatuses = false;
+      includeAllStatuses = true;
     }
 
     return entityManager.createNamedQuery(
         TestBatchNamedQueryConstants.NAME_FIND_TEST_BATCHES_BY_STATUSES_PERIOD_AND_LOCATION, TestBatch.class)
         .setParameter("deleted", false)
-        .setParameter("includeStatuses", includeStatuses)
+        .setParameter("includeAllStatuses", includeAllStatuses)
         .setParameter("statuses", statuses)
-        .setParameter("includeStartDate", includeStartDate)
+        .setParameter("includeStartDateCheck", includeStartDateCheck)
         .setParameter("startDate", startDate)
-        .setParameter("includeEndDate", includeEndDate)
+        .setParameter("includeEndDateCheck", includeEndDateCheck)
         .setParameter("endDate", endDate)
-        .setParameter("includeLocation", includeLocation)
+        .setParameter("includeAllLocations", includeAllLocations)
         .setParameter("locationId", locationId)
         .getResultList();
   }
