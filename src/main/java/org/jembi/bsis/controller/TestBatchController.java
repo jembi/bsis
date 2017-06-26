@@ -54,7 +54,6 @@ public class TestBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("status", TestBatchStatus.values());
-    map.put("donationBatches", testBatchControllerService.getUnnasignedDonationBatches());
     map.put("testingSites", testBatchControllerService.getTestingSites());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
