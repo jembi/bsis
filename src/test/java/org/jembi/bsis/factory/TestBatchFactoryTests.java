@@ -96,12 +96,18 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = createDonationBatch();
 
     TestBatch testBatch1 =
-        aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(IRRELEVANT_STATUS).withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-            .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE).withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-            .withDonationBatches(new HashSet<>(Arrays.asList(donationBatch))).withNotes(IRRELEVANT_NOTES).build();
+      aTestBatch()
+        .withId(IRRELEVANT_TEST_BATCH_ID)
+        .withStatus(IRRELEVANT_STATUS)
+        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+        .withDonationBatches(new HashSet<>(Arrays.asList(donationBatch)))
+        .withNotes(IRRELEVANT_NOTES)
+        .build();
 
     TestBatch testBatch2 =
-        aTestBatch()
+      aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
