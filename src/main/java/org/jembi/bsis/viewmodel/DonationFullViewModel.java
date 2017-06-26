@@ -12,7 +12,7 @@ import org.jembi.bsis.model.donation.HaemoglobinLevel;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.utils.CustomDateFormatter;
 
-public class DonationViewModel extends BaseViewModel<UUID> {
+public class DonationFullViewModel extends BaseViewModel<UUID> {
 
   private Date donationDate;
   private String donationIdentificationNumber;
@@ -41,7 +41,7 @@ public class DonationViewModel extends BaseViewModel<UUID> {
   private Map<String, Boolean> permissions;
   private AdverseEventViewModel adverseEvent;
 
-  public DonationViewModel() {
+  public DonationFullViewModel() {
   }
   
   public void setDonationDate(Date donationDate) {

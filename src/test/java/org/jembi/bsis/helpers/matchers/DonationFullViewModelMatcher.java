@@ -4,26 +4,26 @@ import java.util.Objects;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 
-public class DonationViewModelMatcher extends TypeSafeMatcher<DonationViewModel> {
+public class DonationFullViewModelMatcher extends TypeSafeMatcher<DonationFullViewModel> {
 
-  private DonationViewModel expected;
+  private DonationFullViewModel expected;
 
-  public DonationViewModelMatcher(DonationViewModel expected) {
+  public DonationFullViewModelMatcher(DonationFullViewModel expected) {
     this.expected = expected;
   }
 
   @Override
   public void describeTo(Description description) {
-    description.appendText("A donation view model with the following state:")
+    description.appendText("A donation full view model with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nPermissions: ").appendValue(expected.getPermissions())
         .appendText("\nAdverse Event: ").appendValue(expected.getAdverseEvent());
   }
 
   @Override
-  public boolean matchesSafely(DonationViewModel actual) {
+  public boolean matchesSafely(DonationFullViewModel actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
         Objects.equals(actual.getDonationDate(), expected.getDonationDate()) &&
         Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
@@ -52,8 +52,8 @@ public class DonationViewModelMatcher extends TypeSafeMatcher<DonationViewModel>
         Objects.equals(actual.getAdverseEvent(), expected.getAdverseEvent());
   }
 
-  public static DonationViewModelMatcher hasSameStateAsDonationViewModel(DonationViewModel expected) {
-    return new DonationViewModelMatcher(expected);
+  public static DonationFullViewModelMatcher hasSameStateAsDonationFullViewModel(DonationFullViewModel expected) {
+    return new DonationFullViewModelMatcher(expected);
   }
 
 }

@@ -20,7 +20,7 @@ import org.jembi.bsis.service.TestBatchCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.utils.PermissionUtils;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
-import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
@@ -89,9 +89,9 @@ public class TestBatchControllerService {
     testBatchCRUDService.deleteTestBatch(id);
   }
 
-  public List<DonationViewModel> getDonations(UUID id, BloodTypingMatchStatus bloodTypingMatchStatus) {
+  public List<DonationFullViewModel> getDonations(UUID id, BloodTypingMatchStatus bloodTypingMatchStatus) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-    return testBatchFactory.createDonationViewModels(testBatch, bloodTypingMatchStatus);
+    return testBatchFactory.createDonationFullViewModels(testBatch, bloodTypingMatchStatus);
   }
 
   public Date getTestBatchCreatedDate(UUID id) {

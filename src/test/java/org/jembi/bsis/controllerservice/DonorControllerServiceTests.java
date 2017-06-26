@@ -3,7 +3,7 @@ package org.jembi.bsis.controllerservice;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
+import static org.jembi.bsis.helpers.builders.DonationFullViewModelBuilder.aDonationFullViewModel;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.mockito.Mockito.when;
 
@@ -17,7 +17,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.repository.DonorRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
-import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -46,18 +46,18 @@ public class DonorControllerServiceTests extends UnitTestSuite {
     Donor donor = aDonor().withId(userId).withDonations(donations).build();
     
     // Expectations
-    List<DonationViewModel> expectedViewModels = Arrays.asList(
-        aDonationViewModel().withId(donationId1).build(),
-        aDonationViewModel().withId(donationId2).build()
+    List<DonationFullViewModel> expectedFullViewModels = Arrays.asList(
+        aDonationFullViewModel().withId(donationId1).build(),
+        aDonationFullViewModel().withId(donationId2).build()
     );
     
     when(donorRepository.findDonorById(donorId)).thenReturn(donor);
-    when(donationFactory.createDonationViewModelsWithPermissions(donations)).thenReturn(expectedViewModels);
+    when(donationFactory.createDonationFullViewModelsWithPermissions(donations)).thenReturn(expectedFullViewModels);
     
     // Test
-    List<DonationViewModel> returnedViewModels = donorControllerService.findDonationsForDonor(donorId);
+    List<DonationFullViewModel> returnedFullViewModels = donorControllerService.findDonationsForDonor(donorId);
     
     // Verifications
-    assertThat(returnedViewModels, is(expectedViewModels));
+    assertThat(returnedFullViewModels, is(expectedFullViewModels));
   }
 }

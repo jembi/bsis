@@ -80,7 +80,7 @@ public class TestResultController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    map.put("donation", donationFactory.createDonationViewModelWithoutPermissions(c));
+    map.put("donation", donationFactory.createDonationFullViewModelWithoutPermissions(c));
 
     if (c.getPackType().getTestSampleProduced()) {
       BloodTestingRuleResult results = bloodTestingRepository.getAllTestsStatusForDonation(c.getId());

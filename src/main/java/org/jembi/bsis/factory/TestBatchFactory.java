@@ -20,8 +20,8 @@ import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.TestBatchConstraintChecker;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
-import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,24 +112,24 @@ public class TestBatchFactory {
   }
 
   /**
-   * Creates a list of DonationViewModel objects from a test batch, with the option of filtering by
-   * blood typing match status if the bloodTypingMatchStatus parameter is not null.
+   * Creates a list of DonationFullViewModel objects from a test batch, with the option of filtering
+   * by blood typing match status if the bloodTypingMatchStatus parameter is not null.
    *
    * @param testBatch the test batch
    * @param bloodTypingMatchStatus the blood typing match status
    * @return the list< donation summary view model>
    */
-  public List<DonationViewModel> createDonationViewModels(TestBatch testBatch,
+  public List<DonationFullViewModel> createDonationFullViewModels(TestBatch testBatch,
       BloodTypingMatchStatus bloodTypingMatchStatus) {
-    List<DonationViewModel> donationViewModels = new ArrayList<>();
+    List<DonationFullViewModel> donationFullViewModels = new ArrayList<>();
     for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
       for (Donation donation : donationBatch.getDonations()) {
         if (bloodTypingMatchStatus == null || donation.getBloodTypingMatchStatus().equals(bloodTypingMatchStatus)) {
-          donationViewModels.add(donationFactory.createDonationViewModelWithoutPermissions(donation));
+          donationFullViewModels.add(donationFactory.createDonationFullViewModelWithoutPermissions(donation));
         }
       }
     }
-    return donationViewModels;
+    return donationFullViewModels;
   }
 
   /**

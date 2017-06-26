@@ -21,7 +21,7 @@ public class PostDonationCounsellingViewModel {
 
   private Map<String, Boolean> permissions;
 
-  private DonationViewModel donation;
+  private DonationFullViewModel donation;
 
   private DonorViewModel donor;
 
@@ -72,11 +72,11 @@ public class PostDonationCounsellingViewModel {
     this.notes = notes;
   }
 
-  public void setDonation(DonationViewModel donation) {
+  public void setDonation(DonationFullViewModel donation) {
     this.donation = donation;
   }
 
-  public DonationViewModel getDonation() {
+  public DonationFullViewModel getDonation() {
     return donation;
   }
 

@@ -39,7 +39,7 @@ public class BloodTestingRuleResultViewModelFactory {
 
     // the blood donation
     Donation donation = bloodTestingRuleResultSet.getDonation();
-    ruleResult.setDonation(donationFactory.createDonationViewModelWithoutPermissions(donation));
+    ruleResult.setDonation(donationFactory.createDonationFullViewModelWithoutPermissions(donation));
 
     // pending tests
     List<UUID> pendingBloodTypingTestsIds = new ArrayList<>();

@@ -3,9 +3,9 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
+import static org.jembi.bsis.helpers.builders.DonationFullViewModelBuilder.aDonationFullViewModel;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
-import static org.jembi.bsis.helpers.matchers.DonationViewModelMatcher.hasSameStateAsDonationViewModel;
+import static org.jembi.bsis.helpers.matchers.DonationFullViewModelMatcher.hasSameStateAsDonationFullViewModel;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import org.jembi.bsis.service.DonationBatchConstraintChecker;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DonationBatchFullViewModel;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
-import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -97,12 +97,12 @@ public class DonationBatchViewModelFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = aDonationBatch().withId(donationBatchId).withDonation(donation).build();
 
     // expected data
-    DonationViewModel expectedDonationViewModel = aDonationViewModel()
+    DonationFullViewModel expectedDonationFullViewModel = aDonationFullViewModel()
         .withId(donationId)
         .build();
 
     // set up mocks
-    when(donationFactory.createDonationViewModelWithoutPermissions(donation)).thenReturn(expectedDonationViewModel);
+    when(donationFactory.createDonationFullViewModelWithoutPermissions(donation)).thenReturn(expectedDonationFullViewModel);
     when(donationBatchConstraintChecker.canDeleteDonationBatch(donationBatchId)).thenReturn(false);
     when(donationBatchConstraintChecker.canCloseDonationBatch(donationBatchId)).thenReturn(false);
     when(donationBatchConstraintChecker.canReopenDonationBatch(donationBatchId)).thenReturn(false);
@@ -118,7 +118,7 @@ public class DonationBatchViewModelFactoryTests extends UnitTestSuite {
     Assert.assertNotNull("view model was created", returnedDonationBatchViewModel);
     Assert.assertNotNull("donations were created", returnedDonationBatchViewModel.getDonations());
     Assert.assertEquals("donations correct", 1, returnedDonationBatchViewModel.getDonations().size());
-    assertThat(returnedDonationBatchViewModel.getDonations().get(0), hasSameStateAsDonationViewModel(expectedDonationViewModel));
+    assertThat(returnedDonationBatchViewModel.getDonations().get(0), hasSameStateAsDonationFullViewModel(expectedDonationFullViewModel));
 
     // assert permissions
     Assert.assertNotNull("permissions were created", returnedDonationBatchViewModel.getPermissions());
@@ -147,12 +147,12 @@ public class DonationBatchViewModelFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = aDonationBatch().withId(donationBatchId).withDonations(donations).build();
 
     // expected data (no permissions)
-    DonationViewModel expectedDonation1ViewModel = aDonationViewModel()
+    DonationFullViewModel expectedDonationFullViewModel = aDonationFullViewModel()
         .withId(donation1Id)
         .build();
 
     // set up mocks
-    when(donationFactory.createDonationViewModelWithoutPermissions(donation1)).thenReturn(expectedDonation1ViewModel);
+    when(donationFactory.createDonationFullViewModelWithoutPermissions(donation1)).thenReturn(expectedDonationFullViewModel);
 
     // run tests
     DonationBatchFullViewModel returnedDonationBatchViewModel =
@@ -162,7 +162,7 @@ public class DonationBatchViewModelFactoryTests extends UnitTestSuite {
     Assert.assertNotNull("view model was created", returnedDonationBatchViewModel);
     Assert.assertNotNull("donations were created", returnedDonationBatchViewModel.getDonations());
     Assert.assertEquals("donations correct", 1, returnedDonationBatchViewModel.getDonations().size());
-    assertThat(returnedDonationBatchViewModel.getDonations().get(0), hasSameStateAsDonationViewModel(expectedDonation1ViewModel));
+    assertThat(returnedDonationBatchViewModel.getDonations().get(0), hasSameStateAsDonationFullViewModel(expectedDonationFullViewModel));
   }
 
   private void assertPermissionEquals(Map<String, Boolean> permissions, String permissionKey, Boolean permissionValue) {

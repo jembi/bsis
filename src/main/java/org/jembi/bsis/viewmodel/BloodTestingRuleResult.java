@@ -12,7 +12,7 @@ import org.jembi.bsis.model.donation.Titre;
 
 public class BloodTestingRuleResult {
 
-  private DonationViewModel donation;
+  private DonationFullViewModel donation;
 
   private Set<String> allBloodAboChanges;
 
@@ -52,11 +52,11 @@ public class BloodTestingRuleResult {
   public BloodTestingRuleResult() {
   }
 
-  public DonationViewModel getDonation() {
+  public DonationFullViewModel getDonation() {
     return donation;
   }
 
-  public void setDonation(DonationViewModel donation) {
+  public void setDonation(DonationFullViewModel donation) {
     this.donation = donation;
   }
 
