@@ -1217,7 +1217,6 @@ public class DataImportService {
       testBatch.setLocation(testingSite);
       testBatch.setBatchNumber(sequenceNumberRepository.getNextTestBatchNumber());
       testBatch.setStatus(TestBatchStatus.CLOSED);
-      testBatch.setCreatedDate(donationDate);
       testBatch.setTestBatchDate(donationDate);
       testBatchRepository.save(testBatch);
       testBatches.put(donationDateString, testBatch);
