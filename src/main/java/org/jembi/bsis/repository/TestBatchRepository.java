@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
+import org.jembi.bsis.repository.constant.TestBatchNamedQueryConstants;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,40 +56,40 @@ public class TestBatchRepository extends AbstractRepository<TestBatch> {
     return testBatch;
   }
 
-  public List<TestBatch> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate) {
+  public List<TestBatch> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate, UUID locationId) {
 
-    String queryStr = "SELECT t FROM TestBatch t WHERE t.isDeleted = :deleted ";
-
-    if (statuses != null) {
-      queryStr += "AND t.status IN :statuses ";
+    boolean includeStartDateCheck = true;
+    if (startDate == null) {
+      includeStartDateCheck = false;
     }
 
-    if (startDate != null) {
-      queryStr += "AND t.modificationTracker.createdDate >= :startDate ";
+    boolean includeEndDateCheck = true;
+    if (endDate == null) {
+      includeEndDateCheck = false;
     }
 
-    if (endDate != null) {
-      queryStr += "AND t.modificationTracker.createdDate <= :endDate ";
+    boolean includeAllLocations = false;
+    if (locationId == null) {
+      includeAllLocations = true;
+    }
+    
+    boolean includeAllStatuses = false;
+    if (statuses == null) {
+      includeAllStatuses = true;
     }
 
-    TypedQuery<TestBatch> query = entityManager.createQuery(queryStr, TestBatch.class);
-
-    query.setParameter("deleted", false);
-
-    if (statuses != null) {
-      query.setParameter("statuses", statuses);
-    }
-
-    if (startDate != null) {
-      query.setParameter("startDate", startDate);
-    }
-
-    if (endDate != null) {
-      query.setParameter("endDate", endDate);
-    }
-
-    return query.getResultList();
-
+    return entityManager.createNamedQuery(
+        TestBatchNamedQueryConstants.NAME_FIND_TEST_BATCHES_BY_STATUSES_PERIOD_AND_LOCATION, TestBatch.class)
+        .setParameter("deleted", false)
+        .setParameter("includeAllStatuses", includeAllStatuses)
+        .setParameter("statuses", statuses)
+        .setParameter("includeStartDateCheck", includeStartDateCheck)
+        .setParameter("startDate", startDate)
+        .setParameter("includeEndDateCheck", includeEndDateCheck)
+        .setParameter("endDate", endDate)
+        .setParameter("includeAllLocations", includeAllLocations)
+        .setParameter("locationId", locationId)
+        .getResultList();
   }
 
   public void deleteTestBatch(UUID id) {

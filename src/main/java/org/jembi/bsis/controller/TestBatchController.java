@@ -85,12 +85,13 @@ public class TestBatchController {
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
-  public ResponseEntity<Map<String, Object>> findTestBatchPagination(
+  public ResponseEntity<Map<String, Object>> findTestBatch(
       @RequestParam(value = "status", required = false) List<TestBatchStatus> statuses ,
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
-      @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
+      @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
+      @RequestParam(value = "locationId", required = false) UUID locationId) {
     Map<String, Object> map = new HashMap<>();
-    map.put("testBatches", testBatchControllerService.findTestBatches(statuses, startDate, endDate));
+    map.put("testBatches", testBatchControllerService.findTestBatches(statuses, startDate, endDate, locationId));
     return new ResponseEntity<>(map, HttpStatus.OK);
 
   }

@@ -80,8 +80,8 @@ public class TestBatchControllerService {
     return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
   }
 
-  public List<TestBatchViewModel> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate) {
-    List<TestBatch> testBatches = testBatchRepository.findTestBatches(statuses, startDate, endDate);
+  public List<TestBatchViewModel> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate, UUID locationId) {
+    List<TestBatch> testBatches = testBatchRepository.findTestBatches(statuses, startDate, endDate, locationId);
     return testBatchFactory.createTestBatchBasicViewModels(testBatches);
   }
 
