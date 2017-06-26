@@ -273,7 +273,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(true);
 
-    boolean result = testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch);
+    boolean result = testBatchConstraintChecker.canAddOrRemoveDonation(testBatch);
 
     assertThat(result, is(false));
   }
@@ -288,7 +288,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
 
-    boolean result = testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch);
+    boolean result = testBatchConstraintChecker.canAddOrRemoveDonation(testBatch);
 
     assertThat(result, is(false));
   }
@@ -302,7 +302,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
 
-    boolean result = testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch);
+    boolean result = testBatchConstraintChecker.canAddOrRemoveDonation(testBatch);
 
     assertThat(result, is(true));
   }
@@ -317,7 +317,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
 
-    boolean result = testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch);
+    boolean result = testBatchConstraintChecker.canAddOrRemoveDonation(testBatch);
 
     assertThat(result, is(true));
   }
