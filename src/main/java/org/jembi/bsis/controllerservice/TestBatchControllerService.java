@@ -94,9 +94,9 @@ public class TestBatchControllerService {
     return testBatchFactory.createDonationViewModels(testBatch, bloodTypingMatchStatus);
   }
 
-  public Date getTestBatchCreatedDate(UUID id) {
+  public Date getTestBatchDate(UUID id) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-    return testBatch.getCreatedDate();
+    return testBatch.getTestBatchDate();
   }
 
 }

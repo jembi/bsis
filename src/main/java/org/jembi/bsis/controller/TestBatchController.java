@@ -107,7 +107,7 @@ public class TestBatchController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TESTING_INFORMATION + "')")
   public ResponseEntity<Map<String, Object>> getDonationsForTestBatch(@PathVariable UUID id,
       @RequestParam(value = "bloodTypingMatchStatus", required = false) BloodTypingMatchStatus bloodTypingMatchStatus) {
-    Date testBatchCreatedDate = testBatchControllerService.getTestBatchCreatedDate(id);
+    Date testBatchCreatedDate = testBatchControllerService.getTestBatchDate(id);
     List<DonationViewModel> donationViewModels = testBatchControllerService.getDonations(id, bloodTypingMatchStatus);
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donations", donationViewModels);
