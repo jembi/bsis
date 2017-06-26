@@ -55,7 +55,6 @@ public class TestBatchFactory {
     TestBatch testBatch = new TestBatch();
     testBatch.setId(backingForm.getId());
     testBatch.setStatus(backingForm.getStatus());
-    testBatch.setCreatedDate(backingForm.getCreatedDate());
     testBatch.setTestBatchDate(backingForm.getTestBatchDate());
     Set<DonationBatch> donationBatches = new HashSet<>();
     for (UUID donationBatchId : backingForm.getDonationBatchIds()) {
@@ -143,7 +142,7 @@ public class TestBatchFactory {
     testBatchViewModel.setId(testBatch.getId());
     testBatchViewModel.setStatus(testBatch.getStatus());
     testBatchViewModel.setBatchNumber(testBatch.getBatchNumber());
-    testBatchViewModel.setCreatedDate(testBatch.getCreatedDate());
+    testBatchViewModel.setTestBatchDate(testBatch.getTestBatchDate());
     testBatchViewModel.setLastUpdated(testBatch.getLastUpdated());
     testBatchViewModel.setNotes(testBatch.getNotes());
     testBatchViewModel.setLocation(locationFactory.createViewModel(testBatch.getLocation()));

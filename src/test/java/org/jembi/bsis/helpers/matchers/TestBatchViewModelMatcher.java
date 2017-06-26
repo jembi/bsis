@@ -20,7 +20,7 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nStatus: ").appendValue(expected.getStatus())
         .appendText("\nBatch number: ").appendValue(expected.getBatchNumber())
-        .appendText("\nCreated date: ").appendValue(expected.getCreatedDate())
+        .appendText("\nTest batch date: ").appendValue(expected.getTestBatchDate())
         .appendText("\nLast updated date: ").appendValue(expected.getLastUpdated())
 .appendText("\nNotes: ").appendValue(expected.getNotes());
   }
@@ -45,9 +45,9 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
           .appendText(", actual = ").appendValue(actual.getBatchNumber());
     }
 
-    if (!Objects.equals(actual.getCreatedDate(), expected.getCreatedDate())) {
-      description.appendText("\nCreated date: expected = ").appendValue(expected.getCreatedDate())
-          .appendText(", actual = ").appendValue(actual.getCreatedDate());
+    if (!Objects.equals(actual.getTestBatchDate(), expected.getTestBatchDate())) {
+      description.appendText("\nTest batch date: expected = ").appendValue(expected.getTestBatchDate())
+          .appendText(", actual = ").appendValue(actual.getTestBatchDate());
     }
 
     if (!Objects.equals(actual.getLastUpdated(), expected.getLastUpdated())) {
@@ -66,7 +66,7 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
     return Objects.equals(actual.getId(), expected.getId()) &&
         Objects.equals(actual.getStatus(), expected.getStatus()) &&
         Objects.equals(actual.getBatchNumber(), expected.getBatchNumber()) &&
-        Objects.equals(actual.getCreatedDate(), expected.getCreatedDate()) &&
+        Objects.equals(actual.getTestBatchDate(), expected.getTestBatchDate()) &&
         Objects.equals(actual.getLastUpdated(), expected.getLastUpdated()) &&
         Objects.equals(actual.getNotes(), expected.getNotes());
   }

@@ -36,7 +36,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     return this;
   }
 
-  public TestBatchBuilder withCreatedDate(Date testBatchDate) {
+  public TestBatchBuilder withTestBatchDate(Date testBatchDate) {
     this.testBatchDate = testBatchDate;
     return this;
   }
@@ -75,7 +75,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     testBatch.setId(id);
     testBatch.setStatus(status);
     testBatch.setBatchNumber(batchNumber);
-    testBatch.setCreatedDate(testBatchDate);
+    testBatch.setTestBatchDate(testBatchDate);
     testBatch.setLastUpdated(lastUpdatedDate);
     testBatch.setNotes(notes);
     testBatch.setDonationBatches(donationBatches);

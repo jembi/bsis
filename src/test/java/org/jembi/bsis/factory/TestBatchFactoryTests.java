@@ -61,11 +61,9 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
   private static final UUID IRRELEVANT_TEST_BATCH_ID = UUID.randomUUID();
   private static final UUID ANOTHER_IRRELEVANT_TEST_BATCH_ID = UUID.randomUUID();
-  private static final Long IRRELEVANT_ID = 4L;
-  private static final Long ANOTHER_IRRELEVANT_ID = 5L;
   private static final TestBatchStatus IRRELEVANT_STATUS = TestBatchStatus.OPEN;
   private static final String IRRELEVANT_BATCH_NUMBER = "1234";
-  private static final Date IRRELEVANT_CREATED_DATE = new Date();
+  private static final Date IRRELEVANT_TEST_BATCH_DATE = new Date();
   private static final Date IRRELEVANT_LAST_UPDATED_DATE = new Date();
   private static final String IRRELEVANT_NOTES = "some test batch notes";
   private static final CanReleaseResult CANT_RELEASE = new TestBatchConstraintChecker.CanReleaseResult(false);
@@ -99,7 +97,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
     TestBatch testBatch1 =
         aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(IRRELEVANT_STATUS).withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-            .withCreatedDate(IRRELEVANT_CREATED_DATE).withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+            .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE).withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
             .withDonationBatches(new HashSet<>(Arrays.asList(donationBatch))).withNotes(IRRELEVANT_NOTES).build();
 
     TestBatch testBatch2 =
@@ -107,7 +105,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonationBatches(new HashSet<>(Arrays.asList(donationBatch)))
         .withNotes(IRRELEVANT_NOTES)
@@ -119,7 +117,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .build();
@@ -147,7 +145,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonationBatch(donationBatch)
         .withNotes(IRRELEVANT_NOTES)
@@ -157,7 +155,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(ANOTHER_IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonationBatch(donationBatch)
         .withNotes(IRRELEVANT_NOTES)
@@ -168,7 +166,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatches(Arrays.<DonationBatchViewModel>asList(donationBatchViewModel))
@@ -183,7 +181,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(ANOTHER_IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatches(Arrays.<DonationBatchViewModel>asList(donationBatchViewModel))
@@ -221,7 +219,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonationBatch(donationBatch)
         .withNotes(IRRELEVANT_NOTES)
@@ -233,7 +231,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatches(Arrays.asList(donationBatchViewModel))
@@ -269,7 +267,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatch(donationBatch)
@@ -279,7 +277,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatches(Arrays.asList(donationBatchViewModel))
@@ -314,7 +312,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatch(donationBatch)
@@ -324,7 +322,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatches(Arrays.asList(donationBatchViewModel))
@@ -359,7 +357,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatch(donationBatch)
@@ -369,7 +367,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatches(Arrays.asList(donationBatchViewModel))
@@ -438,7 +436,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     Donor donor = DonorBuilder.aDonor().build();
     
     Donation donation1 = aDonation()
-        .withDonationDate(IRRELEVANT_CREATED_DATE)
+        .withDonationDate(IRRELEVANT_TEST_BATCH_DATE)
         .withDonor(donor)
         .withBloodAbo("A1")
         .withBloodRh("B1")
@@ -479,7 +477,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(IRRELEVANT_TEST_BATCH_ID);
     backingForm.setStatus(TestBatchStatus.OPEN);
-    backingForm.setCreatedDate(IRRELEVANT_CREATED_DATE);
+    backingForm.setTestBatchDate(IRRELEVANT_TEST_BATCH_DATE);
     backingForm.setDonationBatchIds(Arrays.asList(donationBatchId1, donationBatchId2));
     backingForm.setLocation(aTestingSiteBackingForm().withId(locationId).build());
     
@@ -490,7 +488,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     TestBatch expectedTestBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(TestBatchStatus.OPEN)
-        .withCreatedDate(IRRELEVANT_CREATED_DATE)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withDonationBatches(new HashSet<>(Arrays.asList(firstDonationBatch, secondDonationBatch)))
         .withLocation(location)
         .build();

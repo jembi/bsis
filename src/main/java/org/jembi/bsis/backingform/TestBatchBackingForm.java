@@ -16,7 +16,6 @@ public class TestBatchBackingForm {
 
   private UUID id;
   private TestBatchStatus status;
-  private Date createdDate;
   private Date testBatchDate;
   private Date lastUpdated;
 
@@ -40,15 +39,6 @@ public class TestBatchBackingForm {
 
   public void setStatus(TestBatchStatus status) {
     this.status = status;
-  }
-  
-  public Date getCreatedDate() {
-    return createdDate;
-  }
-
-  @JsonSerialize(using = DateTimeSerialiser.class)
-  public void setCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
   }
   
   public List<UUID> getDonationBatchIds() {

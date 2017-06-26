@@ -62,7 +62,6 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
-    backingForm.setCreatedDate(new Date());
     Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-20 09:17");
     backingForm.setTestBatchDate(testBatchDate);
 
@@ -83,7 +82,6 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
-    backingForm.setCreatedDate(new Date());
     TestBatch tb2 = new TestBatch();
     tb2.setId(UUID.randomUUID());
     Location venue = new Location();
@@ -112,7 +110,6 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(testBatchId);
     backingForm.setDonationBatchIds(Arrays.asList(DONATION_BATCH_ID_1, DONATION_BATCH_ID_2));
-    backingForm.setCreatedDate(new Date());
     TestBatch tb1 = new TestBatch();
     tb1.setId(testBatchId);
     Location venue = new Location();
