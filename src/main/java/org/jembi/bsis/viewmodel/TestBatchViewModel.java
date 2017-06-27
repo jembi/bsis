@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 public class TestBatchViewModel {
 
   private UUID id;
-  private Date createdDate;
+  private Date testBatchDate;
   private Date lastUpdatedDate;
   private TestBatchStatus status;
   private String batchNumber;
@@ -20,12 +20,12 @@ public class TestBatchViewModel {
   private LocationViewModel location;
 
   @JsonSerialize(using = DateTimeSerialiser.class)
-  public Date getCreatedDate() {
-    return createdDate;
+  public Date getTestBatchDate() {
+    return testBatchDate;
   }
 
-  public void setCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
+  public void setTestBatchDate(Date testBatchDate) {
+    this.testBatchDate = testBatchDate;
   }
 
   public UUID getId() {

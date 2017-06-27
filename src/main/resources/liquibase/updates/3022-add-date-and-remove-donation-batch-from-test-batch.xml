@@ -1,0 +1,29 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20170623-0944" author="tmvumbi2">
+    <comment>Add testBatchDate field to TestBatch and TestBatch_AUD tables</comment>
+    <addColumn tableName="TestBatch">
+      <column name="testBatchDate" type="DATETIME" />
+    </addColumn>
+    <addColumn tableName="TestBatch_AUD">
+      <column name="testBatchDate" type="DATETIME" />
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="20170623-0957" author="tmvumbi2">
+    <comment>Copy values from createdDate column to the new testBatchDate column for TestBatch and TestBatch_AUD</comment>
+    <sql>
+    	UPDATE TestBatch SET testBatchDate = createdDate
+    </sql>
+    <sql>
+    	UPDATE TestBatch_AUD SET testBatchDate = createdDate
+    </sql>
+  </changeSet>
+
+  <changeSet id="20170623-1003" author="tmvumbi2">
+    <comment>Add not null constraint to column TestBatch.testBatchDate</comment>
+	<addNotNullConstraint tableName="TestBatch" columnName="testBatchDate" columnDataType="DATETIME" />
+  </changeSet>
+</databaseChangeLog>

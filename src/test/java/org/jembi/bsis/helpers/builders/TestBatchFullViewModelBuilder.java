@@ -15,7 +15,7 @@ public class TestBatchFullViewModelBuilder extends AbstractBuilder<TestBatchFull
   private UUID id;
   private TestBatchStatus status;
   private String batchNumber;
-  private Date createdDate;
+  private Date testBatchDate;
   private Date lastUpdatedDate;
   private String notes;
   private List<DonationBatchViewModel> donationBatches;
@@ -38,8 +38,8 @@ public class TestBatchFullViewModelBuilder extends AbstractBuilder<TestBatchFull
     return this;
   }
 
-  public TestBatchFullViewModelBuilder withCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
+  public TestBatchFullViewModelBuilder withTestBatchDate(Date testBatchDate) {
+    this.testBatchDate = testBatchDate;
     return this;
   }
 
@@ -87,7 +87,7 @@ public class TestBatchFullViewModelBuilder extends AbstractBuilder<TestBatchFull
     testBatchViewModel.setId(id);
     testBatchViewModel.setStatus(status);
     testBatchViewModel.setBatchNumber(batchNumber);
-    testBatchViewModel.setCreatedDate(createdDate);
+    testBatchViewModel.setTestBatchDate(testBatchDate);
     testBatchViewModel.setLastUpdated(lastUpdatedDate);
     testBatchViewModel.setNotes(notes);
     testBatchViewModel.setNumSamples(numSamples);
