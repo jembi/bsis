@@ -3,7 +3,7 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
+import static org.jembi.bsis.helpers.builders.DonationFullViewModelBuilder.aDonationFullViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aTestingSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
@@ -48,7 +48,7 @@ import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DonationBatchFullViewModel;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
-import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.joda.time.DateTime;
@@ -177,7 +177,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withPermission("canDelete", false)
         .withPermission("canEdit", false)
         .withPermission("canReopen", false)
-        .withPermission("canEditDonationBatches", false)
+        .withPermission("canEditDonations", false)
         .build();
     TestBatchFullViewModel expectedViewModel2 = aTestBatchFullViewModel()
         .withId(ANOTHER_IRRELEVANT_TEST_BATCH_ID)
@@ -192,7 +192,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withPermission("canDelete", false)
         .withPermission("canEdit", false)
         .withPermission("canReopen", false)
-        .withPermission("canEditDonationBatches", false)
+        .withPermission("canEditDonations", false)
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch1)).thenReturn(CANT_RELEASE);
@@ -242,7 +242,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withPermission("canDelete", false)
         .withPermission("canEdit", false)
         .withPermission("canReopen", false)
-        .withPermission("canEditDonationBatches", false)
+        .withPermission("canEditDonations", false)
         .withReadyForReleaseCount(expectedReadyCount)
         .build();
 
@@ -251,7 +251,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
-    when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
+    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
 
     TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
 
@@ -288,7 +288,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withPermission("canDelete", false)
         .withPermission("canEdit", false)
         .withPermission("canReopen", false)
-        .withPermission("canEditDonationBatches", false)
+        .withPermission("canEditDonations", false)
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
@@ -296,7 +296,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
-    when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
+    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
 
     TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
 
@@ -333,7 +333,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withPermission("canDelete", false)
         .withPermission("canEdit", false)
         .withPermission("canReopen", false)
-        .withPermission("canEditDonationBatches", false)
+        .withPermission("canEditDonations", false)
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
@@ -341,7 +341,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
-    when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
+    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
 
     TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
 
@@ -378,7 +378,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withPermission("canDelete", true)
         .withPermission("canEdit", false)
         .withPermission("canReopen", false)
-        .withPermission("canEditDonationBatches", false)
+        .withPermission("canEditDonations", false)
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
@@ -386,7 +386,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(true);
     when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
-    when(testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch)).thenReturn(false);
+    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
 
     TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
 
@@ -512,10 +512,10 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     Donation d3 = DonationBuilder.aDonation().withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS).build();
     Donation d4 = DonationBuilder.aDonation().withBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED).build();
 
-    DonationViewModel d1ViewModel =
-        aDonationViewModel().withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS).build();
-    DonationViewModel d3ViewModel =
-        aDonationViewModel().withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS).build();
+    DonationFullViewModel d1FullViewModel =
+        aDonationFullViewModel().withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS).build();
+    DonationFullViewModel d3FullViewModel =
+        aDonationFullViewModel().withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS).build();
 
     ArrayList<Donation> donations1 = new ArrayList<Donation>();
     donations1.add(d1);
@@ -528,13 +528,13 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     TestBatch testBatch =
         TestBatchBuilder.aTestBatch().withDonationBatch(donationBatch1).withDonationBatch(donationBatch2).build();
     
-    when(donationFactory.createDonationViewModelWithoutPermissions(d1)).thenReturn(d1ViewModel);
-    when(donationFactory.createDonationViewModelWithoutPermissions(d3)).thenReturn(d3ViewModel);
+    when(donationFactory.createDonationFullViewModelWithoutPermissions(d1)).thenReturn(d1FullViewModel);
+    when(donationFactory.createDonationFullViewModelWithoutPermissions(d3)).thenReturn(d3FullViewModel);
     
-    List<DonationViewModel> donationModels =
-        testBatchFactory.createDonationViewModels(testBatch, BloodTypingMatchStatus.AMBIGUOUS);
+    List<DonationFullViewModel> donationFullViewModels =
+        testBatchFactory.createDonationFullViewModels(testBatch, BloodTypingMatchStatus.AMBIGUOUS);
 
-    Assert.assertTrue("2 ambiguous donations on the test batch", donationModels.size() == 2);
+    Assert.assertTrue("2 ambiguous donations on the test batch", donationFullViewModels.size() == 2);
 
   }
 

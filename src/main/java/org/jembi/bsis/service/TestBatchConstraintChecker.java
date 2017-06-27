@@ -94,7 +94,7 @@ public class TestBatchConstraintChecker {
    * Donation Batches can be added or removed from a Test Batch as long as there aren't any test
    * results recorded.
    */
-  public boolean canAddOrRemoveDonationBatch(TestBatch testBatch) {
+  public boolean canAddOrRemoveDonation(TestBatch testBatch) {
     return canEditTestBatch(testBatch) && !testBatchHasResults(testBatch);
   }
 

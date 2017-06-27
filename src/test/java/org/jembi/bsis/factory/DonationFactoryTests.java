@@ -7,15 +7,15 @@ import static org.jembi.bsis.helpers.builders.AdverseEventViewModelBuilder.anAdv
 import static org.jembi.bsis.helpers.builders.DonationBackingFormBuilder.aDonationBackingForm;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.DonationFullViewModelBuilder.aDonationFullViewModel;
 import static org.jembi.bsis.helpers.builders.DonationTypeBuilder.aDonationType;
 import static org.jembi.bsis.helpers.builders.DonationTypeViewModelBuilder.aDonationTypeViewModel;
-import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.PackTypeFullViewModelBuilder.aPackTypeViewFullModel;
-import static org.jembi.bsis.helpers.matchers.DonationViewModelMatcher.hasSameStateAsDonationViewModel;
+import static org.jembi.bsis.helpers.matchers.DonationFullViewModelMatcher.hasSameStateAsDonationFullViewModel;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -45,8 +45,8 @@ import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.service.DonationConstraintChecker;
 import org.jembi.bsis.service.DonorConstraintChecker;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;
-import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
 import org.junit.Test;
@@ -115,7 +115,7 @@ public class DonationFactoryTests {
   }
 
   @Test
-  public void testCreateDonationViewModelWithPermissions_shouldReturnViewModelWithCorrectDonationAndPermissions() {
+  public void testCreateDonationFullViewModelWithPermissions_shouldReturnViewModelWithCorrectDonationAndPermissions() {
 
     boolean irrelevantCanDeletePermission = true;
     boolean irrelevantCanUpdatePermission = true;
@@ -182,7 +182,7 @@ public class DonationFactoryTests {
     DonationTypeViewModel donationTypeViewModel = aDonationTypeViewModel().withId(donationTypeId).build();
     LocationViewModel venueViewModel = aLocationViewModel().withId(venue.getId()).build();
 
-    DonationViewModel expectedDonationViewModel = aDonationViewModel()
+    DonationFullViewModel expectedDonationFullViewModel = aDonationFullViewModel()
         .withId(IRRELEVANT_DONATION_ID)
         .withPermission("canDelete", irrelevantCanDeletePermission)
         .withPermission("canEditBleedTimes", irrelevantCanUpdatePermission)
@@ -223,14 +223,14 @@ public class DonationFactoryTests {
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
     when(donationTypeFactory.createViewModel(donationType)).thenReturn(donationTypeViewModel);
 
-    DonationViewModel returnedDonationViewModel = donationFactory.createDonationViewModelWithPermissions(
+    DonationFullViewModel returnedDonationFullViewModel = donationFactory.createDonationFullViewModelWithPermissions(
         donation);
 
-    assertThat(returnedDonationViewModel, hasSameStateAsDonationViewModel(expectedDonationViewModel));
+    assertThat(returnedDonationFullViewModel, hasSameStateAsDonationFullViewModel(expectedDonationFullViewModel));
   }
 
   @Test
-  public void testCreateDonationViewModelsWithPermissions_shouldReturnViewModelsWithCorrectDonationAndPermissions() {
+  public void testCreateDonationFullViewModelsWithPermissions_shouldReturnViewModelsWithCorrectDonationAndPermissions() {
 
     UUID irrelevantAdverseEventId = UUID.randomUUID();
     UUID donationTypeId = UUID.randomUUID();
@@ -259,7 +259,7 @@ public class DonationFactoryTests {
     AdverseEventViewModel adverseEventViewModel = anAdverseEventViewModel().withId(irrelevantAdverseEventId).build();
     DonationTypeViewModel donationTypeViewModel = aDonationTypeViewModel().withId(donationTypeId).build();
 
-    DonationViewModel expectedDonation1ViewModel = aDonationViewModel()
+    DonationFullViewModel expectedDonationFullViewModel1 = aDonationFullViewModel()
         .withId(IRRELEVANT_DONATION_ID)
         .withPermission("canDelete", true)
         .withPermission("canEditBleedTimes", true)
@@ -270,7 +270,7 @@ public class DonationFactoryTests {
         .withPackType(packTypeFullViewModel)
         .withDonationType(donationTypeViewModel)
         .build();
-    DonationViewModel expectedDonation2ViewModel = aDonationViewModel()
+    DonationFullViewModel expectedDonationFullViewModel2 = aDonationFullViewModel()
         .withId(ANOTHER_IRRELEVANT_DONATION_ID)
         .withPermission("canDelete", true)
         .withPermission("canEditBleedTimes", true)
@@ -295,9 +295,9 @@ public class DonationFactoryTests {
     when(packTypeFactory.createFullViewModel(packType)).thenReturn(packTypeFullViewModel);
     when(donationTypeFactory.createViewModel(donationType)).thenReturn(donationTypeViewModel);
 
-    List<DonationViewModel> returnedDonationViewModels = donationFactory.createDonationViewModelsWithPermissions(donations);
+    List<DonationFullViewModel> returnedDonationViewModels = donationFactory.createDonationFullViewModelsWithPermissions(donations);
 
-    assertThat(returnedDonationViewModels.get(0), hasSameStateAsDonationViewModel(expectedDonation1ViewModel));
-    assertThat(returnedDonationViewModels.get(1), hasSameStateAsDonationViewModel(expectedDonation2ViewModel));
+    assertThat(returnedDonationViewModels.get(0), hasSameStateAsDonationFullViewModel(expectedDonationFullViewModel1));
+    assertThat(returnedDonationViewModels.get(1), hasSameStateAsDonationFullViewModel(expectedDonationFullViewModel2));
   }
 }
