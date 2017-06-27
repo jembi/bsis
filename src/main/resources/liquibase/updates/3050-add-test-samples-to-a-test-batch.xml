@@ -21,9 +21,9 @@
          <!-- Set the new foreign key in Donation with the correct testBatch_id. If the Donation's DonationBatch is currently associated with a TestBatch, then the Donation testBatch_id is set to the same TestBatch-->
         <sql>
           UPDATE Donation d
-          LEFT JOIN DonationBatch db ON (d.testBatch_id = db.testBatch_id)
+          LEFT JOIN DonationBatch db ON (d.donationBatch_id = db.id)
           SET d.testBatch_id = db.testBatch_id 
-          WHERE d.testBatch_id = db.id;
+          WHERE d.donationBatch_id = db.id;
         </sql>
   </changeSet>
 </databaseChangeLog>
