@@ -1,5 +1,6 @@
 package org.jembi.bsis.backingform.validator;
 
+import java.util.Date;
 import java.util.List;   
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.service.DateGeneratorService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,8 @@ public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackin
   private DonationBatchRepository donationBatchRepository;
   @Autowired
   private LocationRepository locationRepository;
+  @Autowired
+  private DateGeneratorService dateGeneratorService;
 
   @Override
   public void validateForm(TestBatchBackingForm form, Errors errors) {
@@ -57,7 +61,7 @@ public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackin
     // Validate testBatchDate
     if (form.getTestBatchDate() == null) {
       errors.rejectValue("testBatchDate", "errors.invalid", "Test batch date is invalid");
-    } else if (new DateTime(form.getTestBatchDate()).isAfter(new DateTime().withTimeAtStartOfDay())) {
+    } else if (dateGeneratorService.generateDate(form.getTestBatchDate()).after(new Date())) {
       errors.rejectValue("testBatchDate", "errors.invalid", "Test batch date is after current date");
     }
 

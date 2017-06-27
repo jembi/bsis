@@ -25,6 +25,7 @@ import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.FormFieldRepository;
 import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.service.DateGeneratorService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -47,6 +48,8 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   private LocationRepository locationRepository;
   @Mock
   private FormFieldRepository formFieldRepository;
+  @Mock
+  private DateGeneratorService dateGeneratorService;
 
   @Test
   public void testValidateNull() {
@@ -69,6 +72,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+    when(dateGeneratorService.generateDate(backingForm.getTestBatchDate())).thenReturn(testBatchDate);
 
     Errors errors = new BindException(backingForm, "testBatchBackingForm");
     validator.validate(backingForm, errors);
@@ -96,6 +100,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+    when(dateGeneratorService.generateDate(backingForm.getTestBatchDate())).thenReturn(testBatchDate);
 
     Errors errors = new BindException(backingForm, "testBatchBackingForm");
     validator.validate(backingForm, errors);
@@ -124,6 +129,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID_2)).thenReturn(new DonationBatch());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+    when(dateGeneratorService.generateDate(backingForm.getTestBatchDate())).thenReturn(testBatchDate);
 
     Errors errors = new BindException(backingForm, "testBatchBackingForm");
     validator.validate(backingForm, errors);
@@ -146,6 +152,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     when(locationRepository.getLocation(locationId)).thenThrow(new NoResultException());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+    when(dateGeneratorService.generateDate(backingForm.getTestBatchDate())).thenReturn(testBatchDate);
 
     Errors errors = new BindException(backingForm, "testBatchBackingForm");
     validator.validate(backingForm, errors);
@@ -170,6 +177,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     when(locationRepository.getLocation(locationId)).thenReturn(aDistributionSite().build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+    when(dateGeneratorService.generateDate(backingForm.getTestBatchDate())).thenReturn(testBatchDate);
 
     Errors errors = new BindException(backingForm, "testBatchBackingForm");
     validator.validate(backingForm, errors);
@@ -194,6 +202,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().thatIsDeleted().build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+    when(dateGeneratorService.generateDate(backingForm.getTestBatchDate())).thenReturn(testBatchDate);
 
     Errors errors = new BindException(backingForm, "testBatchBackingForm");
     validator.validate(backingForm, errors);
@@ -217,6 +226,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().thatIsDeleted().build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+    when(dateGeneratorService.generateDate(backingForm.getTestBatchDate())).thenReturn(testBatchDate);
 
     Errors errors = new BindException(backingForm, "testBatchBackingForm");
     validator.validate(backingForm, errors);
@@ -227,7 +237,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
   
   @Test
-  public void testValidateValidTestBatchDate() throws ParseException {
+  public void testValidTestBatchDateCurrentDate_shouldHaveNoError() throws ParseException {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
@@ -240,6 +250,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().withId(locationId).build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+    when(dateGeneratorService.generateDate(backingForm.getTestBatchDate())).thenReturn(testBatchDate);
 
     Errors errors = new BindException(backingForm, "testBatchBackingForm");
     validator.validate(backingForm, errors);
@@ -260,6 +271,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().withId(locationId).build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+    when(dateGeneratorService.generateDate(backingForm.getTestBatchDate())).thenReturn(null);
 
     Errors errors = new BindException(backingForm, "testBatchBackingForm");
     validator.validate(backingForm, errors);
@@ -285,6 +297,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
     when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().withId(locationId).build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
     when(formFieldRepository.getFieldMaxLengths("testBatch")).thenReturn(new HashMap<String, Integer>());
+    when(dateGeneratorService.generateDate(backingForm.getTestBatchDate())).thenReturn(testBatchDate);
 
     Errors errors = new BindException(backingForm, "testBatchBackingForm");
     validator.validate(backingForm, errors);
