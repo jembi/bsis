@@ -36,8 +36,8 @@ public class TestBatchCRUDService {
       throw new IllegalStateException("Test batch cannot be updated");
     }
 
-    if (updatedTestBatch.getCreatedDate() != null) {
-      existingTestBatch.setCreatedDate(updatedTestBatch.getCreatedDate());
+    if (updatedTestBatch.getTestBatchDate() != null) {
+      existingTestBatch.setTestBatchDate(updatedTestBatch.getTestBatchDate());
     }
 
     if (updatedTestBatch.getDonationBatches() != null) {
