@@ -2,10 +2,13 @@ package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasItem;
 import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
+import static org.jembi.bsis.helpers.builders.StockLevelDTOBuilder.aStockLevelDTO;
+import static org.jembi.bsis.helpers.matchers.StockLevelDTOMatcher.hasSameStateAsStockLevelDTO;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,12 +51,18 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         .withComponentType(type2).withDonation(donation).withLocation(location2).buildAndPersist(entityManager);
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location1.getId(), InventoryStatus.IN_STOCK);
+
+    // Expected DTO
+    StockLevelDTO stockLevelDTO = aStockLevelDTO()
+        .withComponentType(type1)
+        .withCount(1)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
     
     // Verify levels returned
-    Assert.assertEquals("Verify levels returned", 1, levels.size());
-
-    // Verify right component was returned
-    Assert.assertEquals("Verify componentType", type1, levels.get(0).getComponentType());
+    assertThat(levels.size(), is(1));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO)));
   }
   
   @Test
@@ -70,12 +79,18 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
         .withComponentType(type2).withDonation(donation).withLocation(location).withIsDeleted(true).buildAndPersist(entityManager);
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location.getId(), InventoryStatus.IN_STOCK);
+
+    // Expected DTO
+    StockLevelDTO stockLevelDTO = aStockLevelDTO()
+        .withComponentType(type1)
+        .withCount(1)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
     
     // Verify levels returned
-    Assert.assertEquals("Verify levels returned", 1, levels.size());
-
-    // Verify right component was returned
-    Assert.assertEquals("Verify componentType", type1, levels.get(0).getComponentType());
+    assertThat(levels.size(), is(1));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO)));
   }
   
   @Test
@@ -97,24 +112,32 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     .withComponentType(type2).withDonation(donation3).withLocation(location).buildAndPersist(entityManager);
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location.getId(), InventoryStatus.IN_STOCK);
+
+    // Expected DTOs
+    StockLevelDTO stockLevelDTO1 = aStockLevelDTO()
+        .withComponentType(type1)
+        .withCount(1)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
+    StockLevelDTO stockLevelDTO2 = aStockLevelDTO()
+        .withComponentType(type2)
+        .withCount(1)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
+    StockLevelDTO stockLevelDTO3 = aStockLevelDTO()
+        .withComponentType(type2)
+        .withCount(1)
+        .withBloodAbo("O")
+        .withBloodRh("-")
+        .build();
     
     // Verify levels returned
-    Assert.assertEquals("Verify levels returned", 3, levels.size());
-
-    // Verify right component was returned
-    Assert.assertEquals("Verify componentType", type1, levels.get(0).getComponentType());
-    Assert.assertEquals("Verify componentType", type2, levels.get(1).getComponentType());
-    Assert.assertEquals("Verify componentType", type2, levels.get(2).getComponentType());
-    
-    // Verify right counts were returned
-    Assert.assertEquals("Verify componentType count", 1, levels.get(0).getCount());
-    Assert.assertEquals("Verify componentType count", 1, levels.get(1).getCount());
-    Assert.assertEquals("Verify componentType count", 1, levels.get(2).getCount());
-    
-    // Verify blood group
-    Assert.assertEquals("Verify blood group", "A+", levels.get(0).getBloodAbo() + levels.get(0).getBloodRh());
-    Assert.assertEquals("Verify blood group", "A+", levels.get(1).getBloodAbo() + levels.get(1).getBloodRh());
-    Assert.assertEquals("Verify blood group", "O-", levels.get(2).getBloodAbo() + levels.get(2).getBloodRh());
+    assertThat(levels.size(), is(3));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO1)));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO2)));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO3)));
   }
   
   @Test
@@ -136,15 +159,18 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     .withComponentType(type1).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location.getId(), InventoryStatus.NOT_IN_STOCK);
+
+    // Expected DTO
+    StockLevelDTO stockLevelDTO = aStockLevelDTO()
+        .withComponentType(type1)
+        .withCount(1)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
     
     // Verify levels returned
-    Assert.assertEquals("Verify levels returned", 1, levels.size());
-
-    // Verify right components were returned
-    Assert.assertEquals("Verify componentType", type1, levels.get(0).getComponentType());
-    
-    // Verify right counts were returned
-    Assert.assertEquals("Verify componentType count", 1, levels.get(0).getCount());
+    assertThat(levels.size(), is(1));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO)));
   }
   
   @Test
@@ -175,17 +201,25 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevelsForLocation(location.getId(), InventoryStatus.NOT_IN_STOCK);
+
+    // Expected DTOs
+    StockLevelDTO stockLevelDTO1 = aStockLevelDTO()
+        .withComponentType(type1)
+        .withCount(2)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
+    StockLevelDTO stockLevelDTO2 = aStockLevelDTO()
+        .withComponentType(type2)
+        .withCount(1)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
     
     // Verify levels returned
-    Assert.assertEquals("Verify levels returned", 2, levels.size());
-
-    // Verify right components were returned
-    Assert.assertEquals("Verify componentType", type1, levels.get(0).getComponentType());
-    Assert.assertEquals("Verify componentType", type2, levels.get(1).getComponentType());
-    
-    // Verify right count returned
-    Assert.assertEquals("Verify componentType count", 2, levels.get(0).getCount());
-    Assert.assertEquals("Verify componentType count", 1, levels.get(1).getCount());
+    assertThat(levels.size(), is(2));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO1)));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO2)));
   }
 
   @Test
@@ -214,17 +248,25 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     .withComponentType(type3).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.IN_STOCK);
+
+    // Expected DTOs
+    StockLevelDTO stockLevelDTO1 = aStockLevelDTO()
+        .withComponentType(type1)
+        .withCount(1)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
+    StockLevelDTO stockLevelDTO2 = aStockLevelDTO()
+        .withComponentType(type2)
+        .withCount(2)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
     
     // Verify levels returned
-    Assert.assertEquals("Verify levels returned", 2, levels.size());
-
-    // Verify componentType
-    Assert.assertEquals("Verify componentType", type1, levels.get(0).getComponentType());
-    Assert.assertEquals("Verify componentType", type2, levels.get(1).getComponentType());
-    
-    // Verify count
-    Assert.assertEquals("Verify count", 1, levels.get(0).getCount());
-    Assert.assertEquals("Verify count", 2, levels.get(1).getCount());
+    assertThat(levels.size(), is(2));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO1)));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO2)));
   }
   
   @Test
@@ -246,21 +288,15 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.IN_STOCK);
+
+    // Expected DTOs
+    StockLevelDTO stockLevelDTO1 = aStockLevelDTO().withComponentType(type).withCount(2).withBloodAbo("A").withBloodRh("+").build();
+    StockLevelDTO stockLevelDTO2 = aStockLevelDTO().withComponentType(type).withCount(1).withBloodAbo("O").withBloodRh("-").build();
     
     // Verify levels returned
-    Assert.assertEquals("Verify levels returned", 2, levels.size());
-
-    // Verify componentType
-    Assert.assertEquals("Verify componentType", type, levels.get(0).getComponentType());
-    Assert.assertEquals("Verify componentType", type, levels.get(1).getComponentType());
-    
-    // Verify count
-    Assert.assertEquals("Verify count", 2, levels.get(0).getCount());
-    Assert.assertEquals("Verify count", 1, levels.get(1).getCount());
-
-    // Verify blood group
-    Assert.assertEquals("Verify blood group", "A+", levels.get(0).getBloodAbo() + levels.get(0).getBloodRh());
-    Assert.assertEquals("Verify blood group", "O-", levels.get(1).getBloodAbo() + levels.get(1).getBloodRh());
+    assertThat(levels.size(), is(2));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO1)));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO2)));
   }
   
   @Test
@@ -280,12 +316,18 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.NOT_IN_STOCK);
+
+    // Expected DTOs
+    StockLevelDTO stockLevelDTO = aStockLevelDTO()
+        .withComponentType(type)
+        .withCount(1)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
     
     // Verify levels returned
-    Assert.assertEquals("Verify levels returned", 1, levels.size());
-
-    // Verify count
-    Assert.assertEquals("Verify count", 1, levels.get(0).getCount());
+    assertThat(levels.size(), is(1));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO)));
   }
   
   @Test
@@ -317,17 +359,25 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.NOT_IN_STOCK);
+
+    // Expected DTOs
+    StockLevelDTO stockLevelDTO1 = aStockLevelDTO()
+        .withComponentType(type1)
+        .withCount(1)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
+    StockLevelDTO stockLevelDTO2 = aStockLevelDTO()
+        .withComponentType(type2)
+        .withCount(2)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
     
     // Verify levels returned
-    Assert.assertEquals("Verify levels returned", 2, levels.size());
-    
-    // Verify componentType
-    Assert.assertEquals("Verify componentType", type1, levels.get(0).getComponentType());
-    Assert.assertEquals("Verify componentType", type2, levels.get(1).getComponentType());
-
-    // Verify count
-    Assert.assertEquals("Verify count", 1, levels.get(0).getCount());
-    Assert.assertEquals("Verify count", 2, levels.get(1).getCount());
+    assertThat(levels.size(), is(2));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO1)));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO2)));
   }
   
   @Test
@@ -353,17 +403,25 @@ public class InventoryRepositoryTests extends ContextDependentTestSuite {
     .withComponentType(type2).withDonation(donation).withLocation(location).buildAndPersist(entityManager);
     
     List<StockLevelDTO> levels = inventoryRepository.findStockLevels(InventoryStatus.IN_STOCK);
+
+    // Expected DTOs
+    StockLevelDTO stockLevelDTO1 = aStockLevelDTO()
+        .withComponentType(type1)
+        .withCount(1)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
+    StockLevelDTO stockLevelDTO2 = aStockLevelDTO()
+        .withComponentType(type2)
+        .withCount(2)
+        .withBloodAbo("A")
+        .withBloodRh("+")
+        .build();
     
     // Verify levels returned
-    Assert.assertEquals("Verify levels returned", 2, levels.size());
-    
-    // Verify componentType
-    Assert.assertEquals("Verify componentType", type1, levels.get(0).getComponentType());
-    Assert.assertEquals("Verify componentType", type2, levels.get(1).getComponentType());
-
-    // Verify count
-    Assert.assertEquals("Verify count", 1, levels.get(0).getCount());
-    Assert.assertEquals("Verify count", 2, levels.get(1).getCount());
+    assertThat(levels.size(), is(2));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO1)));
+    assertThat(levels, hasItem(hasSameStateAsStockLevelDTO(stockLevelDTO2)));
   }
   
   @Test
