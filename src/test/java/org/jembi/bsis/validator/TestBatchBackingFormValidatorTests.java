@@ -6,11 +6,6 @@ import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocati
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.mockito.Mockito.when;
-
-<<<<<<< HEAD
-=======
-
->>>>>>> c3048e085684baa2816ab2731199c67ef07ed9b1
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
