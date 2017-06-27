@@ -125,6 +125,86 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
   }
 
   @Test
+  public void testfindDonationsBetweenTwoDins_shouldReturnDonations() {
+    Date irrelevantStartDate = new DateTime().minusDays(7).toDate();
+
+    Location expectedVenue = aVenue().build();
+    DonationType expectedDonationType = aDonationType().thatIsNotDeleted().build();
+    String expectedBloodAbo = "A";
+    String expectedBloodRh = "+";
+    Gender expectedGender = Gender.male;
+
+    // Expected
+    Donation donation1 = aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000003")
+        .withDonationDate(irrelevantStartDate)
+        .withDonor(aDonor().withGender(expectedGender).build())
+        .withDonationType(expectedDonationType)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .withVenue(expectedVenue)
+        .buildAndPersist(entityManager);
+
+    // Expected
+    Donation donation2 = aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000004")
+        .withDonationDate(irrelevantStartDate)
+        .withDonor(aDonor().withGender(expectedGender).build())
+        .withDonationType(expectedDonationType)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .withVenue(expectedVenue)
+        .buildAndPersist(entityManager);
+
+    // Expected
+    Donation donation3 = aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000005")
+        .withDonationDate(irrelevantStartDate)
+        .withDonor(aDonor().withGender(expectedGender).build())
+        .withDonationType(expectedDonationType)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .withVenue(expectedVenue)
+        .buildAndPersist(entityManager);
+
+    // Excluded: din before range
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000002")
+        .withDonationDate(irrelevantStartDate)
+        .withDonor(aDonor().withGender(expectedGender).build())
+        .withDonationType(expectedDonationType)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .withVenue(expectedVenue)
+        .buildAndPersist(entityManager);
+
+    // Excluded: din after range
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000006")
+        .withDonationDate(irrelevantStartDate)
+        .withDonor(aDonor().withGender(expectedGender).build())
+        .withDonationType(expectedDonationType)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .withVenue(expectedVenue)
+        .buildAndPersist(entityManager);
+
+    List<Donation> expectedDonations = Arrays.asList(
+        donation1, donation2, donation3
+    );
+
+    List<Donation> returnedDonations = donationRepository.findDonationsBetweenTwoDins(
+        "2000003", "2000005");
+
+    assertThat(returnedDonations, is(expectedDonations));
+  }
+
+  @Test
   @Ignore("Can't get interval to work with HSQLDB")
   public void testFindLatestDueToDonateDateForDonor_shouldReturnLatestDate() {
 

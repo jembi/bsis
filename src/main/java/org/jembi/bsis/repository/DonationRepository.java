@@ -190,4 +190,10 @@ public class DonationRepository {
         .getResultList();
   }
 
+  public List<Donation> findDonationsBetweenTwoDins(String fromDIN, String toDIN){
+    return em.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_DONATIONS_BETWEEN_TWO_DINS, Donation.class)
+        .setParameter("fromDIN", fromDIN)
+        .setParameter("toDIN", toDIN)
+        .getResultList();
+  }
 }
