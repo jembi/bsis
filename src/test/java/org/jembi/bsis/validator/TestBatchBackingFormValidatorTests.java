@@ -7,6 +7,10 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.mockito.Mockito.when;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c3048e085684baa2816ab2731199c67ef07ed9b1
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -161,7 +165,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
   
   @Test
-  public void testValidateTestBatchWithNullDate_shouldThrowAnError() throws Exception{
+  public void testValidateNullTestBatchDate() throws Exception {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
@@ -181,7 +185,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
   
   @Test
-  public void testValidateTestBatchWithFutureDate_shouldThrowAnError() throws Exception{
+  public void testValidateTestBatchDateAfterToday() throws Exception {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
