@@ -54,7 +54,6 @@ public class TestBatchController {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("status", TestBatchStatus.values());
-    map.put("donationBatches", testBatchControllerService.getUnnasignedDonationBatches());
     map.put("testingSites", testBatchControllerService.getTestingSites());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
@@ -108,7 +107,7 @@ public class TestBatchController {
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TESTING_INFORMATION + "')")
   public ResponseEntity<Map<String, Object>> getDonationsForTestBatch(@PathVariable UUID id,
       @RequestParam(value = "bloodTypingMatchStatus", required = false) BloodTypingMatchStatus bloodTypingMatchStatus) {
-    Date testBatchCreatedDate = testBatchControllerService.getTestBatchCreatedDate(id);
+    Date testBatchCreatedDate = testBatchControllerService.getTestBatchDate(id);
     List<DonationFullViewModel> donationFullViewModels = testBatchControllerService.getDonations(id, bloodTypingMatchStatus);
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("donations", donationFullViewModels);

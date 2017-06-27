@@ -73,7 +73,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     TestBatch aTestBatch = aTestBatch()
         .withId(UUID.randomUUID())
         .withBatchNumber("00001")
-        .withCreatedDate(new Date())
+        .withTestBatchDate(new Date())
         .withStatus(TestBatchStatus.OPEN)
         .withDonationBatches(donationBatches)
         .build();
@@ -144,7 +144,7 @@ public class TestResultControllerTests extends UnitTestSuite {
       )
     );
     
-    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withTestBatchDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
     
     UUID basicTTIBloodTestId = UUID.randomUUID();
@@ -236,7 +236,7 @@ public class TestResultControllerTests extends UnitTestSuite {
       )
     );
     
-    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withTestBatchDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
     
     UUID basicBloodTypingBloodTestId = UUID.randomUUID();
@@ -299,7 +299,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     Set<DonationBatch> donationBatches = new HashSet<>(
         Arrays.asList(aDonationBatch().withId(DONATION_BATCH_ID).withBatchNumber("123").withDonationBatchDate(new Date()).build()));
 
-    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withTestBatchDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
 
     Map<UUID, BloodTestResultViewModel> recentTestResults = new HashMap<>();
@@ -355,7 +355,7 @@ public class TestResultControllerTests extends UnitTestSuite {
       )
     );
     
-    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withCreatedDate(new Date())
+    TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withTestBatchDate(new Date())
         .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
     
     UUID basicBloodTypingBloodTestId = UUID.randomUUID();

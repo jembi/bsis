@@ -23,6 +23,7 @@ public class TestBatchRepository extends AbstractRepository<TestBatch> {
     testBatch.setIsDeleted(false);
     testBatch.setBatchNumber(testBatchNumber);
     testBatch.setStatus(TestBatchStatus.OPEN);
+    entityManager.persist(testBatch);
     updateDonationWithTestBatch(testBatch);
     return testBatch;
   }
@@ -31,7 +32,6 @@ public class TestBatchRepository extends AbstractRepository<TestBatch> {
 
     Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
     if (donationBatches != null && !donationBatches.isEmpty()) {
-      entityManager.persist(testBatch);
       for (DonationBatch donationBatch : donationBatches) {
         donationBatch.setTestBatch(testBatch);
         entityManager.merge(donationBatch);

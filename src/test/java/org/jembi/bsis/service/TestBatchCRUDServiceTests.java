@@ -161,14 +161,14 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
   @Test
   public void testUpdateTestBatch_shouldUpdateDateCreated() throws Exception {
 
-    final Date createdDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-10-17");
-    final Date newCreatedDate = new Date();
+    final Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd").parse("2015-10-17");
+    final Date newTestBatchDate = new Date();
 
     TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN)
-        .withCreatedDate(createdDate).build();
+        .withTestBatchDate(testBatchDate).build();
 
     final TestBatch updated = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN)
-        .withCreatedDate(newCreatedDate).build();
+        .withTestBatchDate(newTestBatchDate).build();
 
     when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
     when(testBatchRepository.update(testBatch)).thenReturn(testBatch);
