@@ -1,7 +1,5 @@
 package org.jembi.bsis.backingform.validator;
 
-import java.util.Date;
-
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
@@ -40,7 +38,7 @@ public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackin
     // Validate testBatchDate
     if (form.getTestBatchDate() == null) {
       errors.rejectValue("testBatchDate", "errors.invalid", "Test batch date is invalid");
-    } else if (dateGeneratorService.generateDate(form.getTestBatchDate()).after(new Date())) {
+    } else if (form.getTestBatchDate().after(dateGeneratorService.generateDate())) {
       errors.rejectValue("testBatchDate", "errors.invalid", "Test batch date is after current date");
     }
 
