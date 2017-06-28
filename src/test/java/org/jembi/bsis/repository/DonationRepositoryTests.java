@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
@@ -12,6 +13,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
+import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -164,14 +166,13 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .withDonationDate(irrelevantStartDate)
         .buildAndPersist(entityManager);
 
-    List<Donation> expectedDonations = Arrays.asList(
-        donation1, donation2, donation3
-    );
-
     List<Donation> returnedDonations = donationRepository.findDonationsBetweenTwoDins(
         "2000003", "2000005");
 
-    assertThat(returnedDonations, is(expectedDonations));
+    assertThat(returnedDonations.size(), is(3));
+    assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation1)));
+    assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation2)));
+    assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation3)));
   }
 
   @Test
