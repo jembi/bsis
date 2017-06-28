@@ -1,16 +1,18 @@
 package org.jembi.bsis.backingform;
 
+import java.util.UUID;
+
 public class TestBatchDonationRangeBackingForm {
 
-  private String testBatchId;
+  private UUID testBatchId;
   private String fromDIN;
   private String toDIN;
 
-  public String getTestBatchId() {
+  public UUID getTestBatchId() {
     return testBatchId;
   }
 
-  public void setTestBatchId(String testBatchId) {
+  public void setTestBatchId(UUID testBatchId) {
     this.testBatchId = testBatchId;
   }
 
