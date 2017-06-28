@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
+import org.jembi.bsis.helpers.persisters.TestBatchPersister;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -15,6 +18,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
   private UUID id;
   private TestBatchStatus status;
   private Set<DonationBatch> donationBatches;
+  private Set<Donation> donations;
   private String batchNumber;
   private Date testBatchDate;
   private Date lastUpdatedDate;
@@ -56,6 +60,11 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     return this;
   }
 
+  public TestBatchBuilder withDonations(Set<Donation> donations) {
+    this.donations = donations;
+    return this;
+  }
+
   public TestBatchBuilder withLocation(Location location) {
     this.location = location;
     return this;
@@ -80,6 +89,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     testBatch.setNotes(notes);
     testBatch.setDonationBatches(donationBatches);
     testBatch.setLocation(location);
+    testBatch.setDonations(donations);
     return testBatch;
   }
 
@@ -93,4 +103,8 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     return builder;
   }
 
+  @Override
+  public AbstractEntityPersister<TestBatch> getPersister() {
+    return new TestBatchPersister();
+  }
 }

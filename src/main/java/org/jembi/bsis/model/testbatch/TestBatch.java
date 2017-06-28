@@ -1,5 +1,6 @@
 package org.jembi.bsis.model.testbatch;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
 
@@ -19,8 +20,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.constant.TestBatchNamedQueryConstants;
@@ -60,6 +65,13 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
 
   @OneToMany(mappedBy = "testBatch", fetch = FetchType.EAGER)
   private Set<DonationBatch> donationBatches;
+
+  @SuppressWarnings("unchecked")
+  @NotAudited
+  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+  @OneToMany(mappedBy = "testBatch", fetch = FetchType.LAZY)
+  @Where(clause = "isDeleted = 0")
+  private Set<Donation> donations = Collections.EMPTY_SET;
 
   @ManyToOne(optional = false)
   private Location location;
@@ -127,6 +139,14 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
 
   public void setTestBatchDate(Date testBatchDate) {
     this.testBatchDate = testBatchDate;
+  }
+
+  public Set<Donation> getDonations() {
+    return donations;
+  }
+
+  public void setDonations(Set<Donation> donations) {
+    this.donations = donations;
   }
 
 }
