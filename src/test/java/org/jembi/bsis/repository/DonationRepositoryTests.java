@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
@@ -12,6 +13,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
+import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -31,6 +33,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
+import org.jembi.bsis.util.RandomTestDate;
 import org.joda.time.DateTime;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -125,25 +128,14 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
   }
 
   @Test
-  public void testfindDonationsBetweenTwoDins_shouldReturnDonations() {
-    Date irrelevantStartDate = new DateTime().minusDays(7).toDate();
-
-    Location expectedVenue = aVenue().build();
-    DonationType expectedDonationType = aDonationType().thatIsNotDeleted().build();
-    String expectedBloodAbo = "A";
-    String expectedBloodRh = "+";
-    Gender expectedGender = Gender.male;
+  public void testFindDonationsBetweenTwoDins_shouldReturnDonations() {
+    Date irrelevantStartDate = new RandomTestDate();
 
     // Expected
     Donation donation1 = aDonation()
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000003")
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build())
-        .withDonationType(expectedDonationType)
-        .withBloodAbo(expectedBloodAbo)
-        .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     // Expected
@@ -151,11 +143,6 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000004")
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build())
-        .withDonationType(expectedDonationType)
-        .withBloodAbo(expectedBloodAbo)
-        .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     // Expected
@@ -163,11 +150,6 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000005")
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build())
-        .withDonationType(expectedDonationType)
-        .withBloodAbo(expectedBloodAbo)
-        .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     // Excluded: din before range
@@ -175,11 +157,6 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000002")
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build())
-        .withDonationType(expectedDonationType)
-        .withBloodAbo(expectedBloodAbo)
-        .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     // Excluded: din after range
@@ -187,21 +164,48 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000006")
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build())
-        .withDonationType(expectedDonationType)
-        .withBloodAbo(expectedBloodAbo)
-        .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
-
-    List<Donation> expectedDonations = Arrays.asList(
-        donation1, donation2, donation3
-    );
 
     List<Donation> returnedDonations = donationRepository.findDonationsBetweenTwoDins(
         "2000003", "2000005");
 
-    assertThat(returnedDonations, is(expectedDonations));
+    assertThat(returnedDonations.size(), is(3));
+    assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation1)));
+    assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation2)));
+    assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation3)));
+  }
+
+  @Test
+  public void testFindDonationsBetweenTwoDinsWithTheSameDin_shouldReturnOneDonation() {
+    Date irrelevantStartDate = new RandomTestDate();
+
+    // Expected
+    Donation donation = aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000003")
+        .withDonationDate(irrelevantStartDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded: din before range
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000002")
+        .withDonationDate(irrelevantStartDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded: din after range
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000004")
+        .withDonationDate(irrelevantStartDate)
+        .buildAndPersist(entityManager);
+
+    List<Donation> returnedDonations = donationRepository.findDonationsBetweenTwoDins(
+        "2000003", "2000003");
+
+    assertThat(returnedDonations.size(), is(1));
+    assertThat(returnedDonations.get(0), hasSameStateAsDonation(donation));
+
   }
 
   @Test
