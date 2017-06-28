@@ -1,11 +1,11 @@
 package org.jembi.bsis.backingform.validator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.jembi.bsis.helpers.builders.DonationTypeBackingFormBuilder.aDonationTypeBackingForm;
-import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
-import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.DonationTypeBackingFormBuilder.aDonationTypeBackingForm;
 import static org.jembi.bsis.helpers.builders.DonationTypeBuilder.aDonationType;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocationBackingForm;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -21,6 +21,7 @@ import javax.persistence.NoResultException;
 
 import org.jembi.bsis.backingform.DonationBackingForm;
 import org.jembi.bsis.backingform.DonationTypeBackingForm;
+import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.DonorBuilder;
@@ -177,7 +178,7 @@ public class DonationBackingFormValidatorTest {
     mockGeneralConfigAndFormFields();
     // edit form and change DIN config value
     form.setLastUpdated(new Date());
-    when(generalConfigAccessorService.getIntValue("donation.dinLength")).thenReturn(10);
+    when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(10);
     when(locationRepository.getLocation(locationId)).thenReturn(venue);
     when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
 
@@ -978,7 +979,7 @@ public class DonationBackingFormValidatorTest {
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMax")).thenReturn("300");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMin")).thenReturn("30");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMax")).thenReturn("200");
-    when(generalConfigAccessorService.getIntValue("donation.dinLength")).thenReturn(35);
+    when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(35);
     when(formFieldRepository.getRequiredFormFields("donation")).thenReturn(Arrays.asList(new String[] {"packType", "donationType"}));
     when(formFieldRepository.getFieldMaxLengths("donation")).thenReturn(new HashMap<String, Integer>());
     when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
@@ -1067,7 +1068,7 @@ public class DonationBackingFormValidatorTest {
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.weightMax")).thenReturn("300");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMin")).thenReturn("30");
     when(generalConfigAccessorService.getGeneralConfigValueByName("donation.donor.pulseMax")).thenReturn("200");
-    when(generalConfigAccessorService.getIntValue("donation.dinLength")).thenReturn(7);
+    when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(formFieldRepository.getRequiredFormFields("donation")).thenReturn(Arrays.asList(new String[] {"packType", "donationType"}));
     when(formFieldRepository.getFieldMaxLengths("donation")).thenReturn(new HashMap<String, Integer>());    
   }

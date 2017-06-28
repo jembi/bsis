@@ -25,6 +25,7 @@ import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder;
 import org.jembi.bsis.helpers.builders.DataTypeBuilder;
 import org.jembi.bsis.helpers.builders.DonationTypeBuilder;
@@ -73,7 +74,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
         .withDataType("Integer")
         .buildAndPersist(entityManager);
     aGeneralConfig()
-        .withName("donation.dinLength")
+        .withName(GeneralConfigConstants.DIN_LENGTH)
         .withValue("7")
         .withDataType(dataType)
         .buildAndPersist(entityManager);
