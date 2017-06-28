@@ -3,25 +3,22 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.testbatch.TestBatch;
 
-public class TestBatchMatcher extends TypeSafeMatcher<TestBatch> {
-
-  private TestBatch expected;
+public class TestBatchMatcher extends AbstractTypeSafeMatcher<TestBatch> {
 
   public TestBatchMatcher(TestBatch expected) {
     this.expected = expected;
   }
 
   @Override
-  public void describeTo(Description description) {
+  public void appendDescription(Description description, TestBatch testBatch) {
     description.appendText("A test batch with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nStatus: ").appendValue(expected.getStatus())
-        .appendText("\nTest batch date: ").appendValue(expected.getTestBatchDate())
-        .appendText("\nDonation batches: ").appendValue(expected.getDonationBatches())
-        .appendText("\nLocation: ").appendValue(expected.getLocation());
+        .appendText("\nId: ").appendValue(testBatch.getId())
+        .appendText("\nStatus: ").appendValue(testBatch.getStatus())
+        .appendText("\nTest batch date: ").appendValue(testBatch.getTestBatchDate())
+        .appendText("\nDonation batches: ").appendValue(testBatch.getDonationBatches())
+        .appendText("\nLocation: ").appendValue(testBatch.getLocation());
   }
 
   @Override
@@ -57,5 +54,4 @@ public class TestBatchMatcher extends TypeSafeMatcher<TestBatch> {
   public static TestBatchMatcher hasSameStateAsTestBatch(TestBatch expected) {
     return new TestBatchMatcher(expected);
   }
-
 }
