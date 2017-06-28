@@ -128,7 +128,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
   }
 
   @Test
-  public void testfindDonationsBetweenTwoDins_shouldReturnDonations() {
+  public void testFindDonationsBetweenTwoDins_shouldReturnDonations() {
     Date irrelevantStartDate = new RandomTestDate();
 
     // Expected
@@ -173,6 +173,39 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation1)));
     assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation2)));
     assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation3)));
+  }
+
+  @Test
+  public void testFindDonationsBetweenTwoDinsWithTheSameDin_shouldReturnOneDonation() {
+    Date irrelevantStartDate = new RandomTestDate();
+
+    // Expected
+    Donation donation = aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000003")
+        .withDonationDate(irrelevantStartDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded: din before range
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000002")
+        .withDonationDate(irrelevantStartDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded: din after range
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000004")
+        .withDonationDate(irrelevantStartDate)
+        .buildAndPersist(entityManager);
+
+    List<Donation> returnedDonations = donationRepository.findDonationsBetweenTwoDins(
+        "2000003", "2000003");
+
+    assertThat(returnedDonations.size(), is(1));
+    assertThat(returnedDonations.get(0), hasSameStateAsDonation(donation));
+
   }
 
   @Test
