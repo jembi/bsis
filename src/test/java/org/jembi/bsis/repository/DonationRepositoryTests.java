@@ -129,22 +129,11 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
   public void testfindDonationsBetweenTwoDins_shouldReturnDonations() {
     Date irrelevantStartDate = new RandomTestDate();
 
-    Location expectedVenue = aVenue().build();
-    DonationType expectedDonationType = aDonationType().thatIsNotDeleted().build();
-    String expectedBloodAbo = "A";
-    String expectedBloodRh = "+";
-    Gender expectedGender = Gender.male;
-
     // Expected
     Donation donation1 = aDonation()
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000003")
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build())
-        .withDonationType(expectedDonationType)
-        .withBloodAbo(expectedBloodAbo)
-        .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     // Expected
@@ -152,11 +141,6 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000004")
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build())
-        .withDonationType(expectedDonationType)
-        .withBloodAbo(expectedBloodAbo)
-        .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     // Expected
@@ -164,11 +148,6 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000005")
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build())
-        .withDonationType(expectedDonationType)
-        .withBloodAbo(expectedBloodAbo)
-        .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     // Excluded: din before range
@@ -176,11 +155,6 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000002")
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build())
-        .withDonationType(expectedDonationType)
-        .withBloodAbo(expectedBloodAbo)
-        .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     // Excluded: din after range
@@ -188,11 +162,6 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000006")
         .withDonationDate(irrelevantStartDate)
-        .withDonor(aDonor().withGender(expectedGender).build())
-        .withDonationType(expectedDonationType)
-        .withBloodAbo(expectedBloodAbo)
-        .withBloodRh(expectedBloodRh)
-        .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
 
     List<Donation> expectedDonations = Arrays.asList(
