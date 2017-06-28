@@ -31,6 +31,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
+import org.jembi.bsis.util.RandomTestDate;
 import org.joda.time.DateTime;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -126,7 +127,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
 
   @Test
   public void testfindDonationsBetweenTwoDins_shouldReturnDonations() {
-    Date irrelevantStartDate = new DateTime().minusDays(7).toDate();
+    Date irrelevantStartDate = new RandomTestDate();
 
     Location expectedVenue = aVenue().build();
     DonationType expectedDonationType = aDonationType().thatIsNotDeleted().build();
