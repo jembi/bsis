@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
@@ -55,12 +53,8 @@ public class TestBatchFactory {
     TestBatch testBatch = new TestBatch();
     testBatch.setId(backingForm.getId());
     testBatch.setStatus(backingForm.getStatus());
-    testBatch.setCreatedDate(backingForm.getCreatedDate());
-    Set<DonationBatch> donationBatches = new HashSet<>();
-    for (UUID donationBatchId : backingForm.getDonationBatchIds()) {
-      donationBatches.add(donationBatchRepository.findDonationBatchById(donationBatchId));
-    }
-    testBatch.setDonationBatches(donationBatches);
+    testBatch.setTestBatchDate(backingForm.getTestBatchDate());
+    testBatch.setDonationBatches(new HashSet<DonationBatch>());
     testBatch.setLocation(locationRepository.getLocation(backingForm.getLocation().getId()));
     return testBatch;
   }
@@ -142,7 +136,7 @@ public class TestBatchFactory {
     testBatchViewModel.setId(testBatch.getId());
     testBatchViewModel.setStatus(testBatch.getStatus());
     testBatchViewModel.setBatchNumber(testBatch.getBatchNumber());
-    testBatchViewModel.setCreatedDate(testBatch.getCreatedDate());
+    testBatchViewModel.setTestBatchDate(testBatch.getTestBatchDate());
     testBatchViewModel.setLastUpdated(testBatch.getLastUpdated());
     testBatchViewModel.setNotes(testBatch.getNotes());
     testBatchViewModel.setLocation(locationFactory.createViewModel(testBatch.getLocation()));

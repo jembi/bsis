@@ -279,10 +279,10 @@
         isMobileSite="false" isUsageSite="false" name="Testing" notes=""/>
 
 	<TestBatch id="uuid'640eb339-c815-48c6-81d7-0f225d3f2701'" batchNumber="TB0215000000" isDeleted="false" location_id="uuid'55321456-eeee-1234-b5b1-123412348893'"
-		createdDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0"
+		createdDate="2015-02-02 03:43:37.0" testBatchDate="2015-02-02 03:43:37.0" lastUpdated="2015-05-06 16:13:50.0"
 		status="CLOSED" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
 	<TestBatch id="uuid'640eb339-c815-48c6-81d7-0f225d3f2702'" batchNumber="TB0415000000" isDeleted="false" location_id="uuid'55321456-eeee-1234-b5b1-123412348893'"
-		createdDate="2015-04-24 04:42:17.0" lastUpdated="2015-04-24 04:42:17.0"
+		createdDate="2015-04-24 04:42:17.0" testBatchDate="2015-04-24 04:42:17.0" lastUpdated="2015-04-24 04:42:17.0"
 		status="OPEN" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" />
 
 	<DonationBatch id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" batchNumber="B0215000000"

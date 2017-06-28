@@ -19,7 +19,7 @@ public class TestBatchMatcher extends TypeSafeMatcher<TestBatch> {
     description.appendText("A test batch with the following state:")
         .appendText("\nId: ").appendValue(expected.getId())
         .appendText("\nStatus: ").appendValue(expected.getStatus())
-        .appendText("\nCreated date: ").appendValue(expected.getCreatedDate())
+        .appendText("\nTest batch date: ").appendValue(expected.getTestBatchDate())
         .appendText("\nDonation batches: ").appendValue(expected.getDonationBatches())
         .appendText("\nLocation: ").appendValue(expected.getLocation());
   }
@@ -39,9 +39,9 @@ public class TestBatchMatcher extends TypeSafeMatcher<TestBatch> {
           .appendText(", expected = ").appendValue(expected.getStatus());
     }
 
-    if (!Objects.equals(actual.getCreatedDate(), expected.getId())) {
-      description.appendText("\nCreated date: actual = ").appendValue(actual.getId())
-          .appendText(", expected = ").appendValue(expected.getCreatedDate());
+    if (!Objects.equals(actual.getTestBatchDate(), expected.getId())) {
+      description.appendText("\nTest batch date: actual = ").appendValue(actual.getId())
+          .appendText(", expected = ").appendValue(expected.getTestBatchDate());
     }
   }
 
@@ -49,7 +49,7 @@ public class TestBatchMatcher extends TypeSafeMatcher<TestBatch> {
   public boolean matchesSafely(TestBatch actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
         actual.getStatus() == expected.getStatus() &&
-        Objects.equals(actual.getCreatedDate(), expected.getCreatedDate()) &&
+        Objects.equals(actual.getTestBatchDate(), expected.getTestBatchDate()) &&
         Objects.equals(actual.getDonationBatches(), expected.getDonationBatches()) &&
         Objects.equals(actual.getLocation(), expected.getLocation());
   }
