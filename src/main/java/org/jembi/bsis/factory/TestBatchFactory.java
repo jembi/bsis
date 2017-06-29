@@ -13,7 +13,6 @@ import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
-import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.TestBatchConstraintChecker;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
@@ -39,9 +38,6 @@ public class TestBatchFactory {
 
   @Autowired
   private LocationFactory locationFactory;
-  
-  @Autowired
-  private DonationBatchRepository donationBatchRepository;
   
   @Autowired
   private LocationRepository locationRepository;
@@ -143,12 +139,10 @@ public class TestBatchFactory {
 
     // Calculate number of samples (only consider donations with test samples)
     int numSamples = 0;
-    for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-      for (Donation donation : donationBatch.getDonations()) {
+    for (Donation donation : testBatch.getDonations()) {
         if (donation.getPackType().getTestSampleProduced()) {
           numSamples++;
         }
-      }
     }
     testBatchViewModel.setNumSamples(numSamples);
   }

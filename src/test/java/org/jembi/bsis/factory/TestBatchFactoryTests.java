@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
@@ -89,11 +90,21 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = aDonationBatch().withDonation(donation).build();
     return donationBatch;
   }
+  
+  private Set<Donation> createDonations() {
+    PackType packType = PackTypeBuilder.aPackType().withTestSampleProduced(true).build();
+    Set<Donation> donations = new HashSet<>(Arrays.asList(
+        aDonation().withPackType(packType).build()
+    ));
+    
+    return donations;
+  }
 
   @Test
   public void testCreateTestBatchBasicViewModel_shouldReturnTestBatchViewModelsWithTheCorrectState() {
 
     DonationBatch donationBatch = createDonationBatch();
+    Set<Donation> donations = createDonations();
 
     TestBatch testBatch1 =
       aTestBatch()
@@ -103,6 +114,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonationBatches(new HashSet<>(Arrays.asList(donationBatch)))
+        .withDonations(donations)
         .withNotes(IRRELEVANT_NOTES)
         .build();
 
@@ -114,6 +126,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonationBatches(new HashSet<>(Arrays.asList(donationBatch)))
+        .withDonations(donations)
         .withNotes(IRRELEVANT_NOTES)
         .build();
 
@@ -146,6 +159,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = createDonationBatch();
     DonationBatchFullViewModel donationBatchViewModel =
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
+    Set<Donation> donations = createDonations();
 
     TestBatch testBatch1 = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
@@ -154,6 +168,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonationBatch(donationBatch)
+        .withDonations(donations)
         .withNotes(IRRELEVANT_NOTES)
         .build();
     
@@ -164,6 +179,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonationBatch(donationBatch)
+        .withDonations(donations)
         .withNotes(IRRELEVANT_NOTES)
         .build();
     List<TestBatch> testBatches = Arrays.asList(new TestBatch[]{testBatch1, testBatch2});
@@ -219,8 +235,8 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
-
-
+    Set<Donation> donations = createDonations();
+ 
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(IRRELEVANT_STATUS)
@@ -228,6 +244,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonationBatch(donationBatch)
+        .withDonations(donations)
         .withNotes(IRRELEVANT_NOTES)
         .build();
 
@@ -268,6 +285,8 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
+    
+    Set<Donation> donations = createDonations();
 
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
@@ -277,6 +296,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatch(donationBatch)
+        .withDonations(donations)
         .build();
 
     TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
@@ -313,6 +333,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
+    Set<Donation> donations = createDonations();
     
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
@@ -322,6 +343,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatch(donationBatch)
+        .withDonations(donations)
         .build();
 
     TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
@@ -358,6 +380,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationBatch donationBatch = createDonationBatch();
     DonationBatchViewModel donationBatchViewModel =
         donationBatchViewModelFactory.createDonationBatchFullViewModel(donationBatch);
+    Set<Donation> donations = createDonations();
     
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
@@ -367,6 +390,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withNotes(IRRELEVANT_NOTES)
         .withDonationBatch(donationBatch)
+        .withDonations(donations)
         .build();
 
     TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
