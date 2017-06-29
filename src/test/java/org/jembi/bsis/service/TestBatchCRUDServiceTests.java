@@ -3,6 +3,7 @@ package org.jembi.bsis.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation; 
 import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
@@ -13,10 +14,13 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
@@ -245,5 +249,31 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
 
     testBatchCRUDService.deleteTestBatch(TEST_BATCH_ID);
+  }
+  
+  @Test(expected = IllegalStateException.class)
+  public void testUnableToAddDonationsToTestBatch() {
+    TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+    Donation donation = aDonation().thatIsNotDeleted().build();
+    List<Donation> donations = new ArrayList<>();
+    donations.add(donation);
+
+    when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
+
+    testBatchCRUDService.addDonationsToTestBatch(TEST_BATCH_ID, donations);
+  }
+
+  @Test
+  public void testAddDonationsToTestBatch_shouldSave() {
+    TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+    Donation donation = aDonation().thatIsNotDeleted().build();
+    List<Donation> donations = new ArrayList<>();
+    donations.add(donation);
+
+    when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
+
+    testBatchCRUDService.addDonationsToTestBatch(TEST_BATCH_ID, donations);
   }
 }

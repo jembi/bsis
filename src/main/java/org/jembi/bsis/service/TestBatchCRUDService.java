@@ -1,8 +1,11 @@
 package org.jembi.bsis.service;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
@@ -105,5 +108,16 @@ public class TestBatchCRUDService {
     }
 
     return testBatch;
+  }
+  
+  public void addDonationsToTestBatch(UUID testBatchId, List<Donation> donations) {
+    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+
+    if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
+      throw new IllegalStateException("Only donations with no test results can be added");
+    }
+    
+    testBatch.setDonations(new HashSet<Donation>(donations));
+    testBatchRepository.save(testBatch);
   }
 }
