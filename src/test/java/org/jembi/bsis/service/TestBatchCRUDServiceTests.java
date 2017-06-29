@@ -275,5 +275,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
 
     testBatchCRUDService.addDonationsToTestBatch(TEST_BATCH_ID, donations);
+    
+    verify(testBatchRepository, times(1)).save(testBatch);
   }
 }
