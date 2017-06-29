@@ -5,16 +5,16 @@ import java.util.Map;
 
 public class TestBatchFullViewModel extends TestBatchViewModel {
 
-  private List<DonationBatchViewModel> donationBatchViewModels;
+  private List<DonationViewModel> donations;
   private Map<String, Boolean> permissions;
   private int readyForReleaseCount;
 
-  public List<DonationBatchViewModel> getDonationBatches() {
-    return donationBatchViewModels;
+  public List<DonationViewModel> getDonations() {
+    return donations;
   }
 
-  public void setDonationBatches(List<DonationBatchViewModel> donationBatchViewModels) {
-    this.donationBatchViewModels = donationBatchViewModels;
+  public void setDonations(List<DonationViewModel> donations) {
+    this.donations = donations;
   }
 
   public Map<String, Boolean> getPermissions() {
