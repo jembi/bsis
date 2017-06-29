@@ -9,12 +9,12 @@ import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
-import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
+import org.jembi.bsis.viewmodel.PackTypeViewModel;
 
 public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel> {
 
   private UUID id;
-  private PackTypeFullViewModel packType;
+  private PackTypeViewModel packType;
   private Date donationDate;
   private String donationIdentificationNumber;
   private String donorNumber;
@@ -30,7 +30,7 @@ public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel>
     return this;
   }
 
-  public DonationViewModelBuilder withPackType(PackTypeFullViewModel packType) {
+  public DonationViewModelBuilder withPackType(PackTypeViewModel packType) {
     this.packType = packType;
     return this;
   }

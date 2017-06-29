@@ -13,6 +13,7 @@ import org.jembi.bsis.service.DonationConstraintChecker;
 import org.jembi.bsis.service.DonorConstraintChecker;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
 import org.jembi.bsis.viewmodel.DonationFullViewModel;
+import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,30 @@ public class DonationFactory {
     donation.setPackType(packTypeRepository.getPackTypeById(donation.getPackType().getId()));
     donation.setAdverseEvent(adverseEventFactory.createEntity(form.getAdverseEvent()));
     return donation;
+  }
+
+  public List<DonationViewModel> createDonationViewModels(List<Donation> donations) {
+    List<DonationViewModel> viewModels = new ArrayList<>();
+    for (Donation donation : donations) {
+      viewModels.add(createDonationViewModel(donation));
+    }
+    return viewModels;
+  }
+
+  public DonationViewModel createDonationViewModel(Donation donation) {
+    DonationViewModel donationViewModel = new DonationViewModel();
+    donationViewModel.setId(donation.getId());
+    donationViewModel.setDonorNumber(donation.getDonorNumber());
+    donationViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
+    donationViewModel.setPackType(packTypeFactory.createViewModel(donation.getPackType()));
+    donationViewModel.setDonationType(donationTypeFactory.createViewModel(donation.getDonationType()));
+    donationViewModel.setDonationDate(donation.getDonationDate());
+    donationViewModel.setVenue(locationFactory.createViewModel(donation.getVenue()));
+    donationViewModel.setReleased(donation.isReleased());
+    donationViewModel.setTTIStatus(donation.getTTIStatus());
+    donationViewModel.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
+    donationViewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
+    return donationViewModel;
   }
 
   public List<DonationFullViewModel> createDonationFullViewModelsWithPermissions(List<Donation> donations) {
