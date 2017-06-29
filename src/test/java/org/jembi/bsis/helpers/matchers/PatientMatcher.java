@@ -9,7 +9,7 @@ import org.jembi.bsis.model.patient.Patient;
 public class PatientMatcher extends AbstractTypeSafeMatcher<Patient> {
 
   public PatientMatcher(Patient expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

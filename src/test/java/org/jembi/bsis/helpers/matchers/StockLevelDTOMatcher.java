@@ -8,7 +8,7 @@ import org.jembi.bsis.dto.StockLevelDTO;
 public class StockLevelDTOMatcher extends AbstractTypeSafeMatcher<StockLevelDTO> {
 
   public StockLevelDTOMatcher(StockLevelDTO expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

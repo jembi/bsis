@@ -8,7 +8,7 @@ import org.jembi.bsis.model.bloodtesting.BloodTest;
 public class BloodTestMatcher extends AbstractTypeSafeMatcher<BloodTest> {
 
   public BloodTestMatcher(BloodTest expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

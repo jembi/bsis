@@ -7,10 +7,8 @@ import org.jembi.bsis.viewmodel.DonationViewModel;
 
 public class DonationViewModelMatcher extends AbstractTypeSafeMatcher<DonationViewModel> {
 
-  private DonationViewModel expected;
-
   public DonationViewModelMatcher(DonationViewModel expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override
