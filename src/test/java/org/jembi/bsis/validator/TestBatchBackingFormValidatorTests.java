@@ -6,8 +6,6 @@ import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocati
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.mockito.Mockito.when;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +48,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateWithNonExistentLocation() throws ParseException {
+  public void testValidateWithNonExistentLocation() throws Exception {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
@@ -73,7 +71,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateWithNonTestingSiteLocation() throws ParseException {
+  public void testValidateWithNonTestingSiteLocation() throws Exception {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
@@ -96,7 +94,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateWithDeletedLocation() throws ParseException {
+  public void testValidateWithDeletedLocation() throws Exception {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
@@ -119,7 +117,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateWithNoLocation() throws ParseException {
+  public void testValidateWithNoLocation() throws Exception {
 
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
@@ -141,7 +139,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
   
   @Test
-  public void testValidTestBatchDateCurrentDate_shouldHaveNoError() throws ParseException {
+  public void testValidTestBatchDateCurrentDate_shouldHaveNoError() throws Exception {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
@@ -163,7 +161,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
   
   @Test
-  public void testValidateNullTestBatchDate() throws ParseException{
+  public void testValidateNullTestBatchDate() throws Exception {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
@@ -183,7 +181,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
   
   @Test
-  public void testValidateTestBatchDateAfterToday() throws ParseException{
+  public void testValidateTestBatchDateAfterToday() throws Exception {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
