@@ -1,6 +1,7 @@
 package org.jembi.bsis.factory;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class DonationFactory {
     return donation;
   }
 
-  public List<DonationViewModel> createDonationViewModels(List<Donation> donations) {
+  public List<DonationViewModel> createDonationViewModels(Collection<Donation> donations) {
     List<DonationViewModel> viewModels = new ArrayList<>();
     for (Donation donation : donations) {
       viewModels.add(createDonationViewModel(donation));
@@ -66,6 +67,8 @@ public class DonationFactory {
     donationViewModel.setTTIStatus(donation.getTTIStatus());
     donationViewModel.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
     donationViewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
+    donationViewModel.setBloodAbo(donation.getBloodAbo());
+    donationViewModel.setBloodRh(donation.getBloodRh());
     return donationViewModel;
   }
 
