@@ -7,6 +7,10 @@ public abstract class AbstractTypeSafeMatcher<T> extends TypeSafeMatcher<T> {
 
   public T expected;
 
+  public AbstractTypeSafeMatcher(T expected) {
+    this.expected = expected;
+  }
+
   public abstract void appendDescription(Description description, T t);
 
   @Override

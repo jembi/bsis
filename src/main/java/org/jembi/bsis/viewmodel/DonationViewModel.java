@@ -20,6 +20,8 @@ public class DonationViewModel extends BaseViewModel<UUID> {
   private TTIStatus ttiStatus;
   private BloodTypingStatus bloodTypingStatus;
   private BloodTypingMatchStatus bloodTypingMatchStatus;
+  private String bloodAbo;
+  private String bloodRh;
 
   public DonationViewModel() {
   }
@@ -111,5 +113,21 @@ public class DonationViewModel extends BaseViewModel<UUID> {
 
   public void setReleased(boolean released) {
     this.released = released;
+  }
+
+  public String getBloodAbo() {
+    return bloodAbo;
+  }
+
+  public void setBloodAbo(String bloodAbo) {
+    this.bloodAbo = bloodAbo;
+  }
+
+  public String getBloodRh() {
+    return bloodRh;
+  }
+
+  public void setBloodRh(String bloodRh) {
+    this.bloodRh = bloodRh;
   }
 }

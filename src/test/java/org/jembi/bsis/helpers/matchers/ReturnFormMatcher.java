@@ -8,7 +8,7 @@ import org.jembi.bsis.model.returnform.ReturnForm;
 public class ReturnFormMatcher extends AbstractTypeSafeMatcher<ReturnForm> {
 
   public ReturnFormMatcher(ReturnForm expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

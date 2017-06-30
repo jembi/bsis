@@ -8,7 +8,7 @@ import org.jembi.bsis.template.labelling.PackLabelTemplateObject;
 public class PackLabelTemplateObjectMatcher extends AbstractTypeSafeMatcher<PackLabelTemplateObject> {
 
   public PackLabelTemplateObjectMatcher(PackLabelTemplateObject expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

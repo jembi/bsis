@@ -8,7 +8,7 @@ import org.jembi.bsis.model.testbatch.TestBatch;
 public class TestBatchMatcher extends AbstractTypeSafeMatcher<TestBatch> {
 
   public TestBatchMatcher(TestBatch expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

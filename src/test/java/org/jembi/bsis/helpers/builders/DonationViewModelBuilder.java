@@ -9,12 +9,12 @@ import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.viewmodel.DonationTypeViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
-import org.jembi.bsis.viewmodel.PackTypeFullViewModel;
+import org.jembi.bsis.viewmodel.PackTypeViewModel;
 
 public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel> {
 
   private UUID id;
-  private PackTypeFullViewModel packType;
+  private PackTypeViewModel packType;
   private Date donationDate;
   private String donationIdentificationNumber;
   private String donorNumber;
@@ -22,6 +22,8 @@ public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel>
   private TTIStatus ttiStatus;
   private BloodTypingStatus bloodTypingStatus;
   private BloodTypingMatchStatus bloodTypingMatchStatus;
+  private String bloodAbo;
+  private String bloodRh;
   private LocationViewModel venue;
   private boolean released;
 
@@ -30,7 +32,7 @@ public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel>
     return this;
   }
 
-  public DonationViewModelBuilder withPackType(PackTypeFullViewModel packType) {
+  public DonationViewModelBuilder withPackType(PackTypeViewModel packType) {
     this.packType = packType;
     return this;
   }
@@ -70,6 +72,16 @@ public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel>
     return this;
   }
 
+  public DonationViewModelBuilder withBloodAbo(String bloodAbo) {
+    this.bloodAbo = bloodAbo;
+    return this;
+  }
+
+  public DonationViewModelBuilder withBloodRh(String bloodRh) {
+    this.bloodRh = bloodRh;
+    return this;
+  }
+
   public DonationViewModelBuilder withVenue(LocationViewModel venue) {
     this.venue = venue;
     return this;
@@ -92,6 +104,8 @@ public class DonationViewModelBuilder extends AbstractBuilder<DonationViewModel>
     donationViewModel.setTTIStatus(ttiStatus);
     donationViewModel.setBloodTypingStatus(bloodTypingStatus);
     donationViewModel.setBloodTypingMatchStatus(bloodTypingMatchStatus);
+    donationViewModel.setBloodAbo(bloodAbo);
+    donationViewModel.setBloodRh(bloodRh);
     donationViewModel.setVenue(venue);
     donationViewModel.setReleased(released);
     return donationViewModel;

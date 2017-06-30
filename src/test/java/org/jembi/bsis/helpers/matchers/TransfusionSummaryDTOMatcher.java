@@ -8,7 +8,7 @@ import org.jembi.bsis.dto.TransfusionSummaryDTO;
 public class TransfusionSummaryDTOMatcher extends AbstractTypeSafeMatcher<TransfusionSummaryDTO> {
 
   public TransfusionSummaryDTOMatcher(TransfusionSummaryDTO expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

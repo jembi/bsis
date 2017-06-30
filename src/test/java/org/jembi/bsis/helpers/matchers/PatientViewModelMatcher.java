@@ -8,7 +8,7 @@ import org.jembi.bsis.viewmodel.PatientViewModel;
 public class PatientViewModelMatcher extends AbstractTypeSafeMatcher<PatientViewModel> {
 
   public PatientViewModelMatcher(PatientViewModel expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override
