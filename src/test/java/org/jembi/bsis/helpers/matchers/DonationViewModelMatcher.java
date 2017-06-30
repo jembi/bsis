@@ -23,6 +23,8 @@ public class DonationViewModelMatcher extends AbstractTypeSafeMatcher<DonationVi
     .appendText("\nTTIStatus: ").appendValue(donationViewModel.getTTIStatus())
     .appendText("\nbloodTypingStatus: ").appendValue(donationViewModel.getBloodTypingStatus())
     .appendText("\nbloodTypingMatchStatus: ").appendValue(donationViewModel.getBloodTypingMatchStatus())
+    .appendText("\nbloodABO: ").appendValue(donationViewModel.getBloodAbo())
+    .appendText("\nbloodRh: ").appendValue(donationViewModel.getBloodRh())
     .appendText("\nvenue: ").appendValue(donationViewModel.getVenue())
     .appendText("\nreleased: ").appendValue(donationViewModel.isReleased());
   }
@@ -38,6 +40,8 @@ public class DonationViewModelMatcher extends AbstractTypeSafeMatcher<DonationVi
         Objects.equals(actual.getTTIStatus(), expected.getTTIStatus()) &&
         Objects.equals(actual.getBloodTypingStatus(), expected.getBloodTypingStatus()) &&
         Objects.equals(actual.getBloodTypingMatchStatus(), expected.getBloodTypingMatchStatus()) &&
+        Objects.equals(actual.getBloodAbo(), expected.getBloodAbo()) &&
+        Objects.equals(actual.getBloodRh(), expected.getBloodRh()) &&
         Objects.equals(actual.getVenue(), expected.getVenue()) &&
         Objects.equals(actual.isReleased(), expected.isReleased());
   }
@@ -45,5 +49,4 @@ public class DonationViewModelMatcher extends AbstractTypeSafeMatcher<DonationVi
   public static DonationViewModelMatcher hasSameStateAsDonationViewModel(DonationViewModel expected) {
     return new DonationViewModelMatcher(expected);
   }
-
 }

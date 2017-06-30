@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.viewmodel.DonationBatchViewModel;
+import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 
 public class TestBatchFullViewModelBuilder extends AbstractBuilder<TestBatchFullViewModel> {
@@ -18,7 +18,7 @@ public class TestBatchFullViewModelBuilder extends AbstractBuilder<TestBatchFull
   private Date testBatchDate;
   private Date lastUpdatedDate;
   private String notes;
-  private List<DonationBatchViewModel> donationBatches;
+  private List<DonationViewModel> donations;
   private Map<String, Boolean> permissions;
   private int readyForReleaseCount;
   private Integer numSamples;
@@ -53,8 +53,8 @@ public class TestBatchFullViewModelBuilder extends AbstractBuilder<TestBatchFull
     return this;
   }
 
-  public TestBatchFullViewModelBuilder withDonationBatches(List<DonationBatchViewModel> donationBatches) {
-    this.donationBatches = donationBatches;
+  public TestBatchFullViewModelBuilder withDonations(List<DonationViewModel> donations) {
+    this.donations = donations;
     return this;
   }
 
@@ -91,7 +91,7 @@ public class TestBatchFullViewModelBuilder extends AbstractBuilder<TestBatchFull
     testBatchViewModel.setLastUpdated(lastUpdatedDate);
     testBatchViewModel.setNotes(notes);
     testBatchViewModel.setNumSamples(numSamples);
-    testBatchViewModel.setDonationBatches(donationBatches);
+    testBatchViewModel.setDonations(donations);
     testBatchViewModel.setPermissions(permissions);
     testBatchViewModel.setReadyForReleaseCount(readyForReleaseCount);
     return testBatchViewModel;

@@ -6,6 +6,7 @@ import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aLocati
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aDistributionSite;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.mockito.Mockito.when;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -204,7 +205,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateTestBatchDateBeforeToday() throws ParseException{
+  public void testValidateTestBatchDateBeforeToday() throws Exception {
     TestBatchBackingForm backingForm = new TestBatchBackingForm();
     backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();

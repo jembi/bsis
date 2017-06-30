@@ -35,6 +35,11 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
     if (!validateDonationRange(form, errors)) {
       return;
     }
+
+    // check that the to/from DIN belong to valid Donations
+    if (!validDonations(form, errors)) {
+      return;
+    }
     
     // check that all Donations in the range aren’t already associated with another TestBatch
     validateDonationsInRange(form, errors);
@@ -62,20 +67,32 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
     return true;
   }
 
+  private boolean validDonations(TestBatchDonationRangeBackingForm form, Errors errors) {
+    Donation donation = donationRepository.findDonationByDonationIdentificationNumber(form.getFromDIN());
+    if (donation == null) {
+      errors.rejectValue("fromDIN", "errors.invalid.donation", "Donation with DIN " + form.getFromDIN() + " does not exist");
+      return false;
+    }
+    if (form.getToDIN() != null) {
+      donation = donationRepository.findDonationByDonationIdentificationNumber(form.getToDIN());
+      if (donation == null) {
+        errors.rejectValue("toDIN", "errors.invalid.donation", "Donation with DIN " + form.getFromDIN() + " does not exist");
+        return false;
+      }
+    }
+    return true;
+  }
+
   private void validateDonationsInRange(TestBatchDonationRangeBackingForm form, Errors errors) {
     String toDIN = form.getToDIN(); 
     if (toDIN == null) {
       toDIN = form.getFromDIN();
     }
     List<Donation> donations = donationRepository.findDonationsBetweenTwoDins(form.getFromDIN(), toDIN);
-    if (donations.size() == 0) {
-      errors.reject("errors.noDonationsInRange", "There were no Donations found with DINs between " + form.getFromDIN() + " and " + toDIN);
-    } else {
-      for (Donation donation : donations) {
-        if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(form.getTestBatchId())) {
-          errors.reject("errors.donationsBelongToAnotherTestBatch", "Donation with DIN " + donation.getDonationIdentificationNumber() + " is assigned to a different TestBatch");
-          break; // no need to log the same error twice
-        }
+    for (Donation donation : donations) {
+      if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(form.getTestBatchId())) {
+        errors.reject("errors.donationsBelongToAnotherTestBatch", "Donation with DIN " + donation.getDonationIdentificationNumber() + " is assigned to a different TestBatch");
+        break; // no need to log the same error twice
       }
     }
   }

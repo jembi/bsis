@@ -16,7 +16,6 @@ import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.TestBatchConstraintChecker;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
-import org.jembi.bsis.viewmodel.DonationBatchViewModel;
 import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
@@ -31,14 +30,11 @@ import org.springframework.stereotype.Service;
 public class TestBatchFactory {
 
   @Autowired
-  private DonationBatchViewModelFactory donationBatchViewModelFactory;
-
-  @Autowired
   private TestBatchConstraintChecker testBatchConstraintChecker;
 
   @Autowired
   private LocationFactory locationFactory;
-  
+
   @Autowired
   private LocationRepository locationRepository;
   
@@ -161,15 +157,8 @@ public class TestBatchFactory {
     // First populate basic fields
     populateBasicViewModel(testBatch, testBatchViewModel);
 
-    // Get list of donation view models with test samples
-    List<DonationBatchViewModel> donationsWithTestSamples = new ArrayList<>();
-    if (testBatch.getDonationBatches() != null) {
-      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-        donationsWithTestSamples.add(
-            donationBatchViewModelFactory.createDonationBatchViewModelWithTestSamples(donationBatch));
-      }
-    }
-    testBatchViewModel.setDonationBatches(donationsWithTestSamples);
+    // Get list of donation view models
+    testBatchViewModel.setDonations(donationFactory.createDonationViewModels(testBatch.getDonations()));
 
     // Check if this test batch can be released
     CanReleaseResult canReleaseResult = testBatchConstraintChecker.canReleaseTestBatch(testBatch);

@@ -320,6 +320,8 @@ public class DonationFactoryTests {
     String donorNumber = "123";
     String donationIdentificationNumber = "1234567";
     Date donationDate = new RandomTestDate();
+    String bloodAbo = "A";
+    String bloodRh = "-";
     Donation donation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withDonor(aDonor().withId(IRRELEVANT_DONOR_ID).withDonorNumber(donorNumber).build())
@@ -331,6 +333,8 @@ public class DonationFactoryTests {
         .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withBloodAbo(bloodAbo)
+        .withBloodRh(bloodRh)
         .thatIsReleased()
         .thatIsNotDeleted()
         .build();
@@ -346,6 +350,8 @@ public class DonationFactoryTests {
         .withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
+        .withBloodAbo(bloodAbo)
+        .withBloodRh(bloodRh)
         .thatIsReleased()
         .build();
 
