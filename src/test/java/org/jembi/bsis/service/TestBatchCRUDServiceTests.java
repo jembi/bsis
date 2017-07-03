@@ -243,10 +243,9 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     List<Donation> donations = Arrays.asList(donation1, donation2);
     HashSet<Donation> donationSet = new HashSet<Donation>(donations);
     Location location = aTestingSite().build();
-    
+
     TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).withLocation(location)
-        .withDonations(donationSet).build();
-    testBatch.setDonations(donationSet);
+        .withDonations(new HashSet<Donation>()).build();
 
     TestBatch expectedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN)
         .withLocation(location).withDonations(donationSet).build();

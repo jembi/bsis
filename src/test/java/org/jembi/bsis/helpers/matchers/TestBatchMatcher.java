@@ -48,6 +48,7 @@ public class TestBatchMatcher extends AbstractTypeSafeMatcher<TestBatch> {
         actual.getStatus() == expected.getStatus() &&
         Objects.equals(actual.getTestBatchDate(), expected.getTestBatchDate()) &&
         Objects.equals(actual.getDonationBatches(), expected.getDonationBatches()) &&
+        Objects.equals(actual.getDonations(), expected.getDonations()) &&
         Objects.equals(actual.getLocation(), expected.getLocation());
   }
 
