@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -94,4 +95,8 @@ public class TestBatchBackingForm {
     this.testBatchDate = testBatchDate;
   }
 
+  @JsonIgnore
+  public void setDonations(List<DonationFullViewModel> donations) {
+    // Ignore
+  }
 }
