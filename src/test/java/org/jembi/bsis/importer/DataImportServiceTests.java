@@ -53,6 +53,7 @@ import org.jembi.bsis.model.idtype.IdType;
 import org.jembi.bsis.model.location.Division;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.preferredlanguage.PreferredLanguage;
+import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
 import org.junit.Test;
@@ -447,31 +448,33 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     assertThat("dueToDonate is set on donor", firstDonation.getDonor().getDueToDonate(), notNullValue());
     assertThat("dateOfFirstDonation is set on donor", firstDonation.getDonor().getDateOfFirstDonation(), notNullValue());
     assertThat("donation is released", firstDonation.isReleased(), equalTo(true));
+
+    TestBatch firstTestBatch = firstDonation.getTestBatch();
+    assertThat("Donation has a test batch", firstTestBatch, notNullValue());
+    assertThat("TestBatch location is a testing site", firstTestBatch.getLocation().getIsTestingSite(), equalTo(true));
     
     DonationBatch firstDonationBatch = firstDonation.getDonationBatch();
     assertThat("DonationBatch has been defined", firstDonationBatch, notNullValue());
     assertThat("DonationBatch has a batch number", firstDonationBatch.getBatchNumber(), notNullValue());
     assertThat("DonationBatch venue is set", firstDonationBatch.getVenue().getName(), equalTo("First"));
     assertThat("DonationBatch is closed", firstDonationBatch.getIsClosed(), equalTo(true));
-    assertThat("DonationBatch has a test batch", firstDonationBatch.getTestBatch(), notNullValue());
-    assertThat("TestBatch location is a testing site", firstDonationBatch.getTestBatch().getLocation().getIsTestingSite(), equalTo(true));
-    
+        
     Donation secondDonation = findDonationByDonationIdentificationNumber("3243500");
     assertThat("Same DonationBatch", secondDonation.getDonationBatch().getId(), equalTo(firstDonationBatch.getId()));
-    assertThat("Same TestBatch", secondDonation.getDonationBatch().getTestBatch(), equalTo(firstDonationBatch.getTestBatch()));
+    assertThat("Same TestBatch", secondDonation.getTestBatch(), equalTo(firstTestBatch));
     assertThat("donation is released", firstDonation.isReleased(), equalTo(true));
     
     Donation thirdDonation = findDonationByDonationIdentificationNumber("3243200");
     assertThat("Different DonationBatch", thirdDonation.getDonationBatch().getId(), not(equalTo(firstDonationBatch.getId())));
-    assertThat("Different TestBatch", thirdDonation.getDonationBatch().getTestBatch(), not(equalTo(firstDonationBatch.getTestBatch())));
-    assertThat("TestBatch location is a testing site", thirdDonation.getDonationBatch().getTestBatch().getLocation().getIsTestingSite(), equalTo(true));
+    assertThat("Different TestBatch", thirdDonation.getTestBatch(), not(equalTo(firstDonationBatch.getTestBatch())));
+    assertThat("TestBatch location is a testing site", thirdDonation.getTestBatch().getLocation().getIsTestingSite(), equalTo(true));
     assertThat("donation is released", firstDonation.isReleased(), equalTo(true));
     
     Donation fourthDonation = findDonationByDonationIdentificationNumber("3243100");
     DonationBatch fourthDonationBatch = fourthDonation.getDonationBatch();
     assertThat("DonationBatch venue is set", fourthDonationBatch.getVenue().getName(), equalTo("Fourth"));
     assertThat("Different DonationBatch", fourthDonationBatch.getId(), not(equalTo(thirdDonation.getDonationBatch().getId())));
-    assertThat("TestBatch location is a testing site", fourthDonationBatch.getTestBatch().getLocation().getIsTestingSite(), equalTo(true));
+    assertThat("TestBatch location is a testing site", fourthDonation.getTestBatch().getLocation().getIsTestingSite(), equalTo(true));
     assertThat("donation is released", firstDonation.isReleased(), equalTo(true));
 
     // The first pair of donations are in the same donation batch and test batch
@@ -490,7 +493,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     assertThat("bloodAbo is not set", fifthDonation.getBloodAbo(), nullValue());
     assertThat("bloodRh is not set", fifthDonation.getBloodRh(), nullValue());
     assertThat("notes is not set", fifthDonation.getNotes(), equalTo(""));
-    assertThat("TestBatch location is a testing site", fifthDonation.getDonationBatch().getTestBatch().getLocation().getIsTestingSite(), equalTo(true));
+    assertThat("TestBatch location is a testing site", fifthDonation.getTestBatch().getLocation().getIsTestingSite(), equalTo(true));
     assertThat("donation is released", firstDonation.isReleased(), equalTo(true));
    
   }
