@@ -100,5 +100,6 @@ public class DonationNamedQueryConstants {
 
   public static final String QUERY_FIND_DONATIONS_BETWEEN_TWO_DINS =
       "SELECT d FROM Donation d "
-      + "WHERE d.donationIdentificationNumber BETWEEN :fromDIN AND :toDIN";
+      + "WHERE d.donationIdentificationNumber BETWEEN :fromDIN AND :toDIN "
+      + "AND d.isDeleted = :deleted";
 }

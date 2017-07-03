@@ -404,7 +404,7 @@ public class ComponentCRUDService {
     Donation existingDonation = existingComponent.getDonation();
     existingDonation.setBleedStartTime(bleedStartTime);
     existingDonation.setBleedEndTime(bleedEndTime);
-    donationRepository.updateDonation(existingDonation);
+    donationRepository.update(existingDonation);
 
     // update component createdOn
     // note: existingComponent is the initial component because pre-processing is only done for the initial component

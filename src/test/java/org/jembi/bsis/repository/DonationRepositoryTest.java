@@ -2,19 +2,13 @@ package org.jembi.bsis.repository;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
-import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -62,41 +56,6 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testGetDonations() throws Exception {
-    Date start = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-01");
-    Date end = new SimpleDateFormat("yyyy-MM-dd").parse("2015-02-10");
-    List<Donation> all = donationRepository.getDonations(start, end);
-    Assert.assertNotNull("There are donations", all);
-    Assert.assertEquals("There are 5 donations", 5, all.size());
-  }
-
-  @Test
-  public void testGetDonationsNone() throws Exception {
-    Date start = new SimpleDateFormat("yyyy-MM-dd").parse("2012-02-01");
-    Date end = new SimpleDateFormat("yyyy-MM-dd").parse("2012-02-10");
-    List<Donation> all = donationRepository.getDonations(start, end);
-    Assert.assertNotNull("There are no donations but list is not null", all);
-    Assert.assertEquals("There are 0 donations", 0, all.size());
-  }
-
-  @Test
-  public void testFilterDonationsWithBloodTypingResults() throws Exception {
-    List<Donation> donations = new ArrayList<Donation>();
-    donations.add(donationRepository.findDonationById(UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1")));
-    donations.add(donationRepository.findDonationById(UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a2")));
-    donations.add(donationRepository.findDonationById(UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a3")));
-    Map<UUID, BloodTestingRuleResult> result = donationRepository.filterDonationsWithBloodTypingResults(donations);
-    Assert.assertEquals("There are two donations with completed tests", 2, result.size());
-    for (BloodTestingRuleResult r : result.values()) {
-      if (r.getDonation().getDonationIdentificationNumber().equals("1234567")) {
-        Assert.assertEquals("O type blood match", "O", r.getBloodAbo());
-      } else if (r.getDonation().getDonationIdentificationNumber().equals("1212129")) {
-        Assert.assertEquals("A type blood match", "A", r.getBloodAbo());
-      }
-    }
-  }
-
-  @Test
   public void testAddDonation() throws Exception {
     Donation newDonation = new Donation();
     Donation existingDonation = donationRepository.findDonationById(DONATION_ID_1);
@@ -110,7 +69,7 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     newDonation.setBleedEndTime(today.getTime());
     today.add(Calendar.MINUTE, -15);
     newDonation.setBleedStartTime(today.getTime());
-    donationRepository.saveDonation(newDonation);
+    donationRepository.save(newDonation);
     Donation savedDonation = donationRepository.findDonationByDonationIdentificationNumber("JUNIT123");
     Assert.assertNotNull("Found new donation", savedDonation);
     Assert.assertNotNull("Donor date of lastDonation has been set", savedDonation.getDonor().getDateOfLastDonation());
@@ -123,7 +82,7 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     newDonation.setId(existingDonation.getId());
     newDonation.setVenue(existingDonation.getVenue());
     newDonation.setDonor(existingDonation.getDonor());
-    donationRepository.saveDonation(newDonation);
+    donationRepository.save(newDonation);
     // should fail because DIN already exists
   }
 
@@ -131,7 +90,7 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
   public void testUpdateDonation() throws Exception {
     Donation existingDonation = donationRepository.findDonationById(DONATION_ID_1);
     existingDonation.setDonorWeight(new BigDecimal(123));
-    donationRepository.updateDonation(existingDonation);
+    donationRepository.update(existingDonation);
     Donation updatedDonation = donationRepository.findDonationById(DONATION_ID_1);
     Assert.assertEquals("donor weight was updataed", new BigDecimal(123), updatedDonation.getDonorWeight());
   }

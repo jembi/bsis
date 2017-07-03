@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.donordeferral.DeferralReasonType;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -44,17 +43,13 @@ public class TestBatchStatusChangeService {
 
     LOGGER.info("Handling release for test batch: " + testBatch);
 
-    if (testBatch.getDonationBatches() == null) {
-      // No donation batches so nothing to do
+    if (testBatch.getDonations() == null) {
+      // No donation so nothing to do
       return;
     }
 
-    for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-
-      for (Donation donation : donationBatch.getDonations()) {
-
-        handleRelease(donation);
-      }
+    for (Donation donation : testBatch.getDonations()) {
+      handleRelease(donation);
     }
   }
 
@@ -84,7 +79,7 @@ public class TestBatchStatusChangeService {
     // Execute tests and update the donation with the results
     BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
     bloodTestsService.updateDonationWithTestResults(donation, bloodTestingRuleResult);
-    donation = donationRepository.updateDonation(donation);
+    donation = donationRepository.update(donation);
 
     // Handle the situation where the Donors and/or Donation are unsafe
     if (donation.getTTIStatus() == TTIStatus.UNSAFE) {

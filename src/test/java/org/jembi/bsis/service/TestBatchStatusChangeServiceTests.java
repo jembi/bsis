@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.not;
 import static org.jembi.bsis.helpers.builders.BloodTestBuilder.aBloodTest;
 import static org.jembi.bsis.helpers.builders.BloodTestResultBuilder.aBloodTestResult;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
-import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
@@ -71,7 +70,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   @Test
   public void testHandleReleaseWithNoDonationBatches_shouldDoNothing() {
 
-    TestBatch testBatch = aTestBatch().withDonationBatches(null).build();
+    TestBatch testBatch = aTestBatch().withDonations(null).build();
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
@@ -86,7 +85,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withPackType(aPackType().build())
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(donationWithDiscrepancies).build())
+        .withDonation(donationWithDiscrepancies)
         .build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(donationWithDiscrepancies)).thenReturn(true);
@@ -106,7 +105,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withBloodRh("+")
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(donationWithDiscrepancies).build())
+        .withDonation(donationWithDiscrepancies)
         .build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(donationWithDiscrepancies)).thenReturn(true);
@@ -125,7 +124,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withPackType(aPackType().withTestSampleProduced(false).build())
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(donation).build())
+        .withDonation(donation)
         .build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(donation)).thenReturn(true);
@@ -142,7 +141,6 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     String bloodAbo = "A";
     String bloodRh = "+";
     Donor donor = aDonor().build();
-    Donor expectedDonor = aDonor().withBloodAbo(bloodAbo).withBloodRh(bloodRh).build();
     Donation donationWithoutDiscrepancies = aDonation()
         .withDonor(donor)
         .withBloodTestResults(bloodTestResults)
@@ -150,16 +148,17 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
+        .thatIsNotReleased()
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(donationWithoutDiscrepancies).build())
+        .withDonation(donationWithoutDiscrepancies)
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(donationWithoutDiscrepancies)).thenReturn(false);
     when(componentStatusCalculator.shouldComponentsBeDiscardedForTestResults(bloodTestResults)).thenReturn(false);
     when(bloodTestsService.executeTests(donationWithoutDiscrepancies)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(donationWithoutDiscrepancies)).thenReturn(donationWithoutDiscrepancies);
+    when(donationRepository.update(donationWithoutDiscrepancies)).thenReturn(donationWithoutDiscrepancies);
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
@@ -184,16 +183,17 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withPackType(aPackType().build())
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
+        .thatIsNotReleased()
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(donationWithoutDiscrepancies).build())
+        .withDonation(donationWithoutDiscrepancies)
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(donationWithoutDiscrepancies)).thenReturn(false);
     when(componentStatusCalculator.shouldComponentsBeDiscardedForTestResults(bloodTestResults)).thenReturn(true);
     when(bloodTestsService.executeTests(donationWithoutDiscrepancies)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(donationWithoutDiscrepancies)).thenReturn(donationWithoutDiscrepancies);
+    when(donationRepository.update(donationWithoutDiscrepancies)).thenReturn(donationWithoutDiscrepancies);
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
@@ -220,16 +220,17 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withPackType(aPackType().build())
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
+        .thatIsNotReleased()
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(unsafeDonation).build())
+        .withDonation(unsafeDonation)
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(unsafeDonation)).thenReturn(false);
     when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
     when(bloodTestsService.executeTests(unsafeDonation)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(unsafeDonation)).thenReturn(unsafeDonation);
+    when(donationRepository.update(unsafeDonation)).thenReturn(unsafeDonation);
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
@@ -258,16 +259,17 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withPackType(aPackType().build())
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
+        .thatIsNotReleased()
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(unsafeDonation).build())
+        .withDonation(unsafeDonation)
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(unsafeDonation)).thenReturn(false);
     when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(true);
     when(bloodTestsService.executeTests(unsafeDonation)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(unsafeDonation)).thenReturn(unsafeDonation);
+    when(donationRepository.update(unsafeDonation)).thenReturn(unsafeDonation);
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
@@ -296,16 +298,17 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withDonor(donor)
         .withBloodTestResults(bloodTestResults)
         .withPackType(aPackType().build())
+        .thatIsNotReleased()
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(noTypeDeterminedBloodTypingOutcomeDonation).build())
+        .withDonation(noTypeDeterminedBloodTypingOutcomeDonation)
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(false);
     when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
     when(bloodTestsService.executeTests(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(noTypeDeterminedBloodTypingOutcomeDonation);
+    when(donationRepository.update(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(noTypeDeterminedBloodTypingOutcomeDonation);
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
@@ -332,16 +335,17 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withDonor(donor)
         .withBloodTestResults(bloodTestResults)
         .withPackType(aPackType().build())
+        .thatIsNotReleased()
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(noTypeDeterminedBloodTypingOutcomeDonation).build())
+        .withDonation(noTypeDeterminedBloodTypingOutcomeDonation)
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(false);
     when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
     when(bloodTestsService.executeTests(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(noTypeDeterminedBloodTypingOutcomeDonation);
+    when(donationRepository.update(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(noTypeDeterminedBloodTypingOutcomeDonation);
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
@@ -366,16 +370,17 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withDonor(donor)
         .withBloodTestResults(bloodTestResults)
         .withPackType(aPackType().build())
+        .thatIsNotReleased()
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(indeterminateBloodTypingOutcomeDonation).build())
+        .withDonation(indeterminateBloodTypingOutcomeDonation)
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(indeterminateBloodTypingOutcomeDonation)).thenReturn(false);
     when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
     when(bloodTestsService.executeTests(indeterminateBloodTypingOutcomeDonation)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(indeterminateBloodTypingOutcomeDonation)).thenReturn(indeterminateBloodTypingOutcomeDonation);
+    when(donationRepository.update(indeterminateBloodTypingOutcomeDonation)).thenReturn(indeterminateBloodTypingOutcomeDonation);
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
@@ -401,16 +406,17 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withDonor(donor)
         .withBloodTestResults(bloodTestResults)
         .withPackType(aPackType().build())
+        .thatIsNotReleased()
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(noTypeDeterminedBloodTypingOutcomeDonation).build())
+        .withDonation(noTypeDeterminedBloodTypingOutcomeDonation)
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(false);
     when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
     when(bloodTestsService.executeTests(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(noTypeDeterminedBloodTypingOutcomeDonation);
+    when(donationRepository.update(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(noTypeDeterminedBloodTypingOutcomeDonation);
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
@@ -438,16 +444,17 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withDonor(donor)
         .withBloodTestResults(bloodTestResults)
         .withPackType(aPackType().build())
+        .thatIsNotReleased()
         .build();
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(noTypeDeterminedBloodTypingOutcomeDonation).build())
+        .withDonation(noTypeDeterminedBloodTypingOutcomeDonation)
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(false);
     when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
     when(bloodTestsService.executeTests(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(noTypeDeterminedBloodTypingOutcomeDonation);
+    when(donationRepository.update(noTypeDeterminedBloodTypingOutcomeDonation)).thenReturn(noTypeDeterminedBloodTypingOutcomeDonation);
 
     testBatchStatusChangeService.handleRelease(testBatch);
 
@@ -475,10 +482,11 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withBloodAbo("A") 
         .withBloodRh("+")
         .withBloodTestResults(bloodTestResults)
+        .thatIsNotReleased()
         .build();
    
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(donationThatContainsPlasma).build())
+        .withDonation(donationThatContainsPlasma)
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
@@ -487,7 +495,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.donationHasDiscrepancies(donationThatContainsPlasma)).thenReturn(false);
     when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
     when(bloodTestsService.executeTests(donationThatContainsPlasma)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(donationThatContainsPlasma)).thenReturn(donationThatContainsPlasma);
+    when(donationRepository.update(donationThatContainsPlasma)).thenReturn(donationThatContainsPlasma);
     
     // Test
     testBatchStatusChangeService.handleRelease(testBatch);
@@ -526,10 +534,11 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
         .withBloodAbo("A") 
         .withBloodRh("+")
         .withBloodTestResults(bloodTestResults)
+        .thatIsNotReleased()
         .build();
    
     TestBatch testBatch = aTestBatch()
-        .withDonationBatch(aDonationBatch().withDonation(donationThatContainsPlasma).build())
+        .withDonation(donationThatContainsPlasma)
         .build();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
@@ -538,7 +547,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
     when(donationConstraintChecker.donationHasDiscrepancies(donationThatContainsPlasma)).thenReturn(false);
     when(donorDeferralStatusCalculator.shouldDonorBeDeferred(bloodTestResults)).thenReturn(false);
     when(bloodTestsService.executeTests(donationThatContainsPlasma)).thenReturn(bloodTestingRuleResult);
-    when(donationRepository.updateDonation(donationThatContainsPlasma)).thenReturn(donationThatContainsPlasma);
+    when(donationRepository.update(donationThatContainsPlasma)).thenReturn(donationThatContainsPlasma);
     
     // Test
     testBatchStatusChangeService.handleRelease(testBatch);

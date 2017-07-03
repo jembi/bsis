@@ -136,6 +136,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000003")
         .withDonationDate(irrelevantStartDate)
+        .thatIsNotDeleted()
         .buildAndPersist(entityManager);
 
     // Expected
@@ -143,6 +144,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000004")
         .withDonationDate(irrelevantStartDate)
+        .thatIsNotDeleted()
         .buildAndPersist(entityManager);
 
     // Expected
@@ -150,24 +152,35 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000005")
         .withDonationDate(irrelevantStartDate)
+        .thatIsNotDeleted()
         .buildAndPersist(entityManager);
 
     // Excluded: din before range
     aDonation()
         .thatIsNotDeleted()
-        .withDonationIdentificationNumber("2000002")
+        .withDonationIdentificationNumber("1000003")
         .withDonationDate(irrelevantStartDate)
+        .thatIsNotDeleted()
         .buildAndPersist(entityManager);
 
     // Excluded: din after range
     aDonation()
         .thatIsNotDeleted()
+        .withDonationIdentificationNumber("3000003")
+        .withDonationDate(irrelevantStartDate)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+
+    // Excluded: donation deleted
+    aDonation()
+        .thatIsNotDeleted()
         .withDonationIdentificationNumber("2000006")
         .withDonationDate(irrelevantStartDate)
+        .thatIsDeleted()
         .buildAndPersist(entityManager);
 
     List<Donation> returnedDonations = donationRepository.findDonationsBetweenTwoDins(
-        "2000003", "2000005");
+        "2000003", "2000010");
 
     assertThat(returnedDonations.size(), is(3));
     assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation1)));
