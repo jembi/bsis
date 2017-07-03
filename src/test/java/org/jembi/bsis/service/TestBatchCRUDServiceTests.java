@@ -186,33 +186,6 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     verify(testBatchRepository).update(argThat(hasSameStateAsTestBatch(updated)));
   }
 
-  @Test
-  public void testUpdateTestBatch_shouldUpdateDonationBatch() {
-    UUID donationBatchId1 = UUID.randomUUID();
-    UUID donationBatchId2 = UUID.randomUUID();
-    UUID donationBatchId3 = UUID.randomUUID();
-    final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(donationBatchId1).build();
-    final DonationBatch donationBatch2 = new DonationBatchBuilder().withId(donationBatchId2).build();
-    final DonationBatch donationBatch3 = new DonationBatchBuilder().withId(donationBatchId3).build();
-
-    final TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withDonationBatch(donationBatch1)
-        .withDonationBatch(donationBatch2).withStatus(TestBatchStatus.OPEN).build();
-    TestBatch updatedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withDonationBatch(donationBatch2)
-        .withDonationBatch(donationBatch3).withStatus(TestBatchStatus.OPEN).build();
-
-    when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
-    when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
-    when(donationBatchRepository.updateDonationBatch(donationBatch1)).thenReturn(donationBatch1);
-    when(donationBatchRepository.updateDonationBatch(donationBatch2)).thenReturn(donationBatch2);
-    when(donationBatchRepository.updateDonationBatch(donationBatch3)).thenReturn(donationBatch3);
-
-    testBatchCRUDService.updateTestBatch(updatedTestBatch);
-
-    verify(donationBatchRepository).updateDonationBatch(argThat(is(donationBatch1)));
-    verify(donationBatchRepository).updateDonationBatch(argThat(is(donationBatch2)));
-    verify(donationBatchRepository).updateDonationBatch(argThat(is(donationBatch3)));
-  }
-
   @Test(expected = IllegalStateException.class)
   public void testUpdateTestBatch_shouldNotUpdateDonationBatch() {
     UUID donationBatchId = UUID.randomUUID();

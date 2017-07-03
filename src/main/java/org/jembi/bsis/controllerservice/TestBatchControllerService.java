@@ -20,8 +20,8 @@ import org.jembi.bsis.service.TestBatchCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.utils.PermissionUtils;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
-import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
+import org.jembi.bsis.viewmodel.TestBatchFullDonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,14 +89,11 @@ public class TestBatchControllerService {
     testBatchCRUDService.deleteTestBatch(id);
   }
 
-  public List<DonationFullViewModel> getDonations(UUID id, BloodTypingMatchStatus bloodTypingMatchStatus) {
+  public TestBatchFullDonationViewModel getTestBatchByIdAndBloodTypingMatchStatus(UUID id, BloodTypingMatchStatus bloodTypingMatchStatus) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-    return testBatchFactory.createDonationFullViewModels(testBatch, bloodTypingMatchStatus);
+    TestBatchFullDonationViewModel testBatchFullDonationViewModel = new TestBatchFullDonationViewModel();
+    testBatchFullDonationViewModel.setDonations(testBatchFactory.createDonationFullViewModels(testBatch, bloodTypingMatchStatus));
+    testBatchFullDonationViewModel.setTestBatchDate(testBatch.getTestBatchDate());
+    return testBatchFullDonationViewModel;
   }
-
-  public Date getTestBatchDate(UUID id) {
-    TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-    return testBatch.getTestBatchDate();
-  }
-
 }

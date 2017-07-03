@@ -13,9 +13,8 @@ import org.jembi.bsis.backingform.validator.TestBatchBackingFormValidator;
 import org.jembi.bsis.controllerservice.TestBatchControllerService;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.DonationFullViewModel;
+import org.jembi.bsis.viewmodel.TestBatchFullDonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -105,13 +104,10 @@ public class TestBatchController {
 
   @RequestMapping(value = "/{id}/donations", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TESTING_INFORMATION + "')")
-  public ResponseEntity<Map<String, Object>> getDonationsForTestBatch(@PathVariable UUID id,
+  public ResponseEntity<TestBatchFullDonationViewModel> getDonationsForTestBatch(@PathVariable UUID id,
       @RequestParam(value = "bloodTypingMatchStatus", required = false) BloodTypingMatchStatus bloodTypingMatchStatus) {
-    Date testBatchCreatedDate = testBatchControllerService.getTestBatchDate(id);
-    List<DonationFullViewModel> donationFullViewModels = testBatchControllerService.getDonations(id, bloodTypingMatchStatus);
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("donations", donationFullViewModels);
-    map.put("testBatchCreatedDate", CustomDateFormatter.format(testBatchCreatedDate));
-    return new ResponseEntity<>(map, HttpStatus.OK);
+    TestBatchFullDonationViewModel testBatchFullDonationViewModel = testBatchControllerService.getTestBatchByIdAndBloodTypingMatchStatus(id, bloodTypingMatchStatus);
+
+    return new ResponseEntity<>(testBatchFullDonationViewModel, HttpStatus.OK);
   }
 }

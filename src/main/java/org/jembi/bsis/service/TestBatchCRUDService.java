@@ -6,10 +6,8 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +26,6 @@ public class TestBatchCRUDService {
   @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
 
-  @Autowired
-  private DonationBatchRepository donationBatchRepository;
-
   public TestBatch updateTestBatch(TestBatch updatedTestBatch) {
 
     TestBatch existingTestBatch = testBatchRepository.findTestBatchById(updatedTestBatch.getId());
@@ -43,22 +38,6 @@ public class TestBatchCRUDService {
       existingTestBatch.setTestBatchDate(updatedTestBatch.getTestBatchDate());
     }
 
-    if (updatedTestBatch.getDonationBatches() != null) {
-      // unlink old donation batches
-      for (DonationBatch donationBatch : existingTestBatch.getDonationBatches()) {
-        if (!updatedTestBatch.getDonationBatches().contains(donationBatch)) {
-          donationBatch.setTestBatch(null);
-          donationBatchRepository.updateDonationBatch(donationBatch);
-        }
-      }
-      // link new donation batches
-      for (DonationBatch donationBatch : updatedTestBatch.getDonationBatches()) {
-        donationBatch.setTestBatch(existingTestBatch);
-        donationBatchRepository.updateDonationBatch(donationBatch);
-      }
-      existingTestBatch.setDonationBatches(updatedTestBatch.getDonationBatches());
-    }
-    
     existingTestBatch.setLocation(updatedTestBatch.getLocation());
 
     if (updatedTestBatch.getStatus() != null) {

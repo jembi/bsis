@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
-import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.DonationTestOutcomesReportViewModelBuilder;
 import org.jembi.bsis.helpers.builders.DonorBuilder;
@@ -499,7 +498,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   }
   
   @Test
-  public void testCreateDonationViewModels_shouldReturnOnlyAmbiguous() {
+  public void testCreateDonationFullViewModels_shouldReturnOnlyAmbiguous() {
 
     Donation d1 = DonationBuilder.aDonation().withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS).build();
     Donation d2 = DonationBuilder.aDonation().withBloodTypingMatchStatus(BloodTypingMatchStatus.RESOLVED).build();
@@ -511,16 +510,12 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationFullViewModel d3FullViewModel =
         aDonationFullViewModel().withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS).build();
 
-    ArrayList<Donation> donations1 = new ArrayList<Donation>();
-    donations1.add(d1);
-    donations1.add(d2);
-    ArrayList<Donation> donations2 = new ArrayList<Donation>();
-    donations2.add(d3);
-    donations2.add(d4);
-    DonationBatch donationBatch1 = DonationBatchBuilder.aDonationBatch().withDonations(donations1).build();
-    DonationBatch donationBatch2 = DonationBatchBuilder.aDonationBatch().withDonations(donations2).build();
-    TestBatch testBatch =
-        TestBatchBuilder.aTestBatch().withDonationBatch(donationBatch1).withDonationBatch(donationBatch2).build();
+    TestBatch testBatch = TestBatchBuilder.aTestBatch()
+        .withDonation(d1)
+        .withDonation(d2)
+        .withDonation(d3)
+        .withDonation(d4)
+        .build();
     
     when(donationFactory.createDonationFullViewModelWithoutPermissions(d1)).thenReturn(d1FullViewModel);
     when(donationFactory.createDonationFullViewModelWithoutPermissions(d3)).thenReturn(d3FullViewModel);

@@ -79,6 +79,14 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     return this;
   }
 
+  public TestBatchBuilder withDonation(Donation donation) {
+    if (donations == null) {
+      donations = new HashSet<>();
+    }
+    donations.add(donation);
+    return this;
+  }
+
   @Override
   public TestBatch build() {
     TestBatch testBatch = new TestBatch();
