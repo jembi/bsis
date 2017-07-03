@@ -1,21 +1,28 @@
 package org.jembi.bsis.repository;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
+import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
+import org.jembi.bsis.util.RandomTestDate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +34,6 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Autowired
   TestBatchRepository testBatchRepository;
-
-  @Autowired
-  DonationBatchRepository donationBatchRepository;
 
   @Autowired
   LocationRepository locationRepository;
@@ -118,7 +122,9 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
     UUID testBatchId = UUID.fromString("640eb339-c815-48c6-81d7-0f225d3f2701");
     testBatchRepository.deleteTestBatch(testBatchId);
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-    Assert.assertTrue("TestBatch is deleted", testBatch.getIsDeleted());
+    assertThat(testBatch.getIsDeleted(), is(true));
+    Donation donation = entityManager.find(Donation.class, UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1"));
+    assertThat(donation.getTestBatch(), nullValue());
   }
 
   @Test
@@ -133,24 +139,35 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
 
   @Test
   public void testSaveTestBatch() throws Exception {
-    TestBatch testBatch = new TestBatch();
-    UUID donationBatchId = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870683");
-    Set<DonationBatch> donationBatches = new HashSet<>();
-    DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
-    donationBatches.add(donationBatch);
-    testBatch.setDonationBatches(donationBatches);
+    Donation donation = aDonation()
+        .withDonationDate(new RandomTestDate())
+        .buildAndPersist(entityManager); // create a new donation
     UUID locationId = UUID.fromString("55321456-eeee-1234-b5b1-123412348811");
     Location location = locationRepository.getLocation(locationId);
-    testBatch.setLocation(location);
-    testBatch.setTestBatchDate(donationBatch.getDonationBatchDate());
+    TestBatch testBatch = aTestBatch()
+        .withLocation(location)
+        .withTestBatchDate(donation.getDonationDate())
+        .withDonation(donation)
+        .build();
+
     TestBatch savedTestBatch = testBatchRepository.saveTestBatch(testBatch, "123456");
-    Assert.assertNotNull("Saved TestBatch has an id", savedTestBatch.getId());
-    TestBatch retrievedTestBatch = testBatchRepository.findTestBatchById(savedTestBatch.getId());
-    Assert.assertNotNull("Saved TestBatch is found", retrievedTestBatch);
-    Assert.assertEquals("TestBatch status is correct", TestBatchStatus.OPEN, retrievedTestBatch.getStatus());
-    Assert.assertEquals("TestBatch batchNumber is correct", "123456", retrievedTestBatch.getBatchNumber());
-    DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
-    Assert.assertNotNull("DonationBatch was linked to TestBatch", updatedDonationBatch.getTestBatch());
+
+    assertThat(savedTestBatch.getId(), notNullValue());
+
+    TestBatch expectedTestBatch = aTestBatch()
+        .withId(savedTestBatch.getId())
+        .withLocation(location)
+        .withTestBatchDate(donation.getDonationDate())
+        .withBatchNumber("123456")
+        .withStatus(TestBatchStatus.OPEN)
+        .withDonation(donation)
+        .build();
+    
+    TestBatch retrievedTestBatch = entityManager.find(TestBatch.class, savedTestBatch.getId());
+    Donation retrievedDonation = entityManager.find(Donation.class, donation.getId());
+    
+    assertThat(retrievedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
+    assertThat(retrievedDonation.getTestBatch(), notNullValue());
   }
 
 }
