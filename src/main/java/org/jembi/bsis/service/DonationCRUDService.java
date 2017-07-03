@@ -203,8 +203,8 @@ public class DonationCRUDService {
         Component component = componentCRUDService.createInitialComponent(existingDonation);
         existingDonation.getComponents().add(component);
         // ensure that the Donation is released, so that the new initial component is made available (or not)
-        releaseDonation = existingDonation.getDonationBatch().getTestBatch() != null
-                && TestBatchStatus.hasBeenReleased(existingDonation.getDonationBatch().getTestBatch().getStatus());
+        releaseDonation = existingDonation.getTestBatch() != null
+                && TestBatchStatus.hasBeenReleased(existingDonation.getTestBatch().getStatus());
       }
       
       // If the new pack type doesn't produce test samples, delete test outcomes and clear statuses
@@ -272,7 +272,7 @@ public class DonationCRUDService {
 
     donation = donationRepository.update(donation);
 
-    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
+    if (donation.getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
       testBatchStatusChangeService.handleRelease(donation);
     }
   }

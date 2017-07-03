@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.TestBatchConstraintChecker;
@@ -46,7 +44,6 @@ public class TestBatchFactory {
     testBatch.setId(backingForm.getId());
     testBatch.setStatus(backingForm.getStatus());
     testBatch.setTestBatchDate(backingForm.getTestBatchDate());
-    testBatch.setDonationBatches(new HashSet<DonationBatch>());
     testBatch.setLocation(locationRepository.getLocation(backingForm.getLocation().getId()));
     return testBatch;
   }
@@ -182,19 +179,16 @@ public class TestBatchFactory {
   public List<DonationTestOutcomesReportViewModel> createDonationTestOutcomesReportViewModels(TestBatch testBatch) {
 
     List<DonationTestOutcomesReportViewModel> donationTestOutcomesReportViewModels = new ArrayList<>();
-
-    for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-      for (Donation donation : donationBatch.getDonations()) {
-        DonationTestOutcomesReportViewModel donationTestOutcomesReportViewModel =
-            new DonationTestOutcomesReportViewModel();
-        donationTestOutcomesReportViewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
-        donationTestOutcomesReportViewModel.setTtiStatus(donation.getTTIStatus());
-        donationTestOutcomesReportViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
-        donationTestOutcomesReportViewModel.setBloodTestOutcomes(donation.getBloodTestResults());
-        donationTestOutcomesReportViewModel.setPreviousDonationAboRhOutcome(getPreviousDonationAboRhOutcome(donation));
-        donationTestOutcomesReportViewModel.setReleased(donation.isReleased());
-        donationTestOutcomesReportViewModels.add(donationTestOutcomesReportViewModel);
-      }
+    for (Donation donation : testBatch.getDonations()) {
+      DonationTestOutcomesReportViewModel donationTestOutcomesReportViewModel =
+          new DonationTestOutcomesReportViewModel();
+      donationTestOutcomesReportViewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
+      donationTestOutcomesReportViewModel.setTtiStatus(donation.getTTIStatus());
+      donationTestOutcomesReportViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
+      donationTestOutcomesReportViewModel.setBloodTestOutcomes(donation.getBloodTestResults());
+      donationTestOutcomesReportViewModel.setPreviousDonationAboRhOutcome(getPreviousDonationAboRhOutcome(donation));
+      donationTestOutcomesReportViewModel.setReleased(donation.isReleased());
+      donationTestOutcomesReportViewModels.add(donationTestOutcomesReportViewModel);
     }
     return donationTestOutcomesReportViewModels;
 

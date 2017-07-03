@@ -728,13 +728,15 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBloodAbo("A")
         .withBloodRh("POS")
         .build();
-    DonationBatch donationBatch = aDonationBatch().withTestBatch(aReleasedTestBatch().build()).build();
+    TestBatch testBatch = aReleasedTestBatch().build();
+    DonationBatch donationBatch = aDonationBatch().build();
     Donation donation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
         .withBloodAbo("B")
         .withBloodRh("NEG")
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .withPackType(packType)
         .build();
     Donation expectedDonation = aDonation()
@@ -743,6 +745,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBloodAbo("A")
         .withBloodRh("POS")
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .withPackType(packType)
         .build();
     
@@ -763,18 +766,21 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withDonationId(IRRELEVANT_DONATION_ID)
         .withStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .build();
-    DonationBatch donationBatch = aDonationBatch().withTestBatch(aTestBatch().build()).build();
+    DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).build();
     PackType packType = aPackType().withId(IRRELEVANT_PACK_TYPE_ID).build();
     Donation donation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.AMBIGUOUS)
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .withPackType(packType)
         .build();
     Donation expectedDonation = aDonation()
         .withId(IRRELEVANT_DONATION_ID)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED)
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .withPackType(packType)
         .build();
     
@@ -990,8 +996,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donor donor = aDonor().withId(irrelevantDonorId).build();
     Component initialComponent = ComponentBuilder.aComponent().build();
     DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
-    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withDonationBatch(donationBatch).withStatus(TestBatchStatus.RELEASED).build();
-    donationBatch.setTestBatch(testBatch);
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
 
     UUID oldPackTypeId = UUID.randomUUID();
     PackType oldPackType = aPackType()
@@ -1014,6 +1019,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
 
     Donation updatedDonation = aDonation()
@@ -1023,6 +1029,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
 
     Donation expectedDonation = aDonation()
@@ -1033,6 +1040,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedEndTime(irrelevantBleedEndTime)
         .withComponents(Arrays.asList(initialComponent))
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
 
     // Exercise SUT
@@ -1061,8 +1069,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donor donor = aDonor().withId(irrelevantDonorId).build();
     Component initialComponent = ComponentBuilder.aComponent().build();
     DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
-    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withDonationBatch(donationBatch).withStatus(TestBatchStatus.CLOSED).build();
-    donationBatch.setTestBatch(testBatch);
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(TestBatchStatus.CLOSED).build();
 
     UUID oldPackTypeId = UUID.randomUUID();
     PackType oldPackType = aPackType()
@@ -1085,6 +1092,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
 
     Donation updatedDonation = aDonation()
@@ -1094,6 +1102,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
 
     Donation expectedDonation = aDonation()
@@ -1104,6 +1113,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedEndTime(irrelevantBleedEndTime)
         .withComponents(Arrays.asList(initialComponent))
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
 
     // Exercise SUT
@@ -1200,14 +1210,11 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     UUID irrelevantDonorId = UUID.randomUUID();
     Donor donor = aDonor().withId(irrelevantDonorId).build();
     Component initialComponent = ComponentBuilder.aComponent().build();
-
     DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withDonationBatch(donationBatch)
         .withStatus(TestBatchStatus.OPEN)
         .build();
-    donationBatch.setTestBatch(testBatch);
 
     UUID oldPackTypeId = UUID.randomUUID();
     PackType oldPackType = aPackType()
@@ -1230,6 +1237,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
 
     Donation updatedDonation = aDonation()
@@ -1239,6 +1247,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedStartTime(irrelevantBleedStartTime)
         .withBleedEndTime(irrelevantBleedEndTime)
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
 
     Donation expectedDonation = aDonation()
@@ -1249,6 +1258,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .withBleedEndTime(irrelevantBleedEndTime)
         .withComponents(Arrays.asList(initialComponent))
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
 
     // Exercise SUT
