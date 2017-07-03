@@ -95,8 +95,8 @@ public class TestBatchCRUDService {
     if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
       throw new IllegalStateException("Only donations with no test results can be added");
     }
-    
-    testBatch.setDonations(new HashSet<Donation>(donations));
+
+    testBatch.getDonations().addAll(new HashSet<Donation>(donations));
     testBatchRepository.save(testBatch);
   }
 }

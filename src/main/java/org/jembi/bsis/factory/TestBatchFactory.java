@@ -108,11 +108,9 @@ public class TestBatchFactory {
   public List<DonationFullViewModel> createDonationFullViewModels(TestBatch testBatch,
       BloodTypingMatchStatus bloodTypingMatchStatus) {
     List<DonationFullViewModel> donationFullViewModels = new ArrayList<>();
-    for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-      for (Donation donation : donationBatch.getDonations()) {
-        if (bloodTypingMatchStatus == null || donation.getBloodTypingMatchStatus().equals(bloodTypingMatchStatus)) {
-          donationFullViewModels.add(donationFactory.createDonationFullViewModelWithoutPermissions(donation));
-        }
+    for (Donation donation : testBatch.getDonations()) {
+      if (bloodTypingMatchStatus == null || donation.getBloodTypingMatchStatus().equals(bloodTypingMatchStatus)) {
+        donationFullViewModels.add(donationFactory.createDonationFullViewModelWithoutPermissions(donation));
       }
     }
     return donationFullViewModels;
