@@ -19,7 +19,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
   private UUID id;
   private TestBatchStatus status;
   private Set<DonationBatch> donationBatches;
-  private Set<Donation> donations = Collections.EMPTY_SET;
+  private Set<Donation> donations;
   private String batchNumber;
   private Date testBatchDate;
   private Date lastUpdatedDate;

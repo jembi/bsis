@@ -488,6 +488,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLocation(location)
         .withDonationBatches(new HashSet<DonationBatch>())
+        .withDonations(new HashSet<Donation>())
         .build();
     
     when(locationRepository.getLocation(locationId)).thenReturn(location);
