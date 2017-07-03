@@ -16,8 +16,6 @@ public class TestBatchBackingForm {
   private UUID id;
   private TestBatchStatus status;
   private Date testBatchDate;
-  private Date lastUpdated;
-
   private LocationBackingForm location;
 
   public TestBatchBackingForm() {
@@ -39,22 +37,25 @@ public class TestBatchBackingForm {
     this.status = status;
   }
 
-  @JsonIgnore
-  public void setDonationBatches(List<DonationBatchViewModel> donationBatches) {
-    // Ignore
-  }
-
-  @JsonIgnore
-  public Date getLastUpdated() {
-    return lastUpdated;
-  }
-
   public void setLocation(LocationBackingForm location) {
     this.location = location;
   }
   
   public LocationBackingForm getLocation() {
     return location;
+  }
+
+  public Date getTestBatchDate() {
+    return testBatchDate;
+  }
+
+  public void setTestBatchDate(Date testBatchDate) {
+    this.testBatchDate = testBatchDate;
+  }
+
+  @JsonIgnore
+  public void setDonations(List<DonationFullViewModel> donations) {
+    // Ignore
   }
 
   @JsonIgnore
@@ -87,16 +88,8 @@ public class TestBatchBackingForm {
     // Ignore
   }
 
-  public Date getTestBatchDate() {
-    return testBatchDate;
-  }
-
-  public void setTestBatchDate(Date testBatchDate) {
-    this.testBatchDate = testBatchDate;
-  }
-
   @JsonIgnore
-  public void setDonations(List<DonationFullViewModel> donations) {
+  public void setDonationBatches(List<DonationBatchViewModel> donationBatches) {
     // Ignore
   }
 }
