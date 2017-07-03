@@ -3,7 +3,6 @@ package org.jembi.bsis.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
-import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
@@ -15,7 +14,6 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.service.BloodTestsService;
@@ -45,17 +43,6 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
     CanReleaseResult result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
 
     assertThat(result.canRelease(), is(false));
-  }
-
-  @Test
-  public void testCanReleaseTestBatchWithNullDonationBatch_shouldReturnTrue() {
-
-    TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).withDonationBatches(null).build();
-
-    CanReleaseResult result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
-
-    assertThat(result.canRelease(), is(true));
-    assertThat(result.getReadyCount(), is(0));
   }
 
   @Test
@@ -157,37 +144,10 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanCloseTestBatchWithNullDonationBatches_shouldReturnTrue() {
-
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatches(null)
-        .build();
-
-    boolean result = testBatchConstraintChecker.canCloseTestBatch(testBatch);
-
-    assertThat(result, is(true));
-  }
-
-  @Test
-  public void testCanCloseTestBatchWithNoDonationBatches_shouldReturnTrue() {
-
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatches(Collections.<DonationBatch>emptySet())
-        .build();
-
-    boolean result = testBatchConstraintChecker.canCloseTestBatch(testBatch);
-
-    assertThat(result, is(true));
-  }
-
-  @Test
   public void testCanCloseTestBatchWithNoDonations_shouldReturnTrue() {
 
     TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatch(aDonationBatch().withDonations(Collections.<Donation>emptyList()).build())
+        .withStatus(TestBatchStatus.RELEASED).withDonations(Collections.<Donation>emptySet())
         .build();
 
     boolean result = testBatchConstraintChecker.canCloseTestBatch(testBatch);
@@ -201,7 +161,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
     Donation donationWithoutDiscrepancies = aDonation().build();
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatch(aDonationBatch().withDonation(donationWithoutDiscrepancies).build())
+        .withDonations(new HashSet<Donation>(Arrays.asList(donationWithoutDiscrepancies)))
         .build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(donationWithoutDiscrepancies)).thenReturn(false);
@@ -229,8 +189,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   public void testCanDeleteTestBatchWithNoTestResults_shouldReturnTrue() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatch(aDonationBatch().withDonation(donation).build())
+        .withStatus(TestBatchStatus.RELEASED).withDonations(new HashSet<Donation>(Arrays.asList(donation)))
         .build();
 
     when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
@@ -254,7 +213,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanAddOrRemoveDonationBatchesWithTestResults_shouldReturnFalse() {
+  public void testCanAddOrRemoveDonationsWithTestResults_shouldReturnFalse() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.RELEASED)
         .withDonations(new HashSet<Donation>(Arrays.asList(donation))).build();
@@ -271,7 +230,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.CLOSED)
-        .withDonationBatch(aDonationBatch().withDonation(donation).build())
+        .withDonations(new HashSet<Donation>(Arrays.asList(donation)))
         .build();
 
     when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
@@ -282,7 +241,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanAddOrRemoveDonationBatchesWithNullTestResults_shouldReturnTrue() {
+  public void testCanAddOrRemoveDonationsWithNullTestResults_shouldReturnTrue() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.RELEASED)
@@ -296,11 +255,11 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanAddOrRemoveDonationBatchesWithoutTestResults_shouldReturnTrue() {
+  public void testCanAddOrRemoveDonationsWithoutTestResults_shouldReturnTrue() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatches(new HashSet<DonationBatch>())
+        .withDonations(new HashSet<Donation>())
         .build();
 
     when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
@@ -311,7 +270,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanReopenClosedDonationBatches() {
+  public void testCanReopenClosedTestBatches() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.CLOSED)
@@ -325,7 +284,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanReopenDonationBatches() {
+  public void testCanReopenTestBatches() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.RELEASED)
@@ -339,7 +298,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanEditDonationBatches() {
+  public void testCanEditReleasedTestBatches() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.RELEASED)
@@ -353,7 +312,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanEditClosedDonationBatches() {
+  public void testCanEditClosedTestBatches() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.CLOSED)
