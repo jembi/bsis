@@ -65,10 +65,8 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
         .withPackType(aPackType().withTestSampleProduced(true).build())
         .build();
 
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.OPEN)
-        .withDonationBatches(new HashSet<>(Arrays.asList(aDonationBatch().withDonation(donation).build())))
-        .build();
+    TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN)
+        .withDonations(new HashSet<Donation>(Arrays.asList(donation))).build();
 
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
@@ -99,13 +97,11 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.OPEN)
-        .withDonationBatch(aDonationBatch()
-            .withDonations(Arrays.asList(
+            .withDonations(new HashSet<Donation>(Arrays.asList(
                 donationWithDiscrepancies,
                 donationWithoutDiscrepancies,
                 donationWithoutTestSample
-            ))
-            .build())
+            )))
         .build();
 
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
@@ -136,10 +132,8 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
         .withPackType(aPackType().withTestSampleProduced(true).build())
         .build();
 
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.OPEN)
-        .withDonationBatch(aDonationBatch().withDonation(donationWithOutstandingOutcomes).build())
-        .build();
+    TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN)
+        .withDonations(new HashSet<Donation>(Arrays.asList(donationWithOutstandingOutcomes))).build();
 
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
 
@@ -221,10 +215,8 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   public void testCanCloseTestBatchWithDonationWithDiscrepancies_shouldReturnFalse() {
 
     Donation donationWithDiscrepancies = aDonation().build();
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatch(aDonationBatch().withDonation(donationWithDiscrepancies).build())
-        .build();
+    TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.RELEASED)
+        .withDonations(new HashSet<Donation>(Arrays.asList(donationWithDiscrepancies))).build();
 
     when(donationConstraintChecker.donationHasDiscrepancies(donationWithDiscrepancies)).thenReturn(true);
 
@@ -251,10 +243,8 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanDeleteTestBatchWithTestResults_shouldReturnFalse() {
     Donation donation = aDonation().build();
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatch(aDonationBatch().withDonation(donation).build())
-        .build();
+    TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.RELEASED)
+        .withDonations(new HashSet<Donation>(Arrays.asList(donation))).build();
 
     when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(true);
 
@@ -266,10 +256,8 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   @Test
   public void testCanAddOrRemoveDonationBatchesWithTestResults_shouldReturnFalse() {
     Donation donation = aDonation().build();
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.RELEASED)
-        .withDonationBatch(aDonationBatch().withDonation(donation).build())
-        .build();
+    TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.RELEASED)
+        .withDonations(new HashSet<Donation>(Arrays.asList(donation))).build();
 
     when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(true);
 
