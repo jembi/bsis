@@ -194,6 +194,7 @@ public class DonationRepository {
     return em.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_DONATIONS_BETWEEN_TWO_DINS, Donation.class)
         .setParameter("fromDIN", fromDIN)
         .setParameter("toDIN", toDIN)
+        .setParameter("deleted", false)
         .getResultList();
   }
 }
