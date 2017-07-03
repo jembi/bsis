@@ -1,7 +1,7 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
+import static org.hamcrest.Matchers.hasItem;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationFullViewModelBuilder.aDonationFullViewModel;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
@@ -17,7 +17,7 @@ import static org.jembi.bsis.helpers.matchers.TestBatchViewModelMatcher.hasSameS
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -37,7 +37,6 @@ import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
@@ -53,7 +52,6 @@ import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
-import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -394,42 +392,78 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCreateTestBatchOutcomesReport_shouldReturnCorrectPreviousDonationAboRh() {
+  public void testCreateTestBatchOutcomesReport_shouldReturnCorrectPreviousDonationAboRh() throws Exception {
       
     Donor donor = DonorBuilder.aDonor().build();
     
-    DateTime date1 = new DateTime();
-    DateTime date2 = date1.plusDays(2);
-    DateTime date3 = date1.plusDays(3);
-    DateTime date4 = date1.plusDays(4);
+    Donation donation1 = aDonation()
+        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2017-01-01"))
+        .withDonor(donor)
+        .withBloodAbo("A1")
+        .withBloodRh("B1")
+        .withDonationIdentificationNumber("A1")
+        .build();
+    Donation donation2 = aDonation()
+        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2017-01-03"))
+        .withDonor(donor)
+        .withBloodAbo("A2")
+        .withBloodRh("B2")
+        .withDonationIdentificationNumber("A2")
+        .build();
+    Donation donation3 = aDonation()
+        .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2017-01-04"))
+        .withDonor(donor)
+        .withBloodAbo("A3")
+        .withBloodRh("B3")
+        .withDonationIdentificationNumber("A3")
+        .build();
+    Donation donation4 = aDonation().
+        withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2017-01-05"))
+        .withDonor(donor)
+        .withBloodAbo("A4")
+        .withBloodRh("B4")
+        .withDonationIdentificationNumber("A4")
+        .build();
     
-    Donation donation1 = aDonation().withDonationDate(date1.toDate()).withDonor(donor).withBloodAbo("A1")
-        .withBloodRh("B1").withDonationIdentificationNumber("A1").build();
-    Donation donation2 = aDonation().withDonationDate(date2.toDate()).withDonor(donor).withBloodAbo("A2")
-        .withBloodRh("B2").withDonationIdentificationNumber("A2").build();
-    Donation donation3 = aDonation().withDonationDate(date3.toDate()).withDonor(donor).withBloodAbo("A3")
-        .withBloodRh("B3").withDonationIdentificationNumber("A3").build();
-    Donation donation4 = aDonation().withDonationDate(date4.toDate()).withDonor(donor).withBloodAbo("A4")
-        .withBloodRh("B4").withDonationIdentificationNumber("A4").build();
-    List<Donation> donations = new ArrayList<>();
-    donations.add(donation1);
-    donations.add(donation2);
-    donations.add(donation3);
-    donations.add(donation4);
+    donor.setDonations(Arrays.asList(donation1, donation2, donation3, donation4));
     
-    donor.setDonations(donations);
+    TestBatch testBatch = aTestBatch()
+        .withDonation(donation1)
+        .withDonation(donation2)
+        .withDonation(donation3)
+        .withDonation(donation4)
+        .build();
 
-    DonationBatch donationBatch = aDonationBatch().withDonations(donations).build();
-    
-    TestBatch testBatch = aTestBatch().withDonationBatch(donationBatch).build();
-    
-    List<DonationTestOutcomesReportViewModel> report =
-        testBatchFactory.createDonationTestOutcomesReportViewModels(testBatch);
+    DonationTestOutcomesReportViewModel expectedTestOutcomeViewModel1 = DonationTestOutcomesReportViewModelBuilder.aDonationTestOutcomesReportViewModel()
+        .withDonationIdentificationNumber("A1")
+        .withPreviousDonationAboRhOutcome("")
+        .withBloodTestOutcomes(new HashMap<String, String>())
+        .build();
 
-    assertThat("Donation 1 has no previous abo/rh", report.get(0).getPreviousDonationAboRhOutcome().isEmpty());
-    assertThat("Donation 2 has correct previous abo/rh", report.get(1).getPreviousDonationAboRhOutcome().equals("A1B1"));
-    assertThat("Donation 3 has correct previous abo/rh", report.get(2).getPreviousDonationAboRhOutcome().equals("A2B2"));
-    assertThat("Donation 4 has correct previous abo/rh", report.get(3).getPreviousDonationAboRhOutcome().equals("A3B3"));
+    DonationTestOutcomesReportViewModel expectedTestOutcomeViewModel2 = DonationTestOutcomesReportViewModelBuilder.aDonationTestOutcomesReportViewModel()
+        .withDonationIdentificationNumber("A2")
+        .withPreviousDonationAboRhOutcome("A1B1")
+        .withBloodTestOutcomes(new HashMap<String, String>())
+        .build();
+
+    DonationTestOutcomesReportViewModel expectedTestOutcomeViewModel3 = DonationTestOutcomesReportViewModelBuilder.aDonationTestOutcomesReportViewModel()
+        .withDonationIdentificationNumber("A3")
+        .withPreviousDonationAboRhOutcome("A2B2")
+        .withBloodTestOutcomes(new HashMap<String, String>())
+        .build();
+
+    DonationTestOutcomesReportViewModel expectedTestOutcomeViewModel4 = DonationTestOutcomesReportViewModelBuilder.aDonationTestOutcomesReportViewModel()
+        .withDonationIdentificationNumber("A4")
+        .withPreviousDonationAboRhOutcome("A3B3")
+        .withBloodTestOutcomes(new HashMap<String, String>())
+        .build();
+    
+    List<DonationTestOutcomesReportViewModel> report = testBatchFactory.createDonationTestOutcomesReportViewModels(testBatch);
+
+    assertThat(report, hasItem(hasSameStateAsDonationTestOutcomesReportViewModel(expectedTestOutcomeViewModel1)));
+    assertThat(report, hasItem(hasSameStateAsDonationTestOutcomesReportViewModel(expectedTestOutcomeViewModel2)));
+    assertThat(report, hasItem(hasSameStateAsDonationTestOutcomesReportViewModel(expectedTestOutcomeViewModel3)));
+    assertThat(report, hasItem(hasSameStateAsDonationTestOutcomesReportViewModel(expectedTestOutcomeViewModel4)));
   }
   
   @Test
@@ -446,14 +480,12 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withTTIStatus(TTIStatus.NOT_DONE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .build();
-    List<Donation> donations = new ArrayList<>();
-    donations.add(donation1);
     
-    donor.setDonations(donations);
-
-    DonationBatch donationBatch = aDonationBatch().withDonations(donations).build();
+    donor.setDonations(Arrays.asList(donation1));
     
-    TestBatch testBatch = aTestBatch().withDonationBatch(donationBatch).build();
+    TestBatch testBatch = aTestBatch()
+        .withDonation(donation1)
+        .build();
     
     DonationTestOutcomesReportViewModel expectedViewModel =
         DonationTestOutcomesReportViewModelBuilder
@@ -487,7 +519,6 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withStatus(TestBatchStatus.OPEN)
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLocation(location)
-        .withDonationBatches(new HashSet<DonationBatch>())
         .withDonations(new HashSet<Donation>())
         .build();
     
