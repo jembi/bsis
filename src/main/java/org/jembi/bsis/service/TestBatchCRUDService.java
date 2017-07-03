@@ -89,7 +89,7 @@ public class TestBatchCRUDService {
     return testBatch;
   }
   
-  public void addDonationsToTestBatch(UUID testBatchId, List<Donation> donations) {
+  public TestBatch addDonationsToTestBatch(UUID testBatchId, List<Donation> donations) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
 
     if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
@@ -98,5 +98,6 @@ public class TestBatchCRUDService {
 
     testBatch.getDonations().addAll(new HashSet<Donation>(donations));
     testBatchRepository.save(testBatch);
+    return testBatch;
   }
 }

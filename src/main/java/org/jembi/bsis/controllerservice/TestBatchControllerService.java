@@ -5,14 +5,17 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
+import org.jembi.bsis.backingform.TestBatchDonationRangeBackingForm;
 import org.jembi.bsis.factory.DonationBatchViewModelFactory;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationBatchRepository;
+import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.SequenceNumberRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
@@ -52,6 +55,9 @@ public class TestBatchControllerService {
 
   @Autowired
   private DonationBatchViewModelFactory donationBatchViewModelFactory;
+  
+  @Autowired
+  private DonationRepository donationRepository;
 
   public TestBatchFullViewModel updateTestBatch(TestBatchBackingForm backingForm) {
     TestBatch testBatch = testBatchFactory.createEntity(backingForm);
@@ -95,5 +101,12 @@ public class TestBatchControllerService {
     testBatchFullDonationViewModel.setDonations(testBatchFactory.createDonationFullViewModels(testBatch, bloodTypingMatchStatus));
     testBatchFullDonationViewModel.setTestBatchDate(testBatch.getTestBatchDate());
     return testBatchFullDonationViewModel;
+  }
+  
+  public TestBatchFullViewModel addDonationsToTestBatch(TestBatchDonationRangeBackingForm form) {
+    List<Donation> donations = donationRepository.findDonationsBetweenTwoDins(form.getFromDIN(), form.getToDIN());
+    TestBatch testbatch = testBatchCRUDService.addDonationsToTestBatch(form.getTestBatchId(), donations);
+    boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
+    return testBatchFactory.createTestBatchFullViewModel(testbatch, isTestingSupervisor);
   }
 }
