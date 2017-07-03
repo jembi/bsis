@@ -32,14 +32,6 @@ public class TestBatchRepository extends AbstractRepository<TestBatch> {
     return testBatch;
   }
 
-  public List<TestBatch> getAllTestBatch() {
-    TypedQuery<TestBatch> query = entityManager.createQuery(
-        "SELECT t FROM TestBatch t WHERE t.isDeleted= :isDeleted",
-        TestBatch.class);
-    query.setParameter("isDeleted", false);
-    return query.getResultList();
-  }
-
   public TestBatch findTestBatchById(UUID id) throws NoResultException {
     TypedQuery<TestBatch> query = entityManager.createQuery(
         "SELECT t FROM TestBatch t WHERE t.id = :id", TestBatch.class);

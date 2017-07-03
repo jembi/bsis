@@ -45,13 +45,6 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
   }
 
   @Test
-  public void testGetAllTestBatches() throws Exception {
-    List<TestBatch> all = testBatchRepository.getAllTestBatch();
-    Assert.assertNotNull("There are TestBatches defined", all);
-    Assert.assertEquals("There are 2 TestBatches", 2, all.size());
-  }
-
-  @Test
   public void testFindTestBatchById() throws Exception {
     UUID testBatchId = UUID.fromString("640eb339-c815-48c6-81d7-0f225d3f2701");
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
