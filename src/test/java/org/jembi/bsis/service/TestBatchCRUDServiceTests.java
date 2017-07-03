@@ -133,7 +133,6 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     testBatchCRUDService.updateTestBatch(updatedTestBatch);
   }
   
- 
   @Test(expected = IllegalStateException.class)
   public void testUpdateTestBatchStatusWithTestBatchThatCannotBeReopend_shouldThrow() {
     TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
