@@ -965,7 +965,7 @@ public class DataImportService {
         donation.setBloodTypingStatus(BloodTypingStatus.COMPLETE);
       }
 
-      donationRepository.saveDonation(donation);
+      donationRepository.save(donation);
 
       // Periodically flush data
       if (donationCount % 50 == 0) {

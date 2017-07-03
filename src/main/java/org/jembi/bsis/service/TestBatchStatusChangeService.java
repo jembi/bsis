@@ -79,7 +79,7 @@ public class TestBatchStatusChangeService {
     // Execute tests and update the donation with the results
     BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
     bloodTestsService.updateDonationWithTestResults(donation, bloodTestingRuleResult);
-    donation = donationRepository.updateDonation(donation);
+    donation = donationRepository.update(donation);
 
     // Handle the situation where the Donors and/or Donation are unsafe
     if (donation.getTTIStatus() == TTIStatus.UNSAFE) {

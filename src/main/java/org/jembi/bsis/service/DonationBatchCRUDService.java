@@ -59,7 +59,7 @@ public class DonationBatchCRUDService {
               component.getCreatedOn()));
         }
       }
-      donationRepository.updateDonation(donation);
+      donationRepository.update(donation);
     }
 
     // update the updateable fields
