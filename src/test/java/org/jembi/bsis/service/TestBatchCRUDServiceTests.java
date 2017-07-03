@@ -2,9 +2,9 @@ package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
-import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation; 
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
+import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
@@ -21,9 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
-import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
@@ -120,7 +118,22 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
 
     assertThat(testBatch.getStatus(), is(TestBatchStatus.OPEN));
   }
+  
+  @Test(expected = IllegalStateException.class)
+  public void testUpdateTestBatch_shouldNotUpdateDonationBatch() {
+    final TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID)
+        .withStatus(TestBatchStatus.OPEN).build();
 
+    TestBatch updatedTestBatch = aTestBatch().withId(TEST_BATCH_ID)
+        .withStatus(TestBatchStatus.OPEN).build();
+
+    when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+    when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
+
+    testBatchCRUDService.updateTestBatch(updatedTestBatch);
+  }
+  
+ 
   @Test(expected = IllegalStateException.class)
   public void testUpdateTestBatchStatusWithTestBatchThatCannotBeReopend_shouldThrow() {
     TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(TestBatchStatus.RELEASED).build();
@@ -184,25 +197,6 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     testBatchCRUDService.updateTestBatch(updated);
 
     verify(testBatchRepository).update(argThat(hasSameStateAsTestBatch(updated)));
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void testUpdateTestBatch_shouldNotUpdateDonationBatch() {
-    UUID donationBatchId = UUID.randomUUID();
-    final DonationBatch donationBatch1 = new DonationBatchBuilder().withId(donationBatchId).build();
-
-    final TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withDonationBatch(donationBatch1)
-        .withDonationBatch(donationBatch1).withStatus(TestBatchStatus.OPEN).build();
-
-    TestBatch updatedTestBatch = aTestBatch().withId(TEST_BATCH_ID).withDonationBatch(donationBatch1)
-        .withDonationBatch(donationBatch1).withStatus(TestBatchStatus.OPEN).build();
-
-    when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
-    when(donationBatchRepository.findDonationBatchById(donationBatchId)).thenReturn(donationBatch1);
-    when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
-    when(donationBatchRepository.updateDonationBatch(donationBatch1)).thenReturn(donationBatch1);
-
-    testBatchCRUDService.updateTestBatch(updatedTestBatch);
   }
 
   @Test
