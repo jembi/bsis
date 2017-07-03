@@ -1,5 +1,6 @@
 package org.jembi.bsis.helpers.builders;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +19,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
   private UUID id;
   private TestBatchStatus status;
   private Set<DonationBatch> donationBatches;
-  private Set<Donation> donations;
+  private Set<Donation> donations = Collections.EMPTY_SET;
   private String batchNumber;
   private Date testBatchDate;
   private Date lastUpdatedDate;
