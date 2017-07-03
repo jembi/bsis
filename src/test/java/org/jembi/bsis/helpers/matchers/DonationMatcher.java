@@ -3,46 +3,45 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.model.donation.Donation;
 
-public class DonationMatcher extends TypeSafeMatcher<Donation> {
-
-  private Donation expected;
+public class DonationMatcher extends AbstractTypeSafeMatcher<Donation> {
 
   public DonationMatcher(Donation expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("A donation with the following state:")
-        .appendText("\nId: ").appendValue(expected.getId())
-        .appendText("\nDeleted: ").appendValue(expected.getIsDeleted())
-        .appendText("\nDonation Date: ").appendValue(expected.getDonationDate())
-        .appendText("\nDonor Pulse: ").appendValue(expected.getDonorPulse())
-        .appendText("\nHaemoglobin Count: ").appendValue(expected.getHaemoglobinCount())
-        .appendText("\nHaemoglobin Level: ").appendValue(expected.getHaemoglobinLevel())
-        .appendText("\nBlood Pressure Systolic: ").appendValue(expected.getBloodPressureSystolic())
-        .appendText("\nBlood Pressure Diastolic: ").appendValue(expected.getBloodPressureDiastolic())
-        .appendText("\nDonor Weight: ").appendValue(expected.getDonorWeight())
-        .appendText("\nNotes: ").appendValue(expected.getNotes())
-        .appendText("\nPack Type: ").appendValue(expected.getPackType())
-        .appendText("\nBleed Start Time: ").appendValue(expected.getBleedStartTime())
-        .appendText("\nBleed End Time: ").appendValue(expected.getBleedEndTime())
-        .appendText("\nAdverse Event: ").appendValue(expected.getAdverseEvent())
-        .appendText("\nTTI status: ").appendValue(expected.getTTIStatus())
-        .appendText("\nBlood ABO: ").appendValue(expected.getBloodAbo())
-        .appendText("\nBlood rh: ").appendValue(expected.getBloodRh())
-        .appendText("\nReleased: ").appendValue(expected.isReleased())
-        .appendText("\nComponents: ").appendValue(expected.getComponents())
-        .appendText("\nTitre: ").appendValue(expected.getTitre())
-        .appendText("\nFlag Characters: ").appendValue(expected.getFlagCharacters());
+  public void appendDescription(Description description, Donation model) {
+    description.appendText("A Donation with the following state:")
+        .appendText("\nId: ").appendValue(model.getId())
+        .appendText("\nDIN: ").appendValue(model.getDonationIdentificationNumber())
+        .appendText("\nDeleted: ").appendValue(model.getIsDeleted())
+        .appendText("\nDonation Date: ").appendValue(model.getDonationDate())
+        .appendText("\nDonor Pulse: ").appendValue(model.getDonorPulse())
+        .appendText("\nHaemoglobin Count: ").appendValue(model.getHaemoglobinCount())
+        .appendText("\nHaemoglobin Level: ").appendValue(model.getHaemoglobinLevel())
+        .appendText("\nBlood Pressure Systolic: ").appendValue(model.getBloodPressureSystolic())
+        .appendText("\nBlood Pressure Diastolic: ").appendValue(model.getBloodPressureDiastolic())
+        .appendText("\nDonor Weight: ").appendValue(model.getDonorWeight())
+        .appendText("\nNotes: ").appendValue(model.getNotes())
+        .appendText("\nPack Type: ").appendValue(model.getPackType())
+        .appendText("\nBleed Start Time: ").appendValue(model.getBleedStartTime())
+        .appendText("\nBleed End Time: ").appendValue(model.getBleedEndTime())
+        .appendText("\nAdverse Event: ").appendValue(model.getAdverseEvent())
+        .appendText("\nTTI status: ").appendValue(model.getTTIStatus())
+        .appendText("\nBlood ABO: ").appendValue(model.getBloodAbo())
+        .appendText("\nBlood rh: ").appendValue(model.getBloodRh())
+        .appendText("\nReleased: ").appendValue(model.isReleased())
+        .appendText("\nComponents: ").appendValue(model.getComponents())
+        .appendText("\nTitre: ").appendValue(model.getTitre())
+        .appendText("\nFlag Characters: ").appendValue(model.getFlagCharacters());
   }
 
   @Override
   public boolean matchesSafely(Donation actual) {
     return Objects.equals(actual.getId(), expected.getId()) &&
+        Objects.equals(actual.getDonationIdentificationNumber(), expected.getDonationIdentificationNumber()) &&
         Objects.equals(actual.getIsDeleted(), expected.getIsDeleted()) &&
         Objects.equals(actual.getDonorPulse(), expected.getDonorPulse()) &&
         Objects.equals(actual.getHaemoglobinCount(), expected.getHaemoglobinCount()) &&
@@ -68,5 +67,4 @@ public class DonationMatcher extends TypeSafeMatcher<Donation> {
   public static DonationMatcher hasSameStateAsDonation(Donation expected) {
     return new DonationMatcher(expected);
   }
-
 }
