@@ -4,10 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,7 +13,6 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
@@ -195,20 +192,6 @@ public class BloodTestingRepositoryTest extends DBUnitContextDependentTestSuite 
     bloodTestingRepository.saveBloodTestResultsToDatabase(testResults, donation, new Date(), ruleResult, true);
     Map<UUID, BloodTestResult> newResults = bloodTestingRepository.getRecentTestResultsForDonation(donation.getId());
     Assert.assertFalse("Re-entry is not required", newResults.get(UUID.fromString("04586549-1d7e-4b12-ba81-1987d11f8617")).getReEntryRequired());
-  }
-
-  @Test
-  public void testGetTestResultsForDonationBatchesByBloodTestType() {
-    UUID donationBatchId = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870682");
-    List<UUID> donationBatchIds = new ArrayList<>();
-    donationBatchIds.add(donationBatchId);
-    List<BloodTestingRuleResult> results = bloodTestingRepository
-        .getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, BloodTestType.BASIC_TTI);
-
-    // donation id = 2 is the only donation in batch id = 2
-    BloodTestingRuleResult result = results.get(0);
-    Assert.assertTrue("Number of tests of type BASIC_TTI for donation batch 2 is 4",
-        result.getRecentTestResults().size() == 4);
   }
   
   @Test

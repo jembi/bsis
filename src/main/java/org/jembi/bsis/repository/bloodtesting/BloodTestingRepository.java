@@ -1,6 +1,5 @@
 package org.jembi.bsis.repository.bloodtesting;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jembi.bsis.model.bloodtesting.BloodTest;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
@@ -26,7 +24,6 @@ import org.jembi.bsis.repository.BloodTestRepository;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.service.BloodTestingRuleEngine;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -111,55 +108,6 @@ public class BloodTestingRepository {
     }
     em.persist(btResult);
     return btResult;
-  }
-
-  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatches(List<UUID> donationBatchIds) {
-
-    List<BloodTestingRuleResult> bloodTestingRuleResults = new ArrayList<BloodTestingRuleResult>();
-
-    for (UUID donationBatchId : donationBatchIds) {
-      List<Donation> donations = donationBatchRepository.findDonationsInBatch(donationBatchId);
-
-      for (Donation donation : donations) {
-
-        if (!donation.getPackType().getTestSampleProduced()) {
-          // This donation did not produce a test sample so skip it
-          continue;
-        }
-
-        BloodTestingRuleResult ruleResult = ruleEngine.applyBloodTests(
-            donation, new HashMap<UUID, String>());
-        bloodTestingRuleResults.add(ruleResult);
-      }
-    }
-
-    return bloodTestingRuleResults;
-  }
-
-  public List<BloodTestingRuleResult> getAllTestsStatusForDonationBatchesByBloodTestType(List<UUID> donationBatchIds,
-                                                                                         BloodTestType bloodTestType) {
-
-    List<BloodTestingRuleResult> bloodTestingRuleResults = getAllTestsStatusForDonationBatches(donationBatchIds);
-    List<BloodTestingRuleResult> filteredRuleResults = new ArrayList<BloodTestingRuleResult>();
-    for (BloodTestingRuleResult result : bloodTestingRuleResults) {
-      Map<UUID, BloodTestResultViewModel> filteredModelMap = new HashMap<>();
-      for (UUID key : result.getRecentTestResults().keySet()) {
-        BloodTestResultViewModel model = result.getRecentTestResults().get(key);
-        if (model.getBloodTest().getBloodTestType().equals(bloodTestType)) {
-          filteredModelMap.put(key, model);
-        }
-      }
-      result.setRecentTestResults(filteredModelMap);
-      filteredRuleResults.add(result);
-    }
-    bloodTestingRuleResults = filteredRuleResults;
-
-    return bloodTestingRuleResults;
-  }
-
-  public BloodTestingRuleResult getAllTestsStatusForDonation(UUID donationId) {
-    Donation donation = donationRepository.findDonationById(donationId);
-    return ruleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
   }
 
   public Map<UUID, BloodTestResult> getRecentTestResultsForDonation(

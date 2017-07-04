@@ -10,7 +10,7 @@ public class BloodTestResultViewModelBuilder extends AbstractBuilder<BloodTestRe
   private UUID id;
   private BloodTestFullViewModel bloodTest;
   private Boolean reEntryRequired;
-  
+  private String result;
 
   public BloodTestResultViewModelBuilder withId(UUID id) {
     this.id = id;
@@ -30,7 +30,12 @@ public class BloodTestResultViewModelBuilder extends AbstractBuilder<BloodTestRe
   public BloodTestResultViewModelBuilder withReEntryNotRequired() {
     this.reEntryRequired = false;
     return this;
-  } 
+  }
+
+  public BloodTestResultViewModelBuilder withResult(String result) {
+    this.result = result;
+    return this;
+  }
   
   @Override
   public BloodTestResultViewModel build() {
@@ -38,6 +43,7 @@ public class BloodTestResultViewModelBuilder extends AbstractBuilder<BloodTestRe
     viewModel.setId(id);
     viewModel.setBloodTest(bloodTest);
     viewModel.setReEntryRequired(reEntryRequired);
+    viewModel.setResult(result);
     
     return viewModel;
   }

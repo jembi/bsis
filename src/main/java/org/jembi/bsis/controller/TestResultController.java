@@ -1,10 +1,8 @@
 package org.jembi.bsis.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +11,12 @@ import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.TestResultsBackingForms;
 import org.jembi.bsis.backingform.validator.TestResultsBackingFormsValidator;
+import org.jembi.bsis.controllerservice.TestResultControllerService;
 import org.jembi.bsis.factory.DonationFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
@@ -69,6 +67,9 @@ public class TestResultController {
   @Autowired
   private DonationFactory donationFactory;
 
+  @Autowired
+  private TestResultControllerService testResultControllerService;
+
   @InitBinder
   protected void initDonationFormBinder(WebDataBinder binder) {
     binder.setValidator(testResultsBackingFormsValidator);
@@ -79,11 +80,11 @@ public class TestResultController {
   public ResponseEntity<Map<String, Object>> findTestResult(@PathVariable String donationIdentificationNumber) {
 
     Map<String, Object> map = new HashMap<String, Object>();
-    Donation c = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
-    map.put("donation", donationFactory.createDonationFullViewModelWithoutPermissions(c));
+    Donation donation = donationRepository.findDonationByDonationIdentificationNumber(donationIdentificationNumber);
+    map.put("donation", donationFactory.createDonationFullViewModelWithoutPermissions(donation));
 
-    if (c.getPackType().getTestSampleProduced()) {
-      BloodTestingRuleResult results = bloodTestingRepository.getAllTestsStatusForDonation(c.getId());
+    if (donation.getPackType().getTestSampleProduced()) {
+      BloodTestingRuleResult results = testResultControllerService.getBloodTestingRuleResult(donation);
       map.put("testResults", results);
     } else {
       map.put("testResults", null);
@@ -93,12 +94,13 @@ public class TestResultController {
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request, @RequestParam(
-      value = "testBatch", required = true) UUID testBatchId,
+  public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request,
+      @RequestParam(value = "testBatch", required = true) UUID testBatchId,
       @RequestParam(value = "bloodTestType", required = false) BloodTestType bloodTestType) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-    List<BloodTestingRuleResult> ruleResults = getBloodTestingRuleResults(bloodTestType, testBatch);
+    List<BloodTestingRuleResult> ruleResults =
+        testResultControllerService.getBloodTestingRuleResults(bloodTestType, testBatch);
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("testResults", ruleResults);
@@ -127,30 +129,9 @@ public class TestResultController {
       @RequestParam(value = "testBatch", required = true) UUID testBatchId) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-    List<BloodTestingRuleResult> ruleResults = getBloodTestingRuleResults(testBatch);
+    List<BloodTestingRuleResult> ruleResults = testResultControllerService.getBloodTestingRuleResults(testBatch);
     Map<String, Object> map = calculateOverviewFlags(ruleResults);
     return new ResponseEntity<>(map, HttpStatus.OK);
-  }
-
-  protected List<BloodTestingRuleResult> getBloodTestingRuleResults(TestBatch testBatch) {
-    return getBloodTestingRuleResults(null, testBatch);
-  }
-
-  protected List<BloodTestingRuleResult> getBloodTestingRuleResults(BloodTestType bloodTestType, TestBatch testBatch) {
-    Set<DonationBatch> donationBatches = testBatch.getDonationBatches();
-    List<UUID> donationBatchIds = new ArrayList<UUID>();
-    for (DonationBatch donationBatch : donationBatches) {
-      donationBatchIds.add(donationBatch.getId());
-    }
-
-    List<BloodTestingRuleResult> ruleResults;
-    if (bloodTestType == null) {
-      ruleResults = bloodTestingRepository.getAllTestsStatusForDonationBatches(donationBatchIds);
-    } else {
-      ruleResults =
-          bloodTestingRepository.getAllTestsStatusForDonationBatchesByBloodTestType(donationBatchIds, bloodTestType);
-    }
-    return ruleResults;
   }
 
   private Map<String, Object> calculateOverviewFlags(List<BloodTestingRuleResult> ruleResults) {

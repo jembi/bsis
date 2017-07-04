@@ -1,23 +1,15 @@
 package org.jembi.bsis.controller;
 
-import org.jembi.bsis.model.bloodtesting.BloodTestType;
-import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
-import org.jembi.bsis.model.testbatch.TestBatch;
-import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.TestBatchRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
-import org.jembi.bsis.suites.UnitTestSuite;
-import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
-import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.springframework.http.ResponseEntity;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicTTIBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aConfirmatoryTTIBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aRepeatBloodTypingBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aRepeatTTIBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestResultViewModelBuilder.aBloodTestResultViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
+import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
+import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,16 +23,24 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicTTIBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aConfirmatoryTTIBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aRepeatBloodTypingBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aRepeatTTIBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestResultViewModelBuilder.aBloodTestResultViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
-import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
-import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
-import static org.mockito.Mockito.when;
+import org.jembi.bsis.controllerservice.TestResultControllerService;
+import org.jembi.bsis.model.bloodtesting.BloodTestType;
+import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
+import org.jembi.bsis.model.donationbatch.DonationBatch;
+import org.jembi.bsis.model.testbatch.TestBatch;
+import org.jembi.bsis.model.testbatch.TestBatchStatus;
+import org.jembi.bsis.repository.TestBatchRepository;
+import org.jembi.bsis.suites.UnitTestSuite;
+import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
+import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.springframework.http.ResponseEntity;
 
 public class TestResultControllerTests extends UnitTestSuite {
   
@@ -50,9 +50,9 @@ public class TestResultControllerTests extends UnitTestSuite {
   @InjectMocks
   private TestResultController testResultController;
   @Mock
-  private BloodTestingRepository bloodTestingRepository;
-  @Mock
   private TestBatchRepository testBatchRepository;
+  @Mock
+  private TestResultControllerService testResultControllerService;
 
   // TODO these testcases can be improved to have better and more descriptive names, and for the
   // tests not to test too many logical combinations at the same time.
@@ -120,7 +120,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     expectedOverviewFlags.put("hasPendingBloodTypingConfirmations", false);
     
     when(testBatchRepository.findTestBatchById(aTestBatch.getId())).thenReturn(aTestBatch);
-    when(testResultController.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
+    when(testResultControllerService.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
 
     // Test
     ResponseEntity<Map<String, Object>> returnedResponse = testResultController.findTestResultsOverviewForTestBatch(
@@ -213,7 +213,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     expectedOverviewFlags.put("hasPendingBloodTypingConfirmations", false);
     
     when(testBatchRepository.findTestBatchById(aTestBatch.getId())).thenReturn(aTestBatch);
-    when(testResultController.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
+    when(testResultControllerService.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
     // Test
     ResponseEntity<Map<String, Object>> returnedResponse = testResultController.findTestResultsOverviewForTestBatch(
         request, aTestBatch.getId());
@@ -281,7 +281,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     expectedOverviewFlags.put("hasPendingBloodTypingConfirmations", false);
 
     when(testBatchRepository.findTestBatchById(aTestBatch.getId())).thenReturn(aTestBatch);
-    when(testResultController.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
+    when(testResultControllerService.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
 
     // Test
     ResponseEntity<Map<String, Object>> returnedResponse =
@@ -331,7 +331,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     expectedOverviewFlags.put("hasPendingBloodTypingConfirmations", true);
     
     when(testBatchRepository.findTestBatchById(aTestBatch.getId())).thenReturn(aTestBatch);
-    when(testResultController.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
+    when(testResultControllerService.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
 
     // Test
     ResponseEntity<Map<String, Object>> returnedResponse = testResultController.findTestResultsOverviewForTestBatch(
@@ -442,7 +442,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     expectedOverviewFlags.put("hasPendingBloodTypingConfirmations", false);
     
     when(testBatchRepository.findTestBatchById(aTestBatch.getId())).thenReturn(aTestBatch);
-    when(testResultController.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
+    when(testResultControllerService.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
     // Test
     ResponseEntity<Map<String, Object>> returnedResponse = testResultController.findTestResultsOverviewForTestBatch(
         request, aTestBatch.getId());
