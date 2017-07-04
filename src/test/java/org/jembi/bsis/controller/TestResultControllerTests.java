@@ -44,8 +44,6 @@ import org.springframework.http.ResponseEntity;
 
 public class TestResultControllerTests extends UnitTestSuite {
   
-  private static final UUID DONATION_BATCH_ID = UUID.randomUUID();
-  
   @Spy
   @InjectMocks
   private TestResultController testResultController;
