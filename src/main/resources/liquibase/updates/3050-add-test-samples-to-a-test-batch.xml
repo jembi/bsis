@@ -25,4 +25,12 @@
           SET d.testBatch_id = db.testBatch_id
         </sql>
   </changeSet>
+
+  <changeSet id="20170704-1535" author="timler">
+    <comment>Deletes the foreign key column from DonationBatch to TestBatch</comment>
+    <dropForeignKeyConstraint constraintName="fk_DonationBatch_TestBatch" baseTableName="DonationBatch" />
+    <dropColumn columnName="testBatch_id_text" tableName="DonationBatch" />
+    <dropColumn columnName="testBatch_id" tableName="DonationBatch" />
+  </changeSet>
+
 </databaseChangeLog>
