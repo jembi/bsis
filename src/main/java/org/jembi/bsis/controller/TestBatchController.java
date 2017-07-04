@@ -9,7 +9,9 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
+import org.jembi.bsis.backingform.TestBatchDonationRangeBackingForm;
 import org.jembi.bsis.backingform.validator.TestBatchBackingFormValidator;
+import org.jembi.bsis.backingform.validator.TestBatchDonationRangeBackingFormValidator;
 import org.jembi.bsis.controllerservice.TestBatchControllerService;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
@@ -41,12 +43,19 @@ public class TestBatchController {
 
   @Autowired
   private TestBatchControllerService testBatchControllerService;
+  
+  @Autowired
+  private TestBatchDonationRangeBackingFormValidator testBatchDonationRangeBackingFormValidator;
 
-  @InitBinder
+  @InitBinder("testBatchBackingForm")
   public void initBinder(WebDataBinder binder) {
-    binder.addValidators(testBatchBackingFormValidator);
+    binder.setValidator(testBatchBackingFormValidator);
   }
-
+  @InitBinder("testBatchDonationRangeBackingForm")
+  protected void discardInitBinder(WebDataBinder binder) {
+    binder.setValidator(testBatchDonationRangeBackingFormValidator);
+  }
+  
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TESTING_INFORMATION+"')")
   public ResponseEntity<Map<String, Object>> findAndAddTestBatchFormGenerator() {
@@ -77,9 +86,9 @@ public class TestBatchController {
   @RequestMapping(value = "{id}",  method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
   public ResponseEntity<TestBatchFullViewModel> updateTestBatch(@PathVariable UUID id,
-      @Valid @RequestBody TestBatchBackingForm form) {
-    form.setId(id);
-    return new ResponseEntity<>(testBatchControllerService.updateTestBatch(form), HttpStatus.OK);
+      @Valid @RequestBody TestBatchBackingForm testBatchBackingForm) {
+    testBatchBackingForm.setId(id);
+    return new ResponseEntity<>(testBatchControllerService.updateTestBatch(testBatchBackingForm), HttpStatus.OK);
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -109,5 +118,13 @@ public class TestBatchController {
     TestBatchFullDonationViewModel testBatchFullDonationViewModel = testBatchControllerService.getTestBatchByIdAndBloodTypingMatchStatus(id, bloodTypingMatchStatus);
 
     return new ResponseEntity<>(testBatchFullDonationViewModel, HttpStatus.OK);
+  }
+  
+  @RequestMapping(value = "{id}/donations",  method = RequestMethod.PUT)
+  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
+  public ResponseEntity<TestBatchFullViewModel> addDonationsToTestBatch(@PathVariable UUID id,
+      @Valid @RequestBody TestBatchDonationRangeBackingForm testBatchDonationRangeBackingForm) {
+    testBatchDonationRangeBackingForm.setTestBatchId(id);
+    return new ResponseEntity<>(testBatchControllerService.addDonationsToTestBatch(testBatchDonationRangeBackingForm), HttpStatus.OK);
   }
 }

@@ -8,8 +8,10 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
+@Component
 public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<TestBatchDonationRangeBackingForm> {
 
   @Autowired
