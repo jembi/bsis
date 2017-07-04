@@ -466,7 +466,7 @@ public class DataImportServiceTests extends SecurityContextDependentTestSuite {
     
     Donation thirdDonation = findDonationByDonationIdentificationNumber("3243200");
     assertThat("Different DonationBatch", thirdDonation.getDonationBatch().getId(), not(equalTo(firstDonationBatch.getId())));
-    assertThat("Different TestBatch", thirdDonation.getTestBatch(), not(equalTo(firstDonationBatch.getTestBatch())));
+    assertThat("Different TestBatch", thirdDonation.getTestBatch(), not(equalTo(firstDonation.getTestBatch())));
     assertThat("TestBatch location is a testing site", thirdDonation.getTestBatch().getLocation().getIsTestingSite(), equalTo(true));
     assertThat("donation is released", firstDonation.isReleased(), equalTo(true));
     
