@@ -16,6 +16,7 @@ import org.jembi.bsis.service.TestBatchConstraintChecker;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
 import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
+import org.jembi.bsis.viewmodel.TestBatchFullDonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,22 @@ public class TestBatchFactory {
     TestBatchFullViewModel testBatchViewModel = new TestBatchFullViewModel();
     populateFullViewModel(testBatch, testBatchViewModel, isTestingSupervisor);
     return testBatchViewModel;
+  }
+
+  /**
+   * Creates a view model for the given test batch
+   * which contains a full view model list of donations.
+   *
+   * @param testBatch the test batch
+   * @param bloodTypingMatchStatus the blood typing match status
+   * @return the test batch view model with a list of donation full view model
+   */
+  public TestBatchFullDonationViewModel createTestBatchFullDonationViewModel(TestBatch testBatch, BloodTypingMatchStatus bloodTypingMatchStatus) {
+    TestBatchFullDonationViewModel testBatchFullDonationViewModel = new TestBatchFullDonationViewModel();
+    testBatchFullDonationViewModel.setDonations(createDonationFullViewModels(testBatch, bloodTypingMatchStatus));
+    testBatchFullDonationViewModel.setId(testBatch.getId());
+    testBatchFullDonationViewModel.setTestBatchDate(testBatch.getTestBatchDate());
+    return testBatchFullDonationViewModel;
   }
 
   /**

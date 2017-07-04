@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationFullViewModelBuilder.aDonationFullViewModel;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
+import static org.jembi.bsis.helpers.builders.TestBatchFullDonationViewModelBuilder.aTestBatchFullDonationViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aTestingSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
@@ -14,6 +15,7 @@ import static org.jembi.bsis.helpers.matchers.DonationTestOutcomesReportViewMode
 import static org.jembi.bsis.helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
 import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 import static org.jembi.bsis.helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
+import static org.jembi.bsis.helpers.matchers.TestBatchFullDonationViewModelMatcher.hasSameStateAsTestBatchFullDonationViewModel;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -50,6 +52,7 @@ import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.TestBatchFullDonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.junit.Assert;
@@ -136,6 +139,63 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     List<TestBatchViewModel> returnedViewModels = testBatchFactory.createTestBatchBasicViewModels(testBatches);
 
     assertThat(returnedViewModels.get(0), hasSameStateAsTestBatchViewModel(expectedViewModel));
+  }
+
+  @Test
+  public void testCreateTestBatchFullDonationViewModel_shouldReturnTestBatchFullDonationViewModel() {
+    UUID donationId1 = UUID.fromString("8812154e-2cef-4060-836c-5c9168721876");
+    UUID donationId2 = UUID.fromString("f94feebc-09e2-4e5c-8888-e1be837fbd2b");
+
+    BloodTypingMatchStatus bloodTypingMatchStatus = BloodTypingMatchStatus.MATCH;
+
+    Donation donation1 = aDonation()
+        .withId(donationId1)
+        .withBloodTypingMatchStatus(bloodTypingMatchStatus)
+        .build();
+
+    Donation donation2 = aDonation()
+        .withId(donationId2)
+        .withBloodTypingMatchStatus(bloodTypingMatchStatus)
+        .build();
+
+    Set<Donation> donations = new HashSet<>(Arrays.asList(donation1, donation2));
+
+    DonationFullViewModel donationFullViewModel1 = aDonationFullViewModel()
+        .withId(donationId1)
+        .withBloodTypingMatchStatus(bloodTypingMatchStatus)
+        .build();
+
+    DonationFullViewModel donationFullViewModel2 = aDonationFullViewModel()
+        .withId(donationId2)
+        .withBloodTypingMatchStatus(bloodTypingMatchStatus)
+        .build();
+
+    List<DonationFullViewModel> donationFullViewModels = Arrays.asList(
+        donationFullViewModel1, donationFullViewModel2);
+
+    TestBatch testBatch =
+        aTestBatch()
+          .withId(IRRELEVANT_TEST_BATCH_ID)
+          .withStatus(IRRELEVANT_STATUS)
+          .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+          .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+          .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+          .withDonations(donations)
+          .withNotes(IRRELEVANT_NOTES)
+          .build();
+
+    TestBatchFullDonationViewModel expectedViewModel = aTestBatchFullDonationViewModel()
+        .withId(IRRELEVANT_TEST_BATCH_ID)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .withDonations(donationFullViewModels)
+        .build();
+
+    when(donationFactory.createDonationFullViewModelWithoutPermissions(donation1)).thenReturn(donationFullViewModel1);
+    when(donationFactory.createDonationFullViewModelWithoutPermissions(donation2)).thenReturn(donationFullViewModel2);
+
+    TestBatchFullDonationViewModel returnedViewModel = testBatchFactory.createTestBatchFullDonationViewModel(testBatch, bloodTypingMatchStatus);
+
+    assertThat(returnedViewModel, hasSameStateAsTestBatchFullDonationViewModel(expectedViewModel));
   }
 
   @Test

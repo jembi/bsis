@@ -97,12 +97,9 @@ public class TestBatchControllerService {
 
   public TestBatchFullDonationViewModel getTestBatchByIdAndBloodTypingMatchStatus(UUID id, BloodTypingMatchStatus bloodTypingMatchStatus) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-    TestBatchFullDonationViewModel testBatchFullDonationViewModel = new TestBatchFullDonationViewModel();
-    testBatchFullDonationViewModel.setDonations(testBatchFactory.createDonationFullViewModels(testBatch, bloodTypingMatchStatus));
-    testBatchFullDonationViewModel.setTestBatchDate(testBatch.getTestBatchDate());
-    return testBatchFullDonationViewModel;
+    return testBatchFactory.createTestBatchFullDonationViewModel(testBatch, bloodTypingMatchStatus);
   }
-  
+
   public TestBatchFullViewModel addDonationsToTestBatch(TestBatchDonationRangeBackingForm form) {
     List<Donation> donations = donationRepository.findDonationsBetweenTwoDins(form.getFromDIN(), form.getToDIN());
     TestBatch testbatch = testBatchCRUDService.addDonationsToTestBatch(form.getTestBatchId(), donations);
