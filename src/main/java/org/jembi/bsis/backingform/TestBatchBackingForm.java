@@ -92,4 +92,9 @@ public class TestBatchBackingForm {
   public void setDonationBatches(List<DonationBatchViewModel> donationBatches) {
     // Ignore
   }
+
+  @JsonIgnore
+  public void setLastUpdated(Date lastUpdated) {
+    // Ignore
+  }
 }
