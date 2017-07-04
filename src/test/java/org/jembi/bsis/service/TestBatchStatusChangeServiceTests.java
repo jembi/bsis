@@ -68,7 +68,7 @@ public class TestBatchStatusChangeServiceTests extends UnitTestSuite {
   private DonorRepository donorRepository;
 
   @Test
-  public void testHandleReleaseWithNoDonationBatches_shouldDoNothing() {
+  public void testHandleReleaseWithNoDonations_shouldDoNothing() {
 
     TestBatch testBatch = aTestBatch().withDonations(null).build();
 

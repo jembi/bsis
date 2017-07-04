@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.viewmodel.DonationBatchViewModel;
 import org.jembi.bsis.viewmodel.DonationFullViewModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -85,11 +84,6 @@ public class TestBatchBackingForm {
   
   @JsonIgnore
   public void setPermissions(Map<String, Boolean> permissions) {
-    // Ignore
-  }
-
-  @JsonIgnore
-  public void setDonationBatches(List<DonationBatchViewModel> donationBatches) {
     // Ignore
   }
 

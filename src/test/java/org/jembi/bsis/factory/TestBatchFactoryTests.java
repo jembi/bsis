@@ -5,17 +5,17 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationFullViewModelBuilder.aDonationFullViewModel;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
-import static org.jembi.bsis.helpers.builders.TestBatchFullDonationViewModelBuilder.aTestBatchFullDonationViewModel;
 import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aTestingSiteBackingForm;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
+import static org.jembi.bsis.helpers.builders.TestBatchFullDonationViewModelBuilder.aTestBatchFullDonationViewModel;
 import static org.jembi.bsis.helpers.builders.TestBatchFullViewModelBuilder.aTestBatchFullViewModel;
 import static org.jembi.bsis.helpers.builders.TestBatchViewModelBuilder.aTestBatchViewModel;
 import static org.jembi.bsis.helpers.matchers.DonationTestOutcomesReportViewModelMatcher.hasSameStateAsDonationTestOutcomesReportViewModel;
+import static org.jembi.bsis.helpers.matchers.TestBatchFullDonationViewModelMatcher.hasSameStateAsTestBatchFullDonationViewModel;
 import static org.jembi.bsis.helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
 import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 import static org.jembi.bsis.helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
-import static org.jembi.bsis.helpers.matchers.TestBatchFullDonationViewModelMatcher.hasSameStateAsTestBatchFullDonationViewModel;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -44,7 +44,6 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.TestBatchConstraintChecker;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
@@ -78,8 +77,6 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   private TestBatchConstraintChecker testBatchConstraintChecker;
   @Mock
   private LocationFactory locationFactory;
-  @Mock
-  private DonationBatchRepository donationBatchRepository;
   @Mock
   private LocationRepository locationRepository;
   @Mock

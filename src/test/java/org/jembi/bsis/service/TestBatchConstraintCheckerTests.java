@@ -55,7 +55,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanCloseTestBatchWithNoDonationBatches_shouldReturnTrue() {
+  public void testCanCloseTestBatchWithNoDonation_shouldReturnTrue() {
     TestBatch testBatch =
         aTestBatch().withStatus(TestBatchStatus.RELEASED).withDonations(Collections.<Donation>emptySet()).build();
     boolean result = testBatchConstraintChecker.canCloseTestBatch(testBatch);

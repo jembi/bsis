@@ -25,7 +25,6 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
 import org.jembi.bsis.suites.UnitTestSuite;
@@ -47,8 +46,6 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
   private TestBatchConstraintChecker testBatchConstraintChecker;
   @Mock
   private TestBatchStatusChangeService testBatchStatusChangeService;
-  @Mock
-  private DonationBatchRepository donationBatchRepository;
 
   @Test
   public void testUpdateTestBatchStatusWithNoStatusChange_shouldDoNothing() {
