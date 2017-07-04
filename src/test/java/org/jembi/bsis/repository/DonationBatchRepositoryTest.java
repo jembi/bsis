@@ -119,34 +119,6 @@ public class DonationBatchRepositoryTest extends DBUnitContextDependentTestSuite
   }
 
   @Test
-  public void testFindUnassignedDonationBatches() throws Exception {
-    List<DonationBatch> unassigned = donationBatchRepository.findUnassignedDonationBatches();
-    Assert.assertNotNull("Should not return a null list", unassigned);
-    Assert.assertEquals("There are no unassigned donation batches", 0, unassigned.size());
-    UUID locationId1 = UUID.fromString("55321456-eeee-1234-b5b1-123412348891");
-    Location venue = locationRepository.getLocation(locationId1);
-
-    // create an unassigned batch
-    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch()
-        .withBatchNumber("JUNIT123")
-        .withVenue(venue)
-        .withDonationBatchDate(new Date())
-        .withLastUpdatedDate(new Date())
-        .thatIsNotDeleted()
-        .thatIsClosed()
-        .withDonationBatchDate(new Date())
-        .build();
-
-    donationBatchRepository.addDonationBatch(donationBatch);
-
-    unassigned = donationBatchRepository.findUnassignedDonationBatches();
-    Assert.assertNotNull("TShould not return a null list", unassigned);
-    Assert.assertEquals("There is 1 unassigned donation batch", 1, unassigned.size());
-    DonationBatch savedDonationBatch = unassigned.get(0);
-    Assert.assertEquals("The donation batch has the number 'JUNIT123'", "JUNIT123", savedDonationBatch.getBatchNumber());
-  }
-
-  @Test
   public void testFindDonationBatchByBatchNumberIncludeDeleted() throws Exception {
     try {
       donationBatchRepository.findDonationBatchByBatchNumber("B0715000000");

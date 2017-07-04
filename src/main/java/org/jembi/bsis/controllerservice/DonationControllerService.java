@@ -43,10 +43,10 @@ public class DonationControllerService {
   
   public TestBatchStatus getTestBatchStatusForDonation(UUID donationId) {
     Donation donation = donationRepository.findDonationById(donationId);
-    if (donation.getDonationBatch() == null || donation.getDonationBatch().getTestBatch() == null) {
+    if (donation.getDonationBatch() == null || donation.getTestBatch() == null) {
       return null;
     }
-    return donation.getDonationBatch().getTestBatch().getStatus();
+    return donation.getTestBatch().getStatus();
   }
 
 }

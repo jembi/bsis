@@ -319,10 +319,11 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   public void testSaveBloodTestingResultsTestBatchNotReleased() throws Exception {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
-    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().build();
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
+        .withTestBatch(testBatch).build();
 
     UUID bloodTestId = UUID.randomUUID();
     Map<UUID, String> bloodTestResults = new HashMap<>();
@@ -371,10 +372,11 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   public void testSaveBloodTestingResultsTestBatchReleased() throws Exception {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
-    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().build();
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
+        .withTestBatch(testBatch).build();
 
     UUID bloodTestId = UUID.randomUUID();
     Map<UUID, String> bloodTestResults = new HashMap<>();
@@ -420,10 +422,11 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   public void testSaveBloodTestingResults1stEntry() throws Exception {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
-    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().build();
     Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
+        .withTestBatch(testBatch).build();
 
     UUID bloodTestId = UUID.randomUUID();
 
@@ -477,10 +480,11 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   public void testDontAllowDonationReleaseIfReEntryPending() throws Exception {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
-    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().build();
     Donation donation = DonationBuilder.aDonation().withTTIStatus(TTIStatus.SAFE)
         .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
+        .withTestBatch(testBatch).build();
 
     UUID bloodTestId = UUID.randomUUID();
     Map<UUID, String> bloodTestResults = new HashMap<>();
@@ -532,13 +536,15 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   public void testSaveBloodTestingResultsForListOfDonations() throws Exception {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
-    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build();
+    DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().build();
     Donation donation1 = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
+        .withTestBatch(testBatch).build();
     Donation donation2 = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_2)
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch).build();
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
+        .withTestBatch(testBatch).build();
 
     UUID bloodTestId = UUID.randomUUID();
     Map<UUID, String> bloodTestResults = new HashMap<>();

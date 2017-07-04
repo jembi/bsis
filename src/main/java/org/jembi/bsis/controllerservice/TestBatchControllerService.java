@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.backingform.TestBatchDonationRangeBackingForm;
-import org.jembi.bsis.factory.DonationBatchViewModelFactory;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
@@ -14,7 +13,6 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.SequenceNumberRepository;
@@ -22,7 +20,6 @@ import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.service.TestBatchCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
 import org.jembi.bsis.utils.PermissionUtils;
-import org.jembi.bsis.viewmodel.DonationBatchViewModel;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullDonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
@@ -48,13 +45,7 @@ public class TestBatchControllerService {
   private TestBatchRepository testBatchRepository;
 
   @Autowired
-  private DonationBatchRepository donationBatchRepository;
-
-  @Autowired
   private SequenceNumberRepository sequenceNumberRepository;
-
-  @Autowired
-  private DonationBatchViewModelFactory donationBatchViewModelFactory;
   
   @Autowired
   private DonationRepository donationRepository;
@@ -68,10 +59,6 @@ public class TestBatchControllerService {
   public List<LocationViewModel> getTestingSites() {
     List<Location> locations = locationRepository.getTestingSites();
     return locationFactory.createViewModels(locations);
-  }
-
-  public List<DonationBatchViewModel> getUnnasignedDonationBatches() {
-    return donationBatchViewModelFactory.createDonationBatchBasicViewModels(donationBatchRepository.findUnassignedDonationBatches());
   }
   
   public TestBatchFullViewModel saveTestBatch(TestBatchBackingForm form) {

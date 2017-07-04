@@ -60,9 +60,9 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Set up fixture
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).build();
-    DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
+    DonationBatch donationBatch = aDonationBatch().build();
     Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN)
-        .withDonationBatch(donationBatch).build();
+        .withDonationBatch(donationBatch).withTestBatch(testBatch).build();
     Map<UUID, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
@@ -90,8 +90,9 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Set up fixture
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).build();
-    DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
-    Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN).withDonationBatch(donationBatch).build();
+    DonationBatch donationBatch = aDonationBatch().build();
+    Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN)
+        .withDonationBatch(donationBatch).withTestBatch(testBatch).build();
     Map<UUID, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
@@ -120,8 +121,8 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Set up fixture
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).build();
-    DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
-    Donation donation = aDonation().withDonationBatch(donationBatch)
+    DonationBatch donationBatch = aDonationBatch().build();
+    Donation donation = aDonation().withDonationBatch(donationBatch).withTestBatch(testBatch)
         .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN).build();
     Map<UUID, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();

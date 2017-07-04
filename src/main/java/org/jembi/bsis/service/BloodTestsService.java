@@ -119,7 +119,7 @@ public class BloodTestsService {
       bloodTestingRepository.saveBloodTestResultsToDatabase(bloodTestResults, donation, new Date(), ruleResult, reEntry);
 
       // Update donation
-      if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
+      if (donation.getTestBatch().getStatus() == TestBatchStatus.RELEASED && reEntry) {
         testBatchStatusChangeService.handleRelease(donation);
       }
     }

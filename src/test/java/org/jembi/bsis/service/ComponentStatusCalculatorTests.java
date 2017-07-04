@@ -704,13 +704,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testUpdateComponentStatusQuarantinedBloodGroupingPendingTestsTTISafe_shouldNotChangeStatus() throws Exception {
     // set up data
     TestBatch testBatch = aReleasedTestBatch().withId(UUID.randomUUID()).build();
-    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
+    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).build();
     Donation donation = aDonation()
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.PENDING_TESTS)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NO_MATCH)
         .withTTIStatus(TTIStatus.SAFE)
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
@@ -736,13 +737,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testUpdateComponentStatusQuarantinedOpenTestBatch_shouldNotChangeStatus() throws Exception {
     // set up data
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).withId(UUID.randomUUID()).build();
-    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
+    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).build();
     Donation donation = aDonation()
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withTTIStatus(TTIStatus.SAFE)
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
@@ -768,13 +770,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testUpdateComponentStatusQuarantinedWithDiscrepancies_shouldNotChangeStatus() throws Exception {
     // set up data
     TestBatch testBatch = aReleasedTestBatch().withId(UUID.randomUUID()).build();
-    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
+    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).build();
     Donation donation = aDonation()
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withTTIStatus(TTIStatus.SAFE)
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);
@@ -1027,13 +1030,14 @@ public class ComponentStatusCalculatorTests extends UnitTestSuite {
   public void testUpdateComponentStatusQuarantinedBloodGroupingCompleteOldStatusTTIUnSafe_shouldNotChangeStatus() throws Exception {
     // set up data
     TestBatch testBatch = aReleasedTestBatch().withId(UUID.randomUUID()).build();
-    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).withTestBatch(testBatch).build();
+    DonationBatch donationBatch = aDonationBatch().withId(DONATION_BATCH_ID).build();
     Donation donation = aDonation()
         .withId(DONATION_ID)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .withTTIStatus(TTIStatus.SAFE) // TTI says safe, but the component status in UNSAFE
         .withDonationBatch(donationBatch)
+        .withTestBatch(testBatch)
         .build();
     Calendar cal = Calendar.getInstance();
     cal.add(Calendar.DAY_OF_YEAR, 90);

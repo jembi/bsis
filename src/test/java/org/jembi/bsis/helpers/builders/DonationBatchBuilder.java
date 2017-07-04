@@ -24,7 +24,6 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
   private String notes;
   private List<Donation> donations;
   private Location venue = aVenue().build();
-  private TestBatch testBatch;
   private boolean deleted;
   private boolean closed;
   private boolean backEntry;
@@ -67,11 +66,6 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
 
   public DonationBatchBuilder withVenue(Location venue) {
     this.venue = venue;
-    return this;
-  }
-
-  public DonationBatchBuilder withTestBatch(TestBatch testBatch) {
-    this.testBatch = testBatch;
     return this;
   }
 
@@ -121,7 +115,6 @@ public class DonationBatchBuilder extends AbstractEntityBuilder<DonationBatch> {
     donationBatch.setIsClosed(closed);
     donationBatch.setVenue(venue);
     donationBatch.setBackEntry(backEntry);
-    donationBatch.setTestBatch(testBatch);
     donationBatch.setComponentBatch(componentBatch);
     donationBatch.setLastUpdated(lastUpdatedDate);
     donationBatch.setDonationBatchDate(donationBatchDate);
