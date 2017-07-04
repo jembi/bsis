@@ -26,6 +26,22 @@
         </sql>
   </changeSet>
 
+  <changeSet id="20170704-1329" author="timler">
+    <comment>Adds testBatch_id to Donation_AUD</comment>
+    <addColumn tableName="Donation_AUD">
+        <column name="testBatch_id" type="binary(16)" />
+    </addColumn>
+    <sql dbms="mysql">
+      ALTER TABLE Donation_AUD ADD testBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
+        HEX(SUBSTR(testBatch_id,  1, 4)),
+        HEX(SUBSTR(testBatch_id,  5, 2)),
+        HEX(SUBSTR(testBatch_id,  7, 2)),
+        HEX(SUBSTR(testBatch_id,  9, 2)),
+        HEX(SUBSTR(testBatch_id, 11)) )))
+      VIRTUAL AFTER testBatch_id;
+    </sql>
+  </changeSet>
+
   <changeSet id="20170704-1535" author="timler">
     <comment>Deletes the foreign key column from DonationBatch to TestBatch</comment>
     <dropForeignKeyConstraint constraintName="fk_DonationBatch_TestBatch" baseTableName="DonationBatch" />
