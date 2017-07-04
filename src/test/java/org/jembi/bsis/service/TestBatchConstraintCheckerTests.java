@@ -341,4 +341,11 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     assertThat(result, is(false));
   }
+  
+  @Test
+  public void testCanCloseTestBatchWithNullDonations_shouldReturnTrue() {
+    TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.RELEASED).withDonations(null).build();
+    boolean result = testBatchConstraintChecker.canCloseTestBatch(testBatch);
+    assertThat(result, is(true));
+  }
 }
