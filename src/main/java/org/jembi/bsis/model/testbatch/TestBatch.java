@@ -26,7 +26,6 @@ import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.constant.TestBatchNamedQueryConstants;
 import org.jembi.bsis.service.TestBatchCRUDService;
@@ -62,9 +61,6 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
   @Enumerated(EnumType.STRING)
   @Column(length = 20)
   private TestBatchStatus status;
-
-  @OneToMany(mappedBy = "testBatch", fetch = FetchType.EAGER)
-  private Set<DonationBatch> donationBatches;
 
   @SuppressWarnings("unchecked")
   @NotAudited
@@ -115,14 +111,6 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
    */
   public void setStatus(TestBatchStatus status) {
     this.status = status;
-  }
-
-  public Set<DonationBatch> getDonationBatches() {
-    return donationBatches;
-  }
-
-  public void setDonationBatches(Set<DonationBatch> donationBatches) {
-    this.donationBatches = donationBatches;
   }
 
   public Location getLocation() {

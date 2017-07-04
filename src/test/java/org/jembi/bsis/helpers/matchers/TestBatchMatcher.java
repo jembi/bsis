@@ -17,29 +17,8 @@ public class TestBatchMatcher extends AbstractTypeSafeMatcher<TestBatch> {
         .appendText("\nId: ").appendValue(testBatch.getId())
         .appendText("\nStatus: ").appendValue(testBatch.getStatus())
         .appendText("\nTest batch date: ").appendValue(testBatch.getTestBatchDate())
-        .appendText("\nDonation batches: ").appendValue(testBatch.getDonationBatches())
+        .appendText("\nDonations: ").appendValue(testBatch.getDonations())
         .appendText("\nLocation: ").appendValue(testBatch.getLocation());
-  }
-
-  @Override
-  protected void describeMismatchSafely(TestBatch actual, Description description) {
-
-    description.appendText("The mismatched fields are:");
-
-    if (!Objects.equals(actual.getId(), expected.getId())) {
-      description.appendText("\nId: actual = ").appendValue(actual.getId())
-          .appendText(", expected = ").appendValue(expected.getId());
-    }
-
-    if (actual.getStatus() != expected.getStatus()) {
-      description.appendText("\nStatus: actual = ").appendValue(actual.getStatus())
-          .appendText(", expected = ").appendValue(expected.getStatus());
-    }
-
-    if (!Objects.equals(actual.getTestBatchDate(), expected.getId())) {
-      description.appendText("\nTest batch date: actual = ").appendValue(actual.getId())
-          .appendText(", expected = ").appendValue(expected.getTestBatchDate());
-    }
   }
 
   @Override
@@ -47,7 +26,6 @@ public class TestBatchMatcher extends AbstractTypeSafeMatcher<TestBatch> {
     return Objects.equals(actual.getId(), expected.getId()) &&
         actual.getStatus() == expected.getStatus() &&
         Objects.equals(actual.getTestBatchDate(), expected.getTestBatchDate()) &&
-        Objects.equals(actual.getDonationBatches(), expected.getDonationBatches()) &&
         Objects.equals(actual.getDonations(), expected.getDonations()) &&
         Objects.equals(actual.getLocation(), expected.getLocation());
   }

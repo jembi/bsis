@@ -60,22 +60,12 @@ public class TestResultControllerTests extends UnitTestSuite {
   @Test
   public void testFindTestResultsOverviewForTestBatchWithReEntryRequiredForTTITestsOnly_shouldReturnCorrectResults() {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-
-    Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
-        aDonationBatch()
-            .withId(DONATION_BATCH_ID)
-            .withBatchNumber("123")
-            .withDonationBatchDate(new Date())
-            .build()
-      )
-    );
     
     TestBatch aTestBatch = aTestBatch()
         .withId(UUID.randomUUID())
         .withBatchNumber("00001")
         .withTestBatchDate(new Date())
         .withStatus(TestBatchStatus.OPEN)
-        .withDonationBatches(donationBatches)
         .build();
     
     UUID basicTTIBloodTestId = UUID.randomUUID();
@@ -134,18 +124,9 @@ public class TestResultControllerTests extends UnitTestSuite {
   @Test
   public void testFindTestResultsOverviewForTestBatchWithMultipleRuleResultsWithReEntryRequiredForBasicAndRepeatTTITests_shouldReturnCorrectResults() {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-
-    Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
-        aDonationBatch()
-            .withId(DONATION_BATCH_ID)
-            .withBatchNumber("123")
-            .withDonationBatchDate(new Date())
-            .build()
-      )
-    );
     
     TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withTestBatchDate(new Date())
-        .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
+        .withStatus(TestBatchStatus.OPEN).build();
     
     UUID basicTTIBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel basicTTIBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
@@ -226,18 +207,9 @@ public class TestResultControllerTests extends UnitTestSuite {
   @Test
   public void testFindTestResultsOverviewForTestBatchWithPendingBloodTypingTests_shouldReturnCorrectResults() {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-
-    Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
-        aDonationBatch()
-            .withId(DONATION_BATCH_ID)
-            .withBatchNumber("123")
-            .withDonationBatchDate(new Date())
-            .build()
-      )
-    );
     
     TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withTestBatchDate(new Date())
-        .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
+        .withStatus(TestBatchStatus.OPEN).build();
     
     UUID basicBloodTypingBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel basicBloodTypingBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
@@ -296,11 +268,8 @@ public class TestResultControllerTests extends UnitTestSuite {
   public void testFindTestResultsOverviewForTestBatchWithAllPendingTestsAndNoRecentResults_shouldReturnCorrectResults() {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
-    Set<DonationBatch> donationBatches = new HashSet<>(
-        Arrays.asList(aDonationBatch().withId(DONATION_BATCH_ID).withBatchNumber("123").withDonationBatchDate(new Date()).build()));
-
     TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withTestBatchDate(new Date())
-        .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
+        .withStatus(TestBatchStatus.OPEN).build();
 
     Map<UUID, BloodTestResultViewModel> recentTestResults = new HashMap<>();
 
@@ -345,18 +314,9 @@ public class TestResultControllerTests extends UnitTestSuite {
   @Test
   public void testFindTestResultsOverviewForTestBatchWithAllTestsRequiringReEntry_shouldReturnCorrectResults() {
     HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-
-    Set<DonationBatch> donationBatches = new HashSet<>(Arrays.asList(
-        aDonationBatch()
-            .withId(DONATION_BATCH_ID)
-            .withBatchNumber("123")
-            .withDonationBatchDate(new Date())
-            .build()
-      )
-    );
     
     TestBatch aTestBatch = aTestBatch().withId(UUID.randomUUID()).withBatchNumber("00001").withTestBatchDate(new Date())
-        .withStatus(TestBatchStatus.OPEN).withDonationBatches(donationBatches).build();
+        .withStatus(TestBatchStatus.OPEN).build();
     
     UUID basicBloodTypingBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel basicBloodTypingBloodFullTestViewModel = aBasicBloodTypingBloodTestFullViewModel()
