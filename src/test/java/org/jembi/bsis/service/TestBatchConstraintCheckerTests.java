@@ -46,6 +46,23 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
+  public void testCanReleaseTestBatchWithNullDonations_shouldReturnTrue() {
+    TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).withDonations(null).build();
+    CanReleaseResult result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
+
+    assertThat(result.canRelease(), is(true));
+    assertThat(result.getReadyCount(), is(0));
+  }
+
+  @Test
+  public void testCanCloseTestBatchWithNoDonationBatches_shouldReturnTrue() {
+    TestBatch testBatch =
+        aTestBatch().withStatus(TestBatchStatus.RELEASED).withDonations(Collections.<Donation>emptySet()).build();
+    boolean result = testBatchConstraintChecker.canCloseTestBatch(testBatch);
+    assertThat(result, is(true));
+  }
+
+  @Test
   public void testCanReleaseTestBatchWithNoOutstandingOutcomes_shouldReturnTrue() {
 
     Donation donation = aDonation()
@@ -226,7 +243,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanAddOrRemoveDonationBatchesFromClosedTestBatch_shouldReturnFalse() {
+  public void testCanAddOrRemoveDonationsFromClosedTestBatch_shouldReturnFalse() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.CLOSED)
