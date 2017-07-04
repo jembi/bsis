@@ -120,17 +120,47 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
   }
   
   @Test(expected = IllegalStateException.class)
-  public void testUpdateTestBatch_shouldNotUpdateDonationBatch() {
-    final TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID)
-        .withStatus(TestBatchStatus.OPEN).build();
-
-    TestBatch updatedTestBatch = aTestBatch().withId(TEST_BATCH_ID)
+  public void testUpdateTestBatchWithOpenTestBatchWithoutCanEditPermission_shouldThrowError() {
+    TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID)
         .withStatus(TestBatchStatus.OPEN).build();
 
     when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
     when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
 
-    testBatchCRUDService.updateTestBatch(updatedTestBatch);
+    testBatchCRUDService.updateTestBatch(testBatch);
+  }
+  
+  @Test
+  public void testUpdateTestBatchWithOpenTestBatchAndCanEditPermission_shouldNotThrowError() {
+    TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID)
+        .withStatus(TestBatchStatus.OPEN).build();
+
+    when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+    when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
+
+    testBatchCRUDService.updateTestBatch(testBatch);
+  }
+  
+  @Test
+  public void testUpdateTestBatchWithClosedTestBatchWithoutCanEditPermission_shouldNotThrowError() {
+    TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID)
+        .withStatus(TestBatchStatus.CLOSED).build();
+
+    when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+    when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
+
+    testBatchCRUDService.updateTestBatch(testBatch);
+  }
+  
+  @Test
+  public void testUpdateTestBatchWithClosedTestBatchAndCanEditPermission_shouldNotThrowError() {
+    TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID)
+        .withStatus(TestBatchStatus.CLOSED).build();
+
+    when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+    when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(true);
+
+    testBatchCRUDService.updateTestBatch(testBatch);
   }
   
   @Test(expected = IllegalStateException.class)
