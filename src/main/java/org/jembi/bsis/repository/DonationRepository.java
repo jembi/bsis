@@ -14,8 +14,6 @@ import org.jembi.bsis.dto.DonationExportDTO;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class DonationRepository extends AbstractRepository<Donation> {
 
   private static final Logger LOGGER = Logger.getLogger(DonationRepository.class);
-
-  @Autowired
-  private BloodTestingRepository bloodTestingRepository;
 
   public Donation findDonationById(UUID donationId) throws NoResultException {
     String queryString = "SELECT c FROM Donation c LEFT JOIN FETCH c.donor WHERE c.id = :donationId and c.isDeleted = :isDeleted";
