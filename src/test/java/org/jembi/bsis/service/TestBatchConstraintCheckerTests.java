@@ -243,7 +243,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanAddOrRemoveDonationFromClosedTestBatch_shouldReturnFalse() {
+  public void testCanAddOrRemoveDonationsFromClosedTestBatch_shouldReturnFalse() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
         .withStatus(TestBatchStatus.CLOSED)
