@@ -18,20 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TestBatchRepository extends AbstractRepository<TestBatch> {
 
-  public TestBatch saveTestBatch(TestBatch testBatch, String testBatchNumber) {
-    testBatch.setIsDeleted(false);
-    testBatch.setBatchNumber(testBatchNumber);
-    testBatch.setStatus(TestBatchStatus.OPEN);
-    entityManager.persist(testBatch);
-    if (testBatch.getDonations() != null) {
-      for (Donation donation : testBatch.getDonations()) {
-        donation.setTestBatch(testBatch);
-        entityManager.merge(donation);
-      }
-    }
-    return testBatch;
-  }
-
   public TestBatch findTestBatchById(UUID id) throws NoResultException {
     TypedQuery<TestBatch> query = entityManager.createQuery(
         "SELECT t FROM TestBatch t WHERE t.id = :id", TestBatch.class);

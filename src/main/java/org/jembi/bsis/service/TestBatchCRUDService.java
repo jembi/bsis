@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
+import org.jembi.bsis.repository.SequenceNumberRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,16 @@ public class TestBatchCRUDService {
   private TestBatchConstraintChecker testBatchConstraintChecker;
   @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
+  @Autowired
+  private SequenceNumberRepository sequenceNumberRepository;
+
+  public TestBatch createTestBatch(TestBatch testBatch) {
+    testBatch.setBatchNumber(sequenceNumberRepository.getNextTestBatchNumber());
+    testBatch.setStatus(TestBatchStatus.OPEN);
+    testBatch.setIsDeleted(Boolean.FALSE);
+    testBatchRepository.save(testBatch);
+    return testBatch;
+  }
 
   public TestBatch updateTestBatch(TestBatch updatedTestBatch) {
 
@@ -97,6 +108,11 @@ public class TestBatchCRUDService {
     }
 
     testBatch.getDonations().addAll(new HashSet<Donation>(donations));
+
+    for (Donation donation : donations) {
+      donation.setTestBatch(testBatch);
+    }
+    
     testBatchRepository.save(testBatch);
     return testBatch;
   }

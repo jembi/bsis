@@ -25,9 +25,11 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
+import org.jembi.bsis.repository.SequenceNumberRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
 import org.jembi.bsis.suites.UnitTestSuite;
+import org.jembi.bsis.util.RandomTestDate;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -46,6 +48,8 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
   private TestBatchConstraintChecker testBatchConstraintChecker;
   @Mock
   private TestBatchStatusChangeService testBatchStatusChangeService;
+  @Mock
+  private SequenceNumberRepository sequenceNumberRepository;
 
   @Test
   public void testUpdateTestBatchStatusWithNoStatusChange_shouldDoNothing() {
@@ -279,8 +283,36 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
     when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
 
-    testBatchCRUDService.addDonationsToTestBatch(TEST_BATCH_ID, donations);
+    TestBatch updatedTestBatch = testBatchCRUDService.addDonationsToTestBatch(TEST_BATCH_ID, donations);
 
     verify(testBatchRepository, times(1)).save(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
+    for (Donation donation : updatedTestBatch.getDonations()) {
+      assertThat(donation.getTestBatch(), is(testBatch));
+    }
+  }
+
+  @Test
+  public void testCreatTestBatch_shouldCreateEntity() {
+    Date testBatchDate = new RandomTestDate();
+    String batchNumber = "1234567";
+    Location location = aTestingSite().build();
+    TestBatch testBatch = aTestBatch()
+        .withTestBatchDate(testBatchDate)
+        .withLocation(location)
+        .build();
+
+    TestBatch expectedTestBatch = aTestBatch()
+        .withTestBatchDate(testBatchDate)
+        .withLocation(location)
+        .withBatchNumber(batchNumber)
+        .withStatus(TestBatchStatus.OPEN)
+        .build();
+
+    when(sequenceNumberRepository.getNextTestBatchNumber()).thenReturn(batchNumber);
+
+    TestBatch savedTestBatch = testBatchCRUDService.createTestBatch(testBatch);
+
+    assertThat(savedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
+    verify(testBatchRepository).save(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
   }
 }

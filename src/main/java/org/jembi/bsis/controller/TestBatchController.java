@@ -69,7 +69,7 @@ public class TestBatchController {
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_BATCH+"')")
   public ResponseEntity<TestBatchFullViewModel> addTestBatch(@Valid @RequestBody TestBatchBackingForm form) {
-    TestBatchFullViewModel testBatch = testBatchControllerService.saveTestBatch(form);
+    TestBatchFullViewModel testBatch = testBatchControllerService.addTestBatch(form);
     return new ResponseEntity<>(testBatch, HttpStatus.CREATED);
   }
 

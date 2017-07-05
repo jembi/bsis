@@ -15,7 +15,6 @@ import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.LocationRepository;
-import org.jembi.bsis.repository.SequenceNumberRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.service.TestBatchCRUDService;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -43,9 +42,6 @@ public class TestBatchControllerService {
   
   @Autowired
   private TestBatchRepository testBatchRepository;
-
-  @Autowired
-  private SequenceNumberRepository sequenceNumberRepository;
   
   @Autowired
   private DonationRepository donationRepository;
@@ -61,8 +57,9 @@ public class TestBatchControllerService {
     return locationFactory.createViewModels(locations);
   }
   
-  public TestBatchFullViewModel saveTestBatch(TestBatchBackingForm form) {
-    TestBatch testBatch = testBatchRepository.saveTestBatch(testBatchFactory.createEntity(form), sequenceNumberRepository.getNextTestBatchNumber());
+  public TestBatchFullViewModel addTestBatch(TestBatchBackingForm form) {
+    TestBatch testBatch = testBatchFactory.createEntity(form);
+    testBatch = testBatchCRUDService.createTestBatch(testBatch);
     boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
     return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
   }
