@@ -101,7 +101,7 @@ public class TestResultControllerServiceTest extends UnitTestSuite {
   }
 
   @Test
-  public void testGetBloodTestingRuleResultsWithNullBloodTestType_shouldAllResults() throws Exception {
+  public void testGetBloodTestingRuleResultsWithNullBloodTestType_shouldReturnAllResults() throws Exception {
     Donation donation1 = aDonation().build();
     Donation donation2 = aDonation().build();
     TestBatch testBatch = aReleasedTestBatch()
