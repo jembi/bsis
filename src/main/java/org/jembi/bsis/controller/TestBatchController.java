@@ -21,7 +21,6 @@ import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
@@ -58,49 +57,50 @@ public class TestBatchController {
   
   @RequestMapping(value = "/form", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TESTING_INFORMATION+"')")
-  public ResponseEntity<Map<String, Object>> findAndAddTestBatchFormGenerator() {
+  public Map<String, Object> findAndAddTestBatchFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("status", TestBatchStatus.values());
     map.put("testingSites", testBatchControllerService.getTestingSites());
-    return new ResponseEntity<>(map, HttpStatus.OK);
+    return map;
   }
 
   @RequestMapping(method = RequestMethod.POST)
   @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_BATCH+"')")
-  public ResponseEntity<TestBatchFullViewModel> addTestBatch(@Valid @RequestBody TestBatchBackingForm form) {
-    TestBatchFullViewModel testBatch = testBatchControllerService.addTestBatch(form);
-    return new ResponseEntity<>(testBatch, HttpStatus.CREATED);
+  @ResponseStatus(HttpStatus.CREATED)
+  public TestBatchFullViewModel addTestBatch(@Valid @RequestBody TestBatchBackingForm testBatchBackingForm) {
+    TestBatchFullViewModel testBatch = testBatchControllerService.addTestBatch(testBatchBackingForm);
+    return testBatch;
   }
 
   @RequestMapping(value = "{id}",  method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
   @Transactional(readOnly = true)
-  public ResponseEntity<Map<String, Object>> getTestBatchById(@PathVariable UUID id){
+  public Map<String, Object> getTestBatchById(@PathVariable UUID id){
     Map<String, Object> map = new HashMap<String, Object>();
     map.put("testBatch", testBatchControllerService.getTestBatchById(id));
-    return new ResponseEntity<>(map, HttpStatus.OK);
+    return map;
 
   }
 
   @RequestMapping(value = "{id}",  method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
-  public ResponseEntity<TestBatchFullViewModel> updateTestBatch(@PathVariable UUID id,
+  public TestBatchFullViewModel updateTestBatch(@PathVariable UUID id,
       @Valid @RequestBody TestBatchBackingForm testBatchBackingForm) {
     testBatchBackingForm.setId(id);
-    return new ResponseEntity<>(testBatchControllerService.updateTestBatch(testBatchBackingForm), HttpStatus.OK);
+    return testBatchControllerService.updateTestBatch(testBatchBackingForm);
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
-  public ResponseEntity<Map<String, Object>> findTestBatch(
+  public Map<String, Object> findTestBatch(
       @RequestParam(value = "status", required = false) List<TestBatchStatus> statuses ,
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
       @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate,
       @RequestParam(value = "locationId", required = false) UUID locationId) {
     Map<String, Object> map = new HashMap<>();
     map.put("testBatches", testBatchControllerService.findTestBatches(statuses, startDate, endDate, locationId));
-    return new ResponseEntity<>(map, HttpStatus.OK);
+    return map;
 
   }
 
@@ -113,18 +113,18 @@ public class TestBatchController {
 
   @RequestMapping(value = "/{id}/donations", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TESTING_INFORMATION + "')")
-  public ResponseEntity<TestBatchFullDonationViewModel> getDonationsForTestBatch(@PathVariable UUID id,
+  public TestBatchFullDonationViewModel getDonationsForTestBatch(@PathVariable UUID id,
       @RequestParam(value = "bloodTypingMatchStatus", required = false) BloodTypingMatchStatus bloodTypingMatchStatus) {
     TestBatchFullDonationViewModel testBatchFullDonationViewModel = testBatchControllerService.getTestBatchByIdAndBloodTypingMatchStatus(id, bloodTypingMatchStatus);
 
-    return new ResponseEntity<>(testBatchFullDonationViewModel, HttpStatus.OK);
+    return testBatchFullDonationViewModel;
   }
   
   @RequestMapping(value = "{id}/donations",  method = RequestMethod.PUT)
   @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
-  public ResponseEntity<TestBatchFullViewModel> addDonationsToTestBatch(@PathVariable UUID id,
+  public TestBatchFullViewModel addDonationsToTestBatch(@PathVariable UUID id,
       @Valid @RequestBody TestBatchDonationRangeBackingForm testBatchDonationRangeBackingForm) {
     testBatchDonationRangeBackingForm.setTestBatchId(id);
-    return new ResponseEntity<>(testBatchControllerService.addDonationsToTestBatch(testBatchDonationRangeBackingForm), HttpStatus.OK);
+    return testBatchControllerService.addDonationsToTestBatch(testBatchDonationRangeBackingForm);
   }
 }
