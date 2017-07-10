@@ -1,20 +1,16 @@
 package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +76,10 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   EntityManager entityManager;
 
   @Mock
-  TypedQuery typedQuery;
+  TypedQuery<BloodTestResult> typedQueryBTR;
+
+  @Mock
+  TypedQuery<BloodTest> typedQueryBT;
 
   @Mock
   TestBatchStatusChangeService testBatchStatusChangeService;
@@ -348,16 +347,16 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
         + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
         + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
-            .thenReturn(typedQuery);
-    when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
+            .thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("donationId", 1)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("testOutcomeDeleted", false)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("isActive", true)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("isDeleted", false)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
-        .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
-    when(typedQuery.getSingleResult()).thenReturn(bloodTest);
+        .thenReturn(typedQueryBT);
+    when(typedQueryBT.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQueryBT);
+    when(typedQueryBT.getSingleResult()).thenReturn(bloodTest);
 
     // run test
     TestResultsBackingForm form = TestResultsBackingFormBuilder.aTestResultsBackingForm()
@@ -399,16 +398,16 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
         + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
         + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
-            .thenReturn(typedQuery);
-    when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
+            .thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("donationId", 1)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("testOutcomeDeleted", false)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("isActive", true)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("isDeleted", false)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
-        .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
-    when(typedQuery.getSingleResult()).thenReturn(bloodTest);
+        .thenReturn(typedQueryBT);
+    when(typedQueryBT.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQueryBT);
+    when(typedQueryBT.getSingleResult()).thenReturn(bloodTest);
 
     // run test
     TestResultsBackingForm form = TestResultsBackingFormBuilder.aTestResultsBackingForm()
@@ -455,16 +454,16 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
         + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
         + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
-            .thenReturn(typedQuery);
-    when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
+            .thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("donationId", 1)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("testOutcomeDeleted", false)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("isActive", true)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("isDeleted", false)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
-        .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
-    when(typedQuery.getSingleResult()).thenReturn(bloodTest);
+        .thenReturn(typedQueryBT);
+    when(typedQueryBT.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQueryBT);
+    when(typedQueryBT.getSingleResult()).thenReturn(bloodTest);
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true))
         .thenReturn(true);
 
@@ -507,16 +506,16 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
         + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
         + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
-            .thenReturn(typedQuery);
-    when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
+            .thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("donationId", 1)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("testOutcomeDeleted", false)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("isActive", true)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("isDeleted", false)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
-        .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
-    when(typedQuery.getSingleResult()).thenReturn(bloodTest);
+        .thenReturn(typedQueryBT);
+    when(typedQueryBT.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQueryBT);
+    when(typedQueryBT.getSingleResult()).thenReturn(bloodTest);
     when(generalConfigAccessorService.getBooleanValue(GeneralConfigConstants.TESTING_RE_ENTRY_REQUIRED, true))
         .thenReturn(true);
 
@@ -565,15 +564,15 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     when(entityManager.createQuery("SELECT btr FROM BloodTestResult btr WHERE "
         + "btr.donation.id=:donationId AND btr.isDeleted = :testOutcomeDeleted "
         + "AND btr.bloodTest.isActive= :isActive AND btr.bloodTest.isDeleted= :isDeleted", BloodTestResult.class))
-            .thenReturn(typedQuery);
-    when(typedQuery.setParameter("donationId", 1)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("testOutcomeDeleted", false)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isActive", true)).thenReturn(typedQuery);
-    when(typedQuery.setParameter("isDeleted", false)).thenReturn(typedQuery);
-    when(typedQuery.getResultList()).thenReturn(bloodTestResultList);
+            .thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("donationId", 1)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("testOutcomeDeleted", false)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("isActive", true)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.setParameter("isDeleted", false)).thenReturn(typedQueryBTR);
+    when(typedQueryBTR.getResultList()).thenReturn(bloodTestResultList);
     when(entityManager.createQuery("SELECT bt FROM BloodTest bt WHERE " + "bt.id=:bloodTestId", BloodTest.class))
-        .thenReturn(typedQuery);
-    when(typedQuery.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQuery);
+        .thenReturn(typedQueryBT);
+    when(typedQueryBT.setParameter("bloodTestId", bloodTestId)).thenReturn(typedQueryBT);
 
     // run test
     TestResultsBackingForm form1 = TestResultsBackingFormBuilder.aTestResultsBackingForm()
