@@ -21,9 +21,6 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donation.Titre;
 import org.jembi.bsis.repository.BloodTestRepository;
-import org.jembi.bsis.repository.DonationBatchRepository;
-import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.service.BloodTestingRuleEngine;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -39,16 +36,7 @@ public class BloodTestingRepository {
   private EntityManager em;
 
   @Autowired
-  private DonationRepository donationRepository;
-
-  @Autowired
-  private DonationBatchRepository donationBatchRepository;
-
-  @Autowired
   private BloodTestRepository bloodTestRepository;
-
-  @Autowired
-  private BloodTestingRuleEngine ruleEngine;
 
   /**
    * Save the BloodTestingRuleResult and update the Donation blood ABO/Rh and blood typing statuses

@@ -1,14 +1,20 @@
 package org.jembi.bsis.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +27,7 @@ import org.jembi.bsis.backingform.TestResultsBackingForm;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.helpers.builders.BloodTestBuilder;
 import org.jembi.bsis.helpers.builders.BloodTestResultBuilder;
-import org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
-import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.TestBatchBuilder;
 import org.jembi.bsis.helpers.builders.TestResultsBackingFormBuilder;
 import org.jembi.bsis.helpers.matchers.BloodTestResultMatcher;
@@ -98,7 +102,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsNotUpdated() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
+    Donation donation = aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -120,7 +124,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedBloodAbo() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodRh("+").withTTIStatus(TTIStatus.NOT_DONE)
+    Donation donation = aDonation().withId(DONATION_ID).withBloodRh("+").withTTIStatus(TTIStatus.NOT_DONE)
         .withBloodTypingStatus(BloodTypingStatus.NOT_DONE).withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
         .build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -142,7 +146,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
 
   public void testUpdateDonationWithTestResultsUpdatedBloodRh() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withTTIStatus(TTIStatus.NOT_DONE)
+    Donation donation = aDonation().withId(DONATION_ID).withBloodAbo("A").withTTIStatus(TTIStatus.NOT_DONE)
         .withBloodTypingStatus(BloodTypingStatus.NOT_DONE).withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
         .build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -165,7 +169,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedTTISafe() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
+    Donation donation = aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
         .withTTIStatus(TTIStatus.NOT_DONE).withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -188,7 +192,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedBloodTypingStatus() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
+    Donation donation = aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -211,7 +215,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedBloodTypingMatchStatus() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
+    Donation donation = aDonation().withId(DONATION_ID).withBloodAbo("A").withBloodRh("+")
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -235,7 +239,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedNotTTISafe() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.SAFE)
+    Donation donation = aDonation().withId(DONATION_ID).withTTIStatus(TTIStatus.SAFE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE).withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
         .build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
@@ -258,7 +262,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedTitreFromNull_shouldUpdate() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTitre(null).build();
+    Donation donation = aDonation().withId(DONATION_ID).withTitre(null).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setTitre(Titre.LOW);
 
@@ -273,7 +277,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedTitreFromHighToLow_shouldUpdate() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTitre(Titre.HIGH).build();
+    Donation donation = aDonation().withId(DONATION_ID).withTitre(Titre.HIGH).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setTitre(Titre.LOW);
 
@@ -288,7 +292,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsUpdatedTitreFromHighToNT_shouldUpdate() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTitre(Titre.HIGH).build();
+    Donation donation = aDonation().withId(DONATION_ID).withTitre(Titre.HIGH).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setTitre(null);
 
@@ -303,7 +307,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testUpdateDonationWithTestResultsSameTitre_shouldNotUpdate() throws Exception {
     // set up data
-    Donation donation = DonationBuilder.aDonation().withId(DONATION_ID).withTitre(Titre.HIGH).build();
+    Donation donation = aDonation().withId(DONATION_ID).withTitre(Titre.HIGH).build();
     BloodTestingRuleResult ruleResult = new BloodTestingRuleResult();
     ruleResult.setTitre(Titre.HIGH);
 
@@ -320,7 +324,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().build();
-    Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
+    Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
         .withTestBatch(testBatch).build();
@@ -332,7 +336,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
-    BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
+    BloodTestingRuleResult ruleResult = aBloodTestingRuleResult().withBloodAbo("AB")
         .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
@@ -373,7 +377,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().build();
-    Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
+    Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
         .withTestBatch(testBatch).build();
@@ -385,7 +389,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
-    BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
+    BloodTestingRuleResult ruleResult = aBloodTestingRuleResult().withBloodAbo("AB")
         .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
@@ -423,7 +427,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().build();
-    Donation donation = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
+    Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
         .withTestBatch(testBatch).build();
@@ -441,7 +445,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
-    BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
+    BloodTestingRuleResult ruleResult = aBloodTestingRuleResult().withBloodAbo("AB")
         .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
@@ -481,7 +485,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().build();
-    Donation donation = DonationBuilder.aDonation().withTTIStatus(TTIStatus.SAFE)
+    Donation donation = aDonation().withTTIStatus(TTIStatus.SAFE)
         .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
         .withTestBatch(testBatch).build();
@@ -493,7 +497,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withBloodTest(bloodTest).build());
 
-    BloodTestingRuleResult ruleResult = BloodTestingRuleResultBuilder.aBloodTestingRuleResult().withBloodAbo("AB")
+    BloodTestingRuleResult ruleResult = aBloodTestingRuleResult().withBloodAbo("AB")
         .withBloodRh("+").withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
@@ -537,11 +541,11 @@ public class BloodTestsServiceTest extends UnitTestSuite {
     // set up data
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     DonationBatch donationBatch = DonationBatchBuilder.aDonationBatch().build();
-    Donation donation1 = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
+    Donation donation1 = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_1)
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
         .withTestBatch(testBatch).build();
-    Donation donation2 = DonationBuilder.aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_2)
+    Donation donation2 = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN_2)
         .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).withDonationBatch(donationBatch)
         .withTestBatch(testBatch).build();
@@ -592,7 +596,7 @@ public class BloodTestsServiceTest extends UnitTestSuite {
   @Test
   public void testSetTestOutcomesAsDeleted_shouldDeleteAllTestOutcomesForDonation() {
     // Set up data
-    Donation donation = DonationBuilder.aDonation().build();
+    Donation donation = aDonation().build();
     List<BloodTestResult> bloodTestResultList = new ArrayList<>();
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(FIRST_BLOOD_TEST_RESULT_ID).withDonation(donation).build());
     bloodTestResultList.add(BloodTestResultBuilder.aBloodTestResult().withId(SECOND_BLOOD_TEST_RESULT_ID).withDonation(donation).build());

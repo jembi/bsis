@@ -20,7 +20,6 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
-import org.jembi.bsis.repository.bloodtesting.BloodTestingRepository;
 import org.jembi.bsis.service.BloodTestsService;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
@@ -51,9 +50,6 @@ public class TestResultController {
 
   @Autowired
   private TestBatchRepository testBatchRepository;
-
-  @Autowired
-  private BloodTestingRepository bloodTestingRepository;
 
   @Autowired
   private BloodTestsService bloodTestsService;
