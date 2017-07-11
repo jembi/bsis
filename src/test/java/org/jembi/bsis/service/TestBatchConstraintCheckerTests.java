@@ -261,7 +261,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   public void testCanAddOrRemoveDonationsWithNullTestResults_shouldReturnTrue() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.RELEASED)
+        .withStatus(TestBatchStatus.OPEN)
         .build();
 
     when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
@@ -275,7 +275,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
   public void testCanAddOrRemoveDonationsWithoutTestResults_shouldReturnTrue() {
     Donation donation = aDonation().build();
     TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.RELEASED)
+        .withStatus(TestBatchStatus.OPEN)
         .withDonations(new HashSet<Donation>())
         .build();
 

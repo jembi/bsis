@@ -87,11 +87,10 @@ public class TestBatchConstraintChecker {
   }
 
   /**
-   * Donations can be added or removed from a Test Batch as long as there aren't any test
-   * results recorded.
+   * Donations can only be added to open test batches
    */
   public boolean canAddOrRemoveDonation(TestBatch testBatch) {
-    return canEditTestBatch(testBatch) && !testBatchHasResults(testBatch);
+    return TestBatchStatus.OPEN.equals(testBatch.getStatus());
   }
 
   /**

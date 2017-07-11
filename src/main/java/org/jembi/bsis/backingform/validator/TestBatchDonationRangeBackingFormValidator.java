@@ -5,7 +5,10 @@ import java.util.List;
 import org.jembi.bsis.backingform.TestBatchDonationRangeBackingForm;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.testbatch.TestBatch;
+import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
+import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +22,9 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
 
   @Autowired
   private DonationRepository donationRepository;
+  
+  @Autowired
+  private TestBatchRepository testBatchRepository;
 
   @Override
   public void validateForm(TestBatchDonationRangeBackingForm form, Errors errors) {
@@ -45,6 +51,11 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
     
     // check that all Donations in the range aren’t already associated with another TestBatch
     validateDonationsInRange(form, errors);
+    
+    //check that Donations can be added to the testbatch
+    if(!validateTestBatchStatus(form, errors)) {
+      return;
+    }
   }
 
   private boolean validateDINLength(TestBatchDonationRangeBackingForm form, Errors errors) {
@@ -97,6 +108,15 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
         break; // no need to log the same error twice
       }
     }
+  }
+  
+  private boolean validateTestBatchStatus(TestBatchDonationRangeBackingForm form, Errors errors) {
+    TestBatch testBatch = testBatchRepository.findTestBatchById(form.getTestBatchId());
+    if (!TestBatchStatus.OPEN.equals(testBatch.getStatus())) {
+      errors.reject("errors.invalid.testBatchStatus", "Donations can only be added to open test batches");
+      return false;
+    }
+    return true;
   }
 
   @Override
