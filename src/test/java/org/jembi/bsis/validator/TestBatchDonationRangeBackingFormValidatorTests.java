@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
+import static org.jembi.bsis.helpers.builders.TestBatchDonationRangeBackingFormBuilder.aTestBatchDonationRangeBackingForm;
 import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
@@ -329,17 +330,15 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     Donation toDonation = aDonation().withDonationIdentificationNumber(toDIN).build();
     TestBatch testBatch = aTestBatch().withId(testBatchId).withStatus(TestBatchStatus.OPEN).build();
     
-    TestBatchDonationRangeBackingForm backingForm = new TestBatchDonationRangeBackingForm();
-    backingForm.setTestBatchId(testBatchId);
-    backingForm.setFromDIN(fromDIN);
-    backingForm.setToDIN(toDIN);
+    TestBatchDonationRangeBackingForm backingForm =
+        aTestBatchDonationRangeBackingForm().withTestBatchId(testBatchId).withFromDIN(fromDIN).withToDIN(toDIN).build();
+
     
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(fromDonation);
     when(donationRepository.findDonationByDonationIdentificationNumber(toDIN)).thenReturn(toDonation);
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(testBatch);
     
-
     Errors errors = new BindException(backingForm, "testBatchDonationRangeBackingForm");
     validator.validate(backingForm, errors);
 
@@ -356,16 +355,13 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     Donation toDonation = aDonation().withDonationIdentificationNumber(toDIN).build();
     TestBatch testBatch = aTestBatch().withId(testBatchId).withStatus(TestBatchStatus.CLOSED).build();
     
-    TestBatchDonationRangeBackingForm backingForm = new TestBatchDonationRangeBackingForm();
-    backingForm.setTestBatchId(testBatchId);
-    backingForm.setFromDIN(fromDIN);
-    backingForm.setToDIN(toDIN);
+    TestBatchDonationRangeBackingForm backingForm =
+        aTestBatchDonationRangeBackingForm().withTestBatchId(testBatchId).withFromDIN(fromDIN).withToDIN(toDIN).build();
 
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(fromDonation);
     when(donationRepository.findDonationByDonationIdentificationNumber(toDIN)).thenReturn(toDonation);
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(testBatch);
-
 
     Errors errors = new BindException(backingForm, "testBatchDonationRangeBackingForm");
     validator.validate(backingForm, errors);
@@ -384,16 +380,13 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     Donation toDonation = aDonation().withDonationIdentificationNumber(toDIN).build();
     TestBatch testBatch = aTestBatch().withId(testBatchId).withStatus(TestBatchStatus.RELEASED).build();
     
-    TestBatchDonationRangeBackingForm backingForm = new TestBatchDonationRangeBackingForm();
-    backingForm.setTestBatchId(testBatchId);
-    backingForm.setFromDIN(fromDIN);
-    backingForm.setToDIN(toDIN);
-
+    TestBatchDonationRangeBackingForm backingForm =
+        aTestBatchDonationRangeBackingForm().withTestBatchId(testBatchId).withFromDIN(fromDIN).withToDIN(toDIN).build();
+    
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(fromDonation);
     when(donationRepository.findDonationByDonationIdentificationNumber(toDIN)).thenReturn(toDonation);
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(testBatch);
-
 
     Errors errors = new BindException(backingForm, "testBatchDonationRangeBackingForm");
     validator.validate(backingForm, errors);

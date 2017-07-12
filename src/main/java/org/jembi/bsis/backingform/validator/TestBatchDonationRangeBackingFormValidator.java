@@ -53,7 +53,7 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
     validateDonationsInRange(form, errors);
     
     //check that Donations can be added to the testbatch
-    if(!validateTestBatchStatus(form, errors)) {
+    if (!validateTestBatchStatus(form, errors)) {
       return;
     }
   }
