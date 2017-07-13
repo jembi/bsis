@@ -87,7 +87,7 @@ public class TestBatchControllerService {
   public TestBatchFullViewModel addDonationsToTestBatch(TestBatchDonationRangeBackingForm form) {
     List<Donation> donations = donationRepository.findDonationsBetweenTwoDins(form.getFromDIN(), form.getToDIN());
     TestBatch testbatch = testBatchCRUDService.addDonationsToTestBatch(form.getTestBatchId(), donations);
-    boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
+    boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.ADD_TEST_BATCH);
     return testBatchFactory.createTestBatchFullViewModel(testbatch, isTestingSupervisor);
   }
 }

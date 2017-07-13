@@ -121,7 +121,7 @@ public class TestBatchController {
   }
   
   @RequestMapping(value = "{id}/donations",  method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
+  @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_BATCH+"')")
   public TestBatchFullViewModel addDonationsToTestBatch(@PathVariable UUID id,
       @Valid @RequestBody TestBatchDonationRangeBackingForm testBatchDonationRangeBackingForm) {
     testBatchDonationRangeBackingForm.setTestBatchId(id);
