@@ -106,7 +106,13 @@ public class TestBatchCRUDService {
     if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
       throw new IllegalStateException("Donations can only be added to open test batches");
     }
-
+    
+    for (Donation donation : donations) {
+      if (!donation.getPackType().getTestSampleProduced()) {
+        throw new IllegalStateException("This donation does not produce test samples");
+      }
+    }
+   
     testBatch.getDonations().addAll(new HashSet<Donation>(donations));
 
     for (Donation donation : donations) {
