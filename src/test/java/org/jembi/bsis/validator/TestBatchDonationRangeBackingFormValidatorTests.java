@@ -45,7 +45,10 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     String fromDIN = "1000000";
     String toDIN = "2000000";
     UUID testBatchId = UUID.randomUUID();
-    TestBatch testBatch = aTestBatch().withId(testBatchId).withStatus(TestBatchStatus.OPEN).build();
+    TestBatch testBatch = aTestBatch()
+        .withId(testBatchId)
+        .withStatus(TestBatchStatus.OPEN)
+        .build();
     TestBatchDonationRangeBackingForm backingForm = new TestBatchDonationRangeBackingForm();
     backingForm.setTestBatchId(testBatchId);
     backingForm.setFromDIN(fromDIN);
@@ -77,9 +80,18 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     backingForm.setFromDIN(fromDIN);
     backingForm.setToDIN(toDIN);
 
-    TestBatch testBatch = aTestBatch().withId(testBatchId).withStatus(TestBatchStatus.OPEN).build();
-    Donation donation1 = aDonation().withDonationIdentificationNumber(fromDIN).withTestBatch(testBatch).build();
-    Donation donation2 = aDonation().withDonationIdentificationNumber(toDIN).withTestBatch(testBatch).build();
+    TestBatch testBatch = aTestBatch()
+        .withId(testBatchId)
+        .withStatus(TestBatchStatus.OPEN)
+        .build();
+    Donation donation1 = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .withTestBatch(testBatch)
+        .build();
+    Donation donation2 = aDonation()
+        .withDonationIdentificationNumber(toDIN)
+        .withTestBatch(testBatch)
+        .build();
     
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(donation1);
@@ -104,8 +116,13 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     backingForm.setToDIN(null);
 
     
-    Donation donation = aDonation().withDonationIdentificationNumber(fromDIN).build();
-    TestBatch testBatch = aTestBatch().withId(testBatchId).withStatus(TestBatchStatus.OPEN).build();
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .build();
+    TestBatch testBatch = aTestBatch()
+        .withId(testBatchId)
+        .withStatus(TestBatchStatus.OPEN)
+        .build();
     
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(donation);
@@ -142,8 +159,12 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     backingForm.setFromDIN(fromDIN);
     backingForm.setToDIN(toDIN);
 
-    Donation donation1 = aDonation().withDonationIdentificationNumber(fromDIN).build();
-    Donation donation2 = aDonation().withDonationIdentificationNumber(toDIN).build();
+    Donation donation1 = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .build();
+    Donation donation2 = aDonation()
+        .withDonationIdentificationNumber(toDIN)
+        .build();
     
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(donationRepository.findDonationsBetweenTwoDins(fromDIN, toDIN)).thenReturn(Arrays.asList(donation1, donation2));
@@ -165,8 +186,12 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     backingForm.setFromDIN(fromDIN);
     backingForm.setToDIN(toDIN);
 
-    Donation donation1 = aDonation().withDonationIdentificationNumber(fromDIN).build();
-    Donation donation2 = aDonation().withDonationIdentificationNumber(toDIN).build();
+    Donation donation1 = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .build();
+    Donation donation2 = aDonation()
+        .withDonationIdentificationNumber(toDIN)
+        .build();
     
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(donationRepository.findDonationsBetweenTwoDins(fromDIN, toDIN)).thenReturn(Arrays.asList(donation1, donation2));
@@ -188,8 +213,12 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     backingForm.setFromDIN(fromDIN);
     backingForm.setToDIN(toDIN);
 
-    Donation donation1 = aDonation().withDonationIdentificationNumber(fromDIN).build();
-    Donation donation2 = aDonation().withDonationIdentificationNumber(toDIN).build();
+    Donation donation1 = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .build();
+    Donation donation2 = aDonation()
+        .withDonationIdentificationNumber(toDIN)
+        .build();
     
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(donationRepository.findDonationsBetweenTwoDins(fromDIN, toDIN)).thenReturn(Arrays.asList(donation1, donation2));
@@ -211,7 +240,9 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     backingForm.setFromDIN(fromDIN);
     backingForm.setToDIN(toDIN);
 
-    Donation donation1 = aDonation().withDonationIdentificationNumber(fromDIN).build();
+    Donation donation1 = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .build();
     Donation donation2 = aDonation().withDonationIdentificationNumber(toDIN).build();
     
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
@@ -234,8 +265,12 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     backingForm.setFromDIN(fromDIN);
     backingForm.setToDIN(toDIN);
 
-    Donation donation1 = aDonation().withDonationIdentificationNumber(fromDIN).build();
-    Donation donation2 = aDonation().withDonationIdentificationNumber(toDIN).build();
+    Donation donation1 = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .build();
+    Donation donation2 = aDonation()
+        .withDonationIdentificationNumber(toDIN)
+        .build();
     
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(donationRepository.findDonationsBetweenTwoDins(fromDIN, toDIN)).thenReturn(Arrays.asList(donation1, donation2));
@@ -258,10 +293,20 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     backingForm.setFromDIN(fromDIN);
     backingForm.setToDIN(toDIN);
 
-    TestBatch testBatch = aTestBatch().withId(testBatchId).withStatus(TestBatchStatus.OPEN).build();
-    TestBatch otherTestBatch = aTestBatch().withId(UUID.randomUUID()).build();
-    Donation donation1 = aDonation().withDonationIdentificationNumber(fromDIN).withTestBatch(otherTestBatch).build();
-    Donation donation2 = aDonation().withDonationIdentificationNumber(toDIN).build();
+    TestBatch testBatch = aTestBatch()
+        .withId(testBatchId)
+        .withStatus(TestBatchStatus.OPEN)
+        .build();
+    TestBatch otherTestBatch = aTestBatch()
+        .withId(UUID.randomUUID())
+        .build();
+    Donation donation1 = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .withTestBatch(otherTestBatch)
+        .build();
+    Donation donation2 = aDonation()
+        .withDonationIdentificationNumber(toDIN)
+        .build();
     
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(donation1);
@@ -285,7 +330,9 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     backingForm.setFromDIN(fromDIN);
     backingForm.setToDIN(toDIN);
 
-    Donation donation = aDonation().withDonationIdentificationNumber(toDIN).build();
+    Donation donation = aDonation()
+        .withDonationIdentificationNumber(toDIN)
+        .build();
     
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(null);
     when(donationRepository.findDonationByDonationIdentificationNumber(toDIN)).thenReturn(donation);
@@ -326,12 +373,23 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     String fromDIN = "1000000";
     String toDIN = "2000000";
     
-    Donation fromDonation = aDonation().withDonationIdentificationNumber(fromDIN).build();
-    Donation toDonation = aDonation().withDonationIdentificationNumber(toDIN).build();
-    TestBatch testBatch = aTestBatch().withId(testBatchId).withStatus(TestBatchStatus.OPEN).build();
+    Donation fromDonation = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .build();
+    Donation toDonation = aDonation()
+        .withDonationIdentificationNumber(toDIN)
+        .build();
+    TestBatch testBatch = aTestBatch()
+        .withId(testBatchId)
+        .withStatus(TestBatchStatus.OPEN)
+        .build();
     
     TestBatchDonationRangeBackingForm backingForm =
-        aTestBatchDonationRangeBackingForm().withTestBatchId(testBatchId).withFromDIN(fromDIN).withToDIN(toDIN).build();
+        aTestBatchDonationRangeBackingForm()
+        .withTestBatchId(testBatchId)
+        .withFromDIN(fromDIN)
+        .withToDIN(toDIN)
+        .build();
 
     
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(fromDonation);
@@ -351,12 +409,23 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     String fromDIN = "1000000";
     String toDIN = "2000000";
     
-    Donation fromDonation = aDonation().withDonationIdentificationNumber(fromDIN).build();
-    Donation toDonation = aDonation().withDonationIdentificationNumber(toDIN).build();
-    TestBatch testBatch = aTestBatch().withId(testBatchId).withStatus(TestBatchStatus.CLOSED).build();
+    Donation fromDonation = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .build();
+    Donation toDonation = aDonation()
+        .withDonationIdentificationNumber(toDIN)
+        .build();
+    TestBatch testBatch = aTestBatch()
+        .withId(testBatchId)
+        .withStatus(TestBatchStatus.CLOSED)
+        .build();
     
     TestBatchDonationRangeBackingForm backingForm =
-        aTestBatchDonationRangeBackingForm().withTestBatchId(testBatchId).withFromDIN(fromDIN).withToDIN(toDIN).build();
+        aTestBatchDonationRangeBackingForm()
+        .withTestBatchId(testBatchId)
+        .withFromDIN(fromDIN)
+        .withToDIN(toDIN)
+        .build();
 
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(fromDonation);
     when(donationRepository.findDonationByDonationIdentificationNumber(toDIN)).thenReturn(toDonation);
@@ -376,12 +445,23 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     String fromDIN = "1000000";
     String toDIN = "2000000";
     
-    Donation fromDonation = aDonation().withDonationIdentificationNumber(fromDIN).build();
-    Donation toDonation = aDonation().withDonationIdentificationNumber(toDIN).build();
-    TestBatch testBatch = aTestBatch().withId(testBatchId).withStatus(TestBatchStatus.RELEASED).build();
+    Donation fromDonation = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .build();
+    Donation toDonation = aDonation()
+        .withDonationIdentificationNumber(toDIN)
+        .build();
+    TestBatch testBatch = aTestBatch()
+        .withId(testBatchId)
+        .withStatus(TestBatchStatus.RELEASED)
+        .build();
     
     TestBatchDonationRangeBackingForm backingForm =
-        aTestBatchDonationRangeBackingForm().withTestBatchId(testBatchId).withFromDIN(fromDIN).withToDIN(toDIN).build();
+        aTestBatchDonationRangeBackingForm()
+        .withTestBatchId(testBatchId)
+        .withFromDIN(fromDIN)
+        .withToDIN(toDIN)
+        .build();
     
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(fromDonation);
     when(donationRepository.findDonationByDonationIdentificationNumber(toDIN)).thenReturn(toDonation);
