@@ -2,6 +2,7 @@ package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
@@ -266,30 +267,51 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     testBatchCRUDService.addDonationsToTestBatch(TEST_BATCH_ID, donations);
   }
   
-  @Test(expected = IllegalStateException.class)
-  public void testAddDonationsToTestBatchWithDonationNotProducingSamples_shouldThrow() {
-    UUID donationId = UUID.randomUUID();
-    PackType packtype = aPackType()
+  @Test
+  public void testAddDonationsToTestBatchWithDonationNotProducingSamples_shouldSave() {
+    Location location = aTestingSite().build();
+    TestBatch testBatch = aTestBatch()
+      .withId(TEST_BATCH_ID)
+      .withStatus(TestBatchStatus.OPEN)
+      .withLocation(location)
+      .withDonations(new HashSet<Donation>())
+      .build();
+
+    PackType didNotBleedPackType = aPackType()
         .withTestSampleProduced(false)
         .build();
+    Donation donationThatDoesNotProduceATestSample = aDonation()
+        .withId(UUID.randomUUID())
+        .withPackType(didNotBleedPackType)
+        .thatIsNotDeleted()
+        .build();
+
+    PackType testSamplePackType = aPackType()
+        .withTestSampleProduced(true)
+        .build();
+    Donation donationThatProducesATestSample = aDonation()
+        .withId(UUID.randomUUID())
+        .withPackType(testSamplePackType)
+        .thatIsNotDeleted()
+        .build();
     
-    List<Donation> donations = Arrays.asList(
-        aDonation()
-            .withId(donationId)
-            .withPackType(packtype)
-            .thatIsNotDeleted()
-            .build()
-    );
-        
-    TestBatch testBatch = aTestBatch()
+    List<Donation> donations = Arrays.asList(donationThatDoesNotProduceATestSample, donationThatProducesATestSample);
+
+    TestBatch expectedTestBatch = aTestBatch()
         .withId(TEST_BATCH_ID)
         .withStatus(TestBatchStatus.OPEN)
+        .withLocation(location)
+        .withDonations(new HashSet<>(Arrays.asList(donationThatProducesATestSample)))
         .build();
     
     when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
     when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
     
-    testBatchCRUDService.addDonationsToTestBatch(TEST_BATCH_ID, donations);  
+    testBatchCRUDService.addDonationsToTestBatch(TEST_BATCH_ID, donations);
+
+    verify(testBatchRepository).save(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
+    assertThat(donationThatDoesNotProduceATestSample.getTestBatch(), nullValue());
+    assertThat(donationThatProducesATestSample.getTestBatch(), is(hasSameStateAsTestBatch(expectedTestBatch)));
   }
   
   @Test

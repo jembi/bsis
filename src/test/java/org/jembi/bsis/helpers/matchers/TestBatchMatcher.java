@@ -13,7 +13,7 @@ public class TestBatchMatcher extends AbstractTypeSafeMatcher<TestBatch> {
 
   @Override
   public void appendDescription(Description description, TestBatch testBatch) {
-    description.appendText("A TestBatch with the following state:")
+    description
         .appendText("\nId: ").appendValue(testBatch.getId())
         .appendText("\nBatchNumber: ").appendValue(testBatch.getBatchNumber())
         .appendText("\nStatus: ").appendValue(testBatch.getStatus())

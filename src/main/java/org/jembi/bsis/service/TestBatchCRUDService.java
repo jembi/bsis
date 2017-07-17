@@ -2,6 +2,7 @@ package org.jembi.bsis.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -106,16 +107,20 @@ public class TestBatchCRUDService {
     if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
       throw new IllegalStateException("Donations can only be added to open test batches");
     }
-    
+
+    Set<Donation> donationsToAdd = new HashSet<>();
     for (Donation donation : donations) {
-      if (!donation.getPackType().getTestSampleProduced()) {
-        throw new IllegalStateException("This donation does not produce test samples");
+      if (donation.getPackType().getTestSampleProduced()) {
+        donationsToAdd.add(donation);
+      } else {
+        LOGGER.debug("DIN '" + donation.getDonationIdentificationNumber()
+            + "' does not produce test samples, so cannot be added to a TestBatch. It is being ignored");
       }
     }
    
-    testBatch.getDonations().addAll(new HashSet<Donation>(donations));
+    testBatch.getDonations().addAll(donationsToAdd);
 
-    for (Donation donation : donations) {
+    for (Donation donation : donationsToAdd) {
       donation.setTestBatch(testBatch);
     }
     
