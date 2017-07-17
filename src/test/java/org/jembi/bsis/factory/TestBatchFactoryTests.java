@@ -258,14 +258,14 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(donationFactory.createDonationViewModels(any(Collection.class))).thenReturn(Arrays.asList(donationViewModel));
 
     List<TestBatchFullViewModel> returnedViewModels =
-        testBatchFactory.createTestBatchFullViewModels(testBatches, false);
+        testBatchFactory.createTestBatchFullViewModels(testBatches);
 
     assertThat(returnedViewModels.get(0), hasSameStateAsTestBatchFullViewModel(expectedViewModel1));
     assertThat(returnedViewModels.get(1), hasSameStateAsTestBatchFullViewModel(expectedViewModel2));
   }
 
   @Test
-  public void testCreateTestBatchViewModelWithTestingSupervisorThatCanReleaseTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
+  public void testCreateTestBatchViewModelThatCanReleaseTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
 
     int expectedReadyCount = 2;
     Set<Donation> donations = createDonations();
@@ -308,13 +308,13 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
     when(donationFactory.createDonationViewModels(any(Collection.class))).thenReturn(Arrays.asList(donationViewModel));
 
-    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch);
 
     assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
 
   @Test
-  public void testCreateTestBatchViewModelWithTestingSupervisorThatCanCloseTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
+  public void testCreateTestBatchViewModelThatCanCloseTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
     
     Set<Donation> donations = createDonations();
 
@@ -353,13 +353,13 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
     when(donationFactory.createDonationViewModels(any(Collection.class))).thenReturn(Arrays.asList(donationViewModel));
 
-    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch);
 
     assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
 
   @Test
-  public void testCreateTestBatchViewModelWithTestingSupervisorAndConstraints_shouldReturnTestBatchViewModelWithTheCorrectState() {
+  public void testCreateTestBatchViewModelWithConstraints_shouldReturnTestBatchViewModelWithTheCorrectState() {
 
     Set<Donation> donations = createDonations();
     
@@ -398,13 +398,13 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
     when(donationFactory.createDonationViewModels(any(Collection.class))).thenReturn(Arrays.asList(donationViewModel));
 
-    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch);
 
     assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }
 
   @Test
-  public void testCreateTestBatchViewModelWithTestingSupervisorThatCanDeleteTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
+  public void testCreateTestBatchViewModelWithCanDeleteTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
 
     Set<Donation> donations = createDonations();
     
@@ -443,7 +443,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
     when(donationFactory.createDonationViewModels(any(Collection.class))).thenReturn(Arrays.asList(donationViewModel));
 
-    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, true);
+    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch);
 
     assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
   }

@@ -17,8 +17,6 @@ import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.service.TestBatchCRUDService;
-import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.utils.PermissionUtils;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullDonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
@@ -49,7 +47,7 @@ public class TestBatchControllerService {
   public TestBatchFullViewModel updateTestBatch(TestBatchBackingForm backingForm) {
     TestBatch testBatch = testBatchFactory.createEntity(backingForm);
     testBatch = testBatchCRUDService.updateTestBatch(testBatch);
-    return testBatchFactory.createTestBatchFullViewModel(testBatch, true);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch);
   }
 
   public List<LocationViewModel> getTestingSites() {
@@ -60,14 +58,12 @@ public class TestBatchControllerService {
   public TestBatchFullViewModel addTestBatch(TestBatchBackingForm form) {
     TestBatch testBatch = testBatchFactory.createEntity(form);
     testBatch = testBatchCRUDService.createTestBatch(testBatch);
-    boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
-    return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch);
   }
 
   public TestBatchFullViewModel getTestBatchById(UUID id) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(id);
-    boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.EDIT_TEST_BATCH);
-    return testBatchFactory.createTestBatchFullViewModel(testBatch, isTestingSupervisor);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch);
   }
 
   public List<TestBatchViewModel> findTestBatches(List<TestBatchStatus> statuses, Date startDate, Date endDate, UUID locationId) {
@@ -87,7 +83,6 @@ public class TestBatchControllerService {
   public TestBatchFullViewModel addDonationsToTestBatch(TestBatchDonationRangeBackingForm form) {
     List<Donation> donations = donationRepository.findDonationsBetweenTwoDins(form.getFromDIN(), form.getToDIN());
     TestBatch testbatch = testBatchCRUDService.addDonationsToTestBatch(form.getTestBatchId(), donations);
-    boolean isTestingSupervisor = PermissionUtils.loggedOnUserHasPermission(PermissionConstants.ADD_TEST_BATCH);
-    return testBatchFactory.createTestBatchFullViewModel(testbatch, isTestingSupervisor);
+    return testBatchFactory.createTestBatchFullViewModel(testbatch);
   }
 }
