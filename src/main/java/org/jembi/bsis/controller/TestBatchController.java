@@ -56,7 +56,7 @@ public class TestBatchController {
   }
   
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TESTING_INFORMATION+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TESTING_INFORMATION + "')")
   public Map<String, Object> findAndAddTestBatchFormGenerator() {
 
     Map<String, Object> map = new HashMap<String, Object>();
@@ -66,7 +66,7 @@ public class TestBatchController {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_BATCH+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_BATCH + "')")
   @ResponseStatus(HttpStatus.CREATED)
   public TestBatchFullViewModel addTestBatch(@Valid @RequestBody TestBatchBackingForm testBatchBackingForm) {
     TestBatchFullViewModel testBatch = testBatchControllerService.addTestBatch(testBatchBackingForm);
@@ -74,7 +74,7 @@ public class TestBatchController {
   }
 
   @RequestMapping(value = "{id}",  method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_BATCH + "')")
   @Transactional(readOnly = true)
   public Map<String, Object> getTestBatchById(@PathVariable UUID id){
     Map<String, Object> map = new HashMap<String, Object>();
@@ -84,7 +84,7 @@ public class TestBatchController {
   }
 
   @RequestMapping(value = "{id}",  method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.EDIT_TEST_BATCH+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.EDIT_TEST_BATCH + "')")
   public TestBatchFullViewModel updateTestBatch(@PathVariable UUID id,
       @Valid @RequestBody TestBatchBackingForm testBatchBackingForm) {
     testBatchBackingForm.setId(id);
@@ -92,7 +92,7 @@ public class TestBatchController {
   }
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
-  @PreAuthorize("hasRole('"+PermissionConstants.VIEW_TEST_BATCH+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_BATCH + "')")
   public Map<String, Object> findTestBatch(
       @RequestParam(value = "status", required = false) List<TestBatchStatus> statuses ,
       @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
@@ -121,7 +121,7 @@ public class TestBatchController {
   }
   
   @RequestMapping(value = "{id}/donations",  method = RequestMethod.PUT)
-  @PreAuthorize("hasRole('"+PermissionConstants.ADD_TEST_BATCH+"')")
+  @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_BATCH + "')")
   public TestBatchFullViewModel addDonationsToTestBatch(@PathVariable UUID id,
       @Valid @RequestBody TestBatchDonationRangeBackingForm testBatchDonationRangeBackingForm) {
     testBatchDonationRangeBackingForm.setTestBatchId(id);
