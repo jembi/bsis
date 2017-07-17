@@ -12,6 +12,8 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
+
 import org.jembi.bsis.backingform.TestBatchDonationRangeBackingForm;
 import org.jembi.bsis.backingform.validator.TestBatchDonationRangeBackingFormValidator;
 import org.jembi.bsis.constant.GeneralConfigConstants;
@@ -337,6 +339,7 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(null);
     when(donationRepository.findDonationByDonationIdentificationNumber(toDIN)).thenReturn(donation);
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
+    when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenThrow(new NoResultException());
 
     Errors errors = new BindException(backingForm, "testBatchDonationRangeBackingForm");
     validator.validate(backingForm, errors);
@@ -359,6 +362,8 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(donation);
     when(donationRepository.findDonationByDonationIdentificationNumber(toDIN)).thenReturn(null);
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
+    when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(donation);
+    when(donationRepository.findDonationByDonationIdentificationNumber(toDIN)).thenThrow(new NoResultException());
 
     Errors errors = new BindException(backingForm, "testBatchDonationRangeBackingForm");
     validator.validate(backingForm, errors);

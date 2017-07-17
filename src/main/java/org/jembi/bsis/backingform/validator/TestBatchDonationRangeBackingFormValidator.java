@@ -2,6 +2,8 @@ package org.jembi.bsis.backingform.validator;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.jembi.bsis.backingform.TestBatchDonationRangeBackingForm;
 import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.donation.Donation;
@@ -81,14 +83,16 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
   }
 
   private boolean validDonations(TestBatchDonationRangeBackingForm form, Errors errors) {
-    Donation donation = donationRepository.findDonationByDonationIdentificationNumber(form.getFromDIN());
-    if (donation == null) {
+    try {
+      donationRepository.findDonationByDonationIdentificationNumber(form.getFromDIN());
+    } catch (NoResultException e) {
       errors.rejectValue("fromDIN", "errors.invalid.donation", "Donation with DIN " + form.getFromDIN() + " does not exist");
       return false;
     }
     if (form.getToDIN() != null) {
-      donation = donationRepository.findDonationByDonationIdentificationNumber(form.getToDIN());
-      if (donation == null) {
+      try {
+        donationRepository.findDonationByDonationIdentificationNumber(form.getToDIN());
+      } catch (NoResultException e) {
         errors.rejectValue("toDIN", "errors.invalid.donation", "Donation with DIN " + form.getFromDIN() + " does not exist");
         return false;
       }
