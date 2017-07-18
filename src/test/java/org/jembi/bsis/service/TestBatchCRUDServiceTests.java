@@ -313,6 +313,57 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     assertThat(donationThatDoesNotProduceATestSample.getTestBatch(), nullValue());
     assertThat(donationThatProducesATestSample.getTestBatch(), is(hasSameStateAsTestBatch(expectedTestBatch)));
   }
+
+  @Test
+  public void testAddDonationsToTestBatchWithDonationBelongingToAnotherTEstBatch_shouldSave() {
+    Location location = aTestingSite().build();
+    TestBatch testBatch = aTestBatch()
+      .withId(TEST_BATCH_ID)
+      .withStatus(TestBatchStatus.OPEN)
+      .withLocation(location)
+      .withDonations(new HashSet<Donation>())
+      .build();
+    TestBatch anotherTestBatch = aTestBatch()
+        .withId(UUID.randomUUID())
+        .withStatus(TestBatchStatus.OPEN)
+        .withLocation(location)
+        .withDonations(new HashSet<Donation>())
+        .build();
+
+    PackType packType = aPackType()
+        .withTestSampleProduced(true)
+        .build();
+    Donation donation = aDonation()
+        .withId(UUID.randomUUID())
+        .withPackType(packType)
+        .thatIsNotDeleted()
+        .build();
+    Donation donationBelongingToAnotherTestBatch = aDonation()
+        .withId(UUID.randomUUID())
+        .withPackType(packType)
+        .withTestBatch(anotherTestBatch)
+        .thatIsNotDeleted()
+        .build();
+    anotherTestBatch.getDonations().add(donationBelongingToAnotherTestBatch);
+    
+    List<Donation> donations = Arrays.asList(donation, donationBelongingToAnotherTestBatch);
+
+    TestBatch expectedTestBatch = aTestBatch()
+        .withId(TEST_BATCH_ID)
+        .withStatus(TestBatchStatus.OPEN)
+        .withLocation(location)
+        .withDonations(new HashSet<>(Arrays.asList(donation)))
+        .build();
+    
+    when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
+    
+    testBatchCRUDService.addDonationsToTestBatch(TEST_BATCH_ID, donations);
+
+    verify(testBatchRepository).save(argThat(hasSameStateAsTestBatch(expectedTestBatch)));
+    assertThat(donationBelongingToAnotherTestBatch.getTestBatch(), is(hasSameStateAsTestBatch(anotherTestBatch)));
+    assertThat(donation.getTestBatch(), is(hasSameStateAsTestBatch(expectedTestBatch)));
+  }
   
   @Test
   public void testAddDonationsToTestBatchWithDonationThatProducesSamples_shouldSave() {

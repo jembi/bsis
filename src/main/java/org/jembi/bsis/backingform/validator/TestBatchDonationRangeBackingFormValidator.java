@@ -1,7 +1,5 @@
 package org.jembi.bsis.backingform.validator;
 
-import java.util.List;
-
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.backingform.TestBatchDonationRangeBackingForm;
@@ -51,9 +49,6 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
       return;
     }
     
-    // check that all Donations in the range aren’t already associated with another TestBatch
-    validateDonationsInRange(form, errors);
-    
     //check that Donations can be added to the testbatch
     if (!validateTestBatchStatus(form, errors)) {
       return;
@@ -84,34 +79,26 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
 
   private boolean validDonations(TestBatchDonationRangeBackingForm form, Errors errors) {
     try {
-      donationRepository.findDonationByDonationIdentificationNumber(form.getFromDIN());
+      Donation donation = donationRepository.findDonationByDonationIdentificationNumber(form.getFromDIN());
+      if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(form.getTestBatchId())) {
+        errors.rejectValue("fromDIN", "errors.donationBelongsToAnotherTestBatch", "Donation with DIN " + donation.getDonationIdentificationNumber() + " is assigned to a different TestBatch");
+      }
     } catch (NoResultException e) {
       errors.rejectValue("fromDIN", "errors.invalid.donation", "Donation with DIN " + form.getFromDIN() + " does not exist");
       return false;
     }
     if (form.getToDIN() != null) {
       try {
-        donationRepository.findDonationByDonationIdentificationNumber(form.getToDIN());
+        Donation donation = donationRepository.findDonationByDonationIdentificationNumber(form.getToDIN());
+        if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(form.getTestBatchId())) {
+          errors.rejectValue("toDIN", "errors.donationBelongsToAnotherTestBatch", "Donation with DIN " + donation.getDonationIdentificationNumber() + " is assigned to a different TestBatch");
+        }
       } catch (NoResultException e) {
         errors.rejectValue("toDIN", "errors.invalid.donation", "Donation with DIN " + form.getFromDIN() + " does not exist");
         return false;
       }
     }
     return true;
-  }
-
-  private void validateDonationsInRange(TestBatchDonationRangeBackingForm form, Errors errors) {
-    String toDIN = form.getToDIN(); 
-    if (toDIN == null) {
-      toDIN = form.getFromDIN();
-    }
-    List<Donation> donations = donationRepository.findDonationsBetweenTwoDins(form.getFromDIN(), toDIN);
-    for (Donation donation : donations) {
-      if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(form.getTestBatchId())) {
-        errors.reject("errors.donationsBelongToAnotherTestBatch", "Donation with DIN " + donation.getDonationIdentificationNumber() + " is assigned to a different TestBatch");
-        break; // no need to log the same error twice
-      }
-    }
   }
   
   private boolean validateTestBatchStatus(TestBatchDonationRangeBackingForm form, Errors errors) {

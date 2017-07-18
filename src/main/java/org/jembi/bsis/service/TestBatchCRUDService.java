@@ -110,12 +110,18 @@ public class TestBatchCRUDService {
 
     Set<Donation> donationsToAdd = new HashSet<>();
     for (Donation donation : donations) {
-      if (donation.getPackType().getTestSampleProduced()) {
-        donationsToAdd.add(donation);
-      } else {
-        LOGGER.debug("DIN '" + donation.getDonationIdentificationNumber()
-            + "' does not produce test samples, so cannot be added to a TestBatch. It is being ignored");
+      if (!donation.getPackType().getTestSampleProduced()) {
+        LOGGER.debug("Cannot add DIN '" + donation.getDonationIdentificationNumber()
+            + "' to a TestBatch because it does not produce test samples. It will be ignored.");
+        continue;
       }
+      if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(testBatchId)) {
+        LOGGER.debug("Cannot add DIN '" + donation.getDonationIdentificationNumber()
+            + "' to a TestBatch because it been assigned to another TestBatch. It will be ignored.");
+        continue;
+      }
+      // donation can be added
+      donationsToAdd.add(donation);
     }
    
     testBatch.getDonations().addAll(donationsToAdd);

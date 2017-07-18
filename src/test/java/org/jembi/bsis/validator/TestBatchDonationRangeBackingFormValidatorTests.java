@@ -286,7 +286,7 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
   }
 
   @Test
-  public void testValidateWithInvalidDINRangeDonationsBelongToAnotherTestBatch_shouldReturnOneError() throws ParseException {
+  public void testValidateWithInvalidFromDINDonationBelongsToAnotherTestBatch_shouldReturnOneError() throws ParseException {
     String fromDIN = "1000000";
     String toDIN = "2000000";
     UUID testBatchId = UUID.randomUUID();
@@ -313,14 +313,52 @@ public class TestBatchDonationRangeBackingFormValidatorTests extends UnitTestSui
     when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
     when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(donation1);
     when(donationRepository.findDonationByDonationIdentificationNumber(toDIN)).thenReturn(donation2);
-    when(donationRepository.findDonationsBetweenTwoDins(fromDIN, toDIN)).thenReturn(Arrays.asList(donation1, donation2));
     when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(testBatch);
 
     Errors errors = new BindException(backingForm, "testBatchDonationRangeBackingForm");
     validator.validate(backingForm, errors);
 
-    assertThat(errors.getGlobalErrorCount(), is(1));
-    assertThat(errors.getGlobalError().getCode(), is("errors.donationsBelongToAnotherTestBatch"));
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("fromDIN"), notNullValue());
+    assertThat(errors.getFieldError("fromDIN").getCode(), is("errors.donationBelongsToAnotherTestBatch"));
+  }
+
+  @Test
+  public void testValidateWithInvalidToDINDonationBelongsToAnotherTestBatch_shouldReturnOneError() throws ParseException {
+    String fromDIN = "1000000";
+    String toDIN = "2000000";
+    UUID testBatchId = UUID.randomUUID();
+    TestBatchDonationRangeBackingForm backingForm = new TestBatchDonationRangeBackingForm();
+    backingForm.setTestBatchId(testBatchId);
+    backingForm.setFromDIN(fromDIN);
+    backingForm.setToDIN(toDIN);
+
+    TestBatch testBatch = aTestBatch()
+        .withId(testBatchId)
+        .withStatus(TestBatchStatus.OPEN)
+        .build();
+    TestBatch otherTestBatch = aTestBatch()
+        .withId(UUID.randomUUID())
+        .build();
+    Donation donation1 = aDonation()
+        .withDonationIdentificationNumber(fromDIN)
+        .build();
+    Donation donation2 = aDonation()
+        .withDonationIdentificationNumber(toDIN)
+        .withTestBatch(otherTestBatch)
+        .build();
+    
+    when(generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH)).thenReturn(7);
+    when(donationRepository.findDonationByDonationIdentificationNumber(fromDIN)).thenReturn(donation1);
+    when(donationRepository.findDonationByDonationIdentificationNumber(toDIN)).thenReturn(donation2);
+    when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(testBatch);
+
+    Errors errors = new BindException(backingForm, "testBatchDonationRangeBackingForm");
+    validator.validate(backingForm, errors);
+
+    assertThat(errors.getErrorCount(), is(1));
+    assertThat(errors.getFieldError("toDIN"), notNullValue());
+    assertThat(errors.getFieldError("toDIN").getCode(), is("errors.donationBelongsToAnotherTestBatch"));
   }
 
   @Test
