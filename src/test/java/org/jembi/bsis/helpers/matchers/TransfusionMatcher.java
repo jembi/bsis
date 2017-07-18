@@ -8,7 +8,7 @@ import org.jembi.bsis.model.transfusion.Transfusion;
 public class TransfusionMatcher extends AbstractTypeSafeMatcher<Transfusion> {
 
   public TransfusionMatcher(Transfusion expected) {
-    this.expected = expected;
+    super(expected);
   }
   
   @Override

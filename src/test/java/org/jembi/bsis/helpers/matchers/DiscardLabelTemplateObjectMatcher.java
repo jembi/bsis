@@ -8,7 +8,7 @@ import org.jembi.bsis.template.labelling.DiscardLabelTemplateObject;
 public class DiscardLabelTemplateObjectMatcher extends AbstractTypeSafeMatcher<DiscardLabelTemplateObject> {
 
   public DiscardLabelTemplateObjectMatcher(DiscardLabelTemplateObject expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

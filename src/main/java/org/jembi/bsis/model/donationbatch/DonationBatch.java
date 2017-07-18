@@ -60,10 +60,6 @@ public class DonationBatch extends BaseModificationTrackerUUIDEntity {
   @NotNull
   private Location venue;
 
-
-  @ManyToOne
-  private TestBatch testBatch;
-
   @OneToOne(fetch = FetchType.LAZY)
   private ComponentBatch componentBatch;
 
@@ -122,15 +118,6 @@ public class DonationBatch extends BaseModificationTrackerUUIDEntity {
 
   public void setIsClosed(boolean isClosed) {
     this.isClosed = isClosed;
-  }
-
-
-  public TestBatch getTestBatch() {
-    return testBatch;
-  }
-
-  public void setTestBatch(TestBatch testBatch) {
-    this.testBatch = testBatch;
   }
 
   public Location getVenue() {

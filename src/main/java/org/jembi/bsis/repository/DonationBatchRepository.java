@@ -120,19 +120,6 @@ public class DonationBatchRepository {
     return query.getResultList();
   }
 
-  public List<DonationBatch> findUnassignedDonationBatches() {
-    String queryStr = "SELECT distinct b from DonationBatch b LEFT JOIN FETCH b.donations WHERE b.isDeleted=:isDeleted " +
-        "AND b.isClosed=:isClosed " +
-        "AND b.testBatch=null";
-
-    TypedQuery<DonationBatch> query = em.createQuery(queryStr, DonationBatch.class);
-    query.setParameter("isDeleted", false);
-    query.setParameter("isClosed", true);
-
-
-    return query.getResultList();
-  }
-
   public List<Donation> findDonationsInBatch(UUID batchId) {
     DonationBatch donationBatch = findDonationBatchByIdEager(batchId);
     List<Donation> donations = new ArrayList<Donation>();

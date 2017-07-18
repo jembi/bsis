@@ -1,6 +1,7 @@
 package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
@@ -12,6 +13,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
 import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
+import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -31,6 +33,7 @@ import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.suites.SecurityContextDependentTestSuite;
+import org.jembi.bsis.util.RandomTestDate;
 import org.joda.time.DateTime;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -122,6 +125,100 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         irrelevantStartDate, irrelevantEndDate);
 
     assertThat(returnedDtos, is(expectedDtos));
+  }
+
+  @Test
+  public void testFindDonationsBetweenTwoDins_shouldReturnDonations() {
+    Date irrelevantStartDate = new RandomTestDate();
+
+    // Expected
+    Donation donation1 = aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000003")
+        .withDonationDate(irrelevantStartDate)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+
+    // Expected
+    Donation donation2 = aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000004")
+        .withDonationDate(irrelevantStartDate)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+
+    // Expected
+    Donation donation3 = aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000005")
+        .withDonationDate(irrelevantStartDate)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+
+    // Excluded: din before range
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("1000003")
+        .withDonationDate(irrelevantStartDate)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+
+    // Excluded: din after range
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("3000003")
+        .withDonationDate(irrelevantStartDate)
+        .thatIsNotDeleted()
+        .buildAndPersist(entityManager);
+
+    // Excluded: donation deleted
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000006")
+        .withDonationDate(irrelevantStartDate)
+        .thatIsDeleted()
+        .buildAndPersist(entityManager);
+
+    List<Donation> returnedDonations = donationRepository.findDonationsBetweenTwoDins(
+        "2000003", "2000010");
+
+    assertThat(returnedDonations.size(), is(3));
+    assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation1)));
+    assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation2)));
+    assertThat(returnedDonations, hasItem(hasSameStateAsDonation(donation3)));
+  }
+
+  @Test
+  public void testFindDonationsBetweenTwoDinsWithTheSameDin_shouldReturnOneDonation() {
+    Date irrelevantStartDate = new RandomTestDate();
+
+    // Expected
+    Donation donation = aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000003")
+        .withDonationDate(irrelevantStartDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded: din before range
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000002")
+        .withDonationDate(irrelevantStartDate)
+        .buildAndPersist(entityManager);
+
+    // Excluded: din after range
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationIdentificationNumber("2000004")
+        .withDonationDate(irrelevantStartDate)
+        .buildAndPersist(entityManager);
+
+    List<Donation> returnedDonations = donationRepository.findDonationsBetweenTwoDins(
+        "2000003", "2000003");
+
+    assertThat(returnedDonations.size(), is(1));
+    assertThat(returnedDonations.get(0), hasSameStateAsDonation(donation));
+
   }
 
   @Test

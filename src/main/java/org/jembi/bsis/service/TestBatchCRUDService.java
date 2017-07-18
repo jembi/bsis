@@ -1,12 +1,15 @@
 package org.jembi.bsis.service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.DonationBatchRepository;
+import org.jembi.bsis.repository.SequenceNumberRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +27,16 @@ public class TestBatchCRUDService {
   private TestBatchConstraintChecker testBatchConstraintChecker;
   @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
-
   @Autowired
-  private DonationBatchRepository donationBatchRepository;
+  private SequenceNumberRepository sequenceNumberRepository;
+
+  public TestBatch createTestBatch(TestBatch testBatch) {
+    testBatch.setBatchNumber(sequenceNumberRepository.getNextTestBatchNumber());
+    testBatch.setStatus(TestBatchStatus.OPEN);
+    testBatch.setIsDeleted(Boolean.FALSE);
+    testBatchRepository.save(testBatch);
+    return testBatch;
+  }
 
   public TestBatch updateTestBatch(TestBatch updatedTestBatch) {
 
@@ -40,22 +50,6 @@ public class TestBatchCRUDService {
       existingTestBatch.setTestBatchDate(updatedTestBatch.getTestBatchDate());
     }
 
-    if (updatedTestBatch.getDonationBatches() != null) {
-      // unlink old donation batches
-      for (DonationBatch donationBatch : existingTestBatch.getDonationBatches()) {
-        if (!updatedTestBatch.getDonationBatches().contains(donationBatch)) {
-          donationBatch.setTestBatch(null);
-          donationBatchRepository.updateDonationBatch(donationBatch);
-        }
-      }
-      // link new donation batches
-      for (DonationBatch donationBatch : updatedTestBatch.getDonationBatches()) {
-        donationBatch.setTestBatch(existingTestBatch);
-        donationBatchRepository.updateDonationBatch(donationBatch);
-      }
-      existingTestBatch.setDonationBatches(updatedTestBatch.getDonationBatches());
-    }
-    
     existingTestBatch.setLocation(updatedTestBatch.getLocation());
 
     if (updatedTestBatch.getStatus() != null) {
@@ -104,6 +98,39 @@ public class TestBatchCRUDService {
       testBatchStatusChangeService.handleRelease(testBatch);
     }
 
+    return testBatch;
+  }
+  
+  public TestBatch addDonationsToTestBatch(UUID testBatchId, List<Donation> donations) {
+    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
+
+    if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
+      throw new IllegalStateException("Donations can only be added to open test batches");
+    }
+
+    Set<Donation> donationsToAdd = new HashSet<>();
+    for (Donation donation : donations) {
+      if (!donation.getPackType().getTestSampleProduced()) {
+        LOGGER.debug("Cannot add DIN '" + donation.getDonationIdentificationNumber()
+            + "' to a TestBatch because it does not produce test samples. It will be ignored.");
+        continue;
+      }
+      if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(testBatchId)) {
+        LOGGER.debug("Cannot add DIN '" + donation.getDonationIdentificationNumber()
+            + "' to a TestBatch because it been assigned to another TestBatch. It will be ignored.");
+        continue;
+      }
+      // donation can be added
+      donationsToAdd.add(donation);
+    }
+   
+    testBatch.getDonations().addAll(donationsToAdd);
+
+    for (Donation donation : donationsToAdd) {
+      donation.setTestBatch(testBatch);
+    }
+    
+    testBatchRepository.save(testBatch);
     return testBatch;
   }
 }

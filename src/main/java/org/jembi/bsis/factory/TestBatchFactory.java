@@ -4,22 +4,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
-import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.service.TestBatchConstraintChecker;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
-import org.jembi.bsis.viewmodel.DonationBatchViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
-import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.TestBatchFullDonationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +29,11 @@ import org.springframework.stereotype.Service;
 public class TestBatchFactory {
 
   @Autowired
-  private DonationBatchViewModelFactory donationBatchViewModelFactory;
-
-  @Autowired
   private TestBatchConstraintChecker testBatchConstraintChecker;
 
   @Autowired
   private LocationFactory locationFactory;
-  
-  @Autowired
-  private DonationBatchRepository donationBatchRepository;
-  
+
   @Autowired
   private LocationRepository locationRepository;
   
@@ -54,7 +45,6 @@ public class TestBatchFactory {
     testBatch.setId(backingForm.getId());
     testBatch.setStatus(backingForm.getStatus());
     testBatch.setTestBatchDate(backingForm.getTestBatchDate());
-    testBatch.setDonationBatches(new HashSet<DonationBatch>());
     testBatch.setLocation(locationRepository.getLocation(backingForm.getLocation().getId()));
     return testBatch;
   }
@@ -80,14 +70,12 @@ public class TestBatchFactory {
    * Creates a list of full view models for the given list of test batches.
    *
    * @param testBatch the test batch
-   * @param isTestingSupervisor the is testing supervisor
    * @return the test batch full view model
    */
-  public List<TestBatchFullViewModel> createTestBatchFullViewModels(List<TestBatch> testBatches,
-      boolean isTestingSupervisor) {
+  public List<TestBatchFullViewModel> createTestBatchFullViewModels(List<TestBatch> testBatches) {
     List<TestBatchFullViewModel> viewModels = new ArrayList<>();
     for (TestBatch testBatch : testBatches) {
-      viewModels.add(createTestBatchFullViewModel(testBatch, isTestingSupervisor));
+      viewModels.add(createTestBatchFullViewModel(testBatch));
     }
     return viewModels;
   }
@@ -96,34 +84,47 @@ public class TestBatchFactory {
    * Creates a full view model for the given test batch.
    *
    * @param testBatch the test batch
-   * @param isTestingSupervisor the is testing supervisor
    * @return the test batch full view model
    */
-  public TestBatchFullViewModel createTestBatchFullViewModel(TestBatch testBatch, boolean isTestingSupervisor) {
+  public TestBatchFullViewModel createTestBatchFullViewModel(TestBatch testBatch) {
     TestBatchFullViewModel testBatchViewModel = new TestBatchFullViewModel();
-    populateFullViewModel(testBatch, testBatchViewModel, isTestingSupervisor);
+    populateFullViewModel(testBatch, testBatchViewModel);
     return testBatchViewModel;
   }
 
   /**
-   * Creates a list of DonationViewModel objects from a test batch, with the option of filtering by
-   * blood typing match status if the bloodTypingMatchStatus parameter is not null.
+   * Creates a view model for the given test batch
+   * which contains a full view model list of donations.
+   *
+   * @param testBatch the test batch
+   * @param bloodTypingMatchStatus the blood typing match status
+   * @return the test batch view model with a list of donation full view model
+   */
+  public TestBatchFullDonationViewModel createTestBatchFullDonationViewModel(TestBatch testBatch, BloodTypingMatchStatus bloodTypingMatchStatus) {
+    TestBatchFullDonationViewModel testBatchFullDonationViewModel = new TestBatchFullDonationViewModel();
+    testBatchFullDonationViewModel.setDonations(createDonationFullViewModels(testBatch, bloodTypingMatchStatus));
+    testBatchFullDonationViewModel.setId(testBatch.getId());
+    testBatchFullDonationViewModel.setTestBatchDate(testBatch.getTestBatchDate());
+    return testBatchFullDonationViewModel;
+  }
+
+  /**
+   * Creates a list of DonationFullViewModel objects from a test batch, with the option of filtering
+   * by blood typing match status if the bloodTypingMatchStatus parameter is not null.
    *
    * @param testBatch the test batch
    * @param bloodTypingMatchStatus the blood typing match status
    * @return the list< donation summary view model>
    */
-  public List<DonationViewModel> createDonationViewModels(TestBatch testBatch,
+  public List<DonationFullViewModel> createDonationFullViewModels(TestBatch testBatch,
       BloodTypingMatchStatus bloodTypingMatchStatus) {
-    List<DonationViewModel> donationViewModels = new ArrayList<>();
-    for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-      for (Donation donation : donationBatch.getDonations()) {
-        if (bloodTypingMatchStatus == null || donation.getBloodTypingMatchStatus().equals(bloodTypingMatchStatus)) {
-          donationViewModels.add(donationFactory.createDonationViewModelWithoutPermissions(donation));
-        }
+    List<DonationFullViewModel> donationFullViewModels = new ArrayList<>();
+    for (Donation donation : testBatch.getDonations()) {
+      if (bloodTypingMatchStatus == null || donation.getBloodTypingMatchStatus().equals(bloodTypingMatchStatus)) {
+        donationFullViewModels.add(donationFactory.createDonationFullViewModelWithoutPermissions(donation));
       }
     }
-    return donationViewModels;
+    return donationFullViewModels;
   }
 
   /**
@@ -143,12 +144,10 @@ public class TestBatchFactory {
 
     // Calculate number of samples (only consider donations with test samples)
     int numSamples = 0;
-    for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-      for (Donation donation : donationBatch.getDonations()) {
+    for (Donation donation : testBatch.getDonations()) {
         if (donation.getPackType().getTestSampleProduced()) {
           numSamples++;
         }
-      }
     }
     testBatchViewModel.setNumSamples(numSamples);
   }
@@ -158,24 +157,15 @@ public class TestBatchFactory {
    *
    * @param testBatch the test batch
    * @param testBatchViewModel the test batch view model
-   * @param isTestingSupervisor the is testing supervisor
    * @return the test batch full view model
    */
-  private TestBatchFullViewModel populateFullViewModel(TestBatch testBatch, TestBatchFullViewModel testBatchViewModel,
-      boolean isTestingSupervisor) {
+  private TestBatchFullViewModel populateFullViewModel(TestBatch testBatch, TestBatchFullViewModel testBatchViewModel) {
 
     // First populate basic fields
     populateBasicViewModel(testBatch, testBatchViewModel);
 
-    // Get list of donation view models with test samples
-    List<DonationBatchViewModel> donationsWithTestSamples = new ArrayList<>();
-    if (testBatch.getDonationBatches() != null) {
-      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-        donationsWithTestSamples.add(
-            donationBatchViewModelFactory.createDonationBatchViewModelWithTestSamples(donationBatch));
-      }
-    }
-    testBatchViewModel.setDonationBatches(donationsWithTestSamples);
+    // Get list of donation view models
+    testBatchViewModel.setDonations(donationFactory.createDonationViewModels(testBatch.getDonations()));
 
     // Check if this test batch can be released
     CanReleaseResult canReleaseResult = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
@@ -186,13 +176,12 @@ public class TestBatchFactory {
 
     // Set permissions
     Map<String, Boolean> permissions = new HashMap<>();
-    permissions.put("canRelease", isTestingSupervisor && canReleaseResult.canRelease());
-    permissions.put("canClose", isTestingSupervisor && testBatchConstraintChecker.canCloseTestBatch(testBatch));
-    permissions.put("canDelete", isTestingSupervisor && testBatchConstraintChecker.canDeleteTestBatch(testBatch));
-    permissions.put("canEdit", isTestingSupervisor && testBatchConstraintChecker.canEditTestBatch(testBatch));
-    permissions.put("canEditDonationBatches",
-        isTestingSupervisor && testBatchConstraintChecker.canAddOrRemoveDonationBatch(testBatch));
-    permissions.put("canReopen", isTestingSupervisor && testBatchConstraintChecker.canReopenTestBatch(testBatch));
+    permissions.put("canRelease", canReleaseResult.canRelease());
+    permissions.put("canClose", testBatchConstraintChecker.canCloseTestBatch(testBatch));
+    permissions.put("canDelete", testBatchConstraintChecker.canDeleteTestBatch(testBatch));
+    permissions.put("canEdit", testBatchConstraintChecker.canEditTestBatch(testBatch));
+    permissions.put("canEditDonations", testBatchConstraintChecker.canAddOrRemoveDonation(testBatch));
+    permissions.put("canReopen", testBatchConstraintChecker.canReopenTestBatch(testBatch));
     testBatchViewModel.setPermissions(permissions);
 
     return testBatchViewModel;
@@ -201,19 +190,16 @@ public class TestBatchFactory {
   public List<DonationTestOutcomesReportViewModel> createDonationTestOutcomesReportViewModels(TestBatch testBatch) {
 
     List<DonationTestOutcomesReportViewModel> donationTestOutcomesReportViewModels = new ArrayList<>();
-
-    for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-      for (Donation donation : donationBatch.getDonations()) {
-        DonationTestOutcomesReportViewModel donationTestOutcomesReportViewModel =
-            new DonationTestOutcomesReportViewModel();
-        donationTestOutcomesReportViewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
-        donationTestOutcomesReportViewModel.setTtiStatus(donation.getTTIStatus());
-        donationTestOutcomesReportViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
-        donationTestOutcomesReportViewModel.setBloodTestOutcomes(donation.getBloodTestResults());
-        donationTestOutcomesReportViewModel.setPreviousDonationAboRhOutcome(getPreviousDonationAboRhOutcome(donation));
-        donationTestOutcomesReportViewModel.setReleased(donation.isReleased());
-        donationTestOutcomesReportViewModels.add(donationTestOutcomesReportViewModel);
-      }
+    for (Donation donation : testBatch.getDonations()) {
+      DonationTestOutcomesReportViewModel donationTestOutcomesReportViewModel =
+          new DonationTestOutcomesReportViewModel();
+      donationTestOutcomesReportViewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
+      donationTestOutcomesReportViewModel.setTtiStatus(donation.getTTIStatus());
+      donationTestOutcomesReportViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
+      donationTestOutcomesReportViewModel.setBloodTestOutcomes(donation.getBloodTestResults());
+      donationTestOutcomesReportViewModel.setPreviousDonationAboRhOutcome(getPreviousDonationAboRhOutcome(donation));
+      donationTestOutcomesReportViewModel.setReleased(donation.isReleased());
+      donationTestOutcomesReportViewModels.add(donationTestOutcomesReportViewModel);
     }
     return donationTestOutcomesReportViewModels;
 

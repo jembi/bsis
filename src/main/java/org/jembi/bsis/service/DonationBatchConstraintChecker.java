@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.model.donationbatch.DonationBatch;
-import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,12 +74,6 @@ public class DonationBatchConstraintChecker {
 
     if (!donationBatch.getIsClosed()) {
       // can't reopen if it's not closed already
-      return false;
-    }
-
-    TestBatch testBatch = donationBatch.getTestBatch();
-    if (testBatch != null) {
-      // can't re-open a donation batch if it has a test batch
       return false;
     }
 

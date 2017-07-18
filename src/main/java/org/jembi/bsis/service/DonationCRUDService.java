@@ -66,7 +66,7 @@ public class DonationCRUDService {
     // Soft delete donation
     Donation donation = donationRepository.findDonationById(donationId);
     donation.setIsDeleted(true);
-    donationRepository.updateDonation(donation);
+    donationRepository.update(donation);
 
     Date donationDate = donation.getDonationDate();
     Donor donor = donation.getDonor();
@@ -120,7 +120,7 @@ public class DonationCRUDService {
 
     Component component = componentCRUDService.createInitialComponent(donation);
     donation.addComponent(component);
-    donationRepository.saveDonation(donation);
+    donationRepository.save(donation);
 
     if (discardComponents) {
       componentCRUDService.markComponentsBelongingToDonationAsUnsafe(donation);
@@ -203,8 +203,8 @@ public class DonationCRUDService {
         Component component = componentCRUDService.createInitialComponent(existingDonation);
         existingDonation.getComponents().add(component);
         // ensure that the Donation is released, so that the new initial component is made available (or not)
-        releaseDonation = existingDonation.getDonationBatch().getTestBatch() != null
-                && TestBatchStatus.hasBeenReleased(existingDonation.getDonationBatch().getTestBatch().getStatus());
+        releaseDonation = existingDonation.getTestBatch() != null
+                && TestBatchStatus.hasBeenReleased(existingDonation.getTestBatch().getStatus());
       }
       
       // If the new pack type doesn't produce test samples, delete test outcomes and clear statuses
@@ -240,7 +240,7 @@ public class DonationCRUDService {
       }
     }
 
-    Donation donation = donationRepository.updateDonation(existingDonation);
+    Donation donation = donationRepository.update(existingDonation);
 
     if (packTypeUpdated) {
       donorService.setDonorDueToDonate(existingDonation.getDonor());
@@ -270,9 +270,9 @@ public class DonationCRUDService {
       donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NO_TYPE_DETERMINED);
     }
 
-    donation = donationRepository.updateDonation(donation);
+    donation = donationRepository.update(donation);
 
-    if (donation.getDonationBatch().getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
+    if (donation.getTestBatch().getStatus() == TestBatchStatus.RELEASED) {
       testBatchStatusChangeService.handleRelease(donation);
     }
   }

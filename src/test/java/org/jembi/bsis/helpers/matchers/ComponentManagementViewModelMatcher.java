@@ -9,7 +9,7 @@ import org.jembi.bsis.viewmodel.ComponentManagementViewModel;
 public class ComponentManagementViewModelMatcher extends AbstractTypeSafeMatcher<ComponentManagementViewModel> {
 
   public ComponentManagementViewModelMatcher(ComponentManagementViewModel expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

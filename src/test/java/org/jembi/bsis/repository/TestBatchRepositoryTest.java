@@ -1,18 +1,19 @@
 package org.jembi.bsis.repository;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
-import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.suites.DBUnitContextDependentTestSuite;
@@ -29,22 +30,12 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
   TestBatchRepository testBatchRepository;
 
   @Autowired
-  DonationBatchRepository donationBatchRepository;
-
-  @Autowired
   LocationRepository locationRepository;
 
   @Override
   protected IDataSet getDataSet() throws Exception {
     File file = new File("src/test/resources/dataset/TestBatchRepositoryDataset.xml");
     return new FlatXmlDataSetBuilder().setColumnSensing(true).build(file);
-  }
-
-  @Test
-  public void testGetAllTestBatches() throws Exception {
-    List<TestBatch> all = testBatchRepository.getAllTestBatch();
-    Assert.assertNotNull("There are TestBatches defined", all);
-    Assert.assertEquals("There are 2 TestBatches", 2, all.size());
   }
 
   @Test
@@ -118,7 +109,9 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
     UUID testBatchId = UUID.fromString("640eb339-c815-48c6-81d7-0f225d3f2701");
     testBatchRepository.deleteTestBatch(testBatchId);
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-    Assert.assertTrue("TestBatch is deleted", testBatch.getIsDeleted());
+    assertThat(testBatch.getIsDeleted(), is(true));
+    Donation donation = entityManager.find(Donation.class, UUID.fromString("b98ebc98-87ed-48b9-80db-7c378a1837a1"));
+    assertThat(donation.getTestBatch(), nullValue());
   }
 
   @Test
@@ -130,27 +123,4 @@ public class TestBatchRepositoryTest extends DBUnitContextDependentTestSuite {
     TestBatch updatedTestBatch = testBatchRepository.findTestBatchById(testBatchId);
     Assert.assertEquals("TestBatch status is correct", TestBatchStatus.RELEASED, updatedTestBatch.getStatus());
   }
-
-  @Test
-  public void testSaveTestBatch() throws Exception {
-    TestBatch testBatch = new TestBatch();
-    UUID donationBatchId = UUID.fromString("11e71397-acc9-b7da-8cc5-34e6d7870683");
-    Set<DonationBatch> donationBatches = new HashSet<>();
-    DonationBatch donationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
-    donationBatches.add(donationBatch);
-    testBatch.setDonationBatches(donationBatches);
-    UUID locationId = UUID.fromString("55321456-eeee-1234-b5b1-123412348811");
-    Location location = locationRepository.getLocation(locationId);
-    testBatch.setLocation(location);
-    testBatch.setTestBatchDate(donationBatch.getDonationBatchDate());
-    TestBatch savedTestBatch = testBatchRepository.saveTestBatch(testBatch, "123456");
-    Assert.assertNotNull("Saved TestBatch has an id", savedTestBatch.getId());
-    TestBatch retrievedTestBatch = testBatchRepository.findTestBatchById(savedTestBatch.getId());
-    Assert.assertNotNull("Saved TestBatch is found", retrievedTestBatch);
-    Assert.assertEquals("TestBatch status is correct", TestBatchStatus.OPEN, retrievedTestBatch.getStatus());
-    Assert.assertEquals("TestBatch batchNumber is correct", "123456", retrievedTestBatch.getBatchNumber());
-    DonationBatch updatedDonationBatch = donationBatchRepository.findDonationBatchById(donationBatchId);
-    Assert.assertNotNull("DonationBatch was linked to TestBatch", updatedDonationBatch.getTestBatch());
-  }
-
 }

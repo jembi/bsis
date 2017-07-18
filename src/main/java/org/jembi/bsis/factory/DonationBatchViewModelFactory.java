@@ -1,20 +1,20 @@
 package org.jembi.bsis.factory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.service.DonationBatchConstraintChecker;
 import org.jembi.bsis.viewmodel.DonationBatchFullViewModel;
 import org.jembi.bsis.viewmodel.DonationBatchViewModel;
-import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.LocationFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class DonationBatchViewModelFactory {
@@ -76,7 +76,7 @@ public class DonationBatchViewModelFactory {
   public DonationBatchFullViewModel createDonationBatchViewModelWithTestSamples(DonationBatch donationBatch) {
     DonationBatchFullViewModel donationBatchViewModel = new DonationBatchFullViewModel();
     populateBasicViewModel(donationBatch, donationBatchViewModel);
-    donationBatchViewModel.setDonations(createDonationViewModels(donationBatch, true));
+    donationBatchViewModel.setDonations(createDonationFullViewModels(donationBatch, true));
     return donationBatchViewModel;
   }
 
@@ -121,7 +121,7 @@ public class DonationBatchViewModelFactory {
 
     populateBasicViewModel(donationBatch, donationBatchViewModel);
     
-    donationBatchViewModel.setDonations(createDonationViewModels(donationBatch));
+    donationBatchViewModel.setDonations(createDonationFullViewModels(donationBatch));
 
     Map<String, Boolean> permissions = new HashMap<>();
     permissions.put("canDelete", donationBatchConstraintChecker.canDeleteDonationBatch(donationBatch.getId()));
@@ -132,30 +132,30 @@ public class DonationBatchViewModelFactory {
     donationBatchViewModel.setPermissions(permissions);
   }
 
-  private List<DonationViewModel> createDonationViewModels(DonationBatch donationBatch) {
-    return createDonationViewModels(donationBatch, false);
+  private List<DonationFullViewModel> createDonationFullViewModels(DonationBatch donationBatch) {
+    return createDonationFullViewModels(donationBatch, false);
   }
 
   /**
-   * Create a list of view models for the given donation batch. Optionally excludes donations
+   * Create a list of full view models for the given donation batch. Optionally excludes donations
    * without test samples.
    *
    * @param donationBatch the donation batch
    * @param excludeDonationsWithoutTestSamples the exclude donations without test samples
-   * @return the list< donation view model>
+   * @return the list< donation full view model>
    */
-  private List<DonationViewModel> createDonationViewModels(DonationBatch donationBatch,
+  private List<DonationFullViewModel> createDonationFullViewModels(DonationBatch donationBatch,
       boolean excludeDonationsWithoutTestSamples) {
-    List<DonationViewModel> donationViewModels = new ArrayList<>();
+    List<DonationFullViewModel> donationFullViewModels = new ArrayList<>();
     if (donationBatch.getDonations() != null) {
       for (Donation donation : donationBatch.getDonations()) {
         if (excludeDonationsWithoutTestSamples && !donation.getPackType().getTestSampleProduced()) {
           // This donation did not produce a test sample so skip it
           continue;
         }
-        donationViewModels.add(donationFactory.createDonationViewModelWithoutPermissions(donation));
+        donationFullViewModels.add(donationFactory.createDonationFullViewModelWithoutPermissions(donation));
       }
     }
-    return donationViewModels;
+    return donationFullViewModels;
   }
 }

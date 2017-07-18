@@ -13,10 +13,8 @@ import java.util.UUID;
 
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
-import org.jembi.bsis.helpers.builders.TestBatchBuilder;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
-import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.junit.Test;
@@ -195,21 +193,6 @@ public class DonationBatchConstraintCheckerTests extends UnitTestSuite {
     boolean canReopen = donationBatchConstraintChecker.canReopenDonationBatch(DONATION_BATCH_ID);
 
     assertThat("Can reopen a closed DonationBatch with no TestBatch", canReopen, is(true));
-  }
-
-  @Test
-  public void testCanReopenDonationBatchWithTestBatch() {
-    List<Donation> donations = new ArrayList<Donation>();
-    donations.add(new DonationBuilder().withId(DONATION_ID).build());
-    TestBatch testBatch = new TestBatchBuilder().build();
-    DonationBatch donationBatch = new DonationBatchBuilder().withId(DONATION_BATCH_ID).withDonations(donations)
-        .withTestBatch(testBatch).thatIsClosed().build();
-
-    when(donationBatchRepository.findDonationBatchById(DONATION_BATCH_ID)).thenReturn(donationBatch);
-
-    boolean canReopen = donationBatchConstraintChecker.canReopenDonationBatch(DONATION_BATCH_ID);
-
-    assertThat("Cannot reopen a closed DonationBatch with a TestBatch", canReopen, is(false));
   }
 
   @Test

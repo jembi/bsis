@@ -39,7 +39,7 @@ public class BloodTestingRuleResultViewModelFactory {
 
     // the blood donation
     Donation donation = bloodTestingRuleResultSet.getDonation();
-    ruleResult.setDonation(donationFactory.createDonationViewModelWithoutPermissions(donation));
+    ruleResult.setDonation(donationFactory.createDonationFullViewModelWithoutPermissions(donation));
 
     // pending tests
     List<UUID> pendingBloodTypingTestsIds = new ArrayList<>();
@@ -83,7 +83,7 @@ public class BloodTestingRuleResultViewModelFactory {
     ruleResult.setTTIStatus(bloodTestingRuleResultSet.getTtiStatus());
 
     // Determine if the Donation is released
-    TestBatch testBatch = donation.getDonationBatch().getTestBatch();
+    TestBatch testBatch = donation.getTestBatch();
     boolean isDonationReleased = donationConstraintChecker.donationIsReleased(testBatch, donation, ruleResult);
 
     // test data in various formats

@@ -8,7 +8,7 @@ import org.jembi.bsis.viewmodel.TransfusionReactionTypeViewModel;
 public class TransfusionReactionTypeViewModelMatcher extends AbstractTypeSafeMatcher<TransfusionReactionTypeViewModel> {
 
   public TransfusionReactionTypeViewModelMatcher(TransfusionReactionTypeViewModel expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

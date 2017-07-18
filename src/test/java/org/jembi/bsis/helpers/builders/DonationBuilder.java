@@ -26,6 +26,7 @@ import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.util.RandomTestDate;
 
@@ -56,6 +57,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
   private BloodTypingMatchStatus bloodTypingMatchStatus;
   private BloodTypingStatus bloodTypingStatus;
   private DonationBatch donationBatch = aDonationBatch().build();
+  private TestBatch testBatch;
   private Date createdDate = new RandomTestDate();
   private boolean released;
   private boolean ineligibleDonor;
@@ -80,6 +82,11 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
 
   public DonationBuilder withDonationBatch(DonationBatch donationBatch) {
     this.donationBatch = donationBatch;
+    return this;
+  }
+
+  public DonationBuilder withTestBatch(TestBatch testBatch) {
+    this.testBatch = testBatch;
     return this;
   }
 
@@ -269,6 +276,7 @@ public class DonationBuilder extends AbstractEntityBuilder<Donation> {
     donation.setBloodTypingMatchStatus(bloodTypingMatchStatus);
     donation.setBloodTypingStatus(bloodTypingStatus);
     donation.setDonationBatch(donationBatch);
+    donation.setTestBatch(testBatch);
     donation.setCreatedBy(createdBy);
     donation.setCreatedDate(createdDate);
     donation.setReleased(released);

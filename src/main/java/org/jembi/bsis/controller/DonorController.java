@@ -41,7 +41,7 @@ import org.jembi.bsis.service.DuplicateDonorService;
 import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.jembi.bsis.utils.CustomDateFormatter;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.DonorDeferralViewModel;
 import org.jembi.bsis.viewmodel.DonorSummaryViewModel;
 import org.jembi.bsis.viewmodel.DonorViewModel;
@@ -171,7 +171,7 @@ public class DonorController {
     map.put("isEligible", donorConstraintChecker.isDonorEligibleToDonate(id));
     map.put("birthDate", CustomDateFormatter.getDateString(donor.getBirthDate()));
     if (donations.size() > 0) {
-      map.put("lastDonation", donationFactory.createDonationViewModelWithoutPermissions(donations.get(donations.size() - 1)));
+      map.put("lastDonation", donationFactory.createDonationFullViewModelWithoutPermissions(donations.get(donations.size() - 1)));
       map.put("dateOfFirstDonation", CustomDateFormatter.getDateTimeString(donations.get(0).getDonationDate()));
       map.put("totalDonations", getNumberOfDonations(donations));
       map.put("dueToDonate", CustomDateFormatter.getDateTimeString(donor.getDueToDonate()));
@@ -392,8 +392,8 @@ public class DonorController {
 
     // Get all the Donations, process the Test Results and update necessary newDonor and Donation fields
     List<Donation> donations = duplicateDonorService.getAllDonationsToMerge(newDonor, donorNumbers);
-    List<DonationViewModel> donationViewModels = donationFactory
-        .createDonationViewModelsWithoutPermissions(donations);
+    List<DonationFullViewModel> donationFullViewModels = donationFactory
+        .createDonationFullViewModelsWithoutPermissions(donations);
 
     // gather all Deferrals
     List<DonorDeferral> donorDeferrals = duplicateDonorService.getAllDeferralsToMerge(newDonor, donorNumbers);
@@ -404,7 +404,7 @@ public class DonorController {
     form.setContact(newDonor.getContact());
     form.setAddress(newDonor.getAddress());
 
-    map.put("allDonations", donationViewModels);
+    map.put("allDonations", donationFullViewModels);
     map.put("allDeferrals", donorDeferralViewModels);
     map.put("mergedDonor", form);
 

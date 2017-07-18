@@ -3,25 +3,23 @@ package org.jembi.bsis.helpers.matchers;
 import java.util.Objects;
 
 import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
 import org.jembi.bsis.viewmodel.DonationTestOutcomesReportViewModel;
 
-public class DonationTestOutcomesReportViewModelMatcher extends TypeSafeMatcher<DonationTestOutcomesReportViewModel> {
+public class DonationTestOutcomesReportViewModelMatcher extends AbstractTypeSafeMatcher<DonationTestOutcomesReportViewModel> {
 
-  private DonationTestOutcomesReportViewModel expected;
 
   public DonationTestOutcomesReportViewModelMatcher(DonationTestOutcomesReportViewModel expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override
-  public void describeTo(Description description) {
-    description.appendText("A test batch view model with the following state:")
-        .appendText("\nBloodTypingStatus: ").appendValue(expected.getBloodTypingStatus())
-        .appendText("\nTtiStatus: ").appendValue(expected.getTtiStatus())
-        .appendText("\nDonationIdentificationNumber: ").appendValue(expected.getDonationIdentificationNumber())
-        .appendText("\nPreviousDonationAboRhOutcome: ").appendValue(expected.getPreviousDonationAboRhOutcome())
-        .appendText("\nBloodTestOutcomes: ").appendValue(expected.getBloodTestOutcomes());
+  public void appendDescription(Description description, DonationTestOutcomesReportViewModel model) {
+    description.appendText("A DonationTestOutcomeReportViewModel with the following state:")
+        .appendText("\nDonationIdentificationNumber: ").appendValue(model.getDonationIdentificationNumber())
+        .appendText("\nBloodTypingStatus: ").appendValue(model.getBloodTypingStatus())
+        .appendText("\nTtiStatus: ").appendValue(model.getTtiStatus())
+        .appendText("\nPreviousDonationAboRhOutcome: ").appendValue(model.getPreviousDonationAboRhOutcome())
+        .appendText("\nBloodTestOutcomes: ").appendValue(model.getBloodTestOutcomes());
         
   }
 
@@ -38,5 +36,4 @@ public class DonationTestOutcomesReportViewModelMatcher extends TypeSafeMatcher<
       DonationTestOutcomesReportViewModel expected) {
     return new DonationTestOutcomesReportViewModelMatcher(expected);
   }
-
 }

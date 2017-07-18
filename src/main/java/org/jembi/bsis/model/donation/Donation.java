@@ -35,6 +35,7 @@ import org.jembi.bsis.model.donationtype.DonationType;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.DonationNamedQueryConstants;
 
@@ -65,7 +66,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED,
         query = DonationNamedQueryConstants.QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER_INCLUDE_DELETED),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER,
-        query = DonationNamedQueryConstants.QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER)
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATIONS_BETWEEN_TWO_DINS,
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATIONS_BETWEEN_TWO_DINS)
 })
 @Entity
 @Audited
@@ -145,6 +148,9 @@ public class Donation extends BaseModificationTrackerUUIDEntity implements Compa
   @ManyToOne(optional = true)
   private DonationBatch donationBatch;
 
+  @ManyToOne(optional = true)
+  private TestBatch testBatch;
+
   @Lob
   private String notes;
 
@@ -215,6 +221,7 @@ public class Donation extends BaseModificationTrackerUUIDEntity implements Compa
     this.donorWeight = donation.getDonorWeight();
     this.donationCreatedBy = donation.getCreatedBy();
     this.donationBatch = donation.getDonationBatch();
+    this.testBatch = donation.getTestBatch();
     this.notes = donation.getNotes();
     this.bloodTypingStatus = donation.getBloodTypingStatus();
     this.bloodTypingMatchStatus = donation.getBloodTypingMatchStatus();
@@ -374,6 +381,14 @@ public class Donation extends BaseModificationTrackerUUIDEntity implements Compa
 
   public void setDonationBatch(DonationBatch donationBatch) {
     this.donationBatch = donationBatch;
+  }
+
+  public TestBatch getTestBatch() {
+    return testBatch;
+  }
+
+  public void setTestBatch(TestBatch testBatch) {
+    this.testBatch = testBatch;
   }
 
   public DonationType getDonationType() {

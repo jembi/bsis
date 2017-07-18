@@ -47,7 +47,8 @@ public class DonationControllerServiceTests extends UnitTestSuite {
     // Set up fixture
     Donation donation = aDonation()
         .withId(DONATION_ID)
-        .withDonationBatch(aDonationBatch().withTestBatch(null).build())
+        .withDonationBatch(aDonationBatch().build())
+        .withTestBatch(null)
         .build();
     
     // Set up expectations
@@ -66,7 +67,8 @@ public class DonationControllerServiceTests extends UnitTestSuite {
     TestBatchStatus testBatchStatus = TestBatchStatus.RELEASED;
     Donation donation = aDonation()
         .withId(DONATION_ID)
-        .withDonationBatch(aDonationBatch().withTestBatch(aTestBatch().withStatus(testBatchStatus).build()).build())
+        .withDonationBatch(aDonationBatch().build())
+        .withTestBatch(aTestBatch().withStatus(testBatchStatus).build())
         .build();
     
     // Set up expectations

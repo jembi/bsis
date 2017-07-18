@@ -1,7 +1,6 @@
 package org.jembi.bsis.service;
 
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
@@ -30,11 +29,9 @@ public class TestBatchConstraintChecker {
     int readyCount = 0;
 
     // Check for tests with outstanding test outcomes
-    if (testBatch.getDonationBatches() != null) {
+    if (testBatch.getDonations() != null) {
 
-      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-
-        for (Donation donation : donationBatch.getDonations()) {
+      for (Donation donation : testBatch.getDonations()) {
 
           if (!donation.getPackType().getTestSampleProduced()) {
             // Don't consider donations without test samples
@@ -54,7 +51,6 @@ public class TestBatchConstraintChecker {
           }
         }
       }
-    }
 
     return new CanReleaseResult(true, readyCount);
   }
@@ -91,11 +87,10 @@ public class TestBatchConstraintChecker {
   }
 
   /**
-   * Donation Batches can be added or removed from a Test Batch as long as there aren't any test
-   * results recorded.
+   * Donations can only be added to open test batches
    */
-  public boolean canAddOrRemoveDonationBatch(TestBatch testBatch) {
-    return canEditTestBatch(testBatch) && !testBatchHasResults(testBatch);
+  public boolean canAddOrRemoveDonation(TestBatch testBatch) {
+    return TestBatchStatus.OPEN.equals(testBatch.getStatus());
   }
 
   /**
@@ -108,10 +103,9 @@ public class TestBatchConstraintChecker {
       return false;
     }
 
-    if (testBatch.getDonationBatches() != null) {
-      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+    if (testBatch.getDonations() != null) {
 
-        for (Donation donation : donationBatch.getDonations()) {
+        for (Donation donation : testBatch.getDonations()) {
 
           if (donationConstraintChecker.donationHasDiscrepancies(donation)) {
 
@@ -120,22 +114,18 @@ public class TestBatchConstraintChecker {
           }
         }
       }
-    }
-
     return true;
   }
 
   protected boolean testBatchHasResults(TestBatch testBatch) {
-    if (testBatch.getDonationBatches() != null) {
-      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-        for (Donation donation : donationBatch.getDonations()) {
+    if (testBatch.getDonations() != null) {
+        for (Donation donation : testBatch.getDonations()) {
           if (donationConstraintChecker.donationHasSavedTestResults(donation)) {
             // test results have been recorded for this donation
             return true;
           }
         }
       }
-    }
     return false;
   }
 

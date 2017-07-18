@@ -5,6 +5,7 @@ import static org.jembi.bsis.helpers.persisters.EntityPersisterFactory.aDonation
 import static org.jembi.bsis.helpers.persisters.EntityPersisterFactory.aDonorPersister;
 import static org.jembi.bsis.helpers.persisters.EntityPersisterFactory.aLocationPersister;
 import static org.jembi.bsis.helpers.persisters.EntityPersisterFactory.aPackTypePersister;
+import static org.jembi.bsis.helpers.persisters.EntityPersisterFactory.aTestBatchPersister;
 import static org.jembi.bsis.helpers.persisters.EntityPersisterFactory.aUserPersister;
 import static org.jembi.bsis.helpers.persisters.EntityPersisterFactory.anAdverseEventPersister;
 
@@ -42,6 +43,10 @@ public class DonationPersister extends AbstractEntityPersister<Donation> {
     
     if (donation.getCreatedBy() != null) {
       aUserPersister().deepPersist(donation.getCreatedBy(), entityManager);
+    }
+
+    if (donation.getTestBatch() != null) {
+      aTestBatchPersister().deepPersist(donation.getTestBatch(), entityManager);
     }
 
     return persist(donation, entityManager);

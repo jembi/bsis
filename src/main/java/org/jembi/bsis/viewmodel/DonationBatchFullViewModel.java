@@ -5,14 +5,14 @@ import java.util.Map;
 
 public class DonationBatchFullViewModel extends DonationBatchViewModel {
 
-  private List<DonationViewModel> donations;
+  private List<DonationFullViewModel> donations;
   private Map<String, Boolean> permissions;
 
-  public List<DonationViewModel> getDonations() {
+  public List<DonationFullViewModel> getDonations() {
     return donations;
   }
 
-  public void setDonations(List<DonationViewModel> donations) {
+  public void setDonations(List<DonationFullViewModel> donations) {
     this.donations = donations;
   }
 

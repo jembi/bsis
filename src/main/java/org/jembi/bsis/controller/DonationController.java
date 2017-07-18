@@ -26,7 +26,7 @@ import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.service.DonationCRUDService;
 import org.jembi.bsis.service.FormFieldAccessorService;
 import org.jembi.bsis.utils.PermissionConstants;
-import org.jembi.bsis.viewmodel.DonationViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -107,14 +107,14 @@ public class DonationController {
   public ResponseEntity<Map<String, Object>> addDonation(@RequestBody @Valid DonationBackingForm donationBackingForm) {
 
     // Create the donation
-    DonationViewModel donationViewModel = donationControllerService.createDonation(donationBackingForm);
+    DonationFullViewModel donationFullViewModel = donationControllerService.createDonation(donationBackingForm);
 
     // Populate the response map
     Map<String, Object> map = new HashMap<>();
     addEditSelectorOptions(map);
     map.put("hasErrors", false);
-    map.put("donationId", donationViewModel.getId());
-    map.put("donation", donationViewModel);
+    map.put("donationId", donationFullViewModel.getId());
+    map.put("donation", donationFullViewModel);
     map.put("donationFields", formFieldAccessorService.getFormFieldsForForm("donation"));
     return new ResponseEntity<>(map, HttpStatus.CREATED);
   }

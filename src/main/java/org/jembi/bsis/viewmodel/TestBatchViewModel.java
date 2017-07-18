@@ -12,7 +12,7 @@ public class TestBatchViewModel {
 
   private UUID id;
   private Date testBatchDate;
-  private Date lastUpdatedDate;
+  private Date lastUpdated;
   private TestBatchStatus status;
   private String batchNumber;
   private String notes;
@@ -62,11 +62,11 @@ public class TestBatchViewModel {
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getLastUpdated() {
-    return lastUpdatedDate;
+    return lastUpdated;
   }
 
   public void setLastUpdated(Date lastUpdatedDate) {
-    this.lastUpdatedDate = lastUpdatedDate;
+    this.lastUpdated = lastUpdatedDate;
   }
 
   public Integer getNumSamples() {

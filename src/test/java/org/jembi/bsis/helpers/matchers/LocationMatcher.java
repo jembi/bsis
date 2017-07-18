@@ -8,7 +8,7 @@ import org.jembi.bsis.model.location.Location;
 public class LocationMatcher extends AbstractTypeSafeMatcher<Location> {
 
   public LocationMatcher(Location expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

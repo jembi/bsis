@@ -601,7 +601,8 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().build();
     Donation donation = aDonation()
         .withPackType(aPackType().withTestSampleProduced(true).build())
-        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().build())
+        .withTestBatch(testBatch)
         .build();
     PackType newPackType = aPackType().withTestSampleProduced(true).build();
 
@@ -631,7 +632,8 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.CLOSED).build();
     Donation donation = aDonation()
         .withPackType(aPackType().withTestSampleProduced(false).build())
-        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().build())
+        .withTestBatch(testBatch)
         .build();
     PackType newPackType = aPackType().withTestSampleProduced(true).build();
 
@@ -648,7 +650,8 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.RELEASED).build();
     Donation donation = aDonation()
         .withPackType(aPackType().withTestSampleProduced(false).build())
-        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().build())
+        .withTestBatch(testBatch)
         .build();
     PackType newPackType = aPackType().withTestSampleProduced(true).build();
 
@@ -665,7 +668,8 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
     Donation donation = aDonation()
         .withPackType(aPackType().withTestSampleProduced(false).build())
-        .withDonationBatch(DonationBatchBuilder.aDonationBatch().withTestBatch(testBatch).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().build())
+        .withTestBatch(testBatch)
         .build();
     PackType newPackType = aPackType().withTestSampleProduced(true).build();
 

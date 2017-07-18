@@ -8,7 +8,7 @@ import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 public class ComponentStatusChangeReasonMatcher extends AbstractTypeSafeMatcher<ComponentStatusChangeReason> {
 
   public ComponentStatusChangeReasonMatcher(ComponentStatusChangeReason expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override
