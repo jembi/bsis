@@ -139,7 +139,7 @@ public class ComponentPreProcessingBackingForm {
   }
 
   @JsonIgnore
-  public void setExpiryStatus(String expiryStatus) {
+  public void setDaysToExpire(Date daysToExpire) {
     // Ignore
   }
 
