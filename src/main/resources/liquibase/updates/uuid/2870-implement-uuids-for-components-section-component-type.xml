@@ -143,9 +143,22 @@
     <modifyDataType columnName="componentType_id" newDataType="BINARY(16)" tableName="PackType_AUD"/>
 
     <sql>
-      UPDATE ComponentType 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d38d98826e4a471449260") WHERE id_temp = 1;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d4cfa8826e4a471449260") WHERE id_temp = 2;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d599e8826e4a471449260") WHERE id_temp = 3;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d66778826e4a471449260") WHERE id_temp = 4;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f19428826e4a471449260") WHERE id_temp = 5;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f2ca48826e4a471449260") WHERE id_temp = 6;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f3d5b8826e4a471449260") WHERE id_temp = 7;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f4ff58826e4a471449260") WHERE id_temp = 8;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f5c148826e4a471449260") WHERE id_temp = 9;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f67828826e4a471449260") WHERE id_temp = 10;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f73028826e4a471449260") WHERE id_temp = 11;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f7f2d8826e4a471449260") WHERE id_temp = 12;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f8a3b8826e4a471449260") WHERE id_temp = 13;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f95858826e4a471449260") WHERE id_temp = 14;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7fa0c38826e4a471449260") WHERE id_temp = 15;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7fabcf8826e4a471449260") WHERE id_temp = 16;
     </sql>
 
     <sql dbms="mysql">

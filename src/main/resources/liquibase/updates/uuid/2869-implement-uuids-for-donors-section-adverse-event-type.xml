@@ -63,9 +63,17 @@
     <modifyDataType columnName="type_id" newDataType="BINARY(16)" tableName="AdverseEvent_AUD"/>
 
     <sql>
-      UPDATE AdverseEventType 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc4075f8826e4a471449260") WHERE id_temp = 1;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc40a828826e4a471449260") WHERE id_temp = 2;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc40c3e8826e4a471449260") WHERE id_temp = 3;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc40dc48826e4a471449260") WHERE id_temp = 4;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc40f368826e4a471449260") WHERE id_temp = 5;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc410a68826e4a471449260") WHERE id_temp = 6;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc4120e8826e4a471449260") WHERE id_temp = 7;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc413788826e4a471449260") WHERE id_temp = 8;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc414ec8826e4a471449260") WHERE id_temp = 9;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc416548826e4a471449260") WHERE id_temp = 10;
+      UPDATE AdverseEventType SET id = UNHEX("11e868b04cc417bb8826e4a471449260") WHERE id_temp = 11;
     </sql>
 
     <sql dbms="mysql">

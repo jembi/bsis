@@ -181,9 +181,28 @@
     <modifyDataType columnName="bloodTest_id" newDataType="BINARY(16)" tableName="BloodTestResult_AUD"/>
 
     <sql>
-      UPDATE BloodTest 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE BloodTest SET id = UNHEX("11e868b0911721578826e4a471449260") WHERE id_temp = 1;
+      UPDATE BloodTest SET id = UNHEX("11e868b0911727318826e4a471449260") WHERE id_temp = 2;
+      UPDATE BloodTest SET id = UNHEX("11e868b091172aa78826e4a471449260") WHERE id_temp = 3;
+      UPDATE BloodTest SET id = UNHEX("11e868b091172e468826e4a471449260") WHERE id_temp = 17;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117325d8826e4a471449260") WHERE id_temp = 18;
+      UPDATE BloodTest SET id = UNHEX("11e868b091178dbc8826e4a471449260") WHERE id_temp = 19;
+      UPDATE BloodTest SET id = UNHEX("11e868b0911792758826e4a471449260") WHERE id_temp = 20;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117960c8826e4a471449260") WHERE id_temp = 21;
+      UPDATE BloodTest SET id = UNHEX("11e868b0911799228826e4a471449260") WHERE id_temp = 22;
+      UPDATE BloodTest SET id = UNHEX("11e868b091179bfa8826e4a471449260") WHERE id_temp = 23;
+      UPDATE BloodTest SET id = UNHEX("11e868b091179ed08826e4a471449260") WHERE id_temp = 24;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117a19f8826e4a471449260") WHERE id_temp = 25;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117a4788826e4a471449260") WHERE id_temp = 26;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117a7418826e4a471449260") WHERE id_temp = 27;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117aa0f8826e4a471449260") WHERE id_temp = 28;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117ace68826e4a471449260") WHERE id_temp = 29;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117afbe8826e4a471449260") WHERE id_temp = 30;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117b2968826e4a471449260") WHERE id_temp = 31;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117b56f8826e4a471449260") WHERE id_temp = 32;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117b8418826e4a471449260") WHERE id_temp = 33;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117bb1b8826e4a471449260") WHERE id_temp = 34;
+      UPDATE BloodTest SET id = UNHEX("11e868b09117be058826e4a471449260") WHERE id_temp = 35;
     </sql>
 
     <sql dbms="mysql">
