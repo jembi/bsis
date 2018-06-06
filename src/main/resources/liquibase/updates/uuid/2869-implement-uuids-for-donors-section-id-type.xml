@@ -62,26 +62,6 @@
       VIRTUAL AFTER id;
     </sql>
 
-    <sql dbms="mysql">
-      ALTER TABLE Donor_AUD ADD idType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(idType_id,  1, 4)),
-        HEX(SUBSTR(idType_id,  5, 2)),
-        HEX(SUBSTR(idType_id,  7, 2)),
-        HEX(SUBSTR(idType_id,  9, 2)),
-        HEX(SUBSTR(idType_id, 11)) )))
-      VIRTUAL AFTER idType_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Donor ADD idType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(idType_id,  1, 4)),
-        HEX(SUBSTR(idType_id,  5, 2)),
-        HEX(SUBSTR(idType_id,  7, 2)),
-        HEX(SUBSTR(idType_id,  9, 2)),
-        HEX(SUBSTR(idType_id, 11)) )))
-      VIRTUAL AFTER idType_id;
-    </sql>
-
     <sql>
       UPDATE Donor AS updateTable
         LEFT JOIN IdType AS joinedTable ON (updateTable.idType_id_temp = joinedTable.id_temp)

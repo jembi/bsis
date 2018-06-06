@@ -14,16 +14,6 @@
         <constraints foreignKeyName="fk_BloodTestingRule_BloodTest_BloodTest" references="BloodTest(id)"  />
       </column>
     </createTable>
-    
-    <sql dbms="mysql">
-      ALTER TABLE BloodTestingRule_BloodTest ADD bloodTestingRule_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(bloodTestingRule_id,  1, 4)),
-        HEX(SUBSTR(bloodTestingRule_id,  5, 2)),
-        HEX(SUBSTR(bloodTestingRule_id,  7, 2)),
-        HEX(SUBSTR(bloodTestingRule_id,  9, 2)),
-        HEX(SUBSTR(bloodTestingRule_id, 11)) )))
-      VIRTUAL AFTER bloodTestingRule_id;
-    </sql>
 
     <createTable tableName="BloodTestingRule_BloodTest_AUD">
       <column name="bloodTestingRule_id" type="BINARY(16)">
@@ -37,16 +27,6 @@
       </column>
       <column name="REVTYPE" type="TINYINT(4)" />    
     </createTable>
-
-    <sql dbms="mysql">
-      ALTER TABLE BloodTestingRule_BloodTest_AUD ADD bloodTestingRule_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(bloodTestingRule_id,  1, 4)),
-        HEX(SUBSTR(bloodTestingRule_id,  5, 2)),
-        HEX(SUBSTR(bloodTestingRule_id,  7, 2)),
-        HEX(SUBSTR(bloodTestingRule_id,  9, 2)),
-        HEX(SUBSTR(bloodTestingRule_id, 11)) )))
-      VIRTUAL AFTER bloodTestingRule_id;
-    </sql>
 
     <sql dbms="mysql">
       CREATE TEMPORARY TABLE numbers AS
@@ -223,66 +203,6 @@
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
       VIRTUAL AFTER id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE BloodTestingRule_AUD ADD bloodTest_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(bloodTest_id,  1, 4)),
-        HEX(SUBSTR(bloodTest_id,  5, 2)),
-        HEX(SUBSTR(bloodTest_id,  7, 2)),
-        HEX(SUBSTR(bloodTest_id,  9, 2)),
-        HEX(SUBSTR(bloodTest_id, 11)) )))
-      VIRTUAL AFTER bloodTest_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE BloodTestingRule_BloodTest_AUD ADD pendingBloodTests_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(pendingBloodTests_id,  1, 4)),
-        HEX(SUBSTR(pendingBloodTests_id,  5, 2)),
-        HEX(SUBSTR(pendingBloodTests_id,  7, 2)),
-        HEX(SUBSTR(pendingBloodTests_id,  9, 2)),
-        HEX(SUBSTR(pendingBloodTests_id, 11)) )))
-      VIRTUAL AFTER pendingBloodTests_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE BloodTestResult_AUD ADD bloodTest_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(bloodTest_id,  1, 4)),
-        HEX(SUBSTR(bloodTest_id,  5, 2)),
-        HEX(SUBSTR(bloodTest_id,  7, 2)),
-        HEX(SUBSTR(bloodTest_id,  9, 2)),
-        HEX(SUBSTR(bloodTest_id, 11)) )))
-      VIRTUAL AFTER bloodTest_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE BloodTestingRule ADD bloodTest_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(bloodTest_id,  1, 4)),
-        HEX(SUBSTR(bloodTest_id,  5, 2)),
-        HEX(SUBSTR(bloodTest_id,  7, 2)),
-        HEX(SUBSTR(bloodTest_id,  9, 2)),
-        HEX(SUBSTR(bloodTest_id, 11)) )))
-      VIRTUAL AFTER bloodTest_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE BloodTestingRule_BloodTest ADD pendingBloodTests_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(pendingBloodTests_id,  1, 4)),
-        HEX(SUBSTR(pendingBloodTests_id,  5, 2)),
-        HEX(SUBSTR(pendingBloodTests_id,  7, 2)),
-        HEX(SUBSTR(pendingBloodTests_id,  9, 2)),
-        HEX(SUBSTR(pendingBloodTests_id, 11)) )))
-      VIRTUAL AFTER pendingBloodTests_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE BloodTestResult ADD bloodTest_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(bloodTest_id,  1, 4)),
-        HEX(SUBSTR(bloodTest_id,  5, 2)),
-        HEX(SUBSTR(bloodTest_id,  7, 2)),
-        HEX(SUBSTR(bloodTest_id,  9, 2)),
-        HEX(SUBSTR(bloodTest_id, 11)) )))
-      VIRTUAL AFTER bloodTest_id;
     </sql>
 
     <sql>

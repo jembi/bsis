@@ -135,66 +135,6 @@
       VIRTUAL AFTER id;
     </sql>
 
-    <sql dbms="mysql">
-      ALTER TABLE BloodTransportBox_AUD ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentBatch_id,  1, 4)),
-        HEX(SUBSTR(componentBatch_id,  5, 2)),
-        HEX(SUBSTR(componentBatch_id,  7, 2)),
-        HEX(SUBSTR(componentBatch_id,  9, 2)),
-        HEX(SUBSTR(componentBatch_id, 11)) )))
-      VIRTUAL AFTER componentBatch_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Component_AUD ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentBatch_id,  1, 4)),
-        HEX(SUBSTR(componentBatch_id,  5, 2)),
-        HEX(SUBSTR(componentBatch_id,  7, 2)),
-        HEX(SUBSTR(componentBatch_id,  9, 2)),
-        HEX(SUBSTR(componentBatch_id, 11)) )))
-      VIRTUAL AFTER componentBatch_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE DonationBatch_AUD ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentBatch_id,  1, 4)),
-        HEX(SUBSTR(componentBatch_id,  5, 2)),
-        HEX(SUBSTR(componentBatch_id,  7, 2)),
-        HEX(SUBSTR(componentBatch_id,  9, 2)),
-        HEX(SUBSTR(componentBatch_id, 11)) )))
-      VIRTUAL AFTER componentBatch_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE BloodTransportBox ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentBatch_id,  1, 4)),
-        HEX(SUBSTR(componentBatch_id,  5, 2)),
-        HEX(SUBSTR(componentBatch_id,  7, 2)),
-        HEX(SUBSTR(componentBatch_id,  9, 2)),
-        HEX(SUBSTR(componentBatch_id, 11)) )))
-      VIRTUAL AFTER componentBatch_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Component ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentBatch_id,  1, 4)),
-        HEX(SUBSTR(componentBatch_id,  5, 2)),
-        HEX(SUBSTR(componentBatch_id,  7, 2)),
-        HEX(SUBSTR(componentBatch_id,  9, 2)),
-        HEX(SUBSTR(componentBatch_id, 11)) )))
-      VIRTUAL AFTER componentBatch_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE DonationBatch ADD componentBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentBatch_id,  1, 4)),
-        HEX(SUBSTR(componentBatch_id,  5, 2)),
-        HEX(SUBSTR(componentBatch_id,  7, 2)),
-        HEX(SUBSTR(componentBatch_id,  9, 2)),
-        HEX(SUBSTR(componentBatch_id, 11)) )))
-      VIRTUAL AFTER componentBatch_id;
-    </sql>
-
     <sql>
       UPDATE ComponentBatch_AUD AS updateTable
         LEFT JOIN ComponentBatch AS joinTable ON (updateTable.id_temp = joinTable.id_temp)

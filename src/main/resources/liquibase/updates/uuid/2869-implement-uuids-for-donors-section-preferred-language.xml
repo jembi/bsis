@@ -83,28 +83,7 @@
         HEX(SUBSTR(id, 11)) )))
       VIRTUAL AFTER id;
     </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Donor_AUD ADD preferredLanguage_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(preferredLanguage_id,  1, 4)),
-        HEX(SUBSTR(preferredLanguage_id,  5, 2)),
-        HEX(SUBSTR(preferredLanguage_id,  7, 2)),
-        HEX(SUBSTR(preferredLanguage_id,  9, 2)),
-        HEX(SUBSTR(preferredLanguage_id, 11)) )))
-      VIRTUAL AFTER preferredLanguage_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Donor ADD preferredLanguage_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(preferredLanguage_id,  1, 4)),
-        HEX(SUBSTR(preferredLanguage_id,  5, 2)),
-        HEX(SUBSTR(preferredLanguage_id,  7, 2)),
-        HEX(SUBSTR(preferredLanguage_id,  9, 2)),
-        HEX(SUBSTR(preferredLanguage_id, 11)) )))
-      VIRTUAL AFTER preferredLanguage_id;
-    </sql>
-
-
+    
     <sql>
       UPDATE Donor AS updateTable
         LEFT JOIN PreferredLanguage AS joinedTable ON (updateTable.preferredLanguage_id_temp = joinedTable.id_temp)

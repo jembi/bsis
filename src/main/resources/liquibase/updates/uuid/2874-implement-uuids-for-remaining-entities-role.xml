@@ -118,46 +118,6 @@
       VIRTUAL AFTER id;
     </sql>
 
-    <sql dbms="mysql">
-      ALTER TABLE Permission_Role_AUD ADD roles_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(roles_id,  1, 4)),
-        HEX(SUBSTR(roles_id,  5, 2)),
-        HEX(SUBSTR(roles_id,  7, 2)),
-        HEX(SUBSTR(roles_id,  9, 2)),
-        HEX(SUBSTR(roles_id, 11)) )))
-      VIRTUAL AFTER roles_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE User_Role_AUD ADD roles_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(roles_id,  1, 4)),
-        HEX(SUBSTR(roles_id,  5, 2)),
-        HEX(SUBSTR(roles_id,  7, 2)),
-        HEX(SUBSTR(roles_id,  9, 2)),
-        HEX(SUBSTR(roles_id, 11)) )))
-      VIRTUAL AFTER roles_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Permission_Role ADD roles_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(roles_id,  1, 4)),
-        HEX(SUBSTR(roles_id,  5, 2)),
-        HEX(SUBSTR(roles_id,  7, 2)),
-        HEX(SUBSTR(roles_id,  9, 2)),
-        HEX(SUBSTR(roles_id, 11)) )))
-      VIRTUAL AFTER roles_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE User_Role ADD roles_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(roles_id,  1, 4)),
-        HEX(SUBSTR(roles_id,  5, 2)),
-        HEX(SUBSTR(roles_id,  7, 2)),
-        HEX(SUBSTR(roles_id,  9, 2)),
-        HEX(SUBSTR(roles_id, 11)) )))
-      VIRTUAL AFTER roles_id;
-    </sql>
-
     <sql>
       UPDATE Role_AUD AS updateTable
         LEFT JOIN Role AS joinTable ON (updateTable.id_temp = joinTable.id_temp)

@@ -120,46 +120,6 @@
       VIRTUAL AFTER id;
     </sql>
 
-    <sql dbms="mysql">
-      ALTER TABLE OrderFormItem_AUD ADD orderForm_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(orderForm_id,  1, 4)),
-        HEX(SUBSTR(orderForm_id,  5, 2)),
-        HEX(SUBSTR(orderForm_id,  7, 2)),
-        HEX(SUBSTR(orderForm_id,  9, 2)),
-        HEX(SUBSTR(orderForm_id, 11)) )))
-      VIRTUAL AFTER orderForm_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE OrderForm_Component_AUD ADD orderForm_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(orderForm_id,  1, 4)),
-        HEX(SUBSTR(orderForm_id,  5, 2)),
-        HEX(SUBSTR(orderForm_id,  7, 2)),
-        HEX(SUBSTR(orderForm_id,  9, 2)),
-        HEX(SUBSTR(orderForm_id, 11)) )))
-      VIRTUAL AFTER orderForm_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE OrderFormItem ADD orderForm_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(orderForm_id,  1, 4)),
-        HEX(SUBSTR(orderForm_id,  5, 2)),
-        HEX(SUBSTR(orderForm_id,  7, 2)),
-        HEX(SUBSTR(orderForm_id,  9, 2)),
-        HEX(SUBSTR(orderForm_id, 11)) )))
-      VIRTUAL AFTER orderForm_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE OrderForm_Component ADD orderForm_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(orderForm_id,  1, 4)),
-        HEX(SUBSTR(orderForm_id,  5, 2)),
-        HEX(SUBSTR(orderForm_id,  7, 2)),
-        HEX(SUBSTR(orderForm_id,  9, 2)),
-        HEX(SUBSTR(orderForm_id, 11)) )))
-      VIRTUAL AFTER orderForm_id;
-    </sql>
-
     <sql>
       UPDATE OrderForm_AUD AS updateTable
         LEFT JOIN OrderForm AS joinTable ON (updateTable.id_temp = joinTable.id_temp)
