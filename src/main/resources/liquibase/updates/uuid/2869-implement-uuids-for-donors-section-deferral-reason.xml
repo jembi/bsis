@@ -61,9 +61,13 @@
     <modifyDataType columnName="deferralReason_id" newDataType="BINARY(16)" tableName="DonorDeferral_AUD"/>
 
     <sql>
-      UPDATE DeferralReason 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff1f2c08826e4a471449260") WHERE id_temp = 1;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff1ff638826e4a471449260") WHERE id_temp = 2;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff207528826e4a471449260") WHERE id_temp = 3;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff20e0e8826e4a471449260") WHERE id_temp = 4;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff216758826e4a471449260") WHERE id_temp = 5;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff21d178826e4a471449260") WHERE id_temp = 6;
+      UPDATE DeferralReason SET id = UNHEX("11e868b04ff223938826e4a471449260") WHERE id_temp = 7;
     </sql>
 
     <sql dbms="mysql">

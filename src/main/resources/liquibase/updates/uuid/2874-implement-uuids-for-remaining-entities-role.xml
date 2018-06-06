@@ -82,9 +82,20 @@
     <modifyDataType columnName="roles_id" newDataType="BINARY(16)" tableName="User_Role_AUD"/>
 
     <sql>
-      UPDATE Role 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE Role SET id = UNHEX("11e868b09ce5787b8826e4a471449260") WHERE id_temp = 1;
+      UPDATE Role SET id = UNHEX("11e868b09ce57cb28826e4a471449260") WHERE id_temp = 2;
+      UPDATE Role SET id = UNHEX("11e868b09ce57f168826e4a471449260") WHERE id_temp = 3;
+      UPDATE Role SET id = UNHEX("11e868b09ce581518826e4a471449260") WHERE id_temp = 4;
+      UPDATE Role SET id = UNHEX("11e868b09ce5834c8826e4a471449260") WHERE id_temp = 5;
+      UPDATE Role SET id = UNHEX("11e868b09ce5b3598826e4a471449260") WHERE id_temp = 6;
+      UPDATE Role SET id = UNHEX("11e868b09ce5b7478826e4a471449260") WHERE id_temp = 9;
+      UPDATE Role SET id = UNHEX("11e868b09ce5b9958826e4a471449260") WHERE id_temp = 10;
+      UPDATE Role SET id = UNHEX("11e868b09ce5bba28826e4a471449260") WHERE id_temp = 11;
+      UPDATE Role SET id = UNHEX("11e868b09ce5bd908826e4a471449260") WHERE id_temp = 12;
+      UPDATE Role SET id = UNHEX("11e868b09ce5bf768826e4a471449260") WHERE id_temp = 13;
+      UPDATE Role SET id = UNHEX("11e868b09ce5c1478826e4a471449260") WHERE id_temp = 14;
+      UPDATE Role SET id = UNHEX("11e868b09ce5c31c8826e4a471449260") WHERE id_temp = 15;
+      UPDATE Role SET id = UNHEX("11e868b09ce5c4f98826e4a471449260") WHERE id_temp = 16;
     </sql>
 
     <sql dbms="mysql">

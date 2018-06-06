@@ -1045,9 +1045,22 @@
     <modifyDataType columnName="users_id" newDataType="BINARY(16)" tableName="User_Role_AUD"/>
 
     <sql>
-      UPDATE User 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE User SET id = UNHEX("11e868b06a64bff48826e4a471449260") WHERE id_temp = 1;
+      UPDATE User SET id = UNHEX("11e868b06a64cd668826e4a471449260") WHERE id_temp = 2;
+      UPDATE User SET id = UNHEX("11e868b06a64d57b8826e4a471449260") WHERE id_temp = 3;
+      UPDATE User SET id = UNHEX("11e868b06a64dd638826e4a471449260") WHERE id_temp = 4;
+      UPDATE User SET id = UNHEX("11e868b06a64e4a48826e4a471449260") WHERE id_temp = 5;
+      UPDATE User SET id = UNHEX("11e868b06a64ef6d8826e4a471449260") WHERE id_temp = 6;
+      UPDATE User SET id = UNHEX("11e868b06a64f88e8826e4a471449260") WHERE id_temp = 7;
+      UPDATE User SET id = UNHEX("11e868b06a650b898826e4a471449260") WHERE id_temp = 8;
+      UPDATE User SET id = UNHEX("11e868b06a6513528826e4a471449260") WHERE id_temp = 9;
+      UPDATE User SET id = UNHEX("11e868b06a651a828826e4a471449260") WHERE id_temp = 10;
+      UPDATE User SET id = UNHEX("11e868b06a6521a78826e4a471449260") WHERE id_temp = 11;
+      UPDATE User SET id = UNHEX("11e868b06a6528a38826e4a471449260") WHERE id_temp = 12;
+      UPDATE User SET id = UNHEX("11e868b06a652f6e8826e4a471449260") WHERE id_temp = 13;
+      UPDATE User SET id = UNHEX("11e868b06a65366d8826e4a471449260") WHERE id_temp = 14;
+      UPDATE User SET id = UNHEX("11e868b06a653d618826e4a471449260") WHERE id_temp = 15;
+      UPDATE User SET id = UNHEX("11e868b06a6544328826e4a471449260") WHERE id_temp = 16;
     </sql>
 
     <sql dbms="mysql">

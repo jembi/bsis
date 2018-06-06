@@ -59,9 +59,14 @@
     <modifyDataType columnName="packType_id" newDataType="BINARY(16)" tableName="Donation_AUD"/>
 
     <sql>
-      UPDATE PackType 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE PackType SET id = UNHEX("11e868b059d90f968826e4a471449260") WHERE id_temp = 1;
+      UPDATE PackType SET id = UNHEX("11e868b059d917db8826e4a471449260") WHERE id_temp = 2;
+      UPDATE PackType SET id = UNHEX("11e868b059d91dbf8826e4a471449260") WHERE id_temp = 3;
+      UPDATE PackType SET id = UNHEX("11e868b059d923628826e4a471449260") WHERE id_temp = 4;
+      UPDATE PackType SET id = UNHEX("11e868b059d927148826e4a471449260") WHERE id_temp = 5;
+      UPDATE PackType SET id = UNHEX("11e868b059d92a538826e4a471449260") WHERE id_temp = 6;
+      UPDATE PackType SET id = UNHEX("11e868b059d92da28826e4a471449260") WHERE id_temp = 7;
+      UPDATE PackType SET id = UNHEX("11e868b059d930848826e4a471449260") WHERE id_temp = 8;
     </sql>
 
     <sql dbms="mysql">

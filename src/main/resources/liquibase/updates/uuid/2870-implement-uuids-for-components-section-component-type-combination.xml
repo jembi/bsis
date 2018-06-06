@@ -62,9 +62,16 @@
 
 
     <sql>
-      UPDATE ComponentTypeCombination 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b083160d6f8826e4a471449260") WHERE id_temp = 1;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08316136f8826e4a471449260") WHERE id_temp = 2;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831615798826e4a471449260") WHERE id_temp = 3;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831617828826e4a471449260") WHERE id_temp = 4;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08317f64d8826e4a471449260") WHERE id_temp = 5;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08317fb548826e4a471449260") WHERE id_temp = 6;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08317fe9d8826e4a471449260") WHERE id_temp = 7;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831801578826e4a471449260") WHERE id_temp = 8;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831804708826e4a471449260") WHERE id_temp = 9;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08318071a8826e4a471449260") WHERE id_temp = 10;
     </sql>
 
     <sql dbms="mysql">
