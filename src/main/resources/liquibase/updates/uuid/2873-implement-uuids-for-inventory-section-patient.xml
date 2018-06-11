@@ -107,46 +107,6 @@
       VIRTUAL AFTER id;
     </sql>
 
-    <sql dbms="mysql">
-      ALTER TABLE OrderForm_AUD ADD patient_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(patient_id,  1, 4)),
-        HEX(SUBSTR(patient_id,  5, 2)),
-        HEX(SUBSTR(patient_id,  7, 2)),
-        HEX(SUBSTR(patient_id,  9, 2)),
-        HEX(SUBSTR(patient_id, 11)) )))
-      VIRTUAL AFTER patient_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Transfusion_AUD ADD patient_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(patient_id,  1, 4)),
-        HEX(SUBSTR(patient_id,  5, 2)),
-        HEX(SUBSTR(patient_id,  7, 2)),
-        HEX(SUBSTR(patient_id,  9, 2)),
-        HEX(SUBSTR(patient_id, 11)) )))
-      VIRTUAL AFTER patient_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE OrderForm ADD patient_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(patient_id,  1, 4)),
-        HEX(SUBSTR(patient_id,  5, 2)),
-        HEX(SUBSTR(patient_id,  7, 2)),
-        HEX(SUBSTR(patient_id,  9, 2)),
-        HEX(SUBSTR(patient_id, 11)) )))
-      VIRTUAL AFTER patient_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Transfusion ADD patient_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(patient_id,  1, 4)),
-        HEX(SUBSTR(patient_id,  5, 2)),
-        HEX(SUBSTR(patient_id,  7, 2)),
-        HEX(SUBSTR(patient_id,  9, 2)),
-        HEX(SUBSTR(patient_id, 11)) )))
-      VIRTUAL AFTER patient_id;
-    </sql>
-
     <sql>
       UPDATE Patient_AUD AS updateTable
         LEFT JOIN Patient AS joinTable ON (updateTable.id_temp = joinTable.id_temp)

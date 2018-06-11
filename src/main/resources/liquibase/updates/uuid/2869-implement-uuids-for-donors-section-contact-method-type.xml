@@ -58,9 +58,12 @@
     <modifyDataType columnName="contactMethodType_id" newDataType="BINARY(16)" tableName="Donor_AUD"/>
 
     <sql>
-      UPDATE ContactMethodType 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE ContactMethodType SET id = UNHEX("11e868b0537a5b858826e4a471449260") WHERE id_temp = 1;
+      UPDATE ContactMethodType SET id = UNHEX("11e868b0537a65eb8826e4a471449260") WHERE id_temp = 2;
+      UPDATE ContactMethodType SET id = UNHEX("11e868b0537a6cb88826e4a471449260") WHERE id_temp = 3;
+      UPDATE ContactMethodType SET id = UNHEX("11e868b0537a72908826e4a471449260") WHERE id_temp = 4;
+      UPDATE ContactMethodType SET id = UNHEX("11e868b0537a78438826e4a471449260") WHERE id_temp = 5;
+      UPDATE ContactMethodType SET id = UNHEX("11e868b0537a7e108826e4a471449260") WHERE id_temp = 6;
     </sql>
 
     <sql dbms="mysql">
@@ -81,26 +84,6 @@
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
       VIRTUAL AFTER id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Donor_AUD ADD contactMethodType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(contactMethodType_id,  1, 4)),
-        HEX(SUBSTR(contactMethodType_id,  5, 2)),
-        HEX(SUBSTR(contactMethodType_id,  7, 2)),
-        HEX(SUBSTR(contactMethodType_id,  9, 2)),
-        HEX(SUBSTR(contactMethodType_id, 11)) )))
-      VIRTUAL AFTER contactMethodType_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Donor ADD contactMethodType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(contactMethodType_id,  1, 4)),
-        HEX(SUBSTR(contactMethodType_id,  5, 2)),
-        HEX(SUBSTR(contactMethodType_id,  7, 2)),
-        HEX(SUBSTR(contactMethodType_id,  9, 2)),
-        HEX(SUBSTR(contactMethodType_id, 11)) )))
-      VIRTUAL AFTER contactMethodType_id;
     </sql>
 
     <sql>

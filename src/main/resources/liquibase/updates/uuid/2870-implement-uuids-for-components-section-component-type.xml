@@ -143,9 +143,22 @@
     <modifyDataType columnName="componentType_id" newDataType="BINARY(16)" tableName="PackType_AUD"/>
 
     <sql>
-      UPDATE ComponentType 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d38d98826e4a471449260") WHERE id_temp = 1;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d4cfa8826e4a471449260") WHERE id_temp = 2;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d599e8826e4a471449260") WHERE id_temp = 3;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7d66778826e4a471449260") WHERE id_temp = 4;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f19428826e4a471449260") WHERE id_temp = 5;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f2ca48826e4a471449260") WHERE id_temp = 6;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f3d5b8826e4a471449260") WHERE id_temp = 7;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f4ff58826e4a471449260") WHERE id_temp = 8;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f5c148826e4a471449260") WHERE id_temp = 9;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f67828826e4a471449260") WHERE id_temp = 10;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f73028826e4a471449260") WHERE id_temp = 11;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f7f2d8826e4a471449260") WHERE id_temp = 12;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f8a3b8826e4a471449260") WHERE id_temp = 13;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7f95858826e4a471449260") WHERE id_temp = 14;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7fa0c38826e4a471449260") WHERE id_temp = 15;
+      UPDATE ComponentType SET id = UNHEX("11e868b08a7fabcf8826e4a471449260") WHERE id_temp = 16;
     </sql>
 
     <sql dbms="mysql">
@@ -166,106 +179,6 @@
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
       VIRTUAL AFTER id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Component_AUD ADD componentType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentType_id,  1, 4)),
-        HEX(SUBSTR(componentType_id,  5, 2)),
-        HEX(SUBSTR(componentType_id,  7, 2)),
-        HEX(SUBSTR(componentType_id,  9, 2)),
-        HEX(SUBSTR(componentType_id, 11)) )))
-      VIRTUAL AFTER componentType_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE ComponentType_AUD ADD pediComponentType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(pediComponentType_id,  1, 4)),
-        HEX(SUBSTR(pediComponentType_id,  5, 2)),
-        HEX(SUBSTR(pediComponentType_id,  7, 2)),
-        HEX(SUBSTR(pediComponentType_id,  9, 2)),
-        HEX(SUBSTR(pediComponentType_id, 11)) )))
-      VIRTUAL AFTER pediComponentType_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE OrderFormItem_AUD ADD componentType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentType_id,  1, 4)),
-        HEX(SUBSTR(componentType_id,  5, 2)),
-        HEX(SUBSTR(componentType_id,  7, 2)),
-        HEX(SUBSTR(componentType_id,  9, 2)),
-        HEX(SUBSTR(componentType_id, 11)) )))
-      VIRTUAL AFTER componentType_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE PackType_AUD ADD componentType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentType_id,  1, 4)),
-        HEX(SUBSTR(componentType_id,  5, 2)),
-        HEX(SUBSTR(componentType_id,  7, 2)),
-        HEX(SUBSTR(componentType_id,  9, 2)),
-        HEX(SUBSTR(componentType_id, 11)) )))
-      VIRTUAL AFTER componentType_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Component ADD componentType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentType_id,  1, 4)),
-        HEX(SUBSTR(componentType_id,  5, 2)),
-        HEX(SUBSTR(componentType_id,  7, 2)),
-        HEX(SUBSTR(componentType_id,  9, 2)),
-        HEX(SUBSTR(componentType_id, 11)) )))
-      VIRTUAL AFTER componentType_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE ComponentType ADD pediComponentType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(pediComponentType_id,  1, 4)),
-        HEX(SUBSTR(pediComponentType_id,  5, 2)),
-        HEX(SUBSTR(pediComponentType_id,  7, 2)),
-        HEX(SUBSTR(pediComponentType_id,  9, 2)),
-        HEX(SUBSTR(pediComponentType_id, 11)) )))
-      VIRTUAL AFTER pediComponentType_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE ComponentTypeCombination_ComponentType ADD componentTypes_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentTypes_id,  1, 4)),
-        HEX(SUBSTR(componentTypes_id,  5, 2)),
-        HEX(SUBSTR(componentTypes_id,  7, 2)),
-        HEX(SUBSTR(componentTypes_id,  9, 2)),
-        HEX(SUBSTR(componentTypes_id, 11)) )))
-      VIRTUAL AFTER componentTypes_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE ComponentType_ComponentTypeCombination ADD sourceComponentTypes_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(sourceComponentTypes_id,  1, 4)),
-        HEX(SUBSTR(sourceComponentTypes_id,  5, 2)),
-        HEX(SUBSTR(sourceComponentTypes_id,  7, 2)),
-        HEX(SUBSTR(sourceComponentTypes_id,  9, 2)),
-        HEX(SUBSTR(sourceComponentTypes_id, 11)) )))
-      VIRTUAL AFTER sourceComponentTypes_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE OrderFormItem ADD componentType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentType_id,  1, 4)),
-        HEX(SUBSTR(componentType_id,  5, 2)),
-        HEX(SUBSTR(componentType_id,  7, 2)),
-        HEX(SUBSTR(componentType_id,  9, 2)),
-        HEX(SUBSTR(componentType_id, 11)) )))
-      VIRTUAL AFTER componentType_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE PackType ADD componentType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentType_id,  1, 4)),
-        HEX(SUBSTR(componentType_id,  5, 2)),
-        HEX(SUBSTR(componentType_id,  7, 2)),
-        HEX(SUBSTR(componentType_id,  9, 2)),
-        HEX(SUBSTR(componentType_id, 11)) )))
-      VIRTUAL AFTER componentType_id;
     </sql>
 
     <sql>
