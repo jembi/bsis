@@ -21,36 +21,34 @@ public class TestBatchConstraintChecker {
    */
   public CanReleaseResult canReleaseTestBatch(TestBatch testBatch) {
 
-    if (testBatch.getStatus() != TestBatchStatus.OPEN) {
-      // Only open test batches can be released
+    // Only open test batches with assigned donations can be released
+    if (testBatch.getStatus() != TestBatchStatus.OPEN || testBatch.getDonations() == null
+        || testBatch.getDonations().isEmpty()) {
       return new CanReleaseResult(false);
     }
 
     int readyCount = 0;
 
     // Check for tests with outstanding test outcomes
-    if (testBatch.getDonations() != null) {
+    for (Donation donation : testBatch.getDonations()) {
 
-      for (Donation donation : testBatch.getDonations()) {
-
-          if (!donation.getPackType().getTestSampleProduced()) {
-            // Don't consider donations without test samples
-            continue;
-          }
-
-          BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
-
-          if (donationConstraintChecker.donationHasOutstandingOutcomes(donation, bloodTestingRuleResult)) {
-            // This test has an outstanding outcome
-            return new CanReleaseResult(false);
-          }
-
-          if (!donationConstraintChecker.donationHasDiscrepancies(donation, bloodTestingRuleResult)) {
-            // This donations is ready to be released
-            readyCount++;
-          }
-        }
+      if (!donation.getPackType().getTestSampleProduced()) {
+        // Don't consider donations without test samples
+        continue;
       }
+
+      BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
+
+      if (donationConstraintChecker.donationHasOutstandingOutcomes(donation, bloodTestingRuleResult)) {
+        // This test has an outstanding outcome
+        return new CanReleaseResult(false);
+      }
+
+      if (!donationConstraintChecker.donationHasDiscrepancies(donation, bloodTestingRuleResult)) {
+        // This donations is ready to be released
+        readyCount++;
+      }
+    }
 
     return new CanReleaseResult(true, readyCount);
   }

@@ -16,9 +16,6 @@ import java.util.UUID;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.service.BloodTestsService;
-import org.jembi.bsis.service.DonationConstraintChecker;
-import org.jembi.bsis.service.TestBatchConstraintChecker;
 import org.jembi.bsis.service.TestBatchConstraintChecker.CanReleaseResult;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
@@ -37,29 +34,29 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
   @Test
   public void testCanReleaseTestBatchWithNonOpenTestBatch_shouldReturnFalse() {
-
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.CLOSED).build();
-
     CanReleaseResult result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
 
     assertThat(result.canRelease(), is(false));
   }
 
   @Test
-  public void testCanReleaseTestBatchWithNullDonations_shouldReturnTrue() {
+  public void testCanReleaseTestBatchWithNullDonations_shouldReturnFalse() {
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).withDonations(null).build();
     CanReleaseResult result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
 
-    assertThat(result.canRelease(), is(true));
+    assertThat(result.canRelease(), is(false));
     assertThat(result.getReadyCount(), is(0));
   }
 
   @Test
-  public void testCanCloseTestBatchWithNoDonation_shouldReturnTrue() {
+  public void testCanReleaseTestBatchWithNoDonations_shouldReturnFalse() {
     TestBatch testBatch =
-        aTestBatch().withStatus(TestBatchStatus.RELEASED).withDonations(Collections.<Donation>emptySet()).build();
-    boolean result = testBatchConstraintChecker.canCloseTestBatch(testBatch);
-    assertThat(result, is(true));
+        aTestBatch().withStatus(TestBatchStatus.OPEN).withDonations(Collections.<Donation>emptySet()).build();
+    CanReleaseResult result = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
+
+    assertThat(result.canRelease(), is(false));
+    assertThat(result.getReadyCount(), is(0));
   }
 
   @Test
@@ -341,7 +338,7 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
     assertThat(result, is(false));
   }
-  
+
   @Test
   public void testCanCloseTestBatchWithNullDonations_shouldReturnTrue() {
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.RELEASED).withDonations(null).build();
