@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
 import org.apache.log4j.Logger;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -117,13 +116,18 @@ public class TestBatchCRUDService {
       }
       if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(testBatchId)) {
         LOGGER.debug("Cannot add DIN '" + donation.getDonationIdentificationNumber()
-            + "' to a TestBatch because it been assigned to another TestBatch. It will be ignored.");
+            + "' to a TestBatch because it has been assigned to another TestBatch. It will be ignored.");
         continue;
       }
       // donation can be added
       donationsToAdd.add(donation);
     }
-   
+
+    // At least one donation must be successfully added to the testBatch
+    if (donationsToAdd.size() == 0) {
+      throw new IllegalArgumentException("None of these donations can be added to this testBatch.");
+    }
+
     testBatch.getDonations().addAll(donationsToAdd);
 
     for (Donation donation : donationsToAdd) {
