@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.jembi.bsis.viewmodel.BloodTestResultFullViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +14,8 @@ public class BloodTestResultFactory {
   @Autowired
   private BloodTestFactory bloodTestFactory;
   
-  public BloodTestResultViewModel createBloodTestResultViewModel(BloodTestResult bloodTestResult) {
-    BloodTestResultViewModel viewModel = new BloodTestResultViewModel();
+  public BloodTestResultFullViewModel createBloodTestResultFullViewModel(BloodTestResult bloodTestResult) {
+    BloodTestResultFullViewModel viewModel = new BloodTestResultFullViewModel();
     viewModel.setId(bloodTestResult.getId());
     viewModel.setBloodTest(bloodTestFactory.createFullViewModel(bloodTestResult.getBloodTest()));
     viewModel.setReEntryRequired(bloodTestResult.getReEntryRequired());
@@ -24,10 +24,10 @@ public class BloodTestResultFactory {
     return viewModel;
   }
   
-  public List<BloodTestResultViewModel> createBloodTestResultViewModels(List<BloodTestResult> bloodTestResults) {
-    List<BloodTestResultViewModel> viewModels = new ArrayList<>();
+  public List<BloodTestResultFullViewModel> createBloodTestResultFullViewModels(List<BloodTestResult> bloodTestResults) {
+    List<BloodTestResultFullViewModel> viewModels = new ArrayList<>();
     for (BloodTestResult bloodTestResult : bloodTestResults) {
-      viewModels.add(createBloodTestResultViewModel(bloodTestResult));
+      viewModels.add(createBloodTestResultFullViewModel(bloodTestResult));
     }
     return viewModels;
   }

@@ -25,7 +25,7 @@ import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.jembi.bsis.viewmodel.BloodTestResultFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Assert;
 import org.junit.Before;
@@ -262,12 +262,13 @@ public class BloodTestingRuleEngineTest extends ContextDependentTestSuite {
     BloodTestingRuleResult result = bloodTestingRuleEngine.applyBloodTests(donation, testResults);
 
     ArrayList<UUID> reEntryRequiredTTITestIds = new ArrayList<>();
-    Map<UUID, BloodTestResultViewModel> resultViewModelMap = result.getRecentTestResults();
+    Map<UUID, BloodTestResultFullViewModel> resultViewModelMap = result.getRecentTestResults();
     for (UUID key : resultViewModelMap.keySet()) {
-      BloodTestResultViewModel bloodTestResultViewModel = resultViewModelMap.get(key);
-      if (bloodTestResultViewModel.getReEntryRequired().equals(true)
-          && bloodTestResultViewModel.getBloodTest().getBloodTestType().equals(BloodTestType.BASIC_TTI)) {
-        reEntryRequiredTTITestIds.add(bloodTestResultViewModel.getBloodTest().getId());
+      BloodTestResultFullViewModel resultFullViewModel = resultViewModelMap.get(key);
+      if (resultFullViewModel.getReEntryRequired().equals(true)
+          && resultFullViewModel.getBloodTest().getBloodTestType()
+              .equals(BloodTestType.BASIC_TTI)) {
+        reEntryRequiredTTITestIds.add(resultFullViewModel.getBloodTest().getId());
       }
     }
     Assert.assertEquals("Re-entry required TTI tests", 1, reEntryRequiredTTITestIds.size());

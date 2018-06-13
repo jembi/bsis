@@ -8,7 +8,7 @@ import org.jembi.bsis.utils.DateTimeSerialiser;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class BloodTestResultViewModel extends BaseViewModel<UUID> {
+public class BloodTestResultFullViewModel extends BaseViewModel<UUID> {
 
   private BloodTestFullViewModel bloodTest;
   private Boolean reEntryRequired;
@@ -17,7 +17,7 @@ public class BloodTestResultViewModel extends BaseViewModel<UUID> {
 
   private Map<String, Boolean> permissions;
 
-  public BloodTestResultViewModel() {
+  public BloodTestResultFullViewModel() {
   }
 
   public BloodTestFullViewModel getBloodTest() {

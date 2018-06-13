@@ -10,7 +10,7 @@ import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.service.BloodTestsService;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.jembi.bsis.viewmodel.BloodTestResultFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,9 +37,9 @@ public class TestResultControllerService {
     if (bloodTestType != null) {
       List<BloodTestingRuleResult> filteredRuleResults = new ArrayList<>();
       for (BloodTestingRuleResult result : results) {
-        Map<UUID, BloodTestResultViewModel> filteredModelMap = new HashMap<>();
+        Map<UUID, BloodTestResultFullViewModel> filteredModelMap = new HashMap<>();
         for (UUID key : result.getRecentTestResults().keySet()) {
-          BloodTestResultViewModel model = result.getRecentTestResults().get(key);
+          BloodTestResultFullViewModel model = result.getRecentTestResults().get(key);
           if (model.getBloodTest().getBloodTestType().equals(bloodTestType)) {
             filteredModelMap.put(key, model);
           }

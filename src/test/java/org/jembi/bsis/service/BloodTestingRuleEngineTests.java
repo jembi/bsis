@@ -193,7 +193,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -232,7 +232,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -271,7 +271,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -310,7 +310,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -349,7 +349,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -391,7 +391,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -427,7 +427,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -465,7 +465,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -503,7 +503,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -539,7 +539,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -577,7 +577,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -616,7 +616,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -653,7 +653,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -692,7 +692,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -734,7 +734,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -776,7 +776,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -818,7 +818,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -858,7 +858,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
 
   }
@@ -897,7 +897,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
   }
 
@@ -933,7 +933,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
   }
 
@@ -969,7 +969,7 @@ public class BloodTestingRuleEngineTests extends UnitTestSuite {
     bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>());
 
     // Verify last step of applyBloodTests before returning view model
-    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultViewModel(
+    verify(bloodTestingRuleResultViewModelFactory).createBloodTestResultFullViewModel(
         argThat(hasSameStateAsBloodTestingRuleResultSet(expectedBloodTestingRuleResultSet)));
   }
 }

@@ -4,7 +4,7 @@ import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel;
 import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicTTIBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestResultViewModelBuilder.aBloodTestResultViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestResultFullViewModelBuilder.aBloodTestResultFullViewModel;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aReleasedTestBatch;
 import static org.jembi.bsis.helpers.matchers.BloodTestingRuleResultMatcher.hasSameStateAsBloodTestingRuleResult;
@@ -27,7 +27,7 @@ import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.service.BloodTestsService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.jembi.bsis.viewmodel.BloodTestResultFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -69,24 +69,24 @@ public class TestResultControllerServiceTest extends UnitTestSuite {
     BloodTestFullViewModel aboBloodTest = aBasicBloodTypingBloodTestFullViewModel().build();
     BloodTestFullViewModel ttiBloodTest = aBasicTTIBloodTestFullViewModel().build();
     UUID results1TTI = UUID.randomUUID();
-    BloodTestResultViewModel results1ViewModel = aBloodTestResultViewModel().withBloodTest(ttiBloodTest).withResult("POS").build();
-    Map<UUID, BloodTestResultViewModel> results1 = new HashMap<>();
-    results1.put(UUID.randomUUID(), aBloodTestResultViewModel().withBloodTest(aboBloodTest).withResult("A").build());
+    BloodTestResultFullViewModel results1ViewModel = aBloodTestResultFullViewModel().withBloodTest(ttiBloodTest).withResult("POS").build();
+    Map<UUID, BloodTestResultFullViewModel> results1 = new HashMap<>();
+    results1.put(UUID.randomUUID(), aBloodTestResultFullViewModel().withBloodTest(aboBloodTest).withResult("A").build());
     results1.put(results1TTI, results1ViewModel);
     UUID results2TTI = UUID.randomUUID();
-    BloodTestResultViewModel results2ViewModel = aBloodTestResultViewModel().withBloodTest(ttiBloodTest).withResult("NEG").build();
-    Map<UUID, BloodTestResultViewModel> results2 = new HashMap<>();
-    results2.put(UUID.randomUUID(), aBloodTestResultViewModel().withBloodTest(aboBloodTest).withResult("O").build());
+    BloodTestResultFullViewModel results2ViewModel = aBloodTestResultFullViewModel().withBloodTest(ttiBloodTest).withResult("NEG").build();
+    Map<UUID, BloodTestResultFullViewModel> results2 = new HashMap<>();
+    results2.put(UUID.randomUUID(), aBloodTestResultFullViewModel().withBloodTest(aboBloodTest).withResult("O").build());
     results2.put(results2TTI, results2ViewModel);
     List<BloodTestingRuleResult> allResults = Arrays.asList(
         aBloodTestingRuleResult().withRecentResults(results1).build(),
         aBloodTestingRuleResult().withRecentResults(results2).build()
      );
 
-    Map<UUID,BloodTestResultViewModel> expectedResults1 = new HashMap<>();
+    Map<UUID,BloodTestResultFullViewModel> expectedResults1 = new HashMap<>();
     expectedResults1.put(results1TTI, results1ViewModel);
     BloodTestingRuleResult expectedRuleResults1 = aBloodTestingRuleResult().withRecentResults(expectedResults1).build();
-    Map<UUID,BloodTestResultViewModel> expectedResults2 = new HashMap<>();
+    Map<UUID,BloodTestResultFullViewModel> expectedResults2 = new HashMap<>();
     expectedResults2.put(results2TTI, results2ViewModel);
     BloodTestingRuleResult expectedRuleResults2 = aBloodTestingRuleResult().withRecentResults(expectedResults2).build();
 
@@ -111,14 +111,14 @@ public class TestResultControllerServiceTest extends UnitTestSuite {
     BloodTestFullViewModel aboBloodTest = aBasicBloodTypingBloodTestFullViewModel().build();
     BloodTestFullViewModel ttiBloodTest = aBasicTTIBloodTestFullViewModel().build();
     UUID results1TTI = UUID.randomUUID();
-    BloodTestResultViewModel results1ViewModel = aBloodTestResultViewModel().withBloodTest(ttiBloodTest).withResult("POS").build();
-    Map<UUID, BloodTestResultViewModel> results1 = new HashMap<>();
-    results1.put(UUID.randomUUID(), aBloodTestResultViewModel().withBloodTest(aboBloodTest).withResult("A").build());
+    BloodTestResultFullViewModel results1ViewModel = aBloodTestResultFullViewModel().withBloodTest(ttiBloodTest).withResult("POS").build();
+    Map<UUID, BloodTestResultFullViewModel> results1 = new HashMap<>();
+    results1.put(UUID.randomUUID(), aBloodTestResultFullViewModel().withBloodTest(aboBloodTest).withResult("A").build());
     results1.put(results1TTI, results1ViewModel);
     UUID results2TTI = UUID.randomUUID();
-    BloodTestResultViewModel results2ViewModel = aBloodTestResultViewModel().withBloodTest(ttiBloodTest).withResult("NEG").build();
-    Map<UUID, BloodTestResultViewModel> results2 = new HashMap<>();
-    results2.put(UUID.randomUUID(), aBloodTestResultViewModel().withBloodTest(aboBloodTest).withResult("O").build());
+    BloodTestResultFullViewModel results2ViewModel = aBloodTestResultFullViewModel().withBloodTest(ttiBloodTest).withResult("NEG").build();
+    Map<UUID, BloodTestResultFullViewModel> results2 = new HashMap<>();
+    results2.put(UUID.randomUUID(), aBloodTestResultFullViewModel().withBloodTest(aboBloodTest).withResult("O").build());
     results2.put(results2TTI, results2ViewModel);
     List<BloodTestingRuleResult> allResults = Arrays.asList(
         aBloodTestingRuleResult().withRecentResults(results1).build(),
