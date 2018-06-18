@@ -5,7 +5,6 @@ import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBas
 import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aConfirmatoryTTIBloodTestFullViewModel;
 import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aRepeatBloodTypingBloodTestFullViewModel;
 import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aRepeatTTIBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestResultFullViewModelBuilder.aBloodTestResultFullViewModel;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.mockito.Mockito.when;
@@ -69,10 +68,10 @@ public class TestResultControllerTests extends UnitTestSuite {
         .build();
     
     BloodTestResultFullViewModel basicTTIBloodTestResultFullViewModel =
-        aBloodTestResultFullViewModel()
-        .withId(UUID.randomUUID())
-        .withBloodTest(basicTTIBloodFullTestViewModel)
-        .withReEntryRequired()
+        BloodTestResultFullViewModel.builder()
+        .id(UUID.randomUUID())
+        .bloodTest(basicTTIBloodFullTestViewModel)
+        .reEntryRequired(true)
         .build();
             
     Map<UUID, BloodTestResultFullViewModel> recentTestResults = new HashMap<>();
@@ -130,10 +129,10 @@ public class TestResultControllerTests extends UnitTestSuite {
         .build();
     
     BloodTestResultFullViewModel basicTTIBloodTestResultFullViewModel =
-        aBloodTestResultFullViewModel()
-        .withId(UUID.randomUUID())
-        .withBloodTest(basicTTIBloodFullTestViewModel)
-        .withReEntryRequired()
+        BloodTestResultFullViewModel.builder()
+        .id(UUID.randomUUID())
+        .bloodTest(basicTTIBloodFullTestViewModel)
+        .reEntryRequired(true)
         .build();
             
     Map<UUID, BloodTestResultFullViewModel> recentTestResults1 = new HashMap<>();
@@ -146,10 +145,10 @@ public class TestResultControllerTests extends UnitTestSuite {
         .build();
     
     BloodTestResultFullViewModel repeatTTIBloodTestResultFullViewModel =
-        aBloodTestResultFullViewModel()
-        .withId(UUID.randomUUID())
-        .withBloodTest(repeatTTIBloodFullTestViewModel)
-        .withReEntryRequired()
+        BloodTestResultFullViewModel.builder()
+        .id(UUID.randomUUID())
+        .bloodTest(repeatTTIBloodFullTestViewModel)
+        .reEntryRequired(true)
         .build();
             
     Map<UUID, BloodTestResultFullViewModel> recentTestResults2 = new HashMap<>();
@@ -215,10 +214,10 @@ public class TestResultControllerTests extends UnitTestSuite {
         .build();
     
     BloodTestResultFullViewModel basicBloodTypingBloodTestResultFullViewModel =
-        aBloodTestResultFullViewModel()
-        .withId(UUID.randomUUID())
-        .withBloodTest(basicBloodTypingBloodFullTestViewModel)
-        .withReEntryNotRequired()
+        BloodTestResultFullViewModel.builder()
+        .id(UUID.randomUUID())
+        .bloodTest(basicBloodTypingBloodFullTestViewModel)
+        .reEntryRequired(false)
         .build();
             
     Map<UUID, BloodTestResultFullViewModel> recentTestResults = new HashMap<>();
@@ -323,10 +322,10 @@ public class TestResultControllerTests extends UnitTestSuite {
         .withBloodTestType(BloodTestType.BASIC_BLOODTYPING)
         .build();
     
-    BloodTestResultFullViewModel bloodTypingTestResultViewModel = aBloodTestResultFullViewModel()
-        .withId(UUID.randomUUID())
-        .withBloodTest(basicBloodTypingBloodFullTestViewModel)
-        .withReEntryRequired()
+    BloodTestResultFullViewModel bloodTypingTestResultViewModel = BloodTestResultFullViewModel.builder()
+        .id(UUID.randomUUID())
+        .bloodTest(basicBloodTypingBloodFullTestViewModel)
+        .reEntryRequired(true)
         .build();
 
     UUID basicTTIBloodTestId = UUID.randomUUID();
@@ -335,26 +334,27 @@ public class TestResultControllerTests extends UnitTestSuite {
         .withBloodTestType(BloodTestType.BASIC_TTI)
         .build();
     
-    BloodTestResultFullViewModel bloodTTITestResultViewModel = aBloodTestResultFullViewModel()
-        .withId(UUID.randomUUID())
-        .withBloodTest(basicTTIBloodFullTestViewModel)
-        .withReEntryRequired()
+    BloodTestResultFullViewModel bloodTTITestResultViewModel = BloodTestResultFullViewModel.builder()
+        .id(UUID.randomUUID())
+        .bloodTest(basicTTIBloodFullTestViewModel)
+        .reEntryRequired(true)
         .build();
 
     UUID repeatBloodTypingTestId = UUID.randomUUID();
     BloodTestFullViewModel repeatBloodTypingFullTestViewModel = aRepeatBloodTypingBloodTestFullViewModel().withId(repeatBloodTypingTestId)
         .withBloodTestType(BloodTestType.REPEAT_BLOODTYPING).build();
 
-    BloodTestResultFullViewModel repeatBloodTypingTestResultViewModel = aBloodTestResultFullViewModel()
-        .withId(UUID.randomUUID())
-        .withBloodTest(repeatBloodTypingFullTestViewModel).withReEntryRequired().build();
+    BloodTestResultFullViewModel repeatBloodTypingTestResultViewModel = BloodTestResultFullViewModel.builder()
+        .id(UUID.randomUUID())
+        .bloodTest(repeatBloodTypingFullTestViewModel).reEntryRequired(true).build();
 
     UUID confirmatoryTTIBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel confirmatoryTTIBloodFullTestViewModel =
         aConfirmatoryTTIBloodTestFullViewModel().withId(confirmatoryTTIBloodTestId).withBloodTestType(BloodTestType.CONFIRMATORY_TTI).build();
 
-    BloodTestResultFullViewModel confirmatoryTTITestResultViewModel = aBloodTestResultFullViewModel().withId(UUID.randomUUID())
-        .withBloodTest(confirmatoryTTIBloodFullTestViewModel).withReEntryRequired().build();
+    BloodTestResultFullViewModel confirmatoryTTITestResultViewModel = BloodTestResultFullViewModel.builder()
+        .id(UUID.randomUUID())
+        .bloodTest(confirmatoryTTIBloodFullTestViewModel).reEntryRequired(true).build();
 
     UUID repeatTTIBloodTestId = UUID.randomUUID();
     BloodTestFullViewModel repeatTTIFullTestViewModel =
@@ -362,8 +362,8 @@ public class TestResultControllerTests extends UnitTestSuite {
         .build();
     
     BloodTestResultFullViewModel repeatTTITestResultViewModel =
-        aBloodTestResultFullViewModel().withId(UUID.randomUUID()).withBloodTest(repeatTTIFullTestViewModel)
-        .withReEntryRequired()
+        BloodTestResultFullViewModel.builder().id(UUID.randomUUID()).bloodTest(repeatTTIFullTestViewModel)
+        .reEntryRequired(true)
         .build();
     
     Map<UUID, BloodTestResultFullViewModel> recentTestResults = new HashMap<>();

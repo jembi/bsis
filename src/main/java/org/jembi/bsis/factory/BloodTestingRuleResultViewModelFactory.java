@@ -99,7 +99,7 @@ public class BloodTestingRuleResultViewModelFactory {
   }
 
   public BloodTestResultFullViewModel createBloodTestResultFullViewModel(BloodTestingRuleResultSet bloodTestingRuleResultSet, BloodTestResult bloodTestResult, boolean isDonationReleased) {
-    BloodTestResultFullViewModel bloodTestResultFullViewModel = bloodTestResultFactory.createBloodTestResultFullViewModel(bloodTestResult);
+    BloodTestResultFullViewModel bloodTestResultFullViewModel = bloodTestResultFactory.createFullViewModel(bloodTestResult);
     Map<String, Boolean> permissions = new HashMap<String, Boolean>();
     permissions.put("canEdit", bloodTestResultConstraintChecker.canEdit(bloodTestingRuleResultSet, bloodTestResult, isDonationReleased));
     bloodTestResultFullViewModel.setPermissions(permissions);

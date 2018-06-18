@@ -3,7 +3,6 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestResultBuilder.aBloodTestResult;
-import static org.jembi.bsis.helpers.builders.BloodTestResultFullViewModelBuilder.aBloodTestResultFullViewModel;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.DonorOutcomesViewModelBuilder.aDonorOutcomesViewModel;
@@ -72,11 +71,12 @@ public class DonorOutcomesViewModelFactoryTests extends UnitTestSuite {
     
     // Set up expectations
     List<BloodTestResultFullViewModel> bloodTestResultFullViewModels = Arrays.asList(
-        aBloodTestResultFullViewModel().withId(UUID.randomUUID()).build(),
-        aBloodTestResultFullViewModel().withId(UUID.randomUUID()).build()
+        BloodTestResultFullViewModel.builder().id(UUID.randomUUID()).build(),
+        BloodTestResultFullViewModel.builder().id(UUID.randomUUID()).build()
     );
 
-    when(bloodTestResultFactory.createBloodTestResultFullViewModels(bloodTestResults)).thenReturn(bloodTestResultFullViewModels);
+    when(bloodTestResultFactory.createFullViewModels(bloodTestResults))
+        .thenReturn(bloodTestResultFullViewModels);
     
     DonorOutcomesViewModel expectedViewModel = aDonorOutcomesViewModel()
         .withDonorNumber(donorNumber)
