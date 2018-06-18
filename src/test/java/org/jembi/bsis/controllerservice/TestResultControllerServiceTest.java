@@ -19,14 +19,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.jembi.bsis.factory.TestSampleFactory;
+import org.jembi.bsis.helpers.builders.BloodTestResultBuilder;
+import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
+import org.jembi.bsis.repository.BloodTestResultRepository;
+import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.service.BloodTestsService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.BloodTestFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestResultFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
+import org.jembi.bsis.viewmodel.TestSampleViewModel;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -38,6 +44,31 @@ public class TestResultControllerServiceTest extends UnitTestSuite {
 
   @Mock
   private BloodTestsService bloodTestsService;
+
+  @Mock
+  private TestSampleFactory testSampleFactory;
+
+  @Mock
+  private DonationRepository donationRepository;
+
+  @Mock
+  private BloodTestResultRepository bloodTestResultRepository;
+
+  @Test
+  public void testGetTestSample_shouldCallServices() throws Exception {
+    Donation donation = aDonation().build();
+    List<BloodTestResult> testOutcomes =
+        Arrays.asList(BloodTestResultBuilder.aBloodTestResult().build());
+    when(donationRepository.findDonationByDonationIdentificationNumber("din")).thenReturn(donation);
+    when(bloodTestResultRepository.getTestOutcomes(donation))
+        .thenReturn(testOutcomes);
+    when(testSampleFactory.createViewModel(donation, testOutcomes))
+        .thenReturn(TestSampleViewModel.builder().build());
+    testResultControllerService.getTestSample("din");
+    verify(donationRepository).findDonationByDonationIdentificationNumber("din");
+    verify(bloodTestResultRepository).getTestOutcomes(donation);
+    verify(testSampleFactory).createViewModel(donation, testOutcomes);
+  }
 
   @Test
   public void testGetBloodTestingRuleResult_shouldCallService() throws Exception {

@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-
 import org.jembi.bsis.backingform.TestResultsBackingForms;
 import org.jembi.bsis.backingform.validator.TestResultsBackingFormsValidator;
 import org.jembi.bsis.controllerservice.TestResultControllerService;
@@ -69,6 +67,15 @@ public class TestResultController {
   @InitBinder
   protected void initDonationFormBinder(WebDataBinder binder) {
     binder.setValidator(testResultsBackingFormsValidator);
+  }
+
+  @RequestMapping(value = "/{donationIdentificationNumber}/sample", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
+  public Map<String, Object> findTestSample(
+      @PathVariable String donationIdentificationNumber) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("testSample", testResultControllerService.getTestSample(donationIdentificationNumber));
+    return map;
   }
 
   @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
