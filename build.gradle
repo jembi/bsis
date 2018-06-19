@@ -1,0 +1,47 @@
+plugins {
+    id "war"
+    id "idea"
+    id "java"
+    id "jacoco"
+    id "application"
+    id "net.ltgt.apt" version "0.15"
+    id "org.liquibase.gradle" version "1.2.4"
+    id "org.springframework.boot" version "2.0.2.RELEASE"
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+}
+
+version = "1.4.0"
+group = "org.jembi"
+archivesBaseName = "bsis"
+sourceCompatibility = 1.8
+mainClassName = "org.jembi.bsis.Application"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-json"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+
+    compile "org.hibernate:hibernate-core:4.3.11.Final"
+    compile "org.hibernate:hibernate-envers:4.3.11.Final"
+
+    compile "mysql:mysql-connector-java:8.0.11"
+    compile "org.liquibase:liquibase-core:3.6.1"
+
+    compile "javax.mail:mail:1.6.1"
+    compile "org.apache.poi:poi:3.17"
+    compile "org.apache.poi:poi-ooxml:3.17"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+
+    testCompile "com.github.springtestdbunit:spring-test-dbunit:1.3.0"
+    testCompile("org.dbunit:dbunit:2.5.4") {
+        exclude(module: 'junit')
+    }
+
+    testRuntime "org.hsqldb:hsqldb:2.4.1"
+    testRuntime "org.hsqldb:sqltool:2.4.1"
+}
