@@ -26,7 +26,7 @@ services:
       - ./target/bsis:/usr/local/tomcat/webapps/bsis
     ports:
       - "8080:8080"
-      - "8000:8000"
+      - "5005:8000"
 
 networks:
   bsis-backend:
