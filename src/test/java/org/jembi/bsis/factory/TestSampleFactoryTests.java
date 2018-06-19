@@ -9,6 +9,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +38,7 @@ public class TestSampleFactoryTests extends UnitTestSuite {
   private BloodTestResultFactory bloodTestResultFactory;
 
   @Test
-  public void testCreateFullViewModel_shouldReturnViewModelWithTheCorrectState() {
+  public void testCreateViewModel_shouldReturnViewModelWithTheCorrectState() {
     Date donationDate = new Date();
     Date testBatchDate = new Date();
     UUID id1 = UUID.randomUUID();
@@ -80,6 +81,104 @@ public class TestSampleFactoryTests extends UnitTestSuite {
 
     TestSampleViewModel actual =
         testSampleFactory.createViewModel(donation, testOutcomes);
+
+    assertThat(actual, is(equalTo(expected)));
+  }
+  
+  @Test
+  public void testCreateViewModelWithEmptyTestOucomes_shouldReturnViewModelWithEmptyTestOutcomes() {
+    List<BloodTestResult> testOutcomes = new ArrayList<>();
+    List<BloodTestResultViewModel> testOutcomeViewModels = new ArrayList<>();
+
+    Date donationDate = new Date();
+    Date testBatchDate = new Date();
+    
+    TestBatch testBatch = aTestBatch()
+        .withLocation(LocationBuilder.aTestingSite().withName("testingSite").build())
+        .withTestBatchDate(testBatchDate)
+        .build();
+
+    Donation donation =
+        aDonation().withDonationIdentificationNumber("din").withVenue(aVenue().withName("venue").build())
+            .withDonationDate(donationDate).withPackType(PackTypeBuilder.aPackType().withPackType("packType").build())
+            .withTTIStatus(TTIStatus.NOT_DONE).withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
+            .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).withTestBatch(testBatch).build();
+
+    TestSampleViewModel expected = TestSampleViewModel.builder().din("din").venue("venue").donationDate(donationDate)
+        .bloodGroup("").packType("packType").ttiStatus(TTIStatus.NOT_DONE).bloodTypingStatus(BloodTypingStatus.NOT_DONE)
+        .bloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).testingSite("testingSite").testingDate(testBatchDate)
+        .testOutcomes(testOutcomeViewModels).build();
+
+    when(bloodTestResultFactory.createViewModels(testOutcomes)).thenReturn(testOutcomeViewModels);
+
+    TestSampleViewModel actual =
+        testSampleFactory.createViewModel(donation, testOutcomes);
+
+    assertThat(actual, is(equalTo(expected)));
+  }
+  
+  @Test
+  public void testCreateViewModelWithNotDoneBloodTypingStatus_shouldReturnEmptyBloodGroup() {
+    String expectedBloodGroup = "";
+
+    Date donationDate = new Date();
+    Date testBatchDate = new Date();
+
+    List<BloodTestResult> testOutcomes = new ArrayList<>();
+    List<BloodTestResultViewModel> testOutcomeViewModels = new ArrayList<>();
+
+    TestBatch testBatch = aTestBatch().withLocation(LocationBuilder.aTestingSite().withName("testingSite").build())
+        .withTestBatchDate(testBatchDate).build();
+
+    Donation donation =
+        aDonation().withDonationIdentificationNumber("din").withVenue(aVenue().withName("venue").build())
+            .withDonationDate(donationDate).withPackType(PackTypeBuilder.aPackType().withPackType("packType").build())
+            .withTTIStatus(TTIStatus.NOT_DONE).withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
+            .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).withTestBatch(testBatch).build();
+
+    TestSampleViewModel expected = TestSampleViewModel.builder()
+        .bloodGroup(expectedBloodGroup)
+        .din("din").venue("venue").donationDate(donationDate)
+        .bloodGroup(expectedBloodGroup).packType("packType").ttiStatus(TTIStatus.NOT_DONE)
+        .bloodTypingStatus(BloodTypingStatus.NOT_DONE).bloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
+        .testingSite("testingSite").testingDate(testBatchDate).testOutcomes(testOutcomeViewModels).build();
+
+    when(bloodTestResultFactory.createViewModels(testOutcomes)).thenReturn(testOutcomeViewModels);
+
+    TestSampleViewModel actual = testSampleFactory.createViewModel(donation, testOutcomes);
+
+    assertThat(actual, is(equalTo(expected)));
+  }
+  
+  @Test
+  public void testCreateViewModelWithPendingTestsBloodTypingStatus_shouldReturnEmptyBloodGroup() {
+    String expectedBloodGroup = "";
+
+    Date donationDate = new Date();
+    Date testBatchDate = new Date();
+
+    List<BloodTestResult> testOutcomes = new ArrayList<>();
+    List<BloodTestResultViewModel> testOutcomeViewModels = new ArrayList<>();
+
+    TestBatch testBatch = aTestBatch().withLocation(LocationBuilder.aTestingSite().withName("testingSite").build())
+        .withTestBatchDate(testBatchDate).build();
+
+    Donation donation =
+        aDonation().withDonationIdentificationNumber("din").withVenue(aVenue().withName("venue").build())
+            .withDonationDate(donationDate).withPackType(PackTypeBuilder.aPackType().withPackType("packType").build())
+            .withTTIStatus(TTIStatus.NOT_DONE).withBloodTypingStatus(BloodTypingStatus.PENDING_TESTS)
+            .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).withTestBatch(testBatch).build();
+
+    TestSampleViewModel expected = TestSampleViewModel.builder()
+        .bloodGroup(expectedBloodGroup)
+        .din("din").venue("venue").donationDate(donationDate)
+        .bloodGroup(expectedBloodGroup).packType("packType").ttiStatus(TTIStatus.NOT_DONE)
+        .bloodTypingStatus(BloodTypingStatus.PENDING_TESTS).bloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE)
+        .testingSite("testingSite").testingDate(testBatchDate).testOutcomes(testOutcomeViewModels).build();
+
+    when(bloodTestResultFactory.createViewModels(testOutcomes)).thenReturn(testOutcomeViewModels);
+
+    TestSampleViewModel actual = testSampleFactory.createViewModel(donation, testOutcomes);
 
     assertThat(actual, is(equalTo(expected)));
   }
