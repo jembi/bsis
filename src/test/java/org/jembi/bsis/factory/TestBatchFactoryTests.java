@@ -1,7 +1,9 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationFullViewModelBuilder.aDonationFullViewModel;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
@@ -10,12 +12,10 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.builders.TestBatchFullDonationViewModelBuilder.aTestBatchFullDonationViewModel;
 import static org.jembi.bsis.helpers.builders.TestBatchFullViewModelBuilder.aTestBatchFullViewModel;
-import static org.jembi.bsis.helpers.builders.TestBatchViewModelBuilder.aTestBatchViewModel;
 import static org.jembi.bsis.helpers.matchers.DonationTestOutcomesReportViewModelMatcher.hasSameStateAsDonationTestOutcomesReportViewModel;
 import static org.jembi.bsis.helpers.matchers.TestBatchFullDonationViewModelMatcher.hasSameStateAsTestBatchFullDonationViewModel;
 import static org.jembi.bsis.helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
 import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
-import static org.jembi.bsis.helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +35,7 @@ import org.jembi.bsis.helpers.builders.DonationTestOutcomesReportViewModelBuilde
 import org.jembi.bsis.helpers.builders.DonorBuilder;
 import org.jembi.bsis.helpers.builders.PackTypeBuilder;
 import org.jembi.bsis.helpers.builders.TestBatchBuilder;
+import org.jembi.bsis.helpers.matchers.TestBatchViewModelMatcher;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
@@ -105,6 +106,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonations(donations)
         .withNotes(IRRELEVANT_NOTES)
+        .withBackEntry(true)
         .build();
 
     TestBatch testBatch2 =
@@ -116,15 +118,17 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonations(donations)
         .withNotes(IRRELEVANT_NOTES)
+        .withBackEntry(true)
         .build();
 
-    TestBatchViewModel expectedViewModel = aTestBatchViewModel()
-        .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
-        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
-        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-        .withNotes(IRRELEVANT_NOTES)
+    TestBatchViewModel expectedViewModel = TestBatchViewModel.builder()
+        .id(IRRELEVANT_TEST_BATCH_ID)
+        .status(IRRELEVANT_STATUS)
+        .batchNumber(IRRELEVANT_BATCH_NUMBER)
+        .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .lastUpdated(IRRELEVANT_LAST_UPDATED_DATE)
+        .notes(IRRELEVANT_NOTES)
+        .backEntry(true)
         .build();
     
     List<TestBatch> testBatches = Arrays.asList(new TestBatch[]{testBatch1, testBatch2});
@@ -135,7 +139,8 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
     List<TestBatchViewModel> returnedViewModels = testBatchFactory.createTestBatchBasicViewModels(testBatches);
 
-    assertThat(returnedViewModels.get(0), hasSameStateAsTestBatchViewModel(expectedViewModel));
+    assertThat(returnedViewModels.get(0),
+        TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel(expectedViewModel));
   }
 
   @Test

@@ -22,7 +22,8 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
         .appendText("\nBatch number: ").appendValue(expected.getBatchNumber())
         .appendText("\nTest batch date: ").appendValue(expected.getTestBatchDate())
         .appendText("\nLast updated date: ").appendValue(expected.getLastUpdated())
-.appendText("\nNotes: ").appendValue(expected.getNotes());
+        .appendText("\nNotes: ").appendValue(expected.getNotes())
+        .appendText("\nBack entry: ").appendValue(expected.isBackEntry());
   }
 
   @Override
@@ -59,6 +60,11 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
       description.appendText("\nNotes: expected = ").appendValue(expected.getNotes())
           .appendText(", actual = ").appendValue(actual.getNotes());
     }
+    
+    if (!Objects.equals(actual.isBackEntry(), expected.isBackEntry())) {
+      description.appendText("\nBack entry: expected = ").appendValue(expected.isBackEntry())
+          .appendText(", actual = ").appendValue(actual.isBackEntry());
+    }
   }
 
   @Override
@@ -68,7 +74,8 @@ public class TestBatchViewModelMatcher extends TypeSafeMatcher<TestBatchViewMode
         Objects.equals(actual.getBatchNumber(), expected.getBatchNumber()) &&
         Objects.equals(actual.getTestBatchDate(), expected.getTestBatchDate()) &&
         Objects.equals(actual.getLastUpdated(), expected.getLastUpdated()) &&
-        Objects.equals(actual.getNotes(), expected.getNotes());
+        Objects.equals(actual.getNotes(), expected.getNotes()) &&
+        Objects.equals(actual.isBackEntry(), expected.isBackEntry());
   }
 
   public static TestBatchViewModelMatcher hasSameStateAsTestBatchViewModel(TestBatchViewModel expected) {

@@ -141,6 +141,7 @@ public class TestBatchFactory {
     testBatchViewModel.setLastUpdated(testBatch.getLastUpdated());
     testBatchViewModel.setNotes(testBatch.getNotes());
     testBatchViewModel.setLocation(locationFactory.createViewModel(testBatch.getLocation()));
+    testBatchViewModel.setBackEntry(testBatch.isBackEntry());
 
     // Calculate number of samples (only consider donations with test samples)
     int numSamples = 0;
