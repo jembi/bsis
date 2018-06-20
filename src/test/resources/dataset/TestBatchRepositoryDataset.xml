@@ -36,13 +36,13 @@
            lastUpdated="2015-06-29 05:24:35.0" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"
            dateOfFirstDonation="2015-06-26" preferredLanguage_id="1" title="Mrs"
            address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870683'" dueToDonate="2015-09-24"/>
-    <TestBatch id="uuid'640eb339-c815-48c6-81d7-0f225d3f2701'" batchNumber="000000" isDeleted="false" location_id="uuid'55321456-eeee-1234-b5b1-123412348812'"
+    <TestBatch backEntry="0" id="uuid'640eb339-c815-48c6-81d7-0f225d3f2701'" batchNumber="000000" isDeleted="false" location_id="uuid'55321456-eeee-1234-b5b1-123412348812'"
                createdDate="2015-08-11 05:44:40.0" testBatchDate="2015-08-11 05:44:40.0" lastUpdated="2015-08-11 05:44:40.0"
                status="CLOSED" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
-    <TestBatch id="uuid'640eb339-c815-48c6-81d7-0f225d3f2702'" batchNumber="000001" isDeleted="false" location_id="uuid'55321456-eeee-1234-b5b1-123412348812'"
+    <TestBatch backEntry="0" id="uuid'640eb339-c815-48c6-81d7-0f225d3f2702'" batchNumber="000001" isDeleted="false" location_id="uuid'55321456-eeee-1234-b5b1-123412348812'"
                createdDate="2015-08-13 05:45:05.0" testBatchDate="2015-08-13 05:45:05.0" lastUpdated="2015-08-13 05:45:05.0"
                status="OPEN" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
-    <TestBatch id="uuid'640eb339-c815-48c6-81d7-0f225d3f2703'" batchNumber="000002" isDeleted="true" location_id="uuid'55321456-eeee-1234-b5b1-123412348812'"
+    <TestBatch backEntry="0" id="uuid'640eb339-c815-48c6-81d7-0f225d3f2703'" batchNumber="000002" isDeleted="true" location_id="uuid'55321456-eeee-1234-b5b1-123412348812'"
                createdDate="2015-07-10 05:45:05.0" testBatchDate="2015-08-13 05:45:05.0" lastUpdated="2015-07-10 05:45:05.0"
                status="RELEASED" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
     <ComponentType canBeIssued="true" id="1" description="" expiresAfter="35"

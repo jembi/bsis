@@ -72,6 +72,8 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
   @ManyToOne(optional = false)
   private Location location;
 
+  private boolean backEntry;
+
   public TestBatch() {
     super();
   }
@@ -135,6 +137,14 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
 
   public void setDonations(Set<Donation> donations) {
     this.donations = donations;
+  }
+
+  public boolean isBackEntry() {
+    return backEntry;
+  }
+
+  public void setBackEntry(boolean backEntry) {
+    this.backEntry = backEntry;
   }
 
 }

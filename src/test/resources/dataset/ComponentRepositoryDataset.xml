@@ -55,7 +55,7 @@
            createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" dateOfFirstDonation="2015-08-11"
            preferredLanguage_id="1" title="Mr" address_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'" contact_id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870685'"
            dueToDonate="2015-11-09"/>
-    <TestBatch id="uuid'616b5f66-125e-41e9-87d4-32d8596b7301'" batchNumber="000000" isDeleted="false" location_id="uuid'77321456-eeee-1234-b5b1-123412348892'"
+    <TestBatch backEntry="0" id="uuid'616b5f66-125e-41e9-87d4-32d8596b7301'" batchNumber="000000" isDeleted="false" location_id="uuid'77321456-eeee-1234-b5b1-123412348892'"
                createdDate="2015-08-11 05:44:40.0" testBatchDate="2015-08-11 05:44:40.0" lastUpdated="2015-08-11 05:44:40.0"
                status="RELEASED" createdBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" lastUpdatedBy_id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'"/>
     <DonationBatch id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'" batchNumber="000000" isDeleted="false"

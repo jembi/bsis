@@ -1,0 +1,16 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet id="20180619-1431" author="lauravignoli">
+    <comment>Add backEntry column to TestBatch</comment>
+    <addColumn tableName="TestBatch">
+      <column name="backEntry" type="TINYINT(1)" defaultValue="0">
+        <constraints nullable="false" />
+      </column>
+    </addColumn>
+    <addColumn tableName="TestBatch_AUD">
+      <column name="backEntry" type="TINYINT(1)" defaultValue="0"/>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>
