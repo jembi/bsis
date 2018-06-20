@@ -42,7 +42,7 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateNull() {
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
+    TestBatchBackingForm backingForm = TestBatchBackingForm.builder().build();
     Errors errors = new BindException(backingForm, "testBatchBackingForm");
     validator.validate(null, errors);
     assertThat(errors.getErrorCount(), is(0));
@@ -50,13 +50,13 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateWithNonExistentLocation() throws Exception {
-
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
-    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
     Date today = new SimpleDateFormat("yyyy-MM-dd").parse("2017-01-21");
-    backingForm.setTestBatchDate(today);
+    TestBatchBackingForm backingForm = TestBatchBackingForm.builder()
+        .id(UUID.randomUUID())
+        .location(aLocationBackingForm().withId(locationId).build())
+        .testBatchDate(today)
+        .build();
 
     when(locationRepository.getLocation(locationId)).thenThrow(new NoResultException());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
@@ -73,13 +73,13 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateWithNonTestingSiteLocation() throws Exception {
-
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
-    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
     Date today = new SimpleDateFormat("yyyy-MM-dd").parse("2017-01-21");
-    backingForm.setTestBatchDate(today);
+    TestBatchBackingForm backingForm = TestBatchBackingForm.builder()
+        .id(UUID.randomUUID())
+        .location(aLocationBackingForm().withId(locationId).build())
+        .testBatchDate(today)
+        .build();
 
     when(locationRepository.getLocation(locationId)).thenReturn(aDistributionSite().build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
@@ -96,13 +96,13 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateWithDeletedLocation() throws Exception {
-
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
-    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
     Date today = new SimpleDateFormat("yyyy-MM-dd").parse("2017-01-21");
-    backingForm.setTestBatchDate(today);
+    TestBatchBackingForm backingForm = TestBatchBackingForm.builder()
+        .id(UUID.randomUUID())
+        .location(aLocationBackingForm().withId(locationId).build())
+        .testBatchDate(today)
+        .build();
 
     when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().thatIsDeleted().build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(new ArrayList<String>());
@@ -119,12 +119,12 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateWithNoLocation() throws Exception {
-
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
-    Date today = new SimpleDateFormat("yyyy-MM-dd").parse("2017-01-21");
-    backingForm.setTestBatchDate(today);
+    Date today = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-21 15:23");
+    TestBatchBackingForm backingForm = TestBatchBackingForm.builder()
+        .id(UUID.randomUUID())
+        .testBatchDate(today)
+        .build();
 
     when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().thatIsDeleted().build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
@@ -141,13 +141,14 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   
   @Test
   public void testValidTestBatchDateCurrentDate_shouldHaveNoError() throws Exception {
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
-    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
     Date today = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-21 15:23");
     Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-21 15:00");
-    backingForm.setTestBatchDate(testBatchDate);
+    TestBatchBackingForm backingForm = TestBatchBackingForm.builder()
+        .id(UUID.randomUUID())
+        .location(aLocationBackingForm().withId(locationId).build())
+        .testBatchDate(testBatchDate)
+        .build();
 
     when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().withId(locationId).build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
@@ -163,10 +164,11 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   
   @Test
   public void testValidateNullTestBatchDate() throws Exception {
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
-    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
+    TestBatchBackingForm backingForm = TestBatchBackingForm.builder()
+        .id(UUID.randomUUID())
+        .location(aLocationBackingForm().withId(locationId).build())
+        .build();
 
     when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().withId(locationId).build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
@@ -183,13 +185,14 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
   
   @Test
   public void testValidateTestBatchDateAfterToday() throws Exception {
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
-    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
     Date today = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-21 15:23");
     Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-06-23 09:17");
-    backingForm.setTestBatchDate(testBatchDate);
+    TestBatchBackingForm backingForm = TestBatchBackingForm.builder()
+        .id(UUID.randomUUID())
+        .location(aLocationBackingForm().withId(locationId).build())
+        .testBatchDate(testBatchDate)
+        .build();
 
     when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().withId(locationId).build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));
@@ -206,13 +209,14 @@ public class TestBatchBackingFormValidatorTests extends UnitTestSuite {
 
   @Test
   public void testValidateTestBatchDateBeforeToday() throws Exception {
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(UUID.randomUUID());
     UUID locationId = UUID.randomUUID();
-    backingForm.setLocation(aLocationBackingForm().withId(locationId).build());
     Date today = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-21 15:23");
     Date testBatchDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2017-01-20 09:17");
-    backingForm.setTestBatchDate(testBatchDate);
+    TestBatchBackingForm backingForm = TestBatchBackingForm.builder()
+        .id(UUID.randomUUID())
+        .location(aLocationBackingForm().withId(locationId).build())
+        .testBatchDate(testBatchDate)
+        .build();
 
     when(locationRepository.getLocation(locationId)).thenReturn(aTestingSite().withId(locationId).build());
     when(formFieldRepository.getRequiredFormFields("testBatch")).thenReturn(Arrays.asList("location"));

@@ -4,53 +4,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.viewmodel.DonationFullViewModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TestBatchBackingForm {
 
   private UUID id;
   private TestBatchStatus status;
   private Date testBatchDate;
   private LocationBackingForm location;
-
-  public TestBatchBackingForm() {
-  }
-  
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-  
-  public TestBatchStatus getStatus() {
-    return status;
-  }
-
-  public void setStatus(TestBatchStatus status) {
-    this.status = status;
-  }
-
-  public void setLocation(LocationBackingForm location) {
-    this.location = location;
-  }
-  
-  public LocationBackingForm getLocation() {
-    return location;
-  }
-
-  public Date getTestBatchDate() {
-    return testBatchDate;
-  }
-
-  public void setTestBatchDate(Date testBatchDate) {
-    this.testBatchDate = testBatchDate;
-  }
+  private boolean backEntry;
 
   @JsonIgnore
   public void setDonations(List<DonationFullViewModel> donations) {

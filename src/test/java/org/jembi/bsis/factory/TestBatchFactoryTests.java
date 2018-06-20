@@ -1,9 +1,7 @@
 package org.jembi.bsis.factory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationFullViewModelBuilder.aDonationFullViewModel;
 import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
@@ -16,6 +14,7 @@ import static org.jembi.bsis.helpers.matchers.DonationTestOutcomesReportViewMode
 import static org.jembi.bsis.helpers.matchers.TestBatchFullDonationViewModelMatcher.hasSameStateAsTestBatchFullDonationViewModel;
 import static org.jembi.bsis.helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
 import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
+import static org.jembi.bsis.helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +34,6 @@ import org.jembi.bsis.helpers.builders.DonationTestOutcomesReportViewModelBuilde
 import org.jembi.bsis.helpers.builders.DonorBuilder;
 import org.jembi.bsis.helpers.builders.PackTypeBuilder;
 import org.jembi.bsis.helpers.builders.TestBatchBuilder;
-import org.jembi.bsis.helpers.matchers.TestBatchViewModelMatcher;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.Donation;
@@ -139,8 +137,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
     List<TestBatchViewModel> returnedViewModels = testBatchFactory.createTestBatchBasicViewModels(testBatches);
 
-    assertThat(returnedViewModels.get(0),
-        TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel(expectedViewModel));
+    assertThat(returnedViewModels.get(0), hasSameStateAsTestBatchViewModel(expectedViewModel));
   }
 
   @Test
@@ -568,11 +565,13 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntity_shouldSetCorrectFields() {
     UUID locationId = UUID.randomUUID();
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(IRRELEVANT_TEST_BATCH_ID);
-    backingForm.setStatus(TestBatchStatus.OPEN);
-    backingForm.setTestBatchDate(IRRELEVANT_TEST_BATCH_DATE);
-    backingForm.setLocation(aTestingSiteBackingForm().withId(locationId).build());
+    TestBatchBackingForm backingForm = TestBatchBackingForm.builder()
+        .id(IRRELEVANT_TEST_BATCH_ID)
+        .status(TestBatchStatus.OPEN)
+        .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .location(aTestingSiteBackingForm().withId(locationId).build())
+        .backEntry(false)
+        .build();
 
     Location location = aTestingSite().withId(locationId).build();
     
@@ -582,6 +581,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLocation(location)
         .withDonations(new HashSet<Donation>())
+        .withBackEntry(false)
         .build();
     
     when(locationRepository.getLocation(locationId)).thenReturn(location);
