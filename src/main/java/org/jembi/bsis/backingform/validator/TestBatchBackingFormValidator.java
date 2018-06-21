@@ -1,5 +1,6 @@
 package org.jembi.bsis.backingform.validator;
 
+import java.util.Date;
 import javax.persistence.NoResultException;
 
 import org.jembi.bsis.backingform.TestBatchBackingForm;
@@ -36,10 +37,17 @@ public class TestBatchBackingFormValidator extends BaseValidator<TestBatchBackin
     }
     
     // Validate testBatchDate
+    Date today = dateGeneratorService.generateDate();
     if (form.getTestBatchDate() == null) {
       errors.rejectValue("testBatchDate", "errors.invalid", "Test batch date is invalid");
     } else if (form.getTestBatchDate().after(dateGeneratorService.generateDate())) {
-      errors.rejectValue("testBatchDate", "errors.invalid", "Test batch date is after current date");
+      errors.rejectValue("testBatchDate", "errors.invalid",
+          "Test batch date is after current date");
+    } else if (form.getId() == null && !form.isBackEntry() && 
+        !dateGeneratorService.generateLocalDate(today)
+            .equals(dateGeneratorService.generateLocalDate(form.getTestBatchDate()))) {
+      errors.rejectValue("testBatchDate", "errors.invalid",
+          "Test batch date should be current date");
     }
 
     commonFieldChecks(form, errors);
