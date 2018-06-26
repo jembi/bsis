@@ -15,14 +15,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
-
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
@@ -431,6 +429,22 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     for (Donation donation : updatedTestBatch.getDonations()) {
       assertThat(donation.getTestBatch(), is(testBatch));
     }
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddDonationsToTestBatchWithNoDonationsThatCanBeAdded_shouldThrow() {
+    TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).build();
+    TestBatch anotherTestBatch = aTestBatch().withId(UUID.randomUUID()).build();
+    Donation donation1 = aDonation()
+        .withPackType(aPackType().withTestSampleProduced(false).build())
+        .build();
+    Donation donation2 = aDonation().withTestBatch(anotherTestBatch).build();
+
+    when(testBatchRepository.findTestBatchById(TEST_BATCH_ID)).thenReturn(testBatch);
+    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
+
+    testBatchCRUDService.addDonationsToTestBatch(TEST_BATCH_ID,
+        Arrays.asList(donation1, donation2));
   }
 
   @Test
