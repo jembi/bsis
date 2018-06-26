@@ -108,7 +108,7 @@ public class TestResultControllerTests extends UnitTestSuite {
 
     // Test
     ResponseEntity<Map<String, Object>> returnedResponse = testResultController.findTestResultsOverviewForTestBatch(
-        request, aTestBatch.getId());
+        aTestBatch.getId());
 
     Map<String, Object> overViewFlags = returnedResponse.getBody();
     Assert.assertNotNull("map is returned", overViewFlags);
@@ -193,7 +193,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     when(testResultControllerService.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
     // Test
     ResponseEntity<Map<String, Object>> returnedResponse = testResultController.findTestResultsOverviewForTestBatch(
-        request, aTestBatch.getId());
+        aTestBatch.getId());
 
     Map<String, Object> overViewFlags = returnedResponse.getBody();
     Assert.assertNotNull("map is returned", overViewFlags);
@@ -255,7 +255,7 @@ public class TestResultControllerTests extends UnitTestSuite {
 
     // Test
     ResponseEntity<Map<String, Object>> returnedResponse =
-        testResultController.findTestResultsOverviewForTestBatch(request, aTestBatch.getId());
+        testResultController.findTestResultsOverviewForTestBatch(aTestBatch.getId());
 
     Map<String, Object> overViewFlags = returnedResponse.getBody();
     Assert.assertNotNull("map is returned", overViewFlags);
@@ -302,7 +302,7 @@ public class TestResultControllerTests extends UnitTestSuite {
 
     // Test
     ResponseEntity<Map<String, Object>> returnedResponse = testResultController.findTestResultsOverviewForTestBatch(
-        request, aTestBatch.getId());
+        aTestBatch.getId());
 
     Map<String, Object> overViewFlags = returnedResponse.getBody();
     Assert.assertNotNull("map is returned", overViewFlags);
@@ -404,7 +404,7 @@ public class TestResultControllerTests extends UnitTestSuite {
     when(testResultControllerService.getBloodTestingRuleResults(aTestBatch)).thenReturn(bloodTestingRuleResult);
     // Test
     ResponseEntity<Map<String, Object>> returnedResponse = testResultController.findTestResultsOverviewForTestBatch(
-        request, aTestBatch.getId());
+        aTestBatch.getId());
 
     Map<String, Object> overViewFlags = returnedResponse.getBody();
     Assert.assertNotNull("map is returned", overViewFlags);

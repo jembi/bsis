@@ -1,12 +1,5 @@
 package org.jembi.bsis.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
 import org.jembi.bsis.backingform.TestResultsBackingForms;
 import org.jembi.bsis.backingform.validator.TestResultsBackingFormsValidator;
 import org.jembi.bsis.controllerservice.TestResultControllerService;
@@ -37,6 +30,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 @Transactional
 @RestController
@@ -71,11 +73,9 @@ public class TestResultController {
 
   @RequestMapping(value = "/{donationIdentificationNumber}/sample", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public Map<String, Object> findTestSample(
-      @PathVariable String donationIdentificationNumber) {
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("testSample", testResultControllerService.getTestSample(donationIdentificationNumber));
-    return map;
+  public Map<String, Object> findTestSample(@PathVariable String donationIdentificationNumber) {
+    return Collections.<String, Object>singletonMap("testSample",
+        testResultControllerService.getTestSample(donationIdentificationNumber));
   }
 
   @RequestMapping(value = "{donationIdentificationNumber}", method = RequestMethod.GET)
@@ -97,7 +97,7 @@ public class TestResultController {
 
   @RequestMapping(value = "/search", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(HttpServletRequest request,
+  public ResponseEntity<Map<String, Object>> findTestResultsForTestBatch(
       @RequestParam(value = "testBatch", required = true) UUID testBatchId,
       @RequestParam(value = "bloodTestType", required = false) BloodTestType bloodTestType) {
 
@@ -128,7 +128,7 @@ public class TestResultController {
 
   @RequestMapping(value = "/overview", method = RequestMethod.GET)
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
-  public ResponseEntity<Map<String, Object>> findTestResultsOverviewForTestBatch(HttpServletRequest request,
+  public ResponseEntity<Map<String, Object>> findTestResultsOverviewForTestBatch(
       @RequestParam(value = "testBatch", required = true) UUID testBatchId) {
 
     TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
@@ -203,8 +203,8 @@ public class TestResultController {
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_OUTCOME + "')")
   @RequestMapping(method = RequestMethod.POST)
   public ResponseEntity<Map<String, Object>> saveTestResults(
-      @RequestBody @Valid TestResultsBackingForms testResultsBackingForms, @RequestParam(value = "reEntry",
-          required = false, defaultValue = "false") boolean reEntry) {
+      @RequestBody @Valid TestResultsBackingForms testResultsBackingForms,
+      @RequestParam(value = "reEntry", required = false, defaultValue = "false") boolean reEntry) {
 
     HttpStatus responseStatus = HttpStatus.CREATED;
     Map<String, Object> responseMap = new HashMap<>();

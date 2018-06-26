@@ -1,24 +1,5 @@
 package org.jembi.bsis.controllerservice;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicTTIBloodTestFullViewModel;
-import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
-import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aReleasedTestBatch;
-import static org.jembi.bsis.helpers.matchers.BloodTestingRuleResultMatcher.hasSameStateAsBloodTestingRuleResult;
-import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import org.jembi.bsis.factory.TestSampleFactory;
 import org.jembi.bsis.helpers.builders.BloodTestResultBuilder;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
@@ -37,8 +18,28 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class TestResultControllerServiceTest extends UnitTestSuite {
-  
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicBloodTypingBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestFullViewModelBuilder.aBasicTTIBloodTestFullViewModel;
+import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aReleasedTestBatch;
+import static org.jembi.bsis.helpers.matchers.BloodTestingRuleResultMatcher.hasSameStateAsBloodTestingRuleResult;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+public class TestResultControllerServiceTests extends UnitTestSuite {
+
   @InjectMocks
   private TestResultControllerService testResultControllerService;
 
@@ -55,46 +56,62 @@ public class TestResultControllerServiceTest extends UnitTestSuite {
   private BloodTestResultRepository bloodTestResultRepository;
 
   @Test
-  public void testGetTestSample_shouldCallServices() throws Exception {
+  public void testGetTestSample_shouldCallServicesAndReturnViewModel() {
     Donation donation = aDonation().build();
-    List<BloodTestResult> testOutcomes =
-        Arrays.asList(BloodTestResultBuilder.aBloodTestResult().build());
+    List<BloodTestResult> testOutcomes = Collections.singletonList(BloodTestResultBuilder.aBloodTestResult().build());
+    TestSampleViewModel expected = TestSampleViewModel.builder().build();
     when(donationRepository.findDonationByDonationIdentificationNumber("din")).thenReturn(donation);
     when(bloodTestResultRepository.getTestOutcomes(donation))
         .thenReturn(testOutcomes);
     when(testSampleFactory.createViewModel(donation, testOutcomes))
-        .thenReturn(TestSampleViewModel.builder().build());
-    testResultControllerService.getTestSample("din");
+        .thenReturn(expected);
+
+    TestSampleViewModel actual = testResultControllerService.getTestSample("din");
+
+    assertThat(actual, is(equalTo(expected)));
     verify(donationRepository).findDonationByDonationIdentificationNumber("din");
     verify(bloodTestResultRepository).getTestOutcomes(donation);
     verify(testSampleFactory).createViewModel(donation, testOutcomes);
   }
 
   @Test
-  public void testGetBloodTestingRuleResult_shouldCallService() throws Exception {
+  public void testGetBloodTestingRuleResult_shouldCallService() {
     Donation donation = aDonation().build();
-    testResultControllerService.getBloodTestingRuleResult(donation);
-    verify(bloodTestsService).executeTests(argThat(hasSameStateAsDonation(donation)));
+    BloodTestingRuleResult expected = aBloodTestingRuleResult().build();
+
+    when(bloodTestsService.executeTests(donation)).thenReturn(expected);
+
+    BloodTestingRuleResult actual = testResultControllerService.getBloodTestingRuleResult(donation);
+
+    assertThat(actual, is(equalTo(expected)));
+    verify(bloodTestsService).executeTests(donation);
   }
 
   @Test
-  public void testGetBloodTestingRuleResults_shouldCallService() throws Exception {
+  public void testGetBloodTestingRuleResults_shouldCallService() {
     TestBatch testBatch = aReleasedTestBatch()
-      .withDonation(aDonation().build())
-      .withDonation(aDonation().build())
-      .build();
-    testResultControllerService.getBloodTestingRuleResults(testBatch);
+        .withDonation(aDonation().build())
+        .withDonation(aDonation().build())
+        .build();
+    BloodTestingRuleResult resultOne = aBloodTestingRuleResult().build();
+    BloodTestingRuleResult resultTwo = aBloodTestingRuleResult().build();
+
+    when(bloodTestsService.executeTests(testBatch.getDonations())).thenReturn(Arrays.asList(resultOne, resultTwo));
+
+    List<BloodTestingRuleResult> actual = testResultControllerService.getBloodTestingRuleResults(testBatch);
+
+    assertThat(actual.size(), is(equalTo(2)));
     verify(bloodTestsService).executeTests(testBatch.getDonations());
   }
 
   @Test
-  public void testGetBloodTestingRuleResultsWithBloodTestType_shouldFilterResults() throws Exception {
+  public void testGetBloodTestingRuleResultsWithBloodTestType_shouldFilterResults() {
     Donation donation1 = aDonation().build();
     Donation donation2 = aDonation().build();
     TestBatch testBatch = aReleasedTestBatch()
-      .withDonation(donation1)
-      .withDonation(donation2)
-      .build();
+        .withDonation(donation1)
+        .withDonation(donation2)
+        .build();
     BloodTestFullViewModel aboBloodTest = aBasicBloodTypingBloodTestFullViewModel().build();
     BloodTestFullViewModel ttiBloodTest = aBasicTTIBloodTestFullViewModel().build();
     UUID results1TTI = UUID.randomUUID();
@@ -111,17 +128,17 @@ public class TestResultControllerServiceTest extends UnitTestSuite {
     List<BloodTestingRuleResult> allResults = Arrays.asList(
         aBloodTestingRuleResult().withRecentResults(results1).build(),
         aBloodTestingRuleResult().withRecentResults(results2).build()
-     );
+    );
 
-    Map<UUID,BloodTestResultFullViewModel> expectedResults1 = new HashMap<>();
+    Map<UUID, BloodTestResultFullViewModel> expectedResults1 = new HashMap<>();
     expectedResults1.put(results1TTI, results1ViewModel);
     BloodTestingRuleResult expectedRuleResults1 = aBloodTestingRuleResult().withRecentResults(expectedResults1).build();
-    Map<UUID,BloodTestResultFullViewModel> expectedResults2 = new HashMap<>();
+    Map<UUID, BloodTestResultFullViewModel> expectedResults2 = new HashMap<>();
     expectedResults2.put(results2TTI, results2ViewModel);
     BloodTestingRuleResult expectedRuleResults2 = aBloodTestingRuleResult().withRecentResults(expectedResults2).build();
 
     when(bloodTestsService.executeTests(testBatch.getDonations())).thenReturn(allResults);
-    
+
     List<BloodTestingRuleResult> results = testResultControllerService.getBloodTestingRuleResults(BloodTestType.BASIC_TTI, testBatch);
 
     assertThat(results.size(), is(2));
@@ -131,13 +148,13 @@ public class TestResultControllerServiceTest extends UnitTestSuite {
   }
 
   @Test
-  public void testGetBloodTestingRuleResultsWithNullBloodTestType_shouldReturnAllResults() throws Exception {
+  public void testGetBloodTestingRuleResultsWithNullBloodTestType_shouldReturnAllResults() {
     Donation donation1 = aDonation().build();
     Donation donation2 = aDonation().build();
     TestBatch testBatch = aReleasedTestBatch()
-      .withDonation(donation1)
-      .withDonation(donation2)
-      .build();
+        .withDonation(donation1)
+        .withDonation(donation2)
+        .build();
     BloodTestFullViewModel aboBloodTest = aBasicBloodTypingBloodTestFullViewModel().build();
     BloodTestFullViewModel ttiBloodTest = aBasicTTIBloodTestFullViewModel().build();
     UUID results1TTI = UUID.randomUUID();
@@ -154,11 +171,10 @@ public class TestResultControllerServiceTest extends UnitTestSuite {
     results2.put(results2TTI, results2ViewModel);
     List<BloodTestingRuleResult> allResults = Arrays.asList(
         aBloodTestingRuleResult().withRecentResults(results1).build(),
-        aBloodTestingRuleResult().withRecentResults(results2).build()
-     );
+        aBloodTestingRuleResult().withRecentResults(results2).build());
 
     when(bloodTestsService.executeTests(testBatch.getDonations())).thenReturn(allResults);
-    
+
     List<BloodTestingRuleResult> results = testResultControllerService.getBloodTestingRuleResults(null, testBatch);
 
     assertThat(results.size(), is(2));
