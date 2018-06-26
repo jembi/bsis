@@ -86,7 +86,7 @@ public class TestSampleFactoryTests extends UnitTestSuite {
   }
   
   @Test
-  public void testCreateViewModelWithEmptyTestOucomes_shouldReturnViewModelWithEmptyTestOutcomes() {
+  public void testCreateViewModelWithEmptyTestOutcomes_shouldReturnViewModelWithEmptyTestOutcomes() {
     List<BloodTestResult> testOutcomes = new ArrayList<>();
     List<BloodTestResultViewModel> testOutcomeViewModels = new ArrayList<>();
 
