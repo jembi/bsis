@@ -5,13 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
+import org.jembi.bsis.factory.TestSampleFactory;
+import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
+import org.jembi.bsis.repository.BloodTestResultRepository;
+import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.service.BloodTestsService;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.jembi.bsis.viewmodel.BloodTestResultFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
+import org.jembi.bsis.viewmodel.TestSampleViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +26,21 @@ public class TestResultControllerService {
 
   @Autowired
   private BloodTestsService bloodTestsService;
+
+  @Autowired
+  private DonationRepository donationRepository;
+
+  @Autowired
+  private BloodTestResultRepository bloodTestResultRepository;
+
+  @Autowired
+  private TestSampleFactory testSampleFactory;
+
+  public TestSampleViewModel getTestSample(String din) {
+    Donation donation = donationRepository.findDonationByDonationIdentificationNumber(din);
+    List<BloodTestResult> testOutcomes = bloodTestResultRepository.getTestOutcomes(donation);
+    return testSampleFactory.createViewModel(donation, testOutcomes);
+  }
 
   public BloodTestingRuleResult getBloodTestingRuleResult(Donation donation) {
     return bloodTestsService.executeTests(donation);
@@ -37,9 +56,9 @@ public class TestResultControllerService {
     if (bloodTestType != null) {
       List<BloodTestingRuleResult> filteredRuleResults = new ArrayList<>();
       for (BloodTestingRuleResult result : results) {
-        Map<UUID, BloodTestResultViewModel> filteredModelMap = new HashMap<>();
+        Map<UUID, BloodTestResultFullViewModel> filteredModelMap = new HashMap<>();
         for (UUID key : result.getRecentTestResults().keySet()) {
-          BloodTestResultViewModel model = result.getRecentTestResults().get(key);
+          BloodTestResultFullViewModel model = result.getRecentTestResults().get(key);
           if (model.getBloodTest().getBloodTestType().equals(bloodTestType)) {
             filteredModelMap.put(key, model);
           }

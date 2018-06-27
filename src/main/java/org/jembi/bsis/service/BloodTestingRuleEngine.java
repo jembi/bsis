@@ -145,7 +145,7 @@ public class BloodTestingRuleEngine {
     List<BloodTest> confirmatoryTTITests = bloodTestRepository.getBloodTestsOfType(BloodTestType.CONFIRMATORY_TTI);
     setSeparateRepeatAndConfirmatoryPendingTTITests(resultSet, repeatTTITests, confirmatoryTTITests);
 
-    return bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(resultSet);
+    return bloodTestingRuleResultViewModelFactory.createBloodTestResultFullViewModel(resultSet);
   }
 
   /**

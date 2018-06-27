@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.jembi.bsis.model.util.Gender;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.jembi.bsis.viewmodel.BloodTestResultFullViewModel;
 import org.jembi.bsis.viewmodel.DonorOutcomesViewModel;
 
 public class DonorOutcomesViewModelBuilder extends AbstractBuilder<DonorOutcomesViewModel> {
@@ -18,7 +18,7 @@ public class DonorOutcomesViewModelBuilder extends AbstractBuilder<DonorOutcomes
   private String donationIdentificationNumber;
   private String bloodAbo;
   private String bloodRh;
-  private List<BloodTestResultViewModel> bloodTestResults;
+  private List<BloodTestResultFullViewModel> bloodTestResults;
 
   public DonorOutcomesViewModelBuilder withDonorNumber(String donorNumber) {
     this.donorNumber = donorNumber;
@@ -65,7 +65,7 @@ public class DonorOutcomesViewModelBuilder extends AbstractBuilder<DonorOutcomes
     return this;
   }
 
-  public DonorOutcomesViewModelBuilder withBloodTestResults(List<BloodTestResultViewModel> bloodTestResults) {
+  public DonorOutcomesViewModelBuilder withBloodTestResults(List<BloodTestResultFullViewModel> bloodTestResults) {
     this.bloodTestResults = bloodTestResults;
     return this;
   }

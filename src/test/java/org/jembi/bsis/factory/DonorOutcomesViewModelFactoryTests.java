@@ -3,7 +3,6 @@ package org.jembi.bsis.factory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestResultBuilder.aBloodTestResult;
-import static org.jembi.bsis.helpers.builders.BloodTestResultViewModelBuilder.aBloodTestResultViewModel;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
 import static org.jembi.bsis.helpers.builders.DonorOutcomesViewModelBuilder.aDonorOutcomesViewModel;
@@ -20,7 +19,7 @@ import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.util.Gender;
 import org.jembi.bsis.suites.UnitTestSuite;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.jembi.bsis.viewmodel.BloodTestResultFullViewModel;
 import org.jembi.bsis.viewmodel.DonorOutcomesViewModel;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -71,12 +70,13 @@ public class DonorOutcomesViewModelFactoryTests extends UnitTestSuite {
         .build();
     
     // Set up expectations
-    List<BloodTestResultViewModel> bloodTestResultViewModels = Arrays.asList(
-        aBloodTestResultViewModel().withId(UUID.randomUUID()).build(),
-        aBloodTestResultViewModel().withId(UUID.randomUUID()).build()
+    List<BloodTestResultFullViewModel> bloodTestResultFullViewModels = Arrays.asList(
+        BloodTestResultFullViewModel.builder().id(UUID.randomUUID()).build(),
+        BloodTestResultFullViewModel.builder().id(UUID.randomUUID()).build()
     );
 
-    when(bloodTestResultFactory.createBloodTestResultViewModels(bloodTestResults)).thenReturn(bloodTestResultViewModels);
+    when(bloodTestResultFactory.createFullViewModels(bloodTestResults))
+        .thenReturn(bloodTestResultFullViewModels);
     
     DonorOutcomesViewModel expectedViewModel = aDonorOutcomesViewModel()
         .withDonorNumber(donorNumber)
@@ -88,7 +88,7 @@ public class DonorOutcomesViewModelFactoryTests extends UnitTestSuite {
         .withDonationIdentificationNumber(donationIdentificationNumber)
         .withBloodAbo(bloodAbo)
         .withBloodRh(bloodRh)
-        .withBloodTestResults(bloodTestResultViewModels)
+        .withBloodTestResults(bloodTestResultFullViewModels)
         .build();
     
     // Exercise SUT

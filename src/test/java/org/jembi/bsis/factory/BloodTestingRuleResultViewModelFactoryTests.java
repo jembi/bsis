@@ -38,7 +38,8 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
   private DonationConstraintChecker donationConstraintChecker;
 
   @Test
-  public void testCreateBloodTestResultViewModelWithHighTitre_shouldCreateCorrectResultSet() throws Exception {    
+  public void testCreateBloodTestResultFullViewModelWithHighTitre_shouldCreateCorrectResultSet()
+      throws Exception {
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
     Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
@@ -53,14 +54,15 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     
     // Run test
     BloodTestingRuleResult ruleResult =
-        bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(bloodTestingRuleResultSet);
+        bloodTestingRuleResultViewModelFactory.createBloodTestResultFullViewModel(bloodTestingRuleResultSet);
 
     // Verify result
     assertThat(ruleResult, is(hasSameStateAsBloodTestingRuleResult(expectedRuleResult)));
   }
 
   @Test
-  public void testCreateBloodTestResultViewModelWithLowTitre_shouldCreateCorrectResultSet() throws Exception {    
+  public void testCreateBloodTestResultFullViewModelWithLowTitre_shouldCreateCorrectResultSet()
+      throws Exception {
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
     Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
@@ -75,14 +77,15 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     
     // Run test
     BloodTestingRuleResult ruleResult =
-        bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(bloodTestingRuleResultSet);
+        bloodTestingRuleResultViewModelFactory.createBloodTestResultFullViewModel(bloodTestingRuleResultSet);
 
     // Verify result
     assertThat(ruleResult, is(hasSameStateAsBloodTestingRuleResult(expectedRuleResult)));
   }
 
   @Test
-  public void testCreateBloodTestResultViewModelWithNTTitre_shouldCreateCorrectResultSet() throws Exception {    
+  public void testCreateBloodTestResultFullViewModelWithNTTitre_shouldCreateCorrectResultSet()
+      throws Exception {
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
     Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).build();
@@ -97,14 +100,15 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     
     // Run test
     BloodTestingRuleResult ruleResult =
-        bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(bloodTestingRuleResultSet);
+        bloodTestingRuleResultViewModelFactory.createBloodTestResultFullViewModel(bloodTestingRuleResultSet);
 
     // Verify result
     assertThat(ruleResult, is(hasSameStateAsBloodTestingRuleResult(expectedRuleResult)));
   }
 
   @Test
-  public void testCreateBloodTestResultViewModelWithUpdatedTitre_shouldCreateCorrectResultSet() throws Exception {    
+  public void testCreateBloodTestResultFullViewModelWithUpdatedTitre_shouldCreateCorrectResultSet()
+      throws Exception {
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
     Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withTitre(Titre.HIGH).build();
@@ -119,14 +123,15 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     
     // Run test
     BloodTestingRuleResult ruleResult =
-        bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(bloodTestingRuleResultSet);
+        bloodTestingRuleResultViewModelFactory.createBloodTestResultFullViewModel(bloodTestingRuleResultSet);
 
     // Verify result
     assertThat(ruleResult, is(hasSameStateAsBloodTestingRuleResult(expectedRuleResult)));
   }
   
   @Test
-  public void testCreateBloodTestResultViewModelWithUpdatedNTTitre_shouldCreateCorrectResultSet() throws Exception {    
+  public void testCreateBloodTestResultFullViewModelWithUpdatedNTTitre_shouldCreateCorrectResultSet()
+      throws Exception {
     // Setup data
     PackType packType = aPackType().withTestSampleProduced(true).build();
     Donation donation = aDonation().withId(DONATION_ID).withPackType(packType).withTitre(Titre.HIGH).build();
@@ -141,7 +146,7 @@ public class BloodTestingRuleResultViewModelFactoryTests extends UnitTestSuite {
     
     // Run test
     BloodTestingRuleResult ruleResult =
-        bloodTestingRuleResultViewModelFactory.createBloodTestResultViewModel(bloodTestingRuleResultSet);
+        bloodTestingRuleResultViewModelFactory.createBloodTestResultFullViewModel(bloodTestingRuleResultSet);
 
     // Verify result
     assertThat(ruleResult, is(hasSameStateAsBloodTestingRuleResult(expectedRuleResult)));

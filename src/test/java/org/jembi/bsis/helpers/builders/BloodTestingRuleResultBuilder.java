@@ -9,7 +9,7 @@ import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donation.Titre;
-import org.jembi.bsis.viewmodel.BloodTestResultViewModel;
+import org.jembi.bsis.viewmodel.BloodTestResultFullViewModel;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 
 public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingRuleResult> {
@@ -21,7 +21,7 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
   private BloodTypingStatus bloodTypingStatus;
   private BloodTypingMatchStatus bloodTypingMatchStatus;
   private List<UUID> pendingRepeatAndConfirmatoryTtiTestsIds;
-  private Map<UUID, BloodTestResultViewModel> recentTestResults;
+  private Map<UUID, BloodTestResultFullViewModel> recentTestResults;
   private List<UUID> pendingBloodTypingTestsIds;
   private List<UUID> pendingConfirmatoryTTITestsIds;
   private List<UUID> pendingRepeatTTITestsIds;
@@ -71,7 +71,7 @@ public class BloodTestingRuleResultBuilder extends AbstractBuilder<BloodTestingR
     return this;
   }
   
-  public BloodTestingRuleResultBuilder withRecentResults(Map<UUID, BloodTestResultViewModel> recentTestResults) {
+  public BloodTestingRuleResultBuilder withRecentResults(Map<UUID, BloodTestResultFullViewModel> recentTestResults) {
     this.recentTestResults = recentTestResults;
     return this;
   }

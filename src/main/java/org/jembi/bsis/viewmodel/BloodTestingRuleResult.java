@@ -34,7 +34,7 @@ public class BloodTestingRuleResult {
 
   private Map<UUID, String> availableTestResults;
 
-  private Map<UUID, BloodTestResultViewModel> recentTestResults;
+  private Map<UUID, BloodTestResultFullViewModel> recentTestResults;
 
   private BloodTypingStatus bloodTypingStatus;
 
@@ -184,11 +184,11 @@ public class BloodTestingRuleResult {
     this.pendingRepeatAndConfirmatoryTtiTestsIds = pendingRepeatAndConfirmatoryTtiTestsIds;
   }
 
-  public Map<UUID, BloodTestResultViewModel> getRecentTestResults() {
+  public Map<UUID, BloodTestResultFullViewModel> getRecentTestResults() {
     return recentTestResults;
   }
 
-  public void setRecentTestResults(Map<UUID, BloodTestResultViewModel> recentTestResults) {
+  public void setRecentTestResults(Map<UUID, BloodTestResultFullViewModel> recentTestResults) {
     this.recentTestResults = recentTestResults;
   }
 
