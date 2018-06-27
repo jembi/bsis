@@ -1,17 +1,23 @@
-services:
-  - mysql
-
 dist: trusty
-sudo: required
+sudo: enabled
 
 language: java
 jdk:
   - openjdk8
 
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+      - mysql-client
+
 before_install:
-  - bash .travis.install-mysql-5.7.sh
-  - echo "USE mysql;\nALTER USER 'root'@'localhost' IDENTIFIED BY 'root';\nFLUSH PRIVILEGES;\n" | mysql -u root
-  - mysql -u root -proot -e 'create database bsis;'
+  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('root') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+  - sudo mysql_upgrade -uroot -proot
+  - sudo service mysql restart
+  - mysql -uroot -proot -e "CREATE DATABASE bsis;"
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t 60bc59b1-74af-468a-b386-7cc209586d00 || echo "Codecov did not collect coverage reports"
