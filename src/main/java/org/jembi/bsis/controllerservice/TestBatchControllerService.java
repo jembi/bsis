@@ -1,11 +1,8 @@
 package org.jembi.bsis.controllerservice;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.backingform.TestBatchDonationRangeBackingForm;
+import org.jembi.bsis.backingform.TestBatchDonationsBackingForm;
 import org.jembi.bsis.factory.LocationFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
@@ -16,6 +13,7 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
+import org.jembi.bsis.service.DonationCRUDService;
 import org.jembi.bsis.service.TestBatchCRUDService;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullDonationViewModel;
@@ -24,6 +22,11 @@ import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -43,6 +46,8 @@ public class TestBatchControllerService {
   
   @Autowired
   private DonationRepository donationRepository;
+  @Autowired
+  private DonationCRUDService donationCRUDService;
 
   public TestBatchFullViewModel updateTestBatch(TestBatchBackingForm backingForm) {
     TestBatch testBatch = testBatchFactory.createEntity(backingForm);
@@ -84,5 +89,13 @@ public class TestBatchControllerService {
     List<Donation> donations = donationRepository.findDonationsBetweenTwoDins(form.getFromDIN(), form.getToDIN());
     TestBatch testbatch = testBatchCRUDService.addDonationsToTestBatch(form.getTestBatchId(), donations);
     return testBatchFactory.createTestBatchFullViewModel(testbatch);
+  }
+
+  public void removeDonationsFromBatch(TestBatchDonationsBackingForm donationsBackingForm) {
+    List<Donation> donationsToRemove = donationsBackingForm.getDonationIds().stream()
+        .map(uuid -> donationRepository.findDonationById(uuid))
+        .collect(Collectors.toList());
+    TestBatch testBatch = testBatchRepository.findTestBatchById(donationsBackingForm.getTestBatchId());
+    donationCRUDService.removeDonationsFromTestBatch(donationsToRemove, testBatch);
   }
 }

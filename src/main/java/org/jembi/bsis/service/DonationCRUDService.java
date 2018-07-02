@@ -1,12 +1,5 @@
 package org.jembi.bsis.service;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
-
-import javax.persistence.NoResultException;
-
 import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.backingform.BloodTypingResolutionsBackingForm;
@@ -18,6 +11,7 @@ import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.packtype.PackType;
+import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
@@ -26,6 +20,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+import javax.persistence.NoResultException;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Transactional
 @Service
 public class DonationCRUDService {
@@ -303,5 +308,9 @@ public class DonationCRUDService {
 
     donorRepository.saveDonor(donor);
     return donor;
+  }
+
+  public void removeDonationsFromTestBatch(List<Donation> donationsToRemove, TestBatch testBatch) {
+    log.info("Removing donations from TestBatch " + testBatch.getId());
   }
 }
