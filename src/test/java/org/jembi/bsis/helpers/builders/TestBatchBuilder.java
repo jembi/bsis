@@ -22,6 +22,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
   private Date lastUpdatedDate;
   private String notes;
   private Location location = LocationBuilder.aTestingSite().build();
+  private boolean backEntry;
 
   public TestBatchBuilder withId(UUID id) {
     this.id = id;
@@ -71,6 +72,11 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     return this;
   }
 
+  public TestBatchBuilder withBackEntry(boolean backEntry) {
+    this.backEntry = backEntry;
+    return this;
+  }
+
   @Override
   public TestBatch build() {
     TestBatch testBatch = new TestBatch();
@@ -82,6 +88,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     testBatch.setNotes(notes);
     testBatch.setLocation(location);
     testBatch.setDonations(donations);
+    testBatch.setBackEntry(backEntry);
     return testBatch;
   }
 

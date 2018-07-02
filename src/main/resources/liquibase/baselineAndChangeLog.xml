@@ -142,4 +142,5 @@
   <include file="liquibase/updates/3431-move-password-reset-email-properties-to-gen-config.xml"/>
   <include file="liquibase/updates/3022-add-date-and-remove-donation-batch-from-test-batch.xml"/>
   <include file="liquibase/updates/3050-add-test-samples-to-a-test-batch.xml"/>
+  <include file="liquibase/updates/3605-enable-test-batch-back-entry.xml"/>
 </databaseChangeLog>

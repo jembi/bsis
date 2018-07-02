@@ -46,6 +46,7 @@ public class TestBatchFactory {
     testBatch.setStatus(backingForm.getStatus());
     testBatch.setTestBatchDate(backingForm.getTestBatchDate());
     testBatch.setLocation(locationRepository.getLocation(backingForm.getLocation().getId()));
+    testBatch.setBackEntry(backingForm.isBackEntry());
     return testBatch;
   }
 
@@ -141,13 +142,14 @@ public class TestBatchFactory {
     testBatchViewModel.setLastUpdated(testBatch.getLastUpdated());
     testBatchViewModel.setNotes(testBatch.getNotes());
     testBatchViewModel.setLocation(locationFactory.createViewModel(testBatch.getLocation()));
+    testBatchViewModel.setBackEntry(testBatch.isBackEntry());
 
     // Calculate number of samples (only consider donations with test samples)
     int numSamples = 0;
     for (Donation donation : testBatch.getDonations()) {
-        if (donation.getPackType().getTestSampleProduced()) {
-          numSamples++;
-        }
+      if (donation.getPackType().getTestSampleProduced()) {
+        numSamples++;
+      }
     }
     testBatchViewModel.setNumSamples(numSamples);
   }

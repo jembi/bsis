@@ -10,7 +10,6 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.builders.TestBatchFullDonationViewModelBuilder.aTestBatchFullDonationViewModel;
 import static org.jembi.bsis.helpers.builders.TestBatchFullViewModelBuilder.aTestBatchFullViewModel;
-import static org.jembi.bsis.helpers.builders.TestBatchViewModelBuilder.aTestBatchViewModel;
 import static org.jembi.bsis.helpers.matchers.DonationTestOutcomesReportViewModelMatcher.hasSameStateAsDonationTestOutcomesReportViewModel;
 import static org.jembi.bsis.helpers.matchers.TestBatchFullDonationViewModelMatcher.hasSameStateAsTestBatchFullDonationViewModel;
 import static org.jembi.bsis.helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
@@ -105,6 +104,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonations(donations)
         .withNotes(IRRELEVANT_NOTES)
+        .withBackEntry(true)
         .build();
 
     TestBatch testBatch2 =
@@ -116,15 +116,17 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonations(donations)
         .withNotes(IRRELEVANT_NOTES)
+        .withBackEntry(true)
         .build();
 
-    TestBatchViewModel expectedViewModel = aTestBatchViewModel()
-        .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
-        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
-        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-        .withNotes(IRRELEVANT_NOTES)
+    TestBatchViewModel expectedViewModel = TestBatchViewModel.builder()
+        .id(IRRELEVANT_TEST_BATCH_ID)
+        .status(IRRELEVANT_STATUS)
+        .batchNumber(IRRELEVANT_BATCH_NUMBER)
+        .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .lastUpdated(IRRELEVANT_LAST_UPDATED_DATE)
+        .notes(IRRELEVANT_NOTES)
+        .backEntry(true)
         .build();
     
     List<TestBatch> testBatches = Arrays.asList(new TestBatch[]{testBatch1, testBatch2});
@@ -563,11 +565,13 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   @Test
   public void testCreateEntity_shouldSetCorrectFields() {
     UUID locationId = UUID.randomUUID();
-    TestBatchBackingForm backingForm = new TestBatchBackingForm();
-    backingForm.setId(IRRELEVANT_TEST_BATCH_ID);
-    backingForm.setStatus(TestBatchStatus.OPEN);
-    backingForm.setTestBatchDate(IRRELEVANT_TEST_BATCH_DATE);
-    backingForm.setLocation(aTestingSiteBackingForm().withId(locationId).build());
+    TestBatchBackingForm backingForm = TestBatchBackingForm.builder()
+        .id(IRRELEVANT_TEST_BATCH_ID)
+        .status(TestBatchStatus.OPEN)
+        .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .location(aTestingSiteBackingForm().withId(locationId).build())
+        .backEntry(false)
+        .build();
 
     Location location = aTestingSite().withId(locationId).build();
     
@@ -577,6 +581,7 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLocation(location)
         .withDonations(new HashSet<Donation>())
+        .withBackEntry(false)
         .build();
     
     when(locationRepository.getLocation(locationId)).thenReturn(location);
