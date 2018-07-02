@@ -22,8 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.NoResultException;
@@ -61,6 +63,8 @@ public class DonationCRUDService {
   private CheckCharacterService checkCharacterService;
   @Autowired
   private DateGeneratorService dateGeneratorService;
+  @Autowired
+  private TestBatchConstraintChecker testBatchConstraintChecker;
 
   public void deleteDonation(UUID donationId) throws IllegalStateException, NoResultException {
 
@@ -308,6 +312,38 @@ public class DonationCRUDService {
 
     donorRepository.saveDonor(donor);
     return donor;
+  }
+
+  public void addDonationsToTestBatch(List<Donation> donations, TestBatch testBatch) {
+    if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
+      throw new IllegalStateException("Donations can only be added to open test batches");
+    }
+
+    Set<Donation> donationsToAdd = new HashSet<>();
+    for (Donation donation : donations) {
+      if (!donation.getPackType().getTestSampleProduced()) {
+        LOGGER.debug("Cannot add DIN '" + donation.getDonationIdentificationNumber()
+            + "' to a TestBatch because it does not produce test samples. It will be ignored.");
+        continue;
+      }
+      if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(testBatch.getId())) {
+        LOGGER.debug("Cannot add DIN '" + donation.getDonationIdentificationNumber()
+            + "' to a TestBatch because it has been assigned to another TestBatch. It will be ignored.");
+        continue;
+      }
+      // donation can be added
+      donationsToAdd.add(donation);
+    }
+
+    // At least one donation must be successfully added to the testBatch
+    if (donationsToAdd.isEmpty()) {
+      throw new IllegalArgumentException("None of these donations can be added to this testBatch.");
+    }
+
+
+    for (Donation donation : donationsToAdd) {
+      donation.setTestBatch(testBatch);
+    }
   }
 
   public void removeDonationsFromTestBatch(List<Donation> donationsToRemove, TestBatch testBatch) {

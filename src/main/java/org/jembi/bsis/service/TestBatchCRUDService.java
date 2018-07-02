@@ -1,11 +1,6 @@
 package org.jembi.bsis.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 import org.apache.log4j.Logger;
-import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.SequenceNumberRepository;
@@ -13,6 +8,8 @@ import org.jembi.bsis.repository.TestBatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -97,44 +94,6 @@ public class TestBatchCRUDService {
       testBatchStatusChangeService.handleRelease(testBatch);
     }
 
-    return testBatch;
-  }
-  
-  public TestBatch addDonationsToTestBatch(UUID testBatchId, List<Donation> donations) {
-    TestBatch testBatch = testBatchRepository.findTestBatchById(testBatchId);
-
-    if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
-      throw new IllegalStateException("Donations can only be added to open test batches");
-    }
-
-    Set<Donation> donationsToAdd = new HashSet<>();
-    for (Donation donation : donations) {
-      if (!donation.getPackType().getTestSampleProduced()) {
-        LOGGER.debug("Cannot add DIN '" + donation.getDonationIdentificationNumber()
-            + "' to a TestBatch because it does not produce test samples. It will be ignored.");
-        continue;
-      }
-      if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(testBatchId)) {
-        LOGGER.debug("Cannot add DIN '" + donation.getDonationIdentificationNumber()
-            + "' to a TestBatch because it has been assigned to another TestBatch. It will be ignored.");
-        continue;
-      }
-      // donation can be added
-      donationsToAdd.add(donation);
-    }
-
-    // At least one donation must be successfully added to the testBatch
-    if (donationsToAdd.size() == 0) {
-      throw new IllegalArgumentException("None of these donations can be added to this testBatch.");
-    }
-
-    testBatch.getDonations().addAll(donationsToAdd);
-
-    for (Donation donation : donationsToAdd) {
-      donation.setTestBatch(testBatch);
-    }
-    
-    testBatchRepository.save(testBatch);
     return testBatch;
   }
 }

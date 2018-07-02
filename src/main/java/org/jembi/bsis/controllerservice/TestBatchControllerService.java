@@ -86,9 +86,10 @@ public class TestBatchControllerService {
   }
 
   public TestBatchFullViewModel addDonationsToTestBatch(TestBatchDonationRangeBackingForm form) {
-    List<Donation> donations = donationRepository.findDonationsBetweenTwoDins(form.getFromDIN(), form.getToDIN());
-    TestBatch testbatch = testBatchCRUDService.addDonationsToTestBatch(form.getTestBatchId(), donations);
-    return testBatchFactory.createTestBatchFullViewModel(testbatch);
+    List<Donation> donationsToAdd = donationRepository.findDonationsBetweenTwoDins(form.getFromDIN(), form.getToDIN());
+    TestBatch testBatchToAddTo = testBatchRepository.findTestBatchById(form.getTestBatchId());
+    donationCRUDService.addDonationsToTestBatch(donationsToAdd, testBatchToAddTo);
+    return testBatchFactory.createTestBatchFullViewModel(testBatchRepository.findTestBatchById(form.getTestBatchId()));
   }
 
   public void removeDonationsFromBatch(TestBatchDonationsBackingForm donationsBackingForm) {
