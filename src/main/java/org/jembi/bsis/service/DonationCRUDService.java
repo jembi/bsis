@@ -30,9 +30,6 @@ import java.util.UUID;
 
 import javax.persistence.NoResultException;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Transactional
 @Service
 public class DonationCRUDService {
@@ -346,7 +343,31 @@ public class DonationCRUDService {
     }
   }
 
-  public void removeDonationsFromTestBatch(List<Donation> donationsToRemove, TestBatch testBatch) {
-    log.info("Removing donations from TestBatch " + testBatch.getId());
+  public void removeDonationsFromTestBatch(List<Donation> donations, TestBatch testBatch) {
+    if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
+      throw new IllegalStateException("Donations can only be added to open test batches");
+    }
+
+    for (Donation donation : donations) {
+      if (donation.getTestBatch().getId().equals(testBatch.getId())) {
+        clearTestOutcomes(donation);
+        donation.setTestBatch(null);
+      } else {
+        throw new IllegalArgumentException(
+            "Donation " + donation.getId() + " belongs to a different Test Batch");
+      }
+    }
+
+    testBatch.getDonations().removeAll(donations);
+  }
+
+  private void clearTestOutcomes(Donation donation) {
+    bloodTestsService.setTestOutcomesAsDeleted(donation);
+    donation.setTTIStatus(TTIStatus.NOT_DONE);
+    donation.setBloodAbo(null);
+    donation.setBloodRh(null);
+    donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+    donation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    donationRepository.update(donation);
   }
 }
