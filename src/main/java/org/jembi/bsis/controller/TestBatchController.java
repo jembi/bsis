@@ -35,6 +35,8 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import static org.springframework.http.HttpStatus.OK;
+
 @RestController
 @RequestMapping("testbatches")
 public class TestBatchController {
@@ -121,7 +123,8 @@ public class TestBatchController {
       @RequestParam(value = "bloodTypingMatchStatus", required = false) BloodTypingMatchStatus bloodTypingMatchStatus) {
     return testBatchControllerService.getTestBatchByIdAndBloodTypingMatchStatus(id, bloodTypingMatchStatus);
   }
-  
+
+  @ResponseStatus(OK)
   @RequestMapping(value = "{id}/donations",  method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_BATCH + "')")
   public TestBatchFullViewModel addDonationsToTestBatch(@PathVariable UUID id,
@@ -130,11 +133,12 @@ public class TestBatchController {
     return testBatchControllerService.addDonationsToTestBatch(testBatchDonationRangeBackingForm);
   }
 
+  @ResponseStatus(OK)
   @RequestMapping(value = "{id}/donations", method = RequestMethod.DELETE)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_TEST_BATCH + "')")
-  public void removeDonationsFromTestBatch(
+  public TestBatchFullViewModel removeDonationsFromTestBatch(
       @PathVariable UUID id, @Valid @RequestBody TestBatchDonationsBackingForm testBatchDonationRangeBackingForm) {
     testBatchDonationRangeBackingForm.setTestBatchId(id);
-    testBatchControllerService.removeDonationsFromBatch(testBatchDonationRangeBackingForm);
+    return testBatchControllerService.removeDonationsFromBatch(testBatchDonationRangeBackingForm);
   }
 }

@@ -1,7 +1,21 @@
 package org.jembi.bsis.model.testbatch;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import org.hibernate.annotations.Where;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
+import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
+import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.repository.constant.TestBatchNamedQueryConstants;
+import org.jembi.bsis.service.TestBatchCRUDService;
+
 import java.util.Collections;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -20,22 +34,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.Where;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-import org.hibernate.envers.RelationTargetAuditMode;
-import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
-import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.location.Location;
-import org.jembi.bsis.repository.constant.TestBatchNamedQueryConstants;
-import org.jembi.bsis.service.TestBatchCRUDService;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 @NamedQueries({
-  @NamedQuery(name = TestBatchNamedQueryConstants.NAME_FIND_TEST_BATCHES_BY_STATUSES_PERIOD_AND_LOCATION,
-      query = TestBatchNamedQueryConstants.QUERY_FIND_TEST_BATCHES_BY_STATUSES_PERIOD_AND_LOCATION)
+    @NamedQuery(name = TestBatchNamedQueryConstants.NAME_FIND_TEST_BATCHES_BY_STATUSES_PERIOD_AND_LOCATION,
+        query = TestBatchNamedQueryConstants.QUERY_FIND_TEST_BATCHES_BY_STATUSES_PERIOD_AND_LOCATION)
 })
 @Entity
 @Audited
@@ -76,6 +77,26 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
 
   public TestBatch() {
     super();
+  }
+
+  public void addDonation(Donation donation) {
+    if (donation.getTestBatch() != null && !Objects.equals(donation.getTestBatch(), this)) {
+      throw new IllegalArgumentException(String
+          .format("Unable to add %s to %s. Donation already assigned to %s", donation, this, donation
+              .getTestBatch()));
+    }
+    donation.setTestBatch(this);
+    this.donations.add(donation);
+  }
+
+  public void removeDonation(Donation donation) {
+    if (donation.getTestBatch() != null && !Objects.equals(donation.getTestBatch(), this)) {
+      throw new IllegalArgumentException(String.
+          format("Unable to remove %s from %s. Donation already assigned to %s", donation, this, donation
+              .getTestBatch()));
+    }
+    donation.setTestBatch(null);
+    this.donations.remove(donation);
   }
 
   public String getNotes() {
@@ -146,5 +167,4 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
   public void setBackEntry(boolean backEntry) {
     this.backEntry = backEntry;
   }
-
 }

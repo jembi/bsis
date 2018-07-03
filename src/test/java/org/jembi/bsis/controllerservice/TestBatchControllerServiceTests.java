@@ -20,11 +20,12 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.builders.TestBatchDonationRangeBackingFormBuilder.aTestBatchDonationRangeBackingForm;
 import static org.jembi.bsis.helpers.builders.TestBatchFullViewModelBuilder.aTestBatchFullViewModel;
-import static org.jembi.bsis.helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -63,13 +64,13 @@ public class TestBatchControllerServiceTests extends UnitTestSuite {
     when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(testBatch);
     when(donationRepository.findDonationsBetweenTwoDins(donationOneId.toString(), donationTwoId.toString()))
         .thenReturn(donations);
-    when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(testBatchWithDonations);
+    when(donationCRUDService.addDonationsToTestBatch(donations, testBatch)).thenReturn(testBatch);
     when(testBatchFactory.createTestBatchFullViewModel(testBatchWithDonations)).thenReturn(expected);
 
     TestBatchFullViewModel actual = controllerService.addDonationsToTestBatch(backingForm);
 
     verify(donationCRUDService).addDonationsToTestBatch(donations, testBatch);
-    assertThat(actual, hasSameStateAsTestBatchFullViewModel(expected));
+    assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
@@ -80,16 +81,24 @@ public class TestBatchControllerServiceTests extends UnitTestSuite {
     TestBatchDonationsBackingForm backingForm = TestBatchDonationsBackingForm.builder().testBatchId(testBatchId)
         .donationIds(Arrays.asList(donationOneId, donationTwoId)).build();
 
-    TestBatch testBatch = aTestBatch().withId(testBatchId).build();
+    TestBatch testBatch = aTestBatch().withId(testBatchId).withDonations(new HashSet<>()).build();
     Donation donationOne = aDonation().withId(donationOneId).build();
     Donation donationTwo = aDonation().withId(donationTwoId).build();
+    testBatch.addDonation(donationOne);
+    testBatch.addDonation(donationTwo);
+    List<Donation> donations = Arrays.asList(donationOne, donationTwo);
+
+    TestBatchFullViewModel expected = aTestBatchFullViewModel().build();
 
     when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(testBatch);
     when(donationRepository.findDonationById(donationOneId)).thenReturn(donationOne);
     when(donationRepository.findDonationById(donationTwoId)).thenReturn(donationTwo);
+    when(donationCRUDService.removeDonationsFromTestBatch(donations, testBatch)).thenReturn(testBatch);
+    when(testBatchFactory.createTestBatchFullViewModel(testBatch)).thenReturn(expected);
 
-    controllerService.removeDonationsFromBatch(backingForm);
+    TestBatchFullViewModel actual = controllerService.removeDonationsFromBatch(backingForm);
 
-    verify(donationCRUDService).removeDonationsFromTestBatch(Arrays.asList(donationOne, donationTwo), testBatch);
+    verify(donationCRUDService).removeDonationsFromTestBatch(donations, testBatch);
+    assertThat(actual, is(equalTo(expected)));
   }
 }

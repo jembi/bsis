@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class TestBatchControllerService {
-  
+
   @Autowired
   private TestBatchCRUDService testBatchCRUDService;
   @Autowired
@@ -40,10 +40,10 @@ public class TestBatchControllerService {
   private LocationRepository locationRepository;
   @Autowired
   private LocationFactory locationFactory;
-  
+
   @Autowired
   private TestBatchRepository testBatchRepository;
-  
+
   @Autowired
   private DonationRepository donationRepository;
   @Autowired
@@ -59,7 +59,7 @@ public class TestBatchControllerService {
     List<Location> locations = locationRepository.getTestingSites();
     return locationFactory.createViewModels(locations);
   }
-  
+
   public TestBatchFullViewModel addTestBatch(TestBatchBackingForm form) {
     TestBatch testBatch = testBatchFactory.createEntity(form);
     testBatch = testBatchCRUDService.createTestBatch(testBatch);
@@ -85,18 +85,20 @@ public class TestBatchControllerService {
     return testBatchFactory.createTestBatchFullDonationViewModel(testBatch, bloodTypingMatchStatus);
   }
 
-  public TestBatchFullViewModel addDonationsToTestBatch(TestBatchDonationRangeBackingForm form) {
-    List<Donation> donationsToAdd = donationRepository.findDonationsBetweenTwoDins(form.getFromDIN(), form.getToDIN());
-    TestBatch testBatchToAddTo = testBatchRepository.findTestBatchById(form.getTestBatchId());
-    donationCRUDService.addDonationsToTestBatch(donationsToAdd, testBatchToAddTo);
-    return testBatchFactory.createTestBatchFullViewModel(testBatchRepository.findTestBatchById(form.getTestBatchId()));
+  public TestBatchFullViewModel addDonationsToTestBatch(TestBatchDonationRangeBackingForm backingForm) {
+    List<Donation> donationsToAdd = donationRepository
+        .findDonationsBetweenTwoDins(backingForm.getFromDIN(), backingForm.getToDIN());
+    TestBatch testBatch = testBatchRepository.findTestBatchById(backingForm.getTestBatchId());
+    testBatch = donationCRUDService.addDonationsToTestBatch(donationsToAdd, testBatch);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch);
   }
 
-  public void removeDonationsFromBatch(TestBatchDonationsBackingForm donationsBackingForm) {
-    List<Donation> donationsToRemove = donationsBackingForm.getDonationIds().stream()
+  public TestBatchFullViewModel removeDonationsFromBatch(TestBatchDonationsBackingForm backingForm) {
+    List<Donation> donationsToRemove = backingForm.getDonationIds().stream()
         .map(uuid -> donationRepository.findDonationById(uuid))
         .collect(Collectors.toList());
-    TestBatch testBatch = testBatchRepository.findTestBatchById(donationsBackingForm.getTestBatchId());
-    donationCRUDService.removeDonationsFromTestBatch(donationsToRemove, testBatch);
+    TestBatch testBatch = testBatchRepository.findTestBatchById(backingForm.getTestBatchId());
+    testBatch = donationCRUDService.removeDonationsFromTestBatch(donationsToRemove, testBatch);
+    return testBatchFactory.createTestBatchFullViewModel(testBatch);
   }
 }

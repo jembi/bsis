@@ -1,5 +1,7 @@
 package org.jembi.bsis.service;
 
+import com.google.common.collect.Sets;
+
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.helpers.builders.BloodTestResultBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
@@ -34,13 +36,16 @@ import org.mockito.Mock;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.jembi.bsis.helpers.builders.AdverseEventBuilder.anAdverseEvent;
@@ -59,17 +64,12 @@ import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static org.jembi.bsis.helpers.matchers.DonorMatcher.hasSameStateAsDonor;
-import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.Matchers.contains;
-
-import com.google.common.collect.Sets;
 
 public class DonationCRUDServiceTests extends UnitTestSuite {
 
@@ -1461,9 +1461,11 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   public void testAddDonationsToTestBatchWithDonationBelongingToAnotherTestBatch_shouldNotSetTestBatch() {
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
+        .withDonations(new HashSet<>())
         .build();
     TestBatch anotherTestBatch = aTestBatch()
         .withId(UUID.randomUUID())
+        .withDonations(new HashSet<>())
         .build();
 
     PackType packType = aPackType()
@@ -1497,14 +1499,15 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation donationTwo = aDonation().withId(UUID.randomUUID()).thatIsNotDeleted().withPackType(packtype).build();
     List<Donation> donations = Arrays.asList(donationOne, donationTwo);
 
-    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).build();
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withDonations(new HashSet<>()).build();
 
     when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
 
-    donationCRUDService.addDonationsToTestBatch(donations, testBatch);
+    TestBatch actual = donationCRUDService.addDonationsToTestBatch(donations, testBatch);
 
     assertThat(donationOne.getTestBatch(), is(testBatch));
     assertThat(donationTwo.getTestBatch(), is(testBatch));
+    assertThat(actual.getDonations(), hasItems(donationOne, donationTwo));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -1568,11 +1571,11 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
 
-    donationCRUDService.removeDonationsFromTestBatch(Arrays.asList(donationToRemove), testBatch);
+    TestBatch actual = donationCRUDService.removeDonationsFromTestBatch(Collections.singletonList(donationToRemove), testBatch);
 
-    assertThat(testBatch.getDonations().size(), is(equalTo(1)));
-    assertThat(testBatch.getDonations(), contains(donation));
-    verify(bloodTestsService, times(1)).setTestOutcomesAsDeleted(argThat(hasSameStateAsDonation(donationToRemove)));
-    verify(donationRepository, times(1)).update(argThat(hasSameStateAsDonation(donationToRemoveUpdated)));
+    assertThat(actual.getDonations().size(), is(equalTo(1)));
+    assertThat(actual.getDonations(), contains(donation));
+    verify(bloodTestsService).setTestOutcomesAsDeleted(argThat(hasSameStateAsDonation(donationToRemove)));
+    verify(donationRepository).update(argThat(hasSameStateAsDonation(donationToRemoveUpdated)));
   }
 }

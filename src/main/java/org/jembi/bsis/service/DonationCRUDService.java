@@ -311,7 +311,7 @@ public class DonationCRUDService {
     return donor;
   }
 
-  public void addDonationsToTestBatch(List<Donation> donations, TestBatch testBatch) {
+  public TestBatch addDonationsToTestBatch(List<Donation> donations, TestBatch testBatch) {
     if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
       throw new IllegalStateException("Donations can only be added to open test batches");
     }
@@ -339,11 +339,13 @@ public class DonationCRUDService {
 
 
     for (Donation donation : donationsToAdd) {
-      donation.setTestBatch(testBatch);
+      testBatch.addDonation(donation);
     }
+
+    return testBatch;
   }
 
-  public void removeDonationsFromTestBatch(List<Donation> donations, TestBatch testBatch) {
+  public TestBatch removeDonationsFromTestBatch(List<Donation> donations, TestBatch testBatch) {
     if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
       throw new IllegalStateException("Donations can only be added to open test batches");
     }
@@ -351,14 +353,14 @@ public class DonationCRUDService {
     for (Donation donation : donations) {
       if (donation.getTestBatch().getId().equals(testBatch.getId())) {
         clearTestOutcomes(donation);
-        donation.setTestBatch(null);
+        testBatch.removeDonation(donation);
       } else {
         throw new IllegalArgumentException(
             "Donation " + donation.getId() + " belongs to a different Test Batch");
       }
     }
 
-    testBatch.getDonations().removeAll(donations);
+    return testBatch;
   }
 
   private void clearTestOutcomes(Donation donation) {
