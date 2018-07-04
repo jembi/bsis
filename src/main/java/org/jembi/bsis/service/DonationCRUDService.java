@@ -365,11 +365,6 @@ public class DonationCRUDService {
 
   private void clearTestOutcomes(Donation donation) {
     bloodTestsService.setTestOutcomesAsDeleted(donation);
-    donation.setTTIStatus(TTIStatus.NOT_DONE);
-    donation.setBloodAbo(null);
-    donation.setBloodRh(null);
-    donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-    donation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
-    donationRepository.update(donation);
+    donation.resetTestStatuses();
   }
 }

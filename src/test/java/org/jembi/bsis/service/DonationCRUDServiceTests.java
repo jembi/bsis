@@ -63,6 +63,7 @@ import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aReleasedTestBatc
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsComponent;
 import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
+import static org.jembi.bsis.helpers.matchers.DonationTestStatusesMatcher.testStatusesAreReset;
 import static org.jembi.bsis.helpers.matchers.DonorMatcher.hasSameStateAsDonor;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
@@ -1564,18 +1565,13 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     donationToRemove.setTestBatch(testBatch);
     donation.setTestBatch(testBatch);
 
-    Donation donationToRemoveUpdated = aDonation().withBloodAbo(null).withBloodRh(null)
-        .withTTIStatus(TTIStatus.NOT_DONE).withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
-        .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).withPackType(donationToRemove.getPackType())
-        .withTestBatch(null).build();
-
     when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
 
     TestBatch actual = donationCRUDService.removeDonationsFromTestBatch(Collections.singletonList(donationToRemove), testBatch);
 
     assertThat(actual.getDonations().size(), is(equalTo(1)));
     assertThat(actual.getDonations(), contains(donation));
+    assertThat(donationToRemove, testStatusesAreReset());
     verify(bloodTestsService).setTestOutcomesAsDeleted(argThat(hasSameStateAsDonation(donationToRemove)));
-    verify(donationRepository).update(argThat(hasSameStateAsDonation(donationToRemoveUpdated)));
   }
 }

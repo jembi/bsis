@@ -236,6 +236,14 @@ public class Donation extends BaseModificationTrackerUUIDEntity implements Compa
     this.flagCharacters = donation.getFlagCharacters();
   }
 
+  public void resetTestStatuses() {
+    setTTIStatus(TTIStatus.NOT_DONE);
+    setBloodAbo(null);
+    setBloodRh(null);
+    setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+    setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
+  }
+
   public String getDonationIdentificationNumber() {
     return donationIdentificationNumber;
   }
