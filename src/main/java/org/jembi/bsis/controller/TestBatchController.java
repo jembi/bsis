@@ -122,7 +122,7 @@ public class TestBatchController {
     return testBatchControllerService.getTestBatchByIdAndBloodTypingMatchStatus(id, bloodTypingMatchStatus);
   }
 
-  @RequestMapping(value = "{id}/donations",  method = RequestMethod.PUT)
+  @RequestMapping(value = "{id}/addDonations",  method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.ADD_TEST_BATCH + "')")
   public TestBatchFullViewModel addDonationsToTestBatch(@PathVariable UUID id,
       @Valid @RequestBody TestBatchDonationRangeBackingForm testBatchDonationRangeBackingForm) {
@@ -130,7 +130,7 @@ public class TestBatchController {
     return testBatchControllerService.addDonationsToTestBatch(testBatchDonationRangeBackingForm);
   }
 
-  @RequestMapping(value = "{id}/donations", method = RequestMethod.DELETE)
+  @RequestMapping(value = "{id}/removeDonations", method = RequestMethod.PUT)
   @PreAuthorize("hasRole('" + PermissionConstants.EDIT_TEST_BATCH + "')")
   public TestBatchFullViewModel removeDonationsFromTestBatch(
       @PathVariable UUID id, @Valid @RequestBody TestBatchDonationsBackingForm testBatchDonationRangeBackingForm) {
