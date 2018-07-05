@@ -1,14 +1,14 @@
 package org.jembi.bsis.viewmodel;
 
-import java.util.Date;
-import java.util.UUID;
-
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.BloodTypingStatus;
 import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.utils.CustomDateFormatter;
 
-public class DonationViewModel extends BaseViewModel<UUID> {
+import java.util.Date;
+import java.util.UUID;
+
+public class DonationViewModel extends BaseViewModel<UUID> implements Comparable<DonationViewModel> {
 
   private String donorNumber;
   private String donationIdentificationNumber;
@@ -129,5 +129,18 @@ public class DonationViewModel extends BaseViewModel<UUID> {
 
   public void setBloodRh(String bloodRh) {
     this.bloodRh = bloodRh;
+  }
+
+  @Override
+  public int compareTo(DonationViewModel donationViewModel) {
+    if (this.getDonationIdentificationNumber() == null && donationViewModel.getDonationIdentificationNumber() == null) {
+      return 0;
+    } else if (this.getDonationIdentificationNumber() == null) {
+      return -1;
+    } else if (donationViewModel.getDonationIdentificationNumber() == null) {
+      return 1;
+    } else {
+      return this.getDonationIdentificationNumber().compareTo(donationViewModel.getDonationIdentificationNumber());
+    }
   }
 }

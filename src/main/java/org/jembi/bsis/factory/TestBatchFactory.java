@@ -167,7 +167,7 @@ public class TestBatchFactory {
     populateBasicViewModel(testBatch, testBatchViewModel);
 
     // Get list of donation view models
-    testBatchViewModel.setDonations(donationFactory.createDonationViewModels(testBatch.getDonations()));
+    testBatchViewModel.addAllDonations(donationFactory.createDonationViewModels(testBatch.getDonations()));
 
     // Check if this test batch can be released
     CanReleaseResult canReleaseResult = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
@@ -184,7 +184,7 @@ public class TestBatchFactory {
     permissions.put("canEdit", testBatchConstraintChecker.canEditTestBatch(testBatch));
     permissions.put("canEditDonations", testBatchConstraintChecker.canAddOrRemoveDonation(testBatch));
     permissions.put("canReopen", testBatchConstraintChecker.canReopenTestBatch(testBatch));
-    testBatchViewModel.setPermissions(permissions);
+    testBatchViewModel.putAllPermissions(permissions);
 
     return testBatchViewModel;
   }
@@ -208,17 +208,12 @@ public class TestBatchFactory {
   }
 
   private String getPreviousDonationAboRhOutcome(Donation thisDonation) {
-  
-    List<Donation> donorDonations = new ArrayList<Donation>(thisDonation.getDonor().getDonations());
+    List<Donation> donorDonations = new ArrayList<>(thisDonation.getDonor().getDonations());
     String aboRh = "";
 
     if (donorDonations.size() > 1) {
       // Order donations for that donor by date desc to be able to find the previous donation
-      Collections.sort(donorDonations, new Comparator<Donation>() {
-        public int compare(Donation d1, Donation d2) {
-          return d2.getDonationDate().compareTo(d1.getDonationDate());
-        }
-      });
+      donorDonations.sort((d1, d2) -> d2.getDonationDate().compareTo(d1.getDonationDate()));
       for (Donation donation : donorDonations) {
         // Find previous donation and return abo/rh outcome
         if (donation.getDonationDate().before(thisDonation.getDonationDate())) {

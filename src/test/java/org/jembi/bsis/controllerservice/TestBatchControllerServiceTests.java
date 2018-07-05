@@ -25,7 +25,6 @@ import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.builders.TestBatchDonationRangeBackingFormBuilder.aTestBatchDonationRangeBackingForm;
-import static org.jembi.bsis.helpers.builders.TestBatchFullViewModelBuilder.aTestBatchFullViewModel;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -59,7 +58,7 @@ public class TestBatchControllerServiceTests extends UnitTestSuite {
     List<Donation> donations = Arrays.asList(donationOne, donationTwo);
     TestBatch testBatchWithDonations = aTestBatch().withId(testBatchId).withDonations(new HashSet<>(donations)).build();
 
-    TestBatchFullViewModel expected = aTestBatchFullViewModel().build();
+    TestBatchFullViewModel expected = TestBatchFullViewModel.builderFull().build();
 
     when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(testBatch);
     when(donationRepository.findDonationsBetweenTwoDins(donationOneId.toString(), donationTwoId.toString()))
@@ -88,7 +87,7 @@ public class TestBatchControllerServiceTests extends UnitTestSuite {
     testBatch.addDonation(donationTwo);
     List<Donation> donations = Arrays.asList(donationOne, donationTwo);
 
-    TestBatchFullViewModel expected = aTestBatchFullViewModel().build();
+    TestBatchFullViewModel expected = TestBatchFullViewModel.builderFull().build();
 
     when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(testBatch);
     when(donationRepository.findDonationById(donationOneId)).thenReturn(donationOne);
