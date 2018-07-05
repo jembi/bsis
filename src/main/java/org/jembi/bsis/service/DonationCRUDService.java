@@ -100,7 +100,7 @@ public class DonationCRUDService {
   }
 
   public Donation createDonation(Donation donation) {
-  
+
     donation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
     donation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
     donation.setTTIStatus(TTIStatus.NOT_DONE);
@@ -133,7 +133,7 @@ public class DonationCRUDService {
       //Also flag for counselling
       postDonationCounsellingCRUDService.createPostDonationCounsellingForDonation(donation);
     }
-    
+
     // update donor
     updateDonorFields(donation);
     return donation;
@@ -153,7 +153,7 @@ public class DonationCRUDService {
    */
   public Donation updateDonation(Donation updatedDonation) {
     Donation existingDonation = donationRepository.findDonationById(updatedDonation.getId());
-    
+
     // Check if pack type has been updated
     boolean packTypeUpdated = !Objects.equals(existingDonation.getPackType(), updatedDonation.getPackType());
 
@@ -183,27 +183,27 @@ public class DonationCRUDService {
 
       // Check that if the donor is deferred, the packType can't be updated to one that produces
       // components (doesn't apply to back entry)
-      if (newPackType.getCountAsDonation() && 
+      if (newPackType.getCountAsDonation() &&
           donorConstraintChecker.isDonorDeferred(existingDonation.getDonor().getId())) {
         DonationBatch donationBatch = existingDonation.getDonationBatch();
         if (!donationBatch.isBackEntry()) {
           throw new IllegalArgumentException("Cannot set pack type that produces components");
         }
       }
-      
+
       // Set new pack type
       existingDonation.setPackType(newPackType);
-      
+
       // If the new packType does not count as donation, delete initial component
       if (!newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {
           existingDonation.getComponents().get(0).setIsDeleted(true);
       }
-     
+
       // If the new packType count as donation, update initial component
-      if (newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {    
-        componentCRUDService.updateComponentWithNewPackType(existingDonation.getComponents().get(0), newPackType);  
+      if (newPackType.getCountAsDonation() && !existingDonation.getComponents().isEmpty()) {
+        componentCRUDService.updateComponentWithNewPackType(existingDonation.getComponents().get(0), newPackType);
       }
-      
+
       // If the new PackType count as donation and there is no initial component then create it
       if (newPackType.getCountAsDonation() && existingDonation.getComponents().isEmpty()) {
         Component component = componentCRUDService.createInitialComponent(existingDonation);
@@ -212,7 +212,7 @@ public class DonationCRUDService {
         releaseDonation = existingDonation.getTestBatch() != null
                 && TestBatchStatus.hasBeenReleased(existingDonation.getTestBatch().getStatus());
       }
-      
+
       // If the new pack type doesn't produce test samples, delete test outcomes and clear statuses
       if (!newPackType.getTestSampleProduced()) {
         bloodTestsService.setTestOutcomesAsDeleted(existingDonation);
@@ -258,13 +258,13 @@ public class DonationCRUDService {
 
     return donation;
   }
-  
+
   public void updateDonationsBloodTypingResolutions(BloodTypingResolutionsBackingForm backingForm) {
     for (BloodTypingResolutionBackingForm form : backingForm.getBloodTypingResolutions()) {
       updateDonationBloodTypingResolution(form);
     }
   }
-  
+
   public void updateDonationBloodTypingResolution(BloodTypingResolutionBackingForm form) {
 
     Donation donation = donationRepository.findDonationById(form.getDonationId());
@@ -351,12 +351,13 @@ public class DonationCRUDService {
     }
 
     for (Donation donation : donations) {
-      if (donation.getTestBatch().getId().equals(testBatch.getId())) {
+      if (donation.getTestBatch() != null && Objects.equals(donation.getTestBatch().getId(), testBatch.getId())) {
         clearTestOutcomes(donation);
         testBatch.removeDonation(donation);
       } else {
         throw new IllegalArgumentException(
-            "Donation " + donation.getId() + " belongs to a different Test Batch");
+            String.format("Donation: \'%s\' belongs to a different Test Batch: \'%s\'", donation.getId(),
+                donation.getTestBatch() == null ? null : donation.getTestBatch().getId()));
       }
     }
 
