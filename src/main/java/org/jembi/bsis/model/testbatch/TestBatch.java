@@ -34,6 +34,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import static org.jembi.bsis.model.testbatch.TestBatchStatus.CLOSED;
+import static org.jembi.bsis.model.testbatch.TestBatchStatus.OPEN;
+
 @NamedQueries({
     @NamedQuery(name = TestBatchNamedQueryConstants.NAME_FIND_TEST_BATCHES_BY_STATUSES_PERIOD_AND_LOCATION,
         query = TestBatchNamedQueryConstants.QUERY_FIND_TEST_BATCHES_BY_STATUSES_PERIOD_AND_LOCATION)
@@ -77,6 +80,14 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
 
   public TestBatch() {
     super();
+  }
+
+  public boolean isOpen() {
+    return OPEN == status;
+  }
+
+  public boolean isClosed() {
+    return CLOSED == status;
   }
 
   public void addDonation(Donation donation) {

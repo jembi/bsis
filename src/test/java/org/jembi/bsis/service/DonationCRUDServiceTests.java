@@ -65,6 +65,8 @@ import static org.jembi.bsis.helpers.matchers.ComponentMatcher.hasSameStateAsCom
 import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 import static org.jembi.bsis.helpers.matchers.DonationTestStatusesMatcher.testStatusesAreReset;
 import static org.jembi.bsis.helpers.matchers.DonorMatcher.hasSameStateAsDonor;
+import static org.jembi.bsis.model.testbatch.TestBatchStatus.CLOSED;
+import static org.jembi.bsis.model.testbatch.TestBatchStatus.OPEN;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
@@ -1077,7 +1079,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donor donor = aDonor().withId(irrelevantDonorId).build();
     Component initialComponent = ComponentBuilder.aComponent().build();
     DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
-    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(TestBatchStatus.CLOSED).build();
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(CLOSED).build();
 
     UUID oldPackTypeId = UUID.randomUUID();
     PackType oldPackType = aPackType()
@@ -1221,7 +1223,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     DonationBatch donationBatch = aDonationBatch().withId(IRRELEVANT_DONATION_BATCH_ID).build();
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(TestBatchStatus.OPEN)
+        .withStatus(OPEN)
         .build();
 
     UUID oldPackTypeId = UUID.randomUUID();
@@ -1411,12 +1413,10 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
   @Test(expected = IllegalStateException.class)
   public void testAddDonationsToTestBatchWithTestResults_shouldThrow() {
-    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(TestBatchStatus.OPEN).build();
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(CLOSED).build();
     Donation donationOne = aDonation().withId(UUID.randomUUID()).thatIsNotDeleted().build();
     Donation donationTwo = aDonation().withId(UUID.randomUUID()).thatIsNotDeleted().build();
     List<Donation> donations = Arrays.asList(donationOne, donationTwo);
-
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
 
     donationCRUDService.addDonationsToTestBatch(donations, testBatch);
   }
@@ -1426,7 +1426,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Location location = aTestingSite().build();
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(TestBatchStatus.OPEN)
+        .withStatus(OPEN)
         .withLocation(location)
         .withDonations(new HashSet<>())
         .build();
@@ -1451,8 +1451,6 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     List<Donation> donations = Arrays.asList(donationThatDoesNotProduceATestSample, donationThatProducesATestSample);
 
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
-
     donationCRUDService.addDonationsToTestBatch(donations, testBatch);
 
     assertThat(donationThatDoesNotProduceATestSample.getTestBatch(), is(not(equalTo(testBatch))));
@@ -1466,6 +1464,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .build();
     TestBatch anotherTestBatch = aTestBatch()
         .withId(UUID.randomUUID())
+        .withStatus(OPEN)
         .withDonations(new HashSet<>())
         .build();
 
@@ -1483,8 +1482,6 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
         .thatIsNotDeleted()
         .build();
 
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
-
     donationCRUDService.addDonationsToTestBatch(Arrays.asList(donation, donationBelongingToAnotherTestBatch), testBatch);
 
     assertThat(donationBelongingToAnotherTestBatch.getTestBatch(), is(not(equalTo(testBatch))));
@@ -1500,9 +1497,7 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     Donation donationTwo = aDonation().withId(UUID.randomUUID()).thatIsNotDeleted().withPackType(packtype).build();
     List<Donation> donations = Arrays.asList(donationOne, donationTwo);
 
-    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withDonations(new HashSet<>()).build();
-
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(OPEN).withDonations(new HashSet<>()).build();
 
     TestBatch actual = donationCRUDService.addDonationsToTestBatch(donations, testBatch);
 
@@ -1513,14 +1508,12 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
   @Test(expected = IllegalArgumentException.class)
   public void testAddDonationsToTestBatchWithNoDonationsThatCanBeAdded_shouldThrow() {
-    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).build();
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(OPEN).build();
     TestBatch anotherTestBatch = aTestBatch().withId(UUID.randomUUID()).build();
     Donation donationOne = aDonation()
         .withPackType(aPackType().withTestSampleProduced(false).build())
         .build();
     Donation donationTwo = aDonation().withTestBatch(anotherTestBatch).build();
-
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
 
     donationCRUDService.addDonationsToTestBatch(Arrays.asList(donationOne, donationTwo), testBatch);
   }
@@ -1529,24 +1522,21 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
   public void testRemoveDonationsFromTestBatchThatCantAddOrRemoveDonations_shouldThrowIllegalStateException() {
     Donation donationToRemove = aDonation().build();
 
-    TestBatch testBatch =
-        aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withDonations(Sets.newHashSet(donationToRemove)).build();
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(CLOSED)
+        .withDonations(Sets.newHashSet(donationToRemove)).build();
 
     donationToRemove.setTestBatch(testBatch);
-
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
 
     donationCRUDService.removeDonationsFromTestBatch(Arrays.asList(donationToRemove), testBatch);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testRemoveDonationsFromTestBatchWithDonationThatBelongToOtherTestBatch_shouldThrowIllegalArgumentException() {
-    Donation donationToRemove = aDonation().withTestBatch(aTestBatch().withId(UUID.randomUUID()).build()).build();
+    Donation donationToRemove = aDonation()
+        .withTestBatch(aTestBatch().withId(UUID.randomUUID()).withStatus(OPEN).build()).build();
 
     TestBatch testBatch =
         aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withDonations(Sets.newHashSet(donationToRemove)).build();
-
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
 
     donationCRUDService.removeDonationsFromTestBatch(Arrays.asList(donationToRemove), testBatch);
   }
@@ -1559,13 +1549,11 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
 
     Donation donation = aDonation().build();
 
-    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID)
+    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(OPEN)
         .withDonations(Sets.newHashSet(donationToRemove, donation)).build();
 
     donationToRemove.setTestBatch(testBatch);
     donation.setTestBatch(testBatch);
-
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(true);
 
     TestBatch actual = donationCRUDService.removeDonationsFromTestBatch(Collections.singletonList(donationToRemove), testBatch);
 

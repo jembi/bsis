@@ -182,7 +182,7 @@ public class TestBatchFactory {
     permissions.put("canClose", testBatchConstraintChecker.canCloseTestBatch(testBatch));
     permissions.put("canDelete", testBatchConstraintChecker.canDeleteTestBatch(testBatch));
     permissions.put("canEdit", testBatchConstraintChecker.canEditTestBatch(testBatch));
-    permissions.put("canEditDonations", testBatchConstraintChecker.canAddOrRemoveDonation(testBatch));
+    permissions.put("canEditDonations", testBatch.isOpen());
     permissions.put("canReopen", testBatchConstraintChecker.canReopenTestBatch(testBatch));
     testBatchViewModel.putAllPermissions(permissions);
 

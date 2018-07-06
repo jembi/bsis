@@ -85,13 +85,6 @@ public class TestBatchConstraintChecker {
   }
 
   /**
-   * Donations can only be added to open test batches
-   */
-  public boolean canAddOrRemoveDonation(TestBatch testBatch) {
-    return TestBatchStatus.OPEN.equals(testBatch.getStatus());
-  }
-
-  /**
    * A test batch can be closed if it is released and none of the donations have discrepancies.
    */
   public boolean canCloseTestBatch(TestBatch testBatch) {

@@ -312,7 +312,7 @@ public class DonationCRUDService {
   }
 
   public TestBatch addDonationsToTestBatch(List<Donation> donations, TestBatch testBatch) {
-    if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
+    if (testBatch.isClosed()) {
       throw new IllegalStateException("Donations can only be added to open test batches");
     }
 
@@ -346,7 +346,7 @@ public class DonationCRUDService {
   }
 
   public TestBatch removeDonationsFromTestBatch(List<Donation> donations, TestBatch testBatch) {
-    if (!testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)) {
+    if (testBatch.isClosed()) {
       throw new IllegalStateException("Donations can only be added to open test batches");
     }
 
