@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -110,7 +111,8 @@ public class Donation extends BaseModificationTrackerUUIDEntity implements Compa
   @ManyToOne
   private DonationType donationType;
 
-  @ManyToOne
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "packType_id", nullable = false)
   private PackType packType;
 
   /**
