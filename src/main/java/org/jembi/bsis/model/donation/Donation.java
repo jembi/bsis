@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -238,6 +239,14 @@ public class Donation extends BaseModificationTrackerUUIDEntity implements Compa
     this.flagCharacters = donation.getFlagCharacters();
   }
 
+  public boolean isTestable() {
+    return getPackType().getTestSampleProduced();
+  }
+
+  public boolean isIncludedIn(TestBatch testBatch) {
+    return this.getTestBatch() != null && Objects.equals(this.getTestBatch(), testBatch);
+  }
+
   public void resetTestStatuses() {
     setTTIStatus(TTIStatus.NOT_DONE);
     setBloodAbo(null);
@@ -318,7 +327,7 @@ public class Donation extends BaseModificationTrackerUUIDEntity implements Compa
   public void setComponents(List<Component> components) {
     this.components = components;
   }
-  
+
   public void addComponent(Component component) {
     if (component == null) {
       return;
@@ -540,5 +549,4 @@ public class Donation extends BaseModificationTrackerUUIDEntity implements Compa
   public void setFlagCharacters(String flagCharacters) {
     this.flagCharacters = flagCharacters;
   }
-
 }

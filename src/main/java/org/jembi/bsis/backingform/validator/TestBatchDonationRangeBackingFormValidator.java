@@ -1,14 +1,7 @@
 package org.jembi.bsis.backingform.validator;
 
-import javax.persistence.NoResultException;
-
 import org.jembi.bsis.backingform.TestBatchDonationRangeBackingForm;
 import org.jembi.bsis.constant.GeneralConfigConstants;
-import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.testbatch.TestBatch;
-import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.DonationRepository;
-import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.service.GeneralConfigAccessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,12 +12,6 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
 
   @Autowired
   private GeneralConfigAccessorService generalConfigAccessorService;
-
-  @Autowired
-  private DonationRepository donationRepository;
-  
-  @Autowired
-  private TestBatchRepository testBatchRepository;
 
   @Override
   public void validateForm(TestBatchDonationRangeBackingForm form, Errors errors) {
@@ -40,19 +27,7 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
     }
     
     // check the range is valid - fromDIN must be before toDIN - using a simple alphabetic comparison. Logged on fromDIN
-    if (!validateDonationRange(form, errors)) {
-      return;
-    }
-
-    // check that the to/from DIN belong to valid Donations
-    if (!validDonations(form, errors)) {
-      return;
-    }
-    
-    //check that Donations can be added to the testbatch
-    if (!validateTestBatchStatus(form, errors)) {
-      return;
-    }
+    validateDonationRange(form, errors);
   }
 
   private boolean validateDINLength(TestBatchDonationRangeBackingForm form, Errors errors) {
@@ -77,38 +52,6 @@ public class TestBatchDonationRangeBackingFormValidator extends BaseValidator<Te
     return true;
   }
 
-  private boolean validDonations(TestBatchDonationRangeBackingForm form, Errors errors) {
-    try {
-      Donation donation = donationRepository.findDonationByDonationIdentificationNumber(form.getFromDIN());
-      if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(form.getTestBatchId())) {
-        errors.rejectValue("fromDIN", "errors.donationBelongsToAnotherTestBatch", "Donation with DIN " + donation.getDonationIdentificationNumber() + " is assigned to a different TestBatch");
-      }
-    } catch (NoResultException e) {
-      errors.rejectValue("fromDIN", "errors.invalid.donation", "Donation with DIN " + form.getFromDIN() + " does not exist");
-      return false;
-    }
-    if (form.getToDIN() != null) {
-      try {
-        Donation donation = donationRepository.findDonationByDonationIdentificationNumber(form.getToDIN());
-        if (donation.getTestBatch() != null && !donation.getTestBatch().getId().equals(form.getTestBatchId())) {
-          errors.rejectValue("toDIN", "errors.donationBelongsToAnotherTestBatch", "Donation with DIN " + donation.getDonationIdentificationNumber() + " is assigned to a different TestBatch");
-        }
-      } catch (NoResultException e) {
-        errors.rejectValue("toDIN", "errors.invalid.donation", "Donation with DIN " + form.getFromDIN() + " does not exist");
-        return false;
-      }
-    }
-    return true;
-  }
-  
-  private boolean validateTestBatchStatus(TestBatchDonationRangeBackingForm form, Errors errors) {
-    TestBatch testBatch = testBatchRepository.findTestBatchById(form.getTestBatchId());
-    if (!TestBatchStatus.OPEN.equals(testBatch.getStatus())) {
-      errors.reject("errors.invalid.testBatchStatus", "Donations can only be added to open test batches");
-      return false;
-    }
-    return true;
-  }
 
   @Override
   public String getFormName() {

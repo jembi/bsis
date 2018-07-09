@@ -24,10 +24,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 @Transactional
 public class TestBatchControllerService {
@@ -86,11 +91,26 @@ public class TestBatchControllerService {
   }
 
   public TestBatchFullViewModel addDonationsToTestBatch(TestBatchDonationRangeBackingForm backingForm) {
-    List<Donation> donationsToAdd = donationRepository
-        .findDonationsBetweenTwoDins(backingForm.getFromDIN(), backingForm.getToDIN());
     TestBatch testBatch = testBatchRepository.findTestBatchById(backingForm.getTestBatchId());
-    testBatch = donationCRUDService.addDonationsToTestBatch(donationsToAdd, testBatch);
-    return testBatchFactory.createTestBatchFullViewModel(testBatch);
+    List<Donation> donationsInRange = donationRepository
+        .findDonationsBetweenTwoDins(backingForm.getFromDIN(), backingForm.getToDIN());
+
+    Set<String> dinsWithoutTestSamples = new HashSet<>();
+    Set<String> dinsInOtherTestBatches = new HashSet<>();
+
+    for (Donation donation : donationsInRange) {
+      if (!donation.isTestable()) {
+        log.debug(String.format("%s cannot be included in %s without a test sample. Ignoring.", donation, testBatch));
+        dinsWithoutTestSamples.add(donation.getDonationIdentificationNumber());
+      } else if (donation.getTestBatch() != null && !donation.isIncludedIn(testBatch)) {
+        log.debug(String.format("%s is already included in %s. Ignoring.", donation, donation.getTestBatch()));
+        dinsInOtherTestBatches.add(donation.getDonationIdentificationNumber());
+      } else {
+        testBatch.addDonation(donation);
+      }
+    }
+
+    return testBatchFactory.createTestBatchFullViewModel(testBatch, dinsWithoutTestSamples, dinsInOtherTestBatches);
   }
 
   public TestBatchFullViewModel removeDonationsFromBatch(TestBatchDonationsBackingForm backingForm) {

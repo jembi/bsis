@@ -15,14 +15,25 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
+import static org.jembi.bsis.model.testbatch.TestBatchStatus.CLOSED;
+import static org.jembi.bsis.model.testbatch.TestBatchStatus.OPEN;
 
 public class TestBatchTests extends UnitTestSuite {
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testAddDonationWithDonationAssignedToAnotherBatch_shouldThrow() {
-    Donation donation = aDonation().withTestBatch(aTestBatch().build()).build();
+  @Test(expected = IllegalStateException.class)
+  public void testAddDonationWithNonOpenBatch_shouldThrow() {
+    Donation donation = aDonation().build();
 
-    TestBatch testBatch = aTestBatch().build();
+    TestBatch testBatch = aTestBatch().withStatus(CLOSED).build();
+
+    testBatch.addDonation(donation);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddDonationWithDonationincludedToAnotherBatch_shouldThrow() {
+    Donation donation = aDonation().withTestBatch(aTestBatch().withStatus(OPEN).build()).build();
+
+    TestBatch testBatch = aTestBatch().withStatus(OPEN).build();
 
     testBatch.addDonation(donation);
   }
@@ -30,7 +41,7 @@ public class TestBatchTests extends UnitTestSuite {
   @Test
   public void testAddDonationWithDonationWithMatchingTestBatch_shouldNoNothing() {
     Donation donation = aDonation().build();
-    TestBatch testBatch = aTestBatch().withDonation(donation).build();
+    TestBatch testBatch = aTestBatch().withStatus(OPEN).withDonation(donation).build();
     donation.setTestBatch(testBatch);
 
     testBatch.addDonation(donation);
@@ -43,18 +54,27 @@ public class TestBatchTests extends UnitTestSuite {
   public void testAddDonationWithDonationWithNullTestBatch_shouldAdd() {
     Donation donation = aDonation().withTestBatch(null).build();
 
-    TestBatch testBatch = aTestBatch().withDonations(new HashSet<>()).build();
+    TestBatch testBatch = aTestBatch().withStatus(OPEN).withDonations(new HashSet<>()).build();
 
     testBatch.addDonation(donation);
 
     assertThat(testBatch.getDonations(), hasItem(donation));
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testRemoveDonationWithDonationAssignedToAnotherBatch_shouldThrow() {
-    Donation donation = aDonation().withTestBatch(aTestBatch().build()).build();
+  @Test(expected = IllegalStateException.class)
+  public void testRemoveDonationWithNonOpenBatch_shouldThrow() {
+    Donation donation = aDonation().build();
 
-    TestBatch testBatch = aTestBatch().build();
+    TestBatch testBatch = aTestBatch().withStatus(CLOSED).build();
+
+    testBatch.removeDonation(donation);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testRemoveDonationWithDonationIncludedInAnotherBatch_shouldThrow() {
+    Donation donation = aDonation().withTestBatch(aTestBatch().withStatus(OPEN).build()).build();
+
+    TestBatch testBatch = aTestBatch().withStatus(OPEN).build();
 
     testBatch.removeDonation(donation);
   }
@@ -63,7 +83,7 @@ public class TestBatchTests extends UnitTestSuite {
   public void testRemoveDonationWithDonationWithNullTestBatch_shouldDoNoting() {
     Donation donation = aDonation().withTestBatch(null).build();
 
-    TestBatch testBatch = aTestBatch().withDonations(new HashSet<>()).build();
+    TestBatch testBatch = aTestBatch().withStatus(OPEN).withDonations(new HashSet<>()).build();
 
     testBatch.removeDonation(donation);
 
@@ -74,7 +94,7 @@ public class TestBatchTests extends UnitTestSuite {
   @Test
   public void testRemoveDonationWithDonationWithMatchingTestBatch_shouldRemove() {
     Donation donation = aDonation().build();
-    TestBatch testBatch = aTestBatch().withDonation(donation).build();
+    TestBatch testBatch = aTestBatch().withStatus(OPEN).withDonation(donation).build();
     donation.setTestBatch(testBatch);
 
     testBatch.removeDonation(donation);

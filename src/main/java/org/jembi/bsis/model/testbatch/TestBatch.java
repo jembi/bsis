@@ -91,7 +91,9 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
   }
 
   public void addDonation(Donation donation) {
-    if (donation.getTestBatch() != null && !Objects.equals(donation.getTestBatch(), this)) {
+    if (!this.isOpen()) {
+      throw new IllegalStateException("Donations may only be added to open test batches");
+    } else if (donation.getTestBatch() != null && !Objects.equals(donation.getTestBatch(), this)) {
       throw new IllegalArgumentException(String
           .format("Unable to add %s to %s. Donation already assigned to %s", donation, this, donation
               .getTestBatch()));
@@ -101,7 +103,9 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
   }
 
   public void removeDonation(Donation donation) {
-    if (donation.getTestBatch() != null && !Objects.equals(donation.getTestBatch(), this)) {
+    if (!this.isOpen()) {
+      throw new IllegalStateException("Donations may only be added to open test batches");
+    } else if (donation.getTestBatch() != null && !Objects.equals(donation.getTestBatch(), this)) {
       throw new IllegalArgumentException(String.
           format("Unable to remove %s from %s. Donation already assigned to %s", donation, this, donation
               .getTestBatch()));

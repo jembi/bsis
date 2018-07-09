@@ -1,12 +1,5 @@
 package org.jembi.bsis.factory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
@@ -21,6 +14,12 @@ import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A factory for creating TestBatchViewModel and TestBatchFullViewModel objects.
@@ -107,6 +106,14 @@ public class TestBatchFactory {
     testBatchFullDonationViewModel.setId(testBatch.getId());
     testBatchFullDonationViewModel.setTestBatchDate(testBatch.getTestBatchDate());
     return testBatchFullDonationViewModel;
+  }
+
+  public TestBatchFullViewModel createTestBatchFullViewModel(TestBatch testBatch, Set<String> dinsWithoutTestSamples,
+                                                             Set<String> dinsInOtherTestBatches) {
+    TestBatchFullViewModel testBatchFullViewModel = createTestBatchFullViewModel(testBatch);
+    testBatchFullViewModel.addAllDonationIdsWithoutTestSamples(dinsWithoutTestSamples);
+    testBatchFullViewModel.addAllDonationIdsInOtherTestBatches(dinsInOtherTestBatches);
+    return testBatchFullViewModel;
   }
 
   /**
