@@ -6,6 +6,7 @@ import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
 
+import javax.persistence.PersistenceException;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -20,8 +21,13 @@ public class DonationRoundTripTests extends ContextDependentTestSuite {
     aDonation().buildAndPersist(entityManager);
   }
 
+  @Test(expected = PersistenceException.class)
+  public void testPersistDonationWithNullPackType_shouldThrow() {
+    aDonation().withPackType(null).buildAndPersist(entityManager);
+  }
+
   @Test
-  public void testPersistBloodTestWithTestBatch_shouldSave() {
+  public void testPersistDonationWithTestBatch_shouldSave() {
     Location testingLocation = aTestingSite().buildAndPersist(entityManager);
     TestBatch testBatch = aTestBatch()
         .withLocation(testingLocation)
