@@ -1,6 +1,7 @@
 package org.jembi.bsis.service;
 
 import org.apache.log4j.Logger;
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.SequenceNumberRepository;
@@ -8,7 +9,8 @@ import org.jembi.bsis.repository.TestBatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -25,6 +27,8 @@ public class TestBatchCRUDService {
   private TestBatchStatusChangeService testBatchStatusChangeService;
   @Autowired
   private SequenceNumberRepository sequenceNumberRepository;
+  @Autowired
+  private DonationCRUDService donationCRUDService;
 
   public TestBatch createTestBatch(TestBatch testBatch) {
     testBatch.setBatchNumber(sequenceNumberRepository.getNextTestBatchNumber());
@@ -92,6 +96,26 @@ public class TestBatchCRUDService {
 
     if (oldStatus == TestBatchStatus.OPEN && newStatus == TestBatchStatus.RELEASED) {
       testBatchStatusChangeService.handleRelease(testBatch);
+    }
+
+    return testBatch;
+  }
+
+  public TestBatch removeDonationsFromTestBatch(List<Donation> donations, TestBatch testBatch) {
+    if (testBatch.isClosed()) {
+      throw new IllegalStateException("Donations can only be added to open test batches");
+    }
+
+    for (Donation donation : donations) {
+      if (donation.getTestBatch() != null
+          && Objects.equals(donation.getTestBatch().getId(), testBatch.getId())) {
+        donationCRUDService.clearTestOutcomes(donation);
+        testBatch.removeDonation(donation);
+      } else {
+        throw new IllegalArgumentException(
+            String.format("Donation: \'%s\' belongs to a different Test Batch: \'%s\'", donation.getId(),
+                donation.getTestBatch() == null ? null : donation.getTestBatch().getId()));
+      }
     }
 
     return testBatch;

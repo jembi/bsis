@@ -11,7 +11,6 @@ import org.jembi.bsis.model.donation.TTIStatus;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
 import org.jembi.bsis.model.packtype.PackType;
-import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationBatchRepository;
 import org.jembi.bsis.repository.DonationRepository;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -250,6 +248,11 @@ public class DonationCRUDService {
     return donation;
   }
 
+  public void clearTestOutcomes(Donation donation) {
+    bloodTestsService.setTestOutcomesAsDeleted(donation);
+    donation.resetTestStatuses();
+  }
+
   public void updateDonationsBloodTypingResolutions(BloodTypingResolutionsBackingForm backingForm) {
     for (BloodTypingResolutionBackingForm form : backingForm.getBloodTypingResolutions()) {
       updateDonationBloodTypingResolution(form);
@@ -300,29 +303,5 @@ public class DonationCRUDService {
 
     donorRepository.saveDonor(donor);
     return donor;
-  }
-
-  public TestBatch removeDonationsFromTestBatch(List<Donation> donations, TestBatch testBatch) {
-    if (testBatch.isClosed()) {
-      throw new IllegalStateException("Donations can only be added to open test batches");
-    }
-
-    for (Donation donation : donations) {
-      if (donation.getTestBatch() != null && Objects.equals(donation.getTestBatch().getId(), testBatch.getId())) {
-        clearTestOutcomes(donation);
-        testBatch.removeDonation(donation);
-      } else {
-        throw new IllegalArgumentException(
-            String.format("Donation: \'%s\' belongs to a different Test Batch: \'%s\'", donation.getId(),
-                donation.getTestBatch() == null ? null : donation.getTestBatch().getId()));
-      }
-    }
-
-    return testBatch;
-  }
-
-  private void clearTestOutcomes(Donation donation) {
-    bloodTestsService.setTestOutcomesAsDeleted(donation);
-    donation.resetTestStatuses();
   }
 }

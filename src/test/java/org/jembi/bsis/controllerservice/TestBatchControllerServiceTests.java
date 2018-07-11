@@ -10,6 +10,7 @@ import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.service.DonationCRUDService;
+import org.jembi.bsis.service.TestBatchCRUDService;
 import org.jembi.bsis.suites.UnitTestSuite;
 import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class TestBatchControllerServiceTests extends UnitTestSuite {
   @Mock
   private DonationRepository donationRepository;
   @Mock
-  private DonationCRUDService donationCRUDService;
+  private TestBatchCRUDService testBatchCRUDService;
   @Mock
   private TestBatchRepository testBatchRepository;
 
@@ -212,12 +213,12 @@ public class TestBatchControllerServiceTests extends UnitTestSuite {
     when(testBatchRepository.findTestBatchById(testBatchId)).thenReturn(testBatch);
     when(donationRepository.findDonationById(donationOneId)).thenReturn(donationOne);
     when(donationRepository.findDonationById(donationTwoId)).thenReturn(donationTwo);
-    when(donationCRUDService.removeDonationsFromTestBatch(donations, testBatch)).thenReturn(testBatch);
+    when(testBatchCRUDService.removeDonationsFromTestBatch(donations, testBatch)).thenReturn(testBatch);
     when(testBatchFactory.createTestBatchFullViewModel(testBatch)).thenReturn(expected);
 
     TestBatchFullViewModel actual = controllerService.removeDonationsFromBatch(backingForm);
 
-    verify(donationCRUDService).removeDonationsFromTestBatch(donations, testBatch);
+    verify(testBatchCRUDService).removeDonationsFromTestBatch(donations, testBatch);
     assertThat(actual, is(equalTo(expected)));
   }
 }

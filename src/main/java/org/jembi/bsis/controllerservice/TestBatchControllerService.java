@@ -13,7 +13,6 @@ import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
 import org.jembi.bsis.repository.LocationRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
-import org.jembi.bsis.service.DonationCRUDService;
 import org.jembi.bsis.service.TestBatchCRUDService;
 import org.jembi.bsis.viewmodel.LocationViewModel;
 import org.jembi.bsis.viewmodel.TestBatchFullDonationViewModel;
@@ -30,9 +29,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 @Transactional
 public class TestBatchControllerService {
@@ -45,14 +41,10 @@ public class TestBatchControllerService {
   private LocationRepository locationRepository;
   @Autowired
   private LocationFactory locationFactory;
-
   @Autowired
   private TestBatchRepository testBatchRepository;
-
   @Autowired
   private DonationRepository donationRepository;
-  @Autowired
-  private DonationCRUDService donationCRUDService;
 
   public TestBatchFullViewModel updateTestBatch(TestBatchBackingForm backingForm) {
     TestBatch testBatch = testBatchFactory.createEntity(backingForm);
@@ -116,7 +108,7 @@ public class TestBatchControllerService {
         .map(uuid -> donationRepository.findDonationById(uuid))
         .collect(Collectors.toList());
     TestBatch testBatch = testBatchRepository.findTestBatchById(backingForm.getTestBatchId());
-    testBatch = donationCRUDService.removeDonationsFromTestBatch(donationsToRemove, testBatch);
+    testBatch = testBatchCRUDService.removeDonationsFromTestBatch(donationsToRemove, testBatch);
     return testBatchFactory.createTestBatchFullViewModel(testBatch);
   }
 }

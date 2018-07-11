@@ -1,5 +1,6 @@
 package org.jembi.bsis.service;
 
+import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.SequenceNumberRepository;
@@ -11,13 +12,20 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
 import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
+import static org.jembi.bsis.model.testbatch.TestBatchStatus.CLOSED;
+import static org.jembi.bsis.model.testbatch.TestBatchStatus.OPEN;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
@@ -25,6 +33,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+
+import com.google.common.collect.Sets;
 
 public class TestBatchCRUDServiceTests extends UnitTestSuite {
 
@@ -42,6 +52,8 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
   private TestBatchStatusChangeService testBatchStatusChangeService;
   @Mock
   private SequenceNumberRepository sequenceNumberRepository;
+  @Mock
+  private DonationCRUDService donationCRUDService;
 
   @Test
   public void testUpdateTestBatchStatusWithNoStatusChange_shouldDoNothing() {
@@ -241,5 +253,47 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
 
     testBatchCRUDService.deleteTestBatch(TEST_BATCH_ID);
+  }
+  
+  @Test(expected = IllegalStateException.class)
+  public void testRemoveDonationsFromTestBatchThatCantAddOrRemoveDonations_shouldThrowIllegalStateException() {
+    Donation donationToRemove = aDonation().build();
+
+    TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(CLOSED)
+        .withDonations(Sets.newHashSet(donationToRemove)).build();
+
+    donationToRemove.setTestBatch(testBatch);
+
+    testBatchCRUDService.removeDonationsFromTestBatch(Arrays.asList(donationToRemove), testBatch);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testRemoveDonationsFromTestBatchWithDonationThatBelongToOtherTestBatch_shouldThrowIllegalArgumentException() {
+    Donation donationToRemove = aDonation()
+        .withTestBatch(aTestBatch().withId(UUID.randomUUID()).withStatus(OPEN).build()).build();
+
+    TestBatch testBatch =
+        aTestBatch().withId(TEST_BATCH_ID).withDonations(Sets.newHashSet(donationToRemove)).build();
+
+    testBatchCRUDService.removeDonationsFromTestBatch(Arrays.asList(donationToRemove), testBatch);
+  }
+
+  @Test
+  public void testRemoveDonationsFromTestBatch_shouldRemoveCorrectDonationAndDelegateToDonationCRUDService() {
+    Donation donationToRemove = aDonation().build();
+    Donation donation = aDonation().build();
+
+    TestBatch testBatch = aTestBatch().withId(TEST_BATCH_ID).withStatus(OPEN)
+        .withDonations(Sets.newHashSet(donationToRemove, donation)).build();
+
+    donationToRemove.setTestBatch(testBatch);
+    donation.setTestBatch(testBatch);
+
+    TestBatch actual = testBatchCRUDService
+        .removeDonationsFromTestBatch(Collections.singletonList(donationToRemove), testBatch);
+
+    assertThat(actual.getDonations().size(), is(equalTo(1)));
+    assertThat(actual.getDonations(), contains(donation));
+    verify(donationCRUDService).clearTestOutcomes(donationToRemove);
   }
 }

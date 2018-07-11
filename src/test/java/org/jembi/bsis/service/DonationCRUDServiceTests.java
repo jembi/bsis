@@ -1,11 +1,12 @@
 package org.jembi.bsis.service;
 
-import com.google.common.collect.Sets;
+import static org.jembi.bsis.helpers.matchers.DonationTestStatusesMatcher.testStatusesAreReset;
 
 import org.jembi.bsis.backingform.BloodTypingResolutionBackingForm;
 import org.jembi.bsis.helpers.builders.BloodTestResultBuilder;
 import org.jembi.bsis.helpers.builders.ComponentBuilder;
 import org.jembi.bsis.helpers.builders.DonationBatchBuilder;
+import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.model.adverseevent.AdverseEvent;
 import org.jembi.bsis.model.bloodtesting.BloodTestResult;
 import org.jembi.bsis.model.component.Component;
@@ -1406,48 +1407,15 @@ public class DonationCRUDServiceTests extends UnitTestSuite {
     assertThat(returnedDonation.getInitialComponent(), hasSameStateAsComponent(expectedDonation.getInitialComponent()));
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void testRemoveDonationsFromTestBatchThatCantAddOrRemoveDonations_shouldThrowIllegalStateException() {
-    Donation donationToRemove = aDonation().build();
-
-    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(CLOSED)
-        .withDonations(Sets.newHashSet(donationToRemove)).build();
-
-    donationToRemove.setTestBatch(testBatch);
-
-    donationCRUDService.removeDonationsFromTestBatch(Arrays.asList(donationToRemove), testBatch);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testRemoveDonationsFromTestBatchWithDonationThatBelongToOtherTestBatch_shouldThrowIllegalArgumentException() {
-    Donation donationToRemove = aDonation()
-        .withTestBatch(aTestBatch().withId(UUID.randomUUID()).withStatus(OPEN).build()).build();
-
-    TestBatch testBatch =
-        aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withDonations(Sets.newHashSet(donationToRemove)).build();
-
-    donationCRUDService.removeDonationsFromTestBatch(Arrays.asList(donationToRemove), testBatch);
-  }
-
   @Test
-  public void testRemoveDonationsFromTestBatch_shouldRemoveCorrectDonationAndClearTestOutcomesForThatDonation() {
-    Donation donationToRemove = aDonation().withBloodAbo("A").withBloodRh("-").withTTIStatus(TTIStatus.SAFE)
-        .withBloodTypingStatus(BloodTypingStatus.COMPLETE).withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH)
-        .build();
+  public void testClearTestOutcomes_shouldResetStatusesAndDelegateToBloodTestService() {
+    Donation donation = aDonation().withBloodAbo("A").withBloodRh("-")
+        .withTTIStatus(TTIStatus.SAFE).withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+        .withBloodTypingMatchStatus(BloodTypingMatchStatus.MATCH).build();
 
-    Donation donation = aDonation().build();
+    donationCRUDService.clearTestOutcomes(donation);
 
-    TestBatch testBatch = aTestBatch().withId(IRRELEVANT_TEST_BATCH_ID).withStatus(OPEN)
-        .withDonations(Sets.newHashSet(donationToRemove, donation)).build();
-
-    donationToRemove.setTestBatch(testBatch);
-    donation.setTestBatch(testBatch);
-
-    TestBatch actual = donationCRUDService.removeDonationsFromTestBatch(Collections.singletonList(donationToRemove), testBatch);
-
-    assertThat(actual.getDonations().size(), is(equalTo(1)));
-    assertThat(actual.getDonations(), contains(donation));
-    assertThat(donationToRemove, testStatusesAreReset());
-    verify(bloodTestsService).setTestOutcomesAsDeleted(argThat(hasSameStateAsDonation(donationToRemove)));
+    assertThat(donation, testStatusesAreReset());
+    verify(bloodTestsService).setTestOutcomesAsDeleted(argThat(hasSameStateAsDonation(donation)));
   }
 }
