@@ -58,8 +58,6 @@ public class DonationCRUDService {
   private CheckCharacterService checkCharacterService;
   @Autowired
   private DateGeneratorService dateGeneratorService;
-  @Autowired
-  private TestBatchConstraintChecker testBatchConstraintChecker;
 
   public void deleteDonation(UUID donationId) throws IllegalStateException, NoResultException {
 
@@ -213,12 +211,7 @@ public class DonationCRUDService {
 
       // If the new pack type doesn't produce test samples, delete test outcomes and clear statuses
       if (!newPackType.getTestSampleProduced()) {
-        bloodTestsService.setTestOutcomesAsDeleted(existingDonation);
-        existingDonation.setTTIStatus(TTIStatus.NOT_DONE);
-        existingDonation.setBloodAbo(null);
-        existingDonation.setBloodRh(null);
-        existingDonation.setBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE);
-        existingDonation.setBloodTypingStatus(BloodTypingStatus.NOT_DONE);
+        clearTestOutcomes(existingDonation);
       }
     }
 
