@@ -118,6 +118,34 @@ public class TestSampleFactoryTests extends UnitTestSuite {
   }
   
   @Test
+  public void testCreateViewModelWithNullTestBatch_shouldReturnViewModelWithEmptyTestingLocationAndTestingDate() {
+    List<BloodTestResult> testOutcomes = new ArrayList<>();
+    List<BloodTestResultViewModel> testOutcomeViewModels = new ArrayList<>();
+
+    Date donationDate = new Date();
+
+    Donation donation =
+        aDonation().withDonationIdentificationNumber("din").withVenue(aVenue().withName("venue").build())
+            .withDonationDate(donationDate).withPackType(PackTypeBuilder.aPackType().withPackType("packType").build())
+            .withTTIStatus(TTIStatus.NOT_DONE).withBloodTypingStatus(BloodTypingStatus.NOT_DONE)
+            .withBloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).withTestBatch(null)
+            .build();
+
+    TestSampleViewModel expected = TestSampleViewModel.builder().din("din").venue("venue")
+        .donationDate(donationDate).bloodGroup("").packType("packType")
+        .ttiStatus(TTIStatus.NOT_DONE).bloodTypingStatus(BloodTypingStatus.NOT_DONE)
+        .bloodTypingMatchStatus(BloodTypingMatchStatus.NOT_DONE).testingSite(null).testingDate(null)
+        .testOutcomes(testOutcomeViewModels).build();
+
+    when(bloodTestResultFactory.createViewModels(testOutcomes)).thenReturn(testOutcomeViewModels);
+
+    TestSampleViewModel actual =
+        testSampleFactory.createViewModel(donation, testOutcomes);
+
+    assertThat(actual, is(equalTo(expected)));
+  }
+  
+  @Test
   public void testCreateViewModelWithNotDoneBloodTypingStatus_shouldReturnEmptyBloodGroup() {
     String expectedBloodGroup = "";
 

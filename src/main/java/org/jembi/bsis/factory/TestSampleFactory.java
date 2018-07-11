@@ -26,8 +26,10 @@ public class TestSampleFactory {
     viewModel.setTtiStatus(donation.getTTIStatus());
     viewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
     viewModel.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
-    viewModel.setTestingSite(donation.getTestBatch().getLocation().getName());
-    viewModel.setTestingDate(donation.getTestBatch().getTestBatchDate());
+    if (donation.getTestBatch() != null) {
+      viewModel.setTestingSite(donation.getTestBatch().getLocation().getName());
+      viewModel.setTestingDate(donation.getTestBatch().getTestBatchDate());
+    }
     viewModel.setTestOutcomes(bloodTestResultFactory.createViewModels(testOutcomes));
     return viewModel;
   }
