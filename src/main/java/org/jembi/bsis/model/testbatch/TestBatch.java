@@ -104,7 +104,7 @@ public class TestBatch extends BaseModificationTrackerUUIDEntity {
 
   public void removeDonation(Donation donation) {
     if (!this.isOpen()) {
-      throw new IllegalStateException("Donations may only be added to open test batches");
+      throw new IllegalStateException("Donations may only be removed from open test batches");
     } else if (donation.getTestBatch() != null && !Objects.equals(donation.getTestBatch(), this)) {
       throw new IllegalArgumentException(String.
           format("Unable to remove %s from %s. Donation already assigned to %s", donation, this, donation

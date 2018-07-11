@@ -42,7 +42,7 @@ public class TestBatchDonationsBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateFormWithNullDonationIds_shouldReturnNoErrors() {
+  public void testValidateFormWithNullDonationIds_shouldReturnRequiredDonationIdsError() {
     TestBatchDonationsBackingForm backingForm = new TestBatchDonationsBackingForm();
     backingForm.setTestBatchId(UUID.randomUUID());
     backingForm.setDonationIds(null);
@@ -56,11 +56,10 @@ public class TestBatchDonationsBackingFormValidatorTests extends UnitTestSuite {
   }
 
   @Test
-  public void testValidateFormWithEmptyDonationIds_shouldReturnNoErrors() {
+  public void testValidateFormWithEmptyDonationIds_shouldReturnRequiredDonationIdsError() {
     TestBatchDonationsBackingForm backingForm = new TestBatchDonationsBackingForm();
     backingForm.setTestBatchId(UUID.randomUUID());
     backingForm.setDonationIds(Collections.<UUID>emptyList());
-
 
     Errors errors = new BindException(backingForm, "testBatchDonationsBackingForm");
     validator.validate(backingForm, errors);

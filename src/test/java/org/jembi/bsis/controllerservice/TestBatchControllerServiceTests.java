@@ -51,7 +51,7 @@ public class TestBatchControllerServiceTests extends UnitTestSuite {
   private TestBatchControllerService controllerService;
 
   @Test(expected = IllegalStateException.class)
-  public void testAddDonationsToClosedTestBatchWithTestResults_shouldThrow() {
+  public void testAddDonationsToClosedTestBatch_shouldThrow() {
     UUID testBatchId = UUID.randomUUID();
     String fromDIN = "from";
     String toDIN = "to";

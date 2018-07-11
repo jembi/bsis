@@ -100,10 +100,8 @@ public class TestBatchControllerService {
 
     for (Donation donation : donationsInRange) {
       if (!donation.isTestable()) {
-        log.debug(String.format("%s cannot be included in %s without a test sample. Ignoring.", donation, testBatch));
         dinsWithoutTestSamples.add(donation.getDonationIdentificationNumber());
       } else if (donation.getTestBatch() != null && !donation.isIncludedIn(testBatch)) {
-        log.debug(String.format("%s is already included in %s. Ignoring.", donation, donation.getTestBatch()));
         dinsInOtherTestBatches.add(donation.getDonationIdentificationNumber());
       } else {
         testBatch.addDonation(donation);
