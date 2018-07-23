@@ -2,6 +2,7 @@ package org.jembi.bsis.service;
 
 import org.apache.log4j.Logger;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.testbatch.DonationAdditionResult;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.SequenceNumberRepository;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -101,8 +101,24 @@ public class TestBatchCRUDService {
     return testBatch;
   }
 
+  public DonationAdditionResult addDonationsToTestBatch(TestBatch testBatch, List<Donation> donations) {
+    DonationAdditionResult result = DonationAdditionResult.from(testBatch);
+
+    for (Donation donation : donations) {
+      if (!donation.isTestable()) {
+        result.addDinWithoutTestSample(donation.getDonationIdentificationNumber());
+      } else if (donation.getTestBatch() != null && !donation.isIncludedIn(testBatch)) {
+        result.addDinInAnotherTestBatch(donation.getDonationIdentificationNumber());
+      } else {
+        testBatch.addDonation(donation);
+      }
+    }
+
+    return result;
+  }
+
   public TestBatch removeDonationsFromTestBatch(List<Donation> donations, TestBatch testBatch) {
-    if (testBatch.isClosed()) {
+    if (!testBatch.isOpen()) {
       throw new IllegalStateException("Donations can only be added to open test batches");
     }
 

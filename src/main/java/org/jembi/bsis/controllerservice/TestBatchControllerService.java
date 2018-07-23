@@ -8,6 +8,7 @@ import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
+import org.jembi.bsis.model.testbatch.DonationAdditionResult;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.repository.DonationRepository;
@@ -23,9 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -82,25 +81,16 @@ public class TestBatchControllerService {
     return testBatchFactory.createTestBatchFullDonationViewModel(testBatch, bloodTypingMatchStatus);
   }
 
-  public TestBatchFullViewModel addDonationsToTestBatch(TestBatchDonationRangeBackingForm backingForm) {
+  public TestBatchFullViewModel addDonationsToTestBatch(
+      TestBatchDonationRangeBackingForm backingForm) {
     TestBatch testBatch = testBatchRepository.findTestBatchById(backingForm.getTestBatchId());
     List<Donation> donationsInRange = donationRepository
         .findDonationsBetweenTwoDins(backingForm.getFromDIN(), backingForm.getToDIN());
-
-    Set<String> dinsWithoutTestSamples = new HashSet<>();
-    Set<String> dinsInOtherTestBatches = new HashSet<>();
-
-    for (Donation donation : donationsInRange) {
-      if (!donation.isTestable()) {
-        dinsWithoutTestSamples.add(donation.getDonationIdentificationNumber());
-      } else if (donation.getTestBatch() != null && !donation.isIncludedIn(testBatch)) {
-        dinsInOtherTestBatches.add(donation.getDonationIdentificationNumber());
-      } else {
-        testBatch.addDonation(donation);
-      }
-    }
-
-    return testBatchFactory.createTestBatchFullViewModel(testBatch, dinsWithoutTestSamples, dinsInOtherTestBatches);
+    DonationAdditionResult result = testBatchCRUDService
+        .addDonationsToTestBatch(testBatch, donationsInRange);
+    return testBatchFactory
+        .createTestBatchFullViewModel(result.getTestBatch(), result.getDinsWithoutTestSamples(),
+            result.getDinsInOtherTestBatches());
   }
 
   public TestBatchFullViewModel removeDonationsFromBatch(TestBatchDonationsBackingForm backingForm) {
