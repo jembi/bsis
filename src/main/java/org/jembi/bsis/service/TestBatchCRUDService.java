@@ -107,8 +107,7 @@ public class TestBatchCRUDService {
     }
 
     for (Donation donation : donations) {
-      if (donation.getTestBatch() != null
-          && Objects.equals(donation.getTestBatch().getId(), testBatch.getId())) {
+      if (donation.isIncludedIn(testBatch)) {
         donationCRUDService.clearTestOutcomes(donation);
         testBatch.removeDonation(donation);
       } else {
