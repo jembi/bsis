@@ -1,10 +1,5 @@
 package org.jembi.bsis.repository;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.UUID;
-
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.jembi.bsis.model.donation.Donation;
@@ -13,6 +8,11 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.UUID;
 
 /**
  * Test using DBUnit to test the Donation Repository
@@ -62,7 +62,8 @@ public class DonationRepositoryTest extends DBUnitContextDependentTestSuite {
     newDonation.setId(existingDonation.getId());
     newDonation.setVenue(existingDonation.getVenue());
     newDonation.setDonor(existingDonation.getDonor());
-    newDonation.setId(null); 
+    newDonation.setId(null);
+    newDonation.setPackType(existingDonation.getPackType());
     newDonation.setDonationIdentificationNumber("JUNIT123");
     Calendar today = Calendar.getInstance();
     newDonation.setCreatedDate(today.getTime());

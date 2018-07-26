@@ -1,12 +1,5 @@
 package org.jembi.bsis.factory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
@@ -21,6 +14,12 @@ import org.jembi.bsis.viewmodel.TestBatchFullViewModel;
 import org.jembi.bsis.viewmodel.TestBatchViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A factory for creating TestBatchViewModel and TestBatchFullViewModel objects.
@@ -109,6 +108,14 @@ public class TestBatchFactory {
     return testBatchFullDonationViewModel;
   }
 
+  public TestBatchFullViewModel createTestBatchFullViewModel(TestBatch testBatch, Set<String> dinsWithoutTestSamples,
+                                                             Set<String> dinsInOtherTestBatches) {
+    TestBatchFullViewModel testBatchFullViewModel = createTestBatchFullViewModel(testBatch);
+    testBatchFullViewModel.addAllDonationIdsWithoutTestSamples(dinsWithoutTestSamples);
+    testBatchFullViewModel.addAllDonationIdsInOtherTestBatches(dinsInOtherTestBatches);
+    return testBatchFullViewModel;
+  }
+
   /**
    * Creates a list of DonationFullViewModel objects from a test batch, with the option of filtering
    * by blood typing match status if the bloodTypingMatchStatus parameter is not null.
@@ -167,7 +174,7 @@ public class TestBatchFactory {
     populateBasicViewModel(testBatch, testBatchViewModel);
 
     // Get list of donation view models
-    testBatchViewModel.setDonations(donationFactory.createDonationViewModels(testBatch.getDonations()));
+    testBatchViewModel.addAllDonations(donationFactory.createDonationViewModels(testBatch.getDonations()));
 
     // Check if this test batch can be released
     CanReleaseResult canReleaseResult = testBatchConstraintChecker.canReleaseTestBatch(testBatch);
@@ -182,9 +189,9 @@ public class TestBatchFactory {
     permissions.put("canClose", testBatchConstraintChecker.canCloseTestBatch(testBatch));
     permissions.put("canDelete", testBatchConstraintChecker.canDeleteTestBatch(testBatch));
     permissions.put("canEdit", testBatchConstraintChecker.canEditTestBatch(testBatch));
-    permissions.put("canEditDonations", testBatchConstraintChecker.canAddOrRemoveDonation(testBatch));
+    permissions.put("canEditDonations", testBatch.isOpen());
     permissions.put("canReopen", testBatchConstraintChecker.canReopenTestBatch(testBatch));
-    testBatchViewModel.setPermissions(permissions);
+    testBatchViewModel.putAllPermissions(permissions);
 
     return testBatchViewModel;
   }
@@ -208,17 +215,12 @@ public class TestBatchFactory {
   }
 
   private String getPreviousDonationAboRhOutcome(Donation thisDonation) {
-  
-    List<Donation> donorDonations = new ArrayList<Donation>(thisDonation.getDonor().getDonations());
+    List<Donation> donorDonations = new ArrayList<>(thisDonation.getDonor().getDonations());
     String aboRh = "";
 
     if (donorDonations.size() > 1) {
       // Order donations for that donor by date desc to be able to find the previous donation
-      Collections.sort(donorDonations, new Comparator<Donation>() {
-        public int compare(Donation d1, Donation d2) {
-          return d2.getDonationDate().compareTo(d1.getDonationDate());
-        }
-      });
+      donorDonations.sort((d1, d2) -> d2.getDonationDate().compareTo(d1.getDonationDate()));
       for (Donation donation : donorDonations) {
         // Find previous donation and return abo/rh outcome
         if (donation.getDonationDate().before(thisDonation.getDonationDate())) {

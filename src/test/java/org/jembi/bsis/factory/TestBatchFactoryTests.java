@@ -1,33 +1,5 @@
 package org.jembi.bsis.factory;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.builders.DonationFullViewModelBuilder.aDonationFullViewModel;
-import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
-import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aTestingSiteBackingForm;
-import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
-import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
-import static org.jembi.bsis.helpers.builders.TestBatchFullDonationViewModelBuilder.aTestBatchFullDonationViewModel;
-import static org.jembi.bsis.helpers.builders.TestBatchFullViewModelBuilder.aTestBatchFullViewModel;
-import static org.jembi.bsis.helpers.matchers.DonationTestOutcomesReportViewModelMatcher.hasSameStateAsDonationTestOutcomesReportViewModel;
-import static org.jembi.bsis.helpers.matchers.TestBatchFullDonationViewModelMatcher.hasSameStateAsTestBatchFullDonationViewModel;
-import static org.jembi.bsis.helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
-import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
-import static org.jembi.bsis.helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
-
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
 import org.jembi.bsis.backingform.TestBatchBackingForm;
 import org.jembi.bsis.helpers.builders.DonationBuilder;
 import org.jembi.bsis.helpers.builders.DonationTestOutcomesReportViewModelBuilder;
@@ -58,12 +30,39 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.DonationFullViewModelBuilder.aDonationFullViewModel;
+import static org.jembi.bsis.helpers.builders.DonationViewModelBuilder.aDonationViewModel;
+import static org.jembi.bsis.helpers.builders.LocationBackingFormBuilder.aTestingSiteBackingForm;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
+import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
+import static org.jembi.bsis.helpers.builders.TestBatchFullDonationViewModelBuilder.aTestBatchFullDonationViewModel;
+import static org.jembi.bsis.helpers.matchers.DonationTestOutcomesReportViewModelMatcher.hasSameStateAsDonationTestOutcomesReportViewModel;
+import static org.jembi.bsis.helpers.matchers.TestBatchFullDonationViewModelMatcher.hasSameStateAsTestBatchFullDonationViewModel;
+import static org.jembi.bsis.helpers.matchers.TestBatchFullViewModelMatcher.hasSameStateAsTestBatchFullViewModel;
+import static org.jembi.bsis.helpers.matchers.TestBatchMatcher.hasSameStateAsTestBatch;
+import static org.jembi.bsis.helpers.matchers.TestBatchViewModelMatcher.hasSameStateAsTestBatchViewModel;
+import static org.jembi.bsis.model.testbatch.TestBatchStatus.CLOSED;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+
 @SuppressWarnings("unchecked")
 public class TestBatchFactoryTests extends UnitTestSuite {
 
   private static final UUID IRRELEVANT_TEST_BATCH_ID = UUID.randomUUID();
   private static final UUID ANOTHER_IRRELEVANT_TEST_BATCH_ID = UUID.randomUUID();
-  private static final TestBatchStatus IRRELEVANT_STATUS = TestBatchStatus.OPEN;
   private static final String IRRELEVANT_BATCH_NUMBER = "1234";
   private static final Date IRRELEVANT_TEST_BATCH_DATE = new Date();
   private static final Date IRRELEVANT_LAST_UPDATED_DATE = new Date();
@@ -80,14 +79,10 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   private LocationRepository locationRepository;
   @Mock
   private DonationFactory donationFactory;
-  
+
   private Set<Donation> createDonations() {
     PackType packType = PackTypeBuilder.aPackType().withTestSampleProduced(true).build();
-    Set<Donation> donations = new HashSet<>(Arrays.asList(
-        aDonation().withPackType(packType).build()
-    ));
-    
-    return donations;
+    return new HashSet<>(Arrays.asList(aDonation().withPackType(packType).build()));
   }
 
   @Test
@@ -96,40 +91,40 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     Set<Donation> donations = createDonations();
 
     TestBatch testBatch1 =
-      aTestBatch()
-        .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
-        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
-        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-        .withDonations(donations)
-        .withNotes(IRRELEVANT_NOTES)
-        .withBackEntry(true)
-        .build();
+        aTestBatch()
+            .withId(IRRELEVANT_TEST_BATCH_ID)
+            .withStatus(CLOSED)
+            .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+            .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+            .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+            .withDonations(donations)
+            .withNotes(IRRELEVANT_NOTES)
+            .withBackEntry(true)
+            .build();
 
     TestBatch testBatch2 =
-      aTestBatch()
-        .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
-        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
-        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-        .withDonations(donations)
-        .withNotes(IRRELEVANT_NOTES)
-        .withBackEntry(true)
-        .build();
+        aTestBatch()
+            .withId(IRRELEVANT_TEST_BATCH_ID)
+            .withStatus(CLOSED)
+            .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+            .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+            .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+            .withDonations(donations)
+            .withNotes(IRRELEVANT_NOTES)
+            .withBackEntry(true)
+            .build();
 
     TestBatchViewModel expectedViewModel = TestBatchViewModel.builder()
         .id(IRRELEVANT_TEST_BATCH_ID)
-        .status(IRRELEVANT_STATUS)
+        .status(CLOSED)
         .batchNumber(IRRELEVANT_BATCH_NUMBER)
         .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .lastUpdated(IRRELEVANT_LAST_UPDATED_DATE)
         .notes(IRRELEVANT_NOTES)
         .backEntry(true)
         .build();
-    
-    List<TestBatch> testBatches = Arrays.asList(new TestBatch[]{testBatch1, testBatch2});
+
+    List<TestBatch> testBatches = Arrays.asList(testBatch1, testBatch2);
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch1)).thenReturn(CANT_RELEASE);
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch2)).thenReturn(CANT_RELEASE);
@@ -174,14 +169,14 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
     TestBatch testBatch =
         aTestBatch()
-          .withId(IRRELEVANT_TEST_BATCH_ID)
-          .withStatus(IRRELEVANT_STATUS)
-          .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-          .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
-          .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-          .withDonations(donations)
-          .withNotes(IRRELEVANT_NOTES)
-          .build();
+            .withId(IRRELEVANT_TEST_BATCH_ID)
+            .withStatus(CLOSED)
+            .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+            .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+            .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+            .withDonations(donations)
+            .withNotes(IRRELEVANT_NOTES)
+            .build();
 
     TestBatchFullDonationViewModel expectedViewModel = aTestBatchFullDonationViewModel()
         .withId(IRRELEVANT_TEST_BATCH_ID)
@@ -205,54 +200,54 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
     TestBatch testBatch1 = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
+        .withStatus(CLOSED)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonations(donations)
         .withNotes(IRRELEVANT_NOTES)
         .build();
-    
+
     TestBatch testBatch2 = aTestBatch()
         .withId(ANOTHER_IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
+        .withStatus(CLOSED)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
         .withDonations(donations)
         .withNotes(IRRELEVANT_NOTES)
         .build();
-    List<TestBatch> testBatches = Arrays.asList(new TestBatch[]{testBatch1, testBatch2});
+    List<TestBatch> testBatches = Arrays.asList(testBatch1, testBatch2);
 
-    TestBatchFullViewModel expectedViewModel1 = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
-        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
-        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-        .withNotes(IRRELEVANT_NOTES)
-        .withDonations(Arrays.<DonationViewModel>asList(donationViewModel))
-        .withPermission("canRelease", false)
-        .withPermission("canClose", false)
-        .withPermission("canDelete", false)
-        .withPermission("canEdit", false)
-        .withPermission("canReopen", false)
-        .withPermission("canEditDonations", false)
+    TestBatchFullViewModel expectedViewModel1 = TestBatchFullViewModel.builderFull()
+        .id(IRRELEVANT_TEST_BATCH_ID)
+        .status(CLOSED)
+        .batchNumber(IRRELEVANT_BATCH_NUMBER)
+        .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .lastUpdated(IRRELEVANT_LAST_UPDATED_DATE)
+        .notes(IRRELEVANT_NOTES)
+        .donations(Arrays.asList(donationViewModel))
+        .permission("canRelease", false)
+        .permission("canClose", false)
+        .permission("canDelete", false)
+        .permission("canEdit", false)
+        .permission("canReopen", false)
+        .permission("canEditDonations", false)
         .build();
-    TestBatchFullViewModel expectedViewModel2 = aTestBatchFullViewModel()
-        .withId(ANOTHER_IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
-        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
-        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-        .withNotes(IRRELEVANT_NOTES)
-        .withDonations(Arrays.<DonationViewModel>asList(donationViewModel))
-        .withPermission("canRelease", false)
-        .withPermission("canClose", false)
-        .withPermission("canDelete", false)
-        .withPermission("canEdit", false)
-        .withPermission("canReopen", false)
-        .withPermission("canEditDonations", false)
+    TestBatchFullViewModel expectedViewModel2 = TestBatchFullViewModel.builderFull()
+        .id(ANOTHER_IRRELEVANT_TEST_BATCH_ID)
+        .status(CLOSED)
+        .batchNumber(IRRELEVANT_BATCH_NUMBER)
+        .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .lastUpdated(IRRELEVANT_LAST_UPDATED_DATE)
+        .notes(IRRELEVANT_NOTES)
+        .donations(Arrays.asList(donationViewModel))
+        .permission("canRelease", false)
+        .permission("canClose", false)
+        .permission("canDelete", false)
+        .permission("canEdit", false)
+        .permission("canReopen", false)
+        .permission("canEditDonations", false)
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch1)).thenReturn(CANT_RELEASE);
@@ -271,10 +266,10 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
     int expectedReadyCount = 2;
     Set<Donation> donations = createDonations();
- 
+
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
+        .withStatus(CLOSED)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
@@ -285,21 +280,21 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     CanReleaseResult canReleaseResult = new CanReleaseResult(true, expectedReadyCount);
 
     DonationViewModel donationViewModel = aDonationViewModel().build();
-    TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
-        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
-        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-        .withNotes(IRRELEVANT_NOTES)
-        .withDonations(Arrays.asList(donationViewModel))
-        .withPermission("canRelease", true)
-        .withPermission("canClose", false)
-        .withPermission("canDelete", false)
-        .withPermission("canEdit", false)
-        .withPermission("canReopen", false)
-        .withPermission("canEditDonations", false)
-        .withReadyForReleaseCount(expectedReadyCount)
+    TestBatchFullViewModel expectedViewModel = TestBatchFullViewModel.builderFull()
+        .id(IRRELEVANT_TEST_BATCH_ID)
+        .status(CLOSED)
+        .batchNumber(IRRELEVANT_BATCH_NUMBER)
+        .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .lastUpdated(IRRELEVANT_LAST_UPDATED_DATE)
+        .notes(IRRELEVANT_NOTES)
+        .donations(Arrays.asList(donationViewModel))
+        .permission("canRelease", true)
+        .permission("canClose", false)
+        .permission("canDelete", false)
+        .permission("canEdit", false)
+        .permission("canReopen", false)
+        .permission("canEditDonations", false)
+        .readyForReleaseCount(expectedReadyCount)
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(canReleaseResult);
@@ -307,7 +302,6 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
     when(donationFactory.createDonationViewModels(any(Collection.class))).thenReturn(Arrays.asList(donationViewModel));
 
     TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch);
@@ -317,12 +311,12 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateTestBatchViewModelThatCanCloseTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
-    
+
     Set<Donation> donations = createDonations();
 
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
+        .withStatus(CLOSED)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
@@ -331,20 +325,20 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
 
     DonationViewModel donationViewModel = aDonationViewModel().build();
-    TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
-        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
-        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-        .withNotes(IRRELEVANT_NOTES)
-        .withDonations(Arrays.asList(donationViewModel))
-        .withPermission("canRelease", false)
-        .withPermission("canClose", true)
-        .withPermission("canDelete", false)
-        .withPermission("canEdit", false)
-        .withPermission("canReopen", false)
-        .withPermission("canEditDonations", false)
+    TestBatchFullViewModel expectedViewModel = TestBatchFullViewModel.builderFull()
+        .id(IRRELEVANT_TEST_BATCH_ID)
+        .status(CLOSED)
+        .batchNumber(IRRELEVANT_BATCH_NUMBER)
+        .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .lastUpdated(IRRELEVANT_LAST_UPDATED_DATE)
+        .notes(IRRELEVANT_NOTES)
+        .donations(Arrays.asList(donationViewModel))
+        .permission("canRelease", false)
+        .permission("canClose", true)
+        .permission("canDelete", false)
+        .permission("canEdit", false)
+        .permission("canReopen", false)
+        .permission("canEditDonations", false)
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
@@ -352,7 +346,6 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
     when(donationFactory.createDonationViewModels(any(Collection.class))).thenReturn(Arrays.asList(donationViewModel));
 
     TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch);
@@ -364,10 +357,10 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   public void testCreateTestBatchViewModelWithConstraints_shouldReturnTestBatchViewModelWithTheCorrectState() {
 
     Set<Donation> donations = createDonations();
-    
+
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
+        .withStatus(CLOSED)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
@@ -376,28 +369,26 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
 
     DonationViewModel donationViewModel = aDonationViewModel().build();
-    TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
-        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
-        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-        .withNotes(IRRELEVANT_NOTES)
-        .withDonations(Arrays.asList(donationViewModel))
-        .withPermission("canRelease", false)
-        .withPermission("canClose", false)
-        .withPermission("canDelete", false)
-        .withPermission("canEdit", false)
-        .withPermission("canReopen", false)
-        .withPermission("canEditDonations", false)
+    TestBatchFullViewModel expectedViewModel = TestBatchFullViewModel.builderFull()
+        .id(IRRELEVANT_TEST_BATCH_ID)
+        .status(CLOSED)
+        .batchNumber(IRRELEVANT_BATCH_NUMBER)
+        .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .lastUpdated(IRRELEVANT_LAST_UPDATED_DATE)
+        .notes(IRRELEVANT_NOTES)
+        .donations(Arrays.asList(donationViewModel))
+        .permission("canRelease", false)
+        .permission("canClose", false)
+        .permission("canDelete", false)
+        .permission("canEdit", false)
+        .permission("canReopen", false)
+        .permission("canEditDonations", false)
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
     when(testBatchConstraintChecker.canCloseTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
-    when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
     when(donationFactory.createDonationViewModels(any(Collection.class))).thenReturn(Arrays.asList(donationViewModel));
 
     TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch);
@@ -409,10 +400,10 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   public void testCreateTestBatchViewModelWithCanDeleteTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
 
     Set<Donation> donations = createDonations();
-    
+
     TestBatch testBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
+        .withStatus(CLOSED)
         .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
@@ -421,20 +412,20 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
 
     DonationViewModel donationViewModel = aDonationViewModel().build();
-    TestBatchFullViewModel expectedViewModel = aTestBatchFullViewModel()
-        .withId(IRRELEVANT_TEST_BATCH_ID)
-        .withStatus(IRRELEVANT_STATUS)
-        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
-        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
-        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
-        .withNotes(IRRELEVANT_NOTES)
-        .withDonations(Arrays.asList(donationViewModel))
-        .withPermission("canRelease", false)
-        .withPermission("canClose", false)
-        .withPermission("canDelete", true)
-        .withPermission("canEdit", false)
-        .withPermission("canReopen", false)
-        .withPermission("canEditDonations", false)
+    TestBatchFullViewModel expectedViewModel = TestBatchFullViewModel.builderFull()
+        .id(IRRELEVANT_TEST_BATCH_ID)
+        .status(CLOSED)
+        .batchNumber(IRRELEVANT_BATCH_NUMBER)
+        .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .lastUpdated(IRRELEVANT_LAST_UPDATED_DATE)
+        .notes(IRRELEVANT_NOTES)
+        .donations(Arrays.asList(donationViewModel))
+        .permission("canRelease", false)
+        .permission("canClose", false)
+        .permission("canDelete", true)
+        .permission("canEdit", false)
+        .permission("canReopen", false)
+        .permission("canEditDonations", false)
         .build();
 
     when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
@@ -442,7 +433,6 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(true);
     when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
     when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
-    when(testBatchConstraintChecker.canAddOrRemoveDonation(testBatch)).thenReturn(false);
     when(donationFactory.createDonationViewModels(any(Collection.class))).thenReturn(Arrays.asList(donationViewModel));
 
     TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch);
@@ -452,9 +442,9 @@ public class TestBatchFactoryTests extends UnitTestSuite {
 
   @Test
   public void testCreateTestBatchOutcomesReport_shouldReturnCorrectPreviousDonationAboRh() throws Exception {
-      
+
     Donor donor = DonorBuilder.aDonor().build();
-    
+
     Donation donation1 = aDonation()
         .withDonationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2017-01-01"))
         .withDonor(donor)
@@ -483,9 +473,9 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withBloodRh("B4")
         .withDonationIdentificationNumber("A4")
         .build();
-    
+
     donor.setDonations(Arrays.asList(donation1, donation2, donation3, donation4));
-    
+
     TestBatch testBatch = aTestBatch()
         .withDonation(donation1)
         .withDonation(donation2)
@@ -496,27 +486,27 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     DonationTestOutcomesReportViewModel expectedTestOutcomeViewModel1 = DonationTestOutcomesReportViewModelBuilder.aDonationTestOutcomesReportViewModel()
         .withDonationIdentificationNumber("A1")
         .withPreviousDonationAboRhOutcome("")
-        .withBloodTestOutcomes(new HashMap<String, String>())
+        .withBloodTestOutcomes(Collections.emptyMap())
         .build();
 
     DonationTestOutcomesReportViewModel expectedTestOutcomeViewModel2 = DonationTestOutcomesReportViewModelBuilder.aDonationTestOutcomesReportViewModel()
         .withDonationIdentificationNumber("A2")
         .withPreviousDonationAboRhOutcome("A1B1")
-        .withBloodTestOutcomes(new HashMap<String, String>())
+        .withBloodTestOutcomes(Collections.emptyMap())
         .build();
 
     DonationTestOutcomesReportViewModel expectedTestOutcomeViewModel3 = DonationTestOutcomesReportViewModelBuilder.aDonationTestOutcomesReportViewModel()
         .withDonationIdentificationNumber("A3")
         .withPreviousDonationAboRhOutcome("A2B2")
-        .withBloodTestOutcomes(new HashMap<String, String>())
+        .withBloodTestOutcomes(Collections.emptyMap())
         .build();
 
     DonationTestOutcomesReportViewModel expectedTestOutcomeViewModel4 = DonationTestOutcomesReportViewModelBuilder.aDonationTestOutcomesReportViewModel()
         .withDonationIdentificationNumber("A4")
         .withPreviousDonationAboRhOutcome("A3B3")
-        .withBloodTestOutcomes(new HashMap<String, String>())
+        .withBloodTestOutcomes(Collections.emptyMap())
         .build();
-    
+
     List<DonationTestOutcomesReportViewModel> report = testBatchFactory.createDonationTestOutcomesReportViewModels(testBatch);
 
     assertThat(report, hasItem(hasSameStateAsDonationTestOutcomesReportViewModel(expectedTestOutcomeViewModel1)));
@@ -524,12 +514,12 @@ public class TestBatchFactoryTests extends UnitTestSuite {
     assertThat(report, hasItem(hasSameStateAsDonationTestOutcomesReportViewModel(expectedTestOutcomeViewModel3)));
     assertThat(report, hasItem(hasSameStateAsDonationTestOutcomesReportViewModel(expectedTestOutcomeViewModel4)));
   }
-  
+
   @Test
   public void testCreateTestBatchOutcomesReport_shouldReturnExpectedObject() {
-      
+
     Donor donor = DonorBuilder.aDonor().build();
-    
+
     Donation donation1 = aDonation()
         .withDonationDate(IRRELEVANT_TEST_BATCH_DATE)
         .withDonor(donor)
@@ -539,23 +529,23 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withTTIStatus(TTIStatus.NOT_DONE)
         .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
         .build();
-    
+
     donor.setDonations(Arrays.asList(donation1));
-    
+
     TestBatch testBatch = aTestBatch()
         .withDonation(donation1)
         .build();
-    
+
     DonationTestOutcomesReportViewModel expectedViewModel =
         DonationTestOutcomesReportViewModelBuilder
-        .aDonationTestOutcomesReportViewModel()
-        .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
-        .withTTIStatus(TTIStatus.NOT_DONE)
-        .withPreviousDonationAboRhOutcome("")
-        .withDonationIdentificationNumber("1234567")
-        .withBloodTestOutcomes(new HashMap<String, String>())
-        .build();
-    
+            .aDonationTestOutcomesReportViewModel()
+            .withBloodTypingStatus(BloodTypingStatus.COMPLETE)
+            .withTTIStatus(TTIStatus.NOT_DONE)
+            .withPreviousDonationAboRhOutcome("")
+            .withDonationIdentificationNumber("1234567")
+            .withBloodTestOutcomes(Collections.emptyMap())
+            .build();
+
     List<DonationTestOutcomesReportViewModel> returnedViewModels =
         testBatchFactory.createDonationTestOutcomesReportViewModels(testBatch);
 
@@ -574,23 +564,23 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .build();
 
     Location location = aTestingSite().withId(locationId).build();
-    
+
     TestBatch expectedTestBatch = aTestBatch()
         .withId(IRRELEVANT_TEST_BATCH_ID)
         .withStatus(TestBatchStatus.OPEN)
         .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
         .withLocation(location)
-        .withDonations(new HashSet<Donation>())
+        .withDonations(new HashSet<>())
         .withBackEntry(false)
         .build();
-    
+
     when(locationRepository.getLocation(locationId)).thenReturn(location);
-    
+
     TestBatch returnedTestBatch = testBatchFactory.createEntity(backingForm);
-    
+
     assertThat(returnedTestBatch, hasSameStateAsTestBatch(expectedTestBatch));
   }
-  
+
   @Test
   public void testCreateDonationFullViewModels_shouldReturnOnlyAmbiguous() {
 
@@ -610,10 +600,10 @@ public class TestBatchFactoryTests extends UnitTestSuite {
         .withDonation(d3)
         .withDonation(d4)
         .build();
-    
+
     when(donationFactory.createDonationFullViewModelWithoutPermissions(d1)).thenReturn(d1FullViewModel);
     when(donationFactory.createDonationFullViewModelWithoutPermissions(d3)).thenReturn(d3FullViewModel);
-    
+
     List<DonationFullViewModel> donationFullViewModels =
         testBatchFactory.createDonationFullViewModels(testBatch, BloodTypingMatchStatus.AMBIGUOUS);
 

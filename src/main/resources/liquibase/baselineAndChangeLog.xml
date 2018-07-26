@@ -143,4 +143,5 @@
   <include file="liquibase/updates/3022-add-date-and-remove-donation-batch-from-test-batch.xml"/>
   <include file="liquibase/updates/3050-add-test-samples-to-a-test-batch.xml"/>
   <include file="liquibase/updates/3605-enable-test-batch-back-entry.xml"/>
+  <include file="liquibase/updates/3706-add-not-null-contraint-to-donation-pack-type.xml"/>
 </databaseChangeLog>

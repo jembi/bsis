@@ -1,18 +1,5 @@
 package org.jembi.bsis.service;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
-import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
-import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.UUID;
-
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
@@ -22,6 +9,19 @@ import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.UUID;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
+import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
+import static org.mockito.Mockito.when;
 
 public class TestBatchConstraintCheckerTests extends UnitTestSuite {
 
@@ -224,63 +224,6 @@ public class TestBatchConstraintCheckerTests extends UnitTestSuite {
     boolean result = testBatchConstraintChecker.canDeleteTestBatch(testBatch);
 
     assertThat(result, is(false));
-  }
-
-  @Test
-  public void testCanAddOrRemoveDonationsWithTestResults_shouldReturnFalse() {
-    Donation donation = aDonation().build();
-    TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.RELEASED)
-        .withDonations(new HashSet<Donation>(Arrays.asList(donation))).build();
-
-    when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(true);
-
-    boolean result = testBatchConstraintChecker.canAddOrRemoveDonation(testBatch);
-
-    assertThat(result, is(false));
-  }
-
-  @Test
-  public void testCanAddOrRemoveDonationsFromClosedTestBatch_shouldReturnFalse() {
-    Donation donation = aDonation().build();
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.CLOSED)
-        .withDonations(new HashSet<Donation>(Arrays.asList(donation)))
-        .build();
-
-    when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
-
-    boolean result = testBatchConstraintChecker.canAddOrRemoveDonation(testBatch);
-
-    assertThat(result, is(false));
-  }
-
-  @Test
-  public void testCanAddOrRemoveDonationsWithNullTestResults_shouldReturnTrue() {
-    Donation donation = aDonation().build();
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.OPEN)
-        .build();
-
-    when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
-
-    boolean result = testBatchConstraintChecker.canAddOrRemoveDonation(testBatch);
-
-    assertThat(result, is(true));
-  }
-
-  @Test
-  public void testCanAddOrRemoveDonationsWithoutTestResults_shouldReturnTrue() {
-    Donation donation = aDonation().build();
-    TestBatch testBatch = aTestBatch()
-        .withStatus(TestBatchStatus.OPEN)
-        .withDonations(new HashSet<Donation>())
-        .build();
-
-    when(donationConstraintChecker.donationHasSavedTestResults(donation)).thenReturn(false);
-
-    boolean result = testBatchConstraintChecker.canAddOrRemoveDonation(testBatch);
-
-    assertThat(result, is(true));
   }
 
   @Test

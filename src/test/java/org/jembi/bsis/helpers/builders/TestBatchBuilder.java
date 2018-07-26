@@ -1,16 +1,16 @@
 package org.jembi.bsis.helpers.builders;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
 import org.jembi.bsis.helpers.persisters.AbstractEntityPersister;
 import org.jembi.bsis.helpers.persisters.TestBatchPersister;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
 
@@ -87,7 +87,7 @@ public class TestBatchBuilder extends AbstractEntityBuilder<TestBatch> {
     testBatch.setLastUpdated(lastUpdatedDate);
     testBatch.setNotes(notes);
     testBatch.setLocation(location);
-    testBatch.setDonations(donations);
+    testBatch.setDonations(donations == null ? new HashSet<>() : donations);
     testBatch.setBackEntry(backEntry);
     return testBatch;
   }
