@@ -25,7 +25,7 @@ public class ComponentManagementViewModelMatcher extends AbstractTypeSafeMatcher
         .appendText("\nWeight: ").appendValue(model.getWeight())
         .appendText("\nPermissions: ").appendValue(model.getPermissions())
         .appendText("\nPack type: ").appendValue(model.getPackType())
-        .appendText("\nHas component batch: ").appendValue(model.getHasComponentBatch())
+        .appendText("\nHas component batch: ").appendValue(model.isBatched())
         .appendText("\nInventory Status: ").appendValue(model.getInventoryStatus())
         .appendText("\nBleed Start Time: ").appendValue(model.getBleedStartTime())
         .appendText("\nBleed End Time: ").appendValue(model.getBleedEndTime())
@@ -42,10 +42,12 @@ public class ComponentManagementViewModelMatcher extends AbstractTypeSafeMatcher
         Objects.equals(actual.getStatus(), expected.getStatus()) &&
         Objects.equals(actual.getDaysToExpire(), expected.getDaysToExpire()) &&
         Objects.equals(actual.getPermissions(), expected.getPermissions()) &&
-        (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn()) || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
-        (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn()) || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
+        (Objects.equals(actual.getCreatedOn(), expected.getCreatedOn())
+            || Objects.equals(sdf.format(actual.getCreatedOn()), sdf.format(expected.getCreatedOn()))) &&
+        (Objects.equals(actual.getExpiresOn(), expected.getExpiresOn())
+            || Objects.equals(sdf.format(actual.getExpiresOn()), sdf.format(expected.getExpiresOn()))) &&
         Objects.equals(actual.getPackType(), expected.getPackType()) &&
-        Objects.equals(actual.getHasComponentBatch(), expected.getHasComponentBatch()) &&
+        Objects.equals(actual.isBatched(), expected.isBatched()) &&
         Objects.equals(actual.getInventoryStatus(), expected.getInventoryStatus()) &&
         Objects.equals(actual.getBleedStartTime(), expected.getBleedStartTime()) &&
         Objects.equals(actual.getBleedEndTime(), expected.getBleedEndTime()) &&

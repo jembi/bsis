@@ -9,8 +9,17 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class ComponentManagementViewModel extends BaseViewModel<UUID> {
 
   private ComponentTypeViewModel componentType;
@@ -22,20 +31,42 @@ public class ComponentManagementViewModel extends BaseViewModel<UUID> {
   private Integer weight;
   private Map<String, Boolean> permissions = new HashMap<>();
   private PackTypeFullViewModel packType;
-  private boolean hasComponentBatch;
+  @JsonProperty("hasComponentBatch")
+  private boolean batched;
   private InventoryStatus inventoryStatus;
   private Date donationDateTime;
   private Date bleedStartTime;
   private Date bleedEndTime;
   private UUID parentComponentId;
 
+  @Builder
+  @SuppressWarnings("unused")
+  public ComponentManagementViewModel(
+      UUID id, ComponentTypeViewModel componentType, Date createdOn, Date expiresOn, ComponentStatus status,
+      int daysToExpire, String componentCode, Integer weight, Map<String, Boolean> permissions,
+      PackTypeFullViewModel packType, boolean batched, InventoryStatus inventoryStatus, Date donationDateTime,
+      Date bleedStartTime, Date bleedEndTime, UUID parentComponentId) {
+    setId(id);
+    this.componentType = componentType;
+    this.createdOn = createdOn;
+    this.expiresOn = expiresOn;
+    this.status = status;
+    this.daysToExpire = daysToExpire;
+    this.componentCode = componentCode;
+    this.weight = weight;
+    this.permissions = permissions;
+    this.packType = packType;
+    this.batched = batched;
+    this.inventoryStatus = inventoryStatus;
+    this.donationDateTime = donationDateTime;
+    this.bleedStartTime = bleedStartTime;
+    this.bleedEndTime = bleedEndTime;
+    this.parentComponentId = parentComponentId;
+  }
+
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getBleedStartTime() {
     return bleedStartTime;
-  }
-
-  public void setBleedStartTime(Date bleedStartTime) {
-    this.bleedStartTime = bleedStartTime;
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
@@ -43,41 +74,9 @@ public class ComponentManagementViewModel extends BaseViewModel<UUID> {
     return bleedEndTime;
   }
 
-  public void setBleedEndTime(Date bleedEndTime) {
-    this.bleedEndTime = bleedEndTime;
-  }
-
-  public boolean getHasComponentBatch() {
-    return hasComponentBatch;
-  }
-
-  public void setHasComponentBatch(boolean hasComponentBatch) {
-    this.hasComponentBatch = hasComponentBatch;
-  }
-
-  public InventoryStatus getInventoryStatus() {
-    return inventoryStatus;
-  }
-
-  public void setInventoryStatus(InventoryStatus inventoryStatus) {
-    this.inventoryStatus = inventoryStatus;
-  }
-
-  public ComponentTypeViewModel getComponentType() {
-    return componentType;
-  }
-
-  public void setComponentType(ComponentTypeViewModel componentType) {
-    this.componentType = componentType;
-  }
-
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getCreatedOn() {
     return createdOn;
-  }
-
-  public void setCreatedOn(Date createdOn) {
-    this.createdOn = createdOn;
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
@@ -85,71 +84,8 @@ public class ComponentManagementViewModel extends BaseViewModel<UUID> {
     return expiresOn;
   }
 
-  public void setExpiresOn(Date expiresOn) {
-    this.expiresOn = expiresOn;
-  }
-  
-  public ComponentStatus getStatus() {
-    return status;
-  }
-
-  public void setStatus(ComponentStatus status) {
-    this.status = status;
-  }
-  public int getDaysToExpire() {
-    return daysToExpire;
-  }
-
-  public void setDaysToExpire(int daysToExpire) {
-    this.daysToExpire = daysToExpire;
-  }
-
-  public String getComponentCode() {
-    return componentCode;
-  }
-
-  public void setComponentCode(String componentCode) {
-    this.componentCode = componentCode;
-  }
-
-  public Integer getWeight() {
-    return weight;
-  }
-
-  public void setWeight(Integer weight) {
-    this.weight = weight;
-  }
-
-  public Map<String, Boolean> getPermissions() {
-    return permissions;
-  }
-
-  public void setPermissions(Map<String, Boolean> permissions) {
-    this.permissions = permissions;
-  }
-
-  public PackTypeFullViewModel getPackType() {
-    return packType;
-  }
-
-  public void setPackType(PackTypeFullViewModel packType) {
-    this.packType = packType;
-  }
-
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getDonationDateTime() {
     return donationDateTime;
-  }
-
-  public void setDonationDateTime(Date donationDateTime) {
-    this.donationDateTime = donationDateTime;
-  }
-
-  public UUID getParentComponentId() {
-    return parentComponentId;
-  }
-
-  public void setParentComponentId(UUID parentComponentId) {
-    this.parentComponentId = parentComponentId;
   }
 }

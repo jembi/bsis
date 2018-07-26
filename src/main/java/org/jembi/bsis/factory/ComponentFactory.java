@@ -54,7 +54,7 @@ public class ComponentFactory {
     viewModel.setStatus(component.getStatus());
     viewModel.setWeight(component.getWeight());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
-    viewModel.setHasComponentBatch(component.hasComponentBatch());
+    viewModel.setBatched(component.hasComponentBatch());
     viewModel.setInventoryStatus(component.getInventoryStatus());
     viewModel.setBleedStartTime(component.getDonation().getBleedStartTime());
     viewModel.setBleedEndTime(component.getDonation().getBleedEndTime());
