@@ -38,6 +38,8 @@ public class ComponentManagementViewModel extends BaseViewModel<UUID> {
   private Date bleedStartTime;
   private Date bleedEndTime;
   private UUID parentComponentId;
+  private String discardReason;
+  private String discardReasonComment;
 
   @Builder
   @SuppressWarnings("unused")
@@ -45,7 +47,7 @@ public class ComponentManagementViewModel extends BaseViewModel<UUID> {
       UUID id, ComponentTypeViewModel componentType, Date createdOn, Date expiresOn, ComponentStatus status,
       int daysToExpire, String componentCode, Integer weight, Map<String, Boolean> permissions,
       PackTypeFullViewModel packType, boolean batched, InventoryStatus inventoryStatus, Date donationDateTime,
-      Date bleedStartTime, Date bleedEndTime, UUID parentComponentId) {
+      Date bleedStartTime, Date bleedEndTime, UUID parentComponentId, String discardReason, String discardReasonComment) {
     setId(id);
     this.componentType = componentType;
     this.createdOn = createdOn;
@@ -62,6 +64,8 @@ public class ComponentManagementViewModel extends BaseViewModel<UUID> {
     this.bleedStartTime = bleedStartTime;
     this.bleedEndTime = bleedEndTime;
     this.parentComponentId = parentComponentId;
+    this.discardReason = discardReason;
+    this.discardReasonComment = discardReasonComment;
   }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
