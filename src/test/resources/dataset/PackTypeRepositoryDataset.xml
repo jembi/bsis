@@ -82,6 +82,6 @@
               isDeleted="false" countAsDonation="false" periodBetweenDonations="0"/>
     <PackType id="uuid'fd44ac9b-19b8-4a48-9d14-1155e4c56c3a'" packType="Deleted" testSampleProduced="true"
               isDeleted="true" countAsDonation="false" periodBetweenDonations="0"/>
-    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="1" name="location 1" isVenue="true"/>
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" isUsageSite="0" isMobileSite="0"  isDeleted="0" id="1" name="location 1" isVenue="true"/>
     <Donation id="uuid'b98ebc98-87ed-48b9-80db-7c378a1837a1'" ineligibleDonor="0" released="0" venue_id="1" packType_id="uuid'4beb4cb2-d55d-48f5-ac8c-8dd4bc1d2a07'"/>
 </dataset>

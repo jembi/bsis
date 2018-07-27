@@ -296,35 +296,35 @@ public class DataImportService {
             break;
             
           case "isUsageSite":
-            locationBackingForm.setIsUsageSite(cell.getBooleanCellValue());
+            locationBackingForm.setUsageSite(cell.getBooleanCellValue());
             break;
             
           case "isMobileSite":
-            locationBackingForm.setIsMobileSite(cell.getBooleanCellValue());
+            locationBackingForm.setMobileSite(cell.getBooleanCellValue());
             break;
             
           case "isVenue":
-            locationBackingForm.setIsVenue(cell.getBooleanCellValue());
+            locationBackingForm.setVenue(cell.getBooleanCellValue());
             break;
             
           case "isProcessingSite":
-            locationBackingForm.setIsProcessingSite(cell.getBooleanCellValue());
+            locationBackingForm.setProcessingSite(cell.getBooleanCellValue());
             break;
             
           case "isDistributionSite":
-            locationBackingForm.setIsDistributionSite(cell.getBooleanCellValue());
+            locationBackingForm.setDistributionSite(cell.getBooleanCellValue());
             break;
             
           case "isTestingSite":
-            locationBackingForm.setIsTestingSite(cell.getBooleanCellValue());
+            locationBackingForm.setTestingSite(cell.getBooleanCellValue());
             break;
             
           case "isDeleted":
-            locationBackingForm.setIsDeleted(cell.getBooleanCellValue());
+            locationBackingForm.setDeleted(cell.getBooleanCellValue());
             break;
           
           case "isReferralSite":
-            locationBackingForm.setIsReferralSite(cell.getBooleanCellValue());
+            locationBackingForm.setReferralSite(cell.getBooleanCellValue());
              break;
 
           case "notes":

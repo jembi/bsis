@@ -68,14 +68,14 @@ public class LocationFactory {
 
     location.setId(backingForm.getId());
     location.setName(backingForm.getName());
-    location.setIsVenue(backingForm.getIsVenue());
-    location.setIsMobileSite(backingForm.getIsMobileSite());
-    location.setIsProcessingSite(backingForm.getIsProcessingSite());
-    location.setIsDistributionSite(backingForm.getIsDistributionSite());
-    location.setIsTestingSite(backingForm.getIsTestingSite());
-    location.setIsReferralSite(backingForm.getIsReferralSite());
-    location.setIsUsageSite(backingForm.getIsUsageSite());
-    location.setIsDeleted(backingForm.getIsDeleted());
+    location.setIsVenue(backingForm.isVenue());
+    location.setIsMobileSite(backingForm.isMobileSite());
+    location.setIsProcessingSite(backingForm.isProcessingSite());
+    location.setIsDistributionSite(backingForm.isDistributionSite());
+    location.setIsTestingSite(backingForm.isTestingSite());
+    location.setIsReferralSite(backingForm.isReferralSite());
+    location.setIsUsageSite(backingForm.isUsageSite());
+    location.setIsDeleted(backingForm.isDeleted());
     location.setNotes(backingForm.getNotes());
 
     // Populate division levels
