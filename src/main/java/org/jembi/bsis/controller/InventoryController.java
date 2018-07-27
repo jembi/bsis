@@ -56,7 +56,7 @@ public class InventoryController {
   @RequestMapping(method = RequestMethod.GET, value = "/search/form")
   @PreAuthorize("hasRole('" + PermissionConstants.VIEW_INVENTORY_INFORMATION + "')")
   public ResponseEntity<Map<String, Object>> getOrderFormForm() {
-    List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypes();
+    List<ComponentType> componentTypes = componentTypeRepository.getAllComponentTypesThatCanBeIssued();
     List<Location> distributionSites = locationRepository.getDistributionSites();
     Map<String, Object> map = new HashMap<>();
     map.put("distributionSites", locationFactory.createFullViewModels(distributionSites));
