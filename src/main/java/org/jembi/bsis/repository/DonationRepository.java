@@ -34,15 +34,13 @@ public class DonationRepository extends AbstractRepository<Donation> {
     }
   }
 
-  public Donation findDonationByDonationIdentificationNumber(
-      String donationIdentificationNumber) throws NoResultException, NonUniqueResultException {
-
-    Donation donation = entityManager.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER, Donation.class) 
+  public Donation findDonationByDonationIdentificationNumber(String donationIdentificationNumber)
+      throws NoResultException, NonUniqueResultException {
+    return entityManager.createNamedQuery(
+        DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER, Donation.class)
         .setParameter("isDeleted", Boolean.FALSE)
         .setParameter("donationIdentificationNumber", donationIdentificationNumber)
         .getSingleResult();
-
-    return donation;
   }
 
   public Donation findDonationByDonationIdentificationNumberIncludeDeleted(
@@ -139,5 +137,43 @@ public class DonationRepository extends AbstractRepository<Donation> {
         .setParameter("toDIN", toDIN)
         .setParameter("deleted", false)
         .getResultList();
+  }
+
+  public List<Donation> findInRange(Date startDate, Date endDate) {
+    return findByVenueAndPackTypeInRange(null, null, startDate, endDate);
+  }
+
+  public List<Donation> findByVenueAndPackTypeInRange(UUID venueId, UUID packTypeId, Date startDate, Date endDate) {
+    if (venueId == null && packTypeId == null) {
+      return entityManager.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_IN_RANGE, Donation.class)
+          .setParameter("startDate", startDate)
+          .setParameter("endDate", endDate)
+          .setParameter("deleted", false)
+          .getResultList();
+    } else if (packTypeId == null) {
+      return entityManager.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_BY_VENUE_ID_IN_RANGE, Donation.class)
+          .setParameter("venueId", venueId)
+          .setParameter("startDate", startDate)
+          .setParameter("endDate", endDate)
+          .setParameter("deleted", false)
+          .getResultList();
+    } else if (venueId == null) {
+      return entityManager.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_BY_PACK_TYPE_ID_IN_RANGE,
+          Donation.class)
+          .setParameter("packTypeId", packTypeId)
+          .setParameter("startDate", startDate)
+          .setParameter("endDate", endDate)
+          .setParameter("deleted", false)
+          .getResultList();
+    } else {
+      return entityManager.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_BY_VENUE_ID_AND_PACK_TYPE_ID_IN_RANGE,
+          Donation.class)
+          .setParameter("venueId", venueId)
+          .setParameter("packTypeId", packTypeId)
+          .setParameter("startDate", startDate)
+          .setParameter("endDate", endDate)
+          .setParameter("deleted", false)
+          .getResultList();
+    }
   }
 }
