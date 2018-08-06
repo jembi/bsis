@@ -60,6 +60,7 @@ public class BloodTestResultRepository extends AbstractRepository<BloodTestResul
         .setParameter("bloodTestDeleted", false)
         .setParameter("released", true)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
+        .setParameter("countAsDonation", true)
         .getResultList();
   }
 
@@ -73,6 +74,7 @@ public class BloodTestResultRepository extends AbstractRepository<BloodTestResul
         .setParameter("testOutcomeDeleted", false)
         .setParameter("released", true)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
+        .setParameter("countAsDonation", true)
         .getResultList();
   }
 
@@ -87,6 +89,7 @@ public class BloodTestResultRepository extends AbstractRepository<BloodTestResul
         .setParameter("released", true)
         .setParameter("bloodTestType", BloodTestType.BASIC_TTI)
         .setParameter("ttiStatus", TTIStatus.UNSAFE)
+        .setParameter("countAsDonation", true)
         .getResultList();
   }
 }
