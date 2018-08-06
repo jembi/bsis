@@ -1,9 +1,3 @@
-update ComponentType set transportInfo = replace(transportInfo, 'Transport below', 'Transport en dessous de');
-update ComponentType set transportInfo = replace(transportInfo, 'Transport at', 'Transport à');
-update ComponentType set preparationInfo = replace(preparationInfo, 'Prepared from', 'Préparé à partir de');
-update ComponentType set storageInfo = replace(storageInfo, 'Store below', 'Conservation en dessous de');
-update ComponentType set storageInfo = replace(storageInfo, 'Store at', 'Conservation à');
-update GeneralConfig set value='Non destiné à une utilisation réelle' where name='packLabel.serviceInfoLine1';
 update GeneralConfig set value='CT~~CD,~CC^~CT~
 ^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2~SD15^JUS^LRN^CI28^XZ
 ~DG000.GRF,11520,040,
