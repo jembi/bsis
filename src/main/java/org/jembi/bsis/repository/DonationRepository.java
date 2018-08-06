@@ -101,6 +101,7 @@ public class DonationRepository extends AbstractRepository<Donation> {
         .setParameter("startDate", startDate)
         .setParameter("endDate", endDate)
         .setParameter("deleted", false)
+        .setParameter("countAsDonation", true)
         .getResultList();
   }
 

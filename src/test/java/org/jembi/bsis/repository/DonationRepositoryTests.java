@@ -98,7 +98,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .withBloodRh(expectedBloodRh)
         .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
- 
+
     // Excluded by deleted donationType
     aDonation()
         .thatIsNotDeleted()
@@ -108,6 +108,18 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .withBloodAbo(expectedBloodAbo)
         .withBloodRh(expectedBloodRh)
         .withVenue(expectedVenue)
+        .buildAndPersist(entityManager);
+
+    // Excluded by not counting as donation
+    aDonation()
+        .thatIsNotDeleted()
+        .withDonationDate(irrelevantStartDate)
+        .withDonor(aDonor().withGender(expectedGender).build())
+        .withDonationType(expectedDonationType)
+        .withBloodAbo(expectedBloodAbo)
+        .withBloodRh(expectedBloodRh)
+        .withVenue(expectedVenue)
+        .withPackType(aPackType().withCountAsDonation(false).build())
         .buildAndPersist(entityManager);
 
     List<CollectedDonationDTO> expectedDtos = Arrays.asList(
