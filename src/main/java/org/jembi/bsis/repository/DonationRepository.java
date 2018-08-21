@@ -149,6 +149,7 @@ public class DonationRepository extends AbstractRepository<Donation> {
           .setParameter("startDate", startDate)
           .setParameter("endDate", endDate)
           .setParameter("deleted", false)
+          .setParameter("testSampleProduced", true)
           .getResultList();
     } else if (packTypeId == null) {
       return entityManager.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_BY_VENUE_ID_IN_RANGE, Donation.class)
@@ -156,6 +157,7 @@ public class DonationRepository extends AbstractRepository<Donation> {
           .setParameter("startDate", startDate)
           .setParameter("endDate", endDate)
           .setParameter("deleted", false)
+          .setParameter("testSampleProduced", true)
           .getResultList();
     } else if (venueId == null) {
       return entityManager.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_BY_PACK_TYPE_ID_IN_RANGE,
@@ -164,6 +166,7 @@ public class DonationRepository extends AbstractRepository<Donation> {
           .setParameter("startDate", startDate)
           .setParameter("endDate", endDate)
           .setParameter("deleted", false)
+          .setParameter("testSampleProduced", true)
           .getResultList();
     } else {
       return entityManager.createNamedQuery(DonationNamedQueryConstants.NAME_FIND_BY_VENUE_ID_AND_PACK_TYPE_ID_IN_RANGE,
@@ -173,6 +176,7 @@ public class DonationRepository extends AbstractRepository<Donation> {
           .setParameter("startDate", startDate)
           .setParameter("endDate", endDate)
           .setParameter("deleted", false)
+          .setParameter("testSampleProduced", true)
           .getResultList();
     }
   }

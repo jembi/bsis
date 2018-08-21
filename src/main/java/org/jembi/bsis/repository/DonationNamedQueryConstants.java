@@ -108,7 +108,8 @@ public class DonationNamedQueryConstants {
       "SELECT d FROM Donation d " +
       "WHERE d.bleedEndTime >= :startDate " +
       "AND d.bleedEndTime <= :endDate " +
-      "AND d.isDeleted = :deleted";
+      "AND d.isDeleted = :deleted " +
+      "AND d.packType.testSampleProduced = :testSampleProduced";
 
   public static final String NAME_FIND_BY_VENUE_ID_IN_RANGE = "Donation.findByVenueIdInRange";
   public static final String QUERY_FIND_BY_VENUE_ID_IN_RANGE =
@@ -116,7 +117,8 @@ public class DonationNamedQueryConstants {
       "WHERE d.venue.id = :venueId " +
       "AND d.bleedEndTime >= :startDate " +
       "AND d.bleedEndTime <= :endDate " +
-      "AND d.isDeleted = :deleted";
+      "AND d.isDeleted = :deleted " +
+      "AND d.packType.testSampleProduced = :testSampleProduced";
 
   public static final String NAME_FIND_BY_PACK_TYPE_ID_IN_RANGE = "Donation.findByPackTypeIdInRange";
   public static final String QUERY_FIND_BY_PACK_TYPE_ID_IN_RANGE =
@@ -124,7 +126,8 @@ public class DonationNamedQueryConstants {
       "WHERE d.packType.id = :packTypeId " +
       "AND d.bleedEndTime >= :startDate " +
       "AND d.bleedEndTime <= :endDate " +
-      "AND d.isDeleted = :deleted";
+      "AND d.isDeleted = :deleted " +
+      "AND d.packType.testSampleProduced = :testSampleProduced";
 
   public static final String NAME_FIND_BY_VENUE_ID_AND_PACK_TYPE_ID_IN_RANGE =
       "Donation.findByVenueIdAndPackTypeIdInRange";
@@ -134,5 +137,6 @@ public class DonationNamedQueryConstants {
       "AND d.packType.id = :packTypeId " +
       "AND d.bleedEndTime >= :startDate " +
       "AND d.bleedEndTime <= :endDate " +
-      "AND d.isDeleted = :deleted";
+      "AND d.isDeleted = :deleted " +
+      "AND d.packType.testSampleProduced = :testSampleProduced";
 }
