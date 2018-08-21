@@ -3,9 +3,9 @@
     <user id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" emailId="admin" firstName="admin" isactive="1"
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
 
-    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="uuid'55321456-eeee-1234-b5b1-123412348811'" name="location 1" isVenue="true"/>
-    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="uuid'55321456-eeee-1234-b5b1-123412348812'" name="location 2" isVenue="true"/>
-    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" id="uuid'55321456-eeee-1234-b5b1-123412348813'" name="location 3" isVenue="true"/>
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" isUsageSite="0" isMobileSite="0" isDeleted="0" id="uuid'55321456-eeee-1234-b5b1-123412348811'" name="location 1" isVenue="true"/>
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" isUsageSite="0" isMobileSite="0" isDeleted="0" id="uuid'55321456-eeee-1234-b5b1-123412348812'" name="location 2" isVenue="true"/>
+    <Location isTestingSite="0" isReferralSite="0" isDistributionSite="0" isProcessingSite="0" isUsageSite="0" isMobileSite="0" isDeleted="0" id="uuid'55321456-eeee-1234-b5b1-123412348813'" name="location 3" isVenue="true"/>
 
     <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D1'" contactMethodType="None" isDeleted="0"/>
     <contactmethodtype id="uuid'11E715F0-FB1C-7A9D-95C5-28F10E15F8D2'" contactMethodType="Phone" isDeleted="0"/>

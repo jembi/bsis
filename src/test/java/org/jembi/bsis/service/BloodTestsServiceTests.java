@@ -1,6 +1,7 @@
 package org.jembi.bsis.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.jembi.bsis.helpers.builders.BloodTestingRuleResultBuilder.aBloodTestingRuleResult;
 import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -60,9 +62,9 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Set up fixture
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).build();
-    DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
+    DonationBatch donationBatch = aDonationBatch().build();
     Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN)
-        .withDonationBatch(donationBatch).build();
+        .withDonationBatch(donationBatch).withTestBatch(testBatch).build();
     Map<UUID, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
@@ -90,8 +92,9 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Set up fixture
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).build();
-    DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
-    Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN).withDonationBatch(donationBatch).build();
+    DonationBatch donationBatch = aDonationBatch().build();
+    Donation donation = aDonation().withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN)
+        .withDonationBatch(donationBatch).withTestBatch(testBatch).build();
     Map<UUID, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
     
@@ -120,8 +123,8 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     
     // Set up fixture
     TestBatch testBatch = aTestBatch().withStatus(TestBatchStatus.OPEN).build();
-    DonationBatch donationBatch = aDonationBatch().withTestBatch(testBatch).build();
-    Donation donation = aDonation().withDonationBatch(donationBatch)
+    DonationBatch donationBatch = aDonationBatch().build();
+    Donation donation = aDonation().withDonationBatch(donationBatch).withTestBatch(testBatch)
         .withDonationIdentificationNumber(IRRELEVANT_DONATION_DIN).build();
     Map<UUID, String> bloodTestResults = new HashMap<>();
     BloodTestingRuleResult bloodTestingRuleResult = aBloodTestingRuleResult().build();
@@ -176,4 +179,37 @@ public class BloodTestsServiceTests extends UnitTestSuite {
     assertThat(((ArrayList<String>) map.get("repeatBloodTypingTestNames")), is(Arrays.asList("ABO_REPEAT")));
   }
 
+
+  @Test
+  public void testExecuteTests_shouldCallRulesEngine() throws Exception {
+    Donation donation = aDonation().withId(UUID.randomUUID()).build();
+    BloodTestingRuleResult expectedResult = aBloodTestingRuleResult().build();
+
+    when(bloodTestingRuleEngine.applyBloodTests(donation, new HashMap<UUID, String>())).thenReturn(expectedResult);
+
+    BloodTestingRuleResult result = bloodTestsService.executeTests(donation);
+
+    assertThat(result, is(expectedResult));
+  }
+
+  @Test
+  public void testExecuteTestsForDonationList_shouldCallRulesEngineForEachDonation() throws Exception {
+    Donation donation1 = aDonation().withId(UUID.randomUUID()).build();
+    Donation donation2 = aDonation().withId(UUID.randomUUID()).build();
+    Donation donation3 = aDonation().withId(UUID.randomUUID()).build();
+
+    BloodTestingRuleResult expectedResult1 = aBloodTestingRuleResult().build();
+    BloodTestingRuleResult expectedResult2 = aBloodTestingRuleResult().build();
+    BloodTestingRuleResult expectedResult3 = aBloodTestingRuleResult().build();
+
+    when(bloodTestingRuleEngine.applyBloodTests(donation1, new HashMap<UUID, String>())).thenReturn(expectedResult1);
+    when(bloodTestingRuleEngine.applyBloodTests(donation2, new HashMap<UUID, String>())).thenReturn(expectedResult2);
+    when(bloodTestingRuleEngine.applyBloodTests(donation3, new HashMap<UUID, String>())).thenReturn(expectedResult3);
+
+    List<BloodTestingRuleResult> results = bloodTestsService.executeTests(Arrays.asList(donation1, donation2, donation3));
+
+    assertThat(results, hasItem(expectedResult1));
+    assertThat(results, hasItem(expectedResult2));
+    assertThat(results, hasItem(expectedResult3));
+  }
 }

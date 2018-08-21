@@ -83,26 +83,6 @@
       VIRTUAL AFTER id;
     </sql>
 
-    <sql dbms="mysql">
-      ALTER TABLE Donation_AUD ADD donationBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(donationBatch_id,  1, 4)),
-        HEX(SUBSTR(donationBatch_id,  5, 2)),
-        HEX(SUBSTR(donationBatch_id,  7, 2)),
-        HEX(SUBSTR(donationBatch_id,  9, 2)),
-        HEX(SUBSTR(donationBatch_id, 11)) )))
-      VIRTUAL AFTER donationBatch_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Donation ADD donationBatch_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(donationBatch_id,  1, 4)),
-        HEX(SUBSTR(donationBatch_id,  5, 2)),
-        HEX(SUBSTR(donationBatch_id,  7, 2)),
-        HEX(SUBSTR(donationBatch_id,  9, 2)),
-        HEX(SUBSTR(donationBatch_id, 11)) )))
-      VIRTUAL AFTER donationBatch_id;
-    </sql>
-
     <sql>
       UPDATE DonationBatch_AUD AS updateTable
         LEFT JOIN DonationBatch AS joinTable ON (updateTable.id_temp = joinTable.id_temp)

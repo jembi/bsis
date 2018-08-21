@@ -8,7 +8,7 @@ import org.jembi.bsis.viewmodel.ComponentFullViewModel;
 public class ComponentFullViewModelMatcher extends AbstractTypeSafeMatcher<ComponentFullViewModel> {
 
   public ComponentFullViewModelMatcher(ComponentFullViewModel expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

@@ -1,36 +1,15 @@
 package org.jembi.bsis.factory;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
-import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentManagementViewModelBuilder.aComponentManagementViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
-import static org.jembi.bsis.helpers.builders.ComponentTypeFullViewModelBuilder.aComponentTypeFullViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
-import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
-import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
-import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
-import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
-import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasSameStateAsComponentFullViewModel;
-import static org.jembi.bsis.helpers.matchers.ComponentManagementViewModelMatcher.hasSameStateAsComponentManagementViewModel;
-import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameStateAsComponentViewModel;
-import static org.mockito.Mockito.when;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
 import org.jembi.bsis.model.component.Component;
 import org.jembi.bsis.model.component.ComponentStatus;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
 import org.jembi.bsis.model.componenttype.ComponentType;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.inventory.InventoryStatus;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.repository.ComponentRepository;
+import org.jembi.bsis.repository.component.ComponentStatusChangeRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
 import org.jembi.bsis.service.ComponentStatusCalculator;
 import org.jembi.bsis.util.RandomTestDate;
@@ -48,30 +27,48 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.ComponentBuilder.aComponent;
+import static org.jembi.bsis.helpers.builders.ComponentFullViewModelBuilder.aComponentFullViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeBuilder.aComponentStatusChange;
+import static org.jembi.bsis.helpers.builders.ComponentStatusChangeReasonBuilder.aComponentStatusChangeReason;
+import static org.jembi.bsis.helpers.builders.ComponentTypeBuilder.aComponentType;
+import static org.jembi.bsis.helpers.builders.ComponentTypeFullViewModelBuilder.aComponentTypeFullViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentTypeViewModelBuilder.aComponentTypeViewModel;
+import static org.jembi.bsis.helpers.builders.ComponentViewModelBuilder.aComponentViewModel;
+import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
+import static org.jembi.bsis.helpers.builders.LocationViewModelBuilder.aLocationViewModel;
+import static org.jembi.bsis.helpers.matchers.ComponentFullViewModelMatcher.hasSameStateAsComponentFullViewModel;
+import static org.jembi.bsis.helpers.matchers.ComponentManagementViewModelMatcher.hasSameStateAsComponentManagementViewModel;
+import static org.jembi.bsis.helpers.matchers.ComponentViewModelMatcher.hasSameStateAsComponentViewModel;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.class)
 public class ComponentFactoryTests {
-  
-  @InjectMocks
-  private ComponentFactory componentFactory;
-  
-  @Mock
-  private LocationFactory locationFactory;
 
-  @Mock
-  private ComponentTypeFactory componentTypeFactory;
+  @Mock private LocationFactory locationFactory;
+  @Mock private PackTypeFactory packTypeFactory;
+  @Mock private ComponentRepository componentRepository;
+  @Mock private ComponentTypeFactory componentTypeFactory;
+  @Mock private ComponentStatusCalculator componentStatusCalculator;
+  @Mock private ComponentConstraintChecker componentConstraintChecker;
+  @Mock private ComponentStatusChangeRepository statusChangeRepository;
 
-  @Mock
-  private PackTypeFactory packTypeFactory;
+  @InjectMocks private ComponentFactory componentFactory;
 
-  @Mock
-  private ComponentConstraintChecker componentConstraintChecker;
-  
-  @Mock
-  private ComponentRepository componentRepository;
-  
-  @Mock
-  private ComponentStatusCalculator componentStatusCalculator;
-  
   private static final UUID COMPONENT_ID_1 = UUID.randomUUID();
   private static final UUID COMPONENT_ID_2 = UUID.randomUUID();
 
@@ -178,20 +175,24 @@ public class ComponentFactoryTests {
     // set up data
     ArrayList<Component> components = new ArrayList<>();
     Donation donation = aDonation().withBloodAbo("A").withBloodRh("+").build();
-    components.add(aComponent()
+    Component componentOne = aComponent()
         .withId(COMPONENT_ID_1)
         .withStatus(ComponentStatus.AVAILABLE)
         .withDonation(donation)
         .withExpiresOn(new RandomTestDate())
-        .build());
-    components.add(aComponent()
+        .build();
+    components.add(componentOne);
+    Component componentTwo = aComponent()
         .withId(COMPONENT_ID_2)
         .withStatus(ComponentStatus.DISCARDED)
         .withDonation(donation)
         .withExpiresOn(new RandomTestDate())
-        .build());
+        .build();
+    components.add(componentTwo);
     donation.addComponent(components.get(0));
     donation.addComponent(components.get(1));
+
+    when(statusChangeRepository.findLatestDiscardReasonForComponent(any(Component.class))).thenReturn(Optional.empty());
 
     // run test
     List<ComponentManagementViewModel> viewModels = componentFactory.createManagementViewModels(components);
@@ -235,6 +236,8 @@ public class ComponentFactoryTests {
         .withComponent(initialComponent)
         .build();
     ComponentType componentType = aComponentType().build();
+    ComponentStatusChangeReason reason = aComponentStatusChangeReason().build();
+    ComponentStatusChange statusChange = aComponentStatusChange().withStatusChangeReason(reason).build();
     Component component = aComponent()
         .withId(COMPONENT_ID_2)
         .withStatus(ComponentStatus.AVAILABLE)
@@ -246,6 +249,7 @@ public class ComponentFactoryTests {
         .withInventoryStatus(InventoryStatus.IN_STOCK)
         .withDonation(donation)
         .withParentComponent(initialComponent)
+        .withComponentStatusChange(statusChange)
         .build();
 
     UUID componentTypeId2 = UUID.randomUUID();
@@ -253,31 +257,37 @@ public class ComponentFactoryTests {
         .withId(componentTypeId2)
         .build();
     
-    ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
-        .withId(COMPONENT_ID_2)
-        .withStatus(ComponentStatus.AVAILABLE)
-        .withComponentCode("0011")
-        .withComponentType(componentTypeFullViewModel)
-        .withCreatedOn(processedOn)
-        .withExpiresOn(expiresOn)
-        .withWeigth(222)
-        .withPermission("canDiscard", true)
-        .withPermission("canProcess", true)
-        .withPermission("canPreProcess", true)
-        .withPermission("canUnprocess", true)
-        .withPermission("canUndiscard", true)
-        .withPermission("canRecordChildComponentWeight", true)
-        .withDaysToExpire(0)
-        .whichHasNoComponentBatch()
-        .withInventoryStatus(InventoryStatus.IN_STOCK)
-        .withBleedStartTime(donation.getBleedStartTime())
-        .withBleedEndTime(donation.getBleedEndTime())
-        .withDonationDateTime(createdOn)
-        .withParentComponentId(initialComponent.getId())
+    Map<String, Boolean> permissionMap = new HashMap<>();
+    permissionMap.put("canDiscard", true);
+    permissionMap.put("canProcess", true);
+    permissionMap.put("canPreProcess", true);
+    permissionMap.put("canUnprocess", true);
+    permissionMap.put("canUndiscard", true);
+    permissionMap.put("canRecordChildComponentWeight", true);
+    
+    ComponentManagementViewModel expectedViewModel = ComponentManagementViewModel.builder()
+        .id(COMPONENT_ID_2)
+        .status(ComponentStatus.AVAILABLE)
+        .componentCode("0011")
+        .componentType(componentTypeFullViewModel)
+        .createdOn(processedOn)
+        .expiresOn(expiresOn)
+        .weight(222)
+        .permissions(permissionMap)
+        .daysToExpire(0)
+        .batched(false)
+        .inventoryStatus(InventoryStatus.IN_STOCK)
+        .bleedStartTime(donation.getBleedStartTime())
+        .bleedEndTime(donation.getBleedEndTime())
+        .donationDateTime(createdOn)
+        .parentComponentId(initialComponent.getId())
+        .discardReason(reason.getStatusChangeReason())
+        .discardReasonComment(statusChange.getStatusChangeReasonText())
         .build();
 
     // setup mocks
     when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(componentTypeFullViewModel);
+    when(statusChangeRepository.findLatestDiscardReasonForComponent(component)).thenReturn(Optional.of(statusChange));
     when(componentConstraintChecker.canDiscard(component)).thenReturn(true);
     when(componentConstraintChecker.canProcess(component)).thenReturn(true);
     when(componentConstraintChecker.canPreProcess(component)).thenReturn(true);
@@ -314,31 +324,35 @@ public class ComponentFactoryTests {
         .withId(componentTypeId)
         .build();
 
-    ComponentManagementViewModel expectedViewModel = aComponentManagementViewModel()
-        .withId(COMPONENT_ID_1)
-        .withStatus(ComponentStatus.QUARANTINED)
-        .withComponentCode(null)
-        .withComponentType(componentTypeFullViewModel)
-        .withCreatedOn(null)
-        .withExpiresOn(initialComponent.getExpiresOn())
-        .withWeigth(null)
-        .withPermission("canDiscard", true)
-        .withPermission("canProcess", true)
-        .withPermission("canPreProcess", true)
-        .withPermission("canUnprocess", true)
-        .withPermission("canUndiscard", true)
-        .withPermission("canRecordChildComponentWeight", true)
-        .withDaysToExpire(0)
-        .whichHasNoComponentBatch()
-        .withInventoryStatus(InventoryStatus.NOT_IN_STOCK)
-        .withBleedStartTime(null)
-        .withBleedEndTime(null)
-        .withDonationDateTime(initialComponent.getCreatedOn())
-        .withParentComponentId(null)
+    Map<String, Boolean> permissionMap = new HashMap<>();
+    permissionMap.put("canDiscard", true);
+    permissionMap.put("canProcess", true);
+    permissionMap.put("canPreProcess", true);
+    permissionMap.put("canUnprocess", true);
+    permissionMap.put("canUndiscard", true);
+    permissionMap.put("canRecordChildComponentWeight", true);
+
+    ComponentManagementViewModel expectedViewModel = ComponentManagementViewModel.builder()
+        .id(COMPONENT_ID_1)
+        .status(ComponentStatus.QUARANTINED)
+        .componentCode(null)
+        .componentType(componentTypeFullViewModel)
+        .createdOn(null)
+        .expiresOn(initialComponent.getExpiresOn())
+        .weight(null)
+        .permissions(permissionMap)
+        .daysToExpire(0)
+        .batched(false)
+        .inventoryStatus(InventoryStatus.NOT_IN_STOCK)
+        .bleedStartTime(null)
+        .bleedEndTime(null)
+        .donationDateTime(initialComponent.getCreatedOn())
+        .parentComponentId(null)
         .build();
 
     // setup mocks
     when(componentTypeFactory.createFullViewModel(componentType)).thenReturn(componentTypeFullViewModel);
+    when(statusChangeRepository.findLatestDiscardReasonForComponent(initialComponent)).thenReturn(Optional.empty());
     when(componentConstraintChecker.canDiscard(initialComponent)).thenReturn(true);
     when(componentConstraintChecker.canProcess(initialComponent)).thenReturn(true);
     when(componentConstraintChecker.canPreProcess(initialComponent)).thenReturn(true);

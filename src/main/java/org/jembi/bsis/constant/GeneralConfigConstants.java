@@ -7,6 +7,9 @@ public class GeneralConfigConstants {
   public static final String DONOR_MINIMUM_AGE = "donors.minimumAge";
   public static final String DONOR_MAXIMUM_AGE = "donors.maximumAge";
 
+  // Donations
+  public static final String DIN_LENGTH = "donation.dinLength";
+
   // Testing
   public static final String DEFER_DONORS_WITH_NEG_REPEAT_OUTCOMES = "testing.deferDonorsWithNegRepeatOutcomes";
   public static final String TESTING_RE_ENTRY_REQUIRED = "testing.reEntryRequired";

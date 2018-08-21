@@ -1,7 +1,6 @@
 package org.jembi.bsis.service;
 
 import org.jembi.bsis.model.donation.Donation;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
 import org.jembi.bsis.viewmodel.BloodTestingRuleResult;
@@ -22,37 +21,32 @@ public class TestBatchConstraintChecker {
    */
   public CanReleaseResult canReleaseTestBatch(TestBatch testBatch) {
 
-    if (testBatch.getStatus() != TestBatchStatus.OPEN) {
-      // Only open test batches can be released
+    // Only open test batches with assigned donations can be released
+    if (testBatch.getStatus() != TestBatchStatus.OPEN || testBatch.getDonations() == null
+        || testBatch.getDonations().isEmpty()) {
       return new CanReleaseResult(false);
     }
 
     int readyCount = 0;
 
     // Check for tests with outstanding test outcomes
-    if (testBatch.getDonationBatches() != null) {
+    for (Donation donation : testBatch.getDonations()) {
 
-      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+      if (!donation.getPackType().getTestSampleProduced()) {
+        // Don't consider donations without test samples
+        continue;
+      }
 
-        for (Donation donation : donationBatch.getDonations()) {
+      BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
 
-          if (!donation.getPackType().getTestSampleProduced()) {
-            // Don't consider donations without test samples
-            continue;
-          }
+      if (donationConstraintChecker.donationHasOutstandingOutcomes(donation, bloodTestingRuleResult)) {
+        // This test has an outstanding outcome
+        return new CanReleaseResult(false);
+      }
 
-          BloodTestingRuleResult bloodTestingRuleResult = bloodTestsService.executeTests(donation);
-
-          if (donationConstraintChecker.donationHasOutstandingOutcomes(donation, bloodTestingRuleResult)) {
-            // This test has an outstanding outcome
-            return new CanReleaseResult(false);
-          }
-
-          if (!donationConstraintChecker.donationHasDiscrepancies(donation, bloodTestingRuleResult)) {
-            // This donations is ready to be released
-            readyCount++;
-          }
-        }
+      if (!donationConstraintChecker.donationHasDiscrepancies(donation, bloodTestingRuleResult)) {
+        // This donations is ready to be released
+        readyCount++;
       }
     }
 
@@ -91,14 +85,6 @@ public class TestBatchConstraintChecker {
   }
 
   /**
-   * Donation Batches can be added or removed from a Test Batch as long as there aren't any test
-   * results recorded.
-   */
-  public boolean canAddOrRemoveDonationBatch(TestBatch testBatch) {
-    return canEditTestBatch(testBatch) && !testBatchHasResults(testBatch);
-  }
-
-  /**
    * A test batch can be closed if it is released and none of the donations have discrepancies.
    */
   public boolean canCloseTestBatch(TestBatch testBatch) {
@@ -108,10 +94,9 @@ public class TestBatchConstraintChecker {
       return false;
     }
 
-    if (testBatch.getDonationBatches() != null) {
-      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
+    if (testBatch.getDonations() != null) {
 
-        for (Donation donation : donationBatch.getDonations()) {
+        for (Donation donation : testBatch.getDonations()) {
 
           if (donationConstraintChecker.donationHasDiscrepancies(donation)) {
 
@@ -120,22 +105,18 @@ public class TestBatchConstraintChecker {
           }
         }
       }
-    }
-
     return true;
   }
 
   protected boolean testBatchHasResults(TestBatch testBatch) {
-    if (testBatch.getDonationBatches() != null) {
-      for (DonationBatch donationBatch : testBatch.getDonationBatches()) {
-        for (Donation donation : donationBatch.getDonations()) {
+    if (testBatch.getDonations() != null) {
+        for (Donation donation : testBatch.getDonations()) {
           if (donationConstraintChecker.donationHasSavedTestResults(donation)) {
             // test results have been recorded for this donation
             return true;
           }
         }
       }
-    }
     return false;
   }
 

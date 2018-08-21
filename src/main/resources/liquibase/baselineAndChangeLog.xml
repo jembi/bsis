@@ -140,4 +140,9 @@
   <include file="liquibase/updates/uuid/2874-implement-uuids-for-remaining-entities-general-config.xml"/>
   <include file="liquibase/updates/3038-make-pack-label-zpl-configurable.xml"/>
   <include file="liquibase/updates/3431-move-password-reset-email-properties-to-gen-config.xml"/>
+  <include file="liquibase/updates/3022-add-date-and-remove-donation-batch-from-test-batch.xml"/>
+  <include file="liquibase/updates/3050-add-test-samples-to-a-test-batch.xml"/>
+  <include file="liquibase/updates/3605-enable-test-batch-back-entry.xml"/>
+  <include file="liquibase/updates/3706-add-not-null-contraint-to-donation-pack-type.xml"/>
+  <include file="liquibase/updates/2573-add-not-null-contraint-to-location-types.xml"/>
 </databaseChangeLog>

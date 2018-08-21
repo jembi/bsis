@@ -50,9 +50,28 @@
     <modifyDataType columnName="preferredLanguage_id" newDataType="BINARY(16)" tableName="Donor_AUD"/>
 
     <sql>
-      UPDATE PreferredLanguage 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb1fd328826e4a471449260") WHERE id_temp = 1;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb200c98826e4a471449260") WHERE id_temp = 2;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb202a08826e4a471449260") WHERE id_temp = 3;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb204268826e4a471449260") WHERE id_temp = 4;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb208118826e4a471449260") WHERE id_temp = 5;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb209d18826e4a471449260") WHERE id_temp = 6;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb20b778826e4a471449260") WHERE id_temp = 7;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb20dbe8826e4a471449260") WHERE id_temp = 8;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb211bd8826e4a471449260") WHERE id_temp = 9;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb213dd8826e4a471449260") WHERE id_temp = 10;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb2160b8826e4a471449260") WHERE id_temp = 11;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb218128826e4a471449260") WHERE id_temp = 12;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb21a108826e4a471449260") WHERE id_temp = 13;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb21c3d8826e4a471449260") WHERE id_temp = 14;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb21e618826e4a471449260") WHERE id_temp = 15;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb21fe18826e4a471449260") WHERE id_temp = 16;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb221468826e4a471449260") WHERE id_temp = 17;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb222aa8826e4a471449260") WHERE id_temp = 18;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb2240c8826e4a471449260") WHERE id_temp = 19;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb225628826e4a471449260") WHERE id_temp = 20;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb226be8826e4a471449260") WHERE id_temp = 21;
+      UPDATE PreferredLanguage SET id = UNHEX("11e868b05bb228208826e4a471449260") WHERE id_temp = 22;
     </sql>
 
     <sql dbms="mysql">
@@ -64,28 +83,7 @@
         HEX(SUBSTR(id, 11)) )))
       VIRTUAL AFTER id;
     </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Donor_AUD ADD preferredLanguage_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(preferredLanguage_id,  1, 4)),
-        HEX(SUBSTR(preferredLanguage_id,  5, 2)),
-        HEX(SUBSTR(preferredLanguage_id,  7, 2)),
-        HEX(SUBSTR(preferredLanguage_id,  9, 2)),
-        HEX(SUBSTR(preferredLanguage_id, 11)) )))
-      VIRTUAL AFTER preferredLanguage_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Donor ADD preferredLanguage_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(preferredLanguage_id,  1, 4)),
-        HEX(SUBSTR(preferredLanguage_id,  5, 2)),
-        HEX(SUBSTR(preferredLanguage_id,  7, 2)),
-        HEX(SUBSTR(preferredLanguage_id,  9, 2)),
-        HEX(SUBSTR(preferredLanguage_id, 11)) )))
-      VIRTUAL AFTER preferredLanguage_id;
-    </sql>
-
-
+    
     <sql>
       UPDATE Donor AS updateTable
         LEFT JOIN PreferredLanguage AS joinedTable ON (updateTable.preferredLanguage_id_temp = joinedTable.id_temp)

@@ -23,6 +23,7 @@ public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResul
   private boolean isDeleted = false;
   private Date createdDate;
   private User createdBy;
+  private Date testedOn;
 
   public BloodTestResultBuilder withId(UUID id) {
     this.id = id;
@@ -69,6 +70,11 @@ public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResul
     return this;
   }
 
+  public BloodTestResultBuilder withTestedOn(Date testedOn) {
+    this.testedOn = testedOn;
+    return this;
+  }
+
   @Override
   public BloodTestResult build() {
     BloodTestResult bloodTestResult = new BloodTestResult();
@@ -80,6 +86,7 @@ public class BloodTestResultBuilder extends AbstractEntityBuilder<BloodTestResul
     bloodTestResult.setIsDeleted(isDeleted);
     bloodTestResult.setCreatedDate(createdDate);
     bloodTestResult.setCreatedBy(createdBy);
+    bloodTestResult.setTestedOn(testedOn);
     return bloodTestResult;
   }
 

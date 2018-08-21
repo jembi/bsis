@@ -86,14 +86,14 @@ public class LocationBackingFormBuilder extends AbstractBuilder<LocationBackingF
     location.setId(id);
     location.setName(name);
     location.setNotes(notes);
-    location.setIsVenue(venue);
-    location.setIsUsageSite(usageSite);
-    location.setIsProcessingSite(processingSite);
-    location.setIsMobileSite(mobileSite);
-    location.setIsDistributionSite(distributionSite);
-    location.setIsDeleted(deleted);
-    location.setIsTestingSite(testingSite);
-    location.setIsReferralSite(referralSite);
+    location.setVenue(venue);
+    location.setDeleted(deleted);
+    location.setUsageSite(usageSite);
+    location.setMobileSite(mobileSite);
+    location.setTestingSite(testingSite);
+    location.setReferralSite(referralSite);
+    location.setProcessingSite(processingSite);
+    location.setDistributionSite(distributionSite);
     location.setDivisionLevel3(divisionLevel3);
     return location;
   }

@@ -1,63 +1,29 @@
 package org.jembi.bsis.viewmodel;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.jembi.bsis.model.bloodtesting.BloodTestCategory;
 import org.jembi.bsis.utils.DateTimeSerialiser;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class BloodTestResultViewModel {
 
-public class BloodTestResultViewModel extends BaseViewModel<UUID> {
-
-  private BloodTestFullViewModel bloodTest;
-  private Boolean reEntryRequired;
+  private UUID id;
+  private String testName;
+  private BloodTestCategory testCategory;
   private String result;
   private Date testedOn;
-
-  private Map<String, Boolean> permissions;
-
-  public BloodTestResultViewModel() {
-  }
-
-  public BloodTestFullViewModel getBloodTest() {
-    return bloodTest;
-  }
-
-  public Boolean getReEntryRequired() {
-    return reEntryRequired;
-  }
-
-  public String getResult() {
-    return result;
-  }
 
   @JsonSerialize(using = DateTimeSerialiser.class)
   public Date getTestedOn() {
     return testedOn;
-  }
-
-  public Map<String, Boolean> getPermissions() {
-    return permissions;
-  }
-
-  public void setBloodTest(BloodTestFullViewModel bloodTest) {
-    this.bloodTest = bloodTest;
-  }
-
-  public void setReEntryRequired(Boolean reEntryRequired) {
-    this.reEntryRequired = reEntryRequired;
-  }
-
-  public void setResult(String result) {
-    this.result = result;
-  }
-
-  public void setTestedOn(Date testedOn) {
-    this.testedOn = testedOn;
-  }
-
-  public void setPermissions(Map<String, Boolean> permissions) {
-    this.permissions = permissions;
   }
 }

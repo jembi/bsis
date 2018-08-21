@@ -27,17 +27,5 @@
     </createTable>
 
     <addPrimaryKey columnNames="id, REV" tableName="BloodTestResult_AUD" constraintName="pk_BloodTestResult_AUD"/>
-
-    <sql dbms="mysql">
-      ALTER TABLE BloodTestResult_AUD ADD donation_id_text VARCHAR(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-',
-          HEX(SUBSTR(donation_id,  1, 4)),
-          HEX(SUBSTR(donation_id,  5, 2)),
-          HEX(SUBSTR(donation_id,  7, 2)),
-          HEX(SUBSTR(donation_id,  9, 2)),
-          HEX(SUBSTR(donation_id, 11)) )))
-          VIRTUAL AFTER donation_id;
-    </sql>
-
   </changeSet>
-
 </databaseChangeLog>

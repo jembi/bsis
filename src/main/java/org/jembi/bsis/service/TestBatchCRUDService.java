@@ -1,16 +1,17 @@
 package org.jembi.bsis.service;
 
-import java.util.UUID;
-
 import org.apache.log4j.Logger;
-import org.jembi.bsis.model.donationbatch.DonationBatch;
+import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.testbatch.DonationAdditionResult;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.repository.DonationBatchRepository;
+import org.jembi.bsis.repository.SequenceNumberRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -24,9 +25,18 @@ public class TestBatchCRUDService {
   private TestBatchConstraintChecker testBatchConstraintChecker;
   @Autowired
   private TestBatchStatusChangeService testBatchStatusChangeService;
-
   @Autowired
-  private DonationBatchRepository donationBatchRepository;
+  private SequenceNumberRepository sequenceNumberRepository;
+  @Autowired
+  private DonationCRUDService donationCRUDService;
+
+  public TestBatch createTestBatch(TestBatch testBatch) {
+    testBatch.setBatchNumber(sequenceNumberRepository.getNextTestBatchNumber());
+    testBatch.setStatus(TestBatchStatus.OPEN);
+    testBatch.setIsDeleted(Boolean.FALSE);
+    testBatchRepository.save(testBatch);
+    return testBatch;
+  }
 
   public TestBatch updateTestBatch(TestBatch updatedTestBatch) {
 
@@ -36,26 +46,10 @@ public class TestBatchCRUDService {
       throw new IllegalStateException("Test batch cannot be updated");
     }
 
-    if (updatedTestBatch.getCreatedDate() != null) {
-      existingTestBatch.setCreatedDate(updatedTestBatch.getCreatedDate());
+    if (updatedTestBatch.getTestBatchDate() != null) {
+      existingTestBatch.setTestBatchDate(updatedTestBatch.getTestBatchDate());
     }
 
-    if (updatedTestBatch.getDonationBatches() != null) {
-      // unlink old donation batches
-      for (DonationBatch donationBatch : existingTestBatch.getDonationBatches()) {
-        if (!updatedTestBatch.getDonationBatches().contains(donationBatch)) {
-          donationBatch.setTestBatch(null);
-          donationBatchRepository.updateDonationBatch(donationBatch);
-        }
-      }
-      // link new donation batches
-      for (DonationBatch donationBatch : updatedTestBatch.getDonationBatches()) {
-        donationBatch.setTestBatch(existingTestBatch);
-        donationBatchRepository.updateDonationBatch(donationBatch);
-      }
-      existingTestBatch.setDonationBatches(updatedTestBatch.getDonationBatches());
-    }
-    
     existingTestBatch.setLocation(updatedTestBatch.getLocation());
 
     if (updatedTestBatch.getStatus() != null) {
@@ -102,6 +96,41 @@ public class TestBatchCRUDService {
 
     if (oldStatus == TestBatchStatus.OPEN && newStatus == TestBatchStatus.RELEASED) {
       testBatchStatusChangeService.handleRelease(testBatch);
+    }
+
+    return testBatch;
+  }
+
+  public DonationAdditionResult addDonationsToTestBatch(TestBatch testBatch, List<Donation> donations) {
+    DonationAdditionResult result = DonationAdditionResult.from(testBatch);
+
+    for (Donation donation : donations) {
+      if (!donation.isTestable()) {
+        result.addDinWithoutTestSample(donation.getDonationIdentificationNumber());
+      } else if (donation.getTestBatch() != null && !donation.isIncludedIn(testBatch)) {
+        result.addDinInAnotherTestBatch(donation.getDonationIdentificationNumber());
+      } else {
+        testBatch.addDonation(donation);
+      }
+    }
+
+    return result;
+  }
+
+  public TestBatch removeDonationsFromTestBatch(List<Donation> donations, TestBatch testBatch) {
+    if (!testBatch.isOpen()) {
+      throw new IllegalStateException("Donations can only be added to open test batches");
+    }
+
+    for (Donation donation : donations) {
+      if (donation.isIncludedIn(testBatch)) {
+        donationCRUDService.clearTestOutcomes(donation);
+        testBatch.removeDonation(donation);
+      } else {
+        throw new IllegalArgumentException(
+            String.format("Donation: \'%s\' belongs to a different Test Batch: \'%s\'", donation.getId(),
+                donation.getTestBatch() == null ? null : donation.getTestBatch().getId()));
+      }
     }
 
     return testBatch;

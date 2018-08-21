@@ -95,4 +95,44 @@ public class DonationNamedQueryConstants {
       + "WHERE d.isDeleted = :deleted "
       + "ORDER BY d.modificationTracker.createdDate ASC ";
 
+  public static final String NAME_FIND_DONATIONS_BETWEEN_TWO_DINS =
+      "Donations.findDonationsBetweenTwoDins";
+
+  public static final String QUERY_FIND_DONATIONS_BETWEEN_TWO_DINS =
+      "SELECT d FROM Donation d "
+      + "WHERE d.donationIdentificationNumber BETWEEN :fromDIN AND :toDIN "
+      + "AND d.isDeleted = :deleted";
+
+  public static final String NAME_FIND_IN_RANGE = "Donation.findInRange";
+  public static final String QUERY_FIND_IN_RANGE =
+      "SELECT d FROM Donation d " +
+      "WHERE d.bleedEndTime >= :startDate " +
+      "AND d.bleedEndTime <= :endDate " +
+      "AND d.isDeleted = :deleted";
+
+  public static final String NAME_FIND_BY_VENUE_ID_IN_RANGE = "Donation.findByVenueIdInRange";
+  public static final String QUERY_FIND_BY_VENUE_ID_IN_RANGE =
+      "SELECT d FROM Donation d " +
+      "WHERE d.venue.id = :venueId " +
+      "AND d.bleedEndTime >= :startDate " +
+      "AND d.bleedEndTime <= :endDate " +
+      "AND d.isDeleted = :deleted";
+
+  public static final String NAME_FIND_BY_PACK_TYPE_ID_IN_RANGE = "Donation.findByPackTypeIdInRange";
+  public static final String QUERY_FIND_BY_PACK_TYPE_ID_IN_RANGE =
+      "SELECT d FROM Donation d " +
+      "WHERE d.packType.id = :packTypeId " +
+      "AND d.bleedEndTime >= :startDate " +
+      "AND d.bleedEndTime <= :endDate " +
+      "AND d.isDeleted = :deleted";
+
+  public static final String NAME_FIND_BY_VENUE_ID_AND_PACK_TYPE_ID_IN_RANGE =
+      "Donation.findByVenueIdAndPackTypeIdInRange";
+  public static final String QUERY_FIND_BY_VENUE_ID_AND_PACK_TYPE_ID_IN_RANGE =
+      "SELECT d FROM Donation d " +
+      "WHERE d.venue.id = :venueId " +
+      "AND d.packType.id = :packTypeId " +
+      "AND d.bleedEndTime >= :startDate " +
+      "AND d.bleedEndTime <= :endDate " +
+      "AND d.isDeleted = :deleted";
 }

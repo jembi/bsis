@@ -9,7 +9,7 @@ import org.jembi.bsis.viewmodel.InventoryViewModel;
 public class InventoryViewModelMatcher extends AbstractTypeSafeMatcher<InventoryViewModel> {
 
   public InventoryViewModelMatcher(InventoryViewModel expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

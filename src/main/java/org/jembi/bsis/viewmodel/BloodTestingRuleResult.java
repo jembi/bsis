@@ -12,7 +12,7 @@ import org.jembi.bsis.model.donation.Titre;
 
 public class BloodTestingRuleResult {
 
-  private DonationViewModel donation;
+  private DonationFullViewModel donation;
 
   private Set<String> allBloodAboChanges;
 
@@ -34,7 +34,7 @@ public class BloodTestingRuleResult {
 
   private Map<UUID, String> availableTestResults;
 
-  private Map<UUID, BloodTestResultViewModel> recentTestResults;
+  private Map<UUID, BloodTestResultFullViewModel> recentTestResults;
 
   private BloodTypingStatus bloodTypingStatus;
 
@@ -52,11 +52,11 @@ public class BloodTestingRuleResult {
   public BloodTestingRuleResult() {
   }
 
-  public DonationViewModel getDonation() {
+  public DonationFullViewModel getDonation() {
     return donation;
   }
 
-  public void setDonation(DonationViewModel donation) {
+  public void setDonation(DonationFullViewModel donation) {
     this.donation = donation;
   }
 
@@ -184,11 +184,11 @@ public class BloodTestingRuleResult {
     this.pendingRepeatAndConfirmatoryTtiTestsIds = pendingRepeatAndConfirmatoryTtiTestsIds;
   }
 
-  public Map<UUID, BloodTestResultViewModel> getRecentTestResults() {
+  public Map<UUID, BloodTestResultFullViewModel> getRecentTestResults() {
     return recentTestResults;
   }
 
-  public void setRecentTestResults(Map<UUID, BloodTestResultViewModel> recentTestResults) {
+  public void setRecentTestResults(Map<UUID, BloodTestResultFullViewModel> recentTestResults) {
     this.recentTestResults = recentTestResults;
   }
 

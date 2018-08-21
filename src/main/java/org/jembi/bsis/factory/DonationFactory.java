@@ -1,6 +1,7 @@
 package org.jembi.bsis.factory;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.service.DonationConstraintChecker;
 import org.jembi.bsis.service.DonorConstraintChecker;
 import org.jembi.bsis.viewmodel.AdverseEventViewModel;
+import org.jembi.bsis.viewmodel.DonationFullViewModel;
 import org.jembi.bsis.viewmodel.DonationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,24 +46,50 @@ public class DonationFactory {
     return donation;
   }
 
-  public List<DonationViewModel> createDonationViewModelsWithPermissions(List<Donation> donations) {
-    List<DonationViewModel> donationViewModels = new ArrayList<>();
+  public List<DonationViewModel> createDonationViewModels(Collection<Donation> donations) {
+    List<DonationViewModel> viewModels = new ArrayList<>();
     for (Donation donation : donations) {
-      donationViewModels.add(createDonationViewModelWithPermissions(donation));
+      viewModels.add(createDonationViewModel(donation));
     }
-    return donationViewModels;
+    return viewModels;
   }
 
-  public List<DonationViewModel> createDonationViewModelsWithoutPermissions(List<Donation> donations) {
-    List<DonationViewModel> donationViewModels = new ArrayList<>();
-    for (Donation donation : donations) {
-      donationViewModels.add(createDonationViewModelWithoutPermissions(donation));
-    }
-    return donationViewModels;
+  public DonationViewModel createDonationViewModel(Donation donation) {
+    DonationViewModel donationViewModel = new DonationViewModel();
+    donationViewModel.setId(donation.getId());
+    donationViewModel.setDonorNumber(donation.getDonorNumber());
+    donationViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
+    donationViewModel.setPackType(packTypeFactory.createViewModel(donation.getPackType()));
+    donationViewModel.setDonationType(donationTypeFactory.createViewModel(donation.getDonationType()));
+    donationViewModel.setDonationDate(donation.getDonationDate());
+    donationViewModel.setVenue(locationFactory.createViewModel(donation.getVenue()));
+    donationViewModel.setReleased(donation.isReleased());
+    donationViewModel.setTTIStatus(donation.getTTIStatus());
+    donationViewModel.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
+    donationViewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
+    donationViewModel.setBloodAbo(donation.getBloodAbo());
+    donationViewModel.setBloodRh(donation.getBloodRh());
+    return donationViewModel;
   }
 
-  public DonationViewModel createDonationViewModelWithPermissions(Donation donation) {
-    DonationViewModel donationViewModel = createDonationViewModelWithoutPermissions(donation);
+  public List<DonationFullViewModel> createDonationFullViewModelsWithPermissions(List<Donation> donations) {
+    List<DonationFullViewModel> donationFullViewModels = new ArrayList<>();
+    for (Donation donation : donations) {
+      donationFullViewModels.add(createDonationFullViewModelWithPermissions(donation));
+    }
+    return donationFullViewModels;
+  }
+
+  public List<DonationFullViewModel> createDonationFullViewModelsWithoutPermissions(List<Donation> donations) {
+    List<DonationFullViewModel> donationFullViewModels = new ArrayList<>();
+    for (Donation donation : donations) {
+      donationFullViewModels.add(createDonationFullViewModelWithoutPermissions(donation));
+    }
+    return donationFullViewModels;
+  }
+
+  public DonationFullViewModel createDonationFullViewModelWithPermissions(Donation donation) {
+    DonationFullViewModel donationFullViewModel = createDonationFullViewModelWithoutPermissions(donation);
 
     boolean canDonate = !donorConstraintChecker.isDonorDeferred(donation.getDonor().getId());
     boolean isBackEntry = donation.getDonationBatch().isBackEntry();
@@ -73,46 +101,46 @@ public class DonationFactory {
     permissions.put("canDonate", canDonate);
     permissions.put("canEditPackType", donationConstraintChecker.canEditPackType(donation));
     permissions.put("isBackEntry", isBackEntry);
-    donationViewModel.setPermissions(permissions);
+    donationFullViewModel.setPermissions(permissions);
 
-    return donationViewModel;
+    return donationFullViewModel;
   }
 
-  public DonationViewModel createDonationViewModelWithoutPermissions(Donation donation) {
-    DonationViewModel donationViewModel = new DonationViewModel();
-    donationViewModel.setId(donation.getId());
-    donationViewModel.setDonationDate(donation.getDonationDate());
-    donationViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
-    donationViewModel.setDonationType(donationTypeFactory.createViewModel(donation.getDonationType()));
-    donationViewModel.setPackType(packTypeFactory.createFullViewModel(donation.getPackType()));
-    donationViewModel.setNotes(donation.getNotes());
-    donationViewModel.setDonorNumber(donation.getDonorNumber());
-    donationViewModel.setLastUpdated(donation.getLastUpdated());
-    donationViewModel.setCreatedDate(donation.getCreatedDate());
-    donationViewModel.setTTIStatus(donation.getTTIStatus());
-    donationViewModel.setDonationBatchNumber(donation.getDonationBatchNumber());
-    donationViewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
-    donationViewModel.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
-    donationViewModel.setBloodAbo(donation.getBloodAbo());
-    donationViewModel.setBloodRh(donation.getBloodRh());
-    donationViewModel.setHaemoglobinCount(donation.getHaemoglobinCount());
-    donationViewModel.setHaemoglobinLevel(donation.getHaemoglobinLevel());
-    donationViewModel.setDonorWeight(donation.getDonorWeight());
-    donationViewModel.setDonorPulse(donation.getDonorPulse());
-    donationViewModel.setBloodPressureSystolic(donation.getBloodPressureSystolic());
-    donationViewModel.setBloodPressureDiastolic(donation.getBloodPressureDiastolic());
-    donationViewModel.setBleedStartTime(donation.getBleedStartTime());
-    donationViewModel.setBleedEndTime(donation.getBleedEndTime());
-    donationViewModel.setVenue(locationFactory.createViewModel(donation.getVenue()));
-    donationViewModel.setReleased(donation.isReleased());
+  public DonationFullViewModel createDonationFullViewModelWithoutPermissions(Donation donation) {
+    DonationFullViewModel donationFullViewModel = new DonationFullViewModel();
+    donationFullViewModel.setId(donation.getId());
+    donationFullViewModel.setDonationDate(donation.getDonationDate());
+    donationFullViewModel.setDonationIdentificationNumber(donation.getDonationIdentificationNumber());
+    donationFullViewModel.setDonationType(donationTypeFactory.createViewModel(donation.getDonationType()));
+    donationFullViewModel.setPackType(packTypeFactory.createFullViewModel(donation.getPackType()));
+    donationFullViewModel.setNotes(donation.getNotes());
+    donationFullViewModel.setDonorNumber(donation.getDonorNumber());
+    donationFullViewModel.setLastUpdated(donation.getLastUpdated());
+    donationFullViewModel.setCreatedDate(donation.getCreatedDate());
+    donationFullViewModel.setTTIStatus(donation.getTTIStatus());
+    donationFullViewModel.setDonationBatchNumber(donation.getDonationBatchNumber());
+    donationFullViewModel.setBloodTypingStatus(donation.getBloodTypingStatus());
+    donationFullViewModel.setBloodTypingMatchStatus(donation.getBloodTypingMatchStatus());
+    donationFullViewModel.setBloodAbo(donation.getBloodAbo());
+    donationFullViewModel.setBloodRh(donation.getBloodRh());
+    donationFullViewModel.setHaemoglobinCount(donation.getHaemoglobinCount());
+    donationFullViewModel.setHaemoglobinLevel(donation.getHaemoglobinLevel());
+    donationFullViewModel.setDonorWeight(donation.getDonorWeight());
+    donationFullViewModel.setDonorPulse(donation.getDonorPulse());
+    donationFullViewModel.setBloodPressureSystolic(donation.getBloodPressureSystolic());
+    donationFullViewModel.setBloodPressureDiastolic(donation.getBloodPressureDiastolic());
+    donationFullViewModel.setBleedStartTime(donation.getBleedStartTime());
+    donationFullViewModel.setBleedEndTime(donation.getBleedEndTime());
+    donationFullViewModel.setVenue(locationFactory.createViewModel(donation.getVenue()));
+    donationFullViewModel.setReleased(donation.isReleased());
 
     if (donation.getAdverseEvent() != null) {
       AdverseEventViewModel adverseEventViewModel =
           adverseEventFactory.createAdverseEventViewModel(donation.getAdverseEvent());
-      donationViewModel.setAdverseEvent(adverseEventViewModel);
+      donationFullViewModel.setAdverseEvent(adverseEventViewModel);
     }
 
-    return donationViewModel;
+    return donationFullViewModel;
   }
 
 }

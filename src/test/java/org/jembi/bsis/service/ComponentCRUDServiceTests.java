@@ -1271,12 +1271,12 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(COMPONENT_ID_1)).thenReturn(oldComponent);
-    when(donationRepository.updateDonation(donation)).thenReturn(donation);
+    when(donationRepository.update(donation)).thenReturn(donation);
     when(dateGeneratorService.generateDateTime(donationDate, bleedStartTime)).thenReturn(expectedCreatedOn);
     // SUT
     Component returnedComponent = componentCRUDService.preProcessComponent(COMPONENT_ID_1, componentWeight, bleedStartTime, bleedEndTime);
     // verify
-    verify(donationRepository, times(1)).updateDonation(any(Donation.class));
+    verify(donationRepository, times(1)).update(any(Donation.class));
     verify(dateGeneratorService).generateDateTime(donationDate, bleedStartTime);
     assertThat(donation.getBleedStartTime(), is(bleedStartTime));
     assertThat(donation.getBleedEndTime(), is(bleedEndTime));
@@ -1295,7 +1295,7 @@ public class ComponentCRUDServiceTests extends UnitTestSuite {
     
     // mocks
     when(componentRepository.findComponentById(COMPONENT_ID_1)).thenReturn(oldComponent);
-    when(donationRepository.updateDonation(donation)).thenReturn(donation);
+    when(donationRepository.update(donation)).thenReturn(donation);
     when(componentConstraintChecker.canPreProcess(oldComponent)).thenReturn(false);
     
     // SUT

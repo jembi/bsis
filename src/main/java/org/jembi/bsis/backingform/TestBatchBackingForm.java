@@ -1,109 +1,27 @@
 package org.jembi.bsis.backingform;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.jembi.bsis.model.testbatch.TestBatchStatus;
-import org.jembi.bsis.utils.DateTimeSerialiser;
-import org.jembi.bsis.viewmodel.DonationBatchViewModel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Date;
+import java.util.UUID;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TestBatchBackingForm {
 
   private UUID id;
   private TestBatchStatus status;
-  private Date createdDate;
-  private Date lastUpdated;
-
+  private Date testBatchDate;
   private LocationBackingForm location;
-  private List<UUID> donationBatchIds = null;
-
-  public TestBatchBackingForm() {
-  }
-  
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-  
-  public TestBatchStatus getStatus() {
-    return status;
-  }
-
-  public void setStatus(TestBatchStatus status) {
-    this.status = status;
-  }
-  
-  public Date getCreatedDate() {
-    return createdDate;
-  }
-
-  @JsonSerialize(using = DateTimeSerialiser.class)
-  public void setCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
-  }
-
-  public List<UUID> getDonationBatchIds() {
-    return donationBatchIds;
-  }
-
-  public void setDonationBatchIds(List<UUID> donationBatchIds) {
-    this.donationBatchIds = donationBatchIds;
-  }
-  
-  @JsonIgnore
-  public void setDonationBatches(List<DonationBatchViewModel> donationBatches) {
-    // Ignore
-  }
-
-  @JsonIgnore
-  public Date getLastUpdated() {
-    return lastUpdated;
-  }
-
-  public void setLocation(LocationBackingForm location) {
-    this.location = location;
-  }
-  
-  public LocationBackingForm getLocation() {
-    return location;
-  }
-
-  @JsonIgnore
-  public void setReadyForReleaseCount(int count) {
-    // Ignore value
-  }
-  
-  @JsonIgnore
-  public void setBatchNumber(String batchNumber) {
-    // Ignore value
-  }
-  
-  @JsonIgnore
-  public void setNotes(String notes) {
-    // Ignore
-  }
-  
-  @JsonIgnore
-  public void setNumSamples(int numSamples) {
-    //Ignore
-  }
-  
-  @JsonIgnore
-  public void setNumReleasedSamples(int numReleasedSamples) {
-    //Ignore
-  }
-  
-  @JsonIgnore
-  public void setPermissions(Map<String, Boolean> permissions) {
-    // Ignore
-  }
-
+  private boolean backEntry;
 }

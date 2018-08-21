@@ -3,7 +3,7 @@
     <user id="uuid'9bb07a38-eb7f-4e35-b5b1-34e77ad79a81'" emailId="admin" firstName="admin" isactive="1"
           isAdmin="1" isDeleted="0" isStaff="1" username="admin" password="admin"/>
 
-    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" isReferralSite="0" id="1" name="location 1"/>
+    <Location isTestingSite="0" isDistributionSite="0" isProcessingSite="0" isReferralSite="0" isUsageSite="0" isMobileSite="0" isVenue="0" isDeleted="0" id="1" name="location 1"/>
 
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870681'"/>
     <Contact id="uuid'11e71397-acc9-b7da-8cc5-34e6d7870682'"/>

@@ -5,8 +5,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.jembi.bsis.model.component.Component;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChange;
+import org.jembi.bsis.model.componentmovement.ComponentStatusChangeReason;
+import org.jembi.bsis.repository.component.ComponentStatusChangeRepository;
 import org.jembi.bsis.service.ComponentConstraintChecker;
 import org.jembi.bsis.service.ComponentStatusCalculator;
 import org.jembi.bsis.viewmodel.ComponentFullViewModel;
@@ -33,6 +37,9 @@ public class ComponentFactory {
   @Autowired
   private ComponentStatusCalculator componentStatusCalculator;
 
+  @Autowired
+  private ComponentStatusChangeRepository statusChangeRepository;
+
   public List<ComponentManagementViewModel> createManagementViewModels(Collection<Component> components) {
     List<ComponentManagementViewModel> viewModels = new ArrayList<>();
     if (components != null) {
@@ -54,11 +61,17 @@ public class ComponentFactory {
     viewModel.setStatus(component.getStatus());
     viewModel.setWeight(component.getWeight());
     viewModel.setPackType(packTypeFactory.createFullViewModel(component.getDonation().getPackType()));
-    viewModel.setHasComponentBatch(component.hasComponentBatch());
+    viewModel.setBatched(component.hasComponentBatch());
     viewModel.setInventoryStatus(component.getInventoryStatus());
     viewModel.setBleedStartTime(component.getDonation().getBleedStartTime());
     viewModel.setBleedEndTime(component.getDonation().getBleedEndTime());
     viewModel.setDonationDateTime(component.getDonation().getInitialComponent().getCreatedOn());
+    Optional<ComponentStatusChange> optionalDiscardReason = statusChangeRepository.findLatestDiscardReasonForComponent(component);
+    if (optionalDiscardReason.isPresent()) {
+      ComponentStatusChange discardReason = optionalDiscardReason.get();
+      viewModel.setDiscardReason(discardReason.getStatusChangeReason().getStatusChangeReason());
+      viewModel.setDiscardReasonComment(discardReason.getStatusChangeReasonText());
+    }
     if (component.getParentComponent() != null) {
       viewModel.setParentComponentId(component.getParentComponent().getId());
     }

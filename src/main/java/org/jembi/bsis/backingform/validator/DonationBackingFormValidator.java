@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jembi.bsis.backingform.DonationBackingForm;
+import org.jembi.bsis.constant.GeneralConfigConstants;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.donor.Donor;
@@ -254,7 +255,7 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
   }
   
   private void validateDonationIdentificationNumber(DonationBackingForm form, Errors errors) {
-    Integer dinLength = generalConfigAccessorService.getIntValue("donation.dinLength");
+    Integer dinLength = generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH);
     if (dinLength > 20) {
       dinLength = 20;
     }

@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -20,9 +21,16 @@ import org.jembi.bsis.model.component.ComponentStatus;
 import org.jembi.bsis.model.user.User;
 import org.jembi.bsis.repository.ComponentNamedQueryConstants;
 
+import static org.jembi.bsis.repository.ComponentNamedQueryConstants.NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE;
+import static org.jembi.bsis.repository.ComponentNamedQueryConstants.QUERY_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE;
+import static org.jembi.bsis.repository.component.ComponentStatusChangeRepository.NAME_FIND_REASONS_IN_CATEGORY_FOR_COMPONENT_ORDERED_BY_DATE_DESC;
+import static org.jembi.bsis.repository.component.ComponentStatusChangeRepository.QUERY_FIND_REASONS_IN_CATEGORY_FOR_COMPONENT_ORDERED_BY_DATE_DESC;
+
 @NamedQueries({
-    @NamedQuery(name = ComponentNamedQueryConstants.NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE,
-        query = ComponentNamedQueryConstants.QUERY_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE)})
+    @NamedQuery(name = NAME_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE,
+        query = QUERY_FIND_SUMMARY_FOR_DISCARDED_COMPONENTS_BY_PROCESSING_SITE),
+    @NamedQuery(name = NAME_FIND_REASONS_IN_CATEGORY_FOR_COMPONENT_ORDERED_BY_DATE_DESC,
+        query = QUERY_FIND_REASONS_IN_CATEGORY_FOR_COMPONENT_ORDERED_BY_DATE_DESC)})
 @Entity
 @Audited
 public class ComponentStatusChange extends BaseUUIDEntity implements Comparable<ComponentStatusChange> {

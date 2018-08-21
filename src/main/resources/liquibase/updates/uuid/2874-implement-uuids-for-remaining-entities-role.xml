@@ -82,9 +82,20 @@
     <modifyDataType columnName="roles_id" newDataType="BINARY(16)" tableName="User_Role_AUD"/>
 
     <sql>
-      UPDATE Role 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE Role SET id = UNHEX("11e868b09ce5787b8826e4a471449260") WHERE id_temp = 1;
+      UPDATE Role SET id = UNHEX("11e868b09ce57cb28826e4a471449260") WHERE id_temp = 2;
+      UPDATE Role SET id = UNHEX("11e868b09ce57f168826e4a471449260") WHERE id_temp = 3;
+      UPDATE Role SET id = UNHEX("11e868b09ce581518826e4a471449260") WHERE id_temp = 4;
+      UPDATE Role SET id = UNHEX("11e868b09ce5834c8826e4a471449260") WHERE id_temp = 5;
+      UPDATE Role SET id = UNHEX("11e868b09ce5b3598826e4a471449260") WHERE id_temp = 6;
+      UPDATE Role SET id = UNHEX("11e868b09ce5b7478826e4a471449260") WHERE id_temp = 9;
+      UPDATE Role SET id = UNHEX("11e868b09ce5b9958826e4a471449260") WHERE id_temp = 10;
+      UPDATE Role SET id = UNHEX("11e868b09ce5bba28826e4a471449260") WHERE id_temp = 11;
+      UPDATE Role SET id = UNHEX("11e868b09ce5bd908826e4a471449260") WHERE id_temp = 12;
+      UPDATE Role SET id = UNHEX("11e868b09ce5bf768826e4a471449260") WHERE id_temp = 13;
+      UPDATE Role SET id = UNHEX("11e868b09ce5c1478826e4a471449260") WHERE id_temp = 14;
+      UPDATE Role SET id = UNHEX("11e868b09ce5c31c8826e4a471449260") WHERE id_temp = 15;
+      UPDATE Role SET id = UNHEX("11e868b09ce5c4f98826e4a471449260") WHERE id_temp = 16;
     </sql>
 
     <sql dbms="mysql">
@@ -105,46 +116,6 @@
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
       VIRTUAL AFTER id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Permission_Role_AUD ADD roles_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(roles_id,  1, 4)),
-        HEX(SUBSTR(roles_id,  5, 2)),
-        HEX(SUBSTR(roles_id,  7, 2)),
-        HEX(SUBSTR(roles_id,  9, 2)),
-        HEX(SUBSTR(roles_id, 11)) )))
-      VIRTUAL AFTER roles_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE User_Role_AUD ADD roles_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(roles_id,  1, 4)),
-        HEX(SUBSTR(roles_id,  5, 2)),
-        HEX(SUBSTR(roles_id,  7, 2)),
-        HEX(SUBSTR(roles_id,  9, 2)),
-        HEX(SUBSTR(roles_id, 11)) )))
-      VIRTUAL AFTER roles_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Permission_Role ADD roles_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(roles_id,  1, 4)),
-        HEX(SUBSTR(roles_id,  5, 2)),
-        HEX(SUBSTR(roles_id,  7, 2)),
-        HEX(SUBSTR(roles_id,  9, 2)),
-        HEX(SUBSTR(roles_id, 11)) )))
-      VIRTUAL AFTER roles_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE User_Role ADD roles_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(roles_id,  1, 4)),
-        HEX(SUBSTR(roles_id,  5, 2)),
-        HEX(SUBSTR(roles_id,  7, 2)),
-        HEX(SUBSTR(roles_id,  9, 2)),
-        HEX(SUBSTR(roles_id, 11)) )))
-      VIRTUAL AFTER roles_id;
     </sql>
 
     <sql>

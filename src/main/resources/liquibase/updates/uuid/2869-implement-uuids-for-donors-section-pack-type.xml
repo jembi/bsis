@@ -59,9 +59,14 @@
     <modifyDataType columnName="packType_id" newDataType="BINARY(16)" tableName="Donation_AUD"/>
 
     <sql>
-      UPDATE PackType 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE PackType SET id = UNHEX("11e868b059d90f968826e4a471449260") WHERE id_temp = 1;
+      UPDATE PackType SET id = UNHEX("11e868b059d917db8826e4a471449260") WHERE id_temp = 2;
+      UPDATE PackType SET id = UNHEX("11e868b059d91dbf8826e4a471449260") WHERE id_temp = 3;
+      UPDATE PackType SET id = UNHEX("11e868b059d923628826e4a471449260") WHERE id_temp = 4;
+      UPDATE PackType SET id = UNHEX("11e868b059d927148826e4a471449260") WHERE id_temp = 5;
+      UPDATE PackType SET id = UNHEX("11e868b059d92a538826e4a471449260") WHERE id_temp = 6;
+      UPDATE PackType SET id = UNHEX("11e868b059d92da28826e4a471449260") WHERE id_temp = 7;
+      UPDATE PackType SET id = UNHEX("11e868b059d930848826e4a471449260") WHERE id_temp = 8;
     </sql>
 
     <sql dbms="mysql">
@@ -82,26 +87,6 @@
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
       VIRTUAL AFTER id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Donation_AUD ADD packType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(packType_id,  1, 4)),
-        HEX(SUBSTR(packType_id,  5, 2)),
-        HEX(SUBSTR(packType_id,  7, 2)),
-        HEX(SUBSTR(packType_id,  9, 2)),
-        HEX(SUBSTR(packType_id, 11)) )))
-      VIRTUAL AFTER packType_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Donation ADD packType_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(packType_id,  1, 4)),
-        HEX(SUBSTR(packType_id,  5, 2)),
-        HEX(SUBSTR(packType_id,  7, 2)),
-        HEX(SUBSTR(packType_id,  9, 2)),
-        HEX(SUBSTR(packType_id, 11)) )))
-      VIRTUAL AFTER packType_id;
     </sql>
 
     <sql>

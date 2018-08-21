@@ -8,7 +8,7 @@ import org.jembi.bsis.model.order.OrderForm;
 public class OrderFormMatcher extends AbstractTypeSafeMatcher<OrderForm> {
 
   public OrderFormMatcher(OrderForm expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

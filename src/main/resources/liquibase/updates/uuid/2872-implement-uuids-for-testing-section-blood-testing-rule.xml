@@ -36,12 +36,42 @@
 
     <modifyDataType columnName="id" newDataType="BINARY(16)" tableName="BloodTestingRule_AUD"/>
 
-
-
     <sql>
-      UPDATE BloodTestingRule 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5016d8826e4a471449260") WHERE id_temp = 1;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de513488826e4a471449260") WHERE id_temp = 2;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de520958826e4a471449260") WHERE id_temp = 3;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de52ccc8826e4a471449260") WHERE id_temp = 4;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de539058826e4a471449260") WHERE id_temp = 5;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5453a8826e4a471449260") WHERE id_temp = 6;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5516c8826e4a471449260") WHERE id_temp = 7;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5597d8826e4a471449260") WHERE id_temp = 8;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de560328826e4a471449260") WHERE id_temp = 9;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5677b8826e4a471449260") WHERE id_temp = 10;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de56e188826e4a471449260") WHERE id_temp = 11;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de577d28826e4a471449260") WHERE id_temp = 12;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de57eb78826e4a471449260") WHERE id_temp = 13;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5850a8826e4a471449260") WHERE id_temp = 14;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de58b748826e4a471449260") WHERE id_temp = 15;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de591ca8826e4a471449260") WHERE id_temp = 16;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5981f8826e4a471449260") WHERE id_temp = 17;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de59e5c8826e4a471449260") WHERE id_temp = 18;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5a5368826e4a471449260") WHERE id_temp = 19;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5ac058826e4a471449260") WHERE id_temp = 20;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5b2608826e4a471449260") WHERE id_temp = 21;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5b8a28826e4a471449260") WHERE id_temp = 22;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5bedb8826e4a471449260") WHERE id_temp = 23;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5c5388826e4a471449260") WHERE id_temp = 24;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5ccb38826e4a471449260") WHERE id_temp = 25;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5d3198826e4a471449260") WHERE id_temp = 26;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5d9918826e4a471449260") WHERE id_temp = 27;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5e0988826e4a471449260") WHERE id_temp = 28;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5e7118826e4a471449260") WHERE id_temp = 29;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5ed678826e4a471449260") WHERE id_temp = 30;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5f50e8826e4a471449260") WHERE id_temp = 31;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de5fc6f8826e4a471449260") WHERE id_temp = 32;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de602e28826e4a471449260") WHERE id_temp = 33;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de6094f8826e4a471449260") WHERE id_temp = 34;
+      UPDATE BloodTestingRule SET id = UNHEX("11e868b08de611318826e4a471449260") WHERE id_temp = 35;
     </sql>
 
     <sql dbms="mysql">

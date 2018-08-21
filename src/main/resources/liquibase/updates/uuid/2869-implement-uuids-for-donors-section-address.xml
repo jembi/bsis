@@ -74,27 +74,6 @@
       VIRTUAL AFTER id;
     </sql>
 
-    <sql dbms="mysql">
-      ALTER TABLE Donor_AUD ADD address_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(address_id,  1, 4)),
-        HEX(SUBSTR(address_id,  5, 2)),
-        HEX(SUBSTR(address_id,  7, 2)),
-        HEX(SUBSTR(address_id,  9, 2)),
-        HEX(SUBSTR(address_id, 11)) )))
-      VIRTUAL AFTER address_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE Donor ADD address_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(address_id,  1, 4)),
-        HEX(SUBSTR(address_id,  5, 2)),
-        HEX(SUBSTR(address_id,  7, 2)),
-        HEX(SUBSTR(address_id,  9, 2)),
-        HEX(SUBSTR(address_id, 11)) )))
-      VIRTUAL AFTER address_id;
-    </sql>
-
-
     <sql>
       UPDATE Donor AS updateTable
         LEFT JOIN Address AS joinedTable ON (updateTable.address_id_temp = joinedTable.id_temp)

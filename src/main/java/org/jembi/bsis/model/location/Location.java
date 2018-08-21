@@ -1,5 +1,7 @@
 package org.jembi.bsis.model.location;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -43,29 +45,45 @@ public class Location extends BaseModificationTrackerUUIDEntity {
   @NotBlank
   private String name;
 
-  private Boolean isUsageSite = Boolean.FALSE;
+  @Basic(optional = false)
+  @Column(nullable = false)
+  private boolean isUsageSite;
 
-  private Boolean isMobileSite = Boolean.FALSE;
+  @Basic(optional = false)
+  @Column(nullable = false)
+  private boolean isMobileSite;
 
-  private Boolean isVenue = Boolean.FALSE;
-  
-  private boolean isProcessingSite = false;
-  
-  private boolean isDistributionSite = false;
+  @Basic(optional = false)
+  @Column(nullable = false)
+  private boolean isVenue;
 
-  private boolean isTestingSite = false;
-  
-  private boolean isReferralSite = false;
+  @Basic(optional = false)
+  @Column(nullable = false)
+  private boolean isProcessingSite;
 
-  private Boolean isDeleted = Boolean.FALSE;
+  @Basic(optional = false)
+  @Column(nullable = false)
+  private boolean isDistributionSite;
 
-  @ManyToOne(optional = true)
+  @Basic(optional = false)
+  @Column(nullable = false)
+  private boolean isTestingSite;
+
+  @Basic(optional = false)
+  @Column(nullable = false)
+  private boolean isReferralSite;
+
+  @Basic(optional = false)
+  @Column(nullable = false)
+  private boolean isDeleted;
+
+  @ManyToOne
   private Division divisionLevel1;
 
-  @ManyToOne(optional = true)
+  @ManyToOne
   private Division divisionLevel2;
 
-  @ManyToOne(optional = true)
+  @ManyToOne
   private Division divisionLevel3;
 
   @Lob

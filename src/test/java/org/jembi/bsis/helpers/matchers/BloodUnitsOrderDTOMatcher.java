@@ -8,7 +8,7 @@ import org.jembi.bsis.dto.BloodUnitsOrderDTO;
 public class BloodUnitsOrderDTOMatcher extends AbstractTypeSafeMatcher<BloodUnitsOrderDTO> {
   
   public BloodUnitsOrderDTOMatcher (BloodUnitsOrderDTO expected) {
-    this.expected = expected;
+    super(expected);
   }
 
   @Override

@@ -174,8 +174,8 @@ public class DonationConstraintChecker {
     // doesn't, the test batch linked to this donation must be OPEN for the packType to be edited
     if (newPackType.getTestSampleProduced() && 
         !existingDonation.getPackType().getTestSampleProduced() && 
-        existingDonation.getDonationBatch().getTestBatch() != null && 
-        !existingDonation.getDonationBatch().getTestBatch().getStatus().equals(TestBatchStatus.OPEN)) {
+        existingDonation.getTestBatch() != null && 
+        !existingDonation.getTestBatch().getStatus().equals(TestBatchStatus.OPEN)) {
       return false;
     }
 

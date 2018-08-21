@@ -19,7 +19,7 @@ public class DonorOutcomesViewModel {
   private String donationIdentificationNumber;
   private String bloodAbo;
   private String bloodRh;
-  private List<BloodTestResultViewModel> bloodTestResults;
+  private List<BloodTestResultFullViewModel> bloodTestResults;
   
   public String getDonorNumber() {
     return donorNumber;
@@ -95,11 +95,11 @@ public class DonorOutcomesViewModel {
     this.bloodRh = bloodRh;
   }
 
-  public List<BloodTestResultViewModel> getBloodTestResults() {
+  public List<BloodTestResultFullViewModel> getBloodTestResults() {
     return bloodTestResults;
   }
 
-  public void setBloodTestResults(List<BloodTestResultViewModel> bloodTestResults) {
+  public void setBloodTestResults(List<BloodTestResultFullViewModel> bloodTestResults) {
     this.bloodTestResults = bloodTestResults;
   }
 

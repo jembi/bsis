@@ -8,7 +8,7 @@
       <where>name = "packLabel.packLabelZPL"</where>
     </delete>
     <insert tableName="GeneralConfig">
-      <column name="id" valueComputed="GENERATEBINARYUUID()"></column>
+      <column name="id" valueComputed="UNHEX('11e868b09e3b24248826e4a471449260')"/>
       <column name="name">packLabel.packLabelZPL</column>
       <column name="description">Zebra Printer Language (ZPL) code for the Pack Label</column>
       <column name="value"><![CDATA[CT~~CD,~CC^~CT~
@@ -97,7 +97,7 @@
       <where>name = "packLabel.discardLabelZPL"</where>
     </delete>
     <insert tableName="GeneralConfig">
-      <column name="id" valueComputed="GENERATEBINARYUUID()"></column>
+      <column name="id" valueComputed="UNHEX('11e868b09e3cb7af8826e4a471449260')"/>
       <column name="name">packLabel.discardLabelZPL</column>
       <column name="description">Zebra Printer Language (ZPL) code for the Discard Label</column>
       <column name="value"><![CDATA[CT~~CD,~CC^~CT~

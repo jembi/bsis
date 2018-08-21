@@ -62,9 +62,16 @@
 
 
     <sql>
-      UPDATE ComponentTypeCombination 
-      SET id = GENERATEBINARYUUID()
-      ORDER BY id_temp;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b083160d6f8826e4a471449260") WHERE id_temp = 1;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08316136f8826e4a471449260") WHERE id_temp = 2;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831615798826e4a471449260") WHERE id_temp = 3;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831617828826e4a471449260") WHERE id_temp = 4;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08317f64d8826e4a471449260") WHERE id_temp = 5;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08317fb548826e4a471449260") WHERE id_temp = 6;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08317fe9d8826e4a471449260") WHERE id_temp = 7;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831801578826e4a471449260") WHERE id_temp = 8;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b0831804708826e4a471449260") WHERE id_temp = 9;
+      UPDATE ComponentTypeCombination SET id = UNHEX("11e868b08318071a8826e4a471449260") WHERE id_temp = 10;
     </sql>
 
     <sql dbms="mysql">
@@ -85,26 +92,6 @@
         HEX(SUBSTR(id,  9, 2)),
         HEX(SUBSTR(id, 11)) )))
       VIRTUAL AFTER id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE ComponentTypeCombination_ComponentType ADD componentTypeCombinations_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(componentTypeCombinations_id,  1, 4)),
-        HEX(SUBSTR(componentTypeCombinations_id,  5, 2)),
-        HEX(SUBSTR(componentTypeCombinations_id,  7, 2)),
-        HEX(SUBSTR(componentTypeCombinations_id,  9, 2)),
-        HEX(SUBSTR(componentTypeCombinations_id, 11)) )))
-      VIRTUAL AFTER componentTypeCombinations_id;
-    </sql>
-
-    <sql dbms="mysql">
-      ALTER TABLE ComponentType_ComponentTypeCombination ADD producedComponentTypeCombinations_id_text varchar(36) GENERATED ALWAYS AS (LCASE(CONCAT_WS('-', 
-        HEX(SUBSTR(producedComponentTypeCombinations_id,  1, 4)),
-        HEX(SUBSTR(producedComponentTypeCombinations_id,  5, 2)),
-        HEX(SUBSTR(producedComponentTypeCombinations_id,  7, 2)),
-        HEX(SUBSTR(producedComponentTypeCombinations_id,  9, 2)),
-        HEX(SUBSTR(producedComponentTypeCombinations_id, 11)) )))
-      VIRTUAL AFTER producedComponentTypeCombinations_id;
     </sql>
 
     <sql>
