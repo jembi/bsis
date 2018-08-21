@@ -1,16 +1,24 @@
 package org.jembi.bsis.model.packtype;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.AssertTrue;
-
 import org.hibernate.envers.Audited;
 import org.jembi.bsis.model.BaseModificationTrackerUUIDEntity;
 import org.jembi.bsis.model.componenttype.ComponentType;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.validation.constraints.AssertTrue;
+
+import static org.jembi.bsis.repository.PackTypeRepository.NAME_FIND_PRODUCING_TEST_SAMPLES;
+import static org.jembi.bsis.repository.PackTypeRepository.QUERY_FIND_PRODUCING_TEST_SAMPLES;
+
 @Entity
 @Audited
+@NamedQueries({
+    @NamedQuery(name = NAME_FIND_PRODUCING_TEST_SAMPLES, query = QUERY_FIND_PRODUCING_TEST_SAMPLES)
+})
 public class PackType extends BaseModificationTrackerUUIDEntity {
 
   private static final long serialVersionUID = 1L;

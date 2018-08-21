@@ -530,12 +530,23 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     Date nowPlusTwo = Date.from(instant.plusMillis(2));
     Date nowPlusThree = Date.from(instant.plusMillis(3));
 
-    Donation donationOutsideStart = aDonation().withBleedEndTime(nowMinusOne).buildAndPersist(entityManager);
-    Donation donationAtStart = aDonation().withBleedEndTime(now).buildAndPersist(entityManager);
-    Donation donationInRange = aDonation().withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
-    Donation donationAtEnd = aDonation().withBleedEndTime(nowPlusTwo).buildAndPersist(entityManager);
-    Donation donationOutsideEnd = aDonation().withBleedEndTime(nowPlusThree).buildAndPersist(entityManager);
-    Donation deletedDonation = aDonation().withBleedEndTime(nowPlusOne).thatIsDeleted().buildAndPersist(entityManager);
+    PackType producesTestSample = aPackType().withTestSampleProduced(true).build();
+    PackType doesNotProduceTestSample = aPackType().withTestSampleProduced(false).build();
+
+    Donation donationOutsideStart = aDonation().withPackType(producesTestSample).withBleedEndTime(nowMinusOne)
+        .buildAndPersist(entityManager);
+    Donation donationAtStart = aDonation().withPackType(producesTestSample).withBleedEndTime(now)
+        .buildAndPersist(entityManager);
+    Donation donationInRange = aDonation().withPackType(producesTestSample).withBleedEndTime(nowPlusOne)
+        .buildAndPersist(entityManager);
+    Donation donationInRangeWithoutTestSample = aDonation().withPackType(doesNotProduceTestSample)
+        .withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
+    Donation donationAtEnd = aDonation().withPackType(producesTestSample).withBleedEndTime(nowPlusTwo)
+        .buildAndPersist(entityManager);
+    Donation donationOutsideEnd = aDonation().withPackType(producesTestSample).withBleedEndTime(nowPlusThree)
+        .buildAndPersist(entityManager);
+    Donation deletedDonation = aDonation().withPackType(producesTestSample).withBleedEndTime(nowPlusOne)
+        .thatIsDeleted().buildAndPersist(entityManager);
 
     List<Donation> actual = donationRepository.findInRange(now, nowPlusTwo);
 
@@ -543,6 +554,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat(actual, not(hasItem(donationOutsideStart)));
     assertThat(actual, not(hasItem(donationOutsideEnd)));
     assertThat(actual, not(hasItem(deletedDonation)));
+    assertThat(actual, not(hasItem(donationInRangeWithoutTestSample)));
   }
 
   @Test
@@ -554,12 +566,17 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
 
     Location queryVenue = aLocation().build();
 
-    Donation donationFromQueryVenue = aDonation().withVenue(queryVenue).withBleedEndTime(nowPlusOne)
-        .buildAndPersist(entityManager);
-    Donation donationFromAnotherVenue = aDonation().withVenue(aLocation().build()).withBleedEndTime(nowPlusOne)
-        .buildAndPersist(entityManager);
-    Donation deletedDonation = aDonation().withBleedEndTime(nowPlusOne).withVenue(queryVenue).thatIsDeleted()
-        .buildAndPersist(entityManager);
+    PackType producesTestSample = aPackType().withTestSampleProduced(true).build();
+    PackType doesNotProduceTestSample = aPackType().withTestSampleProduced(false).build();
+
+    Donation donationFromQueryVenue = aDonation().withPackType(producesTestSample).withVenue(queryVenue)
+        .withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
+    Donation donationFromQueryVenueWithoutTestSample = aDonation().withPackType(doesNotProduceTestSample)
+        .withVenue(queryVenue).withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
+    Donation donationFromAnotherVenue = aDonation().withPackType(producesTestSample).withVenue(aLocation().build())
+        .withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
+    Donation deletedDonation = aDonation().withPackType(producesTestSample).withBleedEndTime(nowPlusOne)
+        .withVenue(queryVenue).thatIsDeleted().buildAndPersist(entityManager);
 
     List<Donation> actual = donationRepository
         .findByVenueAndPackTypeInRange(queryVenue.getId(), null, now, nowPlusTwo);
@@ -567,6 +584,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat(actual, hasItem(donationFromQueryVenue));
     assertThat(actual, not(hasItem(donationFromAnotherVenue)));
     assertThat(actual, not(hasItem(deletedDonation)));
+    assertThat(actual, not(hasItem(donationFromQueryVenueWithoutTestSample)));
   }
 
   @Test
@@ -576,11 +594,14 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     Date nowPlusOne = Date.from(instant.plusMillis(1));
     Date nowPlusTwo = Date.from(instant.plusMillis(2));
 
-    PackType queryPackType = aPackType().build();
+    PackType queryPackType = aPackType().withTestSampleProduced(true).build();
+    PackType doesNotProduceTestSample = aPackType().withTestSampleProduced(false).build();
 
     Donation donationFromQueryPackType = aDonation().withPackType(queryPackType).withBleedEndTime(nowPlusOne)
         .buildAndPersist(entityManager);
     Donation donationWithAnotherPackType = aDonation().withPackType(aPackType().build()).withBleedEndTime(nowPlusOne)
+        .buildAndPersist(entityManager);
+    Donation donationWithoutTestSample = aDonation().withPackType(doesNotProduceTestSample).withBleedEndTime(nowPlusOne)
         .buildAndPersist(entityManager);
     Donation deletedDonation = aDonation().withBleedEndTime(nowPlusOne).withPackType(queryPackType).thatIsDeleted()
         .buildAndPersist(entityManager);
@@ -591,6 +612,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat(actual, hasItem(donationFromQueryPackType));
     assertThat(actual, not(hasItem(donationWithAnotherPackType)));
     assertThat(actual, not(hasItem(deletedDonation)));
+    assertThat(actual, not(hasItem(donationWithoutTestSample)));
   }
 
   @Test
@@ -603,7 +625,8 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     Date nowPlusThree = Date.from(instant.plusMillis(3));
 
     Location queryVenue = aLocation().build();
-    PackType queryPackType = aPackType().build();
+    PackType queryPackType = aPackType().withTestSampleProduced(true).build();
+    PackType doesNotProduceTestSample = aPackType().withTestSampleProduced(false).build();
 
     Donation donationMatchingFilters = aDonation().withVenue(queryVenue).withPackType(queryPackType)
         .withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
@@ -614,6 +637,8 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     Donation donationFromAnotherVenue = aDonation().withVenue(aLocation().build()).withPackType(queryPackType)
         .withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
     Donation donationWithAnotherPackType = aDonation().withVenue(queryVenue).withPackType(aPackType().build())
+        .withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
+    Donation donationWithoutTestSample = aDonation().withVenue(queryVenue).withPackType(doesNotProduceTestSample)
         .withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
     Donation deletedDonation = aDonation().withVenue(queryVenue).withPackType(queryPackType)
         .withBleedEndTime(nowPlusOne).thatIsDeleted().buildAndPersist(entityManager);
@@ -627,5 +652,6 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat(actual, not(hasItem(donationFromAnotherVenue)));
     assertThat(actual, not(hasItem(donationWithAnotherPackType)));
     assertThat(actual, not(hasItem(deletedDonation)));
+    assertThat(actual, not(hasItem(donationWithoutTestSample)));
   }
 }

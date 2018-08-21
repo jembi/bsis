@@ -97,7 +97,7 @@ public class TestResultController {
             .map(locationFactory::createViewModel)
             .collect(Collectors.toList()));
     response.put("packTypes",
-        packTypeRepository.getAllEnabledPackTypes().stream()
+        packTypeRepository.getAllPackTypesProducingTestSamples().stream()
             .map(packTypeFactory::createViewModel)
             .collect(Collectors.toList()));
     return response;

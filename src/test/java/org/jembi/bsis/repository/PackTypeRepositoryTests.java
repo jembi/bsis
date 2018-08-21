@@ -1,15 +1,21 @@
 package org.jembi.bsis.repository;
 
-import static org.junit.Assert.assertEquals;
-
-import javax.validation.ConstraintViolationException;
-
 import org.jembi.bsis.helpers.builders.ComponentTypeBuilder;
-import org.jembi.bsis.helpers.builders.PackTypeBuilder;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.suites.ContextDependentTestSuite;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+import javax.validation.ConstraintViolationException;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.not;
+import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
+import static org.junit.Assert.assertEquals;
 
 public class PackTypeRepositoryTests extends ContextDependentTestSuite {
 
@@ -17,9 +23,21 @@ public class PackTypeRepositoryTests extends ContextDependentTestSuite {
   private PackTypeRepository packTypeRepository;
 
   @Test
-  public void testSavePackType_shouldPersistCorrectly() throws Exception {
+  public void testGetAllPackTypesProducingTestSamples() {
+    PackType producingTestSamples = aPackType().withTestSampleProduced(true).buildAndPersist(entityManager);
+    PackType anotherProducingTestSamples = aPackType().withTestSampleProduced(true).buildAndPersist(entityManager);
+    PackType doesNotProduceTestSamples = aPackType().withTestSampleProduced(false).buildAndPersist(entityManager);
+
+    List<PackType> actual = packTypeRepository.getAllPackTypesProducingTestSamples();
+
+    assertThat(actual, hasItems(producingTestSamples, anotherProducingTestSamples));
+    assertThat(actual, not(hasItem(doesNotProduceTestSamples)));
+  }
+
+  @Test
+  public void testSavePackType_shouldPersistCorrectly() {
     // Set up data
-    PackType packType = PackTypeBuilder.aPackType()
+    PackType packType = aPackType()
         .withMaxWeight(999)
         .withMinWeight(222)
         .withLowVolumeWeight(555)
@@ -35,9 +53,9 @@ public class PackTypeRepositoryTests extends ContextDependentTestSuite {
   }
 
   @Test(expected = ConstraintViolationException.class)
-  public void testSavePackTypeThatCountsAsDonationWithNoComponentType_shouldThrow() throws Exception {
+  public void testSavePackTypeThatCountsAsDonationWithNoComponentType_shouldThrow() {
     // Set up data
-    PackType packType = PackTypeBuilder.aPackType()
+    PackType packType = aPackType()
         .withMaxWeight(999)
         .withMinWeight(222)
         .withLowVolumeWeight(555)
