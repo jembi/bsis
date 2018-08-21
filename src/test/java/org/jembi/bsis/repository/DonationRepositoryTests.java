@@ -1,14 +1,18 @@
 package org.jembi.bsis.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.jembi.bsis.helpers.builders.AdverseEventBuilder.anAdverseEvent;
 import static org.jembi.bsis.helpers.builders.AdverseEventTypeBuilder.anAdverseEventType;
 import static org.jembi.bsis.helpers.builders.CollectedDonationDTOBuilder.aCollectedDonationDTO;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.DonationTypeBuilder.aDonationType;
 import static org.jembi.bsis.helpers.builders.DonorBuilder.aDonor;
+import static org.jembi.bsis.helpers.builders.LocationBuilder.aLocation;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aVenue;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.UserBuilder.aUser;
@@ -16,6 +20,8 @@ import static org.jembi.bsis.helpers.matchers.SameDayMatcher.isSameDayAs;
 import static org.jembi.bsis.helpers.matchers.DonationMatcher.hasSameStateAsDonation;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +49,16 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
 
   @Autowired
   private DonationRepository donationRepository;
+
+  @Test
+  public void testFindByDonationIdentificationNumber_shouldReturnMatchingDonation() {
+    String din = "din";
+    Donation expected = aDonation().withDonationIdentificationNumber(din).buildAndPersist(entityManager);
+
+    Donation actual = donationRepository.findDonationByDonationIdentificationNumber(din);
+
+    assertThat(actual, is(equalTo(expected)));
+  }
 
   @Test
   public void testFindCollectedDonationsReportIndicators_shouldReturnAggregatedIndicators() {
@@ -98,7 +114,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .withBloodRh(expectedBloodRh)
         .withVenue(expectedVenue)
         .buildAndPersist(entityManager);
- 
+
     // Excluded by deleted donationType
     aDonation()
         .thatIsNotDeleted()
@@ -282,7 +298,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
 
     assertThat(returnedDueToDonateDate, is(expectedDueToDonateDate));
   }
-  
+
   @Test
   public void testFindDonationByDonationIdentificationNumberWithFlagCharacters_shouldReturnCorrectDonation() {
     // Set up fixture
@@ -326,9 +342,9 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     Date startDate = new DateTime().minusDays(90).toDate();
     Date endDate = new DateTime().minusDays(60).toDate();
     Date outOfRangeDate = new DateTime().minusDays(30).toDate();
-    
+
     Donor donorWithLastDonationOnEndDate = aDonor().withDateOfLastDonation(endDate).withVenue(venue).build();
-    
+
     // Excluded by last donation date
     aDonation()
         .withDonor(donorWithLastDonationOnEndDate)
@@ -353,7 +369,7 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .withDonor(aDonor().withDateOfLastDonation(endDate).withVenue(venue).build())
         .withDonationDate(endDate)
         .buildAndPersist(entityManager);
-    
+
     List<Donation> expectedDonations = Arrays.asList(
         aDonation()
             .withDonor(aDonor().withDateOfLastDonation(startDate).withVenue(venue).build())
@@ -364,15 +380,15 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
             .withDonationDate(endDate)
             .buildAndPersist(entityManager)
     );
-    
+
     // Exercise SUT
     List<Donation> returnedDonations = donationRepository.findLastDonationsByDonorVenueAndDonationDate(venue, startDate,
         endDate);
-    
+
     // Verify
     assertThat(returnedDonations, is(expectedDonations));
   }
-  
+
   @Test
   public void testFindDonationsForExport_shouldReturnDonationExportDTOsWithTheCorrectState() {
     // Set up fixture
@@ -429,16 +445,16 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .withIneligibleDonor(ineliligibleDonor)
         .withNotes(notes)
         .buildAndPersist(entityManager);
-    
+
     // Excluded deleted donation
     aDonation().thatIsDeleted().buildAndPersist(entityManager);
-    
+
     // Exercise SUT
     List<DonationExportDTO> returnedDTOs = donationRepository.findDonationsForExport();
-    
+
     // Verify
     assertThat(returnedDTOs.size(), is(1));
-    
+
     // Verify DTO state
     DonationExportDTO returnedDTO = returnedDTOs.get(0);
     assertThat(returnedDTO.getDonorNumber(), is(donorNumber));
@@ -468,15 +484,15 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
     assertThat(returnedDTO.isIneligbleDonor(), is(ineliligibleDonor));
     assertThat(returnedDTO.getNotes(), is(notes));
   }
-  
+
   @Test
   public void testFindDonationsForExportWithNoAdverseEvent_shouldReturnDonation() {
     // Set up fixture
     aDonation().withAdverseEvent(null).buildAndPersist(entityManager);
-    
+
     // Exercise SUT
     List<DonationExportDTO> returnedDTOs = donationRepository.findDonationsForExport();
-    
+
     // Verify
     assertThat(returnedDTOs.size(), is(1));
   }
@@ -495,14 +511,121 @@ public class DonationRepositoryTests extends SecurityContextDependentTestSuite {
         .withCreatedDate(new DateTime().minusDays(7).toDate())
         .withDonationIdentificationNumber(firstDonationIdentificationNumber)
         .buildAndPersist(entityManager);
-    
+
     // Exercise SUT
     List<DonationExportDTO> returnedDTOs = donationRepository.findDonationsForExport();
-    
+
     // Verify
     assertThat(returnedDTOs.size(), is(2));
     assertThat(returnedDTOs.get(0).getDonationIdentificationNumber(), is(firstDonationIdentificationNumber));
     assertThat(returnedDTOs.get(1).getDonationIdentificationNumber(), is(secondDonationIdentificationNumber));
   }
 
+  @Test
+  public void testFindByVenueAndPackTypeInRangeWithDatesOnly_shouldReturnDonationsInRange() {
+    Instant instant = Instant.now();
+    Date nowMinusOne = Date.from(instant.minusMillis(1));
+    Date now = Date.from(instant);
+    Date nowPlusOne = Date.from(instant.plusMillis(1));
+    Date nowPlusTwo = Date.from(instant.plusMillis(2));
+    Date nowPlusThree = Date.from(instant.plusMillis(3));
+
+    Donation donationOutsideStart = aDonation().withBleedEndTime(nowMinusOne).buildAndPersist(entityManager);
+    Donation donationAtStart = aDonation().withBleedEndTime(now).buildAndPersist(entityManager);
+    Donation donationInRange = aDonation().withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
+    Donation donationAtEnd = aDonation().withBleedEndTime(nowPlusTwo).buildAndPersist(entityManager);
+    Donation donationOutsideEnd = aDonation().withBleedEndTime(nowPlusThree).buildAndPersist(entityManager);
+    Donation deletedDonation = aDonation().withBleedEndTime(nowPlusOne).thatIsDeleted().buildAndPersist(entityManager);
+
+    List<Donation> actual = donationRepository.findInRange(now, nowPlusTwo);
+
+    assertThat(actual, hasItems(donationAtStart, donationInRange, donationAtEnd));
+    assertThat(actual, not(hasItem(donationOutsideStart)));
+    assertThat(actual, not(hasItem(donationOutsideEnd)));
+    assertThat(actual, not(hasItem(deletedDonation)));
+  }
+
+  @Test
+  public void testFindByVenueAndPackTypeInRangeWithVenueIdAndDates_shouldReturnDonationsFromVenueInRange() {
+    Instant instant = Instant.now();
+    Date now = Date.from(instant);
+    Date nowPlusOne = Date.from(instant.plusMillis(1));
+    Date nowPlusTwo = Date.from(instant.plusMillis(2));
+
+    Location queryVenue = aLocation().build();
+
+    Donation donationFromQueryVenue = aDonation().withVenue(queryVenue).withBleedEndTime(nowPlusOne)
+        .buildAndPersist(entityManager);
+    Donation donationFromAnotherVenue = aDonation().withVenue(aLocation().build()).withBleedEndTime(nowPlusOne)
+        .buildAndPersist(entityManager);
+    Donation deletedDonation = aDonation().withBleedEndTime(nowPlusOne).withVenue(queryVenue).thatIsDeleted()
+        .buildAndPersist(entityManager);
+
+    List<Donation> actual = donationRepository
+        .findByVenueAndPackTypeInRange(queryVenue.getId(), null, now, nowPlusTwo);
+
+    assertThat(actual, hasItem(donationFromQueryVenue));
+    assertThat(actual, not(hasItem(donationFromAnotherVenue)));
+    assertThat(actual, not(hasItem(deletedDonation)));
+  }
+
+  @Test
+  public void testFindByVenueAndPackTypeInRangeWithPackTypeIdAndDates_shouldReturnDonationsWithPackTypeInRange() {
+    Instant instant = Instant.now();
+    Date now = Date.from(instant);
+    Date nowPlusOne = Date.from(instant.plusMillis(1));
+    Date nowPlusTwo = Date.from(instant.plusMillis(2));
+
+    PackType queryPackType = aPackType().build();
+
+    Donation donationFromQueryPackType = aDonation().withPackType(queryPackType).withBleedEndTime(nowPlusOne)
+        .buildAndPersist(entityManager);
+    Donation donationWithAnotherPackType = aDonation().withPackType(aPackType().build()).withBleedEndTime(nowPlusOne)
+        .buildAndPersist(entityManager);
+    Donation deletedDonation = aDonation().withBleedEndTime(nowPlusOne).withPackType(queryPackType).thatIsDeleted()
+        .buildAndPersist(entityManager);
+
+    List<Donation> actual = donationRepository
+        .findByVenueAndPackTypeInRange(null, queryPackType.getId(), now, nowPlusTwo);
+
+    assertThat(actual, hasItem(donationFromQueryPackType));
+    assertThat(actual, not(hasItem(donationWithAnotherPackType)));
+    assertThat(actual, not(hasItem(deletedDonation)));
+  }
+
+  @Test
+  public void testFindByVenueAndPackTypeInRangeWithVenueIdAndPackTypeIdAndDates_shouldReturnDonationsFromVenueWithPackTypeInRange() {
+    Instant instant = Instant.now();
+    Date nowMinusOne = Date.from(instant.minusMillis(1));
+    Date now = Date.from(instant);
+    Date nowPlusOne = Date.from(instant.plusMillis(1));
+    Date nowPlusTwo = Date.from(instant.plusMillis(2));
+    Date nowPlusThree = Date.from(instant.plusMillis(3));
+
+    Location queryVenue = aLocation().build();
+    PackType queryPackType = aPackType().build();
+
+    Donation donationMatchingFilters = aDonation().withVenue(queryVenue).withPackType(queryPackType)
+        .withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
+    Donation donationOutsideStart = aDonation().withVenue(queryVenue).withPackType(queryPackType)
+        .withBleedEndTime(nowMinusOne).buildAndPersist(entityManager);
+    Donation donationOutsideEnd = aDonation().withVenue(queryVenue).withPackType(queryPackType)
+        .withBleedEndTime(nowPlusThree).buildAndPersist(entityManager);
+    Donation donationFromAnotherVenue = aDonation().withVenue(aLocation().build()).withPackType(queryPackType)
+        .withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
+    Donation donationWithAnotherPackType = aDonation().withVenue(queryVenue).withPackType(aPackType().build())
+        .withBleedEndTime(nowPlusOne).buildAndPersist(entityManager);
+    Donation deletedDonation = aDonation().withVenue(queryVenue).withPackType(queryPackType)
+        .withBleedEndTime(nowPlusOne).thatIsDeleted().buildAndPersist(entityManager);
+
+    List<Donation> actual = donationRepository
+        .findByVenueAndPackTypeInRange(queryVenue.getId(), queryPackType.getId(), now, nowPlusTwo);
+
+    assertThat(actual, hasItem(donationMatchingFilters));
+    assertThat(actual, not(hasItem(donationOutsideStart)));
+    assertThat(actual, not(hasItem(donationOutsideEnd)));
+    assertThat(actual, not(hasItem(donationFromAnotherVenue)));
+    assertThat(actual, not(hasItem(donationWithAnotherPackType)));
+    assertThat(actual, not(hasItem(deletedDonation)));
+  }
 }

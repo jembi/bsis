@@ -70,7 +70,15 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER,
         query = DonationNamedQueryConstants.QUERY_FIND_DONATION_BY_DONATION_IDENTIFICATION_NUMBER),
     @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_DONATIONS_BETWEEN_TWO_DINS,
-        query = DonationNamedQueryConstants.QUERY_FIND_DONATIONS_BETWEEN_TWO_DINS)
+        query = DonationNamedQueryConstants.QUERY_FIND_DONATIONS_BETWEEN_TWO_DINS),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_IN_RANGE,
+        query = DonationNamedQueryConstants.QUERY_FIND_IN_RANGE),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_BY_PACK_TYPE_ID_IN_RANGE,
+        query = DonationNamedQueryConstants.QUERY_FIND_BY_PACK_TYPE_ID_IN_RANGE),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_BY_VENUE_ID_IN_RANGE,
+        query = DonationNamedQueryConstants.QUERY_FIND_BY_VENUE_ID_IN_RANGE),
+    @NamedQuery(name = DonationNamedQueryConstants.NAME_FIND_BY_VENUE_ID_AND_PACK_TYPE_ID_IN_RANGE,
+        query = DonationNamedQueryConstants.QUERY_FIND_BY_VENUE_ID_AND_PACK_TYPE_ID_IN_RANGE)
 })
 @Entity
 @Audited

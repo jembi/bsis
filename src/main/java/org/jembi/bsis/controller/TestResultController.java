@@ -4,12 +4,16 @@ import org.jembi.bsis.backingform.TestResultsBackingForms;
 import org.jembi.bsis.backingform.validator.TestResultsBackingFormsValidator;
 import org.jembi.bsis.controllerservice.TestResultControllerService;
 import org.jembi.bsis.factory.DonationFactory;
+import org.jembi.bsis.factory.LocationFactory;
+import org.jembi.bsis.factory.PackTypeFactory;
 import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.bloodtesting.BloodTestType;
 import org.jembi.bsis.model.donation.BloodTypingMatchStatus;
 import org.jembi.bsis.model.donation.Donation;
 import org.jembi.bsis.model.testbatch.TestBatch;
 import org.jembi.bsis.repository.DonationRepository;
+import org.jembi.bsis.repository.LocationRepository;
+import org.jembi.bsis.repository.PackTypeRepository;
 import org.jembi.bsis.repository.TestBatchRepository;
 import org.jembi.bsis.service.BloodTestsService;
 import org.jembi.bsis.utils.CustomDateFormatter;
@@ -36,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -66,9 +71,36 @@ public class TestResultController {
   @Autowired
   private TestResultControllerService testResultControllerService;
 
+  @Autowired
+  private LocationFactory locationFactory;
+
+  @Autowired
+  private LocationRepository locationRepository;
+
+  @Autowired
+  private PackTypeFactory packTypeFactory;
+
+  @Autowired
+  private PackTypeRepository packTypeRepository;
+
   @InitBinder
   protected void initDonationFormBinder(WebDataBinder binder) {
     binder.setValidator(testResultsBackingFormsValidator);
+  }
+
+  @RequestMapping(value = "/form", method = RequestMethod.GET)
+  @PreAuthorize("hasRole('" + PermissionConstants.VIEW_TEST_OUTCOME + "')")
+  public Map<String, Object> form() {
+    Map<String, Object> response = new HashMap<>();
+    response.put("venues",
+        locationRepository.getVenues().stream()
+            .map(locationFactory::createViewModel)
+            .collect(Collectors.toList()));
+    response.put("packTypes",
+        packTypeRepository.getAllEnabledPackTypes().stream()
+            .map(packTypeFactory::createViewModel)
+            .collect(Collectors.toList()));
+    return response;
   }
 
   @RequestMapping(value = "/{donationIdentificationNumber}/sample", method = RequestMethod.GET)
