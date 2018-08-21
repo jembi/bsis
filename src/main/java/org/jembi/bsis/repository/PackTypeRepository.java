@@ -16,6 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PackTypeRepository {
 
+  public static final String NAME_FIND_PRODUCING_TEST_SAMPLES = "PackType.findProducingTestSamples";
+  public static final String QUERY_FIND_PRODUCING_TEST_SAMPLES = "SELECT pt FROM PackType pt " +
+      "WHERE pt.testSampleProduced = :testSampleProduced";
+
   @PersistenceContext
   private EntityManager entityManager;
 
@@ -30,6 +34,12 @@ public class PackTypeRepository {
     query = entityManager.createQuery("SELECT b from PackType b where b.isDeleted=:isDeleted", PackType.class);
     query.setParameter("isDeleted", false);
     return query.getResultList();
+  }
+
+  public List<PackType> getAllPackTypesProducingTestSamples() {
+    return entityManager.createNamedQuery(NAME_FIND_PRODUCING_TEST_SAMPLES, PackType.class)
+        .setParameter("testSampleProduced", true)
+        .getResultList();
   }
 
   public PackType findPackTypeByName(String packType) {
