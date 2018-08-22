@@ -21,6 +21,7 @@ public class BloodTestResultNamedQueryConstants {
           "AND d.released = :released " +
           "AND b.bloodTest.bloodTestType = :bloodTestType " +
           "AND b.bloodTest.isDeleted = :bloodTestDeleted " +
+          "AND d.packType.countAsDonation = :countAsDonation " +
           "GROUP BY d.venue, do.gender, b.bloodTest, b.result " +
           "ORDER BY d.venue, do.gender, b.bloodTest, b.result";
   
@@ -35,6 +36,7 @@ public class BloodTestResultNamedQueryConstants {
           "AND b.isDeleted = :testOutcomeDeleted " +
           "AND d.released = :released " +
           "AND b.bloodTest.bloodTestType = :bloodTestType " +
+          "AND d.packType.countAsDonation = :countAsDonation " +
           "GROUP BY d.venue, do.gender " +
           "ORDER BY d.venue, do.gender";
   
@@ -50,6 +52,7 @@ public class BloodTestResultNamedQueryConstants {
           "AND d.released = :released " +
           "AND b.bloodTest.bloodTestType = :bloodTestType " +
           "AND d.ttiStatus = :ttiStatus " +
+          "AND d.packType.countAsDonation = :countAsDonation " +
           "GROUP BY d.venue, do.gender " +
           "ORDER BY d.venue, do.gender";
   

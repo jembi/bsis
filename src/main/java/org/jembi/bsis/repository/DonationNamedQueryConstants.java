@@ -36,6 +36,7 @@ public class DonationNamedQueryConstants {
           "WHERE d.donor = do AND d.donationDate BETWEEN :startDate AND :endDate " +
           "AND d.donationType.isDeleted = :deleted " +
           "AND d.isDeleted = :deleted " +
+          "AND d.packType.countAsDonation = :countAsDonation " +
           "GROUP BY d.venue, do.gender, d.donationType, d.bloodAbo, d.bloodRh " +
           "ORDER BY d.venue, do.gender, d.donationType, d.bloodAbo, d.bloodRh";
 
