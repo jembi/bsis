@@ -521,7 +521,7 @@
     <modifyDataType columnName="REV" newDataType="BIGINT(20)" tableName="User_Role_AUD"/>
 
     <sql>
-      ALTER TABLE bsis.AuditRevision 
+      ALTER TABLE AuditRevision 
       DROP PRIMARY KEY,
       ADD PRIMARY KEY (`id`, `server_uuid`);
     </sql>
@@ -650,328 +650,328 @@
 
   <changeSet id="20170512-1330" author="rowanpi">
     <sql endDelimiter="/">
-      DROP TRIGGER IF EXISTS bsis.AuditRevision_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.AuditRevision_BEFORE_INSERT BEFORE INSERT ON AuditRevision FOR EACH ROW
+      DROP TRIGGER IF EXISTS AuditRevision_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER AuditRevision_BEFORE_INSERT BEFORE INSERT ON AuditRevision FOR EACH ROW
       BEGIN
       	IF ISNULL(NEW.server_uuid) THEN
       		SET NEW.server_uuid = @@server_uuid;
       	END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.EntityModification_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.EntityModification_AUD_BEFORE_INSERT BEFORE INSERT ON EntityModification FOR EACH ROW
+      DROP TRIGGER IF EXISTS EntityModification_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER EntityModification_AUD_BEFORE_INSERT BEFORE INSERT ON EntityModification FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.AdverseEventType_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.AdverseEventType_AUD_BEFORE_INSERT BEFORE INSERT ON AdverseEventType_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS AdverseEventType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER AdverseEventType_AUD_BEFORE_INSERT BEFORE INSERT ON AdverseEventType_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.AdverseEvent_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.AdverseEvent_AUD_BEFORE_INSERT BEFORE INSERT ON AdverseEvent_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS AdverseEvent_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER AdverseEvent_AUD_BEFORE_INSERT BEFORE INSERT ON AdverseEvent_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.BloodTestResult_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.BloodTestResult_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTestResult_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS BloodTestResult_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER BloodTestResult_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTestResult_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.BloodTest_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.BloodTest_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTest_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS BloodTest_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER BloodTest_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTest_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.BloodTestingRule_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.BloodTestingRule_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTestingRule_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS BloodTestingRule_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER BloodTestingRule_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTestingRule_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.BloodTestingRule_BloodTest_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.BloodTestingRule_BloodTest_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTestingRule_BloodTest_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS BloodTestingRule_BloodTest_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER BloodTestingRule_BloodTest_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTestingRule_BloodTest_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.BloodTransportBox_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.BloodTransportBox_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTransportBox_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS BloodTransportBox_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER BloodTransportBox_AUD_BEFORE_INSERT BEFORE INSERT ON BloodTransportBox_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.ComponentBatch_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.ComponentBatch_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentBatch_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS ComponentBatch_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ComponentBatch_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentBatch_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.ComponentStatusChangeReason_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.ComponentStatusChangeReason_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentStatusChangeReason_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS ComponentStatusChangeReason_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ComponentStatusChangeReason_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentStatusChangeReason_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.ComponentStatusChange_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.ComponentStatusChange_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentStatusChange_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS ComponentStatusChange_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ComponentStatusChange_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentStatusChange_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.ComponentTypeCombination_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.ComponentTypeCombination_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentTypeCombination_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS ComponentTypeCombination_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ComponentTypeCombination_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentTypeCombination_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.ComponentType_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.ComponentType_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentType_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS ComponentType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ComponentType_AUD_BEFORE_INSERT BEFORE INSERT ON ComponentType_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.Component_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.Component_AUD_BEFORE_INSERT BEFORE INSERT ON Component_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS Component_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Component_AUD_BEFORE_INSERT BEFORE INSERT ON Component_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.ContactMethodType_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.ContactMethodType_AUD_BEFORE_INSERT BEFORE INSERT ON ContactMethodType_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS ContactMethodType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ContactMethodType_AUD_BEFORE_INSERT BEFORE INSERT ON ContactMethodType_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.DeferralReason_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.DeferralReason_AUD_BEFORE_INSERT BEFORE INSERT ON DeferralReason_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS DeferralReason_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER DeferralReason_AUD_BEFORE_INSERT BEFORE INSERT ON DeferralReason_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.Division_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.Division_AUD_BEFORE_INSERT BEFORE INSERT ON Division_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS Division_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Division_AUD_BEFORE_INSERT BEFORE INSERT ON Division_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.DonationBatch_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.DonationBatch_AUD_BEFORE_INSERT BEFORE INSERT ON DonationBatch_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS DonationBatch_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER DonationBatch_AUD_BEFORE_INSERT BEFORE INSERT ON DonationBatch_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.DonationType_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.DonationType_AUD_BEFORE_INSERT BEFORE INSERT ON DonationType_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS DonationType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER DonationType_AUD_BEFORE_INSERT BEFORE INSERT ON DonationType_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.Donation_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.Donation_AUD_BEFORE_INSERT BEFORE INSERT ON Donation_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS Donation_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Donation_AUD_BEFORE_INSERT BEFORE INSERT ON Donation_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.DonorDeferral_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.DonorDeferral_AUD_BEFORE_INSERT BEFORE INSERT ON DonorDeferral_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS DonorDeferral_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER DonorDeferral_AUD_BEFORE_INSERT BEFORE INSERT ON DonorDeferral_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.Donor_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.Donor_AUD_BEFORE_INSERT BEFORE INSERT ON Donor_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS Donor_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Donor_AUD_BEFORE_INSERT BEFORE INSERT ON Donor_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.GeneralConfig_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.GeneralConfig_AUD_BEFORE_INSERT BEFORE INSERT ON GeneralConfig_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS GeneralConfig_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER GeneralConfig_AUD_BEFORE_INSERT BEFORE INSERT ON GeneralConfig_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.Location_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.Location_AUD_BEFORE_INSERT BEFORE INSERT ON Location_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS Location_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Location_AUD_BEFORE_INSERT BEFORE INSERT ON Location_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.OrderFormItem_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.OrderFormItem_AUD_BEFORE_INSERT BEFORE INSERT ON OrderFormItem_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS OrderFormItem_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER OrderFormItem_AUD_BEFORE_INSERT BEFORE INSERT ON OrderFormItem_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.OrderForm_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.OrderForm_AUD_BEFORE_INSERT BEFORE INSERT ON OrderForm_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS OrderForm_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER OrderForm_AUD_BEFORE_INSERT BEFORE INSERT ON OrderForm_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.OrderForm_Component_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.OrderForm_Component_AUD_BEFORE_INSERT BEFORE INSERT ON OrderForm_Component_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS OrderForm_Component_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER OrderForm_Component_AUD_BEFORE_INSERT BEFORE INSERT ON OrderForm_Component_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.PackType_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.PackType_AUD_BEFORE_INSERT BEFORE INSERT ON PackType_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS PackType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER PackType_AUD_BEFORE_INSERT BEFORE INSERT ON PackType_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.Patient_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.Patient_AUD_BEFORE_INSERT BEFORE INSERT ON Patient_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS Patient_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Patient_AUD_BEFORE_INSERT BEFORE INSERT ON Patient_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.Permission_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.Permission_AUD_BEFORE_INSERT BEFORE INSERT ON Permission_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS Permission_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Permission_AUD_BEFORE_INSERT BEFORE INSERT ON Permission_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.Permission_Role_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.Permission_Role_AUD_BEFORE_INSERT BEFORE INSERT ON Permission_Role_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS Permission_Role_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Permission_Role_AUD_BEFORE_INSERT BEFORE INSERT ON Permission_Role_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.PostDonationCounselling_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.PostDonationCounselling_AUD_BEFORE_INSERT BEFORE INSERT ON PostDonationCounselling_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS PostDonationCounselling_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER PostDonationCounselling_AUD_BEFORE_INSERT BEFORE INSERT ON PostDonationCounselling_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.ReturnForm_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.ReturnForm_AUD_BEFORE_INSERT BEFORE INSERT ON ReturnForm_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS ReturnForm_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ReturnForm_AUD_BEFORE_INSERT BEFORE INSERT ON ReturnForm_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.ReturnForm_Component_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.ReturnForm_Component_AUD_BEFORE_INSERT BEFORE INSERT ON ReturnForm_Component_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS ReturnForm_Component_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER ReturnForm_Component_AUD_BEFORE_INSERT BEFORE INSERT ON ReturnForm_Component_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.Role_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.Role_AUD_BEFORE_INSERT BEFORE INSERT ON Role_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS Role_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Role_AUD_BEFORE_INSERT BEFORE INSERT ON Role_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.TestBatch_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.TestBatch_AUD_BEFORE_INSERT BEFORE INSERT ON TestBatch_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS TestBatch_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER TestBatch_AUD_BEFORE_INSERT BEFORE INSERT ON TestBatch_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.TransfusionReactionType_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.TransfusionReactionType_AUD_BEFORE_INSERT BEFORE INSERT ON TransfusionReactionType_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS TransfusionReactionType_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER TransfusionReactionType_AUD_BEFORE_INSERT BEFORE INSERT ON TransfusionReactionType_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.Transfusion_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.Transfusion_AUD_BEFORE_INSERT BEFORE INSERT ON Transfusion_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS Transfusion_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER Transfusion_AUD_BEFORE_INSERT BEFORE INSERT ON Transfusion_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.User_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.User_AUD_BEFORE_INSERT BEFORE INSERT ON User_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS User_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER User_AUD_BEFORE_INSERT BEFORE INSERT ON User_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
         END IF;
       END/
 
-      DROP TRIGGER IF EXISTS bsis.User_Role_AUD_BEFORE_INSERT/
-      CREATE DEFINER = CURRENT_USER TRIGGER bsis.User_Role_AUD_BEFORE_INSERT BEFORE INSERT ON User_Role_AUD FOR EACH ROW
+      DROP TRIGGER IF EXISTS User_Role_AUD_BEFORE_INSERT/
+      CREATE DEFINER = CURRENT_USER TRIGGER User_Role_AUD_BEFORE_INSERT BEFORE INSERT ON User_Role_AUD FOR EACH ROW
       BEGIN
         IF ISNULL(NEW.server_uuid) THEN
           SET NEW.server_uuid = @@server_uuid;
