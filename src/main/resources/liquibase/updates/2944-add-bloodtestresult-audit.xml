@@ -4,11 +4,11 @@
 
   <changeSet id="20170406-1509" author="patience-mpofu">
     <preConditions>
-      <not><tableExists tableName="BloodTestResult_AUD" schemaName="bsis"/></not>
+      <not><tableExists tableName="BloodTestResult_AUD"/></not>
     </preConditions>
     <comment>This creates an audit table for BloodTestResult</comment>
 
-    <createTable remarks="Audit table" schemaName="bsis" tableName="BloodTestResult_AUD">
+    <createTable remarks="Audit table" tableName="BloodTestResult_AUD">
       <column name="id" type="BIGINT(20)"/>
       <column name="REV" type="INT(11)"/>
       <column name="REVTYPE" type="TINYINT(4)"/>
