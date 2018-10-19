@@ -109,6 +109,8 @@ public class TestBatchCRUDService {
         result.addDinWithoutTestSample(donation.getDonationIdentificationNumber());
       } else if (donation.getTestBatch() != null && !donation.isIncludedIn(testBatch)) {
         result.addDinInAnotherTestBatch(donation.getDonationIdentificationNumber());
+      } else if (!donation.getDonationBatch().getIsClosed()) {
+        result.addDinInOpenDonationBatch(donation.getDonationIdentificationNumber());
       } else {
         testBatch.addDonation(donation);
       }

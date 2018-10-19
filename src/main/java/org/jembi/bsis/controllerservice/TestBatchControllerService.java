@@ -90,7 +90,7 @@ public class TestBatchControllerService {
         .addDonationsToTestBatch(testBatch, donationsInRange);
     return testBatchFactory
         .createTestBatchFullViewModel(result.getTestBatch(), result.getDinsWithoutTestSamples(),
-            result.getDinsInOtherTestBatches());
+            result.getDinsInOtherTestBatches(), result.getDinsInOpenDonationBatch());
   }
 
   public TestBatchFullViewModel removeDonationsFromBatch(TestBatchDonationsBackingForm backingForm) {

@@ -1,6 +1,7 @@
 package org.jembi.bsis.service;
 
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.location.Location;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.testbatch.DonationAdditionResult;
@@ -28,6 +29,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
+import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.LocationBuilder.aTestingSite;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
@@ -268,8 +270,10 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     UUID testBatchId = UUID.randomUUID();
 
     TestBatch testBatch = aTestBatch().withId(testBatchId).withStatus(CLOSED).build();
-    Donation donationOne = aDonation().withId(UUID.randomUUID()).thatIsNotDeleted().build();
-    Donation donationTwo = aDonation().withId(UUID.randomUUID()).thatIsNotDeleted().build();
+
+    DonationBatch donationBatchClosed = aDonationBatch().thatIsClosed().build();
+    Donation donationOne = aDonation().withDonationBatch(donationBatchClosed).withId(UUID.randomUUID()).thatIsNotDeleted().build();
+    Donation donationTwo = aDonation().withDonationBatch(donationBatchClosed).withId(UUID.randomUUID()).thatIsNotDeleted().build();
     List<Donation> donations = Arrays.asList(donationOne, donationTwo);
 
     testBatchCRUDService.addDonationsToTestBatch(testBatch, donations);
@@ -285,11 +289,14 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
         .withDonations(new HashSet<>())
         .build();
 
+    DonationBatch donationBatchClosed = aDonationBatch().thatIsClosed().build();
+
     PackType didNotBleedPackType = aPackType()
         .withTestSampleProduced(false)
         .build();
     Donation donationThatDoesNotProduceATestSample = aDonation()
         .withId(UUID.randomUUID())
+        .withDonationBatch(donationBatchClosed)
         .withDonationIdentificationNumber("no-test-sample")
         .withPackType(didNotBleedPackType)
         .thatIsNotDeleted()
@@ -300,6 +307,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
         .build();
     Donation donationThatProducesATestSample = aDonation()
         .withId(UUID.randomUUID())
+        .withDonationBatch(donationBatchClosed)
         .withPackType(testSamplePackType)
         .thatIsNotDeleted()
         .build();
@@ -328,15 +336,19 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
         .withDonations(new HashSet<>())
         .build();
 
+    DonationBatch donationBatchClosed = aDonationBatch().thatIsClosed().build();
+
     PackType packType = aPackType()
         .withTestSampleProduced(true)
         .build();
     Donation donation = aDonation()
         .withId(UUID.randomUUID())
+        .withDonationBatch(donationBatchClosed)
         .withPackType(packType)
         .build();
     Donation donationBelongingToAnotherTestBatch = aDonation()
         .withId(UUID.randomUUID())
+        .withDonationBatch(donationBatchClosed)
         .withDonationIdentificationNumber("another")
         .withPackType(packType)
         .withTestBatch(anotherTestBatch)
@@ -356,12 +368,53 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
   }
 
   @Test
+  public void testAddDonationsToTestBatchWithDonationBelongingToOpenDonationBatch_shouldNotSetTestBatch() {
+    TestBatch testBatch = aTestBatch()
+        .withId(UUID.randomUUID())
+        .withStatus(OPEN)
+        .withDonations(new HashSet<>())
+        .build();
+
+    DonationBatch donationBatchClosed = aDonationBatch().thatIsClosed().build();
+    DonationBatch donationBatchOpen = aDonationBatch().build();
+
+    PackType packType = aPackType()
+        .withTestSampleProduced(true)
+        .build();
+    Donation donation = aDonation()
+        .withId(UUID.randomUUID())
+        .withDonationBatch(donationBatchClosed)
+        .withPackType(packType)
+        .build();
+    Donation donationBelongingToOpenDonationBatch = aDonation()
+        .withId(UUID.randomUUID())
+        .withDonationBatch(donationBatchOpen)
+        .withDonationIdentificationNumber("another")
+        .withPackType(packType)
+        .thatIsNotDeleted()
+        .build();
+
+    List<Donation> donations = Arrays.asList(donation, donationBelongingToOpenDonationBatch);
+
+    DonationAdditionResult expected = DonationAdditionResult.builder().testBatch(testBatch).build()
+        .addDinInOpenDonationBatch(donationBelongingToOpenDonationBatch.getDonationIdentificationNumber());
+
+    DonationAdditionResult actual = testBatchCRUDService.addDonationsToTestBatch(testBatch, donations);
+
+    assertThat(donationBelongingToOpenDonationBatch.getTestBatch(), is(not(equalTo(testBatch))));
+    assertThat(donation.getTestBatch(), is(testBatch));
+    assertThat(actual, is(equalTo(expected)));
+  }
+
+  @Test
   public void testAddDonationsToTestBatchWithTestSampleProducingPackType_shouldSetTestBatch() {
     PackType packtype = aPackType()
         .withTestSampleProduced(true)
         .build();
-    Donation donationOne = aDonation().withId(UUID.randomUUID()).thatIsNotDeleted().withPackType(packtype).build();
-    Donation donationTwo = aDonation().withId(UUID.randomUUID()).thatIsNotDeleted().withPackType(packtype).build();
+
+    DonationBatch donationBatchClosed = aDonationBatch().thatIsClosed().build();
+    Donation donationOne = aDonation().withDonationBatch(donationBatchClosed).withId(UUID.randomUUID()).thatIsNotDeleted().withPackType(packtype).build();
+    Donation donationTwo = aDonation().withDonationBatch(donationBatchClosed).withId(UUID.randomUUID()).thatIsNotDeleted().withPackType(packtype).build();
     List<Donation> donations = Arrays.asList(donationOne, donationTwo);
 
     TestBatch testBatch = aTestBatch().withId(UUID.randomUUID()).withStatus(OPEN).withDonations(new HashSet<>()).build();
@@ -374,7 +427,7 @@ public class TestBatchCRUDServiceTests extends UnitTestSuite {
     assertThat(donationTwo.getTestBatch(), is(testBatch));
     assertThat(actual, is(expected));
   }
-  
+
   @Test(expected = IllegalStateException.class)
   public void testRemoveDonationsFromTestBatchThatCantAddOrRemoveDonations_shouldThrowIllegalStateException() {
     Donation donationToRemove = aDonation().build();
