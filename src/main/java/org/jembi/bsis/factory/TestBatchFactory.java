@@ -109,10 +109,11 @@ public class TestBatchFactory {
   }
 
   public TestBatchFullViewModel createTestBatchFullViewModel(TestBatch testBatch, Set<String> dinsWithoutTestSamples,
-                                                             Set<String> dinsInOtherTestBatches) {
+                                                             Set<String> dinsInOtherTestBatches, Set<String> dinsInOpenDonationBatch) {
     TestBatchFullViewModel testBatchFullViewModel = createTestBatchFullViewModel(testBatch);
     testBatchFullViewModel.addAllDonationIdsWithoutTestSamples(dinsWithoutTestSamples);
     testBatchFullViewModel.addAllDonationIdsInOtherTestBatches(dinsInOtherTestBatches);
+    testBatchFullViewModel.addAllDonationIdsInOpenDonationBatch(dinsInOpenDonationBatch);
     return testBatchFullViewModel;
   }
 

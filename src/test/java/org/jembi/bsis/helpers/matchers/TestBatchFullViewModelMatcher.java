@@ -22,7 +22,10 @@ public class TestBatchFullViewModelMatcher extends AbstractTypeSafeMatcher<TestB
       .appendText("\nNotes: ").appendValue(model.getNotes())
       .appendText("\nDonations: ").appendValue(model.getDonations())
       .appendText("\nPermissions: ").appendValue(model.getPermissions())
-      .appendText("\nReady for release count: ").appendValue(model.getReadyForReleaseCount());
+      .appendText("\nReady for release count: ").appendValue(model.getReadyForReleaseCount())
+      .appendText("\nDins Without Test Samples: ").appendValue(model.getDinsWithoutTestSamples())
+      .appendText("\nDins In Other Test Batches: ").appendValue(model.getDinsInOtherTestBatches())
+      .appendText("\nDins In Open Donationan Batch: ").appendValue(model.getDinsInOpenDonationanBatch());
   }
 
   @Override
@@ -35,7 +38,10 @@ public class TestBatchFullViewModelMatcher extends AbstractTypeSafeMatcher<TestB
         Objects.equals(actual.getNotes(), expected.getNotes()) &&
         Objects.equals(actual.getDonations(), expected.getDonations()) &&
         Objects.equals(actual.getPermissions(), expected.getPermissions()) &&
-        Objects.equals(actual.getReadyForReleaseCount(), expected.getReadyForReleaseCount());
+        Objects.equals(actual.getReadyForReleaseCount(), expected.getReadyForReleaseCount()) && 
+        Objects.equals(actual.getDinsWithoutTestSamples(), expected.getDinsWithoutTestSamples()) &&
+        Objects.equals(actual.getDinsInOtherTestBatches(), expected.getDinsInOtherTestBatches()) &&
+        Objects.equals(actual.getDinsInOpenDonationanBatch(), expected.getDinsInOpenDonationanBatch());
   }
 
   public static TestBatchFullViewModelMatcher hasSameStateAsTestBatchFullViewModel(TestBatchFullViewModel expected) {
