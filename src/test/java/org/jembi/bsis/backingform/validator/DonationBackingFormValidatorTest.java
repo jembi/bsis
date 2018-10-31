@@ -562,6 +562,43 @@ public class DonationBackingFormValidatorTest {
   }
 
   @Test
+  public void testUpdateOfExistingDonationBeforeNextAllowedDate_shouldNotHaveErrors() throws Exception {
+    // set up data
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
+    DonationBackingForm form = createBasicBackingForm(venue);
+    form.getPackType().setPeriodBetweenDonations(20);
+    form.getPackType().setCountAsDonation(Boolean.TRUE);
+    Donation donation = aDonation()
+        .withPackType(form.getPackType())
+        .withDonationDate(new Date())
+        .withBleedStartTime(new Date())
+        .withBleedEndTime(new Date())
+        .withDonationBatch(aDonationBatch().withId(UUID.randomUUID()).build())
+        .withVenue(venue)
+        .withDonationType(aDonationType().withId(UUID.randomUUID()).build())
+        .withDonor(form.getDonor())
+        .build();
+    form.getDonor().setDonations(Arrays.asList(donation));
+    //A donation with an existing UUID is not a new one. Donor validation should then not execute on updating
+    form.getDonation().setId(UUID.randomUUID());
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.FALSE);
+    mockGeneralConfigAndFormFields();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Error exist", 0, errors.getErrorCount());
+  }
+
+  @Test
   public void testHistoricalDonationBatchDonationBeforeNextAllowedDate() throws Exception {
     // set up data
     UUID locationId = UUID.randomUUID();
@@ -666,7 +703,6 @@ public class DonationBackingFormValidatorTest {
     Assert.assertEquals("No errors exist", 0, errors.getErrorCount());
   }
 
-
   @Test
   public void testInvalidDonorDeferred() throws Exception {
     // set up data
@@ -689,6 +725,30 @@ public class DonationBackingFormValidatorTest {
     Assert.assertEquals("Error exist", 1, errors.getErrorCount());
     Assert.assertEquals(errors.getFieldError("donation.donor").getCode(), "errors.invalid.donorDeferred");
     Assert.assertEquals(errors.getFieldError("donation.donor").getDefaultMessage(), "Donor is currently deferred");
+  }
+
+  @Test
+  public void testUpdateOfExistingDonationOfDeferredDonor_shouldNotHaveErrors() throws Exception {
+    // set up data
+    UUID locationId = UUID.randomUUID();
+    Location venue = LocationBuilder.aLocation().withId(locationId).thatIsVenue().build();
+    DonationBackingForm form = createBasicBackingForm(venue);
+    //A donation with an existing UUID is not a new one. Donor validation should then not execute on updating
+    form.getDonation().setId(UUID.randomUUID());
+
+    // set up mocks
+    when(donorRepository.findDonorByDonorNumber("DN123", false)).thenReturn(form.getDonor());
+    when(donationBatchRepository.findDonationBatchByBatchNumber("DB123")).thenReturn(form.getDonationBatch());
+    when(locationRepository.getLocation(locationId)).thenReturn(venue);
+    when(donorDeferralStatusCalculator.isDonorCurrentlyDeferred(any(UUID.class))).thenReturn(Boolean.TRUE);
+    mockGeneralConfigAndFormFields();
+
+    // run test
+    Errors errors = new MapBindingResult(new HashMap<String, String>(), "donation");
+    donationBackingFormValidator.validate(form, errors);
+
+    // check asserts
+    Assert.assertEquals("Error exist", 0, errors.getErrorCount());
   }
 
   @Test
