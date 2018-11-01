@@ -584,7 +584,7 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
   }
 
   @Test
-  public void testCanEditToNewPackTypeThatDoesntProducesTestSamplesWithNoTestBatcStatus_shouldReturnTrue() {
+  public void testCanEditToNewPackTypeThatDoesntProducesTestSamplesWithNoTestBatchStatus_shouldReturnTrue() {
     // Set up fixture
     TestBatch testBatch = TestBatchBuilder.aTestBatch().build();
     Donation donation = aDonation().withTestBatch(testBatch).withPackType(aPackType().withTestSampleProduced(false).build()).build();
