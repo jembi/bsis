@@ -170,15 +170,20 @@ public class DonationConstraintChecker {
 
   public boolean canEditToNewPackType(Donation existingDonation, PackType newPackType) {
 
-    // Check that if the newPackType produces test samples, and the existing one
-    // doesn't, the test batch linked to this donation must be OPEN for the packType to be edited
-    if (newPackType.getTestSampleProduced() && 
-        !existingDonation.getPackType().getTestSampleProduced() && 
-        existingDonation.getTestBatch() != null && 
+    if(existingDonation.getTestBatch() != null && 
+        existingDonation.getTestBatch().getStatus() != null &&
         !existingDonation.getTestBatch().getStatus().equals(TestBatchStatus.OPEN)) {
-      return false;
-    }
 
+      if (newPackType.getTestSampleProduced() && 
+          !existingDonation.getPackType().getTestSampleProduced()) {
+        return false;
+      }
+
+      if (existingDonation.getPackType().getTestSampleProduced() && 
+          !newPackType.getTestSampleProduced()) {
+        return false;
+      }
+    }
     return true;
   }
 
