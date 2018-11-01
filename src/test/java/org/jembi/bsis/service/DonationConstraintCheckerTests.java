@@ -748,4 +748,23 @@ public class DonationConstraintCheckerTests extends UnitTestSuite {
     // Verify
     assertThat(canEditToNewPackType, is(true));
   }
+
+  @Test
+  public void testCanEditToNewPackTypeThatDoesNotProduceTestSamplesFromPackTypeThatDoesWithDonationThatIsReleased_shouldReturnFalse() {
+    // Set up fixture
+    TestBatch testBatch = TestBatchBuilder.aTestBatch().withStatus(TestBatchStatus.OPEN).build();
+    Donation donation = aDonation()
+        .withPackType(aPackType().withTestSampleProduced(true).build())
+        .withDonationBatch(DonationBatchBuilder.aDonationBatch().build())
+        .withTestBatch(testBatch)
+        .thatIsReleased()
+        .build();
+    PackType newPackType = aPackType().withTestSampleProduced(false).build();
+
+    // Exercise SUT
+    boolean canEditToNewPackType = donationConstraintChecker.canEditToNewPackType(donation, newPackType);
+
+    // Verify
+    assertThat(canEditToNewPackType, is(false));
+  }
 }

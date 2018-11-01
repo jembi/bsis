@@ -170,21 +170,19 @@ public class DonationConstraintChecker {
 
   public boolean canEditToNewPackType(Donation existingDonation, PackType newPackType) {
 
-    if(existingDonation.getTestBatch() != null && 
-        existingDonation.getTestBatch().getStatus() != null &&
-        !existingDonation.getTestBatch().getStatus().equals(TestBatchStatus.OPEN)) {
-
-      if (newPackType.getTestSampleProduced() && 
-          !existingDonation.getPackType().getTestSampleProduced()) {
-        return false;
-      }
-
-      if (existingDonation.getPackType().getTestSampleProduced() && 
-          !newPackType.getTestSampleProduced()) {
+    if(existingDonation.isReleased() || isTestBatchNotOpen(existingDonation)) {
+      //check if pack type change is from one that produces test samples to one that doesn't or vice versa
+      if (existingDonation.getPackType().getTestSampleProduced() != newPackType.getTestSampleProduced()) {
         return false;
       }
     }
     return true;
+  }
+
+  private boolean isTestBatchNotOpen(Donation donation) {
+    return donation.getTestBatch() != null && 
+        donation.getTestBatch().getStatus() != null &&
+        !donation.getTestBatch().getStatus().equals(TestBatchStatus.OPEN);
   }
 
 }
