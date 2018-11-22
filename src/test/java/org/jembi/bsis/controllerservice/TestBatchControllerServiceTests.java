@@ -4,6 +4,7 @@ import org.jembi.bsis.backingform.TestBatchDonationRangeBackingForm;
 import org.jembi.bsis.backingform.TestBatchDonationsBackingForm;
 import org.jembi.bsis.factory.TestBatchFactory;
 import org.jembi.bsis.model.donation.Donation;
+import org.jembi.bsis.model.donationbatch.DonationBatch;
 import org.jembi.bsis.model.packtype.PackType;
 import org.jembi.bsis.model.testbatch.DonationAdditionResult;
 import org.jembi.bsis.model.testbatch.TestBatch;
@@ -25,6 +26,7 @@ import java.util.UUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.jembi.bsis.helpers.builders.DonationBatchBuilder.aDonationBatch;
 import static org.jembi.bsis.helpers.builders.DonationBuilder.aDonation;
 import static org.jembi.bsis.helpers.builders.PackTypeBuilder.aPackType;
 import static org.jembi.bsis.helpers.builders.TestBatchBuilder.aTestBatch;
@@ -58,8 +60,9 @@ public class TestBatchControllerServiceTests extends UnitTestSuite {
     PackType packtype = aPackType()
         .withTestSampleProduced(true)
         .build();
-    Donation donationOne = aDonation().withId(UUID.randomUUID()).thatIsNotDeleted().withPackType(packtype).build();
-    Donation donationTwo = aDonation().withId(UUID.randomUUID()).thatIsNotDeleted().withPackType(packtype).build();
+    DonationBatch donationBatchClosed = aDonationBatch().thatIsClosed().build();
+    Donation donationOne = aDonation().withId(UUID.randomUUID()).withDonationBatch(donationBatchClosed).thatIsNotDeleted().withPackType(packtype).build();
+    Donation donationTwo = aDonation().withId(UUID.randomUUID()).withDonationBatch(donationBatchClosed).thatIsNotDeleted().withPackType(packtype).build();
     List<Donation> donations = Arrays.asList(donationOne, donationTwo);
 
     TestBatch testBatch = aTestBatch().withId(UUID.randomUUID()).withStatus(OPEN).withDonations(new HashSet<>()).build();
@@ -72,7 +75,7 @@ public class TestBatchControllerServiceTests extends UnitTestSuite {
     when(donationRepository.findDonationsBetweenTwoDins(fromDIN, toDIN))
         .thenReturn(donations);
     when(testBatchCRUDService.addDonationsToTestBatch(testBatch, donations)).thenReturn(result);
-    when(testBatchFactory.createTestBatchFullViewModel(testBatch, Collections.emptySet(), Collections.emptySet()))
+    when(testBatchFactory.createTestBatchFullViewModel(testBatch, Collections.emptySet(), Collections.emptySet(), Collections.emptySet()))
         .thenReturn(expected);
 
     TestBatchFullViewModel actual = controllerService.addDonationsToTestBatch(backingForm);

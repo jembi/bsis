@@ -397,6 +397,59 @@ public class TestBatchFactoryTests extends UnitTestSuite {
   }
 
   @Test
+  public void testCreateTestBatchFullDonationViewModelWithExcludedDonations_shouldReturnTestBatchViewModelWithTheCorrectState() {
+
+    Set<Donation> donations = createDonations();
+    Set<String> dinsWithoutTestSamples = new HashSet<>(Arrays.asList("123456", "123457"));
+    Set<String> dinsInOtherTestBatches = new HashSet<>(Arrays.asList("234567", "234568"));
+    Set<String> dinsInOpenDonationBatch = new HashSet<>(Arrays.asList("345678"));
+
+    TestBatch testBatch = aTestBatch()
+        .withId(IRRELEVANT_TEST_BATCH_ID)
+        .withStatus(CLOSED)
+        .withBatchNumber(IRRELEVANT_BATCH_NUMBER)
+        .withTestBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .withLastUpdatedDate(IRRELEVANT_LAST_UPDATED_DATE)
+        .withNotes(IRRELEVANT_NOTES)
+        .withDonations(donations)
+        .build();
+
+    DonationViewModel donationViewModel = aDonationViewModel().build();
+    TestBatchFullViewModel expectedViewModel = TestBatchFullViewModel.builderFull()
+        .id(IRRELEVANT_TEST_BATCH_ID)
+        .status(CLOSED)
+        .batchNumber(IRRELEVANT_BATCH_NUMBER)
+        .testBatchDate(IRRELEVANT_TEST_BATCH_DATE)
+        .lastUpdated(IRRELEVANT_LAST_UPDATED_DATE)
+        .notes(IRRELEVANT_NOTES)
+        .donations(Arrays.asList(donationViewModel))
+        .permission("canRelease", false)
+        .permission("canClose", false)
+        .permission("canDelete", false)
+        .permission("canEdit", false)
+        .permission("canReopen", false)
+        .permission("canEditDonations", false)
+        .dinsWithoutTestSample("123456")
+        .dinsWithoutTestSample("123457")
+        .dinsInOtherTestBatch("234567")
+        .dinsInOtherTestBatch("234568")
+        .dinInOpenDonationanBatch("345678")
+        .build();
+
+    when(testBatchConstraintChecker.canReleaseTestBatch(testBatch)).thenReturn(CANT_RELEASE);
+    when(testBatchConstraintChecker.canCloseTestBatch(testBatch)).thenReturn(false);
+    when(testBatchConstraintChecker.canDeleteTestBatch(testBatch)).thenReturn(false);
+    when(testBatchConstraintChecker.canEditTestBatch(testBatch)).thenReturn(false);
+    when(testBatchConstraintChecker.canReopenTestBatch(testBatch)).thenReturn(false);
+    when(donationFactory.createDonationViewModels(any(Collection.class))).thenReturn(Arrays.asList(donationViewModel));
+
+    TestBatchFullViewModel returnedViewModel = testBatchFactory.createTestBatchFullViewModel(testBatch, dinsWithoutTestSamples,
+                                                              dinsInOtherTestBatches, dinsInOpenDonationBatch);
+
+    assertThat(returnedViewModel, hasSameStateAsTestBatchFullViewModel(expectedViewModel));
+  }
+
+  @Test
   public void testCreateTestBatchViewModelWithCanDeleteTestBatch_shouldReturnTestBatchViewModelWithTheCorrectState() {
 
     Set<Donation> donations = createDonations();

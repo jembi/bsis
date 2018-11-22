@@ -220,21 +220,20 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
       errors.rejectValue("donation.donor", "donor.invalid", "Please supply a valid donor");
     }
 
-    if (donationBatch == null || donationBatch.isBackEntry()) {
+    if (donationBatch == null || donationBatch.isBackEntry() || !isNewDonation(form)) {
       // skip validation on donor eligibility
-    } else {
-      // Check if the donations are valid
+    } else { 
       if (donor != null && donor.getDonations() != null) {
-  
+
         for (Donation donation : donor.getDonations()) {
-  
+
           PackType packType = donation.getPackType();
-  
+
           if (!packType.getCountAsDonation()) {
             // Don't check period between donations if it doesn't count as a donation
             continue;
           }
-  
+
           // Work out the next allowed donation date
           DateTime nextDonationDate = new DateTime(donation.getDonationDate())
               .plusDays(packType.getPeriodBetweenDonations())
@@ -247,13 +246,16 @@ public class DonationBackingFormValidator extends BaseValidator<DonationBackingF
         }
       }
 
-      // Check if the donor is deferred
       if (donor != null && donorDeferralStatusCalculator.isDonorCurrentlyDeferred(donor.getId())) {
         errors.rejectValue("donation.donor", "errors.invalid.donorDeferred", "Donor is currently deferred");
       }
     }
   }
-  
+
+  private boolean isNewDonation(DonationBackingForm form) {
+    return form.getDonation().getId() == null;
+  }
+
   private void validateDonationIdentificationNumber(DonationBackingForm form, Errors errors) {
     Integer dinLength = generalConfigAccessorService.getIntValue(GeneralConfigConstants.DIN_LENGTH);
     if (dinLength > 20) {
